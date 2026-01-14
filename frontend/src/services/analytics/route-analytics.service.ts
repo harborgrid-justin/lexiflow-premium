@@ -257,7 +257,7 @@ class RouteAnalyticsService {
         "route_analytics_events",
         JSON.stringify(recentEvents)
       );
-    } catch (error) {
+    } catch {
       // Ignore storage errors
     }
   }

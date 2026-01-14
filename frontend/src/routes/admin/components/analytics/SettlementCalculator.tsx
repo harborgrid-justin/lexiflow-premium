@@ -35,15 +35,6 @@ import { cn } from '@/shared/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface ChartTheme {
-  colors: {
-    success: string;
-    danger: string;
-  };
-  text: string;
-  grid: string;
-  tooltipStyle: Record<string, string | number>;
-}
 
 interface SimulationResult {
   range: string;

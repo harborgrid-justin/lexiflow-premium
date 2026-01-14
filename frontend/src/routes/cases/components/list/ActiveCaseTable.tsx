@@ -70,7 +70,7 @@ export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({
   // HOOKS - Context
   // ==========================================================================
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
 
   // ==========================================================================
   // RENDER HELPERS

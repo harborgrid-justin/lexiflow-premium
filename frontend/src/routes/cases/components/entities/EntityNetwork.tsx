@@ -9,7 +9,7 @@
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for graph transitions
  * - Guideline 29: Graph rendering doesn't trigger Suspense cascades
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -57,7 +57,7 @@ interface EntityNetworkProps {
 
 export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
 
   const { data: relationships = [], isLoading } = useQuery<EntityRelationship[]>(
     ['relationships', 'all'],

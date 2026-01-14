@@ -1,15 +1,14 @@
 /**
  * Calendar Route Index
- * 
+ *
  * Enterprise React Architecture - Calendar Events Management
  * Exports loader and default component for React Router v7
- * 
+ *
  * @module routes/calendar/index
  */
 
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
 
 // Export loader from dedicated file
 export { calendarLoader as loader } from './loader';

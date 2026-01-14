@@ -10,7 +10,7 @@ import React from 'react';
 import { useCalendar } from './CalendarProvider';
 
 export function CalendarView() {
-  const { events, upcomingEvents, metrics, viewMode, setViewMode, isPending } = useCalendar();
+  const { upcomingEvents, metrics, viewMode, setViewMode, isPending } = useCalendar();
 
   return (
     <div className="h-full flex flex-col">

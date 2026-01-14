@@ -75,7 +75,7 @@ interface RFP {
 
 export function VendorProcurement() {
     // Guideline 34: Side-effect free context read
-    const { theme, isPendingThemeChange } = useTheme();
+    const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('directory');
 
     const { data: contracts = [], isLoading: contractsLoading } = useQuery<VendorContract[]>(

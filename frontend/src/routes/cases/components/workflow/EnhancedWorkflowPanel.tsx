@@ -11,17 +11,17 @@
  * - Guideline 33: Uses isPendingThemeChange for panel transitions
  */
 
-import { useState } from 'react';
-import { SLAMonitor } from './SLAMonitor';
-import { AuditTrailViewer } from './AuditTrailViewer';
-import { ParallelTasksManager } from './ParallelTasksManager';
-import { TaskDependencyManager } from './TaskDependencyManager';
-import { TimeTrackingPanel } from './TimeTrackingPanel';
-import { ApprovalWorkflow } from './ApprovalWorkflow';
+import { cn } from '@/shared/lib/cn';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { useState } from 'react';
+import { ApprovalWorkflow } from './ApprovalWorkflow';
+import { AuditTrailViewer } from './AuditTrailViewer';
 import { ENHANCED_WORKFLOW_TABS, type EnhancedWorkflowTab } from './constants';
+import { ParallelTasksManager } from './ParallelTasksManager';
+import { SLAMonitor } from './SLAMonitor';
+import { TaskDependencyManager } from './TaskDependencyManager';
+import { TimeTrackingPanel } from './TimeTrackingPanel';
 
 // ============================================================================
 // TYPES
@@ -57,14 +57,14 @@ const TAB_COMPONENTS: Record<EnhancedWorkflowTab, React.ComponentType<Record<str
  */
 function KPIDashboard(_props: KPIDashboardProps) {
   return (
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div className="lg:col-span-2">
-      <SLAMonitor />
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <SLAMonitor />
+      </div>
+      <div>
+        <TimeTrackingPanel />
+      </div>
     </div>
-    <div>
-      <TimeTrackingPanel />
-    </div>
-  </div>
   );
 }
 
@@ -98,7 +98,7 @@ WorkflowContent.displayName = 'WorkflowContent';
  */
 export function EnhancedWorkflowPanel() {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<EnhancedWorkflowTab>('tasks');
 
   const handleApprove = (id: string) => alert(`Approved ${id}`);

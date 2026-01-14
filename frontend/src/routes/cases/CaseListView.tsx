@@ -115,7 +115,6 @@ export function CaseListView() {
     metrics,
     activeTab,
     setActiveTab,
-    activeParentTab,
     handleParentTabChange,
     isPending,
   } = useCaseList();

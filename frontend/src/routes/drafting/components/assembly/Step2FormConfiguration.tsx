@@ -4,9 +4,9 @@
  * ✅ Backend-ready with proper data handling (2025-12-21)
  */
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { getTodayString } from '@/shared/lib/dateUtils';
+import { useTheme } from '@/theme';
 import { Calendar, FileText, Sparkles, User } from 'lucide-react';
 interface Step2FormConfigurationProps {
   template: string;
@@ -24,7 +24,7 @@ export function Step2FormConfiguration({
   formData,
   onFormDataChange,
   onGenerate
-}) => {
+}: Step2FormConfigurationProps) {
   const { theme } = useTheme();
 
   const handleChange = (field: keyof typeof formData) => (

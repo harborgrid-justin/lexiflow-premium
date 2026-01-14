@@ -21,7 +21,7 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Breadcrumbs, BreadcrumbItem } from '@/shared/ui/molecules/Breadcrumbs';
+import { BreadcrumbItem, Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -40,7 +40,7 @@ export interface AppShellProps {
   activeView?: string;
   onNavigate?: (view: string) => void;
   selectedCaseId?: string | null;
-  
+
   // State from Controller
   isFetching?: boolean;
   breadcrumbs?: BreadcrumbItem[];
@@ -68,12 +68,12 @@ PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 // ========================================
 // COMPONENT
 // ========================================
-export const AppShell = memo<AppShellProps>(({ 
-  sidebar, 
-  headerContent, 
-  children, 
-  activeView, 
-  onNavigate: _onNavigate, 
+export const AppShell = memo<AppShellProps>(({
+  sidebar,
+  headerContent,
+  children,
+  activeView: _activeView,
+  onNavigate: _onNavigate,
   selectedCaseId: _selectedCaseId,
   isFetching = false,
   breadcrumbs = [],
@@ -108,21 +108,21 @@ export const AppShell = memo<AppShellProps>(({
           className="flex-1 flex flex-col min-h-0 overflow-hidden relative isolate pb-0"
           style={{ contain: 'strict' }}
         >
-           {/* Breadcrumbs are optional in the shell visualization, but often passed in headerContent. 
+          {/* Breadcrumbs are optional in the shell visualization, but often passed in headerContent.
                If we wanted to render them here we could, but typically they go in the header or just below.
                Given the previous code didn't render breadcrumbs *inside* AppShell main explicitly (it just calculated them),
-               we assume consuming components or headerContent might use them if passed, 
+               we assume consuming components or headerContent might use them if passed,
                but essentially we are just accepting them as props now to satisfy the interface.
                However, looking at the previous file, it calculated breadcrumbs but didn't seemingly render them in the JSX shown in the snippet.
                Wait, let me double check the partial file read.
            */}
-           {breadcrumbs.length > 0 && (
-              <div className="px-6 py-2 shrink-0">
-                  <Breadcrumbs items={breadcrumbs} />
-              </div>
-           )}
+          {breadcrumbs.length > 0 && (
+            <div className="px-6 py-2 shrink-0">
+              <Breadcrumbs items={breadcrumbs} />
+            </div>
+          )}
 
-           {children}
+          {children}
         </main>
       </div>
     </div>

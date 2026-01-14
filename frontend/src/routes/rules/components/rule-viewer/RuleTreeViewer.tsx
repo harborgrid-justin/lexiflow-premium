@@ -1,6 +1,6 @@
-import { LegalRule } from '@/types';
-import { ChevronRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/shared/lib/cn';
+import { LegalRule } from '@/types';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 
 interface RuleTreeViewerProps {
   nodes: LegalRule[];
@@ -20,7 +20,7 @@ export function RuleTreeViewer({
   setSelectedRuleId,
   searchTerm,
   theme,
-}) => {
+}: RuleTreeViewerProps) {
   if (nodes.length === 0 && searchTerm.trim()) {
     return (
       <div className={cn("p-4 text-xs italic text-center", (theme as { text: { tertiary: string } }).text.tertiary)}>No rules found matching "{searchTerm}"</div>

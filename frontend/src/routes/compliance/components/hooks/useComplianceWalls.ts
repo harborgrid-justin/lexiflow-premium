@@ -28,7 +28,7 @@ export const useComplianceWalls = (): [
   ComplianceWallsState,
   ComplianceWallsActions,
 ] => {
-  const [isPending, startTransition] = useTransition(); // Reserved for actions
+  const [_isPending, _startTransition] = useTransition(); // Reserved for actions
 
   const {
     data: walls = [],

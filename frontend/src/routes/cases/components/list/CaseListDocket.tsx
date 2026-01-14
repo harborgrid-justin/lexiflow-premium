@@ -25,14 +25,14 @@ import React, { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
@@ -63,7 +63,7 @@ interface DocketItem {
 
 export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) => {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
 
   const { data: docket = [], isLoading: loadingDocket } = useQuery(queryKeys.docket.all(), async () => {
     const svc = DataService.docket;

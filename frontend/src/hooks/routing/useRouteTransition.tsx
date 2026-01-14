@@ -49,6 +49,7 @@ export function useRouteTransition(
   >('entered');
   const previousLocation = useRef(location.pathname);
   const transitionTimer = useRef<number>();
+  const isNavigating = navigation.state !== 'idle';
 
   const fullConfig: TransitionConfig = {
     ...DEFAULT_CONFIG,

@@ -10,7 +10,7 @@
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for dashboard transitions
  * - Guideline 24: KPI metrics and status distributions are memoized
- * 
+ *
  * Features:
  * - Real-time KPI metrics (active matters, intake pipeline, deadlines)
  * - Matter status distribution with drill-down capability
@@ -27,15 +27,15 @@
  * - Optimistic UI updates for instant feedback
  */
 
+import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/lib/frontend-api';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/theme';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { CaseStatus } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import {
   Activity,
   AlertCircle,
@@ -82,7 +82,7 @@ interface RecentActivity {
 
 export const CaseOverviewDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {
   // Guideline 34: Side-effect free context read
-  const { isDark, isPendingThemeChange } = useTheme();
+  const { isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<CaseStatus | 'all'>('all');
   const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d' | 'all'>('30d');

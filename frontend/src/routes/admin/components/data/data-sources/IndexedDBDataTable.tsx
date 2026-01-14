@@ -13,9 +13,8 @@ import type { StoreRecord } from './types';
 //   onEdit: (item: StoreRecord) => void;
 //   onSave: () => void;
 //   onDelete: (id: string) => void;
+//   onCancel: () => void;
 // }
-onCancel: () => void;
-}
 
 export function IndexedDBDataTable({
   data,

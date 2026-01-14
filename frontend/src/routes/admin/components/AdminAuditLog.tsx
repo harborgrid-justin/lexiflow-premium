@@ -13,10 +13,6 @@ import { useEffect, useState } from 'react';
 import { AuditLogControls } from './audit/AuditLogControls';
 import { LedgerVisualizer } from './ledger/LedgerVisualizer';
 
-interface AdminAuditLogProps {
-    // logs prop is removed; component will fetch its own data.
-}
-
 export function AdminAuditLog() {
     const { theme } = useTheme();
     const { addToast } = useToast();

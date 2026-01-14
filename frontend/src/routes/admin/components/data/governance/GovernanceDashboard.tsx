@@ -4,13 +4,6 @@ import { Card } from '@/shared/ui/molecules/Card';
 import { useTheme } from '@/theme';
 import { AlertTriangle, Edit2, FileSearch, Scale, ShieldCheck } from 'lucide-react';
 
-interface GovernanceRule {
-    id: string;
-    name: string;
-    status: string;
-    impact: string;
-}
-
 // interface GovernanceDashboardProps {
 //     rules: GovernanceRule[];
 //     isScanning: boolean;

@@ -18,18 +18,18 @@
  * - Backend API integration via DataService
  */
 
-import { api } from '@/lib/frontend-api';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 import { PATHS } from '@/config/paths.config';
 import { MatterView } from '@/config/tabs.config';
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { api } from '@/lib/frontend-api';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { CaseStatus, type Case, type Invoice } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { useTheme } from '@/theme';
+import { CaseStatus, type Case, type Invoice } from '@/types';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
 import React, { Suspense, useMemo, useTransition } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -102,7 +102,7 @@ interface CaseManagementProps {
 
 export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, initialInvoices, onSelectCase }) => {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('cases_active_tab', 'overview');

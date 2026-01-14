@@ -30,20 +30,12 @@ import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardSidebar } from './DashboardSidebar';
 
 // Types
-import type { CaseId, TaskId, WorkflowTask } from '@/types';
+import type { WorkflowTask } from '@/types';
 import { TaskStatusBackend } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface ActiveProject {
-  id: TaskId;
-  title: string;
-  case: string | CaseId;
-  progress: number;
-  status: TaskStatusBackend;
-  due: string;
-}
 
 // ============================================================================
 // COMPONENT

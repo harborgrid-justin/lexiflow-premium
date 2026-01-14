@@ -2,7 +2,7 @@ import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import { Cloud, Database, HardDrive } from 'lucide-react';
-import type { CloudProvider, ConnectionFormData } from './types';
+import type { CloudProvider } from './types';
 
 // interface ConnectionFormProps {
 //   isAdding: boolean;
@@ -14,7 +14,7 @@ import type { CloudProvider, ConnectionFormData } from './types';
 //   onSubmit: (e: React.FormEvent) => void;
 //   isLoading: boolean;
 // }
-}
+// }
 
 const PROVIDERS: CloudProvider[] = [
   { id: 'snowflake', name: 'Snowflake', icon: Database, color: 'text-blue-500' },

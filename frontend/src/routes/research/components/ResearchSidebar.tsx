@@ -1,6 +1,6 @@
-import { ResearchSession } from '@/types';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { ResearchSession } from '@/types';
 
 interface ResearchSidebarProps {
     history: ResearchSession[];
@@ -10,7 +10,7 @@ interface ResearchSidebarProps {
 
 export function ResearchSidebar({
     history, activeSessionId, onSelectSession
-}) => {
+}: ResearchSidebarProps) {
     const { theme } = useTheme();
 
     return (

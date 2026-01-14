@@ -5,9 +5,9 @@
  * Lightweight alternative to KPICard for simpler metrics
  */
 
-import { LucideIcon } from 'lucide-react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { LucideIcon } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -45,7 +45,7 @@ export function StatWidget({
   variant = 'default',
   className,
   onClick,
-}) => {
+}: StatWidgetProps) {
   const { theme } = useTheme();
 
   const variantClasses = {

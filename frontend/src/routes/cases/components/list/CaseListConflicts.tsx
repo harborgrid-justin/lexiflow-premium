@@ -27,8 +27,8 @@ import { useState } from 'react';
 import { Button } from '@/shared/ui/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
@@ -46,7 +46,7 @@ interface CaseListConflictsProps {
 
 export const CaseListConflicts: React.FC<CaseListConflictsProps> = () => {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
   // Enterprise Data Access

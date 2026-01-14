@@ -1,9 +1,9 @@
-import { Settings } from 'lucide-react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { CitationFormat } from '@/types/bluebook';
-import type { FormatOptions } from './types';
+import { Settings } from 'lucide-react';
 import React from "react";
+import type { FormatOptions } from './types';
 
 interface FormatOptionsCardProps {
   options: FormatOptions;
@@ -17,7 +17,7 @@ export function FormatOptionsCard({
   formatStyle,
   onOptionsChange,
   onFormatStyleChange
-}) => {
+}: FormatOptionsCardProps) {
   const { theme } = useTheme();
 
   return (

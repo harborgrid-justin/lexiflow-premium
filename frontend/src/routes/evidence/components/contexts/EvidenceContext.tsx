@@ -102,7 +102,7 @@ interface EvidenceProviderProps {
 export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
     children,
     caseId,
-    initialTab
+    initialTab: _initialTab
 }) => {
     const [isPending, startTransition] = useTransition();
 
@@ -157,7 +157,8 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
         manager.handleItemClick,
         manager.handleBack,
         manager.handleIntakeComplete,
-        manager.handleCustodyUpdate
+        manager.handleCustodyUpdate,
+        setView
     ]);
 
     return (

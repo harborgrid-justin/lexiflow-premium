@@ -71,7 +71,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   let caseResult;
   try {
     caseResult = await casesApi.getCaseById(caseId);
-  } catch (error) {
+  } catch {
     caseResult = { ok: false } as const;
   }
 

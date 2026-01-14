@@ -1,12 +1,12 @@
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/theme';
 import { BluebookCitationType, ExportFormat } from '@/types/bluebook';
-import { cn } from '@/shared/lib/cn';
 import { Copy, FileDown, FileText, Filter, Info, Table } from 'lucide-react';
+import React from "react";
 import { ResultItem } from './ResultItem';
 import type { FilterOptions, FormattingResult } from './types';
-import React from "react";
 
 interface ResultsSectionProps {
   results: FormattingResult[];
@@ -32,7 +32,7 @@ export function ResultsSection({
   onRemove,
   onGenerateTOA,
   onExport
-}) => {
+}: ResultsSectionProps) {
   const { theme } = useTheme();
 
   // LAYOUT-STABLE: Render empty state with same card structure instead of null

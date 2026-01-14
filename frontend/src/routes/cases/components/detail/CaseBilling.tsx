@@ -41,7 +41,7 @@ interface CaseBillingProps {
 
 export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, entries }) => {
     // Guideline 34: Side-effect free context read
-    const { theme, isPendingThemeChange } = useTheme();
+    const { theme } = useTheme();
     const { unbilledTotal, billedTotal, totalHours, ledgerTotal } = useCaseFinancials(entries);
 
     return (

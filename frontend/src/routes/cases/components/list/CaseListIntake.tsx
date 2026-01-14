@@ -32,10 +32,10 @@ import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoa
 import { Modal } from '@/shared/ui/molecules/Modal';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
@@ -43,7 +43,7 @@ import { cn } from '@/shared/lib/cn';
 
 export const CaseListIntake: React.FC = () => {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
   const { success, error: notifyError } = useNotify();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);

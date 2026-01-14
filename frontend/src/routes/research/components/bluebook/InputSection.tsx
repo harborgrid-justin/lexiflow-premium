@@ -1,11 +1,11 @@
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
+import React from "react";
 import { FormatOptionsCard } from './FormatOptionsCard';
 import type { FormatOptions } from './types';
-import React from "react";
 
 interface InputSectionProps {
   inputText: string;
@@ -29,7 +29,7 @@ export function InputSection({
   isProcessing,
   formatOptions,
   onFormatOptionsChange
-}) => {
+}: InputSectionProps) {
   const { theme } = useTheme();
 
   return (

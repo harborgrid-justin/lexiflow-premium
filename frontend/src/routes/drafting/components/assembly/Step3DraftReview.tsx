@@ -4,10 +4,10 @@
  * ✅ Backend-connected via parent component DocumentAssembly (2025-12-21)
  */
 
-import { useRef, useEffect } from 'react';
-import { Save, Download, Copy, Sparkles, Loader2, CheckCircle } from 'lucide-react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { CheckCircle, Copy, Download, Loader2, Save, Sparkles } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 interface Step3DraftReviewProps {
   result: string;
@@ -21,7 +21,7 @@ export function Step3DraftReview({
   isStreaming,
   isSaving,
   onSave
-}) => {
+}: Step3DraftReviewProps) {
   const { theme } = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [copied, setCopied] = React.useState(false);

@@ -13,31 +13,31 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, Plus, Users } from 'lucide-react';
-import { lazy, Suspense, useCallback, useEffect, useMemo } from 'react';
+import { lazy, Suspense, useCallback, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { DiscoveryNavigation } from './layout/DiscoveryNavigation';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
+import { DiscoveryNavigation } from './layout/DiscoveryNavigation';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';
-import { DiscoveryProvider, useDiscoveryState, useDiscoveryActions } from './contexts/DiscoveryContext';
+import { useTheme } from '@/theme';
+import { DiscoveryProvider, useDiscoveryActions, useDiscoveryState } from './contexts/DiscoveryContext';
 
 // Services & Utils
+import { DiscoveryRepository } from '@/services/api/discoveryRepository';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
-import { queryKeys } from '@/utils/queryKeys';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
-import { DiscoveryRepository } from '@/services/api/discoveryRepository';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Internal Discovery Components (Lazy)
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));
@@ -70,33 +70,33 @@ const ESIDashboardSkeleton = lazy(() => import('./DiscoverySkeleton').then(m => 
 // TYPES & INTERFACES
 // ============================================================================
 interface DiscoveryPlatformProps {
-  initialTab?: DiscoveryView;
-  caseId?: string;
-  onNavigateToCase?: (caseId: string) => void;
+    initialTab?: DiscoveryView;
+    caseId?: string;
+    onNavigateToCase?: (caseId: string) => void;
 }
 
 // ============================================================================
 // CONTENT COMPONENT
 // ============================================================================
 
-const DiscoveryPlatformContent: React.FC<DiscoveryPlatformProps> = ({ caseId, onNavigateToCase }) => {
+const DiscoveryPlatformContent: React.FC<DiscoveryPlatformProps> = ({ caseId, onNavigateToCase: _onNavigateToCase }) => {
     const { theme } = useTheme();
     const notify = useNotify();
 
-    const { 
-        activeTab, 
-        activeParentTabId, 
-        contextId, 
-        requests, 
-        isPending, 
-        isSyncing 
+    const {
+        activeTab,
+        activeParentTabId,
+        contextId,
+        requests,
+        isPending,
+        isSyncing
     } = useDiscoveryState();
 
-    const { 
-        setActiveTab, 
-        handleParentTabChange, 
-        syncDeadlines, 
-        setContextId 
+    const {
+        setActiveTab,
+        handleParentTabChange,
+        syncDeadlines,
+        setContextId
     } = useDiscoveryActions();
 
     const handleNavigate = useCallback((targetView: DiscoveryView, id?: string) => {
@@ -117,7 +117,7 @@ const DiscoveryPlatformContent: React.FC<DiscoveryPlatformProps> = ({ caseId, on
         'mod+h': () => setActiveTab('holds'),
         'mod+e': () => setActiveTab('esi'),
         'escape': () => {
-             if (['doc_viewer', 'response', 'production_wizard', 'request_wizard'].includes(activeTab)) {
+            if (['doc_viewer', 'response', 'production_wizard', 'request_wizard'].includes(activeTab)) {
                 handleBackToDashboard();
             }
         }
@@ -216,9 +216,9 @@ const DiscoveryPlatformContent: React.FC<DiscoveryPlatformProps> = ({ caseId, on
             </div>
 
             <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0 relative">
-                 <div className={cn("h-full overflow-y-auto custom-scrollbar", isPending && "opacity-60 transition-opacity")}>
+                <div className={cn("h-full overflow-y-auto custom-scrollbar", isPending && "opacity-60 transition-opacity")}>
                     <Suspense fallback={renderSkeleton()}>
-                         {tabContentMap[activeTab as keyof typeof tabContentMap]}
+                        {tabContentMap[activeTab as keyof typeof tabContentMap]}
                     </Suspense>
                 </div>
             </div>

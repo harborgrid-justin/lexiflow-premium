@@ -8,7 +8,7 @@
  * - Guideline 28: Theme-based color derivation (pure function via useCallback)
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for visual feedback
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic chart colors.
  */
@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -56,8 +56,6 @@ export const RiskMeter = React.memo<RiskMeterProps>(({ value, label, type = 'str
     }
   }, [type, theme]);
 
-  const barColor = useMemo(() => getColor(value), [getColor, value]);
-
   return (
     <div className={cn(
       "space-y-2",
@@ -71,9 +69,9 @@ export const RiskMeter = React.memo<RiskMeterProps>(({ value, label, type = 'str
       )}
       <div className={cn("w-full rounded-full h-2 overflow-hidden", theme.surface.highlight)}>
         { }
-        <div 
-          className="h-full rounded-full transition-all duration-500" 
-          style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundColor: getColor(value) }} 
+        <div
+          className="h-full rounded-full transition-all duration-500"
+          style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundColor: getColor(value) }}
         />
       </div>
     </div>

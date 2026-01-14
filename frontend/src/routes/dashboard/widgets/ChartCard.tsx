@@ -5,9 +5,9 @@
  * Provides loading states, error handling, and export capabilities
  */
 
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 import { Download, LucideIcon, Maximize2, RefreshCw } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
@@ -62,7 +62,7 @@ export function ChartCard({
   height = 300,
   showActions = true,
   actions,
-}) => {
+}: ChartCardProps) {
   const { theme } = useTheme();
   const [isRefreshing, setIsRefreshing] = useState(false);
 

@@ -1,7 +1,7 @@
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
+import { useTheme } from '@/theme';
 import { Briefcase, CheckCircle, Lock, Plus, Users } from 'lucide-react';
 import { memo } from 'react';
 import { useComplianceWalls } from './hooks/useComplianceWalls';
@@ -10,9 +10,8 @@ const ComplianceWallsComponent = function ComplianceWalls() {
     const { theme } = useTheme();
 
     // Feature Hook
-    const [state, actions] = useComplianceWalls();
+    const [state] = useComplianceWalls();
     const { walls, status } = state;
-    const { createWall, manageWall } = actions;
 
     const isLoading = status === 'loading';
 

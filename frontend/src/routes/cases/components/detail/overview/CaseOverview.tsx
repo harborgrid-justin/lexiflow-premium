@@ -17,8 +17,8 @@
 // External Dependencies
 import { Users } from 'lucide-react';
 // Internal Dependencies - Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/shared/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { CaseOverviewModals } from './CaseOverviewModals';
 import { CaseOverviewStats } from './CaseOverviewStats';
@@ -26,9 +26,9 @@ import { MatterInfo } from './MatterInfo';
 import { OverviewSidebar } from './OverviewSidebar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
 import { useCaseOverview } from '@/hooks/useCaseOverview';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
@@ -46,7 +46,7 @@ interface CaseOverviewProps {
 
 export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntryAdded, onNavigateToCase }) => {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
 
   const {
     showTimeModal, setShowTimeModal,

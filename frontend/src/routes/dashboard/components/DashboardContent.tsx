@@ -14,7 +14,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { useDashboardActions, useDashboardState } from '../DashboardProvider';
+import { useDashboardState } from '../DashboardProvider';
 import { DashboardOverview } from './DashboardOverview';
 import { PersonalWorkspace } from './PersonalWorkspace';
 
@@ -27,7 +27,6 @@ import React from "react";
 
 export const DashboardContent: React.FC = () => {
   const { activeTab, currentUser } = useDashboardState();
-  const { onSelectCase } = useDashboardActions();
 
   switch (activeTab) {
     case 'overview': return <DashboardOverview />;

@@ -22,8 +22,8 @@ import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
+import { useTheme } from '@/theme';
 
 // Components
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
@@ -47,7 +47,7 @@ const sanitizeHtml = (html: string) => {
 
 export function WikiView() {
   // Guideline 34: Side-effect free context read
-  const { theme, mode, isPendingThemeChange } = useTheme();
+  const { theme, mode } = useTheme();
   const [activeArticleId, setActiveArticleId] = useState('ca-employment');
   const [isPending, startTransition] = useTransition();
 

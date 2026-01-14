@@ -120,7 +120,7 @@ class RoutePrefetchService {
   /**
    * Handle hover event for prefetching
    */
-  onHover(path: string, element: HTMLElement): void {
+  onHover(path: string, _element: HTMLElement): void {
     if (!this.enabled) return;
 
     // Clear any existing timer
@@ -286,7 +286,7 @@ class RoutePrefetchService {
         };
       });
       localStorage.setItem("route_prefetch_metadata", JSON.stringify(data));
-    } catch (error) {
+    } catch {
       // Ignore storage errors
     }
   }

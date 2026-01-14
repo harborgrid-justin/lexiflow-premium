@@ -16,9 +16,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { ReactNode, createContext, useContext, useMemo } from 'react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import React, { ReactNode, createContext, useContext, useMemo } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -208,7 +208,7 @@ export function LayoutComposer({
   gap = 'md',
   enableSkipLinks = true,
   className,
-}) => {
+}: LayoutComposerProps) {
   const { theme } = useTheme();
 
   const contextValue = useMemo<LayoutContextValue>(
@@ -311,10 +311,14 @@ export const AppLayoutComposer: React.FC<{
  * Pre-configured LayoutComposer for dashboard layout (header + sidebar + main)
  */
 export function DashboardLayoutComposer({
+  header,
+  sidebar,
+  main,
+}: {
   header: ReactNode;
   sidebar: ReactNode;
   main: ReactNode;
-}> = ({ header, sidebar, main }) => {
+}) {
   return (
     <LayoutComposer
       sections={[

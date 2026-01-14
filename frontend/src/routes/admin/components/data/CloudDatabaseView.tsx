@@ -231,21 +231,18 @@ const ProviderSelection = function ProviderSelection({ providers, onSelect, them
   );
 };
 
-// interface ConnectionFormProps {
-//   selectedProvider: string;
-//   providers: readonly DataProvider[];
-//
-//   formData: ConnectionFormData;
-//
-//   setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
-// }
-onCancel: () => void;
-onSubmit: (e: React.FormEvent) => void;
-isSubmitting: boolean;
-theme: ThemeContextValue['theme'];
+interface ConnectionFormProps {
+  selectedProvider: string;
+  providers: readonly DataProvider[];
+  formData: ConnectionFormData;
+  setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
+  onCancel: () => void;
+  onSubmit: (e: React.FormEvent) => void;
+  isSubmitting: boolean;
+  theme: ThemeContextValue['theme'];
 }
 
-const ConnectionForm = ({
+function ConnectionForm({
   selectedProvider,
   providers,
   formData,
@@ -254,66 +251,68 @@ const ConnectionForm = ({
   onSubmit,
   isSubmitting,
   theme
-}) => (
-  <form onSubmit={onSubmit} className="space-y-4 max-w-2xl">
-    <div className="flex items-center gap-2 mb-6">
-      <button
-        type="button"
-        onClick={() => { /* Navigate back to provider selection */ }}
-        className="text-sm text-blue-600 hover:underline flex items-center gap-1"
-      >
-        ← Providers
-      </button>
-      <span className="text-gray-400">/</span>
-      <span className={cn("text-sm font-bold", theme.text.primary)}>
-        Configure {providers.find(p => p.id === selectedProvider)?.name}
-      </span>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-          Connection Name
-        </label>
-        <input
-          type="text"
-          required
-          className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
-          value={formData.name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="e.g. Production Warehouse"
-        />
+}: ConnectionFormProps) {
+  return (
+    <form onSubmit={onSubmit} className="space-y-4 max-w-2xl">
+      <div className="flex items-center gap-2 mb-6">
+        <button
+          type="button"
+          onClick={() => { /* Navigate back to provider selection */ }}
+          className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+        >
+          ← Providers
+        </button>
+        <span className="text-gray-400">/</span>
+        <span className={cn("text-sm font-bold", theme.text.primary)}>
+          Configure {providers.find(p => p.id === selectedProvider)?.name}
+        </span>
       </div>
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-          Host / Endpoint
-        </label>
-        <input
-          type="text"
-          required
-          className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
-          value={formData.host}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, host: e.target.value })}
-          placeholder="e.g. xy12345.us-east-1.snowflakecomputing.com"
-        />
-      </div>
-    </div>
 
-    <div className="flex justify-end gap-3 pt-4">
-      <button
-        type="button"
-        onClick={onCancel}
-        className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-      >
-        Cancel
-      </button>
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 shadow-lg shadow-blue-500/30 transition-all hover:scale-105 active:scale-95"
-      >
-        {isSubmitting ? 'Connecting...' : 'Connect Source'}
-      </button>
-    </div>
-  </form>
-);
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
+            Connection Name
+          </label>
+          <input
+            type="text"
+            required
+            className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
+            value={formData.name}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="e.g. Production Warehouse"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
+            Host / Endpoint
+          </label>
+          <input
+            type="text"
+            required
+            className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
+            value={formData.host}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, host: e.target.value })}
+            placeholder="e.g. xy12345.us-east-1.snowflakecomputing.com"
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 shadow-lg shadow-blue-500/30 transition-all hover:scale-105 active:scale-95"
+        >
+          {isSubmitting ? 'Connecting...' : 'Connect Source'}
+        </button>
+      </div>
+    </form>
+  );
+}

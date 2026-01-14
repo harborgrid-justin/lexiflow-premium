@@ -17,20 +17,20 @@ import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { AlertTriangle, Loader2, Play, Plus, RefreshCw } from 'lucide-react';
 
-import { WorkflowView } from './types';
 import { CaseWorkflowList } from './CaseWorkflowList';
 import { EnhancedWorkflowPanel } from './EnhancedWorkflowPanel';
 import { FirmProcessDetail } from './FirmProcessDetail';
 import { FirmProcessList } from './FirmProcessList';
+import { WorkflowView } from './types';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { WorkflowConfig } from './WorkflowConfig';
 import { WorkflowEngineDetail } from './WorkflowEngineDetail';
 import { WorkflowLibrary } from './WorkflowLibrary';
-import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WORKFLOW_TABS } from './WorkflowTabs';
+import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { useMasterWorkflow } from '../../_hooks/useMasterWorkflow';
 
 interface MasterWorkflowProps {
@@ -40,7 +40,7 @@ interface MasterWorkflowProps {
 
 export function MasterWorkflow({ onSelectCase, initialTab }: MasterWorkflowProps) {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
 
   const {
     activeTab,

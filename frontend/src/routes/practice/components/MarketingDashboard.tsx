@@ -45,13 +45,13 @@ import { MarketingCampaign, MarketingMetric } from '@/types';
 
 export function MarketingDashboard() {
   // Guideline 34: Side-effect free context read
-  const { theme, mode, isPendingThemeChange } = useTheme();
+  const { theme, mode } = useTheme();
 
   // Guideline 28: Memoize chart theme values (pure function of mode)
-  const chartColors = useMemo(() => ChartColorService.getChartColors(mode), [mode]);
+  const _chartColors = useMemo(() => ChartColorService.getChartColors(mode), [mode]);
   const chartTheme = useMemo(() => ChartColorService.getChartTheme(mode), [mode]);
   const tooltipStyle = useMemo(() => ChartColorService.getTooltipStyle(mode), [mode]);
-  const palette = useMemo(() => ChartColorService.getPalette(mode), [mode]);
+  const _palette = useMemo(() => ChartColorService.getPalette(mode), [mode]);
 
   // Enterprise Data Access
   const { data: metrics = [] } = useQuery<MarketingMetric[]>(

@@ -8,17 +8,17 @@
  */
 
 import { Loader2, Rocket, Save } from 'lucide-react';
-import { Suspense, lazy, useState } from 'react';
+import { Suspense, lazy } from 'react';
 
 // Internal Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
 import { Button } from '@/shared/ui/atoms/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
+import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
 
 // Hooks & Context
-import { LitigationProvider, useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
 import { useTheme } from '@/theme';
+import { LitigationProvider, useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Utils
 import { cn } from '@/shared/lib/cn';
@@ -35,8 +35,8 @@ const LitigationScheduleView = lazy(() => import('./LitigationScheduleView').the
 
 const LitigationBuilderContent: React.FC = () => {
   const { theme } = useTheme();
-  const { activeTab, nodes, connections, cases, selectedCaseId, isDeploying } = useLitigationState();
-  const { setActiveTab, setSelectedCaseId, deployToCase, loadPlaybook } = useLitigationActions();
+  const { activeTab, nodes: _nodes, connections: _connections, cases, selectedCaseId, isDeploying } = useLitigationState();
+  const { setActiveTab, setSelectedCaseId, deployToCase, loadPlaybook: _loadPlaybook } = useLitigationActions();
 
   // Ensure cases is always an array
   const safeCases = Array.isArray(cases) ? cases : [];

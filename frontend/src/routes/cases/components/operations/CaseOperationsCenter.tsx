@@ -22,16 +22,16 @@
  * - Workflow automation
  */
 
-import { api } from '@/lib/frontend-api';
+import { useQuery } from '@/hooks/useQueryHooks';
 import type { WorkflowInstance } from '@/lib/frontend-api';
+import { api } from '@/lib/frontend-api';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { useTheme } from '@/theme';
-import { useQuery } from '@/hooks/useQueryHooks';
 import type { User } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import {
   Calendar,
   Kanban,
@@ -46,7 +46,7 @@ type ViewMode = 'list' | 'kanban' | 'calendar';
 
 export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) => {
   // Guideline 34: Side-effect free context read
-  const { isDark, isPendingThemeChange } = useTheme();
+  const { isDark } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [filterStatus, setFilterStatus] = useState('all');
   const [_showTaskModal, setShowTaskModal] = useState(false);
@@ -125,8 +125,8 @@ export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                 <Calendar className="w-4 h-4" />
               </button>
             </div>
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               size="sm"
               onClick={() => setShowTaskModal(true)}
             >

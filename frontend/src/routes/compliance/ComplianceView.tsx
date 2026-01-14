@@ -3,7 +3,7 @@ import { AlertCircle, Calendar, Shield } from 'lucide-react';
 import { useCompliance } from './ComplianceProvider';
 
 export function ComplianceView() {
-  const { checks, conflicts, deadlines, metrics } = useCompliance();
+  const { checks, conflicts, metrics } = useCompliance();
 
   return (
     <div className="h-full flex flex-col">

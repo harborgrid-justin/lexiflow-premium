@@ -138,9 +138,18 @@ export const LitigationProvider: React.FC<LitigationProviderProps> = ({
     };
     return process.env.NODE_ENV === 'development' ? Object.freeze(value) : value;
   }, [
-    setActiveTab,
+    activeTab,
+    isPending,
+    builder.nodes,
+    builder.connections,
+    builder.selectedCaseId,
+    builder.cases,
+    builder.validationErrors,
+    builder.isDeploying,
+  ]);
 
-    // Builder Actions
+  const actionsValue = useMemo(() => ({
+    setActiveTab,
     setNodes: builder.setNodes,
     setConnections: builder.setConnections,
     setSelectedCaseId: builder.setSelectedCaseId,
@@ -155,6 +164,7 @@ export const LitigationProvider: React.FC<LitigationProviderProps> = ({
     deleteConnection: builder.deleteConnection,
     clearCanvas: builder.clearCanvas,
   }), [
+    setActiveTab,
     builder.setNodes,
     builder.setConnections,
     builder.setSelectedCaseId,
@@ -170,12 +180,12 @@ export const LitigationProvider: React.FC<LitigationProviderProps> = ({
     builder.clearCanvas,
   ]);
 
-// Rule 36: ISOLATE CONTEXT PROVIDERS
-return (
-  <LitigationActionsContext.Provider value={actionsValue}>
-    <LitigationStateContext.Provider value={stateValue}>
-      {children}
-    </LitigationStateContext.Provider>
-  </LitigationActionsContext.Provider>
-);
+  // Rule 36: ISOLATE CONTEXT PROVIDERS
+  return (
+    <LitigationActionsContext.Provider value={actionsValue}>
+      <LitigationStateContext.Provider value={stateValue}>
+        {children}
+      </LitigationStateContext.Provider>
+    </LitigationActionsContext.Provider>
+  );
 };

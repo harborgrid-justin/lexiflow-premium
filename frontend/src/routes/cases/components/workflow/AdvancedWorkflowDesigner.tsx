@@ -13,8 +13,8 @@
  * - Guideline 24: Workflow analytics computations are memoized (useMemo)
  */
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import type { EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';
 import {
   Boxes,
@@ -57,7 +57,7 @@ export function AdvancedWorkflowDesigner({
   onSave
 }: AdvancedWorkflowDesignerProps) {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
 
   const {
     activeTab,

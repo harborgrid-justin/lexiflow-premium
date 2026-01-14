@@ -5,10 +5,9 @@
  * Displays real-time metrics, activity feeds, deadlines, and analytics
  */
 
-import { useTheme } from '@/theme';
-import { useDashboardOverview } from '../_hooks/useDashboardOverview';
 import { CHART_COLORS } from '@/config/dashboard.config';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import {
   AlertCircle,
   Briefcase,
@@ -32,10 +31,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { useDashboardOverview } from '../_hooks/useDashboardOverview';
 
 // Components
-import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '../widgets';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '../widgets';
 
 // ============================================================================
 // TYPES
@@ -54,7 +54,7 @@ interface EnhancedDashboardOverviewProps {
 
 export function EnhancedDashboardOverview({
   onSelectCase,
-}) => {
+}: EnhancedDashboardOverviewProps) {
   const { theme, mode: _mode } = useTheme();
 
   const {

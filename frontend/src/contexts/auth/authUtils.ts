@@ -21,7 +21,7 @@ export async function getAuthUser(_request: Request): Promise<AuthUser | null> {
   // Production implementation using StorageUtils for client-side auth
   const token = StorageUtils.getItem<string>(STORAGE_KEYS.AUTH_TOKEN);
   const user = StorageUtils.getItem<AuthUser>(STORAGE_KEYS.USER_SESSION);
-  
+
   if (token && user) {
     return user;
   }

@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
 import React, { createContext, useContext, useMemo, useState } from 'react';
+import { useRevalidator } from 'react-router';
 
 interface DashboardMetrics {
   totalCases: number;
@@ -28,10 +29,10 @@ const DashboardContext = createContext<DashboardContextValue | null>(null);
 
 interface DashboardProviderProps {
   children: React.ReactNode;
-  initialCases: Case[];
-  initialDocketEntries: DocketEntry[];
-  initialTimeEntries: TimeEntry[];
-  initialTasks: Task[];
+  initialCases?: Case[];
+  initialDocketEntries?: DocketEntry[];
+  initialTimeEntries?: TimeEntry[];
+  initialTasks?: Task[];
 }
 
 /**
@@ -39,48 +40,53 @@ interface DashboardProviderProps {
  */
 export function DashboardProvider({
   children,
-  initialCases,
-  initialDocketEntries,
-  initialTimeEntries,
-  initialTasks
+  initialCases = [],
+  initialDocketEntries = [],
+  initialTimeEntries = [],
+  initialTasks = [],
 }: DashboardProviderProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const { user } = useAuth(); // Assuming useAuth returns { user }
 
   // Compute dashboard metrics
   const metrics = useMemo<DashboardMetrics>(() => {
-    const totalCases = initialCases.length;
-    const activeCases = initialCases.filter(c => c.status === 'Active').length;
+    const cases = initialCases || [];
+    const docket = initialDocketEntries || [];
+    const time = initialTimeEntries || [];
+    const taskList = initialTasks || [];
+
+    const totalCases = cases.length;
+    const activeCases = cases.filter(c => c.status === 'Active').length;
 
     const today = new Date();
     const nextWeek = new Date(today);
     nextWeek.setDate(nextWeek.getDate() + 7);
 
-    const upcomingDeadlines = initialCases.filter(c => {
+    const upcomingDeadlines = cases.filter(c => {
       if (!c.trialDate) return false;
       const hearingDate = new Date(c.trialDate);
       return hearingDate >= today && hearingDate <= nextWeek;
     }).length;
 
-    const pendingTasks = initialTasks.filter(t => t.status === 'To Do' || t.status === 'In Progress').length;
+    const pendingTasks = taskList.filter(t => t.status === 'To Do' || t.status === 'In Progress').length;
 
     const todayStart = new Date(today.setHours(0, 0, 0, 0));
-    const todayDocketEntries = initialDocketEntries.filter(
+    const todayDocketEntries = docket.filter(
       entry => new Date(entry.entryDate) >= todayStart
     ).length;
 
     const weekStart = new Date(today);
     weekStart.setDate(weekStart.getDate() - 7);
-    const weekHours = initialTimeEntries
+    const weekHours = time
       .filter(entry => new Date(entry.date) >= weekStart)
       .reduce((sum, entry) => sum + (entry.duration || 0), 0);
 
-    const casesByStatus = initialCases.reduce((acc, c) => {
+    const casesByStatus = cases.reduce((acc, c) => {
       acc[c.status] = (acc[c.status] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    const casesByType = initialCases.reduce((acc, c) => {
+    const casesByType = cases.reduce((acc, c) => {
       const type = c.type || c.matterType || 'Unknown';
       acc[type] = (acc[type] || 0) + 1;
       return acc;
@@ -99,10 +105,10 @@ export function DashboardProvider({
   }, [initialCases, initialDocketEntries, initialTimeEntries, initialTasks]);
 
   const value = useMemo<DashboardContextValue>(() => ({
-    cases: initialCases,
-    docketEntries: initialDocketEntries,
-    timeEntries: initialTimeEntries,
-    tasks: initialTasks,
+    cases: initialCases || [],
+    docketEntries: initialDocketEntries || [],
+    timeEntries: initialTimeEntries || [],
+    tasks: initialTasks || [],
     metrics,
     activeTab,
     setActiveTab,
@@ -129,11 +135,17 @@ export function useDashboard() {
  * @returns Dashboard actions object
  */
 export function useDashboardActions() {
-  // Stub implementation - returns empty actions object
-  return {
-    refreshData: async () => { },
-    updateMetrics: () => { },
-  };
+  const revalidator = useRevalidator();
+
+  return useMemo(() => ({
+    refreshData: async () => {
+      revalidator.revalidate();
+    },
+    updateMetrics: () => {
+      // Metrics are computed from data, so revalidating data updates metrics
+      revalidator.revalidate();
+    },
+  }), [revalidator]);
 }
 /**
  * useDashboardState - State hook alias

@@ -7,9 +7,7 @@
  * @module routes/correspondence/index
  */
 
-import type { Correspondence } from '@/lib/frontend-api';
 import { communicationsApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -40,13 +38,16 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 
   try {
     // Fetch correspondence using new enterprise API
-    const result = await communicationsApi.getAllCorrespondence({ page: 1, limit: 100 });
+    // Using getAllMessages as getAllCorrespondence does not exist on communicationsApi
+    // and Correspondence is essentially a type of Message
+    const result = await communicationsApi.getAllMessages({ page: 1, limit: 100 });
     const items = result.ok ? result.data.data : [];
 
     // Apply client-side filtering if needed
+    // Filtering by status requires checking properties on the normalized message objects
     const filteredItems = filter === "all"
       ? items
-      : items.filter((item: Correspondence) => item.status === filter);
+      : items.filter((item: any) => item.status === filter);
 
     return { items: filteredItems, totalCount: filteredItems.length };
   } catch (error) {

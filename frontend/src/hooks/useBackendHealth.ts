@@ -68,16 +68,16 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services
 import {
-    backendDiscovery,
-    type BackendStatus
-} from '@/services/integration/backendDiscovery';
+  backendDiscovery,
+  type BackendStatus,
+} from "@/services/integration/backend-discovery.service";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -155,12 +155,14 @@ export function useBackendHealth(): UseBackendHealthReturn {
     try {
       const initialStatus = backendDiscovery.getStatus();
       // Only log in development or on significant state changes
-      if (process.env.NODE_ENV === 'development' && !initialStatus.available) {
-        console.warn('[useBackendHealth] Backend unavailable on initialization');
+      if (process.env.NODE_ENV === "development" && !initialStatus.available) {
+        console.warn(
+          "[useBackendHealth] Backend unavailable on initialization"
+        );
       }
       return initialStatus;
     } catch (error) {
-      console.error('[useBackendHealth] Error initializing status:', error);
+      console.error("[useBackendHealth] Error initializing status:", error);
       // Fallback to default offline status - explicit BackendStatus type
       const fallbackStatus: BackendStatus = {
         available: false,
@@ -168,7 +170,7 @@ export function useBackendHealth(): UseBackendHealthReturn {
         lastChecked: new Date(),
         latency: undefined,
         version: undefined,
-        error: 'Failed to initialize backend health monitoring'
+        error: "Failed to initialize backend health monitoring",
       };
       return fallbackStatus;
     }
@@ -192,45 +194,57 @@ export function useBackendHealth(): UseBackendHealthReturn {
   useEffect(() => {
     try {
       // Subscribe to status changes - only once on mount
-      const unsubscribe = backendDiscovery.subscribe((newStatus: BackendStatus) => {
-        try {
-          // Validate status object structure
-          if (!newStatus || typeof newStatus !== 'object') {
-            console.error('[useBackendHealth] Invalid status update:', newStatus);
-            return;
-          }
+      const unsubscribe = backendDiscovery.subscribe(
+        (newStatus: BackendStatus) => {
+          try {
+            // Validate status object structure
+            if (!newStatus || typeof newStatus !== "object") {
+              console.error(
+                "[useBackendHealth] Invalid status update:",
+                newStatus
+              );
+              return;
+            }
 
-          // Only log in development on significant changes
-          if (process.env.NODE_ENV === 'development') {
-            setStatus((prevStatus) => {
-              // Log significant status changes
-              if (prevStatus.available !== newStatus.available) {
-                console.log(`[useBackendHealth] Availability: ${prevStatus.available} → ${newStatus.available}`);
-              }
-              if (prevStatus.healthy !== newStatus.healthy) {
-                console.log(`[useBackendHealth] Health: ${prevStatus.healthy} → ${newStatus.healthy}`);
-              }
-              return newStatus;
-            });
-          } else {
-            // Update local state without logging
-            setStatus(newStatus);
+            // Only log in development on significant changes
+            if (process.env.NODE_ENV === "development") {
+              setStatus((prevStatus) => {
+                // Log significant status changes
+                if (prevStatus.available !== newStatus.available) {
+                  console.log(
+                    `[useBackendHealth] Availability: ${prevStatus.available} → ${newStatus.available}`
+                  );
+                }
+                if (prevStatus.healthy !== newStatus.healthy) {
+                  console.log(
+                    `[useBackendHealth] Health: ${prevStatus.healthy} → ${newStatus.healthy}`
+                  );
+                }
+                return newStatus;
+              });
+            } else {
+              // Update local state without logging
+              setStatus(newStatus);
+            }
+          } catch (error) {
+            console.error(
+              "[useBackendHealth] Error processing status update:",
+              error
+            );
           }
-        } catch (error) {
-          console.error('[useBackendHealth] Error processing status update:', error);
         }
-      });
+      );
 
       // Cleanup subscription on unmount
       return () => {
         try {
           unsubscribe();
         } catch (error) {
-          console.error('[useBackendHealth] Error during cleanup:', error);
+          console.error("[useBackendHealth] Error during cleanup:", error);
         }
       };
     } catch (error) {
-      console.error('[useBackendHealth] Error setting up subscription:', error);
+      console.error("[useBackendHealth] Error setting up subscription:", error);
       // Return empty cleanup function on subscription failure
       return () => {};
     }
@@ -268,22 +282,22 @@ export function useBackendHealth(): UseBackendHealthReturn {
       const updatedStatus = await backendDiscovery.refresh();
 
       // Validate response
-      if (!updatedStatus || typeof updatedStatus !== 'object') {
-        throw new Error('Invalid status response from refresh');
+      if (!updatedStatus || typeof updatedStatus !== "object") {
+        throw new Error("Invalid status response from refresh");
       }
 
       // Only log in development
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[useBackendHealth] Refresh completed:', {
+      if (process.env.NODE_ENV === "development") {
+        console.log("[useBackendHealth] Refresh completed:", {
           available: updatedStatus.available,
           healthy: updatedStatus.healthy,
-          latency: updatedStatus.latency
+          latency: updatedStatus.latency,
         });
       }
 
       return updatedStatus;
     } catch (error) {
-      console.error('[useBackendHealth.refresh] Error:', error);
+      console.error("[useBackendHealth.refresh] Error:", error);
 
       // Return current status on error
       return status;
@@ -303,36 +317,45 @@ export function useBackendHealth(): UseBackendHealthReturn {
    */
   const validateStatus = useCallback((status: BackendStatus): boolean => {
     try {
-      if (!status || typeof status !== 'object') {
-        console.error('[useBackendHealth] Invalid status object:', status);
+      if (!status || typeof status !== "object") {
+        console.error("[useBackendHealth] Invalid status object:", status);
         return false;
       }
 
       // Check required fields
-      if (typeof status.available !== 'boolean' || typeof status.healthy !== 'boolean') {
-        console.error('[useBackendHealth] Invalid required fields:', status);
+      if (
+        typeof status.available !== "boolean" ||
+        typeof status.healthy !== "boolean"
+      ) {
+        console.error("[useBackendHealth] Invalid required fields:", status);
         return false;
       }
 
       // lastChecked can be Date object or ISO string
-      if (!status.lastChecked ||
-          (!(status.lastChecked instanceof Date) && typeof status.lastChecked !== 'string')) {
-        console.error('[useBackendHealth] Invalid lastChecked field:', status.lastChecked);
+      if (
+        !status.lastChecked ||
+        (!(status.lastChecked instanceof Date) &&
+          typeof status.lastChecked !== "string")
+      ) {
+        console.error(
+          "[useBackendHealth] Invalid lastChecked field:",
+          status.lastChecked
+        );
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('[useBackendHealth.validateStatus] Error:', error);
+      console.error("[useBackendHealth.validateStatus] Error:", error);
       return false;
     }
   }, []);
 
   // Validate status on each update (development only)
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       if (!validateStatus(status)) {
-        console.warn('[useBackendHealth] Status validation failed:', status);
+        console.warn("[useBackendHealth] Status validation failed:", status);
       }
     }
   }, [status, validateStatus]);

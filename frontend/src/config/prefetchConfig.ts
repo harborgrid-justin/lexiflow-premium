@@ -28,105 +28,141 @@ export const PREFETCH_MAP: Record<
   [PATHS.CASES]: {
     key: queryKeys.cases.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.MATTERS_OVERVIEW]: {
     key: queryKeys.cases.matters.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.MATTERS_CALENDAR]: {
     key: queryKeys.cases.matters.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.MATTERS_ANALYTICS]: {
     key: queryKeys.cases.matters.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.MATTERS_INTAKE]: {
     key: queryKeys.cases.matters.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.MATTERS_OPERATIONS]: {
     key: queryKeys.cases.matters.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.MATTERS_INSIGHTS]: {
     key: queryKeys.cases.matters.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.MATTERS_FINANCIALS]: {
     key: queryKeys.cases.matters.all(),
     fn: async () => {
-      const result = await casesApi.getAllCases({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await casesApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.DOCKET]: {
     key: queryKeys.docket.all(),
     fn: async () => {
-      const result = await docketApi.getAllDocketEntries({
-        page: 1,
-        limit: 50,
-      });
-      return result.ok ? result.data.data : [];
+      try {
+        return await docketApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.DOCUMENTS]: {
     key: queryKeys.documents.all(),
     fn: async () => {
-      const result = await documentsApi.getAllDocuments({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await documentsApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.WORKFLOWS]: {
     key: queryKeys.tasks.all(),
     fn: async () => {
-      const result = await workflowApi.getAllTasks({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await workflowApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.BILLING]: {
     key: queryKeys.billing.timeEntries(),
     fn: async () => {
-      const result = await billingApi.getAllTimeEntries({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await billingApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.EVIDENCE]: {
     key: queryKeys.evidence.all(),
     fn: async () => {
-      const result = await discoveryApi.getAllEvidence({ page: 1, limit: 50 });
-      return result.ok ? result.data.data : [];
+      try {
+        return await discoveryApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
   [PATHS.CRM]: {
     key: queryKeys.clients.all(),
     fn: async () => {
-      const result = await communicationsApi.getAllClients({
-        page: 1,
-        limit: 50,
-      });
-      return result.ok ? result.data.data : [];
+      try {
+        return await communicationsApi.getAll({ page: 1, limit: 50 });
+      } catch {
+        return [];
+      }
     },
   },
 };

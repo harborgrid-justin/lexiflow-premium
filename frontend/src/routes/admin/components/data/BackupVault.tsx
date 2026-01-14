@@ -1,10 +1,10 @@
-import { dataPlatformApi } from '@/lib/frontend-api';
-import { BackupSnapshot } from '@/lib/frontend-api';
-import { useTheme } from '@/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
+import { BackupSnapshot } from '@/lib/frontend-api';
+import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
+import { useTheme } from '@/theme';
 import { AlertCircle, Play, RefreshCw, Server, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import { BackupMetrics } from './backup/BackupMetrics';

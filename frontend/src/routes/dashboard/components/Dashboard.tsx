@@ -44,13 +44,26 @@ interface DashboardProps {
   initialTab?: string;
   /** Current user information. */
   currentUser: User;
+  /** Optional initial data */
+  initialCases?: any[];
+  initialDocketEntries?: any[];
+  initialTimeEntries?: any[];
+  initialTasks?: any[];
 }
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
-export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, currentUser }) => {
+export const Dashboard: React.FC<DashboardProps> = ({
+  onSelectCase,
+  initialTab,
+  currentUser,
+  initialCases,
+  initialDocketEntries,
+  initialTimeEntries,
+  initialTasks
+}) => {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setStoredTab] = useSessionStorage<string>('dashboard_active_tab', initialTab || 'overview');
 
@@ -62,11 +75,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, 
 
   return (
     <DashboardProvider
-      activeTab={activeTab}
-      currentUser={currentUser}
-      isPending={isPending}
-      onSelectCase={onSelectCase}
-      onTabChange={setActiveTab}
+      initialCases={initialCases}
+      initialDocketEntries={initialDocketEntries}
+      initialTimeEntries={initialTimeEntries}
+      initialTasks={initialTasks}
     >
       <TabbedPageLayout
         pageTitle="Executive Dashboard"

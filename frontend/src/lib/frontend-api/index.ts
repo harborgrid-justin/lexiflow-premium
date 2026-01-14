@@ -122,8 +122,8 @@ export * from "@/api";
 // Re-export backend mode detection from config
 export { isBackendApiEnabled } from "@/config/network/api.config";
 
-// Re-export dataPlatformApi from lib/frontend-api (may override @/api version)
-export { dataPlatformApi } from "./data-platform";
+// Note: dataPlatformApi not re-exported here to avoid circular dependencies.
+// Import directly from '@/lib/frontend-api/data-platform' if needed.
 
 // Domain API modules - export only the API objects to avoid name conflicts
 export { adminApi } from "./admin";

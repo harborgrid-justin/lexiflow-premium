@@ -9,7 +9,7 @@ import { reactRouter } from "@react-router/dev/vite";
 import path from "node:path";
 import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths"; // 1. Add this to fix alias resolution
-import { PORTS, HOSTS, URLS } from "./src/config/ports.config";
+import { HOSTS, PORTS, URLS } from "./src/config/ports.config";
 
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -97,9 +97,24 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         output: {
           manualChunks(id) {
             if (id.includes("node_modules")) {
-              if (id.includes("react")) return "vendor-core";
-              if (id.includes("recharts")) return "vendor-charts";
-              if (id.includes("lucide")) return "vendor-ui";
+              // Core React ecosystem - all related packages together to avoid circular deps
+              if (
+                id.includes("react") ||
+                id.includes("react-dom") ||
+                id.includes("react-router") ||
+                id.includes("scheduler")
+              ) {
+                return "vendor-core";
+              }
+              // Charting libraries
+              if (id.includes("recharts") || id.includes("d3-")) {
+                return "vendor-charts";
+              }
+              // UI/Icon libraries
+              if (id.includes("lucide")) {
+                return "vendor-ui";
+              }
+              // Everything else
               return "vendor-misc";
             }
           },

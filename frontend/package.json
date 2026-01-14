@@ -27,6 +27,7 @@
     "@nestjs/terminus": "^11.0.0",
     "@react-router/dev": "^7.11.0",
     "@react-router/node": "^7.11.0",
+    "@remix-run/react": "^2.17.4",
     "axios-retry": "^4.5.0",
     "cache-manager": "^7.2.7",
     "cache-manager-redis-store": "^3.0.1",

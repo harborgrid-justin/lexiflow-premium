@@ -115,7 +115,9 @@ export const ValidationService = {
     _fieldName: string,
     _methodName: string
   ): void => {
-    // Stub implementation - add validation logic if needed
+    if (typeof _value !== 'string') {
+      throw new Error(`[ValidationService.${_methodName}] ${_fieldName} must be a string`);
+    }
   },
 
   /**

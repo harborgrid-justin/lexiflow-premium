@@ -28,6 +28,7 @@
  *
  * @security
  * - Input validation: All parameters validated before use
+ * - Note: SystemEventType now statically imported (already eagerly loaded by many modules)
  * - XSS prevention: Type enforcement and sanitization
  * - Access control: Backend enforces user permissions
  * - Audit trail: All compliance operations logged
@@ -188,7 +189,8 @@ export const ComplianceService = {
     mode: "light" | "dark" = "light"
   ): Promise<Array<{ name: string; value: number; color: string }>> => {
     try {
-      const { ChartColorService } = await import("../theme/chart-color.service");
+      const { ChartColorService } =
+        await import("../theme/chart-color.service");
       const colors = ChartColorService.getRiskColors(mode);
 
       // Risk statistics computed from available compliance data
@@ -434,8 +436,6 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
 
       // Publish integration event
       try {
-        const { SystemEventType } = await import("@/types/integration-types");
-
         await IntegrationEventPublisher.publish(
           SystemEventType.ETHICAL_WALL_CREATED,
           {

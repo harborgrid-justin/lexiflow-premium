@@ -71,17 +71,11 @@ export function meta(_: Route.MetaArgs) {
 export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
     // Fetch cases and tasks using new enterprise API
-    const casesResult = await casesApi.getAllCases({ page: 1, limit: 100 });
+    const casesArray = await casesApi.getAll({ page: 1, limit: 100 });
     const tasksResult = await workflowApi.getAllTasks({ page: 1, limit: 100 });
 
-    // Handle Result<T> returns - check for ok flag
-    let casesArray: DashboardCase[] = [];
+    // Handle Result<T> returns for tasks - check for ok flag
     let tasksArray: DashboardTask[] = [];
-
-    if (casesResult.ok) {
-      // Cast to expected structure
-      casesArray = (casesResult.data as { data: DashboardCase[] })?.data || [];
-    }
 
     if (tasksResult.ok) {
       tasksArray = (tasksResult.data as { data: DashboardTask[] })?.data || [];

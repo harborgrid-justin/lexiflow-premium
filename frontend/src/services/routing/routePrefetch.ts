@@ -29,7 +29,7 @@ export interface RouteMetadata {
 }
 
 class RoutePrefetchService {
-  private prefetchQueue = new Map<string, Promise<any>>();
+  private prefetchQueue = new Map<string, Promise<void>>();
   private routeMetadata = new Map<string, RouteMetadata>();
   private intersectionObserver: IntersectionObserver | null = null;
   private hoverTimers = new Map<string, number>();
@@ -258,12 +258,13 @@ class RoutePrefetchService {
       const stored = localStorage.getItem("route_prefetch_metadata");
       if (stored) {
         const data = JSON.parse(stored);
-        Object.entries(data).forEach(([path, meta]: [string, any]) => {
+        Object.entries(data).forEach(([path, meta]) => {
+          const m = meta as Omit<RouteMetadata, "transitionsFrom"> & {
+            transitionsFrom?: Record<string, number>;
+          };
           this.routeMetadata.set(path, {
-            ...meta,
-            transitionsFrom: new Map(
-              Object.entries(meta.transitionsFrom || {})
-            ),
+            ...m,
+            transitionsFrom: new Map(Object.entries(m.transitionsFrom || {})),
           });
         });
       }
@@ -277,7 +278,7 @@ class RoutePrefetchService {
    */
   private saveMetadata(): void {
     try {
-      const data: Record<string, any> = {};
+      const data: Record<string, unknown> = {};
       this.routeMetadata.forEach((meta, path) => {
         data[path] = {
           ...meta,

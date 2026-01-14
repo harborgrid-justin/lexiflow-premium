@@ -8,8 +8,8 @@
  * - Type-safe data contracts
  */
 
-import { DataService } from "../../services/data/dataService";
-import type { Task, WorkflowInstance, WorkflowTemplate } from "../../types";
+import { DataService } from "@/services/data/data-service.service";
+import type { Task, WorkflowInstance, WorkflowTemplate } from "@/types";
 
 export interface WorkflowsLoaderData {
   templates: WorkflowTemplate[];

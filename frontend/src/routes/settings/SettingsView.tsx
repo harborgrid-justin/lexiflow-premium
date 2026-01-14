@@ -2,9 +2,9 @@
  * Settings Domain - View Component
  */
 
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Bell, Link, Settings as SettingsIcon, Shield } from 'lucide-react';
 import React from 'react';
-import { PageHeader } from '../../components/organisms/PageHeader';
 import { useSettings } from './SettingsProvider';
 
 export function SettingsView() {
@@ -81,8 +81,8 @@ function TabButton({
     <button
       onClick={onClick}
       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${active
-          ? 'bg-blue-600 text-white'
-          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
+        ? 'bg-blue-600 text-white'
+        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
         }`}
     >
       {icon}

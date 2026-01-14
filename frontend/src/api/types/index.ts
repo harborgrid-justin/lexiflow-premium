@@ -42,7 +42,7 @@ export type {
   PlaybookDifficulty,
   PlaybookStage,
   WarRoomConfig,
-} from "../../types/playbook";
+} from "@/types/playbook";
 
 // =============================================================================
 // MOCK DATA CONSTANTS (Deprecated - Use DataService)

@@ -455,15 +455,14 @@ export class BillingApiService {
       >("/billing/invoices", filters);
 
       // Handle nested paginated response (NestJS standard response wrapping a paginated result)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const anyResponse = response as any;
+      const nestedResponse = response as { data?: { data?: unknown } };
       if (
-        anyResponse &&
-        anyResponse.data &&
-        anyResponse.data.data &&
-        Array.isArray(anyResponse.data.data)
+        nestedResponse &&
+        nestedResponse.data &&
+        nestedResponse.data.data &&
+        Array.isArray(nestedResponse.data.data)
       ) {
-        return anyResponse.data.data as Invoice[];
+        return nestedResponse.data.data as Invoice[];
       }
 
       // Handle paginated response

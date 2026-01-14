@@ -2,10 +2,10 @@
 import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { AuthProvider, useAuth } from "@/contexts/auth/AuthContext";
+import { EntitlementsProvider, useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
+import { FlagsProvider, useFlags } from "@/contexts/flags/FlagsContext";
 import { DataProvider } from "@/routes/dashboard";
-import { AuthProvider, useAuth } from "../contexts/auth/AuthContext";
-import { EntitlementsProvider, useEntitlements } from "../contexts/entitlements/EntitlementsContext";
-import { FlagsProvider, useFlags } from "../contexts/flags/FlagsContext";
 
 import { AdminPath } from "./paths/AdminPath";
 import { MemberPath } from "./paths/MemberPath";

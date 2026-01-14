@@ -37,7 +37,7 @@ import { ResearchToolContent } from './ResearchToolContent';
 // Types
 
 const ClauseHistoryModal = lazy(async () => {
-  const module = await import('../../clauses/components/ClauseHistoryModal');
+  const module = await import('@/routes/clauses/components/ClauseHistoryModal');
   return { default: module.ClauseHistoryModal };
 });
 

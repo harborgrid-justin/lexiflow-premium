@@ -6,9 +6,9 @@
  * @module routes/workflows/instance.detail
  */
 
+import { api } from '@/services/api';
 import { requireAuthentication } from '@/utils/route-guards';
 import { Form, Link, useLoaderData, useNavigate, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
 
 // ============================================================================

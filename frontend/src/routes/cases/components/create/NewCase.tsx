@@ -23,12 +23,12 @@
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Save, Trash2, FileText, Scale, Users, DollarSign, Link2 } from 'lucide-react';
+import { DollarSign, FileText, Link2, Save, Scale, Trash2, Users } from 'lucide-react';
 
 // Types
 import { NewMatterProps, TabId } from './types/newCaseTypes';
@@ -37,21 +37,21 @@ import { NewMatterProps, TabId } from './types/newCaseTypes';
 import { useNewCaseController } from './hooks/useNewCaseController';
 
 // Components
-import { TabBar } from './components/TabBar';
-import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { ConflictWarning } from './components/ConflictWarning';
+import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { GlobalErrors } from './components/GlobalErrors';
+import { TabBar } from './components/TabBar';
 
 // Tab Components
-import { IntakeTab } from './tabs/IntakeTab';
 import { CourtTab } from './tabs/CourtTab';
-import { PartiesTab } from './tabs/PartiesTab';
 import { FinancialTab } from './tabs/FinancialTab';
+import { IntakeTab } from './tabs/IntakeTab';
+import { PartiesTab } from './tabs/PartiesTab';
 import { RelatedCasesTab } from './tabs/RelatedCasesTab';
 
 const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser }) => {
   // Guideline 34: Side-effect free context read
-  const { theme, isPendingThemeChange } = useTheme();
+  const { theme } = useTheme();
 
   const {
     isEditMode,

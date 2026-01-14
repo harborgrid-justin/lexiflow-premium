@@ -3,6 +3,7 @@
  * All tab configurations for various modules in one reusable file
  */
 
+import { PlatformView } from "@/routes/admin/components/data/types";
 import type { TabConfigItem } from "@/types/layout";
 import {
   Activity,
@@ -71,7 +72,6 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
-import { PlatformView } from "../features/admin/components/data/types";
 
 // =============================================================================
 // TYPE DEFINITIONS
@@ -800,9 +800,7 @@ export const DISCOVERY_TAB_CONFIG: TabConfigItem[] = [
 // =============================================================================
 
 export const USER_AUTH_PROFILE_TABS = [
-  { id: 'profile', label: 'Profile', icon: Users },
-  { id: 'security', label: 'Security', icon: Lock },
-  { id: 'preferences', label: 'Preferences', icon: Settings },
+  { id: "profile", label: "Profile", icon: Users },
+  { id: "security", label: "Security", icon: Lock },
+  { id: "preferences", label: "Preferences", icon: Settings },
 ];
-
-

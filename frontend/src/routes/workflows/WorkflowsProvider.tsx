@@ -9,9 +9,9 @@
  * - Action handlers with optimistic updates
  */
 
+import type { Task, WorkflowInstance, WorkflowTemplate } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
 import { useLoaderData } from 'react-router';
-import type { Task, WorkflowInstance, WorkflowTemplate } from '../../types';
 import type { WorkflowsLoaderData } from './loader';
 
 /**

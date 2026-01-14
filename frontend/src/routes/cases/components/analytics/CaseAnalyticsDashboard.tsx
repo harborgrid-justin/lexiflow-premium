@@ -9,7 +9,7 @@
  * - Guideline 28: Theme (isDark) determines chart styling (pure function)
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for dashboard transitions
- * 
+ *
  * Features:
  * - Matter performance metrics
  * - Financial performance tracking
@@ -23,13 +23,13 @@
  * - Custom report generation
  */
 
+import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/lib/frontend-api';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/theme';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { CaseStatus } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import {
   ArrowDown,
   ArrowUp,
@@ -45,7 +45,7 @@ import { useMemo, useState } from 'react';
 
 export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {
   // Guideline 34: Side-effect free context read
-  const { isDark, isPendingThemeChange } = useTheme();
+  const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d' | 'ytd' | 'all'>('30d');
   const practiceAreaFilter = 'all';
 

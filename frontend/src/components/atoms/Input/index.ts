@@ -3,4 +3,4 @@
  * @description Re-export Input from ui/atoms for backward compatibility
  */
 
-export * from '../../../shared/ui/atoms/Input';
+export * from "@/shared/ui/atoms/Input";

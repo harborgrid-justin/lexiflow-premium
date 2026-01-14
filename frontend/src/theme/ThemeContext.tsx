@@ -1,6 +1,6 @@
+import { FEATURES_CONFIG } from '@/config/features/features.config';
+import { UI_CONFIG } from '@/config/features/ui.config';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
-import { FEATURES_CONFIG } from '../../config/features/features.config';
-import { UI_CONFIG } from '../../config/features/ui.config';
 // DataService imported for hydration
 import { DataService } from '@/services/data/data-service.service';
 import { ThemeObject } from './ThemeContext.types';
@@ -477,26 +477,23 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
       // We can just use the 'tokens' from closure IF we add it to dependency array.
       const prev = tokens;
-      const next = { ...prev };
+      const next = { ...prev } as Record<string, unknown>;
 
       if (category === 'root') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (next as any)[key] = value;
+        next[key] = value;
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const categoryObj = { ...(next as any)[category] };
+        const categoryObj = { ...(next[category] as Record<string, unknown>) };
 
         if (subKey) {
           if (categoryObj[key] && typeof categoryObj[key] === 'object') {
-            const subObj = { ...categoryObj[key] };
+            const subObj = { ...(categoryObj[key] as Record<string, unknown>) };
             subObj[subKey] = value;
             categoryObj[key] = subObj;
           }
         } else {
           categoryObj[key] = value;
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (next as any)[category] = categoryObj;
+        next[category] = categoryObj;
       }
 
       setTokensExternal(next);

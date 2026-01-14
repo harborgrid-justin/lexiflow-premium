@@ -1,14 +1,14 @@
 import {
   ANIMATION_DURATION_MS,
   ANIMATION_EASING,
-  SIDEBAR_WIDTH,
-  SIDEBAR_COLLAPSED_WIDTH,
-  TOPBAR_HEIGHT,
-  MODAL_MAX_WIDTH,
   FOOTER_HEIGHT,
+  MODAL_MAX_WIDTH,
+  SIDEBAR_COLLAPSED_WIDTH,
+  SIDEBAR_WIDTH,
+  TABLE_HEADER_HEIGHT,
   TABLE_ROW_HEIGHT,
-  TABLE_HEADER_HEIGHT
-} from "../../config/features/ui.config";
+  TOPBAR_HEIGHT,
+} from "@/config/features/ui.config";
 
 export type ThemeDensity = "compact" | "normal" | "comfortable";
 export type FontMode = "sans" | "serif";

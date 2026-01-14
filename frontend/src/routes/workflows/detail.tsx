@@ -6,10 +6,10 @@
  * @module routes/workflows/detail
  */
 
+import { api } from '@/services/api';
+import { useTheme } from '@/theme';
 import { requireAuthentication } from '@/utils/route-guards';
 import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
-import { useTheme } from '@/theme';
-import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/detail";
 

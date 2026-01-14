@@ -8,11 +8,11 @@
  */
 
 import type { WorkflowInstance, WorkflowTemplate } from '@/lib/frontend-api';
+import { api } from '@/services/api';
 import type { WorkflowStatus } from '@/types';
 import { requireAuthentication } from '@/utils/route-guards';
 import { useState } from 'react';
 import { Form, Link, redirect, useLoaderData, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { api } from '../../api';
 import { createListMeta } from '../_shared/meta-utils';
 
 // ============================================================================

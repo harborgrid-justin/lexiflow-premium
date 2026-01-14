@@ -21,7 +21,9 @@ export async function getAnalytics(
     includeTrends?: boolean;
   }
 ): Promise<WorkflowAnalytics> {
-  return apiClient.get(`${BASE_URL}/${workflowId}/analytics`, options);
+  return apiClient.get(`${BASE_URL}/${workflowId}/analytics`, {
+    params: options,
+  });
 }
 
 /**
@@ -49,9 +51,7 @@ export async function getNodeAnalytics(
   waitTime: number;
   throughput: number;
 }> {
-  return apiClient.get(
-    `${BASE_URL}/${workflowId}/analytics/nodes/${nodeId}`
-  );
+  return apiClient.get(`${BASE_URL}/${workflowId}/analytics/nodes/${nodeId}`);
 }
 
 /**

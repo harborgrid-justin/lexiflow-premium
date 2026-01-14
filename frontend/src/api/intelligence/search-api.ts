@@ -4,12 +4,15 @@
  * Coverage: 6/6 search endpoints (now 100%)
  */
 
-import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
-import type { SearchResult } from '@/types';
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
+import type { SearchResult } from "@/types";
 
 export interface SearchQuery {
   q: string;
-  type?: 'all' | 'cases' | 'documents' | 'docket' | 'contacts' | 'tasks';
+  type?: "all" | "cases" | "documents" | "docket" | "contacts" | "tasks";
   filters?: Record<string, unknown>;
   page?: number;
   limit?: number;
@@ -17,7 +20,7 @@ export interface SearchQuery {
 
 export interface SearchSuggestion {
   text: string;
-  type: 'query' | 'entity' | 'tag';
+  type: "query" | "entity" | "tag";
   score: number;
   count?: number;
 }
@@ -31,7 +34,7 @@ export interface SearchStats {
 
 export interface ReindexResult {
   jobId: string;
-  status: 'queued' | 'running' | 'completed' | 'failed';
+  status: "queued" | "running" | "completed" | "failed";
   documentsProcessed?: number;
   totalDocuments?: number;
   startedAt?: string;
@@ -45,7 +48,10 @@ export class SearchApiService {
    * GET ${API_PREFIX}/search
    */
   async search(query: SearchQuery): Promise<SearchResult[]> {
-    const response = await apiClient.get<PaginatedResponse<SearchResult>>('/search', query as unknown as Record<string, unknown>);
+    const response = await apiClient.get<PaginatedResponse<SearchResult>>(
+      "/search",
+      query as unknown as Record<string, unknown>
+    );
     return response.data;
   }
 
@@ -54,8 +60,13 @@ export class SearchApiService {
    * GET ${API_PREFIX}/search/suggestions
    * NEW - Previously missing
    */
-  async getSuggestions(query: string, limit: number = 10): Promise<SearchSuggestion[]> {
-    return apiClient.get<SearchSuggestion[]>('/search/suggestions', { q: query, limit });
+  async getSuggestions(
+    query: string,
+    limit: number = 10
+  ): Promise<SearchSuggestion[]> {
+    return apiClient.get<SearchSuggestion[]>("/search/suggestions", {
+      params: { q: query, limit },
+    });
   }
 
   /**
@@ -63,7 +74,10 @@ export class SearchApiService {
    * GET ${API_PREFIX}/search/case/:caseId
    */
   async searchInCase(caseId: string, query: string): Promise<SearchResult[]> {
-    const response = await apiClient.get<PaginatedResponse<SearchResult>>(`/search/case/${caseId}`, { q: query });
+    const response = await apiClient.get<PaginatedResponse<SearchResult>>(
+      `/search/case/${caseId}`,
+      { params: { q: query } }
+    );
     return response.data;
   }
 
@@ -71,8 +85,14 @@ export class SearchApiService {
    * Search documents by content
    * GET ${API_PREFIX}/search/documents
    */
-  async searchDocuments(query: string, filters?: { caseId?: string; type?: string }): Promise<SearchResult[]> {
-    const response = await apiClient.get<PaginatedResponse<SearchResult>>('/search/documents', { q: query, ...filters });
+  async searchDocuments(
+    query: string,
+    filters?: { caseId?: string; type?: string }
+  ): Promise<SearchResult[]> {
+    const response = await apiClient.get<PaginatedResponse<SearchResult>>(
+      "/search/documents",
+      { q: query, ...filters }
+    );
     return response.data;
   }
 
@@ -81,7 +101,7 @@ export class SearchApiService {
    * GET ${API_PREFIX}/search/stats
    */
   async getStats(): Promise<SearchStats> {
-    return apiClient.get<SearchStats>('/search/stats');
+    return apiClient.get<SearchStats>("/search/stats");
   }
 
   /**
@@ -89,8 +109,11 @@ export class SearchApiService {
    * POST ${API_PREFIX}/search/reindex
    * NEW - Previously missing
    */
-  async reindex(options?: { type?: string; force?: boolean }): Promise<ReindexResult> {
-    return apiClient.post<ReindexResult>('/search/reindex', options || {});
+  async reindex(options?: {
+    type?: string;
+    force?: boolean;
+  }): Promise<ReindexResult> {
+    return apiClient.post<ReindexResult>("/search/reindex", options || {});
   }
 
   /**
@@ -106,8 +129,13 @@ export class SearchApiService {
    * Index a specific document
    * POST ${API_PREFIX}/search/index/document/:documentId
    */
-  async indexDocument(documentId: string): Promise<{ success: boolean; indexed: boolean }> {
-    return apiClient.post<{ success: boolean; indexed: boolean }>(`/search/index/document/${documentId}`, {});
+  async indexDocument(
+    documentId: string
+  ): Promise<{ success: boolean; indexed: boolean }> {
+    return apiClient.post<{ success: boolean; indexed: boolean }>(
+      `/search/index/document/${documentId}`,
+      {}
+    );
   }
 
   /**
@@ -115,7 +143,8 @@ export class SearchApiService {
    * DELETE ${API_PREFIX}/search/index/document/:documentId
    */
   async removeFromIndex(documentId: string): Promise<{ success: boolean }> {
-    return apiClient.delete<{ success: boolean }>(`/search/index/document/${documentId}`);
+    return apiClient.delete<{ success: boolean }>(
+      `/search/index/document/${documentId}`
+    );
   }
 }
-

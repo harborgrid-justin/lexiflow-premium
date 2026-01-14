@@ -6,8 +6,8 @@
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   ApprovalChain,
-  ApprovalInstance,
   ApprovalDecision,
+  ApprovalInstance,
 } from "@/types/workflow-advanced-types";
 
 const BASE_URL = "/workflow/advanced";
@@ -25,7 +25,9 @@ export async function createApprovalChain(
 /**
  * Get approval chains
  */
-export async function getApprovalChains(workflowId: string): Promise<ApprovalChain[]> {
+export async function getApprovalChains(
+  workflowId: string
+): Promise<ApprovalChain[]> {
   return apiClient.get(`${BASE_URL}/${workflowId}/approvals`);
 }
 
@@ -76,6 +78,8 @@ export async function delegateApproval(
 /**
  * Get pending approvals for user
  */
-export async function getPendingApprovals(userId: string): Promise<ApprovalInstance[]> {
-  return apiClient.get(`${BASE_URL}/approvals/pending`, { userId });
+export async function getPendingApprovals(
+  userId: string
+): Promise<ApprovalInstance[]> {
+  return apiClient.get(`${BASE_URL}/approvals/pending`, { params: { userId } });
 }

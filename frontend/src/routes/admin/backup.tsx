@@ -9,9 +9,13 @@
 
 import { adminApi } from '@/lib/frontend-api';
 import { BackupManager, type Backup, type BackupSchedule, type BackupStats } from '@/routes/admin/components/BackupManager';
+import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
+
+// Alias for compatibility
+const BackupService = DataService.backup;
 
 // ============================================================================
 // Types

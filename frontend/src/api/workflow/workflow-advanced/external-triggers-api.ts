@@ -24,7 +24,9 @@ export async function createExternalTrigger(
 /**
  * Get external triggers
  */
-export async function getExternalTriggers(workflowId: string): Promise<ExternalTrigger[]> {
+export async function getExternalTriggers(
+  workflowId: string
+): Promise<ExternalTrigger[]> {
   return apiClient.get(`${BASE_URL}/${workflowId}/triggers`);
 }
 
@@ -80,7 +82,7 @@ export async function getTriggerEvents(
 ): Promise<TriggerEvent[]> {
   return apiClient.get(
     `${BASE_URL}/${workflowId}/triggers/${triggerId}/events`,
-    { limit }
+    { params: { limit } }
   );
 }
 
@@ -91,7 +93,5 @@ export async function deleteExternalTrigger(
   workflowId: string,
   triggerId: string
 ): Promise<void> {
-  return apiClient.delete(
-    `${BASE_URL}/${workflowId}/triggers/${triggerId}`
-  );
+  return apiClient.delete(`${BASE_URL}/${workflowId}/triggers/${triggerId}`);
 }

@@ -21,7 +21,7 @@ export async function searchTemplates(query: {
   minRating?: number;
   certified?: boolean;
 }): Promise<WorkflowTemplate[]> {
-  return apiClient.get(`${BASE_URL}/templates/search`, query);
+  return apiClient.get(`${BASE_URL}/templates/search`, { params: query });
 }
 
 /**
@@ -30,9 +30,7 @@ export async function searchTemplates(query: {
 export async function getAICategories(
   templateId: string
 ): Promise<Array<{ category: string; confidence: number }>> {
-  return apiClient.get(
-    `${BASE_URL}/templates/${templateId}/ai-categories`
-  );
+  return apiClient.get(`${BASE_URL}/templates/${templateId}/ai-categories`);
 }
 
 /**

@@ -14,6 +14,7 @@ import { useDeferredValue, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { communicationsApi } from '@/lib/frontend-api';
 
 // Hooks & Context
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';

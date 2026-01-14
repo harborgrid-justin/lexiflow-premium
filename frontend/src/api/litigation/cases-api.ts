@@ -489,8 +489,10 @@ export class CasesApiService {
 
     try {
       const response = await apiClient.get<PaginatedResponse<Case>>("/cases", {
-        search: query,
-        ...filters,
+        params: {
+          search: query,
+          ...filters,
+        },
       });
       return response.data.map((c) => this.transformCase(c));
     } catch (error) {

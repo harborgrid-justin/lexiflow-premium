@@ -17,14 +17,9 @@ import {
   normalizeAuditLogs,
   normalizeSystemMetrics,
 } from "../normalization/admin";
-import {
-  client,
-  failure,
-  type PaginatedResult,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
+import { failure, type PaginatedResult, type Result, success } from "./types";
 
 /**
  * Audit log filters

@@ -1,5 +1,5 @@
 import { Sidebar } from '@/shared/ui/organisms/Sidebar';
-import { AppView, User } from '@/types';
+import { AppView, User, UserRole } from '@/types';
 import { memo } from 'react';
 
 export interface AppSidebarProps {

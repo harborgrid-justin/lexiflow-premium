@@ -18,7 +18,7 @@ import {
   normalizeId,
   normalizeString,
   type Normalizer,
-} from "./index";
+} from "./core";
 
 /**
  * Backend case status mapping

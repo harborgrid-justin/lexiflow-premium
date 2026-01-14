@@ -5,13 +5,16 @@
  * Displays high-level metrics for executive decision-making
  */
 
-import React, { useMemo } from 'react';
+import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import type { BaseDashboardProps, ExecutiveSummary } from '@/types/dashboard';
-import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';
+import React, { useMemo } from 'react';
 
-export interface ExecutiveSummaryPanelProps extends BaseDashboardProps {
+
+export import { AlertCircle, Calendar, Clock, DollarSign, TrendingUp, Users } from 'lucide-react';
+
+interface ExecutiveSummaryPanelProps extends BaseDashboardProps {
   summary: ExecutiveSummary;
   period?: string;
   comparisonPeriod?: string;
@@ -116,7 +119,7 @@ const ExecutiveSummaryPanelComponent: React.FC<ExecutiveSummaryPanelProps> = ({
     ],
     [summary]
   );
-console.log('metrics data:', metrics);
+  console.log('metrics data:', metrics);
 
   const formatValue = (value: number, format: 'currency' | 'number' | 'percentage'): string => {
     switch (format) {

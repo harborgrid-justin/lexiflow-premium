@@ -15,7 +15,9 @@ const BASE_URL = "/workflow/advanced";
 /**
  * Get enhanced workflow instance
  */
-export async function getEnhanced(workflowId: string): Promise<EnhancedWorkflowInstance> {
+export async function getEnhanced(
+  workflowId: string
+): Promise<EnhancedWorkflowInstance> {
   return apiClient.get(`${BASE_URL}/${workflowId}/enhanced`);
 }
 
@@ -85,7 +87,10 @@ export async function executeEnhanced(
 /**
  * Pause workflow execution
  */
-export async function pauseWorkflow(workflowId: string, reason?: string): Promise<void> {
+export async function pauseWorkflow(
+  workflowId: string,
+  reason?: string
+): Promise<void> {
   return apiClient.post(`${BASE_URL}/${workflowId}/pause`, { reason });
 }
 
@@ -99,7 +104,10 @@ export async function resumeWorkflow(workflowId: string): Promise<void> {
 /**
  * Cancel workflow execution
  */
-export async function cancelWorkflow(workflowId: string, reason?: string): Promise<void> {
+export async function cancelWorkflow(
+  workflowId: string,
+  reason?: string
+): Promise<void> {
   return apiClient.post(`${BASE_URL}/${workflowId}/cancel`, { reason });
 }
 
@@ -122,7 +130,6 @@ export async function exportWorkflow(
 ): Promise<Blob> {
   return apiClient.get(`${BASE_URL}/${workflowId}/export`, {
     params: { format },
-    responseType: "blob",
   });
 }
 

@@ -10,7 +10,7 @@ import {
   normalizeNumber,
   normalizeString,
   type Normalizer,
-} from "./index";
+} from "./core";
 
 interface BackendTimeEntry {
   id: string | number;

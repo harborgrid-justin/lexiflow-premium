@@ -10,7 +10,7 @@ import {
   normalizeId,
   normalizeString,
   type Normalizer,
-} from "./index";
+} from "./core";
 
 interface BackendUser {
   id: string | number;

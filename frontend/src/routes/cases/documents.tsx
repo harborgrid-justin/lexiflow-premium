@@ -32,6 +32,8 @@ export function meta({ data }: { data: { caseData: Case } }) {
 // Loader
 // ============================================================================
 
+import { casesApi, documentsApi } from '@/lib/frontend-api';
+
 export async function loader({ params }: LoaderFunctionArgs) {
   const { caseId } = params;
 

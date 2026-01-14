@@ -3,8 +3,8 @@
  * Backend API client for Matter Management
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import { Matter, MatterId, MatterFilters } from '@/types';
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { Matter, MatterFilters, MatterId } from "@/types";
 
 export interface MatterStatistics {
   total: number;
@@ -14,42 +14,48 @@ export interface MatterStatistics {
 }
 
 export class MattersApiService {
-  private readonly baseUrl = '/matters';
+  private readonly baseUrl = "/matters";
 
   /**
    * Get all matters
    */
   async getAll(filters?: MatterFilters): Promise<Matter[]> {
     const params = new URLSearchParams();
-    if (filters?.status) params.append('status', filters.status);
-    if (filters?.clientId) params.append('clientId', filters.clientId);
-    if (filters?.leadAttorneyId) params.append('leadAttorneyId', filters.leadAttorneyId);
-    if (filters?.practiceArea) params.append('practiceArea', filters.practiceArea);
-    if (filters?.search) params.append('search', filters.search);
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.clientId) params.append("clientId", filters.clientId);
+    if (filters?.leadAttorneyId)
+      params.append("leadAttorneyId", filters.leadAttorneyId);
+    if (filters?.practiceArea)
+      params.append("practiceArea", filters.practiceArea);
+    if (filters?.search) params.append("search", filters.search);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
 
-    const response = await apiClient.get<{ data?: { matters?: Matter[] }; matters?: Matter[] } | Matter[]>(url);
+    const response = await apiClient.get<
+      { data?: { matters?: Matter[] }; matters?: Matter[] } | Matter[]
+    >(url);
     // Backend returns { success, data: { matters, total }, meta }
     if (Array.isArray(response)) {
       return response;
     }
     const data = response.data || response;
-    return Array.isArray(data) ? data : (data as { matters?: Matter[] }).matters || [];
+    return Array.isArray(data)
+      ? data
+      : (data as { matters?: Matter[] }).matters || [];
   }
 
   /**
    * Get matter by ID
    */
   async getById(id: MatterId): Promise<Matter> {
-    const response = await apiClient.get<{ data?: Matter } | Matter>(`${this.baseUrl}/${id}`);
-    if ('data' in response && response.data) {
+    const response = await apiClient.get<{ data?: Matter } | Matter>(
+      `${this.baseUrl}/${id}`
+    );
+    if ("data" in response && response.data) {
       return response.data;
     }
     return response as Matter;
   }
-
-
 
   /**
    * Create new matter
@@ -67,8 +73,10 @@ export class MattersApiService {
       clientEmail: matter.clientEmail || null,
       clientPhone: matter.clientPhone || null,
       // Use exact backend field names
-      leadAttorneyId: matter.leadAttorneyId || matter.responsibleAttorneyId || null,
-      leadAttorneyName: matter.leadAttorneyName || matter.responsibleAttorneyName || null,
+      leadAttorneyId:
+        matter.leadAttorneyId || matter.responsibleAttorneyId || null,
+      leadAttorneyName:
+        matter.leadAttorneyName || matter.responsibleAttorneyName || null,
       originatingAttorneyId: matter.originatingAttorneyId,
       originatingAttorneyName: matter.originatingAttorneyName,
       jurisdiction: matter.jurisdiction,
@@ -88,16 +96,16 @@ export class MattersApiService {
       tags: matter.tags,
       // Backend accepts opposingPartyName, opposingCounsel as string, opposingCounselFirm
       opposingPartyName: matter.opposingPartyName,
-      opposingCounsel: Array.isArray(matter.opposingCounsel) 
-        ? matter.opposingCounsel.join(', ') 
+      opposingCounsel: Array.isArray(matter.opposingCounsel)
+        ? matter.opposingCounsel.join(", ")
         : matter.opposingCounsel,
       opposingCounselFirm: matter.opposingCounselFirm,
       // Backend uses boolean conflictCheckCompleted and optional conflictCheckDate
       conflictCheckCompleted: matter.conflictCheckCompleted || false,
       conflictCheckDate: matter.conflictCheckDate || null,
-      conflictCheckStatus: matter.conflictCheckCompleted 
-        ? 'completed' 
-        : matter.conflictCheckStatus || 'pending',
+      conflictCheckStatus: matter.conflictCheckCompleted
+        ? "completed"
+        : matter.conflictCheckStatus || "pending",
       conflictCheckNotes: matter.conflictCheckNotes,
       // Risk management fields
       riskLevel: matter.riskLevel,
@@ -109,13 +117,19 @@ export class MattersApiService {
       internalNotes: matter.internalNotes,
       customFields: matter.customFields,
       // Use system UUID for userId
-      userId: matter.userId || matter.createdBy || '00000000-0000-0000-0000-000000000000',
+      userId:
+        matter.userId ||
+        matter.createdBy ||
+        "00000000-0000-0000-0000-000000000000",
       isArchived: matter.isArchived || false,
     };
 
-    const response = await apiClient.post<{ data?: Matter } | Matter>(this.baseUrl, createDto);
+    const response = await apiClient.post<{ data?: Matter } | Matter>(
+      this.baseUrl,
+      createDto
+    );
     // Backend returns { success, data, meta } - extract the matter from data
-    if ('data' in response && response.data) {
+    if ("data" in response && response.data) {
       return response.data;
     }
     return response as Matter;
@@ -139,7 +153,8 @@ export class MattersApiService {
       clientPhone: matter.clientPhone,
       // Use exact backend field names
       leadAttorneyId: matter.leadAttorneyId || matter.responsibleAttorneyId,
-      leadAttorneyName: matter.leadAttorneyName || matter.responsibleAttorneyName,
+      leadAttorneyName:
+        matter.leadAttorneyName || matter.responsibleAttorneyName,
       originatingAttorneyId: matter.originatingAttorneyId,
       originatingAttorneyName: matter.originatingAttorneyName,
       jurisdiction: matter.jurisdiction,
@@ -158,14 +173,14 @@ export class MattersApiService {
       practiceArea: matter.practiceArea,
       tags: matter.tags,
       opposingPartyName: matter.opposingPartyName,
-      opposingCounsel: Array.isArray(matter.opposingCounsel) 
-        ? matter.opposingCounsel.join(', ') 
+      opposingCounsel: Array.isArray(matter.opposingCounsel)
+        ? matter.opposingCounsel.join(", ")
         : matter.opposingCounsel,
       opposingCounselFirm: matter.opposingCounselFirm,
       conflictCheckCompleted: matter.conflictCheckCompleted,
       conflictCheckDate: matter.conflictCheckDate,
-      conflictCheckStatus: matter.conflictCheckCompleted 
-        ? 'completed' 
+      conflictCheckStatus: matter.conflictCheckCompleted
+        ? "completed"
         : matter.conflictCheckStatus,
       conflictCheckNotes: matter.conflictCheckNotes,
       riskLevel: matter.riskLevel,
@@ -177,8 +192,11 @@ export class MattersApiService {
       isArchived: matter.isArchived,
     };
 
-    const response = await apiClient.patch<{ data?: Matter } | Matter>(`${this.baseUrl}/${id}`, updateDto);
-    if ('data' in response && response.data) {
+    const response = await apiClient.patch<{ data?: Matter } | Matter>(
+      `${this.baseUrl}/${id}`,
+      updateDto
+    );
+    if ("data" in response && response.data) {
       return response.data;
     }
     return response as Matter;
@@ -202,7 +220,9 @@ export class MattersApiService {
    * Get matter KPIs (Key Performance Indicators)
    */
   async getKPIs(dateRange?: string): Promise<unknown> {
-    const url = dateRange ? `${this.baseUrl}/kpis?dateRange=${dateRange}` : `${this.baseUrl}/kpis`;
+    const url = dateRange
+      ? `${this.baseUrl}/kpis?dateRange=${dateRange}`
+      : `${this.baseUrl}/kpis`;
     const response = await apiClient.get<unknown>(url);
     return (response as { data?: unknown }).data || response;
   }
@@ -211,7 +231,9 @@ export class MattersApiService {
    * Get intake pipeline stages
    */
   async getPipeline(dateRange?: string): Promise<unknown> {
-    const url = dateRange ? `${this.baseUrl}/pipeline?dateRange=${dateRange}` : `${this.baseUrl}/pipeline`;
+    const url = dateRange
+      ? `${this.baseUrl}/pipeline?dateRange=${dateRange}`
+      : `${this.baseUrl}/pipeline`;
     const response = await apiClient.get<unknown>(url);
     return (response as { data?: unknown }).data || response;
   }
@@ -219,11 +241,17 @@ export class MattersApiService {
   /**
    * Get calendar events
    */
-  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string[]): Promise<unknown> {
+  async getCalendarEvents(
+    startDate: string,
+    endDate?: string,
+    matterIds?: string[]
+  ): Promise<unknown> {
     const params = new URLSearchParams({ startDate });
-    if (endDate) params.append('endDate', endDate);
-    if (matterIds?.length) params.append('matterIds', matterIds.join(','));
-    const response = await apiClient.get<unknown>(`${this.baseUrl}/calendar/events?${params.toString()}`);
+    if (endDate) params.append("endDate", endDate);
+    if (matterIds?.length) params.append("matterIds", matterIds.join(","));
+    const response = await apiClient.get<unknown>(
+      `${this.baseUrl}/calendar/events?${params.toString()}`
+    );
     return (response as { data?: unknown }).data || response;
   }
 
@@ -231,7 +259,9 @@ export class MattersApiService {
    * Get revenue analytics
    */
   async getRevenueAnalytics(dateRange?: string): Promise<unknown> {
-    const url = dateRange ? `${this.baseUrl}/analytics/revenue?dateRange=${dateRange}` : `${this.baseUrl}/analytics/revenue`;
+    const url = dateRange
+      ? `${this.baseUrl}/analytics/revenue?dateRange=${dateRange}`
+      : `${this.baseUrl}/analytics/revenue`;
     const response = await apiClient.get<unknown>(url);
     return (response as { data?: unknown }).data || response;
   }
@@ -241,7 +271,7 @@ export class MattersApiService {
    */
   async getRiskInsights(matterIds?: string[]): Promise<unknown> {
     const url = matterIds?.length
-      ? `${this.baseUrl}/insights/risk?matterIds=${matterIds.join(',')}`
+      ? `${this.baseUrl}/insights/risk?matterIds=${matterIds.join(",")}`
       : `${this.baseUrl}/insights/risk`;
     const response = await apiClient.get<unknown>(url);
     return (response as { data?: unknown }).data || response;
@@ -251,7 +281,9 @@ export class MattersApiService {
    * Get financial overview
    */
   async getFinancialOverview(dateRange?: string): Promise<unknown> {
-    const url = dateRange ? `${this.baseUrl}/financials/overview?dateRange=${dateRange}` : `${this.baseUrl}/financials/overview`;
+    const url = dateRange
+      ? `${this.baseUrl}/financials/overview?dateRange=${dateRange}`
+      : `${this.baseUrl}/financials/overview`;
     const response = await apiClient.get<unknown>(url);
     return (response as { data?: unknown }).data || response;
   }
@@ -260,7 +292,9 @@ export class MattersApiService {
    * Search matters
    */
   async search(query: string): Promise<Matter[]> {
-    return apiClient.get<Matter[]>(`${this.baseUrl}/search`, { q: query });
+    return apiClient.get<Matter[]>(`${this.baseUrl}/search`, {
+      params: { q: query },
+    });
   }
 
   /**

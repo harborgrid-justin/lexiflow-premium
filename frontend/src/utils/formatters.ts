@@ -47,22 +47,40 @@
 /**
  * Supported currency codes (ISO 4217)
  */
-const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF'] as const;
+const SUPPORTED_CURRENCIES = [
+  "USD",
+  "EUR",
+  "GBP",
+  "JPY",
+  "CAD",
+  "AUD",
+  "CHF",
+] as const;
 
 /**
  * Default currency fallback
  */
-const DEFAULT_CURRENCY = 'USD';
+const DEFAULT_CURRENCY = "USD";
 
 /**
  * Default locale for formatting
  */
-const DEFAULT_LOCALE = 'en-US';
+const DEFAULT_LOCALE = "en-US";
 
 /**
  * File size units (binary - base 1024)
  */
-const FILE_SIZE_UNITS = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] as const;
+const FILE_SIZE_UNITS = [
+  "Bytes",
+  "KB",
+  "MB",
+  "GB",
+  "TB",
+  "PB",
+  "EB",
+  "ZB",
+  "YB",
+] as const;
 
 /**
  * Maximum safe string length for truncation
@@ -83,19 +101,23 @@ const validateNumber = (
   defaultValue: number = 0
 ): number => {
   // Return default for null/undefined without throwing
-  if (value === undefined || value === null || value === '') {
+  if (value === undefined || value === null || value === "") {
     return defaultValue;
   }
 
   const num = Number(value);
 
   if (isNaN(num)) {
-    console.warn(`[FormattersService.${methodName}] Value must be a valid number, got: ${value}, using default: ${defaultValue}`);
+    console.warn(
+      `[FormattersService.${methodName}] Value must be a valid number, got: ${value}, using default: ${defaultValue}`
+    );
     return defaultValue;
   }
 
   if (!isFinite(num)) {
-    console.warn(`[FormattersService.${methodName}] Value must be finite, got: ${num}, using default: ${defaultValue}`);
+    console.warn(
+      `[FormattersService.${methodName}] Value must be finite, got: ${num}, using default: ${defaultValue}`
+    );
     return defaultValue;
   }
 
@@ -106,7 +128,10 @@ const validateNumber = (
  * Validate date input
  * @private
  */
-const validateDate = (value: string | Date | undefined, methodName: string): Date => {
+const validateDate = (
+  value: string | Date | undefined,
+  methodName: string
+): Date => {
   if (!value) {
     throw new Error(`[FormattersService.${methodName}] Date is required`);
   }
@@ -124,12 +149,13 @@ const validateDate = (value: string | Date | undefined, methodName: string): Dat
  * Validate string input
  * @private
  */
-const validateString = (value: string | undefined, methodName: string): string => {
+const validateString = (
+  value: string | undefined,
+  methodName: string
+): string => {
   if (value === undefined || value === null) {
     throw new Error(`[FormattersService.${methodName}] String is required`);
   }
-
-
 
   return value;
 };
@@ -141,8 +167,14 @@ const validateString = (value: string | undefined, methodName: string): string =
 const validateCurrency = (currency: string): string => {
   const upper = currency.toUpperCase();
 
-  if (!SUPPORTED_CURRENCIES.includes(upper as typeof SUPPORTED_CURRENCIES[number])) {
-    console.warn(`[FormattersService] Unsupported currency "${currency}", using ${DEFAULT_CURRENCY}`);
+  if (
+    !SUPPORTED_CURRENCIES.includes(
+      upper as (typeof SUPPORTED_CURRENCIES)[number]
+    )
+  ) {
+    console.warn(
+      `[FormattersService] Unsupported currency "${currency}", using ${DEFAULT_CURRENCY}`
+    );
     return DEFAULT_CURRENCY;
   }
 
@@ -191,18 +223,18 @@ export const FormattersService = {
     locale: string = DEFAULT_LOCALE
   ): string => {
     try {
-      const num = validateNumber(amount, 'currency', 0);
+      const num = validateNumber(amount, "currency", 0);
       const validCurrency = validateCurrency(currency);
 
       return new Intl.NumberFormat(locale, {
-        style: 'currency',
+        style: "currency",
         currency: validCurrency,
         minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        maximumFractionDigits: 2,
       }).format(num);
     } catch (error) {
-      console.error('[FormattersService.currency] Error:', error);
-      return '$0.00'; // Safe fallback
+      console.error("[FormattersService.currency] Error:", error);
+      return "$0.00"; // Safe fallback
     }
   },
 
@@ -216,17 +248,20 @@ export const FormattersService = {
    * @example
    * FormattersService.currencyValue(1299.99);    // "1,299.99"
    */
-  currencyValue: (amount: number | string | undefined | null, decimals: number = 2): string => {
+  currencyValue: (
+    amount: number | string | undefined | null,
+    decimals: number = 2
+  ): string => {
     try {
-      const num = validateNumber(amount, 'currencyValue', 0);
+      const num = validateNumber(amount, "currencyValue", 0);
 
       return new Intl.NumberFormat(DEFAULT_LOCALE, {
         minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
+        maximumFractionDigits: decimals,
       }).format(num);
     } catch (error) {
-      console.error('[FormattersService.currencyValue] Error:', error);
-      return '0.00';
+      console.error("[FormattersService.currencyValue] Error:", error);
+      return "0.00";
     }
   },
 
@@ -257,19 +292,22 @@ export const FormattersService = {
    * - ISO 8601 default format
    * - Timezone-aware formatting
    */
-  date: (date: string | Date | undefined, options?: Intl.DateTimeFormatOptions): string => {
+  date: (
+    date: string | Date | undefined,
+    options?: Intl.DateTimeFormatOptions
+  ): string => {
     try {
-      const validDate = validateDate(date, 'date');
+      const validDate = validateDate(date, "date");
 
       if (options) {
         return validDate.toLocaleDateString(DEFAULT_LOCALE, options);
       }
 
       // Default: ISO-like YYYY-MM-DD for consistency
-      return validDate.toISOString().split('T')[0]!;
+      return validDate.toISOString().split("T")[0]!;
     } catch (error) {
-      console.error('[FormattersService.date] Error:', error);
-      return 'N/A';
+      console.error("[FormattersService.date] Error:", error);
+      return "N/A";
     }
   },
 
@@ -284,18 +322,18 @@ export const FormattersService = {
    */
   datetime: (date: string | Date | undefined): string => {
     try {
-      const validDate = validateDate(date, 'datetime');
+      const validDate = validateDate(date, "datetime");
 
       return validDate.toLocaleString(DEFAULT_LOCALE, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric'
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
       });
     } catch (error) {
-      console.error('[FormattersService.datetime] Error:', error);
-      return 'N/A';
+      console.error("[FormattersService.datetime] Error:", error);
+      return "N/A";
     }
   },
 
@@ -310,7 +348,7 @@ export const FormattersService = {
    */
   relativeTime: (date: string | Date | undefined): string => {
     try {
-      const validDate = validateDate(date, 'relativeTime');
+      const validDate = validateDate(date, "relativeTime");
       const now = Date.now();
       const diff = now - validDate.getTime();
 
@@ -322,17 +360,17 @@ export const FormattersService = {
       if (days > 30) {
         return FormattersService.date(validDate);
       } else if (days > 0) {
-        return `${days} day${days > 1 ? 's' : ''} ago`;
+        return `${days} day${days > 1 ? "s" : ""} ago`;
       } else if (hours > 0) {
-        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        return `${hours} hour${hours > 1 ? "s" : ""} ago`;
       } else if (minutes > 0) {
-        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
       } else {
-        return 'just now';
+        return "just now";
       }
     } catch (error) {
-      console.error('[FormattersService.relativeTime] Error:', error);
-      return 'N/A';
+      console.error("[FormattersService.relativeTime] Error:", error);
+      return "N/A";
     }
   },
 
@@ -361,14 +399,16 @@ export const FormattersService = {
    */
   fileSize: (bytes: number, decimals: number = 2): string => {
     try {
-      const num = validateNumber(bytes, 'fileSize');
+      const num = validateNumber(bytes, "fileSize");
 
       if (num < 0) {
-        throw new Error('[FormattersService.fileSize] Bytes cannot be negative');
+        throw new Error(
+          "[FormattersService.fileSize] Bytes cannot be negative"
+        );
       }
 
       if (num === 0) {
-        return '0 Bytes';
+        return "0 Bytes";
       }
 
       const k = 1024;
@@ -377,8 +417,8 @@ export const FormattersService = {
 
       return `${parseFloat((num / Math.pow(k, i)).toFixed(dm))} ${FILE_SIZE_UNITS[i]}`;
     } catch (error) {
-      console.error('[FormattersService.fileSize] Error:', error);
-      return '0 Bytes';
+      console.error("[FormattersService.fileSize] Error:", error);
+      return "0 Bytes";
     }
   },
 
@@ -403,16 +443,16 @@ export const FormattersService = {
    */
   capitalize: (str: string | undefined): string => {
     try {
-      const validStr = validateString(str, 'capitalize');
+      const validStr = validateString(str, "capitalize");
 
       if (validStr.length === 0) {
-        return '';
+        return "";
       }
 
       return validStr.charAt(0).toUpperCase() + validStr.slice(1).toLowerCase();
     } catch (error) {
-      console.error('[FormattersService.capitalize] Error:', error);
-      return '';
+      console.error("[FormattersService.capitalize] Error:", error);
+      return "";
     }
   },
 
@@ -427,16 +467,16 @@ export const FormattersService = {
    */
   titleCase: (str: string | undefined): string => {
     try {
-      const validStr = validateString(str, 'titleCase');
+      const validStr = validateString(str, "titleCase");
 
       return validStr
         .toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
     } catch (error) {
-      console.error('[FormattersService.titleCase] Error:', error);
-      return '';
+      console.error("[FormattersService.titleCase] Error:", error);
+      return "";
     }
   },
 
@@ -455,12 +495,18 @@ export const FormattersService = {
    * - Length validation (prevents overflow)
    * - Safe substring operations
    */
-  truncate: (str: string | undefined, maxLength: number = 50, ellipsis: string = '...'): string => {
+  truncate: (
+    str: string | undefined,
+    maxLength: number = 50,
+    ellipsis: string = "..."
+  ): string => {
     try {
-      const validStr = validateString(str, 'truncate');
+      const validStr = validateString(str, "truncate");
 
       if (maxLength < 0 || maxLength > MAX_STRING_LENGTH) {
-        throw new Error(`[FormattersService.truncate] maxLength must be between 0 and ${MAX_STRING_LENGTH}`);
+        throw new Error(
+          `[FormattersService.truncate] maxLength must be between 0 and ${MAX_STRING_LENGTH}`
+        );
       }
 
       if (validStr.length <= maxLength) {
@@ -469,8 +515,8 @@ export const FormattersService = {
 
       return validStr.substring(0, maxLength - ellipsis.length) + ellipsis;
     } catch (error) {
-      console.error('[FormattersService.truncate] Error:', error);
-      return '';
+      console.error("[FormattersService.truncate] Error:", error);
+      return "";
     }
   },
 
@@ -486,22 +532,22 @@ export const FormattersService = {
    */
   phone: (phone: string | undefined): string => {
     try {
-      const validPhone = validateString(phone, 'phone');
+      const validPhone = validateString(phone, "phone");
 
       // Remove all non-numeric characters
-      const cleaned = validPhone.replace(/\D/g, '');
+      const cleaned = validPhone.replace(/\D/g, "");
 
       // Format as (XXX) XXX-XXXX
       if (cleaned.length === 10) {
         return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
-      } else if (cleaned.length === 11 && cleaned[0] === '1') {
+      } else if (cleaned.length === 11 && cleaned[0] === "1") {
         return `+1 (${cleaned.slice(1, 4)}) ${cleaned.slice(4, 7)}-${cleaned.slice(7)}`;
       }
 
       return validPhone; // Return original if format is unrecognized
     } catch (error) {
-      console.error('[FormattersService.phone] Error:', error);
-      return '';
+      console.error("[FormattersService.phone] Error:", error);
+      return "";
     }
   },
 
@@ -516,7 +562,7 @@ export const FormattersService = {
    */
   legalCaseName: (caseName: string | undefined): string => {
     try {
-      const validName = validateString(caseName, 'legalCaseName');
+      const validName = validateString(caseName, "legalCaseName");
 
       // Split by "v." or "vs." or "vs" or "v"
       const parts = validName.split(/\s+(v.?|vs.?)\s+/i);
@@ -529,8 +575,8 @@ export const FormattersService = {
 
       return FormattersService.titleCase(validName);
     } catch (error) {
-      console.error('[FormattersService.legalCaseName] Error:', error);
-      return '';
+      console.error("[FormattersService.legalCaseName] Error:", error);
+      return "";
     }
   },
 
@@ -551,18 +597,22 @@ export const FormattersService = {
    * FormattersService.percentage(75, 0);           // "75%"
    * FormattersService.percentage(75.5, 1);         // "75.5%"
    */
-  percentage: (value: number | string | undefined, decimals: number = 0, isFraction: boolean = false): string => {
+  percentage: (
+    value: number | string | undefined,
+    decimals: number = 0,
+    isFraction: boolean = false
+  ): string => {
     try {
-      const num = validateNumber(value, 'percentage');
+      const num = validateNumber(value, "percentage");
 
       const percent = isFraction ? num * 100 : num;
 
       return `${percent.toFixed(decimals)}%`;
     } catch (error) {
-      console.error('[FormattersService.percentage] Error:', error);
-      return '0%';
+      console.error("[FormattersService.percentage] Error:", error);
+      return "0%";
     }
-  }
+  },
 };
 
 // =============================================================================
@@ -574,11 +624,64 @@ export const FormattersService = {
  * Maintained for backward compatibility
  */
 // Export formatDate helper for convenience
-export { formatDate, formatDateShort, formatDateLong, formatDateTime } from './formatDate';
+/**
+ * Format a date string to a readable format
+ * @param date - Date string or Date object
+ * @param options - Intl.DateTimeFormatOptions
+ * @returns Formatted date string
+ */
+export function formatDate(
+  date: string | Date | undefined,
+  options?: Intl.DateTimeFormatOptions
+): string {
+  if (!date) return "N/A";
+  return FormattersService.date(date, options);
+}
+
+/**
+ * Format date to short format (MM/DD/YYYY)
+ */
+export function formatDateShort(date: string | Date | undefined): string {
+  return formatDate(date, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
+/**
+ * Format date to long format (Month DD, YYYY)
+ */
+export function formatDateLong(date: string | Date | undefined): string {
+  return formatDate(date, { year: "numeric", month: "long", day: "numeric" });
+}
+
+/**
+ * Format date with time
+ */
+export function formatDateTime(date: string | Date | undefined): string {
+  return formatDate(date, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+/**
+ * Format date for display (compatibility export)
+ */
+export function formatDateDisplay(
+  date: string | Date,
+  format: "short" | "long" = "short"
+): string {
+  return format === "short" ? formatDateShort(date) : formatDateLong(date);
+}
 
 export const Formatters = {
   currency: FormattersService.currency,
   date: FormattersService.date,
   fileSize: FormattersService.fileSize,
-  capitalize: FormattersService.capitalize
+  capitalize: FormattersService.capitalize,
 };

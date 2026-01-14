@@ -5,10 +5,10 @@
  * Designed for executive dashboards with professional styling and animations
  */
 
-import React, { useEffect, useState, useRef } from 'react';
-import { TrendingUp, TrendingDown, Minus, LucideIcon } from 'lucide-react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -177,7 +177,8 @@ export const KPICard: React.FC<KPICardProps> = ({
 
   const colors = colorClasses[color];
   const TrendIcon = change.trend === 'up' ? TrendingUp : change.trend === 'down' ? TrendingDown : Minus;
-  
+  const trendColor = change.trend === 'up' ? 'text-green-600' : change.trend === 'down' ? 'text-red-600' : 'text-gray-600';
+
   return (
     <div
       className={cn(

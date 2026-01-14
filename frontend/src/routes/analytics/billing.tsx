@@ -8,6 +8,7 @@
  * - Graceful error handling with fallbacks
  */
 
+import { billingApi } from '@/lib/frontend-api';
 import { BillingAnalytics } from '@/routes/analytics/billing/BillingAnalytics';
 import { useLoaderData } from 'react-router';
 import { createMeta } from '../_shared/meta-utils';

@@ -161,6 +161,8 @@ function MetricCard({ title, value, icon, trend, subtitle }: {
   );
 }
 
+import type { Invoice } from '@/types';
+
 function TabButton({ active, onClick, disabled, children }: {
   active: boolean;
   onClick: () => void;

@@ -9,7 +9,7 @@ import {
   normalizeId,
   normalizeString,
   type Normalizer,
-} from "./index";
+} from "./core";
 
 interface BackendEvidence {
   id: string | number;

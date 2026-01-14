@@ -12,7 +12,7 @@
  * @deprecated Import from "./useTrustAccounts" instead for better tree-shaking
  */
 
-export * from "./useTrustAccounts";
+export * from "./useTrustAccounts/index";
 import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
 import type {
   CreateTrustAccountDto,

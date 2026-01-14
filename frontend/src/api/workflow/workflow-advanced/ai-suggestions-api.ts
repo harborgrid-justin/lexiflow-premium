@@ -5,8 +5,8 @@
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
-  AIWorkflowSuggestion,
   AILearningFeedback,
+  AIWorkflowSuggestion,
   EnhancedWorkflowInstance,
 } from "@/types/workflow-advanced-types";
 
@@ -19,10 +19,9 @@ export async function getAISuggestions(
   workflowId: string,
   options?: { minConfidence?: number; types?: string[] }
 ): Promise<AIWorkflowSuggestion[]> {
-  return apiClient.get(
-    `${BASE_URL}/${workflowId}/ai/suggestions`,
-    options
-  );
+  return apiClient.get(`${BASE_URL}/${workflowId}/ai/suggestions`, {
+    params: options,
+  });
 }
 
 /**

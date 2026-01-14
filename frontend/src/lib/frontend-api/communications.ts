@@ -313,4 +313,14 @@ export const communicationsApi = {
   getMessageById,
   sendMessage,
   deleteMessage,
+  // Notification methods (stub implementations)
+  getAllNotifications: async (filters?: { page?: number; limit?: number }) => {
+    // TODO: Implement actual notification fetching from backend
+    return success({
+      data: [],
+      total: 0,
+      page: filters?.page || 1,
+      limit: filters?.limit || 100,
+    });
+  },
 } as const;

@@ -9,7 +9,7 @@ import {
   normalizeId,
   normalizeString,
   type Normalizer,
-} from "./index";
+} from "./core";
 
 const TASK_STATUS_MAP: Record<string, string> = {
   pending: "Pending",

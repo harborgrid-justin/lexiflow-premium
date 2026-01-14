@@ -15,6 +15,7 @@
  * @architecture Uses communicationsApi for all operations
  */
 
+import { communicationsApi } from '@/lib/frontend-api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {

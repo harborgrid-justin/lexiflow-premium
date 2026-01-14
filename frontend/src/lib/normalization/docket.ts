@@ -11,7 +11,7 @@ import {
   normalizeNumber,
   normalizeString,
   type Normalizer,
-} from "./index";
+} from "./core";
 
 interface BackendDocketEntry {
   id: string | number;

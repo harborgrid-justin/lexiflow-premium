@@ -55,7 +55,9 @@ export class TaskAnalyticsService {
    */
   async getUpcomingTasks(days: number = 7): Promise<WorkflowTask[]> {
     try {
-      return await apiClient.get<WorkflowTask[]>("/tasks/upcoming", { days });
+      return await apiClient.get<WorkflowTask[]>("/tasks/upcoming", {
+        params: { days },
+      });
     } catch (error) {
       console.error("[TaskAnalyticsService.getUpcomingTasks] Error:", error);
       return [];

@@ -84,10 +84,9 @@ export class BluebookApiService {
    */
   async getCitationHistory(documentId?: string): Promise<FormattedCitation[]> {
     const params = documentId ? { documentId } : {};
-    return apiClient.get<FormattedCitation[]>(
-      `${this.baseUrl}/history`,
-      params
-    );
+    return apiClient.get<FormattedCitation[]>(`${this.baseUrl}/history`, {
+      params,
+    });
   }
 
   /**
@@ -95,7 +94,7 @@ export class BluebookApiService {
    */
   async getTemplates(type?: string): Promise<unknown[]> {
     const params = type ? { type } : {};
-    return apiClient.get<unknown[]>(`${this.baseUrl}/templates`, params);
+    return apiClient.get<unknown[]>(`${this.baseUrl}/templates`, { params });
   }
 
   /**

@@ -20,7 +20,13 @@
  * - Custom reports
  */
 
-import { client, type Result, success, ValidationError } from "./index";
+import {
+  ApiError,
+  client,
+  type Result,
+  success,
+  ValidationError,
+} from "./index";
 
 export interface DashboardMetrics {
   totalCases: number;

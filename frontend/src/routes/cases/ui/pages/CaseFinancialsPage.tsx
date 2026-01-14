@@ -6,6 +6,7 @@
 
 import { CaseFinancialsCenter } from '@/routes/cases/components/financials/CaseFinancialsCenter';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import React from 'react';
 
 interface CaseFinancialsPageProps {
   caseId: string;

@@ -5,28 +5,28 @@
  * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling
  */
 
-import { useState, useMemo, useCallback } from 'react';
-import { DataService } from '@/services/data/data-service.service';
+import { PATHS } from '@/config/paths.config';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/data-service.service';
+import { cn } from '@/shared/lib/cn';
+import { Matter, MatterPriority, MatterStatus, MatterType, PracticeArea } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { Matter, MatterStatus, MatterPriority, MatterType, PracticeArea } from '@/types';
 import {
+  AlertCircle,
+  ArrowUpCircle,
+  Building2,
+  Calendar,
+  CheckCircle,
+  Clock,
+  DollarSign,
+  FileText,
+  Filter,
   Plus,
   Search,
-  Filter,
-  Calendar,
-  DollarSign,
   Users,
-  AlertCircle,
-  Clock,
-  CheckCircle,
-  XCircle,
-  ArrowUpCircle,
-  FileText,
-  Building2
+  XCircle
 } from 'lucide-react';
-import { PATHS } from '@/config/paths.config';
-import { cn } from '@/shared/lib/cn';
+import React, { useCallback, useMemo, useState } from 'react';
 
 interface CaseListViewProps {
   filter?: 'all' | 'active' | 'intake' | 'calendar' | 'financials' | 'team';
@@ -37,7 +37,7 @@ export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) =
   // Identity-stable navigation callback (Principle #13)
   const navigate = useCallback((path: string) => {
     window.location.hash = `#/${path}`;
-console.log('useNavigate:', navigate);
+    console.log('useNavigate:', navigate);
   }, []);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,7 +48,7 @@ console.log('useNavigate:', navigate);
   const [showFilters, setShowFilters] = useState(false);
 
   // Concurrent-safe data fetching with cache (Principle #11)
-  const { data: matters = [], isLoading: loading} = useQuery<Matter[]>(
+  const { data: matters = [], isLoading: loading } = useQuery<Matter[]>(
     queryKeys.cases.matters.all(),
     () => DataService.cases.getAll(),
     { staleTime: 30000 } // Cache for 30 seconds

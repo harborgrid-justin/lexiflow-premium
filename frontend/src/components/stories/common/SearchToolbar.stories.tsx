@@ -1,7 +1,7 @@
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { ThemeProvider } from '@/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 /**
  * SearchToolbar component for search with filters.

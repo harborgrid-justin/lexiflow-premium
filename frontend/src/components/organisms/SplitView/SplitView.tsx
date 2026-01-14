@@ -34,11 +34,11 @@ interface SplitViewProps {
 /**
  * SplitView - React 18 optimized with React.memo
  */
-export const SplitView = React.memo<SplitViewProps>(({ 
-  sidebar, 
-  content, 
-  showSidebarOnMobile = true, 
-  className = '' 
+export const SplitView = React.memo<SplitViewProps>(({
+  sidebar,
+  content,
+  showSidebarOnMobile = true,
+  className = ''
 }) => {
   const { theme } = useTheme();
 

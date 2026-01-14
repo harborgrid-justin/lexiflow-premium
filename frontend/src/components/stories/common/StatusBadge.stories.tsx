@@ -1,6 +1,5 @@
 import { StatusBadge } from '@/shared/ui/atoms/StatusBadge/StatusBadge';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React from "react";
 
 /**
  * StatusBadge component for displaying status with icons and colors.

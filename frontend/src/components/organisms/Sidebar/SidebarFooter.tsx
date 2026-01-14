@@ -65,14 +65,14 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
       </div>
 
       <div className={styles.holographicModeContainer}>
-          <span className={styles.getHolographicModeLabel(theme)}>Holographic Mode</span>
-          <button
-            onClick={toggleOrbitalMode}
-            className={styles.getToggleButton(theme, isOrbitalEnabled)}
-            title={isOrbitalEnabled ? "Windowed Interface" : "Flat Interface"}
-          >
-            <span className={styles.getToggleIndicator(isOrbitalEnabled)} />
-          </button>
+        <span className={styles.getHolographicModeLabel(theme)}>Holographic Mode</span>
+        <button
+          onClick={toggleOrbitalMode}
+          className={styles.getToggleButton(theme, isOrbitalEnabled)}
+          title={isOrbitalEnabled ? "Windowed Interface" : "Flat Interface"}
+        >
+          <span className={styles.getToggleIndicator(isOrbitalEnabled)} />
+        </button>
       </div>
 
       <button
@@ -88,12 +88,12 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
       </button>
 
       <div className={styles.actionButtonsGrid}>
-         <button onClick={() => onNavigate(PATHS.ADMIN)} className={styles.getActionButton(theme)}>
-            <Settings className={styles.actionButtonIcon}/> Settings
-         </button>
-         <button onClick={onSwitchUser} className={styles.getActionButton(theme)}>
-            <LogOut className={styles.actionButtonIcon}/> Switch
-         </button>
+        <button onClick={() => onNavigate(PATHS.ADMIN)} className={styles.getActionButton(theme)}>
+          <Settings className={styles.actionButtonIcon} /> Settings
+        </button>
+        <button onClick={onSwitchUser} className={styles.getActionButton(theme)}>
+          <LogOut className={styles.actionButtonIcon} /> Switch
+        </button>
       </div>
     </div>
   );

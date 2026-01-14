@@ -1,12 +1,13 @@
-import { Settings, X, Move, Trash2 } from 'lucide-react';
+import { useModalState } from '@/hooks/core';
+import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { Button } from '@/shared/ui/atoms/Button';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { useModalState } from '@/hooks/core';
-import { WorkflowNode, getNodeIcon } from './types';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { Move, Settings, Trash2, X } from 'lucide-react';
+import React from 'react';
+import { WorkflowNode, getNodeIcon } from './types';
 
 interface BuilderPropertiesProps {
   isOpen: boolean;
@@ -69,8 +70,8 @@ export function BuilderProperties({
               <div>
                 <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Component Type</label>
                 <div className={cn("flex items-center gap-2 p-2 rounded border text-sm", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
-                    {getNodeIcon(selectedNode.type)}
-                    {selectedNode.type}
+                  {getNodeIcon(selectedNode.type)}
+                  {selectedNode.type}
                 </div>
               </div>
 

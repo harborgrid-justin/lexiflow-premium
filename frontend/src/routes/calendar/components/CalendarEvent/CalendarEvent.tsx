@@ -10,6 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
@@ -53,7 +54,7 @@ export const CalendarEvent = React.memo<CalendarEventProps>(({
   };
 
   return (
-    <div 
+    <div
       onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClick?.(); }}
       className={cn(
         "group flex items-center px-2 py-1 rounded border text-xs font-medium cursor-pointer transition-all mb-1 truncate",

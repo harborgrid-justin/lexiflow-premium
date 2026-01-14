@@ -496,7 +496,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         next[category] = categoryObj;
       }
 
-      setTokensExternal(next);
+      setTokensExternal(next as DesignTokens);
     });
   }, [startTransition, tokens, setTokensExternal]);
 

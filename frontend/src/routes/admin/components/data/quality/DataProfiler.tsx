@@ -1,11 +1,12 @@
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
-import { Card } from '@/shared/ui/molecules/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
-import { DataProfile } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
+import { useTheme } from '@/theme';
+import { DataProfile } from '@/types';
 import { AlertTriangle, AlignLeft, Calendar, CheckCircle2, Hash, Loader2 } from 'lucide-react';
+import React from 'react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
 /**

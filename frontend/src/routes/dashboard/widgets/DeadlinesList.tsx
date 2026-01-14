@@ -5,6 +5,7 @@
  * Displays court dates, filing deadlines, and important milestones
  */
 
+import React from 'react';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { format, formatDistanceToNow, isPast, isThisWeek, isToday, isTomorrow } from 'date-fns';

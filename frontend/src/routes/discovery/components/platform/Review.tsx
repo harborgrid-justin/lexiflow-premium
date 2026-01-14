@@ -2,7 +2,7 @@
  * Review.tsx
  * Document Review Interface for E-Discovery
  * Full-featured document review with coding panel
- * 
+ *
  * REACT V18 CONCURRENT-SAFE:
  * - G21: Renders interruptible, no side effects during render
  * - G22: Context (theme) immutable throughout
@@ -14,6 +14,7 @@
  * - G34: Query reads side-effect free
  */
 
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';

@@ -10,7 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { ChevronLeft, ChevronRight, List, Grid } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Grid, List } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -52,27 +53,27 @@ export const CalendarToolbar = React.memo<CalendarToolbarProps>(({
     <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
       <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
         <h2 className={cn("text-lg font-bold min-w-[140px]", theme.text.primary)}>{label}</h2>
-        
+
         <div className={cn("flex items-center rounded-lg p-0.5 border", theme.surface.highlight, theme.border.default)}>
-          <button 
-            onClick={onPrev} 
+          <button
+            onClick={onPrev}
             className={cn("p-1.5 rounded-md transition-all shadow-sm", theme.text.secondary, `hover:${theme.surface.default}`)}
             aria-label="Previous Month"
           >
-            <ChevronLeft className="h-4 w-4"/>
+            <ChevronLeft className="h-4 w-4" />
           </button>
-          <button 
+          <button
             onClick={onToday}
             className={cn("px-3 py-1 text-xs font-semibold", theme.text.secondary, `hover:${theme.text.primary}`)}
           >
             Today
           </button>
-          <button 
-            onClick={onNext} 
+          <button
+            onClick={onNext}
             className={cn("p-1.5 rounded-md transition-all shadow-sm", theme.text.secondary, `hover:${theme.surface.default}`)}
             aria-label="Next Month"
           >
-            <ChevronRight className="h-4 w-4"/>
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -80,23 +81,23 @@ export const CalendarToolbar = React.memo<CalendarToolbarProps>(({
       <div className="flex items-center gap-2 w-full sm:w-auto">
         {onViewChange && (
           <div className={cn("flex rounded-lg p-0.5 border", theme.surface.highlight, theme.border.default)}>
-            <button 
+            <button
               onClick={() => onViewChange('month')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
                 view === 'month' ? cn(theme.surface.default, "shadow text-blue-600") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
-              <Grid className="h-4 w-4"/>
+              <Grid className="h-4 w-4" />
             </button>
-            <button 
+            <button
               onClick={() => onViewChange('list')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
                 view === 'list' ? cn(theme.surface.default, "shadow text-blue-600") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
-              <List className="h-4 w-4"/>
+              <List className="h-4 w-4" />
             </button>
           </div>
         )}

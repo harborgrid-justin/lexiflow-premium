@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useId } from 'react';
-import { SearchService } from '@/services/search/searchService';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { SearchService } from "@/services/search/search.service";
+import { useClickOutside } from "@/shared/hooks/useClickOutside";
+import { useEffect, useId, useRef, useState } from "react";
 
 interface UseSearchToolbarProps {
   value: string;
@@ -15,7 +15,9 @@ export function useSearchToolbar({ value, onChange }: UseSearchToolbarProps) {
   const [showHistory, setShowHistory] = useState(false);
   const history = SearchService.getHistory();
 
-  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setShowHistory(false));
+  useClickOutside(containerRef as React.RefObject<HTMLElement>, () =>
+    setShowHistory(false)
+  );
 
   // Set mounted flag
   useEffect(() => {
@@ -24,16 +26,16 @@ export function useSearchToolbar({ value, onChange }: UseSearchToolbarProps) {
 
   // Only attach keyboard listener after mount
   useEffect(() => {
-    if (!isMounted || typeof document === 'undefined') return;
+    if (!isMounted || typeof document === "undefined") return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === '/' && document.activeElement !== inputRef.current) {
+      if (e.key === "/" && document.activeElement !== inputRef.current) {
         e.preventDefault();
         inputRef.current?.focus();
       }
     };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isMounted]);
 
   const handleFocus = () => {
@@ -47,7 +49,7 @@ export function useSearchToolbar({ value, onChange }: UseSearchToolbarProps) {
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       SearchService.saveHistory(value);
       setShowHistory(false);
     }
@@ -61,6 +63,6 @@ export function useSearchToolbar({ value, onChange }: UseSearchToolbarProps) {
     history,
     handleFocus,
     handleHistorySelect,
-    handleKeyUp
+    handleKeyUp,
   };
 }

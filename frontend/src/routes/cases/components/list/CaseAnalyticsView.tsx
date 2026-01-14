@@ -10,7 +10,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { Matter } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { BarChart3, Briefcase, DollarSign, TrendingUp, Users } from 'lucide-react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 export const CaseAnalyticsView: React.FC = React.memo(() => {
   const { data: matters = [] } = useQuery<Matter[]>(
@@ -157,8 +157,8 @@ export const CaseAnalyticsView: React.FC = React.memo(() => {
                     <div className="w-32 bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                       <div
                         className={`h-2 rounded-full ${priority === 'URGENT' ? 'bg-rose-600' :
-                            priority === 'HIGH' ? 'bg-orange-600' :
-                              priority === 'MEDIUM' ? 'bg-blue-600' : 'bg-slate-600'
+                          priority === 'HIGH' ? 'bg-orange-600' :
+                            priority === 'MEDIUM' ? 'bg-blue-600' : 'bg-slate-600'
                           }`}
                         style={{ width: `${(count / matters.length) * 100}%` }}
                       />

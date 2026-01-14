@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
 import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 import { Button } from '@/shared/ui/atoms/Button/Button';

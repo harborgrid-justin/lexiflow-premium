@@ -5,6 +5,7 @@
  * Designed for executive dashboards with professional styling and animations
  */
 
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';

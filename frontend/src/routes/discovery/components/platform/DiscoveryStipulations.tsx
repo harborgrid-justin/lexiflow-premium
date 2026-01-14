@@ -26,6 +26,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 import { AlertCircle, CheckCircle, FileQuestion, FileText, Loader2, Plus, XCircle } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES

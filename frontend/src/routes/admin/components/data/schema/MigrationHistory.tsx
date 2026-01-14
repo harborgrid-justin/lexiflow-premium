@@ -1,3 +1,4 @@
+import React from 'react';
 import { Migration } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';

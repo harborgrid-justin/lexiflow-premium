@@ -11,8 +11,8 @@ import React from 'react';
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, Command, CornerDownLeft, Sparkles, X, Zap } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,8 +20,8 @@ import { AlertCircle, Command, CornerDownLeft, Sparkles, X, Zap } from 'lucide-r
 // Services & Data
 import type { IntentResult } from '@/services/features/research/geminiService';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
-import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
+import { HolographicRouting } from '@/services/infrastructure/holographic-routing.service';
+import { GlobalSearchResult, SearchService } from '@/services/search/search.service';
 
 // Hooks & Context
 import { useListNavigation } from '@/hooks/useListNavigation';

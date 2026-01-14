@@ -3,6 +3,7 @@
  * Visual progress indicator for multi-step forms
  */
 
+import React from 'react';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import type { LucideIcon } from 'lucide-react';

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';

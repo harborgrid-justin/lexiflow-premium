@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { Suspense, useEffect, useState } from 'react';
 import { Filter, Mail, MapPin, Plus } from 'lucide-react';
-import { Suspense, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

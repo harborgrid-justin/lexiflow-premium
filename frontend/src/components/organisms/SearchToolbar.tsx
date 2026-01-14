@@ -10,18 +10,18 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useId, useRef, useState } from 'react';
 import { Clock, Search } from 'lucide-react';
+import React, { useId, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { SearchService } from '@/services/search/searchService';
+import { SearchService } from '@/services/search/search.service';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

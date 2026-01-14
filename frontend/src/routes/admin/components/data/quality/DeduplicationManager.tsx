@@ -1,14 +1,15 @@
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
+import { DataService } from '@/services/data/data-service.service';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card';
-import { useNotify } from '@/hooks/core';
-import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/data-service.service';
 import { DedupeCluster } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { ArrowRight, CheckCircle, GitMerge, Layers } from 'lucide-react';
+import React from 'react';
 /**
  * DeduplicationManager - React 18 optimized with React.memo
  */

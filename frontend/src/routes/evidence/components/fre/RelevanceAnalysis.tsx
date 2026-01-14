@@ -5,6 +5,7 @@
  * Provides a risk meter and argument builder for admissibility hearings.
  */
 
+import React from 'react';
 import { Filter, Scale, Wand2 } from 'lucide-react';
 // Common Components
 import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';

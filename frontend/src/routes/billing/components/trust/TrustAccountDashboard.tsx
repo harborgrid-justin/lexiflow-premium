@@ -16,6 +16,7 @@
  * 5. Memoized computed values prevent expensive recalculations on re-render
  */
 
+import React, { useCallback, useMemo } from 'react';
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/shared/lib/cn';

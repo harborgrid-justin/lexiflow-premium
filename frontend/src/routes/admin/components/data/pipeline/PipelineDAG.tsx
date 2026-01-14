@@ -1,9 +1,10 @@
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { queryKeys } from '@/utils/queryKeys';
 import { Box, Database, Layers, Loader2, Server, Settings } from 'lucide-react';
+import React from 'react';
 /**
  * PipelineDAG - React 18 optimized with React.memo, real backend data
  */

@@ -16,14 +16,13 @@
  * 5. All dropdowns support keyboard navigation (WCAG 2.1 AA compliant)
  */
 
-import { api } from '@/lib/frontend-api';
-import { Jurisdiction } from '@/lib/frontend-api';
-import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
+import { api, Jurisdiction } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
+import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { Case, CaseStatus, CaseType } from '@/types';
 import { AlertCircle, Building, Calendar, FileText, Scale, Users } from 'lucide-react';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 
 // CreateCaseDto interface matching backend API expectations
 interface CreateCaseDto {

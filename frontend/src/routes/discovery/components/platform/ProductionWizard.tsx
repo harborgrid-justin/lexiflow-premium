@@ -2,7 +2,7 @@
  * ProductionWizard.tsx
  * Multi-step Production Set Creation Wizard
  * Industry-standard production workflow with Bates stamping
- * 
+ *
  * REACT V18 CONCURRENT-SAFE:
  * - G21: Multi-step form tolerates interrupted renders
  * - G22: Context (theme) treated as immutable
@@ -13,6 +13,7 @@
  * - G34: Query reads side-effect free
  */
 
+import React, { useState } from 'react';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';

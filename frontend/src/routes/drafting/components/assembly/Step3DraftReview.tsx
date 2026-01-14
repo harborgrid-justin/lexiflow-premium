@@ -4,6 +4,7 @@
  * ✅ Backend-connected via parent component DocumentAssembly (2025-12-21)
  */
 
+import React, { useEffect, useRef } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import { CheckCircle, Copy, Download, Loader2, Save, Sparkles } from 'lucide-react';

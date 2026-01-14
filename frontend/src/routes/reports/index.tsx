@@ -12,6 +12,7 @@
 
 import type { Report } from '@/lib/frontend-api';
 import { analyticsApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 import type { ReportCategory } from '@/types/analytics-enterprise';
 import {
   Calendar,

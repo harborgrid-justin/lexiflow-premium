@@ -7,6 +7,7 @@
  */
 
 import { knowledgeApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 import type { ResearchSession } from '@/types';
 import { useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

@@ -11,6 +11,7 @@
  */
 
 import { docketApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 import type { CaseId } from '@/types';
 import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

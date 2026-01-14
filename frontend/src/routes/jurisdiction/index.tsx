@@ -8,6 +8,7 @@
  */
 
 import { jurisdictionApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";

@@ -11,6 +11,7 @@
  */
 
 import { crmApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 import { ClientStatus } from '@/types';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

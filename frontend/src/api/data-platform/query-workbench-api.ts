@@ -2,11 +2,11 @@
  * @module services/api/data-platform/query-workbench-api
  * @description Query workbench API service
  * Handles SQL query execution, history, and saved queries
- * 
+ *
  * @responsibility Execute and manage SQL queries
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 /**
  * Query execution result interface
@@ -57,17 +57,20 @@ export class QueryWorkbenchApiService {
    */
   async executeQuery(query: string): Promise<QueryResult> {
     try {
-      return await apiClient.post<QueryResult>('/query-workbench/execute', { query });
+      return await apiClient.post<QueryResult>("/query-workbench/execute", {
+        query,
+      });
     } catch (error) {
-      console.error('[QueryWorkbenchApi] Error executing query:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error("[QueryWorkbenchApi] Error executing query:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       return {
         success: false,
         data: [],
         executionTimeMs: 0,
         rowsAffected: 0,
         error: errorMessage,
-        historyId: '',
+        historyId: "",
       };
     }
   }
@@ -75,12 +78,15 @@ export class QueryWorkbenchApiService {
   /**
    * Explain a SQL query (get execution plan)
    */
-  async explainQuery(query: string): Promise<{ success: boolean; plan?: unknown; error?: string }> {
+  async explainQuery(
+    query: string
+  ): Promise<{ success: boolean; plan?: unknown; error?: string }> {
     try {
-      return await apiClient.post('/query-workbench/explain', { query });
+      return await apiClient.post("/query-workbench/explain", { query });
     } catch (error) {
-      console.error('[QueryWorkbenchApi] Error explaining query:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error("[QueryWorkbenchApi] Error explaining query:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       return { success: false, error: errorMessage };
     }
   }
@@ -90,9 +96,12 @@ export class QueryWorkbenchApiService {
    */
   async getHistory(limit = 100): Promise<QueryHistoryItem[]> {
     try {
-      return await apiClient.get<QueryHistoryItem[]>('/query-workbench/history', { limit });
+      return await apiClient.get<QueryHistoryItem[]>(
+        "/query-workbench/history",
+        { params: { limit } }
+      );
     } catch (error) {
-      console.error('[QueryWorkbenchApi] Error fetching history:', error);
+      console.error("[QueryWorkbenchApi] Error fetching history:", error);
       return [];
     }
   }
@@ -102,9 +111,9 @@ export class QueryWorkbenchApiService {
    */
   async getSavedQueries(): Promise<SavedQuery[]> {
     try {
-      return await apiClient.get<SavedQuery[]>('/query-workbench/saved');
+      return await apiClient.get<SavedQuery[]>("/query-workbench/saved");
     } catch (error) {
-      console.error('[QueryWorkbenchApi] Error fetching saved queries:', error);
+      console.error("[QueryWorkbenchApi] Error fetching saved queries:", error);
       return [];
     }
   }
@@ -119,7 +128,7 @@ export class QueryWorkbenchApiService {
     tags?: string[];
     isShared?: boolean;
   }): Promise<SavedQuery> {
-    return await apiClient.post<SavedQuery>('/query-workbench/saved', data);
+    return await apiClient.post<SavedQuery>("/query-workbench/saved", data);
   }
 
   /**

@@ -108,7 +108,7 @@ export class AnalyticsService {
     try {
       const response = await apiClient.get<PaginatedResponse<unknown>>(
         "/clients",
-        { sortBy: "totalBilled", sortOrder: "desc", limit: 4 }
+        { params: { sortBy: "totalBilled", sortOrder: "desc", limit: 4 } }
       );
       return response.data;
     } catch {

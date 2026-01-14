@@ -73,12 +73,8 @@ export async function bulkUpload(
 export async function download(id: string): Promise<Blob> {
   validateId(id, "download");
   try {
-    const response = await fetch(
-      `${apiClient.getBaseUrl()}/documents/${id}/download`,
-      { headers: apiClient.getHeaders() }
-    );
-    if (!response.ok) throw new Error(`Download failed: ${response.status}`);
-    return await response.blob();
+    // Use apiClient's built-in fetch with proper headers
+    return await apiClient.get<Blob>(`/documents/${id}/download`);
   } catch (error) {
     console.error("[DocumentsApiService.download] Error:", error);
     throw new Error(`Failed to download document with id: ${id}`);

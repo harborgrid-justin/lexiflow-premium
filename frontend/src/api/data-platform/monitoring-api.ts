@@ -2,11 +2,14 @@
  * @module services/api/data-platform/monitoring-api
  * @description System monitoring API service
  * Handles performance metrics, alerts, and health monitoring
- * 
+ *
  * @responsibility Monitor system health and performance
  */
 
-import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
 
 /**
  * Performance metric interface
@@ -27,7 +30,7 @@ export interface SystemAlert {
   id: string;
   title: string;
   message: string;
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  severity: "info" | "warning" | "error" | "critical";
   source: string;
   acknowledged: boolean;
   resolved: boolean;
@@ -38,7 +41,7 @@ export interface SystemAlert {
  * System health interface
  */
 export interface SystemHealth {
-  status: 'healthy' | 'degraded';
+  status: "healthy" | "degraded";
   cpuUsage: number;
   memoryUsage: number;
   activeAlerts: number;
@@ -55,10 +58,10 @@ export class MonitoringApiService {
    */
   async getHealth(): Promise<SystemHealth> {
     try {
-      return await apiClient.get<SystemHealth>('/monitoring/health');
+      return await apiClient.get<SystemHealth>("/monitoring/health");
     } catch {
       return {
-        status: 'degraded',
+        status: "degraded",
         cpuUsage: 0,
         memoryUsage: 0,
         activeAlerts: 0,
@@ -77,7 +80,10 @@ export class MonitoringApiService {
     limit?: number;
   }): Promise<{ data: PerformanceMetric[] }> {
     try {
-      return await apiClient.get('/monitoring/metrics', filters);
+      return await apiClient.get(
+        "/monitoring/metrics",
+        filters ? { params: filters } : undefined
+      );
     } catch {
       return { data: [] };
     }
@@ -92,15 +98,20 @@ export class MonitoringApiService {
     unit?: string;
     tags?: Record<string, unknown>;
   }): Promise<PerformanceMetric> {
-    return await apiClient.post<PerformanceMetric>('/monitoring/metrics', data);
+    return await apiClient.post<PerformanceMetric>("/monitoring/metrics", data);
   }
 
   /**
    * Get system alerts
    */
-  async getAlerts(filters?: Record<string, unknown>): Promise<PaginatedResponse<SystemAlert>> {
+  async getAlerts(
+    filters?: Record<string, unknown>
+  ): Promise<PaginatedResponse<SystemAlert>> {
     try {
-      return await apiClient.get<PaginatedResponse<SystemAlert>>('/monitoring/alerts', filters);
+      return await apiClient.get<PaginatedResponse<SystemAlert>>(
+        "/monitoring/alerts",
+        filters
+      );
     } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
@@ -110,13 +121,19 @@ export class MonitoringApiService {
    * Acknowledge an alert
    */
   async acknowledgeAlert(id: string, userId: string): Promise<SystemAlert> {
-    return await apiClient.post<SystemAlert>(`/monitoring/alerts/${id}/acknowledge`, { userId });
+    return await apiClient.post<SystemAlert>(
+      `/monitoring/alerts/${id}/acknowledge`,
+      { userId }
+    );
   }
 
   /**
    * Resolve an alert
    */
   async resolveAlert(id: string): Promise<SystemAlert> {
-    return await apiClient.post<SystemAlert>(`/monitoring/alerts/${id}/resolve`, {});
+    return await apiClient.post<SystemAlert>(
+      `/monitoring/alerts/${id}/resolve`,
+      {}
+    );
   }
 }

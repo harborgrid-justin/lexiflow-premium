@@ -17,6 +17,7 @@
 
 import { integrationsApi } from '@/lib/frontend-api';
 import { IntegrationsManager } from '@/routes/admin/integrations/IntegrationsManager';
+import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';

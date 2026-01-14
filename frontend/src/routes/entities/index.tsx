@@ -9,6 +9,7 @@
 
 import { crmApi } from '@/lib/frontend-api';
 import { EntityDirector } from '@/routes/cases/components/entities/EntityDirector';
+import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";

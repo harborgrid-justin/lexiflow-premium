@@ -7,6 +7,7 @@
  */
 
 import { discoveryApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 import type { DiscoveryRequest } from '@/types';
 import { redirect, useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

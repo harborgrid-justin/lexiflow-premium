@@ -19,11 +19,13 @@
  * @module routes/cases/case-detail
  */
 
+import { DataService } from '@/services/data/data-service.service';
+
 import { casesApi, documentsApi } from '@/lib/frontend-api';
 import { CaseDetail } from '@/routes/cases/ui/pages/CaseDetailPage';
 import { Case, LegalDocument, Party } from '@/types';
 import { Suspense, useCallback } from 'react';
-import { Await, defer, redirect, useLoaderData, useNavigate } from 'react-router';
+import { Await, redirect, useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createCaseMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/case-detail";

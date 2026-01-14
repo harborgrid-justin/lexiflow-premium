@@ -8,6 +8,7 @@
  */
 
 import { discoveryApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 import { DiscoveryType } from '@/types/enums';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

@@ -1,25 +1,27 @@
-import { Module, Global } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Global, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 // Core Services
-import { BootstrapService } from './services/bootstrap.service';
-import { ShutdownService } from './services/shutdown.service';
-import { ConfigurationValidatorService } from './services/configuration.validator.service';
+import { BootstrapService } from "./services/bootstrap.service";
+import { ConfigurationValidatorService } from "./services/configuration.validator.service";
+import { ShutdownService } from "./services/shutdown.service";
 // Note: 19 Global Configuration Services are provided by GlobalConfigModule (loaded before CoreModule)
 
+// Core Controllers
+
 // Import Enterprise Modules (in dependency order)
-import { CommonModule } from '@common/common.module';
-import { SecurityModule } from '@security/security.module';
-import { ErrorsModule } from '@errors/errors.module';
-import { AuthModule } from '@auth/auth.module';
-import { UsersModule } from '@users/users.module';
-import { AuthorizationModule } from '@authorization/authorization.module';
-import { ComplianceModule } from '@compliance/compliance.module';
-import { MonitoringModule } from '@monitoring/monitoring.module';
-import { HealthModule } from '@health/health.module';
-import { PerformanceModule } from '@performance/performance.module';
-import { ApiSecurityModule } from '@api-security/api.security.module';
+import { ApiSecurityModule } from "@api-security/api.security.module";
+import { AuthModule } from "@auth/auth.module";
+import { AuthorizationModule } from "@authorization/authorization.module";
+import { CommonModule } from "@common/common.module";
+import { ComplianceModule } from "@compliance/compliance.module";
+import { ErrorsModule } from "@errors/errors.module";
+import { HealthModule } from "@health/health.module";
+import { MonitoringModule } from "@monitoring/monitoring.module";
+import { PerformanceModule } from "@performance/performance.module";
+import { SecurityModule } from "@security/security.module";
+import { UsersModule } from "@users/users.module";
 
 /**
  * Core Module
@@ -52,30 +54,31 @@ import { ApiSecurityModule } from '@api-security/api.security.module';
 
     // Phase 1: Core Infrastructure Modules
     // These provide fundamental services needed by everything else
-    CommonModule,       // Common utilities, guards, interceptors, filters
-    SecurityModule,     // Encryption, security headers, request fingerprinting
-    ErrorsModule,       // Error handling and recovery
+    CommonModule, // Common utilities, guards, interceptors, filters
+    SecurityModule, // Encryption, security headers, request fingerprinting
+    ErrorsModule, // Error handling and recovery
 
     // Phase 2: Authentication & User Management
     // Authentication must come before authorization
-    AuthModule,         // JWT authentication, session management
-    UsersModule,        // User entities and management
+    AuthModule, // JWT authentication, session management
+    UsersModule, // User entities and management
 
     // Phase 3: Authorization & Compliance
     // These depend on auth being available
     AuthorizationModule, // RBAC, permissions, policies
-    ComplianceModule,    // Audit logs, conflict checks, ethical walls, GDPR
+    ComplianceModule, // Audit logs, conflict checks, ethical walls, GDPR
 
     // Phase 4: Monitoring & Performance
     // These provide observability for all other modules
-    MonitoringModule,    // Logging, metrics, alerting, distributed tracing
-    HealthModule,        // Health checks and indicators
-    PerformanceModule,   // Caching, query optimization, compression
+    MonitoringModule, // Logging, metrics, alerting, distributed tracing
+    HealthModule, // Health checks and indicators
+    PerformanceModule, // Caching, query optimization, compression
 
     // Phase 5: API Security
     // Additional API-level security features
-    ApiSecurityModule,   // Rate limiting, request validation, webhook security
+    ApiSecurityModule, // Rate limiting, request validation, webhook security
   ],
+  controllers: [FeaturesController],
   providers: [
     // Core coordination services
     BootstrapService,
@@ -110,32 +113,34 @@ export class CoreModule {
    * Log when CoreModule is loaded
    */
   constructor() {
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  CoreModule: Enterprise Infrastructure Loaded');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  ✓ Common Module');
-    console.log('  ✓ Security Module');
-    console.log('  ✓ Errors Module');
-    console.log('  ✓ Auth Module');
-    console.log('  ✓ Users Module');
-    console.log('  ✓ Authorization Module');
-    console.log('  ✓ Compliance Module');
-    console.log('  ✓ Monitoring Module');
-    console.log('  ✓ Health Module');
-    console.log('  ✓ Performance Module');
-    console.log('  ✓ API Security Module');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  Global Config Services (19 via GlobalConfigModule):');
-    console.log('  ✓ DefaultAdminConfigService    ✓ FeatureFlagsConfigService');
-    console.log('  ✓ RateLimitConfigService       ✓ AuthSecurityConfigService');
-    console.log('  ✓ SecurityHeadersConfigService ✓ CacheConfigService');
-    console.log('  ✓ CorsConfigService            ✓ ResourceLimitsConfigService');
-    console.log('  ✓ CircuitBreakerConfigService  ✓ RetryConfigService');
-    console.log('  ✓ DatabasePoolConfigService    ✓ RedisConfigService');
-    console.log('  ✓ JwtConfigService             ✓ FileStorageConfigService');
-    console.log('  ✓ QueueConfigService           ✓ WebSocketConfigService');
-    console.log('  ✓ PaginationConfigService      ✓ ValidationConfigService');
-    console.log('  ✓ AuditConfigService');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("  CoreModule: Enterprise Infrastructure Loaded");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("  ✓ Common Module");
+    console.log("  ✓ Security Module");
+    console.log("  ✓ Errors Module");
+    console.log("  ✓ Auth Module");
+    console.log("  ✓ Users Module");
+    console.log("  ✓ Authorization Module");
+    console.log("  ✓ Compliance Module");
+    console.log("  ✓ Monitoring Module");
+    console.log("  ✓ Health Module");
+    console.log("  ✓ Performance Module");
+    console.log("  ✓ API Security Module");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("  Global Config Services (19 via GlobalConfigModule):");
+    console.log("  ✓ DefaultAdminConfigService    ✓ FeatureFlagsConfigService");
+    console.log("  ✓ RateLimitConfigService       ✓ AuthSecurityConfigService");
+    console.log("  ✓ SecurityHeadersConfigService ✓ CacheConfigService");
+    console.log(
+      "  ✓ CorsConfigService            ✓ ResourceLimitsConfigService"
+    );
+    console.log("  ✓ CircuitBreakerConfigService  ✓ RetryConfigService");
+    console.log("  ✓ DatabasePoolConfigService    ✓ RedisConfigService");
+    console.log("  ✓ JwtConfigService             ✓ FileStorageConfigService");
+    console.log("  ✓ QueueConfigService           ✓ WebSocketConfigService");
+    console.log("  ✓ PaginationConfigService      ✓ ValidationConfigService");
+    console.log("  ✓ AuditConfigService");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   }
 }

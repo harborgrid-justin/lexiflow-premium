@@ -151,6 +151,16 @@ export class AuthController {
 
   @ApiBearerAuth("JWT-auth")
   @UseGuards(JwtAuthGuard)
+  @Get("me")
+  @ApiOperation({ summary: "Get current authenticated user" })
+  @ApiResponse({ status: 200, description: "Returns current user" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  async getCurrentUser(@CurrentUser() user: AuthenticatedUser) {
+    return this.usersService.findOne(user.id);
+  }
+
+  @ApiBearerAuth("JWT-auth")
+  @UseGuards(JwtAuthGuard)
   @Put("profile")
   @ApiOperation({ summary: "Update current user profile" })
   @ApiResponse({ status: 200, description: "Profile updated successfully" })

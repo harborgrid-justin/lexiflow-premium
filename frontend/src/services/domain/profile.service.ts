@@ -30,7 +30,11 @@ import {
 export const ProfileDomain = {
   getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
     try {
-      const user = await authApi.auth.getCurrentUser();
+      const userResult = await authApi.getCurrentUser();
+      if (!userResult.ok) {
+        throw new Error("Failed to get current user");
+      }
+      const user = userResult.data;
 
       let permissions: GranularPermission[] = [];
       try {

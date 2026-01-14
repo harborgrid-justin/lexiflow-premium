@@ -34,6 +34,32 @@ import type { PaginatedResult, Result } from "./types";
 import { failure, success } from "./types";
 
 /**
+ * Correspondence types
+ */
+export interface Correspondence {
+  id: string;
+  caseId?: string;
+  clientId?: string;
+  correspondenceType:
+    | "letter"
+    | "email"
+    | "memo"
+    | "notice"
+    | "demand"
+    | "response";
+  subject: string;
+  sender?: string;
+  recipients?: string[];
+  date: string;
+  documentId?: string;
+  status: "draft" | "sent" | "received" | "filed";
+  notes?: string;
+  metadata?: Record<string, unknown>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/**
  * Client query filters
  */
 export interface ClientFilters {
@@ -297,6 +323,28 @@ export async function deleteMessage(id: string): Promise<Result<void>> {
 }
 
 /**
+ * Get all correspondence
+ */
+export async function getAllCorrespondence(filters?: {
+  page?: number;
+  limit?: number;
+  status?: string;
+}): Promise<Result<PaginatedResult<Correspondence>>> {
+  const params: Record<string, string | number> = {};
+  if (filters?.page) params.page = filters.page;
+  if (filters?.limit) params.limit = filters.limit;
+  if (filters?.status) params.status = filters.status;
+
+  const result = await client.get<PaginatedResult<Correspondence>>(
+    "/correspondence",
+    { params }
+  );
+
+  // Basic normalization/pass-through since we don't have a specific normalizer yet
+  return result;
+}
+
+/**
  * Communications API module
  */
 export const communicationsApi = {
@@ -309,6 +357,7 @@ export const communicationsApi = {
   getMessageById,
   sendMessage,
   deleteMessage,
+  getAllCorrespondence,
   // Notification methods
   getAllNotifications: async (filters?: {
     page?: number;

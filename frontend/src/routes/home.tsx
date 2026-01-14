@@ -71,14 +71,27 @@ export function meta(_: Route.MetaArgs) {
 export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
     // Fetch cases and tasks using new enterprise API
-    const casesArray = await casesApi.getAll({ page: 1, limit: 100 });
+    const casesResult = await casesApi.getAll({ page: 1, limit: 100 });
     const tasksResult = await workflowApi.getAllTasks({ page: 1, limit: 100 });
 
-    // Handle Result<T> returns for tasks - check for ok flag
+    // Handle Result<T> returns - check for ok flag
+    let casesArray: DashboardCase[] = [];
     let tasksArray: DashboardTask[] = [];
 
+    // Extract cases from Result<PaginatedResult<Case>>
+    if (casesResult.ok) {
+      const paginatedData = casesResult.data;
+      casesArray = Array.isArray(paginatedData.data) ? paginatedData.data : [];
+    } else {
+      console.warn('[Dashboard Loader] Failed to load cases:', casesResult.error);
+    }
+
+    // Extract tasks from Result<T>
     if (tasksResult.ok) {
-      tasksArray = (tasksResult.data as { data: DashboardTask[] })?.data || [];
+      const tasksData = tasksResult.data as { data: DashboardTask[] } | DashboardTask[];
+      tasksArray = Array.isArray(tasksData) ? tasksData : (tasksData?.data || []);
+    } else {
+      console.warn('[Dashboard Loader] Failed to load tasks:', tasksResult.error);
     }
 
     // Calculate metrics

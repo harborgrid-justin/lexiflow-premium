@@ -18,6 +18,11 @@ let isRefreshing = false;
  * Proactively refreshes if token is expiring soon
  */
 async function ensureValidToken(): Promise<void> {
+  // During SSR, skip token refresh logic
+  if (typeof window === "undefined") {
+    return;
+  }
+
   if (isRefreshing) {
     // Already refreshing, wait a moment and continue
     await new Promise((resolve) => setTimeout(resolve, 100));

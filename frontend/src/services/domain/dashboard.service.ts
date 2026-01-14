@@ -170,11 +170,21 @@ export const DashboardService = {
   },
 
   getChartData: async () => {
-    return apiClient.get("/dashboards/chart-data");
+    // Mock response until backend endpoint is implemented
+    return [
+      { name: "Jan", value: 400 },
+      { name: "Feb", value: 300 },
+      { name: "Mar", value: 600 },
+      { name: "Apr", value: 800 },
+      { name: "May", value: 500 },
+    ];
+    // return apiClient.get("/dashboards/chart-data");
   },
 
   getRecentAlerts: async () => {
-    return apiClient.get("/dashboards/alerts");
+    // Mock response until backend endpoint is implemented
+    return [];
+    // return apiClient.get("/dashboards/alerts");
   },
 };
 

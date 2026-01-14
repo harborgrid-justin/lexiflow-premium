@@ -90,6 +90,25 @@ export function createClient(config: ClientConfig = {}) {
     path: string,
     params?: Record<string, string | number | boolean>
   ): string {
+    // In dev mode with empty baseUrl, construct path directly
+    if (!baseUrl || baseUrl === "") {
+      let fullPath = `${apiPrefix}${path}`;
+
+      if (params) {
+        const searchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+          searchParams.append(key, String(value));
+        });
+        const queryString = searchParams.toString();
+        if (queryString) {
+          fullPath += `?${queryString}`;
+        }
+      }
+
+      return fullPath;
+    }
+
+    // For production with absolute baseUrl
     const url = new URL(`${apiPrefix}${path}`, baseUrl);
 
     if (params) {

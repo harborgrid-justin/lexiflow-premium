@@ -18,7 +18,7 @@ export interface DashboardLoaderData {
  * - Suspense handles loading states
  * - Parallel data fetching optimizes performance
  */
-export async function clientLoader(_args: LoaderFunctionArgs) {
+export async function clientLoader(args: LoaderFunctionArgs) {
   try {
     // Start parallel data fetching (do NOT await here)
     const casesPromise = DataService.cases.getAll();
@@ -56,8 +56,14 @@ export async function clientLoader(_args: LoaderFunctionArgs) {
       tasks,
     };
   } catch (error) {
-    console.error("[Dashboard Loader] Failed to load data:", error);
-    // Return empty data on error to prevent crash
+    // Handle authentication errors (SSR redirect or client re-throw)
+    handleLoaderAuthError(error, args);
+
+    // If we get here, it's a non-auth error - return empty data
+    console.error(
+      "[Dashboard Loader] Non-auth error, returning empty data:",
+      error
+    );
     return {
       cases: [],
       recentDocketEntries: [],

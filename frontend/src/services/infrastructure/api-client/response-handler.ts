@@ -38,6 +38,16 @@ export async function handleResponse<T>(response: Response): Promise<T> {
       console.warn(
         "[ResponseHandler] Received 401 Unauthorized, attempting token refresh"
       );
+
+      // During SSR, we cannot access localStorage or redirect
+      // Return a special error that the loader can handle
+      if (isSSR) {
+        console.log(
+          "[ResponseHandler] SSR detected, returning auth error for loader handling"
+        );
+        throw new AuthenticationError("SSR_AUTH_REQUIRED");
+      }
+
       const refreshToken = getRefreshToken();
       console.log("[ResponseHandler] Refresh token check:", {
         hasRefreshToken: !!refreshToken,
@@ -54,9 +64,7 @@ export async function handleResponse<T>(response: Response): Promise<T> {
               "[ResponseHandler] Token refresh failed, clearing tokens and redirecting"
             );
             clearAuthTokens();
-            if (!isSSR) {
-              window.location.href = "/login";
-            }
+            window.location.href = "/login";
             throw new AuthenticationError(
               "Session expired. Please login again."
             );
@@ -70,18 +78,14 @@ export async function handleResponse<T>(response: Response): Promise<T> {
           }
           console.error("[ResponseHandler] Token refresh failed:", error);
           clearAuthTokens();
-          if (!isSSR) {
-            window.location.href = "/login";
-          }
+          window.location.href = "/login";
           throw new AuthenticationError("Session expired. Please login again.");
         }
       } else {
         console.warn("[ResponseHandler] No refresh token available");
         clearAuthTokens();
-        if (!isSSR) {
-          console.log("[ResponseHandler] Redirecting to login");
-          window.location.href = "/login";
-        }
+        console.log("[ResponseHandler] Redirecting to login");
+        window.location.href = "/login";
         throw new AuthenticationError("Authentication required. Please login.");
       }
     }
@@ -99,13 +103,13 @@ export async function handleResponse<T>(response: Response): Promise<T> {
       data?: { message?: string; details?: unknown };
       status?: number;
     }
-    
+
     interface ErrorWithResponse extends ExternalServiceError {
       response?: ErrorResponse;
       status?: number;
       statusCode?: number;
     }
-    
+
     const error: ErrorWithResponse = new ExternalServiceError(
       "API",
       errorData.message || `HTTP ${response.status}: ${response.statusText}`,

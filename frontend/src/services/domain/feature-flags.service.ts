@@ -14,7 +14,6 @@
 // ================================================================================
 
 import { FEATURES_CONFIG } from "@/config/features/features.config";
-import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export interface Flags {
   enableNewDashboard: boolean;
@@ -38,8 +37,10 @@ export class FeatureFlagsService {
    * Falls back to config defaults if endpoint doesn't exist
    */
   static async fetchFlags(): Promise<Flags> {
+    // Temporarily disabled to prevent 404 noise until backend endpoint is implemented
+    /*
     try {
-      const response = await apiClient.get<Partial<Flags>>("/api/features");
+      const response = await apiClient.get<Partial<Flags>>("/features");
 
       // Merge with defaults to ensure all flags are present
       return {
@@ -52,9 +53,10 @@ export class FeatureFlagsService {
         err
       );
 
-      // Fallback to config-based defaults
       return DEFAULT_FLAGS;
     }
+    */
+    return DEFAULT_FLAGS;
   }
 
   /**

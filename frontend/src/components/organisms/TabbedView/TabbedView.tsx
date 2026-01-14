@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/layout/TabbedView
  * @category Layout
  * @description Tabbed view layout with header and tab navigation.
@@ -10,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useId } from 'react';
+import React, { useId } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

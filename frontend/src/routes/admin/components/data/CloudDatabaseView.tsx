@@ -5,6 +5,7 @@
  * deleting, and testing connections.
  */
 
+import React from 'react';
 import { cn } from '@/shared/lib/cn';
 import type { ThemeContextValue } from '@/theme';
 import { useTheme } from '@/theme';

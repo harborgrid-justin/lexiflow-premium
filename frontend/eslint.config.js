@@ -36,6 +36,8 @@ export default tseslint.config(
             "react-router.config.ts",
             "scripts/cleanup-orphaned-files.ts",
             "scripts/refactor-services.ts",
+            "src/routes/cases/index.tsx",
+            "src/routes/dashboard/index.tsx",
           ],
           defaultProject: "./tsconfig.json",
         },

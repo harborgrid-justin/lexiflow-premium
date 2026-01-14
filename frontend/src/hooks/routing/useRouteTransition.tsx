@@ -10,7 +10,7 @@
  * @module hooks/routing/useRouteTransition
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigation } from 'react-router';
 
 export type TransitionType = 'fade' | 'slide' | 'scale' | 'none';
@@ -51,10 +51,13 @@ export function useRouteTransition(
   const transitionTimer = useRef<number>();
   const isNavigating = navigation.state !== 'idle';
 
-  const fullConfig: TransitionConfig = {
+  // Apply configuration with navigation state awareness
+  const fullConfig: TransitionConfig = useMemo(() => ({
     ...DEFAULT_CONFIG,
     ...config,
-  };
+    // Reduce duration when actively navigating to improve perceived performance
+    duration: isNavigating && config?.duration ? config.duration * 0.7 : (config?.duration || DEFAULT_CONFIG.duration),
+  }), [config, isNavigating]);
 
   useEffect(() => {
     if (location.pathname !== previousLocation.current) {

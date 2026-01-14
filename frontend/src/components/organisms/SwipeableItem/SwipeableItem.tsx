@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/common/SwipeableItem
  * @category Common
  * @description Swipeable list item with left/right actions.
@@ -10,8 +11,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useRef, useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
-import { useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

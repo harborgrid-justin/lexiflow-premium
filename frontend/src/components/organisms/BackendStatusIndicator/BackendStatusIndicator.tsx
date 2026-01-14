@@ -4,6 +4,7 @@
  * Can be placed in header or sidebar
  */
 
+import React from 'react';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
 import { useDataSource } from '@/providers';
 import { Database, HardDrive, Server } from 'lucide-react';

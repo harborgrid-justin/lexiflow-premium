@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/layout/MobileBottomNav
  * @category Layout - Mobile
  * @description Mobile-only bottom navigation bar displaying primary navigation items with icons
@@ -14,6 +15,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
+import React from 'react';
 import { MoreHorizontal } from 'lucide-react';
 
 // ========================================

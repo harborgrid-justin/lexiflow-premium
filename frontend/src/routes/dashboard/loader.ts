@@ -19,7 +19,7 @@ export interface DashboardLoaderData {
  * - Suspense handles loading states
  * - Parallel data fetching optimizes performance
  */
-export async function clientLoader({ request: _request }: LoaderFunctionArgs) {
+export async function clientLoader(_args: LoaderFunctionArgs) {
   // Start parallel data fetching (do NOT await here)
   const casesPromise = DataService.cases.getAll();
   const docketEntriesPromise = DataService.docket.getAll();

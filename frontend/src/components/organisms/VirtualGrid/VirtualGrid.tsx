@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/common/VirtualGrid
  * @category Common
  * @description Virtualized grid with responsive columns and scroll optimization.
@@ -10,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

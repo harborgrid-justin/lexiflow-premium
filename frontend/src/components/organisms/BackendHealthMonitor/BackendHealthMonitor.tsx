@@ -1,4 +1,5 @@
 import { useTheme } from '@/theme';
+import React from 'react';
 import { apiClient, type ServiceHealthStatus, type SystemHealth } from '@/services/infrastructure/apiClient';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';

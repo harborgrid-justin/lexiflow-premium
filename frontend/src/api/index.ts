@@ -66,7 +66,7 @@ export {
   createClient,
   // Domain errors
   DomainError,
-  ErrorType as ErrorTypes,
+  type ErrorType as ErrorTypes,
   failure,
   ForbiddenError,
   isFailure,

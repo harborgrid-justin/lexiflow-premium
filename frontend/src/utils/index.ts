@@ -9,7 +9,6 @@ export * from "./crdt";
 export * from "./docketValidation";
 export * from "./errorHandler";
 export * from "./formatters";
-export * from "./scheduleHelpers";
 export * from "./idGenerator";
 export * from "./layoutAlgorithms";
 export * from "./nexusPhysics";
@@ -17,6 +16,7 @@ export * from "./pathfinding";
 export * from "./rateLimiter";
 export * from "./retryWithBackoff"; // Note: retryWithBackoff re-exported from here (duplicate exists in async.ts)
 export * from "./sanitize";
+export * from "./scheduleHelpers";
 export * from "./scheduler";
 export * from "./simulationEngine";
 export * from "./sqlHelpers";
@@ -45,7 +45,7 @@ export * from "./formatUtils";
 export * from "./LRUCache";
 export * from "./memoryMonitor";
 export * from "./notificationUtils";
-export * from "./query-keys.service";
+// export * from "./query-keys.service"; // TODO: Create this file or remove export
 export * from "./telemetry";
 export * from "./type-mapping";
 

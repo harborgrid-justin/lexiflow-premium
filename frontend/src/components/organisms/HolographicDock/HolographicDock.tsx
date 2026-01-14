@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/layout/HolographicDock
  * @category Layout
  * @description Dock for minimized holographic windows.
@@ -10,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Maximize2, X, Layers } from 'lucide-react';
 
 // ============================================================================

@@ -5,29 +5,34 @@
  * Integration: Opp #8 from architecture docs
  */
 
-import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads } from '@/types/integration-types';
-import { SystemEventType } from '@/types/integration-types';
+import type { SystemEventPayloads } from "@/types/integration-types";
+import { SystemEventType } from "@/types/integration-types";
+import { BaseEventHandler } from "./base-event.handler.service";
 
-export class WallErectedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.WALL_ERECTED]> {
+export class WallErectedHandler extends BaseEventHandler<
+  SystemEventPayloads[typeof SystemEventType.WALL_ERECTED]
+> {
   readonly eventType = SystemEventType.WALL_ERECTED;
 
-  async handle(payload: SystemEventPayloads[typeof SystemEventType.WALL_ERECTED]) {
+  async handle(
+    payload: SystemEventPayloads[typeof SystemEventType.WALL_ERECTED]
+  ) {
     const actions: string[] = [];
     const { wall } = payload;
 
-    const { DataService } = await import('@/services/data/dataService');
+    const { DataService } =
+      await import("@/services/data/data-service.service");
 
     // Generate RLS policy for ethical wall
     const policyName = `wall_enforce_${wall.caseId}`;
 
     await DataService.admin.saveRLSPolicy({
       name: policyName,
-      table: 'documents',
-      cmd: 'SELECT',
+      table: "documents",
+      cmd: "SELECT",
       roles: wall.restrictedGroups,
       using: `case_id != '${wall.caseId}'`, // Prevent access
-      status: 'Active'
+      status: "Active",
     });
 
     actions.push(`Generated RLS Policy: ${policyName}`);

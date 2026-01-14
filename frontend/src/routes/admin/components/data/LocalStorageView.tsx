@@ -5,6 +5,7 @@
  * Provides functionality to view, delete individual items, or clear all storage.
  */
 
+import React, { useEffect } from 'react';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { HardDrive, Trash2 } from 'lucide-react';

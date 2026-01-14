@@ -67,7 +67,7 @@
  */
 
 import { ValidationError } from "@/services/core/errors";
-import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
+import { IntegrationEventPublisher } from "@/services/data/integration/integration-event-publisher.service";
 import type {
   IntegrationResult,
   SystemEventPayloads,

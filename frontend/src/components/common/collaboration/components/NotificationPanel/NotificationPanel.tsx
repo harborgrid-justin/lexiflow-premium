@@ -4,11 +4,12 @@
  * @description Persistent notification panel with action buttons and grouping.
  */
 
-import { useTheme } from '@/theme';
+import React from 'react';
 import { useModalState } from '@/hooks/core';
 import { NotificationService } from '@/services/domain/notification.service';
-import type { NotificationGroup, UINotification } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import type { NotificationGroup, UINotification } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { AlertCircle, AlertTriangle, Bell, CheckCircle, Clock, Info, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';

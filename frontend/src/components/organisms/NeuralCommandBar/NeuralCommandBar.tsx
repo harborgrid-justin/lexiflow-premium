@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/layout/NeuralCommandBar
  * @category Layout
  * @description AI-powered command bar with intent detection and search.
@@ -10,8 +11,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, Command, CornerDownLeft, Sparkles, X, Zap } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

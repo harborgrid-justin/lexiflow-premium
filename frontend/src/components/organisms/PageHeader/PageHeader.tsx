@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/common/PageHeader
  * @category Common
  * @description Page header with title and actions.
@@ -10,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useId } from 'react';
+import React, { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

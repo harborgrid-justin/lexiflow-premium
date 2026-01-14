@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/sidebar/SidebarHeader
  * @category Layout
  * @description Header section of the sidebar displaying tenant branding.
@@ -10,6 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 import { Scale, X } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES

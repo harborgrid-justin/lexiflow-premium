@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/common/Table
  * @category Common
  * @description Table components with responsive card layout.
@@ -10,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

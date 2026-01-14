@@ -45,7 +45,7 @@ import { CaseListPageContent } from './CaseListPage';
  * Dynamic meta tags showing case count
  * NOTE: With deferred data, meta receives promises, not resolved data
  */
-export function meta({ data }: Route.MetaArgs) {
+export function meta() {
   // TODO: Adjust meta generation for deferred data
   return createListMeta({
     entityType: 'Cases',

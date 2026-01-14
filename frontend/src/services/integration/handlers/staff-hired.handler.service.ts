@@ -5,14 +5,18 @@
  * Integration: Opp #9 from architecture docs
  */
 
-import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads } from '@/types/integration-types';
-import { SystemEventType } from '@/types/integration-types';
+import type { SystemEventPayloads } from "@/types/integration-types";
+import { SystemEventType } from "@/types/integration-types";
+import { BaseEventHandler } from "./base-event.handler.service";
 
-export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]> {
+export class StaffHiredHandler extends BaseEventHandler<
+  SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]
+> {
   readonly eventType = SystemEventType.STAFF_HIRED;
 
-  async handle(payload: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]) {
+  async handle(
+    payload: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]
+  ) {
     const actions: string[] = [];
     const errors: string[] = [];
     const { staff } = payload;
@@ -24,11 +28,12 @@ export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[type
       return this.createError(errors);
     }
 
-    const { DataService } = await import('@/services/data/dataService');
+    const { DataService } =
+      await import("@/services/data/data-service.service");
 
     // Verify user service is available
-    if (!DataService.users || typeof DataService.users.add !== 'function') {
-      errors.push('User provisioning service not available');
+    if (!DataService.users || typeof DataService.users.add !== "function") {
+      errors.push("User provisioning service not available");
       return this.createError(errors);
     }
 
@@ -38,11 +43,11 @@ export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[type
       name: staff.name,
       email: staff.email,
       role: staff.role,
-      userType: 'Internal' as const,
-      orgId: 'org-1',
-      status: 'Active',
+      userType: "Internal" as const,
+      orgId: "org-1",
+      status: "Active",
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await DataService.users.add(newUser);
@@ -51,16 +56,18 @@ export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[type
     return this.createSuccess(actions);
   }
 
-  private validateStaff(staff: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]['staff']): string | null {
+  private validateStaff(
+    staff: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]["staff"]
+  ): string | null {
     // Validate required fields
     if (!staff.userId || !staff.name || !staff.email || !staff.role) {
-      return 'Staff member missing required fields for user provisioning';
+      return "Staff member missing required fields for user provisioning";
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     if (!emailRegex.test(staff.email)) {
-      return 'Invalid email format for user provisioning';
+      return "Invalid email format for user provisioning";
     }
 
     return null;

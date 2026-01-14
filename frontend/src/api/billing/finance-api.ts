@@ -645,7 +645,7 @@ export class BillingApiService {
     try {
       const response = await apiClient.get<TrustTransactionEntity[]>(
         `/billing/trust-accounts/${accountId}/transactions`,
-        filters
+        { params: filters }
       );
       return Array.isArray(response) ? response : [];
     } catch {

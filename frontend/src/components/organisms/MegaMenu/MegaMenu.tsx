@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/navigation/MegaMenu
  * @category Navigation
  * @description Enterprise mega menu component with multi-column layouts, featured items,
@@ -14,9 +15,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useEffect, useRef, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { ChevronDown, ExternalLink } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

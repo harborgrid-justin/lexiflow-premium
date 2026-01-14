@@ -5,23 +5,28 @@
  * Integration: Opp #1 from architecture docs
  */
 
-import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads } from '@/types/integration-types';
-import { SystemEventType } from '@/types/integration-types';
+import type { SystemEventPayloads } from "@/types/integration-types";
+import { SystemEventType } from "@/types/integration-types";
+import { BaseEventHandler } from "./base-event.handler.service";
 
-export class LeadStageChangedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]> {
+export class LeadStageChangedHandler extends BaseEventHandler<
+  SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]
+> {
   readonly eventType = SystemEventType.LEAD_STAGE_CHANGED;
 
-  async handle(payload: SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]) {
+  async handle(
+    payload: SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]
+  ) {
     const actions: string[] = [];
 
     // Only trigger conflict checks for specific stages
-    if (payload.stage === 'Engagement' || payload.stage === 'Conflict Check') {
+    if (payload.stage === "Engagement" || payload.stage === "Conflict Check") {
       // Dynamic import to avoid circular dependency
-      const { DataService } = await import('@/services/data/dataService');
+      const { DataService } =
+        await import("@/services/data/data-service.service");
 
       await DataService.compliance.runConflictCheck(payload.clientName);
-      actions.push('Triggered Automated Conflict Check');
+      actions.push("Triggered Automated Conflict Check");
     }
 
     return this.createSuccess(actions);

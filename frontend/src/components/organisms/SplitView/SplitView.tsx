@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/common/SplitView
  * @category Common
  * @description Split view layout with sidebar and content.
@@ -17,6 +18,7 @@
 import { useTheme } from '@/providers/';
 
 // Utils & Constants
+import React from 'react';
 import { cn } from '@/shared/lib/cn';
 
 // ============================================================================

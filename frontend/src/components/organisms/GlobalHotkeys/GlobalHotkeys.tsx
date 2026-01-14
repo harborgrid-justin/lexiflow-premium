@@ -7,6 +7,8 @@
  * No direct theme usage - purely functional component.
  */
 
+import React from 'react';
+
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================

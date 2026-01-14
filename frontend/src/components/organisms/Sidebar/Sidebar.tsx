@@ -1,4 +1,5 @@
 // components/layout/Sidebar.tsx
+import React from 'react';
 import { SidebarFooter, SidebarHeader } from '@/components';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';

@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/navigation/QuickActions
  * @category Navigation
  * @description Enterprise quick actions menu with role-based visibility, keyboard shortcuts,
@@ -14,9 +15,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useEffect, useRef, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { PlusCircle, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

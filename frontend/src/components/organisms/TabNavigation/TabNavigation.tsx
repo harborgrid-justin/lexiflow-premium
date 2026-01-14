@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/common/TabNavigation
  * @category Common
  * @description Tab navigation with icons and active state.
@@ -10,8 +11,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useId } from 'react';
 import { LucideIcon } from 'lucide-react';
-import { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

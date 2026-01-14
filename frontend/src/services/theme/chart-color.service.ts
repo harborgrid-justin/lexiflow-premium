@@ -9,4 +9,4 @@
  */
 
 // Re-export from centralized location
-export { ChartColorService } from "@/theme/services/chart-color.service";
+export { ChartColorService } from "@/theme/services/chartColorService";

@@ -110,12 +110,14 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
     // We wrap its state setters in startTransition where appropriate
     const manager = useEvidenceManager(caseId);
 
-    // Concurrent-safe view setter
-    const setView = (view: ViewMode) => {
+    // Concurrent-safe view setter wrapped in useCallback to prevent re-creation
+    // Only depend on the stable setView function, not the entire manager object
+    const setView = useCallback((view: ViewMode) => {
         startTransition(() => {
             manager.setView(view);
         });
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- manager.setView is stable, manager object changes would cause unnecessary re-renders
+    }, [manager.setView, startTransition]);
 
     // Guideline 22: DESIGN CONTEXT VALUES TO BE CONCURRENT-SAFE
     // Construct State Values - immutable, frozen in development

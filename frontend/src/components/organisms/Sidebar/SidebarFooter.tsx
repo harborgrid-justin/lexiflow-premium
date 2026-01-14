@@ -1,4 +1,5 @@
 /**
+import React from 'react';
  * @module components/sidebar/SidebarFooter
  * @category Layout
  * @description Footer section of the sidebar with user menu and actions.
@@ -10,6 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 import { ChevronDown, LogOut, Settings } from 'lucide-react';
 
 // ============================================================================

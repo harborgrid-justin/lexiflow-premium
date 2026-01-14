@@ -14,7 +14,7 @@ import {
   DeleteNodeCommand,
   MoveNodeCommand,
   UpdateNodeCommand,
-} from "@/services/infrastructure/commandHistory";
+} from "@/services/infrastructure/command-history.service";
 import { ContextMenuItem } from "@/shared/ui/molecules/ContextMenu/ContextMenu";
 import { CANVAS_CONSTANTS } from "@/types/canvas-constants";
 import {

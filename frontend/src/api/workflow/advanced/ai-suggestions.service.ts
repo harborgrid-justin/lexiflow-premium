@@ -4,7 +4,7 @@
  * AI Suggestions Service - Feature 9
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   AILearningFeedback,
   AIWorkflowSuggestion,

@@ -4,7 +4,7 @@
  * Document generation service - focused on generated document operations
  */
 
-import { ApiClient } from "@/services/infrastructure/apiClient";
+import { ApiClient } from "@/services/infrastructure/api-client.service";
 import type {
   GeneratedDocument,
   GeneratedDocumentStatus,

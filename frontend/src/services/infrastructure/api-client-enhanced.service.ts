@@ -38,7 +38,7 @@ import {
   API_CLIENT_BACKOFF_MULTIPLIER,
   API_CLIENT_RETRYABLE_STATUS_CODES
 } from '@/config/features/services.config';
-import { apiClient } from "./apiClient";
+import { apiClient } from "./api-client.service";
 
 /**
  * Retry configuration options
@@ -768,4 +768,4 @@ export const apiClientEnhanced = new ApiClientEnhanced();
 export { ApiClientEnhanced };
 
 // Re-export types from base client
-export type { PaginatedResponse } from "./apiClient";
+export type { PaginatedResponse } from "./api-client.service";

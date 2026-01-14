@@ -3,7 +3,7 @@
  * Rate table management
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { RateTable } from "./types";
 import { OperationError } from "./types";
 

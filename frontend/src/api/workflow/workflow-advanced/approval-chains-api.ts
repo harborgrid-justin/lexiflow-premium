@@ -3,7 +3,7 @@
  * Feature 6: Multi-level approval chains
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   ApprovalChain,
   ApprovalInstance,

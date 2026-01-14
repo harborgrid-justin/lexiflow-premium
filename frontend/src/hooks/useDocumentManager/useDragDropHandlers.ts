@@ -7,7 +7,7 @@ import { DocumentsApiService } from "@/api/admin/documents-api";
 import type { CaseId } from "@/types";
 
 const documentsApi = new DocumentsApiService();
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import React, { useCallback, useRef, useState } from "react";
 import type { UseNotifyReturn } from "../useNotify";
 import { queryClient } from "../useQueryHooks";

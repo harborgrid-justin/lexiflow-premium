@@ -75,7 +75,7 @@
  */
 
 import { analyticsApi } from "@/api/domains/analytics.api";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
   JudgeMotionStat,
   OpposingCounselProfile,

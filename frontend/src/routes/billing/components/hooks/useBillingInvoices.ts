@@ -1,7 +1,7 @@
 import { useNotify } from "@/hooks/useNotify";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/dataService";
-import { billingQueryKeys } from "@/services/infrastructure/queryKeys";
+import { billingQueryKeys } from "@/services/infrastructure/query-keys.service";
 import { Invoice } from "@/types";
 import { InvoiceStatusEnum } from "@/types/enums";
 import { useCallback, useMemo, useState } from "react";

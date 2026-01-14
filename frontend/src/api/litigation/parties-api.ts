@@ -7,7 +7,7 @@
  * - DTOs: backend/src/parties/dto/create-party.dto.ts, update-party.dto.ts
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { Party, PartyFilters } from "@/types";
 
 // Backend PartyType enum values

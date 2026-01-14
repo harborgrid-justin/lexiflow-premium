@@ -5,7 +5,7 @@
 
 import { DocumentsApiService } from "@/api/admin/documents-api";
 import type { LegalDocument } from "@/types";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import { useMemo } from "react";
 import { useQuery } from "../useQueryHooks";
 

@@ -3,7 +3,7 @@
  * Property disposal tracking and management
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { DisposalStatus, RealEstateDisposal } from "./types";
 
 /**

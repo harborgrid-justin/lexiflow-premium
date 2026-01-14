@@ -3,7 +3,7 @@
  * Main API facade - ~90 LOC instead of 914 LOC
  */
 
-import { ApiClient } from "@/services/infrastructure/apiClient";
+import { ApiClient } from "@/services/infrastructure/api-client.service";
 import { DashboardService } from "./dashboard.service";
 import { DocumentService } from "./documents.service";
 import { TemplateService } from "./templates.service";

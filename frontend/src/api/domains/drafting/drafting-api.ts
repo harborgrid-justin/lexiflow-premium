@@ -3,7 +3,7 @@
  * Main service class aggregating all drafting functionality
  */
 
-import { ApiClient } from "@/services/infrastructure/apiClient";
+import { ApiClient } from "@/services/infrastructure/api-client.service";
 import * as ClauseValidator from "./clause-validator";
 import * as DashboardApi from "./dashboard-api";
 import * as DocumentGeneration from "./document-generation";

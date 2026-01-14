@@ -2,7 +2,7 @@
  * Task Statistics Service
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { TaskStatistics } from "@/types";
 import type { TaskFilters } from "./types";
 

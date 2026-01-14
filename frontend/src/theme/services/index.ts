@@ -5,4 +5,4 @@
  * @module features/theme/services
  */
 
-export * from "./chartColorService";
+export * from "./chart-color.service";

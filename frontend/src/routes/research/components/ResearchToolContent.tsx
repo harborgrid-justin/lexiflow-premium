@@ -6,7 +6,7 @@ const ResearchHistory = lazy(() => import('./ResearchHistory').then(m => ({ defa
 const SavedAuthorities = lazy(() => import('./SavedAuthorities').then(m => ({ default: m.SavedAuthorities })));
 const JurisdictionSettings = lazy(() => import('./JurisdictionSettings').then(m => ({ default: m.JurisdictionSettings })));
 const ShepardizingTool = lazy(() => import('./ShepardizingTool').then(m => ({ default: m.ShepardizingTool })));
-const ClauseLibrary = lazy(() => import('../clauses/ClauseLibrary'));
+const ClauseLibrary = lazy(() => import('../../clauses/components/ClauseLibrary'));
 
 interface ResearchToolContentProps {
     activeView: string;

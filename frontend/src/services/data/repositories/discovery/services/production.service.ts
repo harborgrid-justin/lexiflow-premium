@@ -8,7 +8,7 @@
 
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { ProductionSet } from "@/types";
 import { validateCaseId, validateId } from "../shared/validation";
 

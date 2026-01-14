@@ -2,7 +2,7 @@
  * Task Relations Service (subtasks, comments, attachments, history)
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   TaskAttachment,
   TaskComment,

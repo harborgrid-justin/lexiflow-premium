@@ -4,7 +4,7 @@
  * @description Billing API service for financial reports, WIP, realization, and analytics (Enterprise Legacy)
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 // ============================================================================
 // TYPES - Financial Reports

@@ -3,7 +3,7 @@
  * Invoice management and billing operations
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { Invoice, TimeEntry } from "./types";
 import { OperationError } from "./types";
 

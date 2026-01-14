@@ -32,7 +32,7 @@ import {
   WorkflowStage,
   WorkflowTask,
 } from "@/types";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import { useMemo, useState } from "react";
 import { useNotify } from "./useNotify";
 import { queryClient, useQuery } from "./useQueryHooks";

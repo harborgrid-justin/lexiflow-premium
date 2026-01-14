@@ -19,7 +19,7 @@
 //
 // ================================================================================
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 interface Asset {
   id: string;

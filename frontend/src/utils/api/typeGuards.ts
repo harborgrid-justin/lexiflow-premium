@@ -14,7 +14,7 @@
 import type {
   ApiError,
   PaginatedResponse,
-} from "@/services/infrastructure/apiClient";
+} from "@/services/infrastructure/api-client.service";
 
 /**
  * Standard API response wrapper

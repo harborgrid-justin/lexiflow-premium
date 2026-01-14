@@ -19,7 +19,7 @@
 import { AuditLog } from "@/api/admin/audit-logs-api";
 import { adminApi } from "@/api/domains/admin.api";
 import { authApi } from "@/lib/frontend-api";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
   ExtendedUserProfile,
   GranularPermission,

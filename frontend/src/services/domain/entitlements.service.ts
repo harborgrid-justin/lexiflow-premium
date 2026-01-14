@@ -13,7 +13,7 @@
 //
 // ================================================================================
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { Organization, User } from "@/types";
 
 export type Plan = "free" | "pro" | "enterprise";

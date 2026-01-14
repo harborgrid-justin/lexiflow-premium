@@ -2,7 +2,7 @@ import { useModalState } from "@/hooks/core";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/dataService";
 import { Case, TaskStatusBackend, WorkflowTask } from "@/types";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import { useState } from "react";
 
 export function useCaseListTasks(onSelectCase?: (c: Case) => void) {

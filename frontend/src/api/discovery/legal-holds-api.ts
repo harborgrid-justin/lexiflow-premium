@@ -3,7 +3,7 @@
  * Manages legal hold notices and preservation obligations
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { LegalHold, LegalHoldFilters } from "@/types";
 import type { LegalHoldEnhanced } from "@/types/discovery-enhanced";
 

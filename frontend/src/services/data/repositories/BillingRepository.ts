@@ -186,7 +186,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
       // Get theme-aware colors
       const { ChartColorService } =
-        await import("../../theme/chartColorService");
+        await import("../../theme/chart-color.service");
       const colors = ChartColorService.getChartColors(mode);
 
       const rate =

@@ -20,7 +20,7 @@ import { useBillingStats } from '../hooks/useDashboardData';
 // Hooks & Context
 import { useTheme } from '@/theme';
 
-import { useDashboardActions } from '../contexts/DashboardContext';
+import { useDashboardActions } from '../DashboardProvider';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button/Button';

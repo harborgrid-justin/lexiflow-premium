@@ -38,7 +38,7 @@ export type {
 } from "./types";
 
 // Export query keys
-export { REAL_ESTATE_QUERY_KEYS } from "./queryKeys";
+export { REAL_ESTATE_QUERY_KEYS } from "./query-keys.service";
 
 // Import all operations
 import * as propertyOps from "./propertyOperations";

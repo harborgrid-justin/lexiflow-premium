@@ -10,7 +10,7 @@
  */
 
 import { isBackendApiEnabled } from "@/config/network/api.config";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { Mutation, SyncResult } from "./types/syncTypes";
 import {
   MAX_RETRY_ATTEMPTS,

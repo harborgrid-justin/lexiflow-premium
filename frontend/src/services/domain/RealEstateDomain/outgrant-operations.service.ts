@@ -3,7 +3,7 @@
  * Outgrant and leasing management
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { OutgrantStatus, RealEstateOutgrant } from "./types";
 
 /**

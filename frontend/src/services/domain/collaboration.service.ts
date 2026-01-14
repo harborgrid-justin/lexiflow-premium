@@ -22,7 +22,7 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 interface Workspace {
   id: string;

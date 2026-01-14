@@ -4,7 +4,7 @@
  * Parallel Execution Service - Feature 2
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { ParallelExecutionConfig } from "@/types/workflow-advanced-types";
 
 export class ParallelExecutionService {

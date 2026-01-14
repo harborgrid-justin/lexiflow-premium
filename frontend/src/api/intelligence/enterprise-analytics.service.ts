@@ -4,7 +4,7 @@
  * @description Comprehensive analytics API service for enterprise analytics widgets and dashboards (Enterprise Legacy)
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 // ============================================================================
 // TYPES - Analytics Data Structures

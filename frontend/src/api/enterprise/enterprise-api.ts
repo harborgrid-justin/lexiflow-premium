@@ -40,7 +40,7 @@ import {
   InterceptorManager,
   RequestConfig,
   setupDefaultInterceptors,
-} from "./interceptors";
+} from "./interceptors.service";
 import {
   createRateLimiter,
   globalRateLimiter,

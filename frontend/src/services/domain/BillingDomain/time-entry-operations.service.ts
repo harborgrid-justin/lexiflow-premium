@@ -3,7 +3,7 @@
  * CRUD and query operations for time entries
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { PaginationParams, TimeEntry } from "./types";
 import { OperationError } from "./types";
 

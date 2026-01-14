@@ -33,7 +33,7 @@ import {
   ValidationError,
 } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { BlobManager } from "@/services/infrastructure/blobManager";
+import { BlobManager } from "@/services/infrastructure/blob-manager.service";
 import { DocumentVersion, FileChunk, LegalDocument } from "@/types";
 
 const yieldToMain = () => new Promise((resolve) => setTimeout(resolve, 0));

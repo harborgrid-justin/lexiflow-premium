@@ -1,4 +1,4 @@
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 // UserId import removed as we use string type for userId in methods
 
 export type AuditAction =

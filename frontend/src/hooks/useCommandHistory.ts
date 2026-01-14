@@ -37,7 +37,7 @@
 import {
   Command,
   CommandHistory,
-} from "@/services/infrastructure/commandHistory";
+} from "@/services/infrastructure/command-history.service";
 import { useCallback, useRef, useState } from "react";
 
 export interface UseCommandHistoryReturn {

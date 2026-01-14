@@ -102,7 +102,7 @@ import { SystemEventType } from "@/types/integration-types";
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
 import { ConcurrencyError, OperationError } from "@/services/core/errors";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { Opportunity, ClientRelationship } from "@/types/crm";
 
 // In-memory state for fallback mode (simulating database constraints)

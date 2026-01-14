@@ -5,15 +5,22 @@
  * metrics, and action buttons.
  */
 
-import {
-  RefreshCw, Trash2, ShieldCheck, Activity,
-  Database, Cloud, Server, AlertTriangle, X
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
-import { getStatusColor, getStatusLabel, formatLastSync } from './utils';
+import { useTheme } from '@/theme';
+import { motion } from 'framer-motion';
+import {
+  Activity,
+  AlertTriangle,
+  Cloud,
+  Database,
+  RefreshCw,
+  Server,
+  ShieldCheck,
+  Trash2,
+  X
+} from 'lucide-react';
 import type { DataSourceConnection } from './types';
+import { formatLastSync, getStatusColor, getStatusLabel } from './utils';
 
 interface ConnectionCardProps {
   connection: DataSourceConnection;

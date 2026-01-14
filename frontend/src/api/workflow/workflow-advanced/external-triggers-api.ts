@@ -3,7 +3,7 @@
  * Feature 10: Webhook and external integration triggers
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   ExternalTrigger,
   TriggerEvent,

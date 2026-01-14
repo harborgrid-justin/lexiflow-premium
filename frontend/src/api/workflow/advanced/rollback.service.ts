@@ -4,7 +4,7 @@
  * Rollback Mechanism Service - Feature 7
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   RollbackOperation,
   WorkflowSnapshot,

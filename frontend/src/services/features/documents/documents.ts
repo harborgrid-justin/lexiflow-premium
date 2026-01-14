@@ -13,8 +13,8 @@
 // Services & Data
 
 import { db, STORES } from "@/services/data/db";
-import { BlobManager } from "@/services/infrastructure/blobManager";
-import { CryptoService } from "@/services/infrastructure/cryptoService";
+import { BlobManager } from "@/services/infrastructure/blob-manager.service";
+import { CryptoService } from "@/services/infrastructure/crypto.service";
 
 // Utils & Constants
 import { Formatters } from "@/utils/formatters";

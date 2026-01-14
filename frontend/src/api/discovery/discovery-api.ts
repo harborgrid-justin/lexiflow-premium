@@ -26,7 +26,7 @@
  * - Multi-phase workflow support
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { DiscoveryRequest, LegalHold, PrivilegeLogEntry } from "@/types";
 import { DiscoveryRequestsApiService } from "./discovery-requests-api";
 import { LegalHoldsApiService } from "./legal-holds-api";

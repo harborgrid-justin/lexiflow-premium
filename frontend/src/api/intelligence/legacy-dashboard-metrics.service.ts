@@ -5,7 +5,7 @@
  */
 
 import type { Deadline } from "@/routes/dashboard/widgets";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { Activity } from "@/types/dashboard";
 
 // ============================================================================

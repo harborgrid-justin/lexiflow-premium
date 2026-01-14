@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@/hooks/useQueryHooks";
 import { useTrustAccounts } from "@/hooks/useTrustAccounts";
 import { DataService } from "@/services/data/dataService";
 import { CreateTrustAccountDto, TrustAccount } from "@/types/trust-accounts";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import { useMemo, useState } from "react";
 
 // ============================================================================

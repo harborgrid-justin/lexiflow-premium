@@ -3,7 +3,7 @@
  * @module api/admin/documents/queries
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { LegalDocument } from "@/types";
 import { getAll } from "./crud";
 import { validateId } from "./validation";

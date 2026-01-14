@@ -11,7 +11,7 @@
  * - URL query parameter generation
  */
 
-import type { PaginatedResponse } from "@/services/infrastructure/apiClient";
+import type { PaginatedResponse } from "@/services/infrastructure/api-client.service";
 
 /**
  * Pagination parameters

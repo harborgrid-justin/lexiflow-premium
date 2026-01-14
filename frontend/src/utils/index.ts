@@ -45,7 +45,7 @@ export * from "./formatUtils";
 export * from "./LRUCache";
 export * from "./memoryMonitor";
 export * from "./notificationUtils";
-export * from "./queryKeys";
+export * from "./query-keys.service";
 export * from "./telemetry";
 export * from "./type-mapping";
 

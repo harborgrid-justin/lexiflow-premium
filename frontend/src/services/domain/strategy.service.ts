@@ -33,7 +33,7 @@
  * with backend API integration for persistent storage and analytics.
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { Citation, Defense, LegalArgument } from "@/types";
 
 interface Strategy {

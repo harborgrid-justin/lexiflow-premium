@@ -22,7 +22,7 @@ import { CommunicationItem, ServiceJob } from "@/types";
  */
 import { communicationsApi } from "@/api/domains/communications.api";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { SystemEventType } from "@/types/integration-types";
 
 export const CorrespondenceService = {

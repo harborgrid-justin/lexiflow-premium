@@ -61,7 +61,7 @@ import {
   CalendarFilters,
 } from "@/api/workflow/calendar-api";
 import { ValidationError } from "@/services/core/errors";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { CalendarEventType } from "@/types";
 
 // =============================================================================

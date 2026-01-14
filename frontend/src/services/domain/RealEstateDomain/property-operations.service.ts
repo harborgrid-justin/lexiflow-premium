@@ -3,7 +3,7 @@
  * CRUD operations for property inventory management
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { PropertyStatus, RealEstateProperty } from "./types";
 
 /**

@@ -5,7 +5,7 @@
 
 import { DataService } from "@/services/data/dataService";
 import type { EvidenceItem } from "@/types";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import { useMemo } from "react";
 import { useQuery } from "../useQueryHooks";
 import { filterByCaseId, normalizeEvidenceResponse } from "./utils";

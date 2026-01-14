@@ -3,7 +3,7 @@
  * External data source integrations
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export interface DataSource {
   id: string;

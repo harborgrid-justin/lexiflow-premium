@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import type { IService } from "../services/core/ServiceLifecycle";
 import { ServiceRegistry } from "../services/core/ServiceRegistry";
-import type { FeatureFlagService } from "../services/featureFlags/FeatureFlagService";
+import type { FeatureFlagService } from "../services/featureFlags/feature-flag.service";
 
 /**
  * HOOK ADAPTER for FeatureFlagService

@@ -2,7 +2,7 @@
  * Task Bulk Operations Service
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { TaskBulkOperationResult } from "@/types";
 import { validateArray, validateId } from "./utils";
 

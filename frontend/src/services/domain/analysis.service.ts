@@ -16,7 +16,7 @@
 //
 // ================================================================================
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { JudgeProfile } from "@/types";
 
 export interface AnalysisConfig {

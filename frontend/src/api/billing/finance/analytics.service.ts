@@ -6,7 +6,7 @@
 import {
   apiClient,
   type PaginatedResponse,
-} from "@/services/infrastructure/apiClient";
+} from "@/services/infrastructure/api-client.service";
 import type { FinancialPerformanceData } from "./types";
 import {
   getDefaultOverviewStats,

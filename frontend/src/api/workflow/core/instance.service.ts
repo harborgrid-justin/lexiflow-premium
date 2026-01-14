@@ -3,7 +3,7 @@
  * Handles workflow instance lifecycle and execution
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { WorkflowExecutionOptions, WorkflowInstance } from "./types";
 
 export class WorkflowInstanceService {

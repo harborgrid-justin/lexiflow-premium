@@ -14,7 +14,7 @@
 // ================================================================================
 
 import { FEATURES_CONFIG } from "@/config/features/features.config";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export interface Flags {
   enableNewDashboard: boolean;

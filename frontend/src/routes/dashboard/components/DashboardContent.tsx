@@ -14,12 +14,11 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
+import { useDashboardActions, useDashboardState } from '../DashboardProvider';
 import { DashboardOverview } from './DashboardOverview';
 import { PersonalWorkspace } from './PersonalWorkspace';
-import { useDashboardState, useDashboardActions } from '../contexts/DashboardContext';
 
 // Types
-import type { User } from '@/types';
 import React from "react";
 
 // ============================================================================

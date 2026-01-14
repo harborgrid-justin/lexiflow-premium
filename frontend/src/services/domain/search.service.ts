@@ -15,7 +15,7 @@
  * and relevance scoring.
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 interface SearchResult {
   id: string;

@@ -29,8 +29,8 @@ import React, { useRef, useState } from "react";
 // ========================================
 // Services & Data
 import { DocumentsApiService } from "@/api/admin/documents-api";
-import { queryClient } from "@/services/infrastructure/queryClient";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryClient } from "@/services/infrastructure/query-client.service";
+import { queryKeys } from "@/utils/query-keys.service";
 
 const documentsApi = new DocumentsApiService();
 

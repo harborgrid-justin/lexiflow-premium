@@ -3,7 +3,7 @@
  * Feature 9: AI-powered workflow optimization suggestions
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   AIWorkflowSuggestion,
   AILearningFeedback,

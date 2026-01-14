@@ -12,34 +12,34 @@
  */
 
 // API Clients
-export { ApiClient, apiClient } from "./apiClient";
+export { ApiClient, apiClient } from "./api-client.service";
 export type {
   ApiError,
   PaginatedResponse,
   ServiceHealth,
   SystemHealth,
-} from "./apiClient";
+} from "./api-client.service";
 
-export { ApiClientEnhanced, apiClientEnhanced } from "./apiClientEnhanced";
+export { ApiClientEnhanced, apiClientEnhanced } from "./api-client-enhanced.service";
 export type {
   ErrorInterceptor,
   RequestConfig,
   RequestInterceptor,
   ResponseInterceptor,
   RetryConfig,
-} from "./apiClientEnhanced";
+} from "./api-client-enhanced.service";
 
 // WebSocket Client
-export { WebSocketClient, websocketClient } from "./websocketClient";
+export { WebSocketClient, websocketClient } from "./websocket-client.service";
 export type {
   ConnectionState,
   EventHandler,
   RoomSubscription,
   WebSocketError,
-} from "./websocketClient";
+} from "./websocket-client.service";
 
 // Query Client
-export { QueryClient, queryClient } from "./queryClient";
+export { QueryClient, queryClient } from "./query-client.service";
 export type { QueryFunction, QueryKey, QueryState } from "./queryTypes";
 
 // Interceptors
@@ -58,10 +58,10 @@ export {
   setupInterceptors,
   tenantIsolationInterceptor,
   validationErrorInterceptor,
-} from "./interceptors";
+} from "./interceptors.service";
 
 // Cache Manager
-export { CacheManager } from "./CacheManager";
+export { CacheManager } from "./cache-manager.service";
 
 // Storage Adapters
 export { defaultStorage } from "./adapters/StorageAdapter";

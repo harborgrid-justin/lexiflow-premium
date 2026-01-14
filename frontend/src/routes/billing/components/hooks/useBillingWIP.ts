@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/dataService";
-import { billingQueryKeys } from "@/services/infrastructure/queryKeys";
+import { billingQueryKeys } from "@/services/infrastructure/query-keys.service";
 import { TimeEntry, Invoice } from "@/types"; // Assuming Invoice is in types, if not I'll define local interface but Types usually has it
 import {
   TimeEntryInput,

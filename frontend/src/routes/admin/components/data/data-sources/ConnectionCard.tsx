@@ -1,7 +1,7 @@
-import { RefreshCw, AlertTriangle, X, Database, Cloud, Server, ShieldCheck, Trash2, Activity } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { motion } from 'framer-motion';
+import { Activity, AlertTriangle, Cloud, Database, RefreshCw, Server, ShieldCheck, Trash2, X } from 'lucide-react';
 import type { DataConnection } from './types';
 
 interface ConnectionCardProps {

@@ -3,7 +3,7 @@
  * Enterprise-grade Bluebook citation management and formatting
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
   BatchFormatRequest,
   BatchFormatResult,

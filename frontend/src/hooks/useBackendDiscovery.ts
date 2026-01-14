@@ -17,7 +17,7 @@
 import {
   backendDiscovery,
   type BackendStatus,
-} from "@/services/integration/backendDiscovery";
+} from "@/services/integration/backend-discovery.service";
 import { useEffect, useState } from "react";
 
 /**

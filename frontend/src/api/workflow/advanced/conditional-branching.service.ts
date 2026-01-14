@@ -4,7 +4,7 @@
  * Conditional Branching Service - Feature 1
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { ConditionalBranchingConfig } from "@/types/workflow-advanced-types";
 
 export class ConditionalBranchingService {

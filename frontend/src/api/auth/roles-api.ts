@@ -4,7 +4,7 @@
  * @description Roles and permissions management service (Enterprise Legacy)
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export interface Permission {
   id: string;

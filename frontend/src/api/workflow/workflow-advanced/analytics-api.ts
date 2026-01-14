@@ -3,7 +3,7 @@
  * Feature 8: Workflow analytics engine
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { WorkflowAnalytics } from "@/types/workflow-advanced-types";
 
 const BASE_URL = "/workflow/advanced";

@@ -30,7 +30,7 @@
 import {
   apiClient,
   type PaginatedResponse,
-} from "@/services/infrastructure/apiClient";
+} from "@/services/infrastructure/api-client.service";
 import type { DocketEntry } from "@/types";
 
 export interface DocketFilterOptions {

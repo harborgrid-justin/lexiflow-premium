@@ -3,7 +3,7 @@
  * Cost sharing agreement management
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { RealEstateCostShare } from "./types";
 
 /**

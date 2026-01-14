@@ -3,7 +3,7 @@
  * Core workflow operations with advanced features
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   EnhancedWorkflowInstance,
   WorkflowQueryFilters,

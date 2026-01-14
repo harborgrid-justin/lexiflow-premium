@@ -4,7 +4,7 @@
  * Template management service - focused on template CRUD operations
  */
 
-import { ApiClient } from "@/services/infrastructure/apiClient";
+import { ApiClient } from "@/services/infrastructure/api-client.service";
 import type {
   CreateTemplateDto,
   DraftingTemplate,

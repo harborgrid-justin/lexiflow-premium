@@ -27,7 +27,7 @@ import type {
   UpdateStrategyDto,
 } from "@/api/workflow/war-room-api";
 import { api } from "@/lib/frontend-api";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export const WarRoomService = {
   getAll: async () => {

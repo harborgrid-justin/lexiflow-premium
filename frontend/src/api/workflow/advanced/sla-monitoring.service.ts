@@ -4,7 +4,7 @@
  * SLA Monitoring Service - Feature 5
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { SLAConfig, SLAStatus } from "@/types/workflow-advanced-types";
 
 export class SLAMonitoringService {

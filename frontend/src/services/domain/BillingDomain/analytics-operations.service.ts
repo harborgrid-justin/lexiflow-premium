@@ -3,7 +3,7 @@
  * WIP stats, realization, financial performance, and reporting
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   Client,
   FinancialPerformanceData,

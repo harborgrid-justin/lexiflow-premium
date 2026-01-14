@@ -1,7 +1,7 @@
 import { useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/dataService";
 import { EthicalWall } from "@/types";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import { useCallback, useTransition } from "react";
 
 // ============================================================================

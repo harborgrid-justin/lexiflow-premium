@@ -1,8 +1,8 @@
-import { Database, HardDrive, Cloud } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
-import type { ConnectionFormData, CloudProvider } from './types';
+import { useTheme } from '@/theme';
+import { motion } from 'framer-motion';
+import { Cloud, Database, HardDrive } from 'lucide-react';
+import type { CloudProvider, ConnectionFormData } from './types';
 
 interface ConnectionFormProps {
   isAdding: boolean;

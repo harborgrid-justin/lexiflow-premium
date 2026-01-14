@@ -15,7 +15,7 @@
  * backend API integration for legal databases.
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 interface ResearchResult {
   id: string;

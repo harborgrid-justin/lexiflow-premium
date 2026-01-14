@@ -3,7 +3,7 @@
  * Manages privilege logs for discovery
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { PrivilegeLogEntry, PrivilegeLogFilters } from "@/types";
 import type { PrivilegeLogEntryEnhanced } from "@/types/discovery-enhanced";
 

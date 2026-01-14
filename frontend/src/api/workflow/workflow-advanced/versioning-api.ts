@@ -3,7 +3,7 @@
  * Feature 3: Workflow versioning with semantic versioning
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   WorkflowVersion,
   WorkflowDiff,

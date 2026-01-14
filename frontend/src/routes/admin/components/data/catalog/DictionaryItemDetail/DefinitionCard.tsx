@@ -1,10 +1,9 @@
+import { cn } from '@/shared/lib/cn';
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';
 import { Card } from '@/shared/ui/molecules/Card';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 import { Wand2 } from 'lucide-react';
-import { DefinitionCardProps } from './types';
 
 export function DefinitionCard({
   formData,

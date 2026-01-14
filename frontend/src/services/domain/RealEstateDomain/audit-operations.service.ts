@@ -3,7 +3,7 @@
  * Audit readiness, portfolio stats, and user management
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { PortfolioStats, RealEstateAuditItem } from "./types";
 
 // ─────────────────────────────────────────────────────────────────────────

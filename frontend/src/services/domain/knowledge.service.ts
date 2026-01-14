@@ -30,7 +30,7 @@
  * @migrated Backend API integration completed 2025-12-21
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { Precedent, QAItem, WikiArticle } from "@/types";
 
 /**

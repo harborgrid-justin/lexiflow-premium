@@ -3,7 +3,7 @@
  * Manages legal motions in cases
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { Motion, MotionFilters } from "@/types";
 
 export class MotionsApiService {

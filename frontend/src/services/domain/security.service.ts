@@ -39,7 +39,7 @@
  */
 
 import { OperationError } from "@/services/core/errors";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export const SECURITY_QUERY_KEYS = {
   all: () => ["security"] as const,

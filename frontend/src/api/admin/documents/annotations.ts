@@ -4,7 +4,7 @@
  */
 
 import type { Annotation } from "@/routes/documents/types/DocumentAnnotationsProps";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { validateId, validateObject } from "./validation";
 
 /** Get annotations for a document */

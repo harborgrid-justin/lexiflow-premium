@@ -1,4 +1,4 @@
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export interface AccessRequest {
   id: number | string;

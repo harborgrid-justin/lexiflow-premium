@@ -26,7 +26,7 @@
  */
 
 import { communicationsApi } from "@/api/domains/communications.api";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 interface Notification {
   id: string;

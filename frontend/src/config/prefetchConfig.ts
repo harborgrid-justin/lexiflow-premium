@@ -19,7 +19,7 @@ import {
   documentsApi,
   workflowApi,
 } from "@/lib/frontend-api";
-import { queryKeys } from "../utils/queryKeys";
+import { queryKeys } from "../utils/query-keys.service";
 import { PATHS } from "./paths.config";
 
 export const PREFETCH_MAP: Record<

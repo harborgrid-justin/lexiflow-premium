@@ -3,7 +3,7 @@
  * Handles all trust account-related API operations
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   CreateTrustAccountDto,
   CreateTrustTransactionDto,

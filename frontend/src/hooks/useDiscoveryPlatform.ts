@@ -31,7 +31,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 // ============================================================================
 // Services & Data
 import { DataService } from "@/services/data/dataService";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 import { queryClient, useMutation, useQuery } from "./useQueryHooks";
 
 // Hooks & Context

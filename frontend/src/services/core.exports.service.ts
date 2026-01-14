@@ -14,14 +14,14 @@ export * from "./core/RepositoryFactory";
 // ==================== INFRASTRUCTURE ADAPTERS ====================
 export * from "./infrastructure/adapters/StorageAdapter";
 export * from "./infrastructure/adapters/WindowAdapter";
-export * from "./infrastructure/apiClient";
+export * from "./infrastructure/api-client.service";
 
 // ==================== DATA LAYER (BASE ONLY) ====================
 export * from "./data/db";
 
 // ==================== QUERY CLIENT ====================
-export * from "./infrastructure/queryClient";
-export * from "./infrastructure/queryKeys";
+export * from "./infrastructure/query-client.service";
+export * from "./infrastructure/query-keys.service";
 
 // ==================== BACKEND API CONFIG ====================
 export {

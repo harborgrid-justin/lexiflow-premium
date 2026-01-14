@@ -3,7 +3,7 @@
  * Trust accounting with IOLTA compliance
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { TrustTransaction } from "./types";
 import { ComplianceError, OperationError } from "./types";
 

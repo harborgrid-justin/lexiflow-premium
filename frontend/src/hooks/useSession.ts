@@ -4,7 +4,7 @@ import { ServiceRegistry } from "../services/core/ServiceRegistry";
 import type {
   SessionEvent,
   SessionService,
-} from "../services/session/SessionService";
+} from "../services/session/session.service";
 
 /**
  * HOOK ADAPTER for SessionService

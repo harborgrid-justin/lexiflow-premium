@@ -47,8 +47,8 @@
 import {
   apiClient,
   type PaginatedResponse,
-} from "@/services/infrastructure/apiClient";
-import { IntegrationOrchestrator } from "@/services/integration/integrationOrchestrator";
+} from "@/services/infrastructure/api-client.service";
+import { IntegrationOrchestrator } from "@/services/integration/integration-orchestrator.service";
 import { DocketEntry } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 

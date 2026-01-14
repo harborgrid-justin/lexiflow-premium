@@ -11,7 +11,7 @@
 // ============================================================================
 // Services & Data
 import { DataService } from "@/services/data/dataService";
-import { queryKeys } from "@/utils/queryKeys";
+import { queryKeys } from "@/utils/query-keys.service";
 
 // CRITICAL FIX: Import useQuery from the Hooks layer, not the Infrastructure layer
 import type { QueryState } from "@/services/infrastructure/queryTypes";

@@ -81,4 +81,4 @@ export {
   type RequestConfig,
   type RequestInterceptor,
   type ResponseInterceptor,
-} from "./interceptors";
+} from "./interceptors.service";

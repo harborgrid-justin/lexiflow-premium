@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import type { IService } from "../services/core/ServiceLifecycle";
 import { ServiceRegistry } from "../services/core/ServiceRegistry";
-import type { StorageService } from "../services/storage/StorageService";
+import type { StorageService } from "../services/storage/storage.service";
 
 /**
  * HOOK ADAPTER for StorageService

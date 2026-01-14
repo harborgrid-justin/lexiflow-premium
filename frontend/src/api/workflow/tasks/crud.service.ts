@@ -2,7 +2,7 @@
  * Task CRUD Service
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { CreateTaskDto, UpdateTaskDto, WorkflowTask } from "./types";
 
 export class TaskCrudService {

@@ -3,7 +3,7 @@
  * Create, read, update, delete operations for templates
  */
 
-import { ApiClient } from "@/services/infrastructure/apiClient";
+import { ApiClient } from "@/services/infrastructure/api-client.service";
 import type {
   DraftingTemplate,
   CreateTemplateDto,

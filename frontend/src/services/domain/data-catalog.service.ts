@@ -27,7 +27,7 @@ import {
  * ? Migrated to backend API (2025-12-21)
  */
 import { api } from "@/lib/frontend-api";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export const DataCatalogService = {
   getDictionary: async (): Promise<DataDictionaryItem[]> => {

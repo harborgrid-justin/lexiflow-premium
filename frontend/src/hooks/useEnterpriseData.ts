@@ -28,7 +28,7 @@
  */
 
 import { enterpriseApi } from "@/api/enterprise";
-import { queryClient } from "@/services/infrastructure/queryClient";
+import { queryClient } from "@/services/infrastructure/query-client.service";
 import type {
   Case,
   Client,

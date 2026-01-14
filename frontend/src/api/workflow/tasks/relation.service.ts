@@ -2,7 +2,7 @@
  * Task Assignment and Relationship Service
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   TaskAssignmentDto,
   TaskRelationshipDto,

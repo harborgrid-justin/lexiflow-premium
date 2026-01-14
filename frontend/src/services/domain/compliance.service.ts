@@ -78,7 +78,7 @@ console.log('metrics data:', metrics);
 import { complianceApi } from "@/api/domains/compliance.api";
 import { ComplianceError } from "@/services/core/errors";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
   ComplianceMetrics,
   ConflictCheck,
@@ -188,7 +188,7 @@ export const ComplianceService = {
     mode: "light" | "dark" = "light"
   ): Promise<Array<{ name: string; value: number; color: string }>> => {
     try {
-      const { ChartColorService } = await import("../theme/chartColorService");
+      const { ChartColorService } = await import("../theme/chart-color.service");
       const colors = ChartColorService.getRiskColors(mode);
 
       // Risk statistics computed from available compliance data

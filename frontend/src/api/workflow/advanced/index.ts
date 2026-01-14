@@ -4,7 +4,7 @@
  * Reduced from 910 LOC to modular, testable services
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import { AISuggestionsService } from "./ai-suggestions.service";
 import { AnalyticsService } from "./analytics.service";
 import { ApprovalChainsService } from "./approval-chains.service";

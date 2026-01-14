@@ -4,7 +4,7 @@
  * Analytics Engine Service - Feature 8
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { WorkflowAnalytics } from "@/types/workflow-advanced-types";
 
 export class AnalyticsService {

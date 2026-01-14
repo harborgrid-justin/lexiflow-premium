@@ -28,7 +28,7 @@ export type {
 export { ComplianceError, OperationError } from "./types";
 
 // Export query keys
-export { BILLING_QUERY_KEYS } from "./queryKeys";
+export { BILLING_QUERY_KEYS } from "./query-keys.service";
 
 // Import base repository and operations
 import * as analyticsOps from "./analyticsOperations";

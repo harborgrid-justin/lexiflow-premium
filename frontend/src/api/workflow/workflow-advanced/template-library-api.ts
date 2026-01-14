@@ -3,7 +3,7 @@
  * Feature 4: Template library 2.0 with AI categorization
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { WorkflowTemplate } from "@/types/workflow-advanced-types";
 
 const BASE_URL = "/workflow/advanced";

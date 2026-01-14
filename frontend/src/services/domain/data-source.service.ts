@@ -23,7 +23,7 @@
  */
 
 import { dataPlatformApi } from "@/api/domains/data-platform.api";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 interface DataSource {
   id: string;

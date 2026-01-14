@@ -3,7 +3,7 @@
  * @module api/admin/documents/fileOps
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { LegalDocument } from "@/types";
 import {
   validateArray,

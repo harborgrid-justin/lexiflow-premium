@@ -3,7 +3,7 @@
  * Feature 7: Snapshot and rollback mechanism
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   WorkflowSnapshot,
   RollbackOperation,

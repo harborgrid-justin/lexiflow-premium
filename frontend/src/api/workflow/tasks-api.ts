@@ -27,7 +27,7 @@
  * - DTO-based data transformation
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type {
   TaskAssignmentDto,
   TaskAttachment,

@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data - Direct import to avoid circular dependency
-import { queryClient } from "@/services/infrastructure/queryClient";
+import { queryClient } from "@/services/infrastructure/query-client.service";
 
 // ========================================
 // TYPES

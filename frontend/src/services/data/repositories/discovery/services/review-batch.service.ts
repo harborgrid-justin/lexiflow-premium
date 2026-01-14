@@ -7,7 +7,7 @@
  */
 
 import { OperationError, ValidationError } from "@/services/core/errors";
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { ReviewBatch } from "@/types";
 import { validateId } from "../shared/validation";
 

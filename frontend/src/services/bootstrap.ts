@@ -20,9 +20,9 @@
 import { BrowserClipboardService } from "./clipboard/ClipboardService";
 import { ServiceRegistry, registerService } from "./core/ServiceRegistry";
 import { WebCryptoService } from "./crypto/CryptoService";
-import { EnvironmentFeatureFlagService } from "./featureFlags/FeatureFlagService";
-import { BrowserSessionService } from "./session/SessionService";
-import { BrowserStorageService } from "./storage/StorageService";
+import { EnvironmentFeatureFlagService } from "./featureFlags/feature-flag.service";
+import { BrowserSessionService } from "./session/session.service";
+import { BrowserStorageService } from "./storage/storage.service";
 import { ConsoleTelemetryService } from "./telemetry/TelemetryService";
 
 // ============================================================================

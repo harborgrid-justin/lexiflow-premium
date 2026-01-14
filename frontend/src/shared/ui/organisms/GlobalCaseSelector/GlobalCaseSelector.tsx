@@ -1,5 +1,5 @@
 import { useCaseContext } from '@/routes/cases';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { Case } from '@/types/case';
 import { Briefcase } from 'lucide-react';

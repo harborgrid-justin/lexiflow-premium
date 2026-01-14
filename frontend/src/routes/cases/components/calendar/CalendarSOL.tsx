@@ -16,7 +16,7 @@ import { AlertTriangle, Loader2, MapPin, ShieldAlert } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 
 // Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';

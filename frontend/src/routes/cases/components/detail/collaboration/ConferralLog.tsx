@@ -26,7 +26,7 @@ import { useToast } from '@/providers';
 import { getTodayString } from '@/shared/lib/dateUtils';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/shared/lib/cn';
 

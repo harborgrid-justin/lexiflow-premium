@@ -23,7 +23,7 @@ import { useWindow } from '@/providers';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces

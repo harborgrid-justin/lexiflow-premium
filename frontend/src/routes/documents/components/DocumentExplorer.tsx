@@ -3,7 +3,7 @@ import { useDocumentManager } from '@/hooks/useDocumentManager';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelection';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { LegalDocument, UserRole } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { useState } from 'react';

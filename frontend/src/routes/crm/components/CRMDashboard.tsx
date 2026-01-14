@@ -18,7 +18,7 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContaine
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { ClientStatus } from '@/types/financial';
 

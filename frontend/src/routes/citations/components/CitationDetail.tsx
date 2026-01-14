@@ -25,7 +25,7 @@ import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
 import { sanitizeHtml } from '@/shared/lib/sanitize';

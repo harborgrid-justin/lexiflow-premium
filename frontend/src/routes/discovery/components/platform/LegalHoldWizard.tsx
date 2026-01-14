@@ -16,7 +16,7 @@ import { useTheme } from '@/theme';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useNotify } from '@/hooks/useNotify';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import { LegalHoldEnhanced } from '@/types/discovery-enhanced';

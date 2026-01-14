@@ -1,7 +1,7 @@
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { ArrowRight, FileText, Fingerprint, Link, Loader2, Scale, Search } from 'lucide-react';

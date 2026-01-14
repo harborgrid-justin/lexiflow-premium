@@ -7,7 +7,7 @@ import { useTheme } from '@/theme';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';

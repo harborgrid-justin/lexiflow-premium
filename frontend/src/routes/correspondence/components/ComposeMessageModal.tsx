@@ -7,7 +7,7 @@ import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
 import { CommunicationItem, CommunicationType, UserId } from '@/types';
 import { CommunicationStatus } from '@/types/enums';

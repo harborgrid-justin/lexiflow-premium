@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { ArrowRight, FileText, Wand2 } from 'lucide-react';
 // ✅ Migrated to backend API (2025-12-21)

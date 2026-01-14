@@ -8,7 +8,7 @@
 import { analyticsApi } from '@/lib/frontend-api';
 import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { motion } from 'framer-motion';

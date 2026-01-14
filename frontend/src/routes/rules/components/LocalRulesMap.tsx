@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';

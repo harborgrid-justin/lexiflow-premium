@@ -12,7 +12,7 @@ import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { useNotify } from '@/hooks/useNotify';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';

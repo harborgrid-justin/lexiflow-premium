@@ -7,7 +7,7 @@
  * @module routes/real-estate/user-management
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Plus, Shield, UserCheck, Users } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';

@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { PleadingComment, PleadingDocument, PleadingSection, PleadingVariable } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import jsPDF from 'jspdf';

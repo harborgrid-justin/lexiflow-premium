@@ -7,7 +7,7 @@
  * @module routes/real-estate/acquisition
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { AcquisitionStatus, RealEstateAcquisition } from '@/services/domain/RealEstateDomain';
 import { AcquisitionManager } from '@/routes/real-estate/acquisition/AcquisitionManager';
 import type { AcquisitionLoaderData } from '@/routes/real-estate/acquisition/types';

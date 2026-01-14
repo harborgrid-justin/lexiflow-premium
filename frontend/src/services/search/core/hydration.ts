@@ -3,7 +3,7 @@
  * @module services/search/core/hydration
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { Case, Clause, Client, DocketEntry, EvidenceItem, LegalDocument, LegalRule, Motion, User, WorkflowTask } from '@/types';
 import type { GlobalSearchResult } from './types';
 

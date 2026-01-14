@@ -7,7 +7,7 @@ import { Card } from '@/shared/ui/molecules/Card';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 
 import { RegionMap } from './replication/RegionMap';

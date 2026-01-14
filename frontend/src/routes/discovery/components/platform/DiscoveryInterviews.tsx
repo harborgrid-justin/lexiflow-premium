@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { CaseId, CustodianInterview } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { MessageSquare, Plus } from 'lucide-react';

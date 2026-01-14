@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from 'react';
 // ============================================================================
 // Services & Data
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 

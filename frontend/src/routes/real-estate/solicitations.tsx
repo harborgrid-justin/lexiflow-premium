@@ -7,7 +7,7 @@
  * @module routes/real-estate/solicitations
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { RealEstateSolicitation } from '@/services/domain/RealEstateDomain';
 import { Award, Clock, FileText, Plus } from 'lucide-react';
 import { useState } from 'react';

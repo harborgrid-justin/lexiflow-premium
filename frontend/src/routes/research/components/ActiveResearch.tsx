@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/services/infrastructure/queryClient';
 import { cn } from '@/shared/lib/cn';
 import { ResearchSession } from '@/types';

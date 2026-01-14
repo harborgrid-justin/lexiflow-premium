@@ -7,7 +7,7 @@
  * @module routes/real-estate/audit-readiness
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { RealEstateAuditItem } from '@/services/domain/RealEstateDomain';
 import { AlertTriangle, CheckCircle, ClipboardCheck, FileSearch, Plus } from 'lucide-react';
 import { useState } from 'react';

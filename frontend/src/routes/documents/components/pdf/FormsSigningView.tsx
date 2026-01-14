@@ -3,7 +3,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
 import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DocumentService } from '@/services/features/documents/documents';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';

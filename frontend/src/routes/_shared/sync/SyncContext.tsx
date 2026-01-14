@@ -1,4 +1,4 @@
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { SyncEngine } from '@/services/data/syncEngine';
 import { SYNC_MAX_RETRIES, SYNC_BASE_DELAY_MS } from '@/config/features/contexts.config';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';

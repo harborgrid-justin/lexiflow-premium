@@ -12,7 +12,7 @@
 
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { DiscoveryRequest } from '@/types/discovery';
 import { DiscoveryView } from '@/utils/discoveryNavigation';

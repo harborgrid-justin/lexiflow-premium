@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
 import { queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
 import { WorkflowTask, LegalDocument } from '@/types';
 import { useFetcher } from 'react-router';

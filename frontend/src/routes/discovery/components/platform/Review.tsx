@@ -20,7 +20,7 @@ import { TextArea } from '@/shared/ui/atoms/TextArea';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';

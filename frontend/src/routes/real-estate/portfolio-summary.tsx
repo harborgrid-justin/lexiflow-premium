@@ -7,7 +7,7 @@
  * @module routes/real-estate/portfolio-summary
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { PortfolioStats } from '@/services/domain/RealEstateDomain';
 import { Building2, DollarSign, Landmark, MapPin, PieChart, TrendingUp } from 'lucide-react';
 import { Link, useLoaderData } from 'react-router';

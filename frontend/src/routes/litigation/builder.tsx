@@ -7,7 +7,7 @@
  * @module routes/litigation/builder
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { Case } from '@/types';
 import { MatterType } from '@/types/enums';
 import { useLoaderData } from 'react-router';

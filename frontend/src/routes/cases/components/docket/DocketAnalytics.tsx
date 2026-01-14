@@ -26,7 +26,7 @@ import { ChartColorService, useTheme } from '@/theme';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
 // ✅ Migrated to backend API (2025-12-21)

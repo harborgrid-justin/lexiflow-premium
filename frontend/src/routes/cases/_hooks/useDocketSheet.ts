@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { useModalState } from '@/hooks/core';

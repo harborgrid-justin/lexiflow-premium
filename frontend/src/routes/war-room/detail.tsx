@@ -6,7 +6,7 @@
  * @module routes/war-room/detail
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { Advisor, Case, Expert, WarRoom } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
 import { useTheme } from '@/theme';

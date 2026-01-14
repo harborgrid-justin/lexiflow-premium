@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 
 interface ScheduleTimelineProps {
   className?: string;

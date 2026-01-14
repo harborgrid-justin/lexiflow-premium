@@ -4,7 +4,7 @@
 
 import { useCallback } from 'react';
 import { useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/services/infrastructure/queryClient';
 import { useNotify } from '@/hooks/useNotify';
 import { queryKeys } from '@/utils/queryKeys';

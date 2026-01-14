@@ -1,5 +1,5 @@
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { CasePhase, WorkflowTask } from '@/types';
 
 export const useCasePlanning = (caseId: string) => {

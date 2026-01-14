@@ -96,7 +96,7 @@
  * @example Integration with DataService
  * ```typescript
  * // Access via centralized DataService facade
- * import { DataService } from '@/services/data/dataService';
+ * import { DataService } from '@/services/data/data-service.service';
  *
  * const cases = await DataService.cases.getAll();
  * const phases = await DataService.phases.getByCaseId(caseId);

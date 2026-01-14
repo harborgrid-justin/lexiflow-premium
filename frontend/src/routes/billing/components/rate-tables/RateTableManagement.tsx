@@ -3,7 +3,7 @@ import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';

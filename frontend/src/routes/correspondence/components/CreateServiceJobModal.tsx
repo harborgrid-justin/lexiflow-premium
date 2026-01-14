@@ -5,7 +5,7 @@ import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
 import { CaseId, ServiceJob, UserId } from '@/types';
 import { cn } from '@/shared/lib/cn';

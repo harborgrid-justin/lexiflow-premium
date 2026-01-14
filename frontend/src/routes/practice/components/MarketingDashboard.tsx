@@ -25,7 +25,7 @@ import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { ChartColorService, useTheme } from '@/theme';

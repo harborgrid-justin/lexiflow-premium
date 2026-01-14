@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type {
   AIWorkflowSuggestion,
   ApprovalChain,

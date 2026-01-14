@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';

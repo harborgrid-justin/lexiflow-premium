@@ -16,7 +16,7 @@ import { useWindow } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 
 interface CaseOverviewStatsProps {

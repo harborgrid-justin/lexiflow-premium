@@ -1,6 +1,6 @@
 import { CRMView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Client } from '@/types';
 import { Loader2 } from 'lucide-react';
 import { lazy } from 'react';

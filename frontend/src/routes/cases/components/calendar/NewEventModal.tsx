@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/hooks';
 import { Calendar, Clock, MapPin, FileText, Tag } from 'lucide-react';
 import type { CalendarEventType } from '@/types';

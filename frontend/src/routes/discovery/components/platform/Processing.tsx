@@ -19,7 +19,7 @@ import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { ProcessingJob } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';

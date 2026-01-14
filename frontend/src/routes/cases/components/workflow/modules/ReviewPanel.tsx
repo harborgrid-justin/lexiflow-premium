@@ -4,7 +4,7 @@ import { PleadingComment } from '@/types';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { WorkflowTask, TaskId, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 
 interface ReviewPanelProps {

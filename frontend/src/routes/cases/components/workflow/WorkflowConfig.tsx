@@ -2,7 +2,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Loader2, Settings, ToggleLeft, ToggleRight } from 'lucide-react';

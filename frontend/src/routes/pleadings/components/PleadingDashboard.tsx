@@ -5,7 +5,7 @@ import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { useModalState } from '@/hooks/core';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)

@@ -12,7 +12,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 
 import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Transcript } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Clock, FileText, Search, Upload } from 'lucide-react';

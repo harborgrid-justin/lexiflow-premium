@@ -16,7 +16,7 @@ import { CheckCircle, Loader2, RefreshCw, XCircle } from 'lucide-react';
 // ============================================================================
 // Services/Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from '@/theme';

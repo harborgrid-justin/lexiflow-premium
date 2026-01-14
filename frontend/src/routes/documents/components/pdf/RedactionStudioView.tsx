@@ -1,7 +1,7 @@
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DocumentService } from '@/services/features/documents/documents';
 import { BlobManager } from '@/services/infrastructure/blobManager';
 import { cn } from '@/shared/lib/cn';

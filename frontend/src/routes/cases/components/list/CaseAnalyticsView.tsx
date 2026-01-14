@@ -6,7 +6,7 @@
  */
 
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Matter } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { BarChart3, Briefcase, DollarSign, TrendingUp, Users } from 'lucide-react';

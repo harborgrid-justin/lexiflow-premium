@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useSessionStorage } from '@/hooks/useSessionStorage';

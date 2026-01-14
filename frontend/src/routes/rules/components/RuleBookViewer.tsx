@@ -1,5 +1,5 @@
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { LegalRule } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';

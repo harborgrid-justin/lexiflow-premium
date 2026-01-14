@@ -1,5 +1,5 @@
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { TimelineEvent } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '@/theme';

@@ -26,7 +26,7 @@ import { getTodayString } from '@/shared/lib/dateUtils';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { ChainService } from '@/services/infrastructure/chainService';
 // ✅ Migrated to backend API (2025-12-21)
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { CustodyActionType, validateCustodyEventSafe } from '@/services/validation/evidenceSchemas';
 import { ChainOfCustodyEvent, EvidenceItem, UserId } from '@/types';

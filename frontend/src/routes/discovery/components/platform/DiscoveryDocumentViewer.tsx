@@ -1,7 +1,7 @@
 import { DOCUMENTS_QUERY_KEYS } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';

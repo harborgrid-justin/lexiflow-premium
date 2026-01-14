@@ -27,7 +27,7 @@ import { useModalState } from '@/hooks/useModalState';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 
 // ============================================================================

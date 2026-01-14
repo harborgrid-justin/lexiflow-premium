@@ -4,7 +4,7 @@ import { Card } from '@/shared/ui/molecules/Card';
 import { useNotify } from '@/hooks/core';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DedupeCluster } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';

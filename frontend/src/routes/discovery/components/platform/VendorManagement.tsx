@@ -52,7 +52,7 @@ import { useModalState } from '@/hooks/core';
 
 // Services & Utils
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

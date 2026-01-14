@@ -18,7 +18,7 @@ import { Download, FileText, Package, Plus, Share2 } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context

@@ -5,7 +5,7 @@ import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
 import { DocumentPreviewPanel } from '@/routes/documents/components/DocumentPreviewPanel';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';

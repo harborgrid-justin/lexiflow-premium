@@ -9,7 +9,7 @@ import { useState, useMemo } from 'react';
 import { Target, Search, AlertCircle, Briefcase, Clock, Shield } from 'lucide-react';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Case } from '@/types';
 import { Button } from '@/shared/ui/atoms/Button';

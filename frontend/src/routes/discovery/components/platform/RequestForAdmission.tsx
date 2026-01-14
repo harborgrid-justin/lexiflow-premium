@@ -13,7 +13,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DiscoveryRequest } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckSquare, Plus } from 'lucide-react';

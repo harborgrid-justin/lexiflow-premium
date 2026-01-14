@@ -21,7 +21,7 @@ import { queryClient, useQuery } from '@/hooks';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from '@/theme';

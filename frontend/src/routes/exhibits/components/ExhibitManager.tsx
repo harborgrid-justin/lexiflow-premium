@@ -42,7 +42,7 @@ import { cn } from '@/shared/lib/cn';
 
 // Data & Types
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { CaseId, TrialExhibit } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 import { getTodayString } from '@/shared/lib/dateUtils';

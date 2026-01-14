@@ -7,7 +7,7 @@
  * @module routes/real-estate/disposal
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { DisposalStatus, RealEstateDisposal } from '@/services/domain/RealEstateDomain';
 import { CheckCircle, Clock, Package, Plus } from 'lucide-react';
 import { useState } from 'react';

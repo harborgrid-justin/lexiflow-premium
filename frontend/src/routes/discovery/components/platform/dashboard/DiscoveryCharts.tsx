@@ -1,6 +1,6 @@
 import { ChartColorService, useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';

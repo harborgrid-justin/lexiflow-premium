@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { EmptyListState } from '@/shared/ui/organisms/_legacy/RefactoredCommon';

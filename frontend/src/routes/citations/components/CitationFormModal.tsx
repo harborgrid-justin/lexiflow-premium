@@ -7,7 +7,7 @@ import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 // import { Badge } from '@/shared/ui/atoms/Badge';
 import { useNotify } from '@/hooks/useNotify';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Citation } from '@/types';
 
 interface CitationFormModalProps {

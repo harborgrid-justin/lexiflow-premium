@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { db } from '@/services/data/db';
 import { cn } from '@/shared/lib/cn';
 import { Database, RefreshCw } from 'lucide-react';

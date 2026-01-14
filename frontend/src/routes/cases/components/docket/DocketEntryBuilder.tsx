@@ -22,7 +22,7 @@ import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
 import { cn } from '@/shared/lib/cn';
 import { getTodayString } from '@/shared/lib/dateUtils';

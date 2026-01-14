@@ -4,7 +4,7 @@ import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { WorkflowTask, TaskStatusBackend } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

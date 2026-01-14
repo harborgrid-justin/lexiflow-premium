@@ -2,7 +2,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { FEATURES_CONFIG } from '../../config/features/features.config';
 import { UI_CONFIG } from '../../config/features/ui.config';
 // DataService imported for hydration
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { ThemeObject } from './ThemeContext.types';
 import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from './tokens';
 

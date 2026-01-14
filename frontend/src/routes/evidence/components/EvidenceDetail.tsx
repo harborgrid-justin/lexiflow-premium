@@ -25,7 +25,7 @@ import { cn } from '@/shared/lib/cn';
 
 // Services & Types
 import { useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 import { ChainOfCustodyEvent, EvidenceItem, TrialExhibit } from '@/types';
 

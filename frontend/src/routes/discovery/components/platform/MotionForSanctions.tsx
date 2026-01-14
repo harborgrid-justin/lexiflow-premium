@@ -18,7 +18,7 @@ import { Modal } from '@/shared/ui/molecules/Modal';
 import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { SanctionMotion } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';

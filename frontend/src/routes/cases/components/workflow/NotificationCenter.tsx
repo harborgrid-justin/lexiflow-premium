@@ -1,5 +1,5 @@
 import { Bell, Check, X, BellOff } from 'lucide-react';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { SystemNotification } from '@/types';
 import { useTheme } from '@/theme';

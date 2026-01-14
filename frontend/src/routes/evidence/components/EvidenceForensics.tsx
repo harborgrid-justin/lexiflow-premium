@@ -18,7 +18,7 @@ import { cn } from '@/shared/lib/cn';
 
 // Services & Types
 import { queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { EvidenceItem } from '@/types';
 

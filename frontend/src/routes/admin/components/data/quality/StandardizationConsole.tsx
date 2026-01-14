@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 import { useNotify } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { CleansingRule } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Calendar, CheckCircle, Loader2, Phone, Play, Plus, Type, Wand2 } from 'lucide-react';

@@ -7,7 +7,7 @@
  * @module routes/real-estate/encroachment
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { EncroachmentStatus, RealEstateEncroachment } from '@/services/domain/RealEstateDomain';
 import { AlertTriangle, CheckCircle, FileText, Plus } from 'lucide-react';
 import { useState } from 'react';

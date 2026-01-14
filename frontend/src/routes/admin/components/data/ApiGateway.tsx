@@ -12,7 +12,7 @@ import { ChevronRight, Loader2, Server } from 'lucide-react';
 
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { ApiMethod, ApiServiceSpec } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { encodeHtmlEntities } from '@/shared/lib/sanitize';

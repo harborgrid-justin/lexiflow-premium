@@ -11,7 +11,7 @@
  */
 
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // import type { Route } from "./+types/billing";

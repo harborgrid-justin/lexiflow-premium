@@ -7,7 +7,7 @@
  * @module routes/real-estate/utilization
  */
 
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { RealEstateUtilization } from '@/services/domain/RealEstateDomain';
 import { Activity, AlertTriangle, BarChart3, TrendingUp } from 'lucide-react';
 import { Link, useLoaderData, useNavigate } from 'react-router';

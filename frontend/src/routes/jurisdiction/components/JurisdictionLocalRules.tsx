@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';

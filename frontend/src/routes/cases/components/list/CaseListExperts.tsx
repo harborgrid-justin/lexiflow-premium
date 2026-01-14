@@ -24,7 +24,7 @@ import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 

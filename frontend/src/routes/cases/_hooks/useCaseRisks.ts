@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Risk } from '@/types';
 
 interface UseCaseRisksOptions {

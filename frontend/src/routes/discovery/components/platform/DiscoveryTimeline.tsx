@@ -7,7 +7,7 @@ import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';

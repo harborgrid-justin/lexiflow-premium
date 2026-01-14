@@ -33,7 +33,7 @@ import { queryClient } from '@/hooks/useQueryHooks';
 import { DiscoveryProvider, useDiscoveryState, useDiscoveryActions } from './contexts/DiscoveryContext';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';

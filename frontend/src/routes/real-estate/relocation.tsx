@@ -9,7 +9,7 @@
 
 import { RelocationList } from '@/routes/real-estate/relocation/RelocationList';
 import type { RelocationLoaderData } from '@/routes/real-estate/relocation/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { RealEstateRelocation } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

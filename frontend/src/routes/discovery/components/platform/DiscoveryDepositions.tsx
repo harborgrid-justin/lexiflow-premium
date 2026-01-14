@@ -30,7 +30,7 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 

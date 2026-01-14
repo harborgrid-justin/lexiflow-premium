@@ -36,7 +36,7 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';

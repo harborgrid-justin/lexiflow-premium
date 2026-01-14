@@ -26,7 +26,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Types

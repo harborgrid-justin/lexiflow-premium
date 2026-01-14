@@ -3,7 +3,7 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';

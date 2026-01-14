@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
 import { Matter, Case, User } from '@/types';
 import { TabId } from '../types/newCaseTypes';

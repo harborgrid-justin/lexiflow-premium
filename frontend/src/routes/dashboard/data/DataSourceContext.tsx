@@ -1,4 +1,4 @@
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { backendDiscovery } from '@/services/integration/backendDiscovery';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { DataSourceConfig } from '../repository/config';

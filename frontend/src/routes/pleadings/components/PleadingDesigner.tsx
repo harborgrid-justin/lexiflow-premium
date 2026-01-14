@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';

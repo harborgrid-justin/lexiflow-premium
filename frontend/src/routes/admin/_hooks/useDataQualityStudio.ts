@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DataAnomaly, QualityMetricHistory } from '@/types';
 import { QualityRule } from '../components/data/quality/RuleBuilder';
 import { QUALITY_RULES_DEFAULT } from '@/config/quality.config';

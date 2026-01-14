@@ -1,6 +1,6 @@
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';

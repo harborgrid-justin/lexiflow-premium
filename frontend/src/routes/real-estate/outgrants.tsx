@@ -9,7 +9,7 @@
 
 import { OutgrantsList } from '@/routes/real-estate/outgrants/OutgrantsList';
 import type { OutgrantsLoaderData } from '@/routes/real-estate/outgrants/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { RealEstateOutgrant } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

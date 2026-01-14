@@ -20,7 +20,7 @@ import { api } from '@/lib/frontend-api';
 import { Jurisdiction } from '@/lib/frontend-api';
 import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Case, CaseStatus, CaseType } from '@/types';
 import { AlertCircle, Building, Calendar, FileText, Scale, Users } from 'lucide-react';
 import { useCallback, useEffect, useReducer, useState } from 'react';

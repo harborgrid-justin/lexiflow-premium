@@ -18,7 +18,7 @@ import React from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks'; // CORRECT
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from '@/theme';

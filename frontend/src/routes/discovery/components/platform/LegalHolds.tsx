@@ -29,7 +29,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';

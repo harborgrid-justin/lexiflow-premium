@@ -6,7 +6,7 @@
 //
 // 📦 RECOMMENDED: Import from focused sub-modules instead:
 //
-//   import { DataService } from '@/services/data/dataService';       // Data layer
+//   import { DataService } from '@/services/data/data-service.service';       // Data layer
 //   import { api, isBackendApiEnabled } from '@/config/network/api.config';  // Backend integration
 //   import { UserRepository } from '@/services/data/repositories/UserRepository';  // Specific repositories
 //   import { cryptoService } from '@/services/infrastructure/cryptoService';       // Utility services
@@ -95,7 +95,7 @@ export * from "./infrastructure/adapters/WindowAdapter";
 
 // ==================== DATA LAYER ====================
 // DO NOT export dataService here - it causes circular dependencies
-// Import directly: import { DataService } from '@/services/data/dataService';
+// Import directly: import { DataService } from '@/services/data/data-service.service';
 // DO NOT export db here - it causes circular dependencies with microORM and dbSeeder
 // Import directly: import { db } from '@/services/data/db';
 // export * from "./data/db";

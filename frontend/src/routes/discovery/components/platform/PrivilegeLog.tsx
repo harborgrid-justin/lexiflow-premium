@@ -28,7 +28,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { cn } from '@/shared/lib/cn';
 

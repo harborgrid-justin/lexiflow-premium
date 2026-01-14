@@ -1,7 +1,7 @@
 // components/DocumentAssembly.tsx
 import { queryClient, useMutation } from '@/hooks/backend';
 import { useWindow } from '@/providers';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { CaseId, DocumentId, LegalDocument } from '@/types';
 import { Minus, Wand2, X } from 'lucide-react';

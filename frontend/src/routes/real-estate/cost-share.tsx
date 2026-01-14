@@ -9,7 +9,7 @@
 
 import { CostShareList } from '@/routes/real-estate/cost-share/CostShareList';
 import type { CostShareLoaderData } from '@/routes/real-estate/cost-share/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { RealEstateCostShare } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

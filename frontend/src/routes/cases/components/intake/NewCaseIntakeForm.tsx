@@ -18,7 +18,7 @@ import { api } from '@/lib/frontend-api';
 import { PATHS } from '@/config/paths.config';
 import { useEnhancedWizard, WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card';

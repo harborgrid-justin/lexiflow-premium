@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Scheduler } from '@/utils/scheduler';
 import { CaseId, Organization, Party, PartyId } from '@/types';
 

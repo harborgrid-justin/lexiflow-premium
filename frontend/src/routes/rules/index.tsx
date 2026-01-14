@@ -8,7 +8,7 @@
  */
 
 import { RulesPlatform } from '@/routes/rules/components/RulesPlatform';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";

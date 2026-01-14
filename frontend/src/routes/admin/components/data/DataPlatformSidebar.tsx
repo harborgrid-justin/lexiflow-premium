@@ -1,7 +1,7 @@
 import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { TenantConfig } from '@/types';
 import { ChevronDown, ChevronRight, Server } from 'lucide-react';

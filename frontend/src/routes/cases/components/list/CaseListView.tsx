@@ -6,7 +6,7 @@
  */
 
 import { useState, useMemo, useCallback } from 'react';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { Matter, MatterStatus, MatterPriority, MatterType, PracticeArea } from '@/types';

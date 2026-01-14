@@ -15,7 +15,7 @@ import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import { ESISource } from '@/types';
 import { cn } from '@/shared/lib/cn';

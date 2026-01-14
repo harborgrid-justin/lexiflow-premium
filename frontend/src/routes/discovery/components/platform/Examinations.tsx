@@ -3,7 +3,7 @@ import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { Examination } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Calendar, Plus, Stethoscope, User } from 'lucide-react';

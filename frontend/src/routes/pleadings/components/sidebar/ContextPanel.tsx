@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { BookOpen, ChevronRight, FileText, Loader2, Plus, Scale, Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';

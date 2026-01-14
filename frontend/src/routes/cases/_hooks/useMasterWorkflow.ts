@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, useTransition } from 'react';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useNotify } from '@/hooks/useNotify';
 import { getTodayString } from '@/shared/lib/dateUtils';
 import { TaskStatusBackend, WorkflowTask, WorkflowTemplateData, Case } from '@/types';

@@ -1,6 +1,6 @@
 import { useNotify } from '@/hooks/useNotify';
 import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { useState } from 'react';
 import { MessengerChatWindow } from './MessengerChatWindow';
 

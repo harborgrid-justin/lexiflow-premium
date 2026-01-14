@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { useModalState } from '@/hooks/core';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';

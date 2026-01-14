@@ -14,7 +14,7 @@
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks/useModalState';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/services/infrastructure/queryClient';
 import { Matter, MatterPriority, MatterStatus } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';

@@ -9,7 +9,7 @@
 
 import { InventoryList } from '@/routes/real-estate/inventory/InventoryList';
 import type { InventoryLoaderData } from '@/routes/real-estate/inventory/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import type { PropertyStatus, RealEstateProperty } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

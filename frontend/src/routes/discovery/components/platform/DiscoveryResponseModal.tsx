@@ -4,7 +4,7 @@ import { Modal } from '@/shared/ui/molecules/Modal';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { DiscoveryRequest } from '@/types';
 import { cn } from '@/shared/lib/cn';

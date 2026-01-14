@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { queryClient, useMutation } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card';

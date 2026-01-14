@@ -1,7 +1,7 @@
 import { adminApi } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';

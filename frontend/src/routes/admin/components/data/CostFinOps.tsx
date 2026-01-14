@@ -6,7 +6,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services/data/data-service.service';
 import { CostForecast, InfrastructureCostMetric } from '@/types';
 import { cn } from '@/shared/lib/cn';
 

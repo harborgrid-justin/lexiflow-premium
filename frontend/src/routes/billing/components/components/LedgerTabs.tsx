@@ -1,4 +1,4 @@
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/molecules/Tabs/Tabs";
+import { Tabs } from "@/shared/ui/molecules/Tabs/Tabs";
 
 interface LedgerTabsProps {
   activeTab: 'operating' | 'trust';
@@ -7,11 +7,13 @@ interface LedgerTabsProps {
 
 export function LedgerTabs({ activeTab, onTabChange }: LedgerTabsProps) {
   return (
-    <Tabs value={activeTab} onValueChange={(val) => onTabChange(val as 'operating' | 'trust')}>
-      <TabsList>
-        <TabsTrigger value="operating">Operating</TabsTrigger>
-        <TabsTrigger value="trust">Trust</TabsTrigger>
-      </TabsList>
-    </Tabs>
+    <Tabs
+      tabs={[
+        { id: 'operating', label: 'Operating' },
+        { id: 'trust', label: 'Trust' }
+      ]}
+      activeTab={activeTab}
+      onChange={(tab) => onTabChange(tab as 'operating' | 'trust')}
+    />
   );
 }

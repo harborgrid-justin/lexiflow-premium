@@ -151,3 +151,7 @@ export type {
   CreateCaseInput,
   UpdateCaseInput,
 } from "./cases";
+
+export { DOCUMENTS_QUERY_KEYS } from "@/api/admin/documents-api";
+export { catalogApi } from "./catalog";
+export { knowledgeApi } from "./knowledge";

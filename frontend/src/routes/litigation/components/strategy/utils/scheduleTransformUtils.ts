@@ -10,7 +10,7 @@ import {
   WorkflowConnection,
   WorkflowNode,
 } from "@/routes/cases/components/workflow/builder/types";
-import { DateCalculationService } from "@/services/infrastructure/dateCalculationService";
+import * as DateCalculationService from "@/services/infrastructure/dateCalculationService";
 import {
   CaseId,
   CasePhase,

@@ -33,7 +33,7 @@ import { useCallback, useState } from "react";
 // ============================================================================
 // Services & Data
 import { DataService } from "@/services/data/data-service.service";
-import { DateCalculationService } from "@/services/infrastructure/dateCalculationService";
+import * as DateCalculationService from "@/services/infrastructure/dateCalculationService";
 import { GraphValidationService } from "@/services/search/graph-validation.service";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useMutation, useQuery } from "./useQueryHooks";

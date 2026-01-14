@@ -29,3 +29,47 @@ export function formatDate(
     ? d.toLocaleDateString()
     : d.toLocaleDateString("en-US", { dateStyle: "long" });
 }
+
+export function formatToISO(date: Date): string {
+  return date.toISOString();
+}
+
+export function calculateDueDate(startDate: Date, durationDays: number): Date {
+  return addDays(startDate, durationDays);
+}
+
+export function calculateStartDateFromPosition(
+  x: number,
+  pixelsPerDay: number,
+  minX: number,
+  referenceDate: Date
+): Date {
+  const daysOffset = Math.floor((x - minX) / pixelsPerDay);
+  return addDays(referenceDate, daysOffset);
+}
+
+export function parseFromISO(isoInfo: string): Date {
+  return new Date(isoInfo);
+}
+
+export function calculatePositionFromDate(
+  date: Date,
+  pixelsPerDay: number,
+  minX: number,
+  referenceDate: Date
+): number {
+  const diff = calculateDateDifference(referenceDate, date);
+  return minX + diff * pixelsPerDay;
+}
+
+// Export as object for compatibility
+export const DateCalculationService = {
+  calculateDateDifference,
+  addDays,
+  formatDate,
+  formatToISO,
+  calculateDueDate,
+  calculateStartDateFromPosition,
+  parseFromISO,
+  calculatePositionFromDate,
+};

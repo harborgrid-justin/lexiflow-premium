@@ -177,3 +177,6 @@ export const DashboardService = {
     return apiClient.get("/dashboards/alerts");
   },
 };
+
+// Export lowercase alias for compatibility
+export const dashboardService = DashboardService;

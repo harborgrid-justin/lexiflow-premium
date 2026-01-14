@@ -66,7 +66,6 @@ export {
   createClient,
   // Domain errors
   DomainError,
-  type ErrorType as ErrorTypes,
   failure,
   ForbiddenError,
   isFailure,
@@ -99,6 +98,7 @@ export {
   // HTTP client
   type ClientConfig,
   type ErrorType,
+  type ErrorType as ErrorTypes,
   type Failure,
   type FieldError,
   type FieldValidator,
@@ -203,6 +203,7 @@ export * from "./billing";
 export * from "./communications";
 // REMOVED: export * from "./compliance"; // Circular dependency - use complianceApi from domains instead
 export * from "./discovery";
+export * from "./domains/drafting";
 export * from "./integrations";
 export * from "./intelligence";
 export * from "./litigation";
@@ -212,6 +213,7 @@ export * from "./workflow";
 // Export admin services (excluding classes that data-platform also exports)
 export {
   AuditLogsApiService,
+  DOCUMENTS_QUERY_KEYS,
   DocumentsApiService,
   DocumentVersionsApiService,
   HealthApiService,

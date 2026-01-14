@@ -20,7 +20,8 @@ import { useBillingStats } from '../_hooks/useDashboardData';
 // Hooks & Context
 import { useTheme } from '@/theme';
 
-import { useDashboardActions } from '../DashboardProvider';
+import { PATHS } from '@/config/paths.config';
+import { useNavigate } from 'react-router-dom';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
@@ -52,7 +53,8 @@ interface DashboardSidebarProps {
 // ============================================================================
 
 export function DashboardSidebar({ alerts }: DashboardSidebarProps) {
-    const { onSelectCase } = useDashboardActions();
+    const navigate = useNavigate();
+    const onSelectCase = (caseId: string) => navigate(`${PATHS.CASES}/${caseId}`);
     const { theme } = useTheme();
 
     // Data Fetching via the centralized hook system

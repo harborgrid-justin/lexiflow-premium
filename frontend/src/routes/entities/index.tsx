@@ -7,7 +7,6 @@
  * @module routes/entities/index
  */
 
-import { crmApi } from '@/lib/frontend-api';
 import { EntityDirector } from '@/routes/cases/components/entities/EntityDirector';
 import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -32,7 +31,7 @@ export function meta({ data }: Route.MetaArgs) {
 
 export async function clientLoader() {
   try {
-    const result = await crmApi.getAllEntities({ page: 1, limit: 100 });
+    const result = await communicationsApi.getAllEntities({ page: 1, limit: 100 });
     const items = result.ok ? result.data.data : [];
     return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {

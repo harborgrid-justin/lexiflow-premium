@@ -9,6 +9,10 @@ import type {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export { queryClient } from "@/services/infrastructure/query-client.service";
 
+export function useQueryClient() {
+  return queryClient;
+}
+
 export function useQuery<T>(
   key: QueryKey,
   fn: (signal: AbortSignal) => Promise<T>,

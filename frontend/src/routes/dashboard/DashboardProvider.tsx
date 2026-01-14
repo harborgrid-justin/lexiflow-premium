@@ -123,3 +123,22 @@ export function useDashboard() {
   }
   return context;
 }
+
+/**
+ * useDashboardActions - Actions hook stub
+ * @returns Dashboard actions object
+ */
+export function useDashboardActions() {
+  // Stub implementation - returns empty actions object
+  return {
+    refreshData: async () => { },
+    updateMetrics: () => { },
+  };
+}
+/**
+ * useDashboardState - State hook alias
+ * @returns Dashboard state from context
+ */
+export function useDashboardState() {
+  return useDashboard();
+}

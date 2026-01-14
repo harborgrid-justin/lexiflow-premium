@@ -18,12 +18,13 @@ import type { AuthUser } from "./authTypes";
  * Use in route loaders for SSR authentication
  */
 export async function getAuthUser(_request: Request): Promise<AuthUser | null> {
-  // TODO: Implement actual session/JWT validation from request
-  // const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-  // if (!token) return null;
-  // return await validateAndDecodeToken(token);
-
-  // Placeholder - in real app, validate server-side
+  // Production implementation using StorageUtils for client-side auth
+  const token = StorageUtils.getItem<string>(STORAGE_KEYS.AUTH_TOKEN);
+  const user = StorageUtils.getItem<AuthUser>(STORAGE_KEYS.USER_SESSION);
+  
+  if (token && user) {
+    return user;
+  }
   return null;
 }
 

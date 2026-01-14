@@ -21,6 +21,7 @@
  */
 
 import type { Client, Message } from "@/types";
+import type { NotificationDTO } from "@/types/notifications";
 import {
   normalizeClient,
   normalizeClients,
@@ -29,7 +30,8 @@ import {
 } from "../normalization/communications";
 import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
-import { failure, type PaginatedResult, type Result, success } from "./types";
+import type { PaginatedResult, Result } from "./types";
+import { failure, success } from "./types";
 
 /**
  * Client query filters
@@ -307,14 +309,16 @@ export const communicationsApi = {
   getMessageById,
   sendMessage,
   deleteMessage,
-  // Notification methods (stub implementations)
-  getAllNotifications: async (filters?: { page?: number; limit?: number }) => {
-    // TODO: Implement actual notification fetching from backend
-    return success({
-      data: [],
-      total: 0,
-      page: filters?.page || 1,
-      limit: filters?.limit || 100,
-    });
+  // Notification methods
+  getAllNotifications: async (filters?: {
+    page?: number;
+    limit?: number;
+  }): Promise<Result<PaginatedResult<NotificationDTO>>> => {
+    return client.get<PaginatedResult<NotificationDTO>>(
+      "/communications/notifications",
+      {
+        params: filters,
+      }
+    );
   },
 } as const;

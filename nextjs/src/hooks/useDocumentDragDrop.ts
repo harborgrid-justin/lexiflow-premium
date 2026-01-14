@@ -28,7 +28,7 @@ import React, { useRef, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
-import { DocumentService } from "@/services/features/documents/documentService";
+import { DocumentService } from "@/services/features/documents/documents";
 import { queryClient } from "@/services/infrastructure/queryClient";
 import { queryKeys } from "@/utils/queryKeys";
 

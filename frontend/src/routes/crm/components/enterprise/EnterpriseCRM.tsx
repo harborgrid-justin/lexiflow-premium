@@ -9,7 +9,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { crmApi } from '@/lib/frontend-api';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import type { Client } from "@/types";
 import { cn } from '@/shared/lib/cn';
@@ -39,15 +39,21 @@ export const EnterpriseCRM: React.FC = () => {
   const [activeView, setActiveView] = useState<'list' | '360'>('list');
 
   // Data queries
-  const { data: clients = [] } = useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
-  const { data: opportunities = [] } = useQuery(QUERY_KEYS.CRM.OPPORTUNITIES, () =>
-    DataService.crm.getOpportunities()
-  );
+  const { data: clients = [] } = useQuery(QUERY_KEYS.CLIENTS.ALL, async () => {
+    const result = await crmApi.getAllClients({ page: 1, limit: 1000 });
+    return result.ok ? result.data.data : [];
+  });
+  
+  const { data: opportunities = [] } = useQuery(QUERY_KEYS.CRM.OPPORTUNITIES, async () => {
+    const result = await crmApi.getOpportunities({ page: 1, limit: 100 });
+    return result.ok ? result.data.data : [];
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: relationships = [] } = useQuery<any[]>(QUERY_KEYS.CRM.RELATIONSHIPS, () =>
-    DataService.crm.getRelationships()
-  );
+  const { data: relationships = [] } = useQuery<any[]>(QUERY_KEYS.CRM.RELATIONSHIPS, async () => {
+    const result = await crmApi.getRelationships({ page: 1, limit: 100 });
+    return result.ok ? result.data.data : [];
+  });
 
   // Ensure data is array
   const clientsArray = Array.isArray(clients) ? clients : [];

@@ -7,8 +7,8 @@
  * @module routes/citations/index
  */
 
+import { knowledgeApi } from '@/lib/frontend-api';
 import { CitationManager } from '@/routes/citations/components/CitationManager';
-import { DataService } from '@/services/data/dataService';
 import type { ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -35,8 +35,9 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof clientLoader>> 
  */
 export async function clientLoader() {
   try {
-    const citations = await DataService.citations.getAll();
-    return { items: citations, totalCount: citations.length };
+    const result = await knowledgeApi.getAllCitations({ page: 1, limit: 100 });
+    const items = result.ok ? result.data.data : [];
+    return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {
     console.error("Failed to load citations", error);
     return { items: [], totalCount: 0 };

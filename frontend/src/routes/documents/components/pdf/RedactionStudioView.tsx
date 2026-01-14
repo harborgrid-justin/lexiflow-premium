@@ -1,13 +1,13 @@
-import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
-import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
+import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
 import { DataService } from '@/services/data/dataService';
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 import { BlobManager } from '@/services/infrastructure/blobManager';
-import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { useTheme } from '@/theme';
+import { LegalDocument } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Eraser, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';

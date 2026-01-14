@@ -10,9 +10,9 @@
  * @module routes/cases/filings
  */
 
+import { casesApi, docketApi } from '@/lib/frontend-api';
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
 import { FilingsTable, type Filing } from '@/routes/cases/ui/components/FilingsTable';
-import { DataService } from '@/services/data/dataService';
 import type { DocketEntry } from '@/types';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -50,15 +50,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Case ID is required", { status: 400 });
   }
 
-  // Fetch case and docket entries
-  const [caseData, docketEntries] = await Promise.all([
-    DataService.cases.get(caseId),
-    DataService.docket.getByCaseId(caseId).catch(() => []),
+  // Fetch case and docket entries using new enterprise API
+  const [caseResult, docketResult] = await Promise.all([
+    casesApi.getCaseById(caseId),
+    docketApi.getEntriesByCase(caseId).catch(() => ({ ok: false })),
   ]);
 
-  if (!caseData) {
+  if (!caseResult.ok) {
     throw new Response("Case Not Found", { status: 404 });
   }
+
+  const caseData = caseResult.data;
+  const docketEntries = docketResult.ok ? docketResult.data.data : [];
 
   // Transform docket entries to filings format
   const filings: Filing[] = docketEntries.map((entry: DocketEntry) => ({

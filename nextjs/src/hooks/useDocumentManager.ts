@@ -75,7 +75,7 @@ import React, {
 // ============================================================================
 // Services & Data
 import { documentsService } from "@/services/documents.service";
-import { DocumentService } from "@/services/features/documents/documentService";
+import { DocumentService } from "@/services/features/documents/documents";
 import { queryKeys } from "@/utils/queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

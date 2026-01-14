@@ -3,9 +3,9 @@
  * View and export individual reports
  */
 
-import { ChartCard } from '@/components/enterprise/analytics';
-import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
-import { DataService } from '@/services/data/dataService';
+import { ChartCard } from '@/routes/analytics/components/enterprise';
+import { exportToCSV, exportToExcel } from '@/shared/components/enterprise/data/export';
+import { analyticsApi } from '@/lib/frontend-api';
 import { jsPDF } from 'jspdf';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';
@@ -45,7 +45,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   if (!id) throw new Error("Report ID is required");
 
   try {
-    const report = await DataService.reports.getById(id);
+    const result = await analyticsApi.getReportById(id);
+    if (!result.ok) throw new Error("Report not found");
+    const report = result.data;
     const metadata = report.metadata || {};
 
     const mappedReport = {

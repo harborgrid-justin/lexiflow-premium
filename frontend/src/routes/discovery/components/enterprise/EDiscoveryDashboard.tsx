@@ -6,7 +6,7 @@
  */
 
 import { analyticsApi } from '@/api';
-import { KPICard } from '@/components/enterprise/dashboard/KPICard';
+import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';

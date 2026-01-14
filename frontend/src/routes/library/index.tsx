@@ -10,7 +10,7 @@
  * @module routes/library/index
  */
 
-import { DataService } from '@/services/data/dataService';
+import { knowledgeApi } from '@/lib/frontend-api';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -42,18 +42,20 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
   const search = url.searchParams.get("q") || "";
 
   try {
-    // Map filters to API params
-    const filter = {
+    // Fetch resources using new enterprise API
+    const result = await knowledgeApi.getAllKnowledge({
       category: category !== "all" ? category : undefined,
-      search: search || undefined
-    };
+      search: search || undefined,
+      page: 1,
+      limit: 100
+    });
 
-    const resources = await DataService.knowledge.getAll(filter);
+    const resources = result.ok ? result.data.data : [];
 
     return {
       resources,
       categories: [
-        { id: 'templates', name: 'Templates', count: 0 }, // Counts could be fetched separately if needed
+        { id: 'templates', name: 'Templates', count: 0 },
         { id: 'precedents', name: 'Precedents', count: 0 },
         { id: 'research', name: 'Research', count: 0 },
         { id: 'forms', name: 'Forms', count: 0 },

@@ -10,9 +10,9 @@
  * @module routes/cases/timeline
  */
 
+import { casesApi, docketApi, documentsApi } from '@/lib/frontend-api';
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
 import { CaseTimeline, type TimelineEvent } from '@/routes/cases/ui/components/CaseTimeline';
-import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -40,16 +40,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Case ID is required", { status: 400 });
   }
 
-  // Fetch case and related timeline data
-  const [caseData, docketEntries, documents] = await Promise.all([
-    DataService.cases.get(caseId),
-    DataService.docket.getByCaseId(caseId).catch(() => []),
-    DataService.documents.getByCaseId(caseId).catch(() => []),
+  // Fetch case and related timeline data using new enterprise API
+  const [caseResult, docketResult, docsResult] = await Promise.all([
+    casesApi.getCaseById(caseId),
+    docketApi.getEntriesByCase(caseId).catch(() => ({ ok: false })),
+    documentsApi.getDocumentsByCase(caseId).catch(() => ({ ok: false })),
   ]);
 
-  if (!caseData) {
+  if (!caseResult.ok) {
     throw new Response("Case Not Found", { status: 404 });
   }
+
+  const caseData = caseResult.data;
+  const docketEntries = docketResult.ok ? docketResult.data.data : [];
+  const documents = docsResult.ok ? docsResult.data.data : [];
 
   // Construct timeline events from various sources
   const events: TimelineEvent[] = [

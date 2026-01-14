@@ -22,7 +22,7 @@ import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // Services & Types
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 import { validateEvidenceItemSafe } from '@/services/validation/evidenceSchemas';
 import { CaseId, EvidenceId, EvidenceItem, EvidenceType, UUID } from '@/types';
 import { AdmissibilityStatusEnum } from '@/types/enums';

@@ -7,8 +7,8 @@
  * @module routes/entities/index
  */
 
+import { crmApi } from '@/lib/frontend-api';
 import { EntityDirector } from '@/routes/cases/components/entities/EntityDirector';
-import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -31,8 +31,9 @@ export function meta({ data }: Route.MetaArgs) {
 
 export async function clientLoader() {
   try {
-    const entities = await DataService.entities.getAll();
-    return { items: entities, totalCount: entities.length };
+    const result = await crmApi.getAllEntities({ page: 1, limit: 100 });
+    const items = result.ok ? result.data.data : [];
+    return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {
     console.error("Failed to load entities", error);
     return { items: [], totalCount: 0 };

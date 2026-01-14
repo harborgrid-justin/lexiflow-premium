@@ -19,7 +19,7 @@ import React, { useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 
 // Hooks & Context
 import { useTheme } from '@/providers';

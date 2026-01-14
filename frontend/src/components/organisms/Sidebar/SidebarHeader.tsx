@@ -16,7 +16,7 @@ import { Scale, X } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks'; // CORRECT
-import { DataService } from '@/services/data/dataService';
+import { adminApi } from '@/lib/frontend-api';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -47,7 +47,10 @@ export const SidebarHeader = React.memo<SidebarHeaderProps>(function SidebarHead
 
   const { data: tenantConfig } = useQuery<TenantConfig>(
     ['admin', 'tenant'],
-    () => DataService.admin.getTenantConfig(),
+    async () => {
+      const result = await adminApi.getTenantConfig();
+      return result.ok ? result.data : { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' };
+    },
     { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
   );
 

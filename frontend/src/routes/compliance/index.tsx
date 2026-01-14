@@ -10,7 +10,7 @@
  * @module routes/compliance/index
  */
 
-import { api } from '@/api';
+import { complianceApi } from '@/lib/frontend-api';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -40,11 +40,15 @@ export function meta(_: unknown) {
 
 export async function loader({ request: _ }: LoaderFunctionArgs) {
   try {
-    const [alerts, reports, conflicts] = await Promise.all([
-      api.compliance.getChecks({ status: 'requires_review' }).catch(() => []),
-      api.reports.getAll({ status: 'pending' }).catch(() => []),
-      api.conflictChecks.getAll({ status: 'pending' }).catch(() => []),
+    const [alertsResult, reportsResult, conflictsResult] = await Promise.all([
+      complianceApi.getComplianceChecks({ status: 'requires_review', page: 1, limit: 50 }),
+      complianceApi.getComplianceReports({ status: 'pending', page: 1, limit: 50 }),
+      complianceApi.getConflictChecks({ status: 'pending', page: 1, limit: 50 }),
     ]);
+
+    const alerts = alertsResult.ok ? alertsResult.data.data : [];
+    const reports = reportsResult.ok ? reportsResult.data.data : [];
+    const conflicts = conflictsResult.ok ? conflictsResult.data.data : [];
 
     return {
       alerts,

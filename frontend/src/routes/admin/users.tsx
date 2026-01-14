@@ -4,7 +4,7 @@
  * Enterprise user management with role assignment, permissions, and audit trails.
  */
 
-import { authApi } from '@/api';
+import { authApi } from '@/lib/frontend-api';
 import type { User } from '@/types';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
@@ -12,7 +12,8 @@ import type { Route } from './+types/users';
 
 export async function loader(_args: Route.LoaderArgs) {
   try {
-    const users = await authApi.users.getAll();
+    const result = await authApi.getAllUsers({ page: 1, limit: 1000 });
+    const users = result.ok ? result.data.data : [];
     return { users };
   } catch (error) {
     console.error('Failed to load users:', error);

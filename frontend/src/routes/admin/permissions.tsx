@@ -4,8 +4,8 @@
  * Enterprise permission management with granular access control.
  */
 
-import { RolesService } from '@/api/auth/roles-api';
 import { SYSTEM_PERMISSIONS, type PermissionDefinition } from '@/config/permissions';
+import { authApi } from '@/lib/frontend-api';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/permissions';
@@ -15,16 +15,18 @@ interface Permission extends PermissionDefinition {
 }
 
 export async function loader(_args: Route.LoaderArgs) {
-  const rolesService = new RolesService();
   const roleCounts: Record<string, number> = {};
 
   try {
-    const roles = await rolesService.getRoles();
+    const result = await authApi.getAllRoles({ page: 1, limit: 100 });
+    const roles = result.ok ? result.data.data : [];
     // Count how many roles have each permission
     roles.forEach(role => {
-      role.permissions.forEach(permId => {
-        roleCounts[permId] = (roleCounts[permId] || 0) + 1;
-      });
+      if (role.permissions) {
+        role.permissions.forEach(permId => {
+          roleCounts[permId] = (roleCounts[permId] || 0) + 1;
+        });
+      }
     });
   } catch (error) {
     console.error("Failed to fetch roles for permission counts", error);

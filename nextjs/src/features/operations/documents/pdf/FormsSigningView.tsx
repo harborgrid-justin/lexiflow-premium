@@ -8,7 +8,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 import { LegalDocument } from '@/types';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';

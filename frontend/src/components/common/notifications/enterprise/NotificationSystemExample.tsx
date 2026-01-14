@@ -12,10 +12,10 @@
  * - ConnectionStatus indicator
  *
  * @status PRODUCTION READY - Zero mock data, backend-integrated
- * @architecture Uses DataService.notifications for all operations
+ * @architecture Uses communicationsApi for all operations
  */
 
-import { DataService } from '@/services/data/dataService';
+import { communicationsApi } from '@/lib/frontend-api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {

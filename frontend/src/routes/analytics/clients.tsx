@@ -3,7 +3,7 @@
  * Client profitability, engagement, and retention metrics
  */
 
-import { ChartCard, DateRangeSelector, MetricCard } from '@/components/enterprise/analytics';
+import { ChartCard, DateRangeSelector, MetricCard } from '@/routes/analytics/components/enterprise';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useState } from 'react';

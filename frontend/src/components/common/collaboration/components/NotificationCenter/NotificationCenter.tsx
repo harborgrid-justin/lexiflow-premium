@@ -14,12 +14,11 @@ import { useDeferredValue, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToast } from '@/providers';
+import { useTheme } from '@/theme';
 
 // Components
 import { Badge } from '@/shared/ui/atoms/Badge';
@@ -66,13 +65,19 @@ export function NotificationCenter() {
   // --- DATA FETCHING ---
   const { data: notifications = [], isLoading } = useQuery<Notification[]>(
     ['notifications', 'all'],
-    () => DataService.notifications.getAll(),
+    async () => {
+      const result = await communicationsApi.getAllNotifications({ page: 1, limit: 100 });
+      return result.ok ? result.data.data : [];
+    },
     { staleTime: 30000 }
   );
 
   // --- MUTATIONS ---
   const { mutate: markAsRead } = useMutation(
-    (id: string) => DataService.notifications.markAsRead(id),
+    (id: string) => {
+      const result = communicationsApi.updateNotification(id, { isRead: true });
+      return result.then(r => r.ok ? r.data : null);
+    },
     {
       onSuccess: () => {
         queryClient.invalidate(['notifications']);
@@ -82,7 +87,10 @@ export function NotificationCenter() {
   );
 
   const { mutate: markAllAsRead } = useMutation(
-    () => DataService.notifications.markAllAsRead(),
+    async () => {
+      const result = await communicationsApi.markAllNotificationsAsRead();
+      return result.ok ? result.data : null;
+    },
     {
       onSuccess: () => {
         queryClient.invalidate(['notifications']);
@@ -92,7 +100,10 @@ export function NotificationCenter() {
   );
 
   const { mutate: deleteNotification } = useMutation(
-    (id: string) => DataService.notifications.delete(id),
+    (id: string) => {
+      const result = communicationsApi.deleteNotification(id);
+      return result.then(r => r.ok ? r.data : null);
+    },
     {
       onSuccess: () => {
         queryClient.invalidate(['notifications']);

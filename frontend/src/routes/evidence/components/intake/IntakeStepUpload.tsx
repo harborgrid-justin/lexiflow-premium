@@ -10,11 +10,11 @@ import { CheckCircle, Link, Loader2, ShieldCheck, UploadCloud } from 'lucide-rea
 import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Context & Utils
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 
 // Services
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 
 interface IntakeStepUploadProps {
     file: File | null;

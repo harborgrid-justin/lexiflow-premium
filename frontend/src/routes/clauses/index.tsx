@@ -7,7 +7,7 @@
  * @module routes/clauses/index
  */
 
-import { DataService } from '@/services/data/dataService';
+import { catalogApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -37,11 +37,10 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const category = url.searchParams.get("category");
 
   try {
-    // Map category string to API filter type if needed, or pass as is if compatible
-    // Assuming category from URL matches Clause['category'] or is undefined
-    const filter = category ? { category: category as string } : {};
-    const items = await DataService.clauses.getAll(filter);
-    return { items, totalCount: items.length };
+    // Fetch clauses using new enterprise API with optional category filter
+    const result = await catalogApi.getAllClauses({ category, page: 1, limit: 100 });
+    const items = result.ok ? result.data.data : [];
+    return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {
     console.error("Failed to load clauses", error);
     return { items: [], totalCount: 0 };

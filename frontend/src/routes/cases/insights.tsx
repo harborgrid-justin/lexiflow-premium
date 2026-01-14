@@ -2,8 +2,8 @@
  * Case Insights Sub-Route
  */
 
+import { casesApi } from '@/lib/frontend-api';
 import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
-import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/insights";
 
@@ -15,9 +15,10 @@ export async function loader({ params }: Route.LoaderArgs) {
   const { caseId } = params;
   if (!caseId) throw new Response("Case ID is required", { status: 400 });
 
-  const caseData = await DataService.cases.get(caseId);
-  if (!caseData) throw new Response("Not Found", { status: 404 });
-  return { case: caseData };
+  const result = await casesApi.getCaseById(caseId);
+  if (!result.ok) throw new Response("Not Found", { status: 404 });
+
+  return { case: result.data };
 }
 
 export default function CaseInsightsRoute() {

@@ -18,7 +18,7 @@ import React, { useId, useState } from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { RuleService } from '@/services/features/rules/ruleService';
+import { RuleService } from '@/services/features/rules/rules';
 
 // Hooks & Context
 import { useDebounce } from '@/shared/hooks/useDebounce';

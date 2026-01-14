@@ -15,14 +15,14 @@ import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
 import { TagInput } from '@/shared/ui/molecules/TagInput/TagInput';
 
 // Context & Utils
-import { useTheme } from '@/theme';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 
 // Services & Types
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 import { validateEvidenceItemSafe } from '@/services/validation/evidenceSchemas';
 import { CaseId, EvidenceId, EvidenceItem, EvidenceType, UUID } from '@/types';
 import { AdmissibilityStatusEnum } from '@/types/enums';

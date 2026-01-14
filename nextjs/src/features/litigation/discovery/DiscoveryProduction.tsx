@@ -11,8 +11,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Upload, FileText, Check, ShieldCheck, Database, Printer, HardDrive } from 'lucide-react';
+import { ArrowLeft, Check, Database, FileText, HardDrive, Printer, ShieldCheck, Upload } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -22,18 +22,18 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '@/providers';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers';
 
 // Services & Utils
-import { cn } from '@/utils/cn';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { validateProductionConfigSafe } from '@/services/validation/discoverySchemas';
+import { cn } from '@/utils/cn';
 
 // Lazy load DocumentService for bundle optimization
 const loadDocumentService = async () => {
-    const { DocumentService } = await import('@/services/features/documents/documentService');
+    const { DocumentService } = await import('@/services/features/documents/documents');
     return DocumentService;
 };
 

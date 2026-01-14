@@ -5,7 +5,7 @@
 
 import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
-import { RuleService } from "@/services/features/rules/ruleService";
+import { RuleService } from "@/services/features/rules/rules";
 import { LegalRule } from "@/types";
 
 export const RULE_QUERY_KEYS = {

@@ -16,7 +16,7 @@ import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // Services
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 
 interface IntakeStepUploadProps {
     file: File | null;

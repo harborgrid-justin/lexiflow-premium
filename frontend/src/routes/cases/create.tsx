@@ -11,6 +11,7 @@
  */
 
 import { api } from '@/api';
+import { catalogApi, jurisdictionApi } from '@/lib/frontend-api';
 import NewCase from '@/routes/cases/components/create/NewCase';
 import { CaseStatus } from '@/types';
 import { requireAuthentication } from '@/utils/route-guards';
@@ -54,11 +55,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Auth check
   requireAuthentication(request);
 
-  // Pre-fetch reference data (jurisdictions, case types, etc.)
-  const [jurisdictions, templates] = await Promise.all([
-    api.jurisdiction.getAll().catch(() => []),
-    api.drafting.getAllTemplates().catch(() => []),
+  // Pre-fetch reference data using new enterprise API
+  const [jurisdictionsResult, templatesResult] = await Promise.all([
+    jurisdictionApi.getAllJurisdictions({ page: 1, limit: 100 }),
+    catalogApi.getAllTemplates({ page: 1, limit: 100 }),
   ]);
+
+  const jurisdictions = jurisdictionsResult.ok ? jurisdictionsResult.data.data : [];
+  const templates = templatesResult.ok ? templatesResult.data.data : [];
 
   return { jurisdictions, templates };
 }

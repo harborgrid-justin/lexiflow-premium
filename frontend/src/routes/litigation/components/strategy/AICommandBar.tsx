@@ -9,12 +9,12 @@
 import { AlertCircle, Sparkles, Wand2 } from 'lucide-react';
 import { useState } from 'react';
 
-import { Button } from '@/shared/ui/atoms/Button';
-import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { AIValidationService } from '@/services/infrastructure/aiValidationService';
+import { AIValidationService } from '@/services/infrastructure/aiValidation';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { useTheme } from '@/theme';
 import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {

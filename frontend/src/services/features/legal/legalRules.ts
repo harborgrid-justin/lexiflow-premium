@@ -7,7 +7,7 @@
  *
  * @example
  * ```tsx
- * import { RuleService, ruleQueryKeys } from './services/features/legal/ruleService';
+ * import { RuleService, ruleQueryKeys } from './services/features/legal/legalRules';
  * import { useQuery, useMutation } from './hooks/useQueryHooks';
  *
  * // Fetch all rules
@@ -31,16 +31,19 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Errors
-import { OperationError } from '@/services/core/errors';
+import { OperationError } from "@/services/core/errors";
 
 // API & Query Keys
-import { api } from '@/api';
-import { queryKeys } from '@/utils/queryKeys';
-import { queryClient } from '@/services/infrastructure/queryClient';
+import { api } from "@/api";
+import { queryClient } from "@/services/infrastructure/queryClient";
+import { queryKeys } from "@/utils/queryKeys";
 
 // Types
-import { LegalRule } from '@/types';
-import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/intelligence/jurisdiction-api';
+import type {
+  CreateJurisdictionRuleDto,
+  JurisdictionRule,
+} from "@/api/intelligence/jurisdiction-api";
+import { LegalRule } from "@/types";
 
 // ============================================================================
 // TYPE MAPPING UTILITIES
@@ -53,11 +56,11 @@ function mapToLegalRule(rule: JurisdictionRule): LegalRule {
     id: rule.id,
     code: rule.code,
     name: rule.name,
-    type: rule.type as LegalRule['type'],
-    description: rule.description || '',
-    jurisdiction: rule.jurisdiction?.name || rule.jurisdictionId || 'Unknown',
+    type: rule.type as LegalRule["type"],
+    description: rule.description || "",
+    jurisdiction: rule.jurisdiction?.name || rule.jurisdictionId || "Unknown",
     effectiveDate: rule.effectiveDate || new Date().toISOString(),
-    source: rule.fullText || '',
+    source: rule.fullText || "",
     url: rule.url,
     createdAt: rule.createdAt || new Date().toISOString(),
     updatedAt: rule.updatedAt || new Date().toISOString(),
@@ -67,12 +70,14 @@ function mapToLegalRule(rule: JurisdictionRule): LegalRule {
 /**
  * Maps LegalRule to CreateJurisdictionRuleDto for backend
  */
-function mapToCreateDto(rule: Omit<LegalRule, 'id'>): CreateJurisdictionRuleDto {
+function mapToCreateDto(
+  rule: Omit<LegalRule, "id">
+): CreateJurisdictionRuleDto {
   return {
-    jurisdictionId: rule.jurisdiction || 'default',
+    jurisdictionId: rule.jurisdiction || "default",
     code: rule.code,
     name: rule.name,
-    type: rule.type as JurisdictionRule['type'],
+    type: rule.type as JurisdictionRule["type"],
     description: rule.description,
     effectiveDate: rule.effectiveDate,
     fullText: rule.source,
@@ -95,7 +100,10 @@ export const RuleService = {
   /**
    * Search legal rules by query string
    */
-  search: async (query: string, jurisdictionId?: string): Promise<LegalRule[]> => {
+  search: async (
+    query: string,
+    jurisdictionId?: string
+  ): Promise<LegalRule[]> => {
     const rules = await api.jurisdiction.searchRules(query, jurisdictionId);
     return rules.map(mapToLegalRule);
   },
@@ -111,12 +119,12 @@ export const RuleService = {
   /**
    * Add a new legal rule
    */
-  add: async (rule: Omit<LegalRule, 'id'>): Promise<LegalRule> => {
+  add: async (rule: Omit<LegalRule, "id">): Promise<LegalRule> => {
     const dto = mapToCreateDto(rule);
     const created = await api.jurisdiction.createRule(dto);
 
     if (!created) {
-      throw new OperationError('RuleService.add', 'Failed to create rule');
+      throw new OperationError("RuleService.add", "Failed to create rule");
     }
 
     // Invalidate relevant queries
@@ -128,12 +136,17 @@ export const RuleService = {
   /**
    * Update an existing legal rule
    */
-  update: async (id: string, updates: Partial<LegalRule>): Promise<LegalRule> => {
-    const updateDto: Partial<Omit<CreateJurisdictionRuleDto, 'jurisdictionId'>> = {};
+  update: async (
+    id: string,
+    updates: Partial<LegalRule>
+  ): Promise<LegalRule> => {
+    const updateDto: Partial<
+      Omit<CreateJurisdictionRuleDto, "jurisdictionId">
+    > = {};
 
     if (updates.code) updateDto.code = updates.code;
     if (updates.name) updateDto.name = updates.name;
-    if (updates.type) updateDto.type = updates.type as JurisdictionRule['type'];
+    if (updates.type) updateDto.type = updates.type as JurisdictionRule["type"];
     if (updates.description) updateDto.description = updates.description;
     if (updates.effectiveDate) updateDto.effectiveDate = updates.effectiveDate;
     if (updates.source) updateDto.fullText = updates.source;
@@ -142,7 +155,7 @@ export const RuleService = {
     const updated = await api.jurisdiction.updateRule(id, updateDto);
 
     if (!updated) {
-      throw new OperationError('RuleService.update', 'Failed to update rule');
+      throw new OperationError("RuleService.update", "Failed to update rule");
     }
 
     // Invalidate relevant queries
@@ -159,7 +172,7 @@ export const RuleService = {
     const success = await api.jurisdiction.deleteRule(id);
 
     if (!success) {
-      throw new OperationError('RuleService.delete', 'Failed to delete rule');
+      throw new OperationError("RuleService.delete", "Failed to delete rule");
     }
 
     // Invalidate relevant queries
@@ -171,5 +184,6 @@ export const RuleService = {
 export const ruleQueryKeys = {
   all: () => queryKeys.jurisdiction.rules(),
   detail: (id: string) => queryKeys.jurisdiction.detail(id),
-  search: (query: string) => [...queryKeys.jurisdiction.rules(), 'search', query] as const,
+  search: (query: string) =>
+    [...queryKeys.jurisdiction.rules(), "search", query] as const,
 };

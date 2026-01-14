@@ -2,7 +2,7 @@ import {
   ChartCard,
   DateRangeSelector,
   MetricCard,
-} from '@/components/enterprise/analytics';
+} from '@/routes/analytics/components/enterprise';
 import { format, subDays, subMonths } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useMemo, useState } from 'react';

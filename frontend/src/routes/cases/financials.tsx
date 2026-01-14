@@ -2,8 +2,8 @@
  * Case Financials Sub-Route
  */
 
+import { billingApi, casesApi } from '@/lib/frontend-api';
 import { CaseFinancialsCenter } from '@/routes/cases/components/financials/CaseFinancialsCenter';
-import { DataService } from '@/services/data/dataService';
 import { Suspense } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/financials";
@@ -16,13 +16,16 @@ export async function loader({ params }: Route.LoaderArgs) {
   const { caseId } = params;
   if (!caseId) throw new Response("Case ID is required", { status: 400 });
 
-  const caseData = await DataService.cases.get(caseId);
-  if (!caseData) throw new Response("Not Found", { status: 404 });
+  const [caseResult, billingResult] = await Promise.all([
+    casesApi.getCaseById(caseId),
+    billingApi.getBillingByCaseId(caseId),
+  ]);
 
-  // Fetch billing data in parallel
-  const billing = await DataService.billing.getByCaseId(caseId).catch(() => []);
+  if (!caseResult.ok) throw new Response("Not Found", { status: 404 });
 
-  return { case: caseData, billing };
+  const billing = billingResult.ok ? billingResult.data.data : [];
+
+  return { case: caseResult.data, billing };
 }
 
 export default function CaseFinancialsRoute() {

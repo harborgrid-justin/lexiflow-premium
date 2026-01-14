@@ -7,8 +7,8 @@
  * @module routes/admin/backup
  */
 
+import { adminApi } from '@/lib/frontend-api';
 import { BackupManager, type Backup, type BackupSchedule, type BackupStats } from '@/routes/admin/components/BackupManager';
-import { BackupService } from '@/services/domain/BackupDomain';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
@@ -50,15 +50,20 @@ export function meta() {
 // ============================================================================
 
 export async function loader(): Promise<LoaderData> {
-  const snapshots = await BackupService.getSnapshots();
-  const schedulesData = await BackupService.getSchedules();
+  const [snapshotsResult, schedulesResult] = await Promise.all([
+    adminApi.getBackupSnapshots({ page: 1, limit: 100 }),
+    adminApi.getBackupSchedules({ page: 1, limit: 100 }),
+  ]);
+
+  const snapshots = snapshotsResult.ok ? snapshotsResult.data.data : [];
+  const schedulesData = schedulesResult.ok ? schedulesResult.data.data : [];
 
   // Map snapshots to UI Backup type
   const backups: Backup[] = snapshots.map(s => ({
     ...s,
     retentionDays: 30, // Default or fetch from policy
     storageLocation: 'local', // Default
-    createdAt: s.created,
+    createdAt: s.created || s.createdAt,
   }));
 
   const schedules: BackupSchedule[] = (schedulesData as ApiBackupSchedule[]).map((s) => ({

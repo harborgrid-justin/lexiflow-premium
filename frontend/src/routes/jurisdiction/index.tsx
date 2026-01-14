@@ -7,7 +7,7 @@
  * @module routes/jurisdiction/index
  */
 
-import { DataService } from '@/services/data/dataService';
+import { jurisdictionApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -33,16 +33,10 @@ export async function loader({ request }: Route.LoaderArgs) {
   const type = url.searchParams.get("type"); // federal, state, local
 
   try {
-    // Load all jurisdictions or filter by type
-    let items;
-    if (type === 'federal') {
-      items = await DataService.jurisdiction.getFederal();
-    } else if (type === 'state') {
-      items = await DataService.jurisdiction.getState();
-    } else {
-      items = await DataService.jurisdiction.getAll();
-    }
-    return { items, totalCount: items.length };
+    // Load all jurisdictions or filter by type using new enterprise API
+    const result = await jurisdictionApi.getAllJurisdictions({ type, page: 1, limit: 100 });
+    const items = result.ok ? result.data.data : [];
+    return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {
     console.error("Failed to load jurisdictions", error);
     return { items: [], totalCount: 0 };

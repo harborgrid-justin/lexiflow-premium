@@ -12,8 +12,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/atoms/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/providers';
-import { predictIntent, generateStrategyFromPrompt } from '@/app/actions/ai/gemini';
-import { AIValidationService } from '@/services/infrastructure/aiValidationService';
+import { AIValidationService } from '@/services/infrastructure/aiValidation';
 import { cn } from '@/utils/cn';
 import { AICommandBarProps } from './types';
 

@@ -6,7 +6,7 @@
  * @module routes/documents/detail
  */
 
-import { DataService } from '@/services/data/dataService';
+import { documentsApi } from '@/lib/frontend-api';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
@@ -44,14 +44,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   try {
-    const document = await DataService.documents.getById(documentId);
-    const versions = await DataService.documents.getVersions(documentId);
-    const annotations = await DataService.documents.getAnnotations(documentId);
+    const [docResult, versionsResult, annotationsResult] = await Promise.all([
+      documentsApi.getDocumentById(documentId),
+      documentsApi.getDocumentVersions(documentId),
+      documentsApi.getDocumentAnnotations(documentId),
+    ]);
+
+    if (!docResult.ok) {
+      throw new Response("Document not found", { status: 404 });
+    }
 
     return {
-      document,
-      versions,
-      annotations,
+      document: docResult.data,
+      versions: versionsResult.ok ? versionsResult.data.data : [],
+      annotations: annotationsResult.ok ? annotationsResult.data.data : [],
     };
   } catch (error) {
     console.error('[Document Detail Loader] Error:', error);

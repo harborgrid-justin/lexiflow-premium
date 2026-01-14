@@ -7,7 +7,7 @@
 
 import { ChartColorService, useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
+import { crmApi } from '@/lib/frontend-api';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
@@ -123,7 +123,10 @@ export const ClientAnalytics: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'profitability' | 'ltv' | 'risk' | 'satisfaction'>('profitability');
 
   // Data queries
-  useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
+  useQuery(QUERY_KEYS.CLIENTS.ALL, async () => {
+    const result = await crmApi.getAllClients({ page: 1, limit: 1000 });
+    return result.ok ? result.data.data : [];
+  });
 
   // Mock analytics data
   const profitabilityData: ClientProfitability[] = [

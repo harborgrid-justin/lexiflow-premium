@@ -6,8 +6,8 @@
  * @module routes/docket/detail
  */
 
+import { docketApi } from '@/lib/frontend-api';
 import { DocketDetail } from '@/routes/cases/components/docket/DocketDetail';
-import { DataService } from '@/services/data/dataService';
 import type { CaseId } from '@/types';
 import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -43,11 +43,11 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   }
 
   try {
-    const item = await DataService.docket.getById(docketId as CaseId);
-    if (!item) {
+    const result = await docketApi.getEntryById(docketId as CaseId);
+    if (!result.ok) {
       throw new Response("Docket entry not found", { status: 404 });
     }
-    return { item };
+    return { item: result.data };
   } catch (error) {
     if ((error as { statusCode?: number })?.statusCode === 404) {
       throw new Response("Docket entry not found", { status: 404 });

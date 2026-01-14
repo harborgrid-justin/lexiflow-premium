@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { billingApi } from '@/lib/frontend-api';
 import {
   AlertTriangle,
   CheckCircle,
@@ -82,7 +82,10 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
 
   const { data: billingData, isLoading: _isLoading } = useQuery(
     ['billing', 'analytics'],
-    () => DataService.billing.getOverviewStats()
+    async () => {
+      const result = await billingApi.getOverviewStats();
+      return result.ok ? result.data : null;
+    }
   );
 
   const metrics: BillingSummaryMetrics = useMemo(() => {
@@ -121,7 +124,10 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
 
   const { data: collectionItemsData = [] } = useQuery<CollectionItem[]>(
     ['billing', 'collections'],
-    async () => DataService.billing.getCollections()
+    async () => {
+      const result = await billingApi.getCollections();
+      return result.ok ? result.data : [];
+    }
   );
   const collectionItems: CollectionItem[] = collectionItemsData;
 

@@ -4,8 +4,8 @@
  * Displays analytics dashboard for a specific case
  */
 
+import { analyticsApi, casesApi } from '@/lib/frontend-api';
 import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
-import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/analytics";
 
@@ -19,13 +19,16 @@ export async function loader({ params }: Route.LoaderArgs) {
   const { caseId } = params;
   if (!caseId) throw new Response("Case ID is required", { status: 400 });
 
-  const caseData = await DataService.cases.get(caseId);
-  if (!caseData) throw new Response("Not Found", { status: 404 });
+  const [caseResult, analyticsResult] = await Promise.all([
+    casesApi.getCaseById(caseId),
+    analyticsApi.getCaseAnalytics(caseId),
+  ]);
 
-  // Pre-fetch analytics data
-  const analytics = await DataService.analytics.getCaseMetrics(caseId).catch(() => null);
+  if (!caseResult.ok) throw new Response("Not Found", { status: 404 });
 
-  return { case: caseData, analytics };
+  const analytics = analyticsResult.ok ? analyticsResult.data : null;
+
+  return { case: caseResult.data, analytics };
 }
 
 export default function CaseAnalyticsRoute() {

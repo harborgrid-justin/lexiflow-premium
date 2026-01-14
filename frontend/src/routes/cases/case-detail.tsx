@@ -19,8 +19,8 @@
  * @module routes/cases/case-detail
  */
 
+import { casesApi, documentsApi } from '@/lib/frontend-api';
 import { CaseDetail } from '@/routes/cases/ui/pages/CaseDetailPage';
-import { DataService } from '@/services/data/dataService';
 import { Case, LegalDocument, Party } from '@/types';
 import { Suspense, useCallback } from 'react';
 import { Await, defer, redirect, useLoaderData, useNavigate } from 'react-router';
@@ -68,30 +68,27 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   }
 
   // Critical data - await immediately (blocks render)
-  let caseData;
+  let caseResult;
   try {
-    caseData = await DataService.cases.getById(caseId);
+    caseResult = await casesApi.getCaseById(caseId);
   } catch (error) {
-    // Handle 404 Not Found from backend
-    if ((error as { statusCode?: number })?.statusCode === 404) {
-      caseData = null;
-    } else {
-      throw error;
-    }
+    caseResult = { ok: false } as const;
   }
 
   // 404 handling - case doesn't exist
-  if (!caseData) {
+  if (!caseResult.ok) {
     throw new Response("Case Not Found", {
       status: 404,
       statusText: "The requested case does not exist",
     });
   }
 
+  const caseData = caseResult.data;
+
   // Non-critical data - return as promises for streaming
   // These load in parallel and render when ready via Suspense
-  const documentsPromise = DataService.documents.getByCaseId(caseId);
-  const partiesPromise = DataService.parties.getByCaseId(caseId);
+  const documentsPromise = documentsApi.getDocumentsByCase(caseId).then(r => r.ok ? r.data.data : []);
+  const partiesPromise = casesApi.getCaseParties(caseId).then(r => r.ok ? r.data.data : []);
 
   return defer({
     caseData,

@@ -10,7 +10,7 @@
  * @module routes/practice/index
  */
 
-import { DataService } from '@/services/data/dataService';
+import { hrApi, workflowApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -35,24 +35,22 @@ export function meta() {
  */
 export async function clientLoader() {
   try {
-    const [staff, metrics] = await Promise.all([
-      DataService.hr.getAll(),
-      DataService.hr.getUtilizationMetrics()
+    const [staffResult, metricsResult, tasksResult] = await Promise.all([
+      hrApi.getAllStaff({ page: 1, limit: 1000 }),
+      hrApi.getUtilizationMetrics({ page: 1, limit: 100 }),
+      workflowApi.getAllTasks({ page: 1, limit: 1000 }),
     ]);
 
-    const activeMatters = metrics.reduce((acc: number, m: { cases: number }) => acc + m.cases, 0);
+    const staff = staffResult.ok ? staffResult.data.data : [];
+    const metrics = metricsResult.ok ? metricsResult.data.data : [];
+    const tasksData = tasksResult.ok ? tasksResult.data.data : [];
+
+    const activeMatters = metrics.reduce((acc: number, m: { cases?: number }) => acc + (m.cases || 0), 0);
     const avgUtilization = metrics.length > 0
-      ? metrics.reduce((acc: number, m: { utilization: number }) => acc + m.utilization, 0) / metrics.length
+      ? metrics.reduce((acc: number, m: { utilization?: number }) => acc + (m.utilization || 0), 0) / metrics.length
       : 0;
 
-    let pendingTasks = 0;
-    try {
-      const tasks = await DataService.tasks.getAll();
-      const tasksArray = Array.isArray(tasks) ? tasks : [];
-      pendingTasks = tasksArray.filter((t: { status?: string }) => t.status !== 'completed').length;
-    } catch (e) {
-      console.error("Failed to fetch tasks", e);
-    }
+    const pendingTasks = tasksData.filter((t: { status?: string }) => t.status !== 'completed').length;
 
     return {
       staffCount: staff.length,

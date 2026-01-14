@@ -11,7 +11,7 @@
  */
 
 import type { Report } from '@/api/compliance/reports-api';
-import { DataService } from '@/services/data/dataService';
+import { analyticsApi } from '@/lib/frontend-api';
 import type { ReportCategory } from '@/types/analytics-enterprise';
 import {
   Calendar,
@@ -62,18 +62,18 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
   const category = url.searchParams.get("category") || "all";
 
   try {
-    // Fetch reports from API
-    const reports = await DataService.reports.getAll({
-      reportType: category !== 'all' ? (category as Report['reportType']) : undefined,
+    // Fetch reports using new enterprise API
+    const result = await analyticsApi.getAllReports({
+      reportType: category !== 'all' ? (category as string) : undefined,
+      search: search || undefined,
+      page: 1,
+      limit: 100,
     });
 
-    // Filter by search term if API doesn't support it yet
-    const filteredReports = search
-      ? reports.filter((r: Report) => r.name.toLowerCase().includes(search.toLowerCase()))
-      : reports;
+    const reports = result.ok ? result.data.data : [];
 
     return {
-      reports: filteredReports,
+      reports,
       search,
       category,
     };

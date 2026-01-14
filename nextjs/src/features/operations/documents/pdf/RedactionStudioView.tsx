@@ -4,7 +4,7 @@ import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
-import { DocumentService } from '@/services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documents';
 import { BlobManager } from '@/services/infrastructure/blobManager';
 import { LegalDocument } from '@/types';
 import { cn } from '@/utils/cn';

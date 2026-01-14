@@ -4,17 +4,20 @@
  * Enterprise role management with permission templates and hierarchy.
  */
 
-import { rolesService, type Role } from '@/api/auth/roles-api';
+import type { Role } from '@/api/auth/roles-api';
+import { authApi } from '@/lib/frontend-api';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/roles';
 
 export async function loader(_args: Route.LoaderArgs) {
   try {
-    const [roles, permissionGroups] = await Promise.all([
-      rolesService.getRoles(),
-      rolesService.getPermissions()
+    const [rolesResult, permissionsResult] = await Promise.all([
+      authApi.getAllRoles({ page: 1, limit: 100 }),
+      authApi.getAllPermissions({ page: 1, limit: 1000 })
     ]);
+    const roles = rolesResult.ok ? rolesResult.data.data : [];
+    const permissionGroups = permissionsResult.ok ? permissionsResult.data.data : [];
     return { roles, permissionGroups };
   } catch (error) {
     console.error('Failed to load roles data:', error);

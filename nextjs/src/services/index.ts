@@ -83,10 +83,10 @@ export {
 export * from "./integration/backendDiscovery";
 
 // ==================== INFRASTRUCTURE SERVICES ====================
-export * from "./infrastructure/aiValidationService";
+export * from "./infrastructure/aiValidation";
 export * from "./infrastructure/blobManager";
 export * from "./infrastructure/chainService";
-export * from "./infrastructure/collaborationService";
+export * from "./infrastructure/collaboration";
 export * from "./infrastructure/commandHistory";
 export { CryptoService } from "./infrastructure/cryptoService";
 export * from "./infrastructure/dateCalculationService";
@@ -99,7 +99,7 @@ export * from "./infrastructure/queryKeys";
 export * from "./infrastructure/schemaGenerator";
 
 // ==================== SEARCH SERVICES ====================
-export { GraphValidationService } from "./search/graphValidationService"; // Explicit export to avoid ValidationError conflict with bluebook types
+export { GraphValidationService } from "./search/graphValidation"; // Explicit export to avoid ValidationError conflict with bluebook types
 // DO NOT export searchService - causes circular dependencies
 // Import directly: import { searchService } from '@/services/search/searchService';
 export * from "./search/searchWorker";
@@ -113,20 +113,20 @@ export * from "./workers/workerPool";
 export * from "./features/analysis/analysisEngine";
 
 // Calendar
-export * from "./features/calendar/calendarConflictService";
+export * from "./features/calendar/calendarConflicts";
 
 // Discovery
 // DO NOT export - causes circular dependency with db.ts
-// Import directly: import { discoveryService } from '@/services/features/discovery/discoveryService';
+// Import directly: import { discoveryService } from '@/services/features/discovery/discovery';
 
 // Documents
 // DO NOT export - causes circular dependency with db.ts
-// Import directly: import { DocumentService } from '@/services/features/documents/documentService';
+// Import directly: import { DocumentService } from '@/services/features/documents/documents';
 export * from "./features/documents/xmlDocketParser";
 
 // Legal
 // DO NOT export - causes circular dependency
-// Import directly: import { ruleService } from '@/services/features/legal/ruleService';
+// Import directly: import { ruleService } from '@/services/features/legal/legalRules';
 // Heavy service - import directly when needed: import { DeadlineEngine } from '@/services/features-services';
 // export * from './features/legal/deadlineEngine';
 

@@ -23,7 +23,7 @@
  *   NotificationCenter,
  *   NotificationPreferences,
  *   ConnectionStatus,
- * } from '@/components/enterprise/notifications';
+ * } from '@/components/common/notifications/enterprise';
  *
  * // Use NotificationBell in header
  * <NotificationBell

@@ -75,8 +75,8 @@ export type {
 } from "./types";
 
 export {
-  combineResults,
   ErrorType,
+  combineResults,
   failure,
   isFailure,
   isSuccess,
@@ -92,10 +92,7 @@ export {
   CancelledError,
   ConflictError,
   DomainError,
-  extractFieldErrors,
   ForbiddenError,
-  mapFetchError,
-  mapHttpStatusToError,
   NetworkError,
   NotFoundError,
   RateLimitError,
@@ -103,6 +100,9 @@ export {
   TimeoutError,
   UnknownError,
   ValidationError,
+  extractFieldErrors,
+  mapFetchError,
+  mapHttpStatusToError,
 } from "./errors";
 
 // HTTP client
@@ -114,7 +114,7 @@ export { schemas, validate, validators } from "./schemas";
 export type { FieldValidator, Schema, Validator } from "./schemas";
 
 // Re-export normalization (for convenience)
-export * from "../normalization";
+export * from "@/lib/normalization";
 
 // Domain API modules - export only the API objects to avoid name conflicts
 export { adminApi } from "./admin";

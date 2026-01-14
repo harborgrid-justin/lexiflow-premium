@@ -1,5 +1,5 @@
 import { useTheme } from "@/theme";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { ExtendedUserProfile } from "@/types";
 import { useCallback, useState } from "react";
 

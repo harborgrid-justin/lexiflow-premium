@@ -3,7 +3,7 @@
  * @module hooks/useEvidenceManager/useEvidenceMutations
  */
 
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import type { EvidenceItem } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useMutation } from "../useQueryHooks";

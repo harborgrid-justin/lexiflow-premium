@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MotionToCompelBuilder } from '@features/litigation/discovery/MotionToCompelBuilder';
+import { MotionToCompelBuilder } from '@/routes/discovery/components/platform/MotionToCompelBuilder';
 import { CaseId } from '@/types';
 
 const meta = {

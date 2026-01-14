@@ -32,7 +32,7 @@ import { useCallback, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { DateCalculationService } from "@/services/infrastructure/dateCalculationService";
 import { GraphValidationService } from "@/services/search/graph-validation.service";
 import { queryKeys } from "@/utils/query-keys.service";

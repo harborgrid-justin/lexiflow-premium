@@ -17,7 +17,7 @@
  * @module routes/cases/loader
  */
 
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import type { Case } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";

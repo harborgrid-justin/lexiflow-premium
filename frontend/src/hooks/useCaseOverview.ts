@@ -32,7 +32,7 @@ import { useEffect, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 
 // Hooks & Context
 import { useSync } from "./useSync";

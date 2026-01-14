@@ -1,6 +1,6 @@
 import { useNotify } from "@/hooks/useNotify";
 import { useMutation, useQuery, queryClient } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useCallback } from "react";
 

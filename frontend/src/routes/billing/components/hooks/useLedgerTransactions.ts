@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { useNotify } from "@/hooks/useNotify";
 import { useWindow } from "@/providers";
 import { TransactionData } from "../components/TransactionForm";

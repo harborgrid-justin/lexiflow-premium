@@ -1,10 +1,10 @@
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
 import { MetricTile, SearchInputBar } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { useTheme } from '@/theme';
 import { LegalEntity } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Briefcase, Building, GraduationCap, Linkedin, Mail, Network } from 'lucide-react';
@@ -76,10 +76,8 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = () => {
               <div className="flex justify-between items-start mb-4">
                 <UserAvatar name={person.name} size="lg" className="border-2 border-white shadow-sm" />
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {(person.metadata as any)?.linkedin && typeof (person.metadata as any).linkedin === 'string' && (
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    <a href={(person.metadata as any).linkedin} target="_blank" rel="noopener noreferrer" className={cn("p-1.5 rounded hover:bg-blue-50 text-blue-600")}>
+                  {(person.metadata as { linkedin?: string })?.linkedin && typeof (person.metadata as { linkedin?: string }).linkedin === 'string' && (
+                    <a href={(person.metadata as { linkedin: string }).linkedin} target="_blank" rel="noopener noreferrer" className={cn("p-1.5 rounded hover:bg-blue-50 text-blue-600")}>
                       <Linkedin className="h-4 w-4" />
                     </a>
                   )}

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { GovernanceDashboard } from '@features/admin/components/data/governance/GovernanceDashboard';
+import { GovernanceDashboard } from '@/routes/admin/components/data/governance/GovernanceDashboard';
 
 /**
  * GovernanceDashboard provides comprehensive data governance oversight with

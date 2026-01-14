@@ -19,7 +19,7 @@
  * ```
  */
 
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import {
   Case,
   DocketEntry,

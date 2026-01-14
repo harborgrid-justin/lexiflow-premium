@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TrustAccountDashboard } from '@features/operations/billing/trust/TrustAccountDashboard';
+import { TrustAccountDashboard } from '@/routes/billing/components/trust/TrustAccountDashboard';
 
 /**
  * TrustAccountDashboard provides comprehensive trust accounting management with

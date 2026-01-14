@@ -11,9 +11,9 @@
 // External Dependencies
 import { CheckCircle, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from 'lucide-react';
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
-import { useWindow } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useWindow } from '@/providers';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
@@ -34,12 +34,10 @@ export const CaseOverviewStats: React.FC<CaseOverviewStatsProps> = ({ caseId }) 
         { enabled: !!caseId }
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const argsCount = (strategyData as any)?.arguments?.length || 0;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const defsCount = (strategyData as any)?.defenses?.length || 0;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const citesCount = (strategyData as any)?.citations?.length || 0;
+    const data = strategyData as { arguments?: unknown[]; defenses?: unknown[]; citations?: unknown[] } | null;
+    const argsCount = data?.arguments?.length || 0;
+    const defsCount = data?.defenses?.length || 0;
+    const citesCount = data?.citations?.length || 0;
     const healthValue = `${argsCount} / ${defsCount} / ${citesCount}`;
 
     const handleDetail = (title: string) => {

@@ -9,7 +9,7 @@ import {
   REPORT_PERIODS,
   ReportPeriod
 } from '@/config/billing.config';
-import { useFinancialHelpers, useFinancialReports } from '@/features/billing/hooks/useFinancialReports';
+import { useFinancialHelpers, useFinancialReports } from '@/routes/billing/_hooks/useFinancialReports';
 import {
   Activity,
   BarChart3,

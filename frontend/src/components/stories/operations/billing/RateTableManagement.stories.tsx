@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RateTableManagement } from '@features/operations/billing/rate-tables/RateTableManagement';
+import { RateTableManagement } from '@/routes/billing/components/rate-tables/RateTableManagement';
 
 /**
  * RateTableManagement provides billing rate administration including attorney

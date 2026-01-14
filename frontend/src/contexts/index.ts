@@ -80,33 +80,34 @@ export { QueryClientProvider } from "./query/QueryClientProvider";
 // Legacy re-exports below will be removed in future release:
 
 // @deprecated Use @/routes/cases instead
+export type { CaseContextValue } from "@/routes/cases";
 export {
   CaseProvider,
   useCaseActions,
   useCaseContext,
   useCaseState,
 } from "../routes/cases";
-export type { CaseContextValue } from "../routes/cases";
 
 // @deprecated Use @/routes/dashboard instead
+export type { DashboardItem, DataContextValue } from "@/routes/dashboard";
 export {
   DataProvider,
   useData,
   useDataActions,
   useDataState,
 } from "../routes/dashboard";
-export type { DashboardItem, DataContextValue } from "../routes/dashboard";
 
 // @deprecated Use @/routes/_shared instead
+export type { WindowInstance } from "@/routes/_shared";
 export {
   WindowProvider,
   useWindow,
   useWindowActions,
   useWindowState,
 } from "../routes/_shared";
-export type { WindowInstance } from "../routes/_shared";
 
 // @deprecated Use @/routes/_shared instead
+export type { SyncContextType, SyncStatus } from "@/routes/_shared";
 export {
   SyncContext,
   SyncProvider,
@@ -114,16 +115,15 @@ export {
   useSyncActions,
   useSyncState,
 } from "../routes/_shared";
-export type { SyncContextType, SyncStatus } from "../routes/_shared";
 
 // @deprecated Use @/routes/dashboard instead
+export type { DataSourceType } from "@/routes/dashboard";
 export {
   DataSourceProvider,
   useDataSource,
   useDataSourceActions,
   useDataSourceState,
 } from "../routes/dashboard";
-export type { DataSourceType } from "../routes/dashboard";
 
 // Repository infrastructure exports
 export type {

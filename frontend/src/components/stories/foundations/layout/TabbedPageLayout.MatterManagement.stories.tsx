@@ -6,8 +6,12 @@ import React, { Suspense, useState } from 'react';
 
 // Import actual Case Management components
 import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
-import { CaseAnalyticsDashboard, CaseFinancialsCenter, CaseInsightsDashboard, CaseOperationsCenter, CaseOverviewDashboard } from '@features/cases';
-import { CaseCalendar } from '@features/cases/components/calendar/CaseCalendar';
+import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
+import { CaseFinancialsCenter } from '@/routes/cases/components/financials/CaseFinancialsCenter';
+import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
+import { CaseOperationsCenter } from '@/routes/cases/components/operations/CaseOperationsCenter';
+import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
+import { CaseCalendar } from '@/routes/cases/components/calendar/CaseCalendar';
 
 /**
  * TabbedPageLayout with Actions - Matter Management pattern

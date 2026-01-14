@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { KnowledgeCenter } from '@features/knowledge/practice';
+import { KnowledgeCenter } from '@/routes/practice/components/KnowledgeCenter';
 
 /**
  * KnowledgeCenter is the firm's legal research and knowledge management platform

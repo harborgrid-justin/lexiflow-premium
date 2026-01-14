@@ -14,10 +14,10 @@
  * 6. Document Ingestion
  */
 
-import { api } from '@/lib/frontend-api';
 import { PATHS } from '@/config/paths.config';
 import { useEnhancedWizard, WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { api } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
@@ -120,12 +120,9 @@ const INITIAL_DATA: IntakeData = {
 };
 
 const WIZARD_STEPS: WizardStep<IntakeData>[] = [
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { id: 'client', title: 'Client & Conflicts', validationSchema: ClientSchema as any },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { id: 'matter', title: 'Matter Details', validationSchema: MatterSchema as any },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { id: 'risk', title: 'Risk & Compliance', validationSchema: RiskSchema as any },
+  { id: 'client', title: 'Client & Conflicts', validationSchema: ClientSchema as z.ZodType<Partial<IntakeData>> },
+  { id: 'matter', title: 'Matter Details', validationSchema: MatterSchema as z.ZodType<Partial<IntakeData>> },
+  { id: 'risk', title: 'Risk & Compliance', validationSchema: RiskSchema as z.ZodType<Partial<IntakeData>> },
   { id: 'financial', title: 'Financial Setup' },
   { id: 'team', title: 'Staffing' },
   { id: 'review', title: 'Review & Submit' }

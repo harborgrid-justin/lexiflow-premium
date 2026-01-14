@@ -2,11 +2,11 @@ import { ThemeProvider } from '@/theme';
 import { ToastProvider } from '@/providers';
 import type { PleadingDocument } from '@/types';
 import type { CaseId, DocumentId } from '@/types/primitives';
-import { PleadingAnalytics, PleadingDashboard, PleadingDrafts, PleadingFilingQueue, PleadingTemplates } from '@features/litigation/pleadings';
+import { PleadingAnalytics, PleadingDashboard, PleadingDrafts, PleadingFilingQueue, PleadingTemplates } from '@/routes/pleadings/components';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
-import { PleadingBuilder } from '../../../../features/litigation/pleadings/PleadingBuilder';
-import PleadingDesigner from '../../../../features/litigation/pleadings/PleadingDesigner';
+import { PleadingBuilder } from '@/routes/pleadings/components/PleadingBuilder';
+import PleadingDesigner from '@/routes/pleadings/components/PleadingDesigner';
 
 /**
  * Pleading components provide comprehensive tools for drafting, managing, and filing

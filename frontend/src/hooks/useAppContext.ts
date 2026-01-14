@@ -33,7 +33,7 @@ import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 // ============================================================================
 // Services & Data
 import { isBackendApiEnabled } from '@/lib/frontend-api';
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { UserId, UserRole } from "@/types";
 

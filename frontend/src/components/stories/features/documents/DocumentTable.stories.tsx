@@ -6,7 +6,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentTable } from '@features/operations/documents/table/DocumentTable';
+import { DocumentTable } from '@/routes/documents/components/table/DocumentTable';
 import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
 
 const meta: Meta<typeof DocumentTable> = {

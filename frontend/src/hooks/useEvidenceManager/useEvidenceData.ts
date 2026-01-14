@@ -3,7 +3,7 @@
  * @module hooks/useEvidenceManager/useEvidenceData
  */
 
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import type { EvidenceItem } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useMemo } from "react";

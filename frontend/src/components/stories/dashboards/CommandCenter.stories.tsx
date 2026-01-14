@@ -1,6 +1,6 @@
 import { CaseStatus, MatterType } from '@/types/enums';
 import type { CaseId } from '@/types/primitives';
-import { CommandCenter } from '@features/litigation/war-room';
+import { CommandCenter } from '@/routes/war-room/components/CommandCenter';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

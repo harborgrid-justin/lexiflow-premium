@@ -1,4 +1,4 @@
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "../ThemeContext";
 import { DesignTokens, ThemeDensity } from "../tokens";

@@ -25,7 +25,7 @@
  */
 
 import { useQuery } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { Task } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useCallback, useEffect, useState } from "react";

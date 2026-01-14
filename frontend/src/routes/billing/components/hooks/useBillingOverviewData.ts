@@ -1,6 +1,6 @@
 import { useTheme } from "@/theme";
 import { useQuery, useQueryClient } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { Client, Invoice, WIPStat } from "@/types";
 import { useCallback } from "react";
 

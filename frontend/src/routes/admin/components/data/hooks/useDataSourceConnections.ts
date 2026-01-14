@@ -4,7 +4,7 @@
  */
 
 import { useQuery, useMutation, queryClient } from "@/hooks/backend";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { DataSource } from "@/api/data-platform/data-sources-api";
 import type {
   DataSourceConnection,

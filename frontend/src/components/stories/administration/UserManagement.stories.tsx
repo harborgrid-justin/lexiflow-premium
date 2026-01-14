@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { UserManagement } from '@features/admin/components/users/UserManagement';
+import { UserManagement } from '@/routes/admin/components/users/UserManagement';
 
 /**
  * UserManagement provides comprehensive user administration including role management,

@@ -1,5 +1,5 @@
 import { queryClient, useMutation, useQuery } from "@/hooks/backend";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/query-keys.service";
 // ✅ Migrated to backend API (2025-12-21)
 import { Category } from "./EntitySidebar";

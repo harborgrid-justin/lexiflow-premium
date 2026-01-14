@@ -58,8 +58,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
   useEffect(() => {
     if (strategyData) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = strategyData as any;
+      const data = strategyData as { arguments?: LegalArgument[]; defenses?: Defense[]; citations?: Citation[] };
       if (data.arguments) setArgs(data.arguments);
       if (data.defenses) setDefenses(data.defenses);
       if (data.citations) setCitations(data.citations);
@@ -170,8 +169,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const confirmDelete = () => {
     if (itemToDelete) {
       deleteStrategyItem(itemToDelete, {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onSuccess: (data: any) => {
+        onSuccess: (data: { type: string; id: string }) => {
           success(`${data.type} deleted successfully`);
 
           // Update local state

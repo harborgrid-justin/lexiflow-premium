@@ -38,7 +38,7 @@ import React, {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 
 // Utils & Constants
 import { Scheduler } from "@/utils/scheduler";

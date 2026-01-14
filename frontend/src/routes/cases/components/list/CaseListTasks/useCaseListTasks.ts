@@ -1,6 +1,6 @@
 import { useModalState } from "@/hooks/core";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { Case, TaskStatusBackend, WorkflowTask } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useState } from "react";

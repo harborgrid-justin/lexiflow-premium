@@ -31,10 +31,9 @@ export function CitationFormModal({ isOpen, onClose, caseId }: CitationFormModal
         citationType: type,
         caseId,
         notes,
-        status: 'Draft', // Default status
-        relevance: 'Medium', // Default relevance
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any);
+        status: 'Draft',
+        relevance: 'Medium',
+      } as Omit<Citation, 'id' | 'createdAt' | 'updatedAt'>);
     },
     {
       onSuccess: () => {
@@ -91,8 +90,7 @@ export function CitationFormModal({ isOpen, onClose, caseId }: CitationFormModal
           <select
             className="w-full p-2 border rounded-md"
             value={type as string}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onChange={(e) => setType(e.target.value as any)}
+            onChange={(e) => setType(e.target.value as Citation['citationType'])}
           >
             <option value="case_law">Case Law</option>
             <option value="statute">Statute</option>

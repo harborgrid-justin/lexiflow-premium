@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RulesDashboard } from '@features/knowledge/rules';
+import { RulesDashboard } from '@/routes/rules/components/RulesDashboard';
 
 /**
  * RulesDashboard provides centralized court rules management with jurisdiction

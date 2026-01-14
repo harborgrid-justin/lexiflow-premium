@@ -30,7 +30,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/query-keys.service";
 import { queryClient, useMutation, useQuery } from "./useQueryHooks";
 

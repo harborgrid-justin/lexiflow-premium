@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DiscoveryPlatform } from '@features/litigation/discovery/DiscoveryPlatform';
+import { DiscoveryPlatform } from '@/routes/discovery/components/platform/DiscoveryPlatform';
 
 /**
  * Discovery components provide comprehensive tools for managing the discovery process

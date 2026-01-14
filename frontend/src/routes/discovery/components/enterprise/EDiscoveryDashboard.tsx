@@ -7,10 +7,10 @@
 
 import { analyticsApi } from '@/lib/frontend-api';
 import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
-import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
+import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -151,17 +151,16 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
         }));
 
         setCollections(collectionsData.map(c => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const item = c as any;
+          const item = c as { id: string; collectionName: string; custodians: string[]; status: string;[key: string]: unknown };
           let status: Collection['status'] = 'pending';
           if (['pending', 'in_progress', 'completed', 'failed'].includes(item.status)) {
             status = item.status as Collection['status'];
           }
 
           return {
-            id: item.id as string,
+            id: item.id,
             name: item.collectionName,
-            custodian: (item.custodians as string[]).join(', '),
+            custodian: item.custodians.join(', '),
             sourceType: 'email',
             status,
             totalItems: item.totalItems || 0,

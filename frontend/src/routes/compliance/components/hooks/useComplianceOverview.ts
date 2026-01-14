@@ -1,6 +1,6 @@
 import { useTheme } from "@/theme";
 import { useQuery } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { ComplianceMetrics } from "@/types";
 
 // ============================================================================

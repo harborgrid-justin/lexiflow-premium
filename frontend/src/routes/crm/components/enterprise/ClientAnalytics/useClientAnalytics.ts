@@ -5,7 +5,7 @@
 
 import { ChartColorService, useTheme } from "@/theme";
 import { useQuery } from "@/hooks/backend";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { QUERY_KEYS } from "@/services/data/query-keys.service";
 import { getChartTheme } from "@/utils/chartConfig";
 import { useState } from "react";

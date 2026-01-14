@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FinancialCenter } from '@features/knowledge/practice';
+import { FinancialCenter } from '@/routes/practice/components/FinancialCenter';
 
 const meta = {
   title: 'Pages/Financial Center',

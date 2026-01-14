@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FeeAgreementManagement } from '@features/operations/billing/fee-agreements/FeeAgreementManagement';
+import { FeeAgreementManagement } from '@/routes/billing/components/fee-agreements/FeeAgreementManagement';
 
 /**
  * FeeAgreementManagement provides comprehensive fee agreement administration

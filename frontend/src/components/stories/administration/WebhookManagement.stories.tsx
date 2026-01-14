@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { WebhookManagement } from '@features/admin/components/webhooks/WebhookManagement';
+import { WebhookManagement } from '@/routes/admin/components/webhooks/WebhookManagement';
 
 const meta = {
   title: 'Pages/Webhook Management',

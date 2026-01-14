@@ -6,7 +6,7 @@
  */
 
 import { useQuery } from "@/hooks/backend";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 
 export const useEnterpriseData = () => {
   // Fetch Departments

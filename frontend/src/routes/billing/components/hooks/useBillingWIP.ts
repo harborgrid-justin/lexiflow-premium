@@ -2,7 +2,7 @@ import { useAutoSave } from "@/hooks/useAutoSave";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useNotify } from "@/hooks/useNotify";
 import { useMutation, useQuery } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { billingQueryKeys } from "@/services/infrastructure/query-keys.service";
 import {
   TimeEntryInput,

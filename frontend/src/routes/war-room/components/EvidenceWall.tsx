@@ -19,9 +19,9 @@ import { useMemo, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useWindow } from '@/providers';
+import { useTheme } from '@/theme';
 
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
@@ -147,8 +147,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
             `Evidence Preview: ${item.title}`,
             <div className={cn("h-full", theme.background)}>
                 <DocumentPreviewPanel
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    document={{ id: item.id } as any} onViewHistory={() => { }}
+                    document={{ id: item.id } as { id: string }} onViewHistory={() => { }}
 
                 />
             </div>

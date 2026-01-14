@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { PleadingDashboard } from '@features/litigation/pleadings/PleadingDashboard';
+import { PleadingDashboard } from '@/routes/pleadings/components/PleadingDashboard';
 
 /**
  * PleadingDashboard provides centralized pleading document management with

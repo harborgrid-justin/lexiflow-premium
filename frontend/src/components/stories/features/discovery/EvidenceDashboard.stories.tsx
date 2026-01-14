@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { EvidenceDashboard } from '@features/litigation/evidence';
+import { EvidenceDashboard } from '@/routes/evidence/components/EvidenceDashboard';
 
 /**
  * EvidenceDashboard provides comprehensive evidence management including document

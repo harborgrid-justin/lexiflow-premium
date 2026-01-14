@@ -1,6 +1,6 @@
 import { useNotify } from "@/hooks/useNotify";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 import { billingQueryKeys } from "@/services/infrastructure/query-keys.service";
 import { Invoice } from "@/types";
 import { InvoiceStatusEnum } from "@/types/enums";

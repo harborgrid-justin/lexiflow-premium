@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { WorkflowAnalyticsDashboard } from '@features/cases';
+import { WorkflowAnalyticsDashboard } from '@/routes/cases/components/workflow/WorkflowAnalyticsDashboard';
 
 /**
  * WorkflowAnalyticsDashboard provides workflow performance analytics including

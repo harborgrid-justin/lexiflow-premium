@@ -7,7 +7,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, expect, userEvent, within } from 'storybook/test';
-import { Dashboard } from '../../../features/dashboard/components/Dashboard';
+import { Dashboard } from '@/routes/dashboard/components/Dashboard';
 import type { User, UserId } from '@/types';
 
 const meta: Meta<typeof Dashboard> = {

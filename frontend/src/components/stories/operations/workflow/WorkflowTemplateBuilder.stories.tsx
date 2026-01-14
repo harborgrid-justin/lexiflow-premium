@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { WorkflowTemplateBuilder } from '@features/cases';
+import { WorkflowTemplateBuilder } from '@/routes/cases/components/workflow/WorkflowTemplateBuilder';
 
 /**
  * WorkflowTemplateBuilder provides visual workflow design tools for creating

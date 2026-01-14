@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { HardDrive, Database, Cloud } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import { LocalStorageView } from './data-sources/LocalStorageView';
-import { IndexedDBView } from './data-sources/IndexedDBView';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Cloud, Database, HardDrive } from 'lucide-react';
+import { useState } from 'react';
 import { CloudDatabaseContent } from './data-sources/CloudDatabaseContent';
+import { IndexedDBView } from './data-sources/IndexedDBView';
+import { LocalStorageView } from './data-sources/LocalStorageView';
 
 interface DataSourcesManagerProps {
   initialTab?: string;
@@ -17,7 +17,7 @@ const TABS = [
   { id: 'indexeddb', label: 'IndexedDB Registry', icon: Database },
 ];
 
-export const DataSourcesManager: React.FC<DataSourcesManagerProps> = ({ initialTab }) => {
+export function DataSourcesManager({ initialTab }: DataSourcesManagerProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab || 'cloud');
 
@@ -28,7 +28,7 @@ export const DataSourcesManager: React.FC<DataSourcesManagerProps> = ({ initialT
           Data Sources
         </h2>
         <p className={cn("text-base mt-2 max-w-2xl", theme.text.secondary)}>
-          Manage your enterprise data landscape. Connect to cloud warehouses, monitor local storage, 
+          Manage your enterprise data landscape. Connect to cloud warehouses, monitor local storage,
           and synchronize replication streams in real-time.
         </p>
       </div>
@@ -40,8 +40,8 @@ export const DataSourcesManager: React.FC<DataSourcesManagerProps> = ({ initialT
             onClick={() => setActiveTab(tab.id)}
             className={cn(
               "px-4 py-3 text-sm font-medium flex items-center gap-2 border-b-2 transition-all",
-              activeTab === tab.id 
-                ? "border-blue-600 text-blue-600 dark:text-blue-400" 
+              activeTab === tab.id
+                ? "border-blue-600 text-blue-600 dark:text-blue-400"
                 : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             )}
           >

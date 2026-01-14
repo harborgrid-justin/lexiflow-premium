@@ -39,7 +39,7 @@ const toDataConnection = (ds: DataSource): DataConnection => ({
   lastSync: ds.config?.lastSync,
 });
 
-export const CloudDatabaseContent: React.FC = () => {
+export function CloudDatabaseContent() {
   const { theme } = useTheme();
   const notify = useNotify();
   const [isAdding, setIsAdding] = useState(false);

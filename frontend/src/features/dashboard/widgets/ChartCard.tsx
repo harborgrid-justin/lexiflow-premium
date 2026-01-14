@@ -48,7 +48,7 @@ export interface ChartCardProps {
 // COMPONENT
 // ============================================================================
 
-export const ChartCard: React.FC<ChartCardProps> = ({
+export function ChartCard({
   title,
   subtitle,
   children,

@@ -45,7 +45,7 @@ interface BillingDashboardProps {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
+function BillingDashboardInternal({ navigateTo, initialTab }: BillingDashboardProps) {
   const [state, actions] = useBillingDashboard(initialTab, navigateTo);
   const { activeTab, period, status, isPending } = state;
   const { setActiveTab, setPeriod, syncFinancials, exportReport } = actions;
@@ -81,10 +81,14 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
   );
 };
 
-const BillingDashboard: React.FC<BillingDashboardProps> = (props) => (
-  <BillingErrorBoundary>
-    <BillingDashboardInternal {...props} />
-  </BillingErrorBoundary>
-);
+function BillingDashboard(props: BillingDashboardProps) {
+  return (
+    <BillingErrorBoundary>
+      <BillingDashboardInternal {...props} />
+    </BillingErrorBoundary>
+  );
+}
+
+BillingDashboard.displayName = 'BillingDashboard';
 
 export default BillingDashboard;

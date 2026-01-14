@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/cn';
 import { Wand2 } from 'lucide-react';
 import { DefinitionCardProps } from './types';
 
-export const DefinitionCard: React.FC<DefinitionCardProps> = ({
+export function DefinitionCard({
   formData,
   setFormData,
   onAISuggestion,

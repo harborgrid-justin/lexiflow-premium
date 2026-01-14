@@ -1,9 +1,9 @@
+import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { useTheme } from '@/features/theme';
 import { StaffMember } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { useState } from 'react';
 
 interface AddStaffModalProps {
@@ -12,7 +12,7 @@ interface AddStaffModalProps {
   onAdd: (staff: Partial<StaffMember>) => void;
 }
 
-export const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, onAdd }) => {
+export function AddStaffModal({ isOpen, onClose, onAdd }: AddStaffModalProps) {
   const { theme } = useTheme();
   const [newStaff, setNewStaff] = useState<Partial<StaffMember>>({});
 

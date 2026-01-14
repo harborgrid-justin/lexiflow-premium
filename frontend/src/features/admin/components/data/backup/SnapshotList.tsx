@@ -1,18 +1,17 @@
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
-import { Button } from '@/shared/ui/atoms/Button';
-import { StatusBadge } from '@/shared/ui/atoms/StatusBadge';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { StatusBadge } from '@/shared/ui/atoms/StatusBadge';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
 import { Archive, Clock, Database, Download } from 'lucide-react';
-import React from "react";
 interface SnapshotListProps {
     snapshots: BackupSnapshot[];
     isLoading: boolean;
     onRestore: (snap: BackupSnapshot) => void;
 }
 
-export const SnapshotList: React.FC<SnapshotListProps> = ({ snapshots, isLoading, onRestore }) => {
+export function SnapshotList({ snapshots, isLoading, onRestore }: SnapshotListProps) {
     const { theme } = useTheme();
 
     const getSnapshotIcon = (type: string) => {

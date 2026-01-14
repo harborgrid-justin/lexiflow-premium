@@ -22,8 +22,8 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/features/theme';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';
@@ -45,7 +45,7 @@ interface KnowledgeAnalyticsData {
 // COMPONENT
 // ============================================================================
 
-export const KnowledgeAnalytics: React.FC = () => {
+export function KnowledgeAnalytics() {
     const { theme, mode } = useTheme();
     const chartTheme = useChartTheme();
 

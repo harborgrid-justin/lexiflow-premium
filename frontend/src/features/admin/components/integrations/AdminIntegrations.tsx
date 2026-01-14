@@ -1,10 +1,10 @@
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Link as LinkIcon, Loader2, RefreshCw, Settings } from 'lucide-react';
 interface Integration {
     id: string;
@@ -15,7 +15,7 @@ interface Integration {
     status: string;
 }
 
-export const AdminIntegrations: React.FC = () => {
+export function AdminIntegrations() {
     const { theme } = useTheme();
 
     // Enterprise Data Access

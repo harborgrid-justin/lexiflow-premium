@@ -160,19 +160,52 @@ export async function action({ params, request }: Route.ActionArgs) {
       // Handle document upload
       const file = formData.get("file") as File;
       const title = formData.get("title") as string;
+      const logAsEvidence = formData.get("logAsEvidence") === "true";
 
       if (!file || !title) {
         return { success: false, error: "File and title are required" };
       }
 
       try {
-        await DataService.documents.upload(file, {
+        const savedDoc = await DataService.documents.upload(file, {
           title,
           caseId,
           category: 'case_document',
-          uploadedAt: new Date().toISOString()
+          uploadedAt: new Date().toISOString(),
+          tags: logAsEvidence ? ['Evidence'] : []
         });
-        return { success: true, message: "Document added" };
+
+        // Trigger integration event
+        await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: savedDoc });
+
+        if (logAsEvidence) {
+          // Auto-create Evidence Item
+          const evidence: EvidenceItem = {
+            id: `ev-${Date.now()}` as EvidenceId,
+            trackingUuid: crypto.randomUUID() as UUID,
+            caseId: savedDoc.caseId,
+            title: savedDoc.title,
+            type: 'Document',
+            description: 'Auto-logged via Document Upload',
+            collectionDate: new Date().toISOString().split('T')[0] || '',
+            collectedBy: 'System',
+            custodian: 'Firm DMS',
+            location: 'Evidence Vault',
+            admissibility: 'Pending',
+            chainOfCustody: [{
+              id: `cc-${Date.now()}`,
+              date: new Date().toISOString(),
+              action: 'Intake from DMS',
+              actor: 'System',
+              notes: 'Linked from Case Documents'
+            }],
+            tags: ['Document'],
+            fileSize: typeof savedDoc.fileSize === 'string' ? savedDoc.fileSize : String(savedDoc.fileSize)
+          };
+          await DataService.evidence.add(evidence);
+        }
+
+        return { success: true, message: "Document added", document: savedDoc };
       } catch (error) {
         console.error("Failed to add document", error);
         return { success: false, error: "Failed to add document" };

@@ -16,14 +16,17 @@ export interface Toast {
 }
 
 // BP2: Narrow interface - read-only state
+// Guideline 33: Support transitional UI states
 export interface ToastStateValue {
-  toasts: readonly Toast[];
+  readonly toasts: readonly Toast[];
+  readonly isPending: boolean; // Transition state for concurrent updates
 }
 
 // BP2: Narrow interface - actions only
 export interface ToastActionsValue {
   addToast: (message: string, type: ToastType) => void;
   removeToast: (id: string) => void;
+  clearAllToasts: () => void; // Clear all active toasts
   success: (message: string) => void;
   error: (message: string) => void;
   info: (message: string) => void;

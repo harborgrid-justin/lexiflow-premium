@@ -4,7 +4,7 @@ import { OptimisticInput } from "../../components/performance/OptimisticInput";
 import { useAuth } from "../../contexts/auth/AuthContext";
 import { useData } from "../../contexts/data/DataContext";
 
-export const PublicPath: React.FC = () => {
+export function PublicPath() {
   const { login, isLoading: authLoading, error: authError } = useAuth();
   const { items, refresh } = useData();
   const [email, setEmail] = useState("demo@lexiflow.ai");

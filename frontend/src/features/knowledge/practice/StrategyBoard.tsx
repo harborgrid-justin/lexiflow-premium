@@ -8,7 +8,7 @@
  * - Guideline 28: Theme usage is pure function of context
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for transitions
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -31,11 +31,11 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/features/theme';
 
 // Components
-import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
 import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -44,7 +44,7 @@ import { cn } from '@/shared/lib/cn';
 // COMPONENT
 // ============================================================================
 
-export const StrategyBoard: React.FC = () => {
+export function StrategyBoard() {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('okr');
 

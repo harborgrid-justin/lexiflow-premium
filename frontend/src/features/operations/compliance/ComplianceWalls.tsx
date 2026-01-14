@@ -6,7 +6,7 @@ import { Briefcase, CheckCircle, Lock, Plus, Users } from 'lucide-react';
 import { memo } from 'react';
 import { useComplianceWalls } from './hooks/useComplianceWalls';
 
-const ComplianceWallsComponent: React.FC = () => {
+const ComplianceWallsComponent = function ComplianceWalls() {
     const { theme } = useTheme();
 
     // Feature Hook

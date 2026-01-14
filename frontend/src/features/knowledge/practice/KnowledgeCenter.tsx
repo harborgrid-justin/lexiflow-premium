@@ -39,7 +39,7 @@ import { cn } from '@/shared/lib/cn';
 // COMPONENT
 // ============================================================================
 
-export const KnowledgeCenter: React.FC = () => {
+export function KnowledgeCenter() {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('wiki');
 

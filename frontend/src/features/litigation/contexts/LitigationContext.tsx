@@ -2,65 +2,85 @@
  * @module features/litigation/contexts/LitigationContext
  * @description Context definitions for Litigation feature.
  * Implements React v18 Concurrency Guidelines.
+ *
+ * Guidelines Applied:
+ * - Guideline 22: Immutable context values
+ * - Guideline 25: startTransition for non-urgent updates
+ * - Guideline 33: Explicit transitional states (isPending)
+ * - Guideline 38: Concurrent-safe defaults
  */
 
-import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
 import { UseLitigationBuilderReturn, useLitigationBuilder } from '@/hooks/useLitigationBuilder';
-import { WorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 import { Case } from '@/types/models';
+import { WorkflowConnection, WorkflowNode } from '@/types/workflow-types';
+import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 
-// Rule 26: SEPARATE URGENT AND NON-URGENT CONTEXT PATHS
+// Guideline 26: SEPARATE URGENT AND NON-URGENT CONTEXT PATHS
 
 export interface LitigationState {
   // UI State
-  activeTab: string;
-  isPending: boolean; // Tracking transition state
+  readonly activeTab: string;
+  readonly isPending: boolean; // Tracking transition state
 
   // Builder State
-  nodes: WorkflowNode[];
-  connections: WorkflowConnection[];
-  selectedCaseId: string | null;
-  cases: Case[];
-  validationErrors: string[];
-  isDeploying: boolean;
+  readonly nodes: readonly WorkflowNode[];
+  readonly connections: readonly WorkflowConnection[];
+  readonly selectedCaseId: string | null;
+  readonly cases: readonly Case[];
+  readonly validationErrors: readonly string[];
+  readonly isDeploying: boolean;
 }
 
-export type LitigationActions = Omit<UseLitigationBuilderReturn, 
+export type LitigationActions = Omit<UseLitigationBuilderReturn,
   'nodes' | 'connections' | 'selectedCaseId' | 'cases' | 'validationErrors' | 'isDeploying'> & {
-  setActiveTab: (tab: string) => void;
-};
+    setActiveTab: (tab: string) => void;
+  };
 
 // ============================================================================
 // CONTEXTS
 // ============================================================================
 
-// Rule 38: ENSURE CONTEXT DEFAULTS ARE CONCURRENT-SAFE
-const defaultState: LitigationState = {
+// Guideline 38: ENSURE CONTEXT DEFAULTS ARE CONCURRENT-SAFE
+const DEFAULT_STATE: LitigationState = Object.freeze({
   activeTab: 'canvas',
   isPending: false,
-  nodes: [],
-  connections: [],
+  nodes: Object.freeze([]),
+  connections: Object.freeze([]),
   selectedCaseId: null,
-  cases: [],
-  validationErrors: [],
+  cases: Object.freeze([]),
+  validationErrors: Object.freeze([]),
   isDeploying: false,
-};
+});
 
-// We cast the default actions safely as they will be provided immediately
-const LitigationStateContext = createContext<LitigationState>(defaultState);
-const LitigationActionsContext = createContext<LitigationActions>({} as LitigationActions);
+const DEFAULT_ACTIONS: LitigationActions = Object.freeze({
+  setActiveTab: () => { throw new Error('LitigationProvider not mounted'); },
+  addNode: () => { throw new Error('LitigationProvider not mounted'); },
+  updateNode: () => { throw new Error('LitigationProvider not mounted'); },
+  removeNode: () => { throw new Error('LitigationProvider not mounted'); },
+  addConnection: () => { throw new Error('LitigationProvider not mounted'); },
+  removeConnection: () => { throw new Error('LitigationProvider not mounted'); },
+  selectCase: () => { throw new Error('LitigationProvider not mounted'); },
+  loadWorkflowFromCase: () => { throw new Error('LitigationProvider not mounted'); },
+  validateWorkflow: () => { throw new Error('LitigationProvider not mounted'); },
+  deployWorkflow: () => { throw new Error('LitigationProvider not mounted'); },
+  clearCanvas: () => { throw new Error('LitigationProvider not mounted'); },
+} as LitigationActions);
+
+const LitigationStateContext = createContext<LitigationState>(DEFAULT_STATE);
+const LitigationActionsContext = createContext<LitigationActions>(DEFAULT_ACTIONS);
 
 // ============================================================================
 // HOOKS
 // ============================================================================
 
+// Guideline 34: ASSUME CONTEXT READS MAY BE REPEATED OR DISCARDED
 export const useLitigationState = () => {
   const context = useContext(LitigationStateContext);
-  if (!context) {
+  if (context === DEFAULT_STATE) {
     throw new Error('useLitigationState must be used within a LitigationProvider');
   }
   return context;
@@ -68,7 +88,7 @@ export const useLitigationState = () => {
 
 export const useLitigationActions = () => {
   const context = useContext(LitigationActionsContext);
-  if (!context) {
+  if (context === DEFAULT_ACTIONS) {
     throw new Error('useLitigationActions must be used within a LitigationProvider');
   }
   return context;
@@ -83,50 +103,43 @@ interface LitigationProviderProps {
   navigateToCaseTab: (caseId: string, tab: string) => void;
 }
 
-export const LitigationProvider: React.FC<LitigationProviderProps> = ({ 
-  children, 
-  navigateToCaseTab 
+export const LitigationProvider: React.FC<LitigationProviderProps> = ({
+  children,
+  navigateToCaseTab
 }) => {
   const [activeTab, setUiActiveTab] = useState('canvas');
   const [isPending, startTransition] = useTransition();
 
   // Initialize the builder logic
-  // This hook manages its own state internally. 
+  // This hook manages its own state internally.
   // Ideally, the hook itself would be split, but for now we consume it and split the output.
   const builder = useLitigationBuilder({ navigateToCaseTab });
 
-  // Rule 25: USE startTransition FOR NON-URGENT CONTEXT UPDATES
-  const setActiveTab = (tab: string) => {
+  // Guideline 25: USE startTransition FOR NON-URGENT CONTEXT UPDATES
+  // Guideline 28: Stable function references
+  const setActiveTab = React.useCallback((tab: string) => {
     startTransition(() => {
       setUiActiveTab(tab);
     });
-  };
+  }, []);
 
-  // Rule 22: DESIGN CONTEXT VALUES TO BE CONCURRENT-SAFE
-  const stateValue: LitigationState = useMemo(() => ({
-    activeTab,
-    isPending,
-    nodes: builder.nodes,
-    connections: builder.connections,
-    selectedCaseId: builder.selectedCaseId,
-    cases: builder.cases || [], // Ensure array
-    validationErrors: builder.validationErrors,
-    isDeploying: builder.isDeploying
-  }), [
-    activeTab, 
-    isPending, 
-    builder.nodes, 
-    builder.connections, 
-    builder.selectedCaseId, 
-    builder.cases, 
-    builder.validationErrors, 
-    builder.isDeploying
-  ]);
-
-  const actionsValue: LitigationActions = useMemo(() => ({
-    // UI Actions
+  // Guideline 22: DESIGN CONTEXT VALUES TO BE CONCURRENT-SAFE
+  // Immutable state, frozen in development
+  const stateValue: LitigationState = useMemo(() => {
+    const value = {
+      activeTab,
+      isPending,
+      nodes: builder.nodes,
+      connections: builder.connections,
+      selectedCaseId: builder.selectedCaseId,
+      cases: builder.cases || [], // Ensure array
+      validationErrors: builder.validationErrors,
+      isDeploying: builder.isDeploying
+    };
+    return process.env.NODE_ENV === 'development' ? Object.freeze(value) : value;
+  }, [
     setActiveTab,
-    
+
     // Builder Actions
     setNodes: builder.setNodes,
     setConnections: builder.setConnections,
@@ -157,12 +170,12 @@ export const LitigationProvider: React.FC<LitigationProviderProps> = ({
     builder.clearCanvas,
   ]);
 
-  // Rule 36: ISOLATE CONTEXT PROVIDERS
-  return (
-    <LitigationActionsContext.Provider value={actionsValue}>
-      <LitigationStateContext.Provider value={stateValue}>
-        {children}
-      </LitigationStateContext.Provider>
-    </LitigationActionsContext.Provider>
-  );
+// Rule 36: ISOLATE CONTEXT PROVIDERS
+return (
+  <LitigationActionsContext.Provider value={actionsValue}>
+    <LitigationStateContext.Provider value={stateValue}>
+      {children}
+    </LitigationStateContext.Provider>
+  </LitigationActionsContext.Provider>
+);
 };

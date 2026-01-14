@@ -45,7 +45,7 @@ const sanitizeHtml = (html: string) => {
     .replace(/on\w+="[^"]*"/g, "");
 };
 
-export const WikiView: React.FC = () => {
+export function WikiView() {
   // Guideline 34: Side-effect free context read
   const { theme, mode, isPendingThemeChange } = useTheme();
   const [activeArticleId, setActiveArticleId] = useState('ca-employment');

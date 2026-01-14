@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useId } from 'react';
 import { LucideIcon } from 'lucide-react';
+import { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -41,7 +41,7 @@ interface TabNavigationProps {
 /**
  * TabNavigation - React 18 optimized with React.memo and useId
  */
-export const TabNavigation = React.memo<TabNavigationProps>(({ tabs, activeTab, onTabChange, className = '' }) => {
+export const TabNavigation = React.memo<TabNavigationProps>(function TabNavigation({ tabs, activeTab, onTabChange, className = '' }) {
   const { theme } = useTheme();
   const navId = useId();
 

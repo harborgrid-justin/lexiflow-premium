@@ -23,7 +23,7 @@ interface TimerState {
 
 const STORAGE_KEY = 'lexiflow_running_timer';
 
-export const RunningTimer: React.FC<RunningTimerProps> = ({
+export function RunningTimer({
   onComplete,
   caseId = '',
   description = '',

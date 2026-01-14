@@ -70,7 +70,7 @@ const TAB_CONFIG: TabConfigItem[] = [
   }
 ];
 
-export const FirmOperations: React.FC<FirmOperationsProps> = ({ initialTab }) => {
+export function FirmOperations({ initialTab }: FirmOperationsProps) {
   const [activeTab, setActiveTab] = useSessionStorage<string>('ops_active_tab', initialTab || 'hr');
 
   const renderContent = () => {

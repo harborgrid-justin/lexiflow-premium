@@ -85,7 +85,7 @@ export interface BreadcrumbsProps {
  * Breadcrumbs - Enterprise navigation breadcrumb component
  * Optimized with React.memo for performance
  */
-export const Breadcrumbs = React.memo<BreadcrumbsProps>(({
+export const Breadcrumbs = React.memo<BreadcrumbsProps>(function Breadcrumbs({
   items,
   onNavigate,
   currentUserRole,

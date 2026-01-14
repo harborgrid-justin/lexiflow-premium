@@ -2,7 +2,7 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { FileText } from 'lucide-react';
 
-export const ClientPortalDocuments: React.FC = () => {
+export function ClientPortalDocuments() {
     const { theme } = useTheme();
     return (
         <div className="p-4">

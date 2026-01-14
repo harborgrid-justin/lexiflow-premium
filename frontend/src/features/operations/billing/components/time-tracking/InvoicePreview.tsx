@@ -9,7 +9,7 @@ interface InvoicePreviewProps {
   invoice: Invoice;
 }
 
-export const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
+export function InvoicePreview({ invoice }: InvoicePreviewProps) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-800">
       {/* Invoice Header */}

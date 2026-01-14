@@ -50,7 +50,7 @@ interface CasePredictionProps {
  * - Expected value range for settlements
  * - Strategic recommendations based on patterns
  */
-export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) => {
+export function CasePrediction({ outcomeData }: CasePredictionProps) {
   // ==========================================================================
   // HOOKS - Context
   // ==========================================================================

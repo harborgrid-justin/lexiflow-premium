@@ -13,7 +13,7 @@ interface ExpenseListProps {
   filters?: Record<string, unknown>;
 }
 
-export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) => {
+export function ExpenseList({ expenses, filters }: ExpenseListProps) {
   const [showFilters, setShowFilters] = useState(false);
 
   const getStatusBadge = (status: string) => {

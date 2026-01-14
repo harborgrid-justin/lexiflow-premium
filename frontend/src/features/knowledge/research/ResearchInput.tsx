@@ -10,7 +10,7 @@ interface ResearchInputProps {
     isLoading: boolean;
 }
 
-export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, onSearch, isLoading }) => {
+export function ResearchInput({ query, setQuery, onSearch, isLoading }: ResearchInputProps) {
     const { theme } = useTheme();
     const [intent, setIntent] = useState<'general' | 'caselaw' | 'statute'>('general');
     const [isDetecting, setIsDetecting] = useState(false);

@@ -1,15 +1,15 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';
 import { Book, Loader2, MapPin } from 'lucide-react';
 import { useMemo } from 'react';
 import { CourtLevel, groupJurisdictionsByState, Jurisdiction, StateGroup } from './localRulesMap.utils';
 // ✅ Migrated to backend API (2025-12-21)
 
-export const LocalRulesMap: React.FC = () => {
+export function LocalRulesMap() {
     const { theme } = useTheme();
 
     // Fetch state jurisdictions dynamically

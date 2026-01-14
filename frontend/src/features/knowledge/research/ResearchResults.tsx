@@ -1,17 +1,17 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
-import { ResearchSession } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { TypewriterText } from '@/shared/ui/atoms/TypewriterText';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { ResearchSession } from '@/types';
 import { Bookmark, BookOpen, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { ResearchResultCard } from './ResearchResultCard';
-import { TypewriterText } from '@/shared/ui/atoms/TypewriterText';
 
 interface ResearchResultsProps {
     session?: ResearchSession;
     onViewSource?: (url: string, title: string) => void;
 }
 
-export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onViewSource }) => {
+export function ResearchResults({ session, onViewSource }: ResearchResultsProps) {
     const { theme } = useTheme();
 
     if (!session) {

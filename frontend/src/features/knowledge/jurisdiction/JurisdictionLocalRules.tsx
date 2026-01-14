@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { Plus, Edit2, Trash2, Book } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
+import { useTheme } from '@/features/theme';
+import { useModalState } from '@/hooks/core';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { DataService } from '@/services/data/dataService';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { LegalRule } from '@/types';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
-import { useModalState } from '@/hooks/core';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { Book, Edit2, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import { filterRules } from './utils';
 
-export const JurisdictionLocalRules: React.FC = () => {
+export function JurisdictionLocalRules() {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
   const ruleModal = useModalState();
@@ -32,36 +32,36 @@ export const JurisdictionLocalRules: React.FC = () => {
   };
 
   const { data: rules = [] } = useQuery<LegalRule[]>(
-      ['rules', 'all'],
-      rulesService.getAll
+    ['rules', 'all'],
+    rulesService.getAll
   );
 
   const { mutate: saveRule } = useMutation(
     async (rule: Partial<LegalRule>) => {
-        if (rule.id) {
-            return rulesService.update(rule.id, rule);
-        } else {
-            return rulesService.add({
-                id: '',
-                code: rule.code!,
-                name: rule.name!,
-                type: (rule.type as unknown as LegalRule['type']) || 'Local',
-                summary: rule.summary || ''
-            });
-        }
+      if (rule.id) {
+        return rulesService.update(rule.id, rule);
+      } else {
+        return rulesService.add({
+          id: '',
+          code: rule.code!,
+          name: rule.name!,
+          type: (rule.type as unknown as LegalRule['type']) || 'Local',
+          summary: rule.summary || ''
+        });
+      }
     },
     {
-        invalidateKeys: [['rules', 'all']],
-        onSuccess: () => {
-            ruleModal.close();
-            setEditingRule({});
-        }
+      invalidateKeys: [['rules', 'all']],
+      onSuccess: () => {
+        ruleModal.close();
+        setEditingRule({});
+      }
     }
   );
 
   const { mutate: deleteRule } = useMutation(
-      rulesService.delete,
-      { invalidateKeys: [['rules', 'all']] }
+    rulesService.delete,
+    { invalidateKeys: [['rules', 'all']] }
   );
 
   const handleSave = () => {
@@ -100,7 +100,7 @@ export const JurisdictionLocalRules: React.FC = () => {
         onChange={setFilter}
         placeholder="Search rules (Code, Name, Type)..."
         actions={
-            <Button variant="primary" icon={Plus} onClick={openNew}>Add Rule</Button>
+          <Button variant="primary" icon={Plus} onClick={openNew}>Add Rule</Button>
         }
       />
 
@@ -117,74 +117,74 @@ export const JurisdictionLocalRules: React.FC = () => {
             <TableRow key={r.id}>
               <TableCell className={cn("font-bold whitespace-nowrap", theme.text.primary)}>{r.code}</TableCell>
               <TableCell>
-                  <Badge variant={r.type === 'FRCP' ? 'neutral' : r.type === 'Local' ? 'info' : 'warning'}>{r.type}</Badge>
+                <Badge variant={r.type === 'FRCP' ? 'neutral' : r.type === 'Local' ? 'info' : 'warning'}>{r.type}</Badge>
               </TableCell>
               <TableCell className={theme.primary.text}>
                 <div className="flex items-center">
-                    <Book className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
-                    {r.name}
+                  <Book className={cn("h-4 w-4 mr-2", theme.text.tertiary)} />
+                  {r.name}
                 </div>
               </TableCell>
               <TableCell className={cn("text-xs max-w-sm truncate", theme.text.secondary)} title={r.summary}>{r.summary}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                    <button title="Edit rule" onClick={() => openEdit(r)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}><Edit2 className="h-4 w-4"/></button>
-                    <button title="Delete rule" onClick={() => handleDelete(r.id)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.status.error.text}`, `hover:${theme.status.error.bg}`)}><Trash2 className="h-4 w-4"/></button>
+                  <button title="Edit rule" onClick={() => openEdit(r)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}><Edit2 className="h-4 w-4" /></button>
+                  <button title="Delete rule" onClick={() => handleDelete(r.id)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.status.error.text}`, `hover:${theme.status.error.bg}`)}><Trash2 className="h-4 w-4" /></button>
                 </div>
               </TableCell>
             </TableRow>
           ))}
           {filteredRules.length === 0 && (
-              <TableRow>
-                  <TableCell colSpan={5} className={cn("text-center py-8", theme.text.tertiary)}>No rules match your search.</TableCell>
-              </TableRow>
+            <TableRow>
+              <TableCell colSpan={5} className={cn("text-center py-8", theme.text.tertiary)}>No rules match your search.</TableCell>
+            </TableRow>
           )}
         </TableBody>
       </TableContainer>
 
       <Modal isOpen={ruleModal.isOpen} onClose={ruleModal.close} title={editingRule.id ? "Edit Rule" : "Add New Rule"}>
-          <div className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                  <Input
-                    label="Rule Code"
-                    placeholder="e.g. L.R. 7-3"
-                    value={editingRule.code || ''}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, code: e.target.value})}
-                  />
-                  <div>
-                      <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Jurisdiction Type</label>
-                      <select
-                        title="Select jurisdiction type"
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
-                        value={editingRule.type || 'Local'}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setEditingRule({...editingRule, type: e.target.value as LegalRule['type']})}
-                      >
-                          <option value="FRCP">Federal (FRCP)</option>
-                          <option value="FRAP">Appellate (FRAP)</option>
-                          <option value="FRE">Evidence (FRE)</option>
-                          <option value="Local">Local Court Rule</option>
-                          <option value="State">State Code</option>
-                      </select>
-                  </div>
-              </div>
-              <Input
-                label="Rule Name / Title"
-                placeholder="e.g. Conference of the Parties"
-                value={editingRule.name || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, name: e.target.value})}
-              />
-              <TextArea
-                label="Summary / Requirements"
-                rows={4}
-                placeholder="Brief summary of the rule's requirement..."
-                value={editingRule.summary || ''}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingRule({...editingRule, summary: e.target.value})}
-              />
-              <div className={cn("flex justify-end gap-2 pt-4 border-t mt-4", theme.border.default)}>
-                  <Button variant="secondary" onClick={ruleModal.close}>Cancel</Button>
-                  <Button variant="primary" onClick={handleSave}>Save Rule</Button>
-              </div>
+        <div className="p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Rule Code"
+              placeholder="e.g. L.R. 7-3"
+              value={editingRule.code || ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({ ...editingRule, code: e.target.value })}
+            />
+            <div>
+              <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Jurisdiction Type</label>
+              <select
+                title="Select jurisdiction type"
+                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
+                value={editingRule.type || 'Local'}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setEditingRule({ ...editingRule, type: e.target.value as LegalRule['type'] })}
+              >
+                <option value="FRCP">Federal (FRCP)</option>
+                <option value="FRAP">Appellate (FRAP)</option>
+                <option value="FRE">Evidence (FRE)</option>
+                <option value="Local">Local Court Rule</option>
+                <option value="State">State Code</option>
+              </select>
+            </div>
           </div>
+          <Input
+            label="Rule Name / Title"
+            placeholder="e.g. Conference of the Parties"
+            value={editingRule.name || ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({ ...editingRule, name: e.target.value })}
+          />
+          <TextArea
+            label="Summary / Requirements"
+            rows={4}
+            placeholder="Brief summary of the rule's requirement..."
+            value={editingRule.summary || ''}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingRule({ ...editingRule, summary: e.target.value })}
+          />
+          <div className={cn("flex justify-end gap-2 pt-4 border-t mt-4", theme.border.default)}>
+            <Button variant="secondary" onClick={ruleModal.close}>Cancel</Button>
+            <Button variant="primary" onClick={handleSave}>Save Rule</Button>
+          </div>
+        </div>
       </Modal>
 
       <ConfirmDialog
@@ -199,4 +199,3 @@ export const JurisdictionLocalRules: React.FC = () => {
     </div>
   );
 };
-

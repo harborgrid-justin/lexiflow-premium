@@ -1,11 +1,11 @@
+import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
+import { useTheme } from '@/features/theme';
+import { DataService } from '@/services/data/dataService';
+import { useDebounce } from '@/shared/hooks/useDebounce';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { Modal } from '@/shared/ui/molecules/Modal';
-import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
-import { useTheme } from '@/features/theme';
-import { useDebounce } from '@/shared/hooks/useDebounce';
-import { DataService } from '@/services/data/dataService';
-import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, Loader2, Plus, ShieldCheck, UserPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ interface ClientIntakeModalProps {
   onSave?: (name: string) => void;
 }
 
-export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, onSave }) => {
+export function ClientIntakeModal({ onClose, onSave }: ClientIntakeModalProps) {
   const { theme } = useTheme();
   const [name, setName] = useState('');
   const [industry, setIndustry] = useState('');

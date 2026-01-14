@@ -42,7 +42,7 @@ interface DataPlatformSidebarProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ activeView, onChange }) => {
+export function DataPlatformSidebar({ activeView, onChange }: DataPlatformSidebarProps) {
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({
     'schema': true,

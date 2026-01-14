@@ -12,7 +12,7 @@ interface RuleTreeViewerProps {
   theme: unknown;
 }
 
-export const RuleTreeViewer: React.FC<RuleTreeViewerProps> = ({
+export function RuleTreeViewer({
   nodes,
   currentExpandedIds,
   selectedRuleId,
@@ -23,10 +23,10 @@ export const RuleTreeViewer: React.FC<RuleTreeViewerProps> = ({
 }) => {
   if (nodes.length === 0 && searchTerm.trim()) {
     return (
-      <div className={cn("p-4 text-xs italic text-center", (theme as {text: {tertiary: string}}).text.tertiary)}>No rules found matching "{searchTerm}"</div>
+      <div className={cn("p-4 text-xs italic text-center", (theme as { text: { tertiary: string } }).text.tertiary)}>No rules found matching "{searchTerm}"</div>
     );
   } else if (nodes.length === 0) {
-    return <div className={cn("p-4 text-xs italic text-center", (theme as {text: {tertiary: string}}).text.tertiary)}>No rules available.</div>;
+    return <div className={cn("p-4 text-xs italic text-center", (theme as { text: { tertiary: string } }).text.tertiary)}>No rules available.</div>;
   }
 
   return (
@@ -46,8 +46,8 @@ export const RuleTreeViewer: React.FC<RuleTreeViewerProps> = ({
               className={cn(
                 "w-full flex items-center py-1.5 px-2 rounded cursor-pointer transition-colors text-sm text-left",
                 isSelected
-                  ? cn((theme as {primary: {light: string; text: string}}).primary.light, (theme as {primary: {light: string; text: string}}).primary.text, "font-medium")
-                  : cn((theme as {text: {secondary: string}; surface: {highlight: string}}).text.secondary, `hover:${(theme as {text: {secondary: string}; surface: {highlight: string}}).surface.highlight}`)
+                  ? cn((theme as { primary: { light: string; text: string } }).primary.light, (theme as { primary: { light: string; text: string } }).primary.text, "font-medium")
+                  : cn((theme as { text: { secondary: string }; surface: { highlight: string } }).text.secondary, `hover:${(theme as { text: { secondary: string }; surface: { highlight: string } }).surface.highlight}`)
               )}
             >
               {hasChildren && (

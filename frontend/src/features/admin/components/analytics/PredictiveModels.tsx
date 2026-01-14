@@ -17,10 +17,10 @@ import { AlertCircle, BrainCircuit, Target, TrendingUp } from 'lucide-react';
 // ============================================================================
 import { api } from '@/api';
 import type { OutcomePrediction } from '@/api/intelligence';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -32,7 +32,7 @@ interface PredictiveModelsProps {
 // ============================================================================
 // SKELETON COMPONENT
 // ============================================================================
-const PredictiveModelsSkeleton: React.FC = () => {
+const PredictiveModelsSkeleton = function PredictiveModelsSkeleton() {
   const { theme } = useTheme();
 
   return (
@@ -49,7 +49,7 @@ const PredictiveModelsSkeleton: React.FC = () => {
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
-export const PredictiveModels: React.FC<PredictiveModelsProps> = ({ subTab }) => {
+export function PredictiveModels({ subTab }: PredictiveModelsProps) {
   const { theme } = useTheme();
 
   // ==========================================================================

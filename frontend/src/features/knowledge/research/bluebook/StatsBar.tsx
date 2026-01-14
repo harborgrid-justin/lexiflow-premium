@@ -1,14 +1,13 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { FormatStats } from './types';
-import React from "react";
 
 interface StatsBarProps {
   stats: FormatStats;
 }
 
-export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
+export function StatsBar({ stats }: StatsBarProps) {
   const { theme } = useTheme();
 
   return (

@@ -1,41 +1,41 @@
-import { useState } from 'react';
-import { Database, Server, Cloud, Power, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
 import { useDataSource } from '@/providers';
+import { cn } from '@/shared/lib/cn';
+import { Cloud, Database, Power, RefreshCw, Server } from 'lucide-react';
+import { useState } from 'react';
 
-export const DataSourceSelector: React.FC = () => {
+export function DataSourceSelector() {
   const { theme } = useTheme();
   const { currentSource, switchDataSource } = useDataSource();
   const [isSwitching, setIsSwitching] = useState(false);
 
   const sources = [
-    { 
-      id: 'indexeddb' as const, 
-      name: 'IndexedDB', 
-      desc: 'Client-side offline storage', 
-      icon: Database, 
-      color: 'blue' 
+    {
+      id: 'indexeddb' as const,
+      name: 'IndexedDB',
+      desc: 'Client-side offline storage',
+      icon: Database,
+      color: 'blue'
     },
-    { 
-      id: 'postgresql' as const, 
-      name: 'PostgreSQL', 
-      desc: 'Backend database (requires server)', 
-      icon: Server, 
-      color: 'purple' 
+    {
+      id: 'postgresql' as const,
+      name: 'PostgreSQL',
+      desc: 'Backend database (requires server)',
+      icon: Server,
+      color: 'purple'
     },
-    { 
-      id: 'cloud' as const, 
-      name: 'Cloud Database', 
-      desc: 'External cloud provider', 
-      icon: Cloud, 
-      color: 'emerald' 
+    {
+      id: 'cloud' as const,
+      name: 'Cloud Database',
+      desc: 'External cloud provider',
+      icon: Cloud,
+      color: 'emerald'
     },
   ];
 
   const handleSwitch = async (sourceId: typeof currentSource) => {
     if (sourceId === currentSource) return;
-    
+
     const sourceName = sources.find(s => s.id === sourceId)?.name;
     if (confirm(`Switch to ${sourceName}? This will reload the application and clear all cached data.`)) {
       setIsSwitching(true);
@@ -52,7 +52,7 @@ export const DataSourceSelector: React.FC = () => {
         {sources.map((source) => {
           const isActive = currentSource === source.id;
           const Icon = source.icon;
-          
+
           return (
             <button
               key={source.id}
@@ -60,8 +60,8 @@ export const DataSourceSelector: React.FC = () => {
               disabled={isActive || isSwitching}
               className={cn(
                 "p-4 rounded-xl border-2 transition-all text-left",
-                isActive 
-                  ? `border-${source.color}-500 bg-${source.color}-50 dark:bg-${source.color}-900/20` 
+                isActive
+                  ? `border-${source.color}-500 bg-${source.color}-50 dark:bg-${source.color}-900/20`
                   : `border-gray-200 dark:border-gray-700 hover:border-${source.color}-300 dark:hover:border-${source.color}-700`,
                 isActive || isSwitching ? "cursor-default" : "cursor-pointer hover:shadow-md"
               )}

@@ -1,8 +1,8 @@
+import { useTheme } from '@/features/theme';
+import { useModalState } from '@/hooks/core';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { useModalState } from '@/hooks/core';
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
 import { Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 import { EMPTY_TEMPLATES } from './AdminConfig';
@@ -11,7 +11,7 @@ import { Category, EntitySidebar } from './EntitySidebar';
 import { RecordModal } from './RecordModal';
 import { useAdminData } from './useAdminData';
 
-export const AdminPlatformManager: React.FC = () => {
+export function AdminPlatformManager() {
   const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<Category>('users');
   const [searchTerm, setSearchTerm] = useState('');

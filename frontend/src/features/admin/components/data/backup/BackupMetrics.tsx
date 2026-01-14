@@ -1,6 +1,5 @@
 import { MetricCard } from '@/shared/ui/molecules/MetricCard';
 import { Clock, Database, HardDrive } from 'lucide-react';
-import React from "react";
 interface BackupMetricsProps {
     latestCreated?: string;
     stats?: {
@@ -10,7 +9,7 @@ interface BackupMetricsProps {
     };
 }
 
-export const BackupMetrics: React.FC<BackupMetricsProps> = ({ latestCreated, stats }) => {
+export function BackupMetrics({ latestCreated, stats }: BackupMetricsProps) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <MetricCard

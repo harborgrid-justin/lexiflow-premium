@@ -24,7 +24,7 @@ const SAMPLE_CITATIONS = `Brown v. Board of Education, 347 U.S. 483 (1954)
 U.S. Const. art. I, § 8
 21 C.F.R. § 314.126 (2022)`;
 
-export const BluebookFormatter: React.FC = () => {
+export function BluebookFormatter() {
   const notify = useNotify();
 
   const [inputText, setInputText] = useState('');

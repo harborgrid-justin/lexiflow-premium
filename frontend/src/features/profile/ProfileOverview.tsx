@@ -43,7 +43,7 @@ interface ProfileOverviewProps {
 // COMPONENT
 // ============================================================================
 
-export const ProfileOverview = ({ profile }: ProfileOverviewProps) => {
+export function ProfileOverview({ profile }: ProfileOverviewProps) {
   const { theme } = useTheme();
 
   return (

@@ -15,7 +15,7 @@ import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-export const ThemeSettingsPage: React.FC = () => {
+export function ThemeSettingsPage() {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
 
@@ -299,33 +299,34 @@ export const ThemeSettingsPage: React.FC = () => {
 };
 
 // Helper Components
-const ColorTokenSection: React.FC<{ title: string; theme: ReturnType<typeof useTheme>['theme']; children: React.ReactNode }> = ({ title, theme, children }) => (
-  <div className={cn("p-6 rounded-lg", theme.surface.raised)}>
-    <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>{title}</h3>
-    <div className="grid grid-cols-2 gap-4">
-      {children}
-    </div>
-  </div>
-);
-
-const TokenDisplay: React.FC<{ label: string; value: string }> = ({ label, value }) => {
-  const { theme } = useTheme();
+const ColorTokenSection = React.memo<{ title: string; theme: ReturnType<typeof useTheme>['theme']; children: React.ReactNode }>(function ColorTokenSection({ title, theme, children }) {
   return (
-    <div className={cn("p-3 rounded-lg border", theme.border.default)}>
-      <div className="flex items-center justify-between">
+    <div className={cn("p-6 rounded-lg", theme.surface.raised)}>
+      <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>{title}</h3>
+      <div className="grid grid-cols-2 gap-4">
+        {children}
+      </div>
+    </div>
+  );
+});
+ColorTokenSection.displayName = 'ColorTokenSection';
+
+TokenDisplay.displayName = 'TokenDisplay';
+
+const ColorSwatch = React.memo<{ label: string; color: string }>(function ColorSwatch({ label, color }) {
         <span className={cn("text-sm font-medium", theme.text.secondary)}>{label}</span>
         <code className={cn("text-xs px-2 py-1 rounded", theme.surface.highlight, theme.text.code)}>
           {value}
         </code>
-      </div>
-      <div className={cn("mt-2 p-2 rounded", value)}>
-        <span className={value}>Sample Text</span>
-      </div>
-    </div>
+      </div >
+  <div className={cn("mt-2 p-2 rounded", value)}>
+    <span className={value}>Sample Text</span>
+  </div>
+    </div >
   );
 };
 
-const ColorSwatch: React.FC<{ label: string; color: string }> = ({ label, color }) => {
+const ColorSwatch = React.memo<{ label: string; color: string }>(function ColorSwatch({ label, color }) {
   const { theme } = useTheme();
   return (
     <div className="flex items-center gap-3">
@@ -339,6 +340,7 @@ const ColorSwatch: React.FC<{ label: string; color: string }> = ({ label, color 
       </div>
     </div>
   );
-};
+});
+ColorSwatch.displayName = 'ColorSwatch';
 
 export default ThemeSettingsPage;

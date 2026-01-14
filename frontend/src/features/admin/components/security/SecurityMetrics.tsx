@@ -1,6 +1,6 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Activity, TrendingUp } from 'lucide-react';
 import type { SecurityMetric } from './types';
 
@@ -21,7 +21,7 @@ const trendIcons = {
   neutral: Activity
 };
 
-export const SecurityMetrics: React.FC<SecurityMetricsProps> = ({ metrics }) => {
+export function SecurityMetrics({ metrics }: SecurityMetricsProps) {
   const { theme } = useTheme();
 
   return (

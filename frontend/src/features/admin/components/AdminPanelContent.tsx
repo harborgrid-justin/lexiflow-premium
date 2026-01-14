@@ -4,7 +4,7 @@
  * @description Admin panel content router rendering lazy-loaded admin sub-components based on
  * active tab selection. Routes between Hierarchy, Security, Database Control, Data Registry,
  * Audit Logs, Integrations, and Platform Manager views.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - No direct theme usage (routing component)
  * - Child components handle their own theme integration
@@ -32,7 +32,7 @@ const SystemSettings = lazy(() => import('./SystemSettings').then(m => ({ defaul
 // ========================================
 // TYPES & INTERFACES
 // ========================================
-type AdminView = 
+type AdminView =
   | 'hierarchy' | 'profile' | 'users' | 'security' | 'compliance'
   | 'db' | 'data' | 'logs' | 'integrations' | 'api' | 'system';
 
@@ -43,24 +43,24 @@ interface AdminPanelContentProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const AdminPanelContent: React.FC<AdminPanelContentProps> = ({ activeTab }) => {
+export function AdminPanelContent({ activeTab }: AdminPanelContentProps) {
   switch (activeTab) {
     // Organization Section
     case 'hierarchy': return <AdminHierarchy />;
     case 'profile': return <FirmProfile />;
     case 'users': return <UserManagement />;
     case 'compliance': return <SecurityCompliance />;
-    
+
     // Data Management Section
     case 'data': return <AdminPlatformManager />;
     case 'integrations': return <AdminIntegrations />;
     case 'logs': return <AdminAuditLog />;
-    
+
     // System Section
     case 'security': return <AdminSecurity />;
     case 'api': return <AdminSecurity />; // Placeholder - will be replaced with API Keys component
     case 'system': return <SystemSettings />;
-    
+
     default: return <FirmProfile />;
   }
 };

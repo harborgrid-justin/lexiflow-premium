@@ -18,7 +18,7 @@ interface FormNavigationProps {
   onSubmit: () => void;
 }
 
-export const FormNavigation: React.FC<FormNavigationProps> = ({
+export function FormNavigation({
   isFirstStep,
   isLastStep,
   isSubmitting,

@@ -36,7 +36,7 @@ interface AdminDatabaseControlProps {
   initialTab?: string;
 }
 
-export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ initialTab }) => {
+export function AdminDatabaseControl({ initialTab }: AdminDatabaseControlProps) {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
   const [activeView, setActiveView] = useState<PlatformView>('overview');

@@ -12,7 +12,7 @@ import { AlertTriangle, CheckCircle, Clock, Edit, FileText, Plus, Trash2 } from 
 import { useState } from 'react';
 import { FeeAgreement, useFeeAgreements } from './hooks/useFeeAgreements';
 
-export const FeeAgreementManagement: React.FC = () => {
+export function FeeAgreementManagement() {
   const { theme } = useTheme();
   const notify = useNotify();
 

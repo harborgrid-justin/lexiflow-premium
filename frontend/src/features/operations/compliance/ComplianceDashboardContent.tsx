@@ -12,7 +12,7 @@ interface ComplianceDashboardContentProps {
   activeTab: ComplianceView;
 }
 
-const ComplianceDashboardContentComponent: React.FC<ComplianceDashboardContentProps> = ({ activeTab }) => {
+const ComplianceDashboardContentComponent = function ComplianceDashboardContent({ activeTab }: ComplianceDashboardContentProps) {
   switch (activeTab) {
     case 'overview': return <ComplianceOverview />;
     case 'conflicts': return <ComplianceConflicts />;

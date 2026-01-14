@@ -1,9 +1,9 @@
+import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { Modal } from '@/shared/ui/molecules/Modal';
-import { useTheme } from '@/features/theme';
 import { RLSPolicy, SqlCmd } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { Check, Code, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ interface PolicyEditorModalProps {
     initialPolicy?: RLSPolicy;
 }
 
-export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, onClose, onSave, initialPolicy }) => {
+export function PolicyEditorModal({ isOpen, onClose, onSave, initialPolicy }: PolicyEditorModalProps) {
     const { theme } = useTheme();
 
     const [formData, setFormData] = useState<Partial<RLSPolicy>>({

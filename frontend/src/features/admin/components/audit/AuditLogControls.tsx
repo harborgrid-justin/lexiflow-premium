@@ -14,7 +14,7 @@ interface AuditLogControlsProps {
     verifyResult: IntegrityReport | null;
 }
 
-export const AuditLogControls: React.FC<AuditLogControlsProps> = ({
+export function AuditLogControls({
     viewMode, setViewMode, handleReset, handleSimulateTamper, handleVerifyChain, handleExport, isVerifying, verifyResult
 }) => {
     const { theme } = useTheme();

@@ -11,25 +11,19 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { CheckSquare, Loader2 } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/features/theme';
-import { useAutoSave } from '@/hooks/useAutoSave';
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useNotify } from '@/hooks/useNotify';
 
 // Components
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -40,7 +34,7 @@ import { useBillingWIP } from './hooks/useBillingWIP';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-const BillingWIPComponent: React.FC = () => {
+function BillingWIPComponent() {
     const { theme } = useTheme();
 
     // Explicit State State (Rule 43: Tuples)

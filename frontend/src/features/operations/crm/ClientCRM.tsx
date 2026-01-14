@@ -1,12 +1,12 @@
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { CRM_TAB_CONFIG, CRMView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { DataService } from '@/services/data/dataService';
-import { Client, ClientStatus, EntityId, PaymentTerms } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Client, ClientStatus, EntityId, PaymentTerms } from '@/types';
 import { UserPlus } from 'lucide-react';
 import { Suspense, useState, useTransition } from 'react';
 import { ClientCRMContent } from './ClientCRMContent';
@@ -17,7 +17,7 @@ interface ClientCRMProps {
   initialTab?: CRMView;
 }
 
-export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
+export function ClientCRM({ initialTab }: ClientCRMProps) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTabState] = useSessionStorage<string>('crm_active_tab', initialTab || 'dashboard');
   const [showIntake, setShowIntake] = useState(false);

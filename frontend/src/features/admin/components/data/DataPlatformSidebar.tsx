@@ -2,8 +2,8 @@ import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
-import { TenantConfig } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { TenantConfig } from '@/types';
 import { ChevronDown, ChevronRight, Server } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { PlatformView } from './types';
@@ -13,7 +13,7 @@ interface DataPlatformSidebarProps {
   onChange: (view: PlatformView) => void;
 }
 
-export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ activeView, onChange }) => {
+export function DataPlatformSidebar({ activeView, onChange }: DataPlatformSidebarProps) {
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({
     'schema': true,

@@ -1,17 +1,17 @@
 import { dataPlatformApi } from '@/api/data-platform';
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
-import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/features/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
 import { AlertCircle, Play, RefreshCw, Server, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import { BackupMetrics } from './backup/BackupMetrics';
 import { CreateSnapshotModal, RestoreSnapshotModal } from './backup/BackupModals';
 import { SnapshotList } from './backup/SnapshotList';
 
-export const BackupVault: React.FC = () => {
+export function BackupVault() {
     const { theme } = useTheme();
     const notify = useNotify();
     const [isSnapshotModalOpen, setIsSnapshotModalOpen] = useState(false);

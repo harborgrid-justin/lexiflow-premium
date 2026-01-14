@@ -16,7 +16,7 @@ interface Step3DraftReviewProps {
   onSave: () => void;
 }
 
-export const Step3DraftReview: React.FC<Step3DraftReviewProps> = ({
+export function Step3DraftReview({
   result,
   isStreaming,
   isSaving,
@@ -60,7 +60,7 @@ export const Step3DraftReview: React.FC<Step3DraftReviewProps> = ({
           {isStreaming ? 'Generating Draft...' : 'Review Generated Draft'}
         </h2>
         <p className={theme.text.secondary}>
-          {isStreaming 
+          {isStreaming
             ? 'AI is composing your document in real-time. This may take a moment.'
             : 'Review and edit the generated draft. You can save it to your case files when ready.'
           }

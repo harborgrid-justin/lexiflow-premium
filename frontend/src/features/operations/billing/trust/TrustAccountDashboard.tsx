@@ -316,7 +316,7 @@ import { useTrustDashboard } from './hooks/useTrustDashboard';
 /**
  * Main Dashboard Component
  */
-export const TrustAccountDashboard: React.FC = () => {
+export function TrustAccountDashboard() {
   const { theme } = useTheme();
 
   // Use Feature Hook

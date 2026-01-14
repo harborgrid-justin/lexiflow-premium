@@ -8,7 +8,7 @@ interface ResearchSidebarProps {
     onSelectSession: (id: string) => void;
 }
 
-export const ResearchSidebar: React.FC<ResearchSidebarProps> = ({
+export function ResearchSidebar({
     history, activeSessionId, onSelectSession
 }) => {
     const { theme } = useTheme();

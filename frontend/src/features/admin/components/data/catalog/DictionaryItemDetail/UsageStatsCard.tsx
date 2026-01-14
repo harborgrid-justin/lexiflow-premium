@@ -1,7 +1,7 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Activity } from 'lucide-react';
-export const UsageStatsCard: React.FC = () => {
+export function UsageStatsCard() {
   const { theme } = useTheme();
 
   return (

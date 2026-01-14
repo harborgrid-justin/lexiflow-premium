@@ -32,8 +32,8 @@ import { cn } from '@/shared/lib/cn';
 // TYPES & INTERFACES
 // ============================================================================
 import { Citation } from '@/types';
-import { CitationManagerProps } from './types';
 import { CitationFormModal } from './CitationFormModal';
+import { CitationManagerProps } from './types';
 
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));
@@ -50,7 +50,7 @@ const TAB_CONFIG: TabConfigItem[] = [
   },
 ];
 
-export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
+export function CitationManager({ caseId }: CitationManagerProps) {
   const [isPending, startTransition] = useTransition();
   const [activeView, _setActiveView] = useSessionStorage<string>('citation_active_tab', 'library');
   const citationSelection = useSelection<Citation>();

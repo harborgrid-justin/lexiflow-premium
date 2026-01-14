@@ -24,9 +24,9 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/features/theme';
 
 // Components
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -38,7 +38,7 @@ interface StateJurisdiction {
   type?: string;
 }
 
-export const JurisdictionState: React.FC = () => {
+export function JurisdictionState() {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
   const [, startTransition] = useTransition();

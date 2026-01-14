@@ -5,7 +5,7 @@ interface LedgerTabsProps {
   onTabChange: (tab: 'operating' | 'trust') => void;
 }
 
-export const LedgerTabs: React.FC<LedgerTabsProps> = ({ activeTab, onTabChange }) => {
+export function LedgerTabs({ activeTab, onTabChange }: LedgerTabsProps) {
   const { theme } = useTheme();
 
   return (

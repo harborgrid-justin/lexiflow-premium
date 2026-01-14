@@ -12,7 +12,7 @@ interface ResultItemProps {
   onRemove: (id: string) => void;
 }
 
-export const ResultItem: React.FC<ResultItemProps> = ({
+export function ResultItem({
   result,
   onCopy,
   onToggleDetails,

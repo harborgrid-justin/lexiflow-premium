@@ -107,7 +107,7 @@ export interface QuickActionsProps {
  * QuickActions - Enterprise quick actions menu component
  * Optimized with React.memo for performance
  */
-export const QuickActions = React.memo<QuickActionsProps>(({
+export const QuickActions = React.memo<QuickActionsProps>(function QuickActions({
   groups,
   currentUserRole,
   label = 'Quick Add',

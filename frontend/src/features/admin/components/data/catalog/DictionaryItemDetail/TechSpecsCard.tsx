@@ -1,13 +1,13 @@
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Card } from '@/shared/ui/molecules/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Card } from '@/shared/ui/molecules/Card';
 import { DataDictionaryItem } from '@/types';
 interface TechSpecsCardProps {
   formData: DataDictionaryItem;
 }
 
-export const TechSpecsCard: React.FC<TechSpecsCardProps> = ({ formData }) => {
+export function TechSpecsCard({ formData }: TechSpecsCardProps) {
   const { theme } = useTheme();
 
   return (

@@ -1,16 +1,16 @@
-import React from 'react';
+import { useTheme } from '@/features/theme';
+import { useMutation } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { useMutation } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
 import { StaffMember, UserId } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Award, Loader2, MoreHorizontal, Plus, Trash2, TrendingUp, User, Users } from 'lucide-react';
+import React from 'react';
 import { AddStaffModal } from './AddStaffModal';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
@@ -56,7 +56,7 @@ const getUtilizationColorClass = (rate: number): string => {
 // MAIN COMPONENT
 // ============================================================================
 
-export const HRManager: React.FC = () => {
+export function HRManager() {
   // ==========================================================================
   // HOOKS - Context & State
   // ==========================================================================

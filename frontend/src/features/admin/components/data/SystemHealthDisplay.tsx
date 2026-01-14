@@ -5,18 +5,18 @@
  * are using the backend vs IndexedDB.
  */
 
-import { useState } from 'react';
-import { Activity } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { useDataSource } from '@/providers';
 import { cn } from '@/shared/lib/cn';
-import { calculateCoverage } from './utils';
+import { Activity } from 'lucide-react';
+import { useState } from 'react';
 import { BACKEND_ENABLED_SERVICES } from './constants';
+import { calculateCoverage } from './utils';
 
 /**
  * Displays real-time metrics about backend API service coverage
  */
-export const SystemHealthDisplay: React.FC = () => {
+export function SystemHealthDisplay() {
   const { theme } = useTheme();
   const { currentSource } = useDataSource();
   const [showDetails, setShowDetails] = useState(false);

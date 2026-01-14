@@ -1,7 +1,7 @@
 import { useTheme } from '@/features/theme';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { LineageLink, LineageNode } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { LineageLink, LineageNode } from '@/types';
 import { NODE_STRIDE, SimulationNode } from '@/utils/nexusPhysics';
 import { Pause, Play, RefreshCw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -10,7 +10,7 @@ interface LineageCanvasProps {
     data?: { nodes: LineageNode[], links: LineageLink[] };
 }
 
-export const LineageCanvas: React.FC<LineageCanvasProps> = ({ data }) => {
+export function LineageCanvas({ data }: LineageCanvasProps) {
     const { theme, mode } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);

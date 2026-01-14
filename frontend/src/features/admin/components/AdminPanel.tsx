@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useTransition } from 'react';
+import { Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -41,7 +41,7 @@ interface AdminPanelProps {
 // COMPONENT
 // ============================================================================
 
-export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
+export function AdminPanel({ initialTab }: AdminPanelProps) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('admin_active_tab', initialTab || 'profile');
 

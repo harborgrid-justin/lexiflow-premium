@@ -16,7 +16,7 @@ interface IndexedDBDataTableProps {
   onCancel: () => void;
 }
 
-export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
+export function IndexedDBDataTable({
   data,
   isLoading,
   searchTerm,

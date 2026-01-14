@@ -43,7 +43,7 @@ interface PreferencePaneProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const PreferencePane = ({ profile }: PreferencePaneProps) => {
+export function PreferencePane({ profile }: PreferencePaneProps) {
     // Refactored to use custom hook (Rules 41-60)
     const [
         { mode, locale, timezone, emailNotifications, pushNotifications },

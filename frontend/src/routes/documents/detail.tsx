@@ -15,7 +15,7 @@ import {
 import { DataService } from '@/services/data/dataService';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';
-import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { useFetcher, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 
@@ -106,30 +106,25 @@ export default function DocumentDetailRoute() {
   const navigate = useNavigate();
   const { document: doc, versions, annotations } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const [activeTab, setActiveTab] = useState<'viewer' | 'metadata' | 'versions' | 'annotations'>('viewer');
+  const fetcher = useFetcher();
 
   const handleUpdate = async (updates: Partial<typeof doc>) => {
-    try {
-      await DataService.documents.update(doc.id, updates);
-      window.location.reload();
-    } catch (error) {
-      console.error('Update failed:', error);
-      alert('Failed to update document');
-    }
+    fetcher.submit(
+      { intent: "update", data: JSON.stringify(updates) },
+      { method: "post" }
+    );
   };
 
   const handleRestoreVersion = async (versionNumber: number) => {
     if (!confirm(`Restore to version ${versionNumber}?`)) return;
 
-    try {
-      const versionId = versions.find((v: DocumentVersion) => v.versionNumber === versionNumber)?.id;
-      if (!versionId) throw new Error('Version not found');
+    const versionId = versions.find((v: DocumentVersion) => v.versionNumber === versionNumber)?.id;
+    if (!versionId) return;
 
-      await DataService.documents.restoreVersion(doc.id, versionId as string);
-      window.location.reload();
-    } catch (error) {
-      console.error('Restore failed:', error);
-      alert('Failed to restore version');
-    }
+    fetcher.submit(
+      { intent: "restore-version", versionId: versionId as string },
+      { method: "post" }
+    );
   };
 
   const handleCompare = async (v1: number, v2: number) => {

@@ -112,7 +112,7 @@ export interface MegaMenuProps {
  * MegaMenu - Enterprise mega menu navigation component
  * Optimized with React.memo for performance
  */
-export const MegaMenu = React.memo<MegaMenuProps>(({
+export const MegaMenu = React.memo<MegaMenuProps>(function MegaMenu({
   label,
   sections,
   currentUserRole,

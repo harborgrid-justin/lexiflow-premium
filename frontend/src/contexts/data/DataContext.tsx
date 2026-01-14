@@ -27,13 +27,13 @@ export type DataContextValue = DataStateValue & DataActionsValue;
 const DataStateContext = createContext<DataStateValue | undefined>(undefined);
 const DataActionsContext = createContext<DataActionsValue | undefined>(undefined);
 
-export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export function DataProvider({ children }: React.PropsWithChildren) {
   const { auth } = useAuth();
   const { entitlements } = useEntitlements();
   const [items, setItems] = useState<DashboardItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // GUIDELINE #25-26: Use startTransition for non-urgent context updates
   const [isPending, startTransition] = useTransition();
 
@@ -62,7 +62,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
             label: `Audit: ${log.action} by ${log.userId}`,
             action: log.action as string
           }));
-          
+
           // GUIDELINE #25: Dashboard data refresh is not urgent
           startTransition(() => {
             setItems(mappedLogs);
@@ -86,7 +86,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
           label: (c.title || c.caseNumber || "Untitled Case") as string,
           status: c.status as string
         }));
-        
+
         // GUIDELINE #25: Dashboard refresh is not urgent - UI can show stale data during transition
         startTransition(() => {
           setItems(mappedCases);

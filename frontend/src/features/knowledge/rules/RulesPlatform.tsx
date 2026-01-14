@@ -8,7 +8,7 @@
  * - Guideline 28: Theme usage is pure function of context
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for UI transitions
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -26,9 +26,9 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@/features/theme';
 
 // Components
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
 // Utils & Config
@@ -47,7 +47,7 @@ interface RulesPlatformProps {
 // COMPONENT
 // ============================================================================
 
-export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
+export function RulesPlatform({ initialTab }: RulesPlatformProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<RulesView>('dashboard');
 

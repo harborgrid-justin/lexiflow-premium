@@ -24,11 +24,11 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/features/theme';
 
 // Components
-import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -37,7 +37,7 @@ import { cn } from '@/shared/lib/cn';
 // COMPONENT
 // ============================================================================
 
-export const FacilitiesManager: React.FC = () => {
+export function FacilitiesManager() {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('locations');
 

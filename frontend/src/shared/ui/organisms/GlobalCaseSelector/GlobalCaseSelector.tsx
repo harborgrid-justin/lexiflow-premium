@@ -1,17 +1,17 @@
-import {useCaseContext} from '@/contexts/case/CaseContext';
-import {DataService} from '@/services/data/dataService';
-import {AutocompleteSelect} from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
-import {Case} from '@/types/case';
-import {Briefcase} from 'lucide-react';
-import React, {useCallback} from 'react';
+import { useCaseContext } from '@/contexts/case/CaseContext';
+import { DataService } from '@/services/data/dataService';
+import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
+import { Case } from '@/types/case';
+import { Briefcase } from 'lucide-react';
+import { useCallback } from 'react';
 
-export const GlobalCaseSelector: React.FC = () => {
+export function GlobalCaseSelector() {
   const { selectedCaseId, selectCase } = useCaseContext();
 
   const fetchCases = useCallback(async (query: string): Promise<Case[]> => {
     try {
       // Use backend search with pg_trgm optimizations
-        return await DataService.cases.getAll({search: query || undefined});
+      return await DataService.cases.getAll({ search: query || undefined });
     } catch (error) {
       console.error("Failed to fetch cases", error);
       return [];

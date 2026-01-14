@@ -1,12 +1,12 @@
-import { VirtualList } from '@/shared/ui/organisms/VirtualList';
+import { useTheme } from '@/features/theme';
+import { queryClient, useMutation } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card';
-import { useNotify } from '@/hooks/core';
-import { queryClient, useMutation } from '@/hooks/backend';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { DataAnomaly, QualityMetricHistory } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertOctagon, Check, CheckCircle2, RefreshCw } from 'lucide-react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -16,7 +16,7 @@ interface QualityDashboardProps {
     history: QualityMetricHistory[];
 }
 
-export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, history }) => {
+export function QualityDashboard({ anomalies, history }: QualityDashboardProps) {
     const { theme } = useTheme();
     const notify = useNotify();
 

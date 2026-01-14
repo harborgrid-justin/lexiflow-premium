@@ -16,11 +16,11 @@ import { BarChart3, Building2, TrendingUp, Users } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { api } from '@/api';
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { cn } from '@/shared/lib/cn';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -50,7 +50,7 @@ interface FinancialMetricsData {
 // ============================================================================
 // SKELETON COMPONENT
 // ============================================================================
-const BusinessIntelligenceSkeleton: React.FC = () => {
+const BusinessIntelligenceSkeleton = function BusinessIntelligenceSkeleton() {
   const { theme } = useTheme();
 
   return (
@@ -72,7 +72,7 @@ const BusinessIntelligenceSkeleton: React.FC = () => {
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
-export const BusinessIntelligence: React.FC<BusinessIntelligenceProps> = ({ subTab }) => {
+export function BusinessIntelligence({ subTab }: BusinessIntelligenceProps) {
   const { theme } = useTheme();
 
   // ==========================================================================

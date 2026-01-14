@@ -176,7 +176,7 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
   );
 });
 
-export const SystemHealthDisplay: React.FC<{
+export function SystemHealthDisplay({
   isOpen: boolean;
   onClose: () => void;
 }> = ({ isOpen, onClose }) => {

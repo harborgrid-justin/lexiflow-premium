@@ -10,7 +10,7 @@ interface IndexedDBStoreListProps {
   onStoreClick: (storeName: string) => void;
 }
 
-export const IndexedDBStoreList: React.FC<IndexedDBStoreListProps> = ({
+export function IndexedDBStoreList({
   stores,
   isLoading,
   onStoreClick

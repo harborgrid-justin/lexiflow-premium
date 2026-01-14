@@ -9,7 +9,7 @@ import { CheckCircle, FileText, ShieldAlert, TrendingUp } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 
-export const ClauseAnalytics: React.FC = () => {
+export function ClauseAnalytics() {
     const { mode } = useTheme();
     const chartTheme = ChartColorService.getChartTheme(mode);
     const tooltipStyle = ChartColorService.getTooltipStyle(mode);

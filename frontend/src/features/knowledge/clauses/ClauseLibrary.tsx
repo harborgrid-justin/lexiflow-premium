@@ -17,6 +17,11 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
@@ -24,12 +29,7 @@ import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoa
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/features/theme';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { Clause } from '@/types';
-import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -43,7 +43,7 @@ interface ClauseLibraryProps {
 // COMPONENT
 // ============================================================================
 
-const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
+const ClauseLibrary = function ClauseLibrary({ onSelectClause }: ClauseLibraryProps) {
     const { theme } = useTheme();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

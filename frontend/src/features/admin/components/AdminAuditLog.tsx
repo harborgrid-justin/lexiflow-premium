@@ -17,7 +17,7 @@ interface AdminAuditLogProps {
     // logs prop is removed; component will fetch its own data.
 }
 
-export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
+export function AdminAuditLog({ }: AdminAuditLogProps) {
     const { theme } = useTheme();
     const { addToast } = useToast();
     const { openWindow, closeWindow } = useWindow();

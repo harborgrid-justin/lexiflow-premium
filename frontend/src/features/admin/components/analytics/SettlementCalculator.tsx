@@ -83,7 +83,7 @@ interface SimulationMetricsDisplayProps {
 /**
  * SimulationParametersPanel - Input controls for simulation parameters
  */
-const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
+const SimulationParametersPanel = function SimulationParametersPanel({
   low,
   high,
   liabilityProb,
@@ -143,7 +143,7 @@ const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
 /**
  * SimulationMetricsDisplay - Bottom metrics row
  */
-const SimulationMetricsDisplay: React.FC<SimulationMetricsDisplayProps> = ({ metrics, theme }) => {
+const SimulationMetricsDisplay = function SimulationMetricsDisplay({ metrics, theme }: SimulationMetricsDisplayProps) {
   const recommendedSettlement = ((metrics.ev + metrics.p75) / 2).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
   return (
@@ -175,7 +175,7 @@ const SimulationMetricsDisplay: React.FC<SimulationMetricsDisplayProps> = ({ met
 /**
  * SimulationResultsChart - Distribution chart with metrics
  */
-const SimulationResultsChart: React.FC<SimulationResultsChartProps> = ({
+const SimulationResultsChart = function SimulationResultsChart({
   results,
   metrics,
   iterations,
@@ -246,7 +246,7 @@ const SimulationResultsChart: React.FC<SimulationResultsChartProps> = ({
  * - Expected value and percentile calculations
  * - Strategic settlement recommendations
  */
-export const SettlementCalculator: React.FC = () => {
+export function SettlementCalculator() {
   const { theme, mode } = useTheme();
   const chartTheme = getChartTheme(mode as 'light' | 'dark');
 

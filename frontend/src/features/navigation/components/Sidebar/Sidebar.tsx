@@ -1,10 +1,9 @@
 // components/layout/Sidebar.tsx
-import { User, AppView } from '@/types';
+import { SidebarFooter, SidebarHeader } from '@/components';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import { SidebarHeader } from '@/components';
+import { AppView, User } from '@/types';
 import { SidebarNav } from './SidebarNav';
-import { SidebarFooter } from '@/components';
 
 interface SidebarProps {
   activeView: AppView;
@@ -18,7 +17,7 @@ interface SidebarProps {
 /**
  * Sidebar - React 18 optimized with React.memo
  */
-export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, isOpen, onClose, currentUser, onSwitchUser }) => {
+export const Sidebar = React.memo<SidebarProps>(function Sidebar({ activeView, setActiveView, isOpen, onClose, currentUser, onSwitchUser }) {
   const { theme } = useTheme();
 
   return (

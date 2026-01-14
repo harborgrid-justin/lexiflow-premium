@@ -1,13 +1,13 @@
+import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useState } from 'react';
-import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // import { BookOpen, AlertCircle } from 'lucide-react';
 
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 // import { Badge } from '@/shared/ui/atoms/Badge';
-import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
+import { DataService } from '@/services/data/dataService';
 import { Citation } from '@/types';
 
 interface CitationFormModalProps {
@@ -16,7 +16,7 @@ interface CitationFormModalProps {
   caseId?: string;
 }
 
-export const CitationFormModal: React.FC<CitationFormModalProps> = ({ isOpen, onClose, caseId }) => {
+export function CitationFormModal({ isOpen, onClose, caseId }: CitationFormModalProps) {
   const notify = useNotify();
   const [citationText, setCitationText] = useState('');
   const [title, setTitle] = useState('');

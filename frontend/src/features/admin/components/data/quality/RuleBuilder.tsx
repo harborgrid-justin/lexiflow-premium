@@ -1,8 +1,8 @@
+import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Code, Database, Play, Plus, Save, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
@@ -29,7 +29,7 @@ interface RuleBuilderProps {
     onCancel: () => void;
 }
 
-export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, onCancel }) => {
+export function RuleBuilder({ initialRule, onSave, onCancel }: RuleBuilderProps) {
     const { theme } = useTheme();
 
     // Deterministic initialization

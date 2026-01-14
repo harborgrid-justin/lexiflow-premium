@@ -1,16 +1,16 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Citation } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Bookmark, BookmarkMinus, FileText, Scale } from 'lucide-react';
-export const SavedAuthorities: React.FC = () => {
+export function SavedAuthorities() {
     const { theme } = useTheme();
 
     // Enterprise Data Access

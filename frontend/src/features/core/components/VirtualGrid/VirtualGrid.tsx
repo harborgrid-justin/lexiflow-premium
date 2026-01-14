@@ -171,3 +171,5 @@ export const VirtualGrid = React.memo(<T = Record<string, unknown>>(props: Virtu
     </div>
   );
 });
+
+VirtualGrid.displayName = 'VirtualGrid';

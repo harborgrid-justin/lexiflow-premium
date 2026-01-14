@@ -72,7 +72,7 @@ interface CreateTrustAccountFormProps {
   onCancel?: () => void;
 }
 
-export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
+export function CreateTrustAccountForm({
   onSuccess,
   onCancel,
 }) => {
@@ -210,10 +210,10 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
   ], []);
 
   const renderStepContent = useCallback(() => {
-    const commonProps = { 
-      formData, 
-      getFieldError: (field: string) => getFieldError(field as keyof FormState), 
-      updateField, 
+    const commonProps = {
+      formData,
+      getFieldError: (field: string) => getFieldError(field as keyof FormState),
+      updateField,
       handleFieldBlur: (field: string) => handleFieldBlur(field as keyof FormState)
     };
 

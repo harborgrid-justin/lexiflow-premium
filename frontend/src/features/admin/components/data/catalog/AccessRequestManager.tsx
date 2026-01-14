@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { CheckCircle, Clock, Loader2, User, XCircle } from 'lucide-react';
-export const AccessRequestManager: React.FC = () => {
+export function AccessRequestManager() {
     const { theme } = useTheme();
 
     const { data: requests = [], isLoading } = useQuery<AccessRequest[]>(

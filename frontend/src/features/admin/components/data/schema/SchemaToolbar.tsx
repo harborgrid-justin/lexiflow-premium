@@ -1,6 +1,6 @@
-import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
 import { BrainCircuit as Brain, Code, GitBranch, History, RefreshCw, Save, Table } from 'lucide-react';
 import React from "react";
 interface SchemaToolbarProps {
@@ -12,7 +12,7 @@ interface SchemaToolbarProps {
 /**
  * SchemaToolbar - React 18 optimized with React.memo
  */
-export const SchemaToolbar = React.memo<SchemaToolbarProps>(({ activeTab, setActiveTab, onAutoArrange }) => {
+export const SchemaToolbar = React.memo<SchemaToolbarProps>(function SchemaToolbar({ activeTab, setActiveTab, onAutoArrange }) {
   const { theme } = useTheme();
 
   return (

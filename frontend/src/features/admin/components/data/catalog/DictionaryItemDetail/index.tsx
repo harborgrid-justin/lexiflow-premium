@@ -1,10 +1,10 @@
-import { Button } from '@/shared/ui/atoms/Button';
-import { useNotify } from '@/hooks/useNotify';
-import { useMutation } from '@/hooks/backend';
 import { useTheme } from '@/features/theme';
+import { useMutation } from '@/hooks/backend';
+import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useState } from 'react';
 import { DefinitionCard } from './DefinitionCard';
@@ -13,7 +13,7 @@ import { TechSpecsCard } from './TechSpecsCard';
 import { UsageStatsCard } from './UsageStatsCard';
 import type { DictionaryItemDetailProps } from './types';
 
-export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item, onClose }) => {
+export function DictionaryItemDetail({ item, onClose }: DictionaryItemDetailProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const [formData, setFormData] = useState({ ...item });

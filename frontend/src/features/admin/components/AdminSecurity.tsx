@@ -41,7 +41,7 @@ import { cn } from '@/shared/lib/cn';
 // ========================================
 // COMPONENT
 // ========================================
-export const AdminSecurity: React.FC = () => {
+export function AdminSecurity() {
     const { theme } = useTheme();
     const [testIp, setTestIp] = useState('');
     const [checkResult, setCheckResult] = useState<'Safe' | 'Blocked' | null>(null);

@@ -7,8 +7,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useMemo, useDeferredValue } from 'react';
-import { Bell, Check, Trash2, Settings, CheckCheck } from 'lucide-react';
+import { Bell, Check, CheckCheck, Settings, Trash2 } from 'lucide-react';
+import { useDeferredValue, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -17,15 +17,15 @@ import { Bell, Check, Trash2, Settings, CheckCheck } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/features/theme';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToast } from '@/providers';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
 import { Badge } from '@/shared/ui/atoms/Badge';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { Button } from '@/shared/ui/atoms/Button';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 
 // Utils
 import { cn } from '@/shared/lib/cn';
@@ -46,7 +46,7 @@ interface Notification {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const NotificationCenter: React.FC = () => {
+export function NotificationCenter() {
   const { theme } = useTheme();
   const { addToast } = useToast();
 
@@ -136,10 +136,10 @@ export const NotificationCenter: React.FC = () => {
         actions={
           <div className="flex gap-2">
             <Button
-                variant="secondary"
-                icon={CheckCheck}
-                onClick={() => markAllAsRead(undefined)}
-                disabled={unreadCount === 0}
+              variant="secondary"
+              icon={CheckCheck}
+              onClick={() => markAllAsRead(undefined)}
+              disabled={unreadCount === 0}
             >
               Mark All Read
             </Button>
@@ -183,9 +183,9 @@ export const NotificationCenter: React.FC = () => {
       {/* Notifications List */}
       <div className="flex-1 overflow-y-auto space-y-3 pr-2">
         {isLoading ? (
-            <div className="space-y-3">
-                {[1,2,3].map(i => <div key={i} className="h-24 w-full animate-pulse bg-slate-200 rounded-lg" />)}
-            </div>
+          <div className="space-y-3">
+            {[1, 2, 3].map(i => <div key={i} className="h-24 w-full animate-pulse bg-slate-200 rounded-lg" />)}
+          </div>
         ) : filteredNotifications.map(notification => (
           <div
             key={notification.id}
@@ -199,7 +199,7 @@ export const NotificationCenter: React.FC = () => {
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-4">
                 <div className={cn("p-2 rounded-full bg-opacity-10", getTypeColor(notification.type).replace('text', 'bg'))}>
-                    <Bell className={cn("h-5 w-5", getTypeColor(notification.type))} />
+                  <Bell className={cn("h-5 w-5", getTypeColor(notification.type))} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -231,7 +231,7 @@ export const NotificationCenter: React.FC = () => {
         {!isLoading && filteredNotifications.length === 0 && (
           <div className={cn("text-center py-20", theme.text.tertiary)}>
             <div className="bg-slate-100 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Bell className="h-8 w-8 opacity-20" />
+              <Bell className="h-8 w-8 opacity-20" />
             </div>
             <p className="text-lg font-bold">No notifications</p>
             <p className="text-sm">You're all caught up!</p>

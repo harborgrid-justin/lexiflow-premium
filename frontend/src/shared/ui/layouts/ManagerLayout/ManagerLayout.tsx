@@ -32,7 +32,7 @@ const sidebarWidthClasses = {
   lg: 'w-80',
 };
 
-export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
+export function ManagerLayout({
   title,
   subtitle,
   actions,
@@ -53,25 +53,25 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
           actions={actions}
         />
         {filterPanel && (
-            <div className="mb-4">
-                {filterPanel}
-            </div>
+          <div className="mb-4">
+            {filterPanel}
+          </div>
         )}
       </div>
 
       <div className="flex-1 flex overflow-hidden px-6 pb-6 gap-6 min-h-0">
         {sidebar && (
-            <div className={cn(
-              sidebarWidthClasses[sidebarWidth],
-              "border rounded-lg shadow-sm flex-col shrink-0 hidden md:flex overflow-y-auto",
-              theme.surface.default,
-              theme.border.default
-            )}>
-                {sidebar}
-            </div>
+          <div className={cn(
+            sidebarWidthClasses[sidebarWidth],
+            "border rounded-lg shadow-sm flex-col shrink-0 hidden md:flex overflow-y-auto",
+            theme.surface.default,
+            theme.border.default
+          )}>
+            {sidebar}
+          </div>
         )}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
-            {children}
+          {children}
         </div>
       </div>
     </div>

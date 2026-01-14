@@ -1,13 +1,13 @@
 import { dataPlatformApi } from '@/api/data-platform';
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/backend';
+import { useModalState } from '@/hooks/core';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
 import { Modal } from '@/shared/ui/molecules/Modal';
-import { useModalState } from '@/hooks/core';
-import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
@@ -20,7 +20,7 @@ interface SchemaArchitectProps {
   initialTab?: string;
 }
 
-export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = 'designer' }) => {
+export function SchemaArchitect({ initialTab = 'designer' }: SchemaArchitectProps) {
   const { theme } = useTheme();
 
   const mapInitialTabToState = (tab?: string): 'visual' | 'code' | 'history' | 'snapshots' => {

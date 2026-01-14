@@ -37,7 +37,7 @@ import { sanitizeHtml } from '@/shared/lib/sanitize';
 import { Case } from '@/types';
 import { CitationDetailProps } from './types';
 
-export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClose }) => {
+export function CitationDetail({ citation, onClose }: CitationDetailProps) {
     const { theme } = useTheme();
     const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
     const [analyzing, setAnalyzing] = useState(false);

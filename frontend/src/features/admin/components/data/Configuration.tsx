@@ -1,12 +1,12 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { TIMEOUTS } from '@/config/ports.config';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { CheckCircle, Code, Download, FileSearch, Save, Settings, Upload } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ interface ConfigurationProps {
   initialTab?: string;
 }
 
-export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'general' }) => {
+export function Configuration({ initialTab = 'general' }: ConfigurationProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
   const [saveSuccess, setSaveSuccess] = useState(false);

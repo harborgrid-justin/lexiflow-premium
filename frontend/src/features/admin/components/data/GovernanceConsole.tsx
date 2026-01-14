@@ -1,14 +1,14 @@
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { ModalFooter } from '@/shared/ui/molecules/ModalFooter';
 import { Tabs } from '@/shared/ui/molecules/Tabs';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
 import { GovernancePolicy } from '@/types';
 import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';
-import { cn } from '@/shared/lib/cn';
 import { FileText, Plus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { AccessGovernance } from './governance/AccessGovernance';
@@ -28,7 +28,7 @@ interface GovernanceConsoleProps {
     initialTab?: string;
 }
 
-export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab = 'overview' }) => {
+export function GovernanceConsole({ initialTab = 'overview' }: GovernanceConsoleProps) {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState(initialTab);
     const [isScanning, setIsScanning] = useState(false);

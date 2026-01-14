@@ -1,18 +1,11 @@
-import { BackupSnapshot } from '@/api/data-platform/backups-api';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Modal } from '@/shared/ui/molecules/Modal';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Modal } from '@/shared/ui/molecules/Modal';
 import { AlertCircle, Clock, Database } from 'lucide-react';
-import React from "react";
-interface CreateSnapshotModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSnapshot: (type: string) => void;
-    isCreating: boolean;
-}
+import type { CreateSnapshotModalProps, RestoreSnapshotModalProps } from './BackupModals.types';
 
-export const CreateSnapshotModal: React.FC<CreateSnapshotModalProps> = ({ isOpen, onClose, onSnapshot, isCreating }) => {
+export function CreateSnapshotModal({ isOpen, onClose, onSnapshot, isCreating }: CreateSnapshotModalProps) {
     const { theme } = useTheme();
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Trigger Manual Snapshot">
@@ -46,14 +39,7 @@ export const CreateSnapshotModal: React.FC<CreateSnapshotModalProps> = ({ isOpen
     );
 };
 
-interface RestoreSnapshotModalProps {
-    snapshot: BackupSnapshot | null;
-    onClose: () => void;
-    onRestore: () => void;
-    isRestoring: boolean;
-}
-
-export const RestoreSnapshotModal: React.FC<RestoreSnapshotModalProps> = ({ snapshot, onClose, onRestore, isRestoring }) => {
+export function RestoreSnapshotModal({ snapshot, onClose, onRestore, isRestoring }: RestoreSnapshotModalProps) {
     const { theme } = useTheme();
     if (!snapshot) return null;
 

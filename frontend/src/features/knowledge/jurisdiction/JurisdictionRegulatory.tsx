@@ -1,12 +1,11 @@
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { AlertTriangle, FileText, Scale } from 'lucide-react';
-import React from "react";
-export const JurisdictionRegulatory: React.FC = () => {
+export function JurisdictionRegulatory() {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery

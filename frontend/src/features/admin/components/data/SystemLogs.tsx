@@ -4,8 +4,7 @@ import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { Loader2 } from 'lucide-react';
-import React from "react";
-export const SystemLogs: React.FC = () => {
+export function SystemLogs() {
   const { theme } = useTheme();
 
   // Fetch Logs

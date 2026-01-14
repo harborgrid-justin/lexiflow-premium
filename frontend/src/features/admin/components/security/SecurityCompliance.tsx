@@ -101,7 +101,7 @@ const initialLogs: AccessLogEntry[] = [
   }
 ];
 
-export const SecurityCompliance: React.FC = () => {
+export function SecurityCompliance() {
   const notify = useNotify();
   const [controls, setControls] = useState<SecurityControl[]>(initialControls);
   const [accessLogs] = useState<AccessLogEntry[]>(initialLogs);

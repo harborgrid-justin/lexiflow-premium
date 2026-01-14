@@ -3,10 +3,10 @@
  * Display invoice details with payment tracking and PDF preview
  */
 
+import type { Invoice } from '@/types/financial';
+import { CreditCard, Download, Send } from 'lucide-react';
 import { useState } from 'react';
 import { Form } from 'react-router';
-import { Download, Send, CreditCard } from 'lucide-react';
-import type { Invoice } from '@/types/financial';
 import { InvoicePreview } from './InvoicePreview';
 
 interface InvoiceDetailProps {
@@ -14,7 +14,7 @@ interface InvoiceDetailProps {
   onBack?: () => void;
 }
 
-export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
+export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
   const getStatusBadge = (status: string) => {
@@ -28,9 +28,8 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
 
     return (
       <span
-        className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${
-          styles[status as keyof typeof styles] || styles.Draft
-        }`}
+        className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${styles[status as keyof typeof styles] || styles.Draft
+          }`}
       >
         {status}
       </span>

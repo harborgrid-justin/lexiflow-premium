@@ -30,9 +30,9 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 
 // Hooks & Context
+import { useTheme } from '@/features/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 
 // Services & Utils
@@ -48,7 +48,7 @@ import { Case, Citation } from '@/types';
 import { BriefCritique } from '@/types/intelligence';
 import { sanitizeHtml } from './utils';
 
-export const BriefAnalyzer: React.FC = () => {
+export function BriefAnalyzer() {
     const { theme } = useTheme();
     const notify = useNotify();
     const { openWindow, closeWindow: _closeWindow } = useWindow();

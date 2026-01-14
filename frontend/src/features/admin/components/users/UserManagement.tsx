@@ -1,8 +1,3 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Modal } from '@/shared/ui/molecules/Modal';
 import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
@@ -10,6 +5,11 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Modal } from '@/shared/ui/molecules/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { queryKeys } from '@/utils/queryKeys';
 import { Edit, Mail, Plus, Search, Shield, Trash2, Users } from 'lucide-react';
 import { useDeferredValue, useState } from 'react';
@@ -30,7 +30,7 @@ interface UserData {
  * Manages system users via backend API
  */
 
-export const UserManagement: React.FC = () => {
+export function UserManagement() {
   const { theme } = useTheme();
   const notify = useNotify();
 

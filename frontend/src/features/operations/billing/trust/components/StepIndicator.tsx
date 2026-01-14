@@ -3,8 +3,8 @@
  * Visual progress indicator for multi-step forms
  */
 
-import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import type { LucideIcon } from 'lucide-react';
 export interface Step {
   id: number;
@@ -17,7 +17,7 @@ interface StepIndicatorProps {
   currentStep: number;
 }
 
-export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep }) => {
+export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
   const { theme } = useTheme();
 
   return (

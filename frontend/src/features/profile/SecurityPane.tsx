@@ -39,7 +39,7 @@ interface SecurityPaneProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const SecurityPane = ({ profile }: SecurityPaneProps) => {
+export function SecurityPane({ profile }: SecurityPaneProps) {
     // Refactored to use custom hook (Rules 41-60)
     const [
         { activeSessions, status },

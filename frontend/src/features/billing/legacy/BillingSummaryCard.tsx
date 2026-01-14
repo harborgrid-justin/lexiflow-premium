@@ -15,7 +15,7 @@ interface BillingSummaryCardProps {
   color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple';
 }
 
-export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
+export function BillingSummaryCard({
   title,
   value,
   change,

@@ -8,7 +8,7 @@
  * - Guideline 28: Theme usage is pure function of context
  * - Guideline 34: useThemeContext() is side-effect free read
  * - Guideline 29: Lazy components don't trigger Suspense cascades on theme change
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -29,10 +29,10 @@ import { useThemeContext } from '@/features/theme';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
+import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { ResearchToolContent } from './ResearchToolContent';
-import { cn } from '@/shared/lib/cn';
-import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
 
 // Types
 
@@ -41,13 +41,13 @@ const ClauseHistoryModal = lazy(async () => {
   return { default: module.ClauseHistoryModal };
 });
 
-export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
+export function ResearchTool({ initialTab, caseId }: { initialTab?: string; caseId?: string }) {
   const { theme } = useThemeContext();
-  
+
   const {
-      activeView,
-      setActiveView,
-      clauseSelection,
+    activeView,
+    setActiveView,
+    clauseSelection,
   } = useResearchTool(initialTab, caseId);
 
   const renderContent = () => {

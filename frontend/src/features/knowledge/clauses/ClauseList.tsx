@@ -1,23 +1,23 @@
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { Button } from '@/shared/ui/atoms/Button';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { Clause } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { Clause } from '@/types';
 import { BookOpen, Check, Copy, History, Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { filterClauses } from './clauseList.utils';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 
 interface ClauseListProps {
     onSelectClause: (clause: Clause) => void;
 }
 
-export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
+export function ClauseList({ onSelectClause }: ClauseListProps) {
     const { theme } = useTheme();
     const [searchTerm, setSearchTerm] = useState('');
     const [copiedId, setCopiedId] = useState<string | null>(null);

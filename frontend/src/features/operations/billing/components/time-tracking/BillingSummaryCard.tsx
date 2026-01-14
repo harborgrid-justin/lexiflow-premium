@@ -14,7 +14,7 @@ interface BillingSummaryCardProps {
   color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple';
 }
 
-export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
+export function BillingSummaryCard({
   title,
   value,
   change,
@@ -79,9 +79,8 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
                 <TrendingDown className="h-4 w-4 text-red-600" />
               )}
               <span
-                className={`text-sm font-medium ${
-                  change >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}
+                className={`text-sm font-medium ${change >= 0 ? 'text-green-600' : 'text-red-600'
+                  }`}
               >
                 {change >= 0 ? '+' : ''}{change}%
               </span>

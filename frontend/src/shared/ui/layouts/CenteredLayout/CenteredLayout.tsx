@@ -22,7 +22,7 @@ const maxWidthClasses = {
   '2xl': 'max-w-2xl',
 };
 
-export const CenteredLayout: React.FC<CenteredLayoutProps> = ({
+export function CenteredLayout({
   children,
   maxWidth = 'md',
   verticalCenter = true,

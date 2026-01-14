@@ -42,7 +42,7 @@ interface SidebarHeaderProps {
 /**
  * SidebarHeader - React 18 optimized with React.memo
  */
-export const SidebarHeader = React.memo<SidebarHeaderProps>(({ onClose }) => {
+export const SidebarHeader = React.memo<SidebarHeaderProps>(function SidebarHeader({ onClose }) {
   const { theme } = useTheme();
 
   const { data: tenantConfig } = useQuery<TenantConfig>(

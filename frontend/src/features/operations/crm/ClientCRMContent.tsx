@@ -1,9 +1,9 @@
-import { lazy } from 'react';
 import { CRMView } from '@/config/tabs.config';
-import { Client } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import { Client } from '@/types';
 import { Loader2 } from 'lucide-react';
+import { lazy } from 'react';
 
 const CRMDashboard = lazy(() => import('./CRMDashboard').then(m => ({ default: m.CRMDashboard })));
 const ClientDirectory = lazy(() => import('./ClientDirectory').then(m => ({ default: m.ClientDirectory })));
@@ -11,12 +11,12 @@ const CRMPipeline = lazy(() => import('./CRMPipeline'));
 const ClientAnalytics = lazy(() => import('./ClientAnalytics').then(m => ({ default: m.ClientAnalytics })));
 
 interface ClientCRMContentProps {
-  activeTab: CRMView;
-  onOpenPortal: (client: Client) => void;
-  clients: Client[];
+    activeTab: CRMView;
+    onOpenPortal: (client: Client) => void;
+    clients: Client[];
 }
 
-export const ClientCRMContent: React.FC<ClientCRMContentProps> = ({ activeTab, onOpenPortal, clients }) => {
+export function ClientCRMContent({ activeTab, onOpenPortal, clients }: ClientCRMContentProps) {
     // Fetch leads for the pipeline view
     const { data: leads = [], isLoading: isLoadingLeads } = useQuery(
         ['crm', 'leads'],
@@ -28,7 +28,7 @@ export const ClientCRMContent: React.FC<ClientCRMContentProps> = ({ activeTab, o
         case 'dashboard': return <CRMDashboard />;
         case 'directory': return <ClientDirectory onOpenPortal={onOpenPortal} clients={clients} />;
         case 'pipeline':
-            if (isLoadingLeads) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+            if (isLoadingLeads) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600" /></div>;
             return <CRMPipeline leads={leads as unknown[]} />;
         case 'analytics': return <ClientAnalytics />;
         default: return <CRMDashboard />;

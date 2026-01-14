@@ -36,14 +36,14 @@ export type FlagsContextValue = FlagsStateValue & FlagsActionsValue;
 const FlagsStateContext = createContext<FlagsStateValue | undefined>(undefined);
 const FlagsActionsContext = createContext<FlagsActionsValue | undefined>(undefined);
 
-export const FlagsProvider: React.FC<React.PropsWithChildren<{ initial?: Partial<Flags> }>> = ({
+export function FlagsProvider({
   initial,
   children
-}) => {
+}: React.PropsWithChildren<{ initial?: Partial<Flags> }>) {
   const [flags, setFlags] = useState<Flags>({ ...DEFAULT_FLAGS, ...initial });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // GUIDELINE #25-26: Use startTransition for non-urgent context updates
   const [isPending, startTransition] = useTransition();
 
@@ -53,7 +53,7 @@ export const FlagsProvider: React.FC<React.PropsWithChildren<{ initial?: Partial
       // Try to fetch from backend
       // If endpoint doesn't exist, this will throw, and we'll catch it
       const response = await apiClient.get<Flags>('/api/features');
-      
+
       // GUIDELINE #25: Wrap non-urgent state updates in startTransition
       // Feature flag changes are not urgent - UI can remain interactive during fetch
       startTransition(() => {

@@ -1,7 +1,7 @@
-import { ContextMenu } from '@/shared/ui/molecules/ContextMenu/ContextMenu';
-import { useCanvasDrag } from '@/hooks/ui';
 import { useTheme } from '@/features/theme';
+import { useCanvasDrag } from '@/hooks/ui';
 import { cn } from '@/shared/lib/cn';
+import { ContextMenu } from '@/shared/ui/molecules/ContextMenu/ContextMenu';
 import { Database, Edit2, Key, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ContextData, ContextMenuItem, ContextMenuType, TableColumn, TableData } from './schemaTypes';
@@ -17,7 +17,7 @@ interface SchemaVisualizerProps {
     onUpdateTablePos: (tableName: string, pos: { x: number, y: number }) => void;
 }
 
-export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }) => {
+export function SchemaVisualizer({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }: SchemaVisualizerProps) {
     const { theme, mode } = useTheme();
     const [zoom, setZoom] = useState(1);
     const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: ContextMenuItem[] } | null>(null);

@@ -1,17 +1,17 @@
-import { EmptyListState } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
-import { Button } from '@/shared/ui/atoms/Button';
-import { useNotify } from '@/hooks/core';
-import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/features/theme';
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';
-import { RLSPolicy } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { EmptyListState } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { RLSPolicy } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Edit2, Pause, Play, Plus, Shield, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { PolicyEditorModal } from './PolicyEditorModal';
 
-export const RLSPolicyManager: React.FC = () => {
+export function RLSPolicyManager() {
     const { theme } = useTheme();
     const notify = useNotify();
     const [editingPolicy, setEditingPolicy] = useState<RLSPolicy | undefined>(undefined);

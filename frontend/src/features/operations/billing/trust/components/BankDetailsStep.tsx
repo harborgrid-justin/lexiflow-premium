@@ -21,7 +21,7 @@ interface BankDetailsStepProps {
   handleFieldBlur: (field: string) => void;
 }
 
-export const BankDetailsStep: React.FC<BankDetailsStepProps> = ({
+export function BankDetailsStep({
   formData,
   getFieldError,
   updateField,

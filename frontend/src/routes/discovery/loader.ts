@@ -1,0 +1,46 @@
+import type { ActionFunctionArgs } from "react-router";
+import { DataService } from "../../services/data/dataService";
+import type { DiscoveryRequest, Evidence, ProductionSet } from "../../types";
+
+export interface DiscoveryLoaderData {
+  evidence: Evidence[];
+  requests: DiscoveryRequest[];
+  productions: ProductionSet[];
+}
+
+export async function clientLoader(): Promise<DiscoveryLoaderData> {
+  const [evidence, requests, productions] = await Promise.all([
+    DataService.evidence.getAll(),
+    DataService.discovery.getRequests(),
+    DataService.discovery.getProductions(),
+  ]);
+
+  return { evidence, requests, productions };
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const intent = formData.get("intent") as string;
+
+  switch (intent) {
+    case "create-evidence": {
+      const data = JSON.parse(formData.get("data") as string);
+      const evidence = await DataService.evidence.add(data);
+      return { success: true, evidence };
+    }
+    case "update-evidence": {
+      const id = formData.get("id") as string;
+      const updates = JSON.parse(formData.get("data") as string);
+      await DataService.evidence.update(id, updates);
+      return { success: true };
+    }
+    case "tag-evidence": {
+      const id = formData.get("id") as string;
+      const tags = JSON.parse(formData.get("tags") as string);
+      await DataService.evidence.addTags(id, tags);
+      return { success: true };
+    }
+    default:
+      return { success: false, error: "Unknown intent" };
+  }
+}

@@ -16,7 +16,7 @@ import { format } from 'date-fns';
 import { Briefcase, Calendar, LayoutGrid, List, MoreVertical, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 
-export const MatterManagement: React.FC = () => {
+export function MatterManagement() {
   const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');

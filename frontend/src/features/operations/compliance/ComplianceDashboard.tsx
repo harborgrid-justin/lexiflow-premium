@@ -43,7 +43,7 @@ interface ComplianceDashboardProps {
 // COMPONENT
 // ============================================================================
 
-export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initialTab }) => {
+export function ComplianceDashboard({ initialTab }: ComplianceDashboardProps) {
   const [state, actions] = useComplianceDashboard(initialTab);
   const { activeTab, status } = state;
   const { setActiveTab } = actions;

@@ -1,0 +1,31 @@
+/**
+ * Evidence Management Domain - Data Loader
+ * Enterprise React Architecture Pattern
+ */
+
+import { DataService } from "../../services/data/dataService";
+
+type EvidenceItem = {
+  id: string;
+  caseId: string;
+  title: string;
+  description: string;
+  type: string;
+  status: string;
+  tags: string[];
+  custodian?: string;
+  collectedDate: string;
+  location?: string;
+};
+
+export interface EvidenceLoaderData {
+  evidence: EvidenceItem[];
+}
+
+export async function evidenceLoader(): Promise<EvidenceLoaderData> {
+  const evidence = await DataService.evidence.getAll().catch(() => []);
+
+  return {
+    evidence: evidence || [],
+  };
+}

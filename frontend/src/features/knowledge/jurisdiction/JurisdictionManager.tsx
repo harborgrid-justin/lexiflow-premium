@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useState, useTransition } from 'react';
 import { Plus } from 'lucide-react';
+import React, { Suspense, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,9 +20,9 @@ import { Plus } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 
 // Components
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -36,7 +36,7 @@ const JurisdictionArbitration = React.lazy(() => import('./JurisdictionArbitrati
 const JurisdictionLocalRules = React.lazy(() => import('./JurisdictionLocalRules').then(m => ({ default: m.JurisdictionLocalRules })));
 const JurisdictionGeoMap = React.lazy(() => import('./JurisdictionGeoMap').then(m => ({ default: m.JurisdictionGeoMap })));
 
-export const JurisdictionManager: React.FC = () => {
+export function JurisdictionManager() {
   const { theme } = useTheme();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useState<JurisdictionView>('federal');

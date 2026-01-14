@@ -26,8 +26,12 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 export async function loader({ params }: LoaderFunctionArgs) {
   const invoicesApi = new InvoicesApiService();
 
+  if (!params.id) {
+    throw new Response("Invoice ID Required", { status: 400 });
+  }
+
   try {
-    const invoice = await invoicesApi.getById(params.id!);
+    const invoice = await invoicesApi.getById(params.id);
 
     return {
       invoice,

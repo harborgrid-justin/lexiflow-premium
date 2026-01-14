@@ -16,7 +16,7 @@ interface TimeEntryListProps {
   filters?: Record<string, unknown>;
 }
 
-export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }) => {
+export function TimeEntryList({ entries, filters }: TimeEntryListProps) {
   const { theme } = useTheme();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);

@@ -37,7 +37,7 @@ import { SuffixTree } from '@/utils/datastructures/suffixTree';
 // COMPONENT
 // ============================================================================
 
-export const SecurityOps: React.FC = () => {
+export function SecurityOps() {
     const { theme } = useTheme();
     const notify = useNotify();
     const [isScanning, setIsScanning] = useState(false);

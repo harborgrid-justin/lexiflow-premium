@@ -6,9 +6,8 @@ import { useFlags } from "../contexts/flags/FlagsContext";
 import { AdminPath } from "./paths/AdminPath";
 import { MemberPath } from "./paths/MemberPath";
 import { PublicPath } from "./paths/PublicPath";
-import React from "react";
 
-export const AppGate: React.FC = () => {
+export function AppGate() {
   const { auth } = useAuth();
   const { flags } = useFlags();
   const { entitlements } = useEntitlements();

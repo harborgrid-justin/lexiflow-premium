@@ -6,10 +6,10 @@
  * @module routes/crm/client-detail
  */
 
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import type { Client } from '@/types';
 import { redirect, useLoaderData, useNavigate } from 'react-router';
-import { useTheme } from '@/features/theme';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/client-detail";
@@ -94,7 +94,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 export default function ClientDetailRoute() {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { item } = useLoaderData() as { item: Client };
+  const { item } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div className="p-8">

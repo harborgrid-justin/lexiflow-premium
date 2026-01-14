@@ -1,13 +1,13 @@
-import { Loader2 } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Loader2 } from 'lucide-react';
 import { useDocumentTemplates } from './hooks/useDocumentTemplates';
 
 interface Step1TemplateSelectionProps {
   onSelectTemplate: (templateName: string) => void;
 }
 
-export const Step1TemplateSelection: React.FC<Step1TemplateSelectionProps> = ({ onSelectTemplate }) => {
+export function Step1TemplateSelection({ onSelectTemplate }: Step1TemplateSelectionProps) {
   const { theme } = useTheme();
   const { templates, isLoading } = useDocumentTemplates();
 
@@ -77,7 +77,7 @@ export const Step1TemplateSelection: React.FC<Step1TemplateSelectionProps> = ({ 
         "border-blue-200 dark:border-blue-800"
       )}>
         <p className={cn("text-sm", theme.text.secondary)}>
-          <strong className={theme.text.primary}>Tip:</strong> After selecting a template, you'll configure specific details 
+          <strong className={theme.text.primary}>Tip:</strong> After selecting a template, you'll configure specific details
           and our AI will generate a customized draft based on your case information.
         </p>
       </div>

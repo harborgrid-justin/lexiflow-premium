@@ -14,10 +14,10 @@ interface WorkflowPageProps {
 /**
  * WorkflowPage - React 18 optimized with React.memo
  */
-export const WorkflowPage = React.memo<WorkflowPageProps>(() => {
+export const WorkflowPage = React.memo<WorkflowPageProps>(function WorkflowPage() {
   return (
     <PageContainerLayout>
-      <MasterWorkflow onSelectCase={() => {}} />
+      <MasterWorkflow onSelectCase={() => { }} />
     </PageContainerLayout>
   );
 });

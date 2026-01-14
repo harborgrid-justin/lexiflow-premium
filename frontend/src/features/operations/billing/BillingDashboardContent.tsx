@@ -12,7 +12,7 @@ interface BillingDashboardContentProps {
     navigateTo?: (view: string) => void;
 }
 
-const BillingDashboardContentComponent: React.FC<BillingDashboardContentProps> = ({ activeTab, navigateTo }) => {
+function BillingDashboardContentComponent({ activeTab, navigateTo }: BillingDashboardContentProps) {
     switch (activeTab as string) {
         case 'overview': return <BillingOverview onNavigate={navigateTo} />;
         case 'invoices': return <BillingInvoices />;

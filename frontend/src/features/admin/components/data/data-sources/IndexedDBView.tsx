@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { Database, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
-import { DataSourceSelector } from './DataSourceSelector';
-import { SystemHealthDisplay } from './SystemHealthDisplay';
-import { IndexedDBStoreList } from './IndexedDBStoreList';
-import { IndexedDBDataTable } from './IndexedDBDataTable';
-import type { StoreInfo, StoreRecord } from './types';
 import { db } from '@/services/data/db';
+import { cn } from '@/shared/lib/cn';
+import { Database, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
+import { DataSourceSelector } from './DataSourceSelector';
+import { IndexedDBDataTable } from './IndexedDBDataTable';
+import { IndexedDBStoreList } from './IndexedDBStoreList';
+import { SystemHealthDisplay } from './SystemHealthDisplay';
+import type { StoreInfo, StoreRecord } from './types';
 
-export const IndexedDBView: React.FC = () => {
+export function IndexedDBView() {
   const { theme } = useTheme();
   const { data: stores = [], isLoading, refetch } = useQuery<StoreInfo[]>(
     ['admin', 'registry'],

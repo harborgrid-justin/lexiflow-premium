@@ -1,15 +1,15 @@
 /**
  * Data Source Selector Component
- * 
+ *
  * Allows users to switch between different data source modes
  * (IndexedDB, PostgreSQL, Cloud Database).
  */
 
-import { useState } from 'react';
-import { Database, Server, Cloud, Power, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { useDataSource } from '@/providers';
 import { cn } from '@/shared/lib/cn';
+import { Cloud, Database, Power, RefreshCw, Server } from 'lucide-react';
+import { useState } from 'react';
 
 type DataSourceType = 'indexeddb' | 'postgresql' | 'cloud';
 
@@ -22,45 +22,45 @@ interface DataSourceOption {
 }
 
 const DATASOURCE_OPTIONS: readonly DataSourceOption[] = [
-  { 
-    id: 'indexeddb', 
-    name: 'IndexedDB', 
-    desc: 'Client-side offline storage', 
-    icon: Database, 
-    color: 'blue' 
+  {
+    id: 'indexeddb',
+    name: 'IndexedDB',
+    desc: 'Client-side offline storage',
+    icon: Database,
+    color: 'blue'
   },
-  { 
-    id: 'postgresql', 
-    name: 'PostgreSQL', 
-    desc: 'Backend database (requires server)', 
-    icon: Server, 
-    color: 'purple' 
+  {
+    id: 'postgresql',
+    name: 'PostgreSQL',
+    desc: 'Backend database (requires server)',
+    icon: Server,
+    color: 'purple'
   },
-  { 
-    id: 'cloud', 
-    name: 'Cloud Database', 
-    desc: 'External cloud provider', 
-    icon: Cloud, 
-    color: 'emerald' 
+  {
+    id: 'cloud',
+    name: 'Cloud Database',
+    desc: 'External cloud provider',
+    icon: Cloud,
+    color: 'emerald'
   },
 ];
 
 /**
  * Component for switching between data source modes
  */
-export const DataSourceSelector: React.FC = () => {
+export function DataSourceSelector() {
   const { theme } = useTheme();
   const { currentSource, switchDataSource } = useDataSource();
   const [isSwitching, setIsSwitching] = useState(false);
 
   const handleSwitch = async (sourceId: DataSourceType) => {
     if (sourceId === currentSource) return;
-    
+
     const sourceName = DATASOURCE_OPTIONS.find(s => s.id === sourceId)?.name;
     const confirmed = confirm(
       `Switch to ${sourceName}? This will reload the application and clear all cached data.`
     );
-    
+
     if (confirmed) {
       setIsSwitching(true);
       await switchDataSource(sourceId);
@@ -70,15 +70,15 @@ export const DataSourceSelector: React.FC = () => {
   return (
     <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
       <h3 className={cn("text-lg font-semibold mb-4 flex items-center gap-2", theme.text.primary)}>
-        <Power className="h-5 w-5 text-emerald-500" /> 
+        <Power className="h-5 w-5 text-emerald-500" />
         Active Data Source
       </h3>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {DATASOURCE_OPTIONS.map((source) => {
           const isActive = currentSource === source.id;
           const Icon = source.icon;
-          
+
           return (
             <button
               key={source.id}
@@ -86,8 +86,8 @@ export const DataSourceSelector: React.FC = () => {
               disabled={isActive || isSwitching}
               className={cn(
                 "p-4 rounded-xl border-2 transition-all text-left",
-                isActive 
-                  ? `border-${source.color}-500 bg-${source.color}-50 dark:bg-${source.color}-900/20` 
+                isActive
+                  ? `border-${source.color}-500 bg-${source.color}-50 dark:bg-${source.color}-900/20`
                   : `border-gray-200 dark:border-gray-700 hover:border-${source.color}-300 dark:hover:border-${source.color}-700`,
                 isActive || isSwitching ? "cursor-default" : "cursor-pointer hover:shadow-md"
               )}
@@ -111,10 +111,10 @@ export const DataSourceSelector: React.FC = () => {
           );
         })}
       </div>
-      
+
       {isSwitching && (
         <div className={cn(
-          "mt-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-sm flex items-center gap-2", 
+          "mt-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-sm flex items-center gap-2",
           theme.text.primary
         )}>
           <RefreshCw className="h-4 w-4 animate-spin text-blue-600" />

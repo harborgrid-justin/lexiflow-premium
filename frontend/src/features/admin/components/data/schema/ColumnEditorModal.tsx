@@ -25,7 +25,7 @@ interface ColumnEditorModalProps {
 
 const dataTypes = ['UUID', 'VARCHAR(255)', 'TEXT', 'INTEGER', 'BIGINT', 'NUMERIC', 'BOOLEAN', 'TIMESTAMP WITH TIME ZONE', 'DATE'];
 
-export const ColumnEditorModal: React.FC<ColumnEditorModalProps> = ({
+export function ColumnEditorModal({
     isOpen, onClose, onSave, tableName, columnName, data, setData
 }) => {
     const { theme } = useTheme();

@@ -47,7 +47,7 @@ interface CounselAnalyticsProps {
  * - Negotiation patterns and leverage points
  * - Behavioral tendencies in different case phases
  */
-export const CounselAnalytics: React.FC<CounselAnalyticsProps> = ({ counsel }) => {
+export function CounselAnalytics({ counsel }: CounselAnalyticsProps) {
   // ==========================================================================
   // HOOKS - Context
   // ==========================================================================

@@ -23,14 +23,14 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/features/theme';
 
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
 
-export const JurisdictionFederal: React.FC = () => {
+export function JurisdictionFederal() {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery

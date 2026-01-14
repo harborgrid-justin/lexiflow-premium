@@ -1,14 +1,14 @@
 // components/research/ShepardizingTool.tsx
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { GeminiService, ShepardizeResult, TreatmentType } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { AlertTriangle, CheckCircle, HelpCircle, Loader2, Scale, XCircle } from 'lucide-react';
 import { useState } from 'react';
 
-export const ShepardizingTool: React.FC = () => {
+export function ShepardizingTool() {
   const { theme } = useTheme();
   const [citation, setCitation] = useState('');
   const [isLoading, setIsLoading] = useState(false);

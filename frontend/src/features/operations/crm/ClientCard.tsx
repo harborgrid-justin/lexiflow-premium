@@ -1,16 +1,16 @@
+import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Currency } from '@/shared/ui/atoms/Currency/Currency';
-import { useTheme } from '@/features/theme';
 import { Client, ClientStatus } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { Building, Lock, PieChart } from 'lucide-react';
 interface ClientCardProps {
     client: Client;
     onGenerateToken: (id: string) => void;
 }
 
-export const ClientCard: React.FC<ClientCardProps> = ({ client, onGenerateToken }) => {
+export function ClientCard({ client, onGenerateToken }: ClientCardProps) {
     const { theme } = useTheme();
 
     return (

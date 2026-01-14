@@ -1,8 +1,3 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
@@ -10,6 +5,11 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { queryKeys } from '@/utils/queryKeys';
 import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
 import { memo, useCallback, useState } from 'react';
@@ -27,7 +27,7 @@ interface RateTable {
   createdAt: string;
 }
 
-const RateTableManagementComponent: React.FC = () => {
+const RateTableManagementComponent = function RateTableManagement() {
   const { theme } = useTheme();
   const notify = useNotify();
 

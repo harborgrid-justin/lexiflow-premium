@@ -1,8 +1,8 @@
+import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Shield, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import type { ThreatCheckResult } from './types';
@@ -12,7 +12,7 @@ interface ThreatDetectionPanelProps {
   ipWhitelist: string[];
 }
 
-export const ThreatDetectionPanel: React.FC<ThreatDetectionPanelProps> = ({ onCheckIp, ipWhitelist }) => {
+export function ThreatDetectionPanel({ onCheckIp, ipWhitelist }: ThreatDetectionPanelProps) {
   const { theme } = useTheme();
   const [testIp, setTestIp] = useState('');
   const [checkResult, setCheckResult] = useState<ThreatCheckResult | null>(null);

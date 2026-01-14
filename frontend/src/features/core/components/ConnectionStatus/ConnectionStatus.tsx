@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Database, Cloud, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
-import { apiClient } from '@/services/infrastructure/apiClient';
 import { useDataSource } from '@/providers';
+import { apiClient } from '@/services/infrastructure/apiClient';
 import { BackendHealthMonitor } from '@/shared/ui/organisms/BackendHealthMonitor/BackendHealthMonitor';
 import { SystemHealthDisplay } from '@/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay';
+import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface ConnectionStatusProps {
   className?: string;
 }
 
-export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = '' }) => {
+export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
   // HYDRATION-SAFE: Track mounted state for browser-only APIs
   const [isMounted, setIsMounted] = useState(false);
   const [isOnline, setIsOnline] = useState(true);

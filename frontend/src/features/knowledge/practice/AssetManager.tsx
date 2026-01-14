@@ -8,7 +8,7 @@
  * - Guideline 28: Theme usage is pure function of context
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for UI feedback
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -28,19 +28,19 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
+import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/features/theme';
 import { getTodayString } from '@/shared/lib/dateUtils';
 
 // Components
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -52,7 +52,7 @@ import { FirmAsset } from '@/types';
 // COMPONENT
 // ============================================================================
 
-export const AssetManager: React.FC = () => {
+export function AssetManager() {
     const { theme } = useTheme();
     const [searchTerm, setSearchTerm] = useState('');
     const addModal = useModalState();

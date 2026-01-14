@@ -8,7 +8,7 @@
  */
 
 // External Dependencies
-import { Gavel, FileText, Clock, Bell, Lock, Eye, Hash, ExternalLink } from 'lucide-react';
+import { Bell, Clock, ExternalLink, Eye, FileText, Gavel, Hash, Lock } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Badge } from '@/shared/ui/atoms/Badge';
@@ -33,7 +33,7 @@ interface DocketRowProps {
     dataIndex?: number;
 }
 
-export const DocketRow: React.FC<DocketRowProps> = ({
+export function DocketRow({
     entry,
     showCaseColumn,
     onSelect,
@@ -41,7 +41,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({
     onViewDoc,
     isFocused = false,
     dataIndex
-}) => {
+}: DocketRowProps) {
     const { theme } = useTheme();
 
     const getIconForType = (type: string) => {
@@ -93,7 +93,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({
                 <span className={cn("font-mono text-xs px-1.5 py-0.5 rounded font-bold", theme.surface.highlight, theme.text.secondary)} title="Internal Seq">#{entry.sequenceNumber}</span>
                 {entry.pacerSequenceNumber && (
                     <span className={cn("font-mono text-[10px] px-1.5 py-0.5 rounded border flex items-center", theme.border.default, theme.text.tertiary)} title="PACER Seq">
-                        <Hash className="h-2 w-2 mr-0.5"/> {entry.pacerSequenceNumber}
+                        <Hash className="h-2 w-2 mr-0.5" /> {entry.pacerSequenceNumber}
                     </span>
                 )}
             </div>
@@ -106,42 +106,42 @@ export const DocketRow: React.FC<DocketRowProps> = ({
             {/* Case Ref */}
             {showCaseColumn && (
                 <div className="w-32 shrink-0 px-2">
-                     <span
+                    <span
                         className={cn("text-xs hover:underline font-medium truncate block", theme.primary.text)}
                         onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelectCaseId(entry.caseId); }}
                         title={entry.caseId}
-                     >
-                      {entry.caseId}
+                    >
+                        {entry.caseId}
                     </span>
                 </div>
             )}
 
             {/* Content */}
             <div className="flex-1 min-w-0 px-4">
-                 <div className="flex flex-col">
+                <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
-                      {entry.isSealed && <span title="Sealed Document"><Lock className={cn("h-3 w-3", theme.status.error.text)} /></span>}
-                      {getIconForType(entry.type)}
-                      <div className="truncate">
-                        {renderDescription(entry)}
-                      </div>
+                        {entry.isSealed && <span title="Sealed Document"><Lock className={cn("h-3 w-3", theme.status.error.text)} /></span>}
+                        {getIconForType(entry.type)}
+                        <div className="truncate">
+                            {renderDescription(entry)}
+                        </div>
                     </div>
                     {(!entry.structuredData) && <p className={cn("text-xs truncate pl-6", theme.text.secondary)}>{entry.description}</p>}
-                  </div>
+                </div>
             </div>
 
             {/* Doc Icon */}
             <div className="w-16 shrink-0 text-center">
-                 {entry.documentId && (
+                {entry.documentId && (
                     <Button
                         size="sm"
                         variant="ghost"
                         className={cn("h-8 w-8 p-0", theme.text.tertiary, `hover:${theme.primary.text}`)}
                         onClick={(e: React.MouseEvent) => { e.stopPropagation(); onViewDoc(entry.documentId!); }}
                     >
-                        <Eye className="h-4 w-4"/>
+                        <Eye className="h-4 w-4" />
                     </Button>
-                 )}
+                )}
             </div>
 
             {/* Deadlines / Status */}
@@ -157,11 +157,11 @@ export const DocketRow: React.FC<DocketRowProps> = ({
                         Details
                     </Button>
                 </div>
-                  {entry.triggersDeadlines?.slice(0, 1).map(dl => (
+                {entry.triggersDeadlines?.slice(0, 1).map(dl => (
                     <Badge key={dl.id} variant={dl.status === 'Satisfied' ? 'success' : 'warning'}>
-                      {dl.status === 'Satisfied' ? 'Done' : 'Due ' + dl.date.split('-').slice(1).join('/')}
+                        {dl.status === 'Satisfied' ? 'Done' : 'Due ' + dl.date.split('-').slice(1).join('/')}
                     </Badge>
-                  ))}
+                ))}
             </div>
         </div>
     );

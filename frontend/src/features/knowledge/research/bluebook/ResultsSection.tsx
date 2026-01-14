@@ -21,7 +21,7 @@ interface ResultsSectionProps {
   onExport: (format: ExportFormat) => void;
 }
 
-export const ResultsSection: React.FC<ResultsSectionProps> = ({
+export function ResultsSection({
   results,
   filteredResults,
   filters,

@@ -46,7 +46,7 @@ import { Formatters } from '@/utils/formatters';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-const BillingInvoicesComponent: React.FC = () => {
+function BillingInvoicesComponent() {
   const { theme } = useThemeContext();
   const notify = useNotify();
 

@@ -18,7 +18,7 @@ interface SignatoriesStepProps {
   handleFieldBlur: (field: string) => void;
 }
 
-export const SignatoriesStep: React.FC<SignatoriesStepProps> = ({
+export function SignatoriesStep({
   formData,
   getFieldError,
   updateField,

@@ -42,7 +42,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   // Fetch case and documents in parallel
   const [caseData, documents] = await Promise.all([
-    DataService.cases.get(caseId),
+    DataService.cases.getById(caseId),
     DataService.documents.getByCaseId(caseId),
   ]);
 

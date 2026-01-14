@@ -1,19 +1,19 @@
+import { RulesView } from '@/config/tabs.config';
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { RulesView } from '@/config/tabs.config';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
 import type { JudgeProfile } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, ArrowRight, BookOpen, Clock, Gavel, MapPin, Scale } from 'lucide-react';
 interface RulesDashboardProps {
     onNavigate: (view: RulesView) => void;
 }
 
-export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) => {
+export function RulesDashboard({ onNavigate }: RulesDashboardProps) {
     const { theme } = useTheme();
 
     // Performance Engine: useQuery

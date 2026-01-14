@@ -2,25 +2,31 @@
  * @module features/litigation/evidence/contexts/EvidenceContext
  * @description Context definitions for Evidence feature.
  * Implements React v18 Concurrency Guidelines.
+ *
+ * Guidelines Applied:
+ * - Guideline 22: Immutable context values
+ * - Guideline 25: startTransition for non-urgent updates
+ * - Guideline 33: Explicit transitional states (isPending)
+ * - Guideline 38: Concurrent-safe defaults
  */
 
-import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
-import { ViewMode, DetailTab, useEvidenceManager } from '@/hooks/useEvidenceManager';
+import { DetailTab, useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
 import { EvidenceItem } from '@/types/evidence'; // Assumed type
+import React, { createContext, useContext, useMemo, useTransition } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 
 export interface EvidenceState {
-    view: ViewMode;
-    activeTab: DetailTab;
-    selectedItem: EvidenceItem | null;
-    evidenceItems: EvidenceItem[];
-    filters: Record<string, any>;
-    filteredItems: EvidenceItem[];
-    isLoading: boolean;
-    isPending: boolean; // For concurrent transitions
+    readonly view: ViewMode;
+    readonly activeTab: DetailTab;
+    readonly selectedItem: EvidenceItem | null;
+    readonly evidenceItems: readonly EvidenceItem[];
+    readonly filters: Readonly<Record<string, any>>;
+    readonly filteredItems: readonly EvidenceItem[];
+    readonly isLoading: boolean;
+    readonly isPending: boolean; // For concurrent transitions
 }
 
 export interface EvidenceActions {
@@ -37,16 +43,39 @@ export interface EvidenceActions {
 // CONTEXTS
 // ============================================================================
 
-const EvidenceStateContext = createContext<EvidenceState>({} as EvidenceState);
-const EvidenceActionsContext = createContext<EvidenceActions>({} as EvidenceActions);
+// Guideline 38: ENSURE CONTEXT DEFAULTS ARE CONCURRENT-SAFE
+const DEFAULT_STATE: EvidenceState = Object.freeze({
+    view: 'list' as ViewMode,
+    activeTab: 'details' as DetailTab,
+    selectedItem: null,
+    evidenceItems: Object.freeze([]),
+    filters: Object.freeze({}),
+    filteredItems: Object.freeze([]),
+    isLoading: false,
+    isPending: false,
+});
+
+const DEFAULT_ACTIONS: EvidenceActions = Object.freeze({
+    setView: () => { throw new Error('EvidenceProvider not mounted'); },
+    setActiveTab: () => { throw new Error('EvidenceProvider not mounted'); },
+    setFilters: () => { throw new Error('EvidenceProvider not mounted'); },
+    handleItemClick: () => { throw new Error('EvidenceProvider not mounted'); },
+    handleBack: () => { throw new Error('EvidenceProvider not mounted'); },
+    handleIntakeComplete: () => { throw new Error('EvidenceProvider not mounted'); },
+    handleCustodyUpdate: () => { throw new Error('EvidenceProvider not mounted'); },
+});
+
+const EvidenceStateContext = createContext<EvidenceState>(DEFAULT_STATE);
+const EvidenceActionsContext = createContext<EvidenceActions>(DEFAULT_ACTIONS);
 
 // ============================================================================
 // HOOKS
 // ============================================================================
 
+// Guideline 34: ASSUME CONTEXT READS MAY BE REPEATED OR DISCARDED
 export const useEvidenceState = () => {
     const context = useContext(EvidenceStateContext);
-    if (!context) {
+    if (context === DEFAULT_STATE) {
         throw new Error('useEvidenceState must be used within a EvidenceProvider');
     }
     return context;
@@ -54,7 +83,7 @@ export const useEvidenceState = () => {
 
 export const useEvidenceActions = () => {
     const context = useContext(EvidenceActionsContext);
-    if (!context) {
+    if (context === DEFAULT_ACTIONS) {
         throw new Error('useEvidenceActions must be used within a EvidenceProvider');
     }
     return context;
@@ -70,8 +99,8 @@ interface EvidenceProviderProps {
     initialTab?: ViewMode;
 }
 
-export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({ 
-    children, 
+export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
+    children,
     caseId,
     initialTab
 }) => {
@@ -88,23 +117,27 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
         });
     };
 
-    // Construct State Values (Urgent/Render Critical)
-    const stateValue = useMemo(() => ({
-        view: manager.view,
-        activeTab: manager.activeTab,
-        selectedItem: manager.selectedItem,
-        evidenceItems: manager.evidenceItems,
-        filters: manager.filters,
-        filteredItems: manager.filteredItems,
-        isLoading: manager.isLoading,
-        isPending
-    }), [
-        manager.view, 
-        manager.activeTab, 
-        manager.selectedItem, 
-        manager.evidenceItems, 
-        manager.filters, 
-        manager.filteredItems, 
+    // Guideline 22: DESIGN CONTEXT VALUES TO BE CONCURRENT-SAFE
+    // Construct State Values - immutable, frozen in development
+    const stateValue = useMemo(() => {
+        const value = {
+            view: manager.view,
+            activeTab: manager.activeTab,
+            selectedItem: manager.selectedItem,
+            evidenceItems: manager.evidenceItems,
+            filters: manager.filters,
+            filteredItems: manager.filteredItems,
+            isLoading: manager.isLoading,
+            isPending
+        };
+        return process.env.NODE_ENV === 'development' ? Object.freeze(value) : value;
+    }, [
+        manager.view,
+        manager.activeTab,
+        manager.selectedItem,
+        manager.evidenceItems,
+        manager.filters,
+        manager.filteredItems,
         manager.isLoading,
         isPending
     ]);
@@ -119,11 +152,11 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
         handleIntakeComplete: manager.handleIntakeComplete,
         handleCustodyUpdate: manager.handleCustodyUpdate
     }), [
-        manager.setActiveTab, 
-        manager.setFilters, 
-        manager.handleItemClick, 
-        manager.handleBack, 
-        manager.handleIntakeComplete, 
+        manager.setActiveTab,
+        manager.setFilters,
+        manager.handleItemClick,
+        manager.handleBack,
+        manager.handleIntakeComplete,
         manager.handleCustodyUpdate
     ]);
 

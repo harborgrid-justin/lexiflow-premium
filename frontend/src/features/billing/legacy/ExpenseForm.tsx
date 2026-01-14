@@ -14,7 +14,7 @@ interface ExpenseFormProps {
   actionError?: string;
 }
 
-export const ExpenseForm: React.FC<ExpenseFormProps> = ({
+export function ExpenseForm({
   expense,
   onCancel,
   actionError,

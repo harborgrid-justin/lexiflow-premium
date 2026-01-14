@@ -1,6 +1,6 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Clock, Globe, Lock, Smartphone } from 'lucide-react';
 import type { SecurityControl } from './types';
 
@@ -16,7 +16,7 @@ const iconMap = {
   Clock
 };
 
-export const SecurityControlsPanel: React.FC<SecurityControlsPanelProps> = ({ controls, onToggle }) => {
+export function SecurityControlsPanel({ controls, onToggle }: SecurityControlsPanelProps) {
   const { theme } = useTheme();
 
   return (

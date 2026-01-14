@@ -1,15 +1,15 @@
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 import { useTheme } from '@/features/theme';
-import { SearchResult } from '@/types';
+import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { SearchResult } from '@/types';
 import { ExternalLink } from 'lucide-react';
 interface ResearchResultCardProps {
     source: SearchResult;
     onView: () => void;
 }
 
-export const ResearchResultCard: React.FC<ResearchResultCardProps> = ({ source, onView }) => {
+export function ResearchResultCard({ source, onView }: ResearchResultCardProps) {
     const { theme } = useTheme();
     const { ref, isRead, duration: _duration } = useReadAnalytics(source.id, {
         thresholdMs: 2000, // Mark as "read" after 2 seconds
@@ -30,7 +30,7 @@ export const ResearchResultCard: React.FC<ResearchResultCardProps> = ({ source, 
         >
             <div className="flex justify-between items-start">
                 <div className={cn("text-sm font-bold hover:underline line-clamp-1 flex items-center", theme.primary.text)}>
-                    {source.title} <ExternalLink className="h-3 w-3 ml-2 opacity-50"/>
+                    {source.title} <ExternalLink className="h-3 w-3 ml-2 opacity-50" />
                 </div>
                 <div className="flex items-center gap-2">
                     {isRead && <Badge variant="success">Viewed</Badge>}

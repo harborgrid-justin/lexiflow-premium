@@ -2,38 +2,44 @@
  * @module features/litigation/discovery/contexts/DiscoveryContext
  * @description Context definitions for Discovery feature.
  * Implements React v18 Concurrency Guidelines.
+ *
+ * Guidelines Applied:
+ * - Guideline 22: Immutable context values
+ * - Guideline 25: startTransition for non-urgent updates
+ * - Guideline 33: Explicit transitional states (isPending)
+ * - Guideline 38: Concurrent-safe defaults
  */
 
-import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
-import { DiscoveryView } from '@/utils/discoveryNavigation';
-import { DiscoveryRequest } from '@/types/discovery';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { getParentTabForView, getFirstTabOfParent } from '../layout/DiscoveryNavigation';
-import { useNotify } from '@/hooks/useNotify';
+import { DiscoveryRequest } from '@/types/discovery';
+import { DiscoveryView } from '@/utils/discoveryNavigation';
 import { queryKeys } from '@/utils/queryKeys';
+import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
+import { getFirstTabOfParent, getParentTabForView } from '../layout/DiscoveryNavigation';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 
 export interface DiscoveryState {
-    activeTab: DiscoveryView;
-    activeParentTabId: string;
-    caseId?: string;
-    requests: DiscoveryRequest[];
-    isPending: boolean; // For transition UI
-    isLoadingRequests: boolean;
-    isSyncing: boolean;
-    contextId: string | null;
-    viewMode: string;
+    readonly activeTab: DiscoveryView;
+    readonly activeParentTabId: string;
+    readonly caseId?: string;
+    readonly requests: readonly DiscoveryRequest[];
+    readonly isPending: boolean; // For transition UI
+    readonly isLoadingRequests: boolean;
+    readonly isSyncing: boolean;
+    readonly contextId: string | null;
+    readonly viewMode: string;
 }
 
 export interface DiscoveryActions {
     setActiveTab: (tab: DiscoveryView) => void;
     handleParentTabChange: (parentId: string) => void;
-    syncDeadlines: () => void;
+    syncDeadlines: () => Promise<void>; // Returns void promise
     setContextId: (id: string | null) => void;
     setViewMode: (mode: string) => void;
 }
@@ -42,27 +48,37 @@ export interface DiscoveryActions {
 // CONTEXTS
 // ============================================================================
 
-const defaultState: DiscoveryState = {
-    activeTab: 'dashboard',
+// Guideline 38: ENSURE CONTEXT DEFAULTS ARE CONCURRENT-SAFE
+const DEFAULT_STATE: DiscoveryState = Object.freeze({
+    activeTab: 'dashboard' as DiscoveryView,
     activeParentTabId: 'home',
-    requests: [],
+    requests: Object.freeze([]),
     isPending: false,
     isLoadingRequests: false,
     isSyncing: false,
     contextId: null,
     viewMode: 'list'
-};
+});
 
-const DiscoveryStateContext = createContext<DiscoveryState>(defaultState);
-const DiscoveryActionsContext = createContext<DiscoveryActions>({} as DiscoveryActions);
+const DEFAULT_ACTIONS: DiscoveryActions = Object.freeze({
+    setActiveTab: () => { throw new Error('DiscoveryProvider not mounted'); },
+    handleParentTabChange: () => { throw new Error('DiscoveryProvider not mounted'); },
+    syncDeadlines: () => { throw new Error('DiscoveryProvider not mounted'); },
+    setContextId: () => { throw new Error('DiscoveryProvider not mounted'); },
+    setViewMode: () => { throw new Error('DiscoveryProvider not mounted'); },
+});
+
+const DiscoveryStateContext = createContext<DiscoveryState>(DEFAULT_STATE);
+const DiscoveryActionsContext = createContext<DiscoveryActions>(DEFAULT_ACTIONS);
 
 // ============================================================================
 // HOOKS
 // ============================================================================
 
+// Guideline 34: ASSUME CONTEXT READS MAY BE REPEATED OR DISCARDED
 export const useDiscoveryState = () => {
     const context = useContext(DiscoveryStateContext);
-    if (!context) {
+    if (context === DEFAULT_STATE) {
         throw new Error('useDiscoveryState must be used within a DiscoveryProvider');
     }
     return context;
@@ -70,7 +86,7 @@ export const useDiscoveryState = () => {
 
 export const useDiscoveryActions = () => {
     const context = useContext(DiscoveryActionsContext);
-    if (!context) {
+    if (context === DEFAULT_ACTIONS) {
         throw new Error('useDiscoveryActions must be used within a DiscoveryProvider');
     }
     return context;
@@ -86,28 +102,30 @@ interface DiscoveryProviderProps {
     initialTab?: DiscoveryView;
 }
 
-export const DiscoveryProvider: React.FC<DiscoveryProviderProps> = ({ 
-    children, 
-    caseId, 
-    initialTab = 'dashboard' 
+export const DiscoveryProvider: React.FC<DiscoveryProviderProps> = ({
+    children,
+    caseId,
+    initialTab = 'dashboard'
 }) => {
     const [activeTab, setUiActiveTab] = useState<DiscoveryView>(initialTab);
     const [isPending, startTransition] = useTransition();
     const notify = useNotify();
 
     // Active View/Tab State (Concurrent Safe)
-    const setActiveTab = (tab: DiscoveryView) => {
+    // Guideline 28: Stable function references
+    const setActiveTab = React.useCallback((tab: DiscoveryView) => {
         startTransition(() => {
             setUiActiveTab(tab);
         });
-    };
+    }, []);
 
     const activeParentTabId = useMemo(() => getParentTabForView(activeTab), [activeTab]);
 
-    const handleParentTabChange = (parentId: string) => {
+    // Guideline 28: Stable function references
+    const handleParentTabChange = React.useCallback((parentId: string) => {
         const firstTab = getFirstTabOfParent(parentId);
         setActiveTab(firstTab);
-    };
+    }, [setActiveTab]);
 
     // Data Fetching
     const { data: rawRequests = [], isLoading: isLoadingRequests } = useQuery<DiscoveryRequest[]>(
@@ -123,7 +141,7 @@ export const DiscoveryProvider: React.FC<DiscoveryProviderProps> = ({
     const requests = useMemo(() => Array.isArray(rawRequests) ? rawRequests : [], [rawRequests]);
 
     // Data Mutation
-    const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
+    const { mutate: syncDeadlinesMutation, isLoading: isSyncing } = useMutation(
         async () => {
             return DataService.discovery.syncDeadlines();
         },
@@ -140,31 +158,48 @@ export const DiscoveryProvider: React.FC<DiscoveryProviderProps> = ({
         }
     );
 
+    // Wrap mutation to match expected signature
+    const syncDeadlines = React.useCallback(() => {
+        return new Promise<void>((resolve, reject) => {
+            try {
+                syncDeadlinesMutation(undefined as never); // Mutation requires a parameter
+                resolve();
+            } catch (error: unknown) {
+                reject(error);
+            }
+        });
+    }, [syncDeadlinesMutation]);
+
     // Placeholder for other state (lifting from DiscoveryPlatform)
     // In a full refactor, useSessionStorage would be here or in a separate hook
     const [contextId, setContextId] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<string>('list');
 
-    // Rule 22: Concurrent Safe State
-    const stateValue = useMemo(() => ({
-        activeTab,
-        activeParentTabId,
-        caseId,
-        requests,
-        isPending,
-        isLoadingRequests,
-        isSyncing,
-        contextId,
-        viewMode
-    }), [activeTab, activeParentTabId, caseId, requests, isPending, isLoadingRequests, isSyncing, contextId, viewMode]);
+    // Guideline 22: DESIGN CONTEXT VALUES TO BE CONCURRENT-SAFE
+    // Immutable state, frozen in development
+    const stateValue = useMemo(() => {
+        const value = {
+            activeTab,
+            activeParentTabId: activeParentTabId.id, // Extract string ID
+            caseId,
+            requests,
+            isPending,
+            isLoadingRequests,
+            isSyncing,
+            contextId,
+            viewMode
+        };
+        return process.env.NODE_ENV === 'development' ? Object.freeze(value) : value;
+    }, [activeTab, activeParentTabId, caseId, requests, isPending, isLoadingRequests, isSyncing, contextId, viewMode]);
 
+    // Guideline 28: Stable action references
     const actionsValue = useMemo(() => ({
         setActiveTab,
         handleParentTabChange,
         syncDeadlines,
         setContextId,
         setViewMode
-    }), [handleParentTabChange, syncDeadlines]);
+    }), [setActiveTab, handleParentTabChange, syncDeadlines, setContextId, setViewMode]);
 
     return (
         <DiscoveryActionsContext.Provider value={actionsValue}>

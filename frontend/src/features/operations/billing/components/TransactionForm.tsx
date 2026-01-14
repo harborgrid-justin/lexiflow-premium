@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
 import { getTodayString } from '@/shared/lib/dateUtils';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { FileText } from 'lucide-react';
 import { useState } from 'react';
 
@@ -20,7 +20,7 @@ export interface TransactionData {
   userId: string;
 }
 
-export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onError }) => {
+export function TransactionForm({ onSubmit, onError }: TransactionFormProps) {
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [receiptPreview, setReceiptPreview] = useState<string | null>(null);
   const [account, setAccount] = useState('Operating');

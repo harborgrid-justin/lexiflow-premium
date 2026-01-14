@@ -8,7 +8,7 @@
  * - Guideline 28: Theme usage is pure function of context
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for UI transitions
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -32,10 +32,10 @@ import { useTheme } from '@/features/theme';
 
 // Components
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Utils & Constants
@@ -73,7 +73,7 @@ interface RFP {
 // COMPONENT
 // ============================================================================
 
-export const VendorProcurement: React.FC = () => {
+export function VendorProcurement() {
     // Guideline 34: Side-effect free context read
     const { theme, isPendingThemeChange } = useTheme();
     const [activeTab, setActiveTab] = useState('directory');

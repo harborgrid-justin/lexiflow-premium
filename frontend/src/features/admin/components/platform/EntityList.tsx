@@ -1,7 +1,7 @@
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Edit2, Trash2 } from 'lucide-react';
 import { Category } from './EntitySidebar';
 
@@ -34,7 +34,7 @@ interface EntityListProps {
     onDelete: (id: string) => void;
 }
 
-export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, onEdit, onDelete }) => {
+export function EntityList({ activeCategory, items, onEdit, onDelete }: EntityListProps) {
     const { theme } = useTheme();
 
     const renderRow = (item: GenericRecord) => {

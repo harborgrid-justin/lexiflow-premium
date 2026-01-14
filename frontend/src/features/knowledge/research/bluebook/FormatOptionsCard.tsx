@@ -12,7 +12,7 @@ interface FormatOptionsCardProps {
   onFormatStyleChange: (style: CitationFormat) => void;
 }
 
-export const FormatOptionsCard: React.FC<FormatOptionsCardProps> = ({
+export function FormatOptionsCard({
   options,
   formatStyle,
   onOptionsChange,
@@ -26,7 +26,7 @@ export const FormatOptionsCard: React.FC<FormatOptionsCardProps> = ({
         <Settings className="h-4 w-4 text-slate-500" />
         <h4 className={cn("font-bold text-sm", theme.text.primary)}>Format Options</h4>
       </div>
-      
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <label className="flex items-center gap-2">
           <input

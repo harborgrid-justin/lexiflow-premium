@@ -9,7 +9,7 @@ import { cn } from '@/shared/lib/cn';
 /**
  * Skeleton for communication log items
  */
-export const CommunicationLogSkeleton: React.FC = () => {
+export function CommunicationLogSkeleton() {
   const { theme } = useTheme();
 
   return (
@@ -63,7 +63,7 @@ export const CommunicationLogSkeleton: React.FC = () => {
 /**
  * Skeleton for service tracker cards
  */
-export const ServiceTrackerSkeleton: React.FC = () => {
+export function ServiceTrackerSkeleton() {
   const { theme } = useTheme();
 
   return (
@@ -110,7 +110,7 @@ export const ServiceTrackerSkeleton: React.FC = () => {
 /**
  * Skeleton for correspondence detail panel
  */
-export const CorrespondenceDetailSkeleton: React.FC = () => {
+export function CorrespondenceDetailSkeleton() {
   const { theme } = useTheme();
 
   return (

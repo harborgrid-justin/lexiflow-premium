@@ -23,7 +23,7 @@ interface AccountInfoStepProps {
   handleFieldBlur: (field: string) => void;
 }
 
-export const AccountInfoStep: React.FC<AccountInfoStepProps> = ({
+export function AccountInfoStep({
   formData,
   getFieldError,
   updateField,

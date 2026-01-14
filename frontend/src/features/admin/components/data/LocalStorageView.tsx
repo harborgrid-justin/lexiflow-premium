@@ -5,17 +5,17 @@
  * Provides functionality to view, delete individual items, or clear all storage.
  */
 
-import { useEffect } from 'react';
-import { HardDrive, Trash2 } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { HardDrive, Trash2 } from 'lucide-react';
+import { useEffect } from 'react';
 import { DataSourceSelector } from './DataSourceSelector';
 import { useLocalStorageFiles } from './hooks';
 
 /**
  * Component for viewing and managing localStorage - React 18 optimized with React.memo
  */
-export const LocalStorageView = React.memo(() => {
+export const LocalStorageView = React.memo(function LocalStorageView() {
   const { theme } = useTheme();
   const { files, loadFiles, clearCache, deleteItem } = useLocalStorageFiles();
 

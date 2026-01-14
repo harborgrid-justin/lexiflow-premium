@@ -3,8 +3,8 @@
  * Review and summary step before form submission
  */
 
-import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle } from 'lucide-react';
 interface FormState {
   accountNumber?: string;
@@ -23,7 +23,7 @@ interface ReviewStepProps {
   apiError?: { message: string } | null;
 }
 
-export const ReviewStep: React.FC<ReviewStepProps> = ({ formData, apiError }) => {
+export function ReviewStep({ formData, apiError }: ReviewStepProps) {
   const { theme } = useTheme();
 
   return (

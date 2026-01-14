@@ -1,12 +1,12 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import type { JudgeProfile } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import type { JudgeProfile } from '@/types';
 import { Download, ExternalLink, Gavel } from 'lucide-react';
-export const StandingOrders: React.FC = () => {
+export function StandingOrders() {
     const { theme } = useTheme();
 
     // Fetch judge profiles from backend

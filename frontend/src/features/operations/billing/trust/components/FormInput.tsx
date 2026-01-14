@@ -19,7 +19,7 @@ interface FormInputProps {
   onBlur: () => void;
 }
 
-export const FormInput: React.FC<FormInputProps> = ({
+export function FormInput({
   label,
   type = 'text',
   required = false,

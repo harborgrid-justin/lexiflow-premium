@@ -1,14 +1,14 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { OperatingLedger, TrustLedger } from '@features/knowledge';
 import { Plus } from 'lucide-react';
 import { memo, useCallback, useState } from 'react';
 import { LedgerTabs } from './components/LedgerTabs';
-import { TransactionForm, TransactionData } from './components/TransactionForm';
+import { TransactionData, TransactionForm } from './components/TransactionForm';
 import { useLedgerTransactions } from './hooks/useLedgerTransactions';
 
-const BillingLedgerComponent: React.FC = () => {
+function BillingLedgerComponent() {
   const { openWindow } = useWindow();
   const { error: notifyError } = useNotify();
   const [activeTab, setActiveTab] = useState<'operating' | 'trust'>('operating');

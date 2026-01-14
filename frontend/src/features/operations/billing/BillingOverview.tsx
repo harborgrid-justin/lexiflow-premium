@@ -47,7 +47,7 @@ interface BillingOverviewProps {
 // COMPONENT
 // ============================================================================
 
-const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }) => {
+const BillingOverviewComponent = function BillingOverview({ onNavigate }: BillingOverviewProps) {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 

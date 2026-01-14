@@ -11,11 +11,11 @@ interface ConnectionCardProps {
   onTest: (connection: DataConnection) => void;
 }
 
-export const ConnectionCard: React.FC<ConnectionCardProps> = ({ 
-  connection, 
-  onSync, 
-  onDelete, 
-  onTest 
+export function ConnectionCard({
+  connection,
+  onSync,
+  onDelete,
+  onTest
 }) => {
   const { theme } = useTheme();
 
@@ -58,13 +58,13 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
         <div className="flex items-center gap-4">
           <div className={cn(
             "p-3 rounded-lg shadow-sm border transition-colors",
-            connection.status === 'error' 
-              ? "bg-rose-50 border-rose-200" 
+            connection.status === 'error'
+              ? "bg-rose-50 border-rose-200"
               : "bg-white dark:bg-slate-800 border-gray-200 dark:border-gray-700"
           )}>
             {connection.type === 'Snowflake' ? <Database className="h-6 w-6 text-blue-600" /> :
-             connection.type === 'S3' ? <Cloud className="h-6 w-6 text-orange-500" /> :
-             <Server className="h-6 w-6 text-purple-600" />}
+              connection.type === 'S3' ? <Cloud className="h-6 w-6 text-orange-500" /> :
+                <Server className="h-6 w-6 text-purple-600" />}
           </div>
           <div>
             <h4 className={cn("font-bold text-base", theme.text.primary)}>{connection.name}</h4>
@@ -105,29 +105,29 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
       </div>
 
       <div className="flex gap-2">
-        <button 
+        <button
           onClick={() => onSync(connection.id)}
           disabled={connection.status === 'syncing'}
           className={cn(
             "flex-1 py-2 text-xs font-semibold rounded-lg border transition-all flex items-center justify-center gap-2",
-            connection.status === 'syncing' 
-              ? "bg-blue-50 text-blue-600 border-blue-200" 
+            connection.status === 'syncing'
+              ? "bg-blue-50 text-blue-600 border-blue-200"
               : "hover:bg-gray-50 dark:hover:bg-slate-800 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300"
           )}
         >
           <RefreshCw className={cn("h-3.5 w-3.5", connection.status === 'syncing' && "animate-spin")} />
           {connection.status === 'syncing' ? 'Syncing...' : 'Sync Now'}
         </button>
-        
-        <button 
+
+        <button
           onClick={() => onTest(connection)}
           className={cn("p-2 rounded-lg border hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-gray-500", theme.border.default)}
           title="Test Connection"
         >
           <ShieldCheck className="h-4 w-4" />
         </button>
-        
-        <button 
+
+        <button
           onClick={() => onDelete(connection.id)}
           className={cn("p-2 rounded-lg border hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors text-gray-400", theme.border.default)}
           title="Delete Connection"

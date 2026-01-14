@@ -13,7 +13,7 @@ interface RolePermission {
 
 type PermissionLevel = 'None' | 'Read' | 'Write' | 'Full' | 'Own';
 
-export const AccessGovernance: React.FC = () => {
+export function AccessGovernance() {
     const { theme } = useTheme();
     const notify = useNotify();
 

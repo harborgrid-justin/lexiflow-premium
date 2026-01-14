@@ -8,7 +8,7 @@
  * - Guideline 28: Theme usage is pure function of context
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for smooth transitions
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -43,7 +43,7 @@ import { cn } from '@/shared/lib/cn';
 // COMPONENT
 // ============================================================================
 
-export const FinancialCenter: React.FC = () => {
+export function FinancialCenter() {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'operating' | 'trust'>('operating');
 

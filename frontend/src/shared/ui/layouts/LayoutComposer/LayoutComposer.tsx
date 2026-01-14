@@ -98,7 +98,7 @@ interface SkipLinkProps {
   label: string;
 }
 
-const SkipLink: React.FC<SkipLinkProps> = ({ targetId, label }) => {
+const SkipLink = function SkipLink({ targetId, label }: SkipLinkProps) {
   const { theme } = useTheme();
 
   const handleClick = (e: React.MouseEvent) => {
@@ -136,7 +136,7 @@ interface SectionProps {
   section: LayoutSection;
 }
 
-const Section: React.FC<SectionProps> = ({ section }) => {
+const Section = function Section({ section }: SectionProps) {
   const { theme } = useTheme();
   const { id, content, role, ariaLabel, className, flexGrow, scrollable, printable = true } = section;
 
@@ -202,7 +202,7 @@ const Section: React.FC<SectionProps> = ({ section }) => {
  * />
  * ```
  */
-export const LayoutComposer: React.FC<LayoutComposerProps> = ({
+export function LayoutComposer({
   sections,
   direction = 'vertical',
   gap = 'md',
@@ -262,7 +262,7 @@ export const LayoutComposer: React.FC<LayoutComposerProps> = ({
 /**
  * Pre-configured LayoutComposer for standard app layout (header + main + sidebar)
  */
-export const AppLayoutComposer: React.FC<{
+export function AppLayoutComposer({
   header: ReactNode;
   main: ReactNode;
   sidebar?: ReactNode;
@@ -310,7 +310,7 @@ export const AppLayoutComposer: React.FC<{
 /**
  * Pre-configured LayoutComposer for dashboard layout (header + sidebar + main)
  */
-export const DashboardLayoutComposer: React.FC<{
+export function DashboardLayoutComposer({
   header: ReactNode;
   sidebar: ReactNode;
   main: ReactNode;

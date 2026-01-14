@@ -1,5 +1,5 @@
-import React, { lazy } from 'react';
 import { KnowledgeView } from '@/config/tabs.config';
+import { lazy } from 'react';
 
 // Lazy load all sub-views for the Knowledge Base
 const WikiView = lazy(() => import('./WikiView').then(m => ({ default: m.WikiView })));
@@ -12,7 +12,7 @@ interface KnowledgeContentProps {
   activeTab: KnowledgeView;
 }
 
-export const KnowledgeContent: React.FC<KnowledgeContentProps> = ({ activeTab }) => {
+export function KnowledgeContent({ activeTab }: KnowledgeContentProps) {
   switch (activeTab) {
     case 'wiki': return <WikiView />;
     case 'precedents': return <PrecedentsView />;

@@ -18,17 +18,17 @@ import { useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { CitationDetail } from './CitationDetail';
 
 // Hooks & Context
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 
 // Services & Utils
@@ -43,7 +43,7 @@ import { Citation } from '@/types';
 import { CitationLibraryProps } from './types';
 import { getSignalIcon, getTypeIcon } from './utils';
 
-export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) => {
+export function CitationLibrary({ onSelect }: CitationLibraryProps) {
     const { theme } = useTheme();
     const { openWindow, closeWindow } = useWindow();
     const [searchTerm, setSearchTerm] = useState('');
@@ -138,7 +138,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
             </div>
         </>
     );
-console.log('content data:', content);
+    console.log('content data:', content);
 
     return (
         <div className="flex flex-col h-full">

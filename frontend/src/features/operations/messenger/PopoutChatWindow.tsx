@@ -9,7 +9,7 @@ interface PopoutChatWindowProps {
   formatTime: (iso: string) => string;
 }
 
-export const PopoutChatWindow: React.FC<PopoutChatWindowProps> = ({ conversation, formatTime }) => {
+export function PopoutChatWindow({ conversation, formatTime }: PopoutChatWindowProps) {
   const [inputText, setInputText] = useState('');
   const [pendingAttachments, setPendingAttachments] = useState<Attachment[]>([]);
   const [isPrivilegedMode, setIsPrivilegedMode] = useState(false);

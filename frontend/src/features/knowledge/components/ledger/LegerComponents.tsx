@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { DollarSign } from 'lucide-react';
-import { DataService } from '@/services/data/dataService';
+import { useEffect, useState } from 'react';
 
 interface LedgerProps {
     className?: string;
@@ -17,7 +17,7 @@ interface Transaction {
     date: string;
 }
 
-const LedgerBase: React.FC<LedgerProps> = ({ className, type, accountId }) => {
+const LedgerBase = function LedgerBase({ className, type, accountId }: LedgerProps) {
     const isTrust = type === 'trust';
     const title = isTrust ? 'Trust Account Ledger' : 'Operating Account Ledger';
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -116,5 +116,12 @@ const LedgerBase: React.FC<LedgerProps> = ({ className, type, accountId }) => {
     );
 };
 
-export const OperatingLedger: React.FC<{ className?: string; accountId?: string }> = (props) => <LedgerBase {...props} type="operating" />;
-export const TrustLedger: React.FC<{ className?: string; accountId?: string }> = (props) => <LedgerBase {...props} type="trust" />;
+export const OperatingLedger = React.memo<{ className?: string; accountId?: string }>(function OperatingLedger(props) {
+    return <LedgerBase {...props} type="operating" />;
+});
+OperatingLedger.displayName = 'OperatingLedger';
+
+export const TrustLedger = React.memo<{ className?: string; accountId?: string }>(function TrustLedger(props) {
+    return <LedgerBase {...props} type="trust" />;
+});
+TrustLedger.displayName = 'TrustLedger';

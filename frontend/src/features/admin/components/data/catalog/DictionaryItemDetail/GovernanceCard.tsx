@@ -1,13 +1,13 @@
-import { Input } from '@/shared/ui/atoms/Input';
-import { Card } from '@/shared/ui/molecules/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Card } from '@/shared/ui/molecules/Card';
 import { Shield } from 'lucide-react';
 import { CardSectionProps } from './types';
 
 const CLASSIFICATIONS = ['Public', 'Internal', 'Confidential', 'Restricted'] as const;
 
-export const GovernanceCard: React.FC<CardSectionProps> = ({ formData, setFormData }) => {
+export function GovernanceCard({ formData, setFormData }: CardSectionProps) {
   const { theme } = useTheme();
 
   return (

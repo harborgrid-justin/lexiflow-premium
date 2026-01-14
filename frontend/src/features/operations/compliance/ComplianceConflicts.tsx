@@ -33,7 +33,7 @@ import { cn } from '@/shared/lib/cn';
 // COMPONENT
 // ============================================================================
 
-const ComplianceConflictsComponent: React.FC = () => {
+function ComplianceConflictsComponent() {
   const { theme } = useTheme();
 
   // Feature Hook

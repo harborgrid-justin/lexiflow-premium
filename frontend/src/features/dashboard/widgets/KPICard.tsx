@@ -115,7 +115,7 @@ const colorClasses = {
 // COMPONENT
 // ============================================================================
 
-export const KPICard: React.FC<KPICardProps> = ({
+export function KPICard({
   label,
   value,
   previousValue,

@@ -10,7 +10,7 @@ interface InvoicePreviewProps {
   invoice: Invoice;
 }
 
-export const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
+export function InvoicePreview({ invoice }: InvoicePreviewProps) {
   const { theme } = useTheme();
 
   return (

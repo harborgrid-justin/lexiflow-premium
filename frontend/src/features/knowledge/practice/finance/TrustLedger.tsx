@@ -1,7 +1,7 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Formatters } from '@/utils/formatters';
 import { FileText, Landmark } from 'lucide-react';
 interface TrustLedgerAccount {
@@ -16,7 +16,7 @@ interface TrustLedgerProps {
     trustAccounts: TrustLedgerAccount[];
 }
 
-export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
+export function TrustLedger({ trustAccounts }: TrustLedgerProps) {
     const { theme } = useTheme();
 
     const totalLiability = trustAccounts.reduce((acc: number, curr) => acc + curr.balance, 0);

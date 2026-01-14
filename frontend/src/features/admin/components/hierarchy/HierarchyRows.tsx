@@ -1,7 +1,7 @@
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 import { useTheme } from '@/features/theme';
-import { Group, Organization, User as UserType } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { Group, Organization, User as UserType } from '@/types';
 import { Building2, Globe, MoreVertical, Shield } from 'lucide-react';
 interface OrgListItemProps {
     org: Organization;
@@ -9,7 +9,7 @@ interface OrgListItemProps {
     onSelect: (id: string) => void;
 }
 
-export const OrgListItem: React.FC<OrgListItemProps> = ({ org, isSelected, onSelect }) => {
+export function OrgListItem({ org, isSelected, onSelect }: OrgListItemProps) {
     const { theme } = useTheme();
     return (
         <div
@@ -42,7 +42,7 @@ interface GroupListItemProps {
     onSelect: (id: string) => void;
 }
 
-export const GroupListItem: React.FC<GroupListItemProps> = ({ group, isSelected, onSelect }) => {
+export function GroupListItem({ group, isSelected, onSelect }: GroupListItemProps) {
     const { theme } = useTheme();
     return (
         <div
@@ -72,7 +72,7 @@ interface UserListItemProps {
     viewMode?: 'table' | 'card';
 }
 
-export const UserListItem: React.FC<UserListItemProps> = ({ user, viewMode = 'table' }) => {
+export function UserListItem({ user, viewMode = 'table' }: UserListItemProps) {
     const { theme } = useTheme();
 
     if (viewMode === 'card') {

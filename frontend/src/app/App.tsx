@@ -1,5 +1,5 @@
 // src/app/App.tsx
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "../contexts/auth/AuthContext";
@@ -55,7 +55,7 @@ type GuardedRouteProps = {
  *  - Feature-flag checks
  *  - Optional entitlement/business checks via `when`
  */
-const GuardedRoute: React.FC<GuardedRouteProps> = ({ policy, element }) => {
+function GuardedRoute({ policy, element }: GuardedRouteProps) {
   const { auth } = useAuth();
   const { flags } = useFlags();
   const { entitlements } = useEntitlements();
@@ -149,7 +149,7 @@ const ROUTES = {
   }
 } as const;
 
-export const App: React.FC = () => {
+export function App() {
   return (
     <BrowserRouter>
       <AuthProvider>

@@ -77,7 +77,7 @@ export class CorrespondenceErrorBoundary extends Component<Props, State> {
 /**
  * Fallback UI component displayed when error occurs
  */
-const ErrorFallback: React.FC<{ error: Error | null; onReset: () => void }> = ({ error, onReset }) => {
+const ErrorFallback = React.memo<{ error: Error | null; onReset: () => void }>(function ErrorFallback({ error, onReset }) {
   const FallbackContent = () => {
     const { theme } = useTheme();
 

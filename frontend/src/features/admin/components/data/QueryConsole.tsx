@@ -1,12 +1,12 @@
 import { dataPlatformApi } from '@/api/data-platform';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/backend';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { useTheme } from '@/features/theme';
-import { useQuery } from '@/hooks/backend';
-import { cn } from '@/shared/lib/cn';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { AlignLeft, Bot, Download, Play } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -17,7 +17,7 @@ interface QueryConsoleProps {
     initialTab?: string;
 }
 
-export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor' }) => {
+export function QueryConsole({ initialTab = 'editor' }: QueryConsoleProps) {
     const { theme } = useTheme();
     const [activeSidebarTab, setActiveSidebarTab] = useState<'schema' | 'history' | 'saved'>('schema');
     const [activeResultsTab, setActiveResultsTab] = useState<'results' | 'explain' | 'visualize'>('results');

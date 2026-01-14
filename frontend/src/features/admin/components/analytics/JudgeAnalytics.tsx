@@ -52,7 +52,7 @@ interface JudgeAnalyticsProps {
  * - Average case duration
  * - Documented judicial tendencies
  */
-export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) => {
+export function JudgeAnalytics({ judge, stats }: JudgeAnalyticsProps) {
   // ==========================================================================
   // HOOKS - Context
   // ==========================================================================

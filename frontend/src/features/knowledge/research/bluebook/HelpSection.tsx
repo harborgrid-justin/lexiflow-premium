@@ -1,8 +1,8 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Book, FileCode, FileText, Flag, Scale } from 'lucide-react';
-export const HelpSection: React.FC = () => {
+export function HelpSection() {
   const { theme } = useTheme();
 
   const citationTypes = [

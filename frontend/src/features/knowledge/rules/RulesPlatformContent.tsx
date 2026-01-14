@@ -1,5 +1,5 @@
-import { lazy } from 'react';
 import { RulesView } from '@/config/tabs.config';
+import { lazy } from 'react';
 
 // Sub-components
 const RulesDashboard = lazy(() => import('./RulesDashboard').then(m => ({ default: m.RulesDashboard })));
@@ -12,7 +12,7 @@ interface RulesPlatformContentProps {
   setActiveTab: (view: RulesView) => void;
 }
 
-export const RulesPlatformContent: React.FC<RulesPlatformContentProps> = ({ activeTab, setActiveTab }) => {
+export function RulesPlatformContent({ activeTab, setActiveTab }: RulesPlatformContentProps) {
   switch (activeTab) {
     case 'dashboard': return <RulesDashboard onNavigate={setActiveTab} />;
     case 'federal_evidence': return <RuleBookViewer type="FRE" />;

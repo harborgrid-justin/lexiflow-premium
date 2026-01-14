@@ -22,7 +22,7 @@ interface DatabaseInfo {
 }
 
 
-export const DatabaseManagement: React.FC = () => {
+export function DatabaseManagement() {
   const { theme } = useTheme();
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);

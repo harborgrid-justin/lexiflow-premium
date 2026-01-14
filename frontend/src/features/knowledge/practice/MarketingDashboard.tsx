@@ -8,7 +8,7 @@
  * - Guideline 28: Theme & chart colors memoized (pure derivations)
  * - Guideline 34: useTheme() is side-effect free read
  * - Guideline 33: Uses isPendingThemeChange for smooth chart transitions
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -43,10 +43,10 @@ import { MarketingCampaign, MarketingMetric } from '@/types';
 // COMPONENT
 // ============================================================================
 
-export const MarketingDashboard: React.FC = () => {
+export function MarketingDashboard() {
   // Guideline 34: Side-effect free context read
   const { theme, mode, isPendingThemeChange } = useTheme();
-  
+
   // Guideline 28: Memoize chart theme values (pure function of mode)
   const chartColors = useMemo(() => ChartColorService.getChartColors(mode), [mode]);
   const chartTheme = useMemo(() => ChartColorService.getChartTheme(mode), [mode]);

@@ -29,8 +29,8 @@ import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/shared/hooks/useToggle';
 
 // Components
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { CommunicationLog } from './CommunicationLog';
 import { ComposeMessageModal } from './ComposeMessageModal';
 import { CorrespondenceDetail } from './CorrespondenceDetail';
@@ -57,7 +57,7 @@ interface CorrespondenceManagerProps {
 // COMPONENT
 // ============================================================================
 
-const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ initialTab }) => {
+function CorrespondenceManagerInternal({ initialTab }: CorrespondenceManagerProps) {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState<'communications' | 'process'>('communications');
     const itemSelection = useSelection<CommunicationItem | ServiceJob>();
@@ -271,7 +271,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
 };
 
 // Export with ErrorBoundary wrapper for resilience
-const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = (props) => (
+const CorrespondenceManager = React.memo<CorrespondenceManagerProps>(function CorrespondenceManager(props) {
     <CorrespondenceErrorBoundary>
         <Suspense fallback={<CommunicationLogSkeleton />}>
             <CorrespondenceManagerInternal {...props} />

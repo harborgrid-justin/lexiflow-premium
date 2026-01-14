@@ -22,7 +22,7 @@ const PROVIDERS: CloudProvider[] = [
   { id: 's3', name: 'Amazon S3', icon: Cloud, color: 'text-orange-500' },
 ];
 
-export const ConnectionForm: React.FC<ConnectionFormProps> = ({
+export function ConnectionForm({
   isAdding,
   setIsAdding,
   selectedProvider,
@@ -51,8 +51,8 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
             <h4 className={cn("text-sm font-bold mb-4", theme.text.primary)}>Select Provider</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {PROVIDERS.map(p => (
-                <button 
-                  key={p.id} 
+                <button
+                  key={p.id}
                   onClick={() => setSelectedProvider(p.id)}
                   className="group flex flex-col items-center justify-center p-6 rounded-xl border bg-white dark:bg-slate-800 hover:border-blue-500 hover:shadow-md transition-all gap-3"
                 >
@@ -69,9 +69,9 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
         ) : (
           <form onSubmit={onSubmit} className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-2 mb-6">
-              <button 
-                type="button" 
-                onClick={() => setSelectedProvider(null)} 
+              <button
+                type="button"
+                onClick={() => setSelectedProvider(null)}
                 className="text-sm text-blue-600 hover:underline flex items-center gap-1"
               >
                 ← Providers
@@ -81,14 +81,14 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                 Configure {PROVIDERS.find(p => p.id === selectedProvider)?.name}
               </span>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
                   Connection Name
                 </label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   className={cn(
                     "w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all",
@@ -97,7 +97,7 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                     theme.text.primary
                   )}
                   value={formData.name}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Production Warehouse"
                 />
               </div>
@@ -105,8 +105,8 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
                   Host / Endpoint
                 </label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   className={cn(
                     "w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all",
@@ -115,21 +115,21 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                     theme.text.primary
                   )}
                   value={formData.host}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, host: e.target.value})}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, host: e.target.value })}
                   placeholder="e.g. xy12345.us-east-1.snowflakecomputing.com"
                 />
               </div>
             </div>
-            
+
             <div className="flex justify-end gap-3 pt-4">
-              <button 
+              <button
                 type="button"
-                onClick={() => { setIsAdding(false); setSelectedProvider(null); }} 
+                onClick={() => { setIsAdding(false); setSelectedProvider(null); }}
                 className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 type="submit"
                 disabled={isLoading}
                 className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 shadow-lg shadow-blue-500/30 transition-all hover:scale-105 active:scale-95"

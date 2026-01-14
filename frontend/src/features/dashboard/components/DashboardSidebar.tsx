@@ -30,7 +30,6 @@ import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
-import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -52,7 +51,7 @@ interface DashboardSidebarProps {
 // COMPONENT
 // ============================================================================
 
-export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ alerts }) => {
+export function DashboardSidebar({ alerts }: DashboardSidebarProps) {
     const { onSelectCase } = useDashboardActions();
     const { theme } = useTheme();
 

@@ -36,7 +36,7 @@ export interface StatWidgetProps {
 // COMPONENT
 // ============================================================================
 
-export const StatWidget: React.FC<StatWidgetProps> = ({
+export function StatWidget({
   label,
   value,
   icon: Icon,

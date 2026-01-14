@@ -1,16 +1,16 @@
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { LegalRule } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
 import { useTheme } from '@/features/theme';
+import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { Bookmark, BookOpen, ExternalLink, FileText, History, Loader2, Scale, Search, Share2 } from 'lucide-react';
 import { RuleContentDisplay } from './rule-viewer/RuleContentDisplay';
 import { RuleTreeViewer } from './rule-viewer/RuleTreeViewer';
@@ -20,7 +20,7 @@ interface RuleBookViewerProps {
     isOrbital?: boolean; // Detect if running in window
 }
 
-export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital }) => {
+export function RuleBookViewer({ type, isOrbital }: RuleBookViewerProps) {
     const { theme, mode } = useTheme();
     const { openWindow } = useWindow();
     const [activeTab, setActiveTab] = useState('text');

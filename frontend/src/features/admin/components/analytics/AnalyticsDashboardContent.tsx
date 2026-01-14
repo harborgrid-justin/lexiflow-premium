@@ -36,7 +36,7 @@ interface AnalyticsDashboardContentProps {
 // MAIN COMPONENT
 // ============================================================================
 
-export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps> = ({ activeTab }) => {
+export function AnalyticsDashboardContent({ activeTab }: AnalyticsDashboardContentProps) {
   // ==========================================================================
   // DETERMINE ACTIVE VIEW
   // ==========================================================================

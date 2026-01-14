@@ -1,31 +1,16 @@
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { Activity, AlertCircle, CheckCircle, Plus, Radio, Users, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import type { DataStream, RealtimeStreamsProps } from './RealtimeStreams.types';
 
-interface DataStream {
-  id: string;
-  name: string;
-  source: string;
-  target: string;
-  status: 'active' | 'paused' | 'error';
-  throughput: string;
-  latency: string;
-  messagesProcessed: number;
-  lastActivity: string;
-}
-
-interface RealtimeStreamsProps {
-  initialTab?: string;
-}
-
-export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = 'streams' }) => {
+export function RealtimeStreams({ initialTab = 'streams' }: RealtimeStreamsProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
 

@@ -15,7 +15,7 @@ interface TimeEntryFormProps {
   actionError?: string;
 }
 
-export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
+export function TimeEntryForm({
   entry,
   onCancel,
   actionError,

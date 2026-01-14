@@ -19,7 +19,7 @@ interface Step2FormConfigurationProps {
   onGenerate: () => void;
 }
 
-export const Step2FormConfiguration: React.FC<Step2FormConfigurationProps> = ({
+export function Step2FormConfiguration({
   template,
   formData,
   onFormDataChange,

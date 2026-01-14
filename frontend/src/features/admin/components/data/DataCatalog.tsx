@@ -1,27 +1,17 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { ArrowLeft, ChevronRight, Database, Loader2, Maximize2, Tag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
 import { DataDictionary } from './catalog/DataDictionary';
+import type { DataCatalogProps, DataDomain } from './DataCatalog.types';
 
-interface DataDomain {
-    name: string;
-    count: number;
-    desc: string;
-}
-
-interface DataCatalogProps {
-    initialTab?: string;
-    isOrbital?: boolean;
-}
-
-export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse', isOrbital = false }) => {
+export function DataCatalog({ initialTab = 'browse', isOrbital = false }: DataCatalogProps) {
     const { theme } = useTheme();
     const { openWindow } = useWindow();
     const [activeTab, setActiveTab] = useState(initialTab);

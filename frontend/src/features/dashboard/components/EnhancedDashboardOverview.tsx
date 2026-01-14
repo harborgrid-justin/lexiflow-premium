@@ -52,19 +52,19 @@ interface EnhancedDashboardOverviewProps {
 // COMPONENT
 // ============================================================================
 
-export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps> = ({
+export function EnhancedDashboardOverview({
   onSelectCase,
 }) => {
   const { theme, mode: _mode } = useTheme();
-  
+
   const {
-      kpis,
-      caseBreakdown,
-      billingData,
-      activities,
-      deadlines,
-      isLoading,
-      loadingState
+    kpis,
+    caseBreakdown,
+    billingData,
+    activities,
+    deadlines,
+    isLoading,
+    loadingState
   } = useDashboardOverview();
 
   if (isLoading) {

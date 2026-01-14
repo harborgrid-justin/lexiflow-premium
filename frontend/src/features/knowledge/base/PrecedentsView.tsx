@@ -10,14 +10,14 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { FileText, Download } from 'lucide-react';
+import { Download, FileText } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -36,12 +36,12 @@ import { Precedent } from '@/types';
 // COMPONENT
 // ============================================================================
 
-export const PrecedentsView: React.FC = () => {
+export function PrecedentsView() {
   const { theme } = useTheme();
 
   const { data: precedents = [] } = useQuery<Precedent[]>(
-      ['precedents', 'all'],
-      DataService.knowledge.getPrecedents
+    ['precedents', 'all'],
+    DataService.knowledge.getPrecedents
   );
 
   return (
@@ -50,16 +50,16 @@ export const PrecedentsView: React.FC = () => {
         <div key={item.id} className={cn("p-6 rounded-xl border shadow-sm transition-all hover:shadow-md cursor-pointer group flex flex-col", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
           <div className="flex items-center justify-between mb-3">
             <div className={cn("p-2 rounded-lg", theme.surface.highlight)}>
-                <FileText className={cn("h-6 w-6", theme.primary.text)}/>
+              <FileText className={cn("h-6 w-6", theme.primary.text)} />
             </div>
             <span className={cn(
-                "text-xs font-bold px-2 py-1 rounded",
-                item.tag === 'success' ? cn(theme.status.success.bg, theme.status.success.text) :
+              "text-xs font-bold px-2 py-1 rounded",
+              item.tag === 'success' ? cn(theme.status.success.bg, theme.status.success.text) :
                 item.tag === 'info' ? cn(theme.status.info.bg, theme.status.info.text) :
-                item.tag === 'warning' ? cn(theme.status.warning.bg, theme.status.warning.text) :
-                cn(theme.surface.highlight, theme.text.secondary)
+                  item.tag === 'warning' ? cn(theme.status.warning.bg, theme.status.warning.text) :
+                    cn(theme.surface.highlight, theme.text.secondary)
             )}>
-                {item.type}
+              {item.type}
             </span>
           </div>
 
@@ -75,5 +75,3 @@ export const PrecedentsView: React.FC = () => {
     </div>
   );
 };
-
-

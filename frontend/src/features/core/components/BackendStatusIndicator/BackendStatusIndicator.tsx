@@ -14,7 +14,7 @@ interface BackendStatusIndicatorProps {
   showPulse?: boolean; // Show pulse animation when monitoring
 }
 
-export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
+export function BackendStatusIndicator({
   showLabel = true,
   variant = 'compact',
   showPulse = true

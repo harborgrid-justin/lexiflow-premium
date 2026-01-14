@@ -1,18 +1,18 @@
-import { Card } from '@/shared/ui/molecules/Card';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
-import { DataService } from '@/services/data/dataService';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { Card } from '@/shared/ui/molecules/Card';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-export const ClientAnalytics: React.FC = () => {
+export function ClientAnalytics() {
   const { mode } = useTheme();
   const chartTheme = useChartTheme();
 
   // Enterprise Data Access
   const { data: analyticsData } = useQuery(
-      ['crm', 'analytics'],
-      () => DataService.crm.getAnalytics(mode)
+    ['crm', 'analytics'],
+    () => DataService.crm.getAnalytics(mode)
   );
 
   // Type guard for analytics
@@ -34,10 +34,10 @@ export const ClientAnalytics: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={analytics.revenue} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} tickFormatter={(value) => `$${value/1000}k`} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} tickFormatter={(value) => `$${value / 1000}k`} />
                 <Tooltip
-                  cursor={{fill: chartTheme.grid}}
+                  cursor={{ fill: chartTheme.grid }}
                   formatter={(value: unknown) => {
                     const numValue = typeof value === 'number' ? value : 0;
                     return `$${numValue.toLocaleString()}`;
@@ -57,8 +57,8 @@ export const ClientAnalytics: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={analytics.sources} layout="vertical" margin={{ left: 40 }}>
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" tick={{fill: chartTheme.text, fontSize: 12}} />
-                <Tooltip cursor={{fill: chartTheme.grid}} contentStyle={chartTheme.tooltipStyle} />
+                <YAxis dataKey="name" type="category" tick={{ fill: chartTheme.text, fontSize: 12 }} />
+                <Tooltip cursor={{ fill: chartTheme.grid }} contentStyle={chartTheme.tooltipStyle} />
                 <Bar dataKey="value" fill={chartTheme.colors.purple} radius={[0, 4, 4, 0]} barSize={24} />
               </BarChart>
             </ResponsiveContainer>

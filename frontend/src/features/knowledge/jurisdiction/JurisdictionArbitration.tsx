@@ -1,12 +1,12 @@
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
-import { cn } from '@/shared/lib/cn';
 import { CheckCircle } from 'lucide-react';
-export const JurisdictionArbitration: React.FC = () => {
+export function JurisdictionArbitration() {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery

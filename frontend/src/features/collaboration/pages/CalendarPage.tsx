@@ -14,7 +14,7 @@ interface CalendarPageProps {
 /**
  * CalendarPage - React 18 optimized with React.memo
  */
-export const CalendarPage = React.memo<CalendarPageProps>(({ caseId: _caseId }) => {
+export const CalendarPage = React.memo<CalendarPageProps>(function CalendarPage({ caseId: _caseId }) {
   return (
     <PageContainerLayout>
       <CalendarMaster />

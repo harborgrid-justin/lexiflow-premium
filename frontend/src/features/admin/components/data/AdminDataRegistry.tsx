@@ -1,8 +1,8 @@
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { HardDrive, Loader2, Server } from 'lucide-react';
 interface DataFile {
   name: string;
@@ -11,7 +11,7 @@ interface DataFile {
   size: string;
 }
 
-export const AdminDataRegistry: React.FC = () => {
+export function AdminDataRegistry() {
   const { theme } = useTheme();
 
   const { data: dataFiles = [], isLoading } = useQuery<DataFile[]>(

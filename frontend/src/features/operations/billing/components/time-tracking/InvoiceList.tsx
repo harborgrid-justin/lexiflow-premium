@@ -13,7 +13,7 @@ interface InvoiceListProps {
   filters?: Record<string, unknown>;
 }
 
-export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) => {
+export function InvoiceList({ invoices, filters }: InvoiceListProps) {
   const [showFilters, setShowFilters] = useState(false);
 
   const getStatusBadge = (status: string) => {

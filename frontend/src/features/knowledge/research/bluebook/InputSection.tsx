@@ -19,7 +19,7 @@ interface InputSectionProps {
   onFormatOptionsChange: (options: FormatOptions) => void;
 }
 
-export const InputSection: React.FC<InputSectionProps> = ({
+export function InputSection({
   inputText,
   onInputChange,
   onFormat,

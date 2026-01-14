@@ -9,12 +9,12 @@
  * - theme.border.default - Card and input borders
  */
 
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { useNotify } from '@/hooks/core';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import {
   AlertCircle,
   Briefcase,
@@ -48,7 +48,7 @@ interface FirmDetails {
   barAssociations: string[];
 }
 
-export const FirmProfile: React.FC = () => {
+export function FirmProfile() {
   const { theme } = useTheme();
   const notify = useNotify();
   const [isEditing, setIsEditing] = useState(false);

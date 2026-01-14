@@ -23,7 +23,7 @@ interface ComplianceStepProps {
   handleFieldBlur: (field: string) => void;
 }
 
-export const ComplianceStep: React.FC<ComplianceStepProps> = ({
+export function ComplianceStep({
   formData,
   getFieldError,
   updateField,

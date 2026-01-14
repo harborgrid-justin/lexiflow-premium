@@ -44,7 +44,7 @@ import { cn } from '@/shared/lib/cn';
  * - Predictive Models (Case Outcome Predictions)
  * - Export Report functionality
  */
-export const AnalyticsDashboard: React.FC = () => {
+export function AnalyticsDashboard() {
   // ==========================================================================
   // HOOKS - Context & State
   // ==========================================================================

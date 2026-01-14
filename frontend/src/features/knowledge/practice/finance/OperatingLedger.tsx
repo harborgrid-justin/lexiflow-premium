@@ -1,18 +1,18 @@
+import { useTheme } from '@/features/theme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
 import { FirmExpense, OperatingSummary } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 interface OperatingLedgerProps {
   expenses: FirmExpense[];
 }
 
-export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses: propExpenses }) => {
+export function OperatingLedger({ expenses: propExpenses }: OperatingLedgerProps) {
   const { theme, mode } = useTheme();
 
   const { data: summary } = useQuery<OperatingSummary>(

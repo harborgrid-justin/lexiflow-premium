@@ -20,7 +20,7 @@ import type { ConnectionFormData, DataProvider } from './types';
 /**
  * Main view for managing cloud database connections - React 18 optimized with React.memo
  */
-export const CloudDatabaseView = React.memo(() => {
+export const CloudDatabaseView = React.memo(function CloudDatabaseView() {
   const { theme } = useTheme();
   const { isAdding, setIsAdding, formData, setFormData } = useConnectionForm();
   const { selectedProvider, setSelectedProvider, resetForm } = useConnectionForm();
@@ -58,7 +58,7 @@ interface CloudDatabaseContentProps {
   resetForm: () => void;
 }
 
-const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
+const CloudDatabaseContent = function CloudDatabaseContent({
   theme,
   isAdding,
   setIsAdding,
@@ -209,25 +209,27 @@ interface ProviderSelectionProps {
   theme: ThemeContextValue['theme'];
 }
 
-const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSelect, theme }) => (
-  <>
-    <h4 className={cn("text-sm font-bold mb-4", theme.text.primary)}>Select Provider</h4>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {providers.map(p => (
-        <button
-          key={p.id}
-          onClick={() => onSelect(p.id)}
-          className="group flex flex-col items-center justify-center p-6 rounded-xl border bg-white dark:bg-slate-800 hover:border-blue-500 hover:shadow-md transition-all gap-3"
-        >
-          <div className={cn("p-3 rounded-full bg-gray-50 dark:bg-slate-700 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors")}>
-            <p.icon className={cn("h-6 w-6", p.color)} />
-          </div>
-          <span className={cn("text-sm font-medium", theme.text.primary)}>{p.name}</span>
-        </button>
-      ))}
-    </div>
-  </>
-);
+const ProviderSelection = function ProviderSelection({ providers, onSelect, theme }: ProviderSelectionProps) {
+  return (
+    <>
+      <h4 className={cn("text-sm font-bold mb-4", theme.text.primary)}>Select Provider</h4>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {providers.map(p => (
+          <button
+            key={p.id}
+            onClick={() => onSelect(p.id)}
+            className="group flex flex-col items-center justify-center p-6 rounded-xl border bg-white dark:bg-slate-800 hover:border-blue-500 hover:shadow-md transition-all gap-3"
+          >
+            <div className={cn("p-3 rounded-full bg-gray-50 dark:bg-slate-700 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors")}>
+              <p.icon className={cn("h-6 w-6", p.color)} />
+            </div>
+            <span className={cn("text-sm font-medium", theme.text.primary)}>{p.name}</span>
+          </button>
+        ))}
+      </div>
+    </>
+  );
+};
 
 interface ConnectionFormProps {
   selectedProvider: string;
@@ -242,7 +244,7 @@ interface ConnectionFormProps {
   theme: ThemeContextValue['theme'];
 }
 
-const ConnectionForm: React.FC<ConnectionFormProps> = ({
+const ConnectionForm = function ConnectionForm({
   selectedProvider,
   providers,
   formData,

@@ -1,10 +1,28 @@
+// ================================================================================
+// DASHBOARD DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → DashboardService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Dashboard widget management and configuration
+//   - Real-time metrics and KPI aggregation
+//   - User-specific dashboard customization
+//
+// USAGE:
+//   Called by DashboardContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * DashboardDomain - Dashboard widgets and metrics service
  * Provides dashboard configuration, widget management, and real-time metrics
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { api } from "@/api";
+import { api } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { TaskStatusBackend } from "@/types";
 import { Invoice } from "@/types/financial";

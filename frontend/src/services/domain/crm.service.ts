@@ -2,7 +2,7 @@
  * CRM Domain Service - Client Relationship Management and lead pipeline
  * Production-grade service for lead tracking, conversion, and client acquisition
  *
- * @module services/domain/CRMDomain
+ * @module services/domain/crm.service
  * @description Comprehensive CRM service providing:
  * - **Lead management** (intake, qualification, tracking)
  * - **Pipeline analytics** (conversion rates, value tracking, source attribution)

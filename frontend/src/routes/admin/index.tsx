@@ -10,8 +10,8 @@
  * @module routes/admin/index
  */
 
-import { api } from '@/api';
-import type { SystemMetrics } from '@/api/admin/metrics-api';
+import { api } from '@/lib/frontend-api';
+import type { SystemMetrics } from '@/lib/frontend-api';
 import { requireAdmin } from '@/utils/route-guards';
 import {
   Activity,

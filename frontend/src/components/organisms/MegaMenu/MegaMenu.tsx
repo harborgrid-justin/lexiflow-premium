@@ -22,8 +22,8 @@ import { useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -121,7 +121,8 @@ export const MegaMenu = React.memo<MegaMenuProps>(function MegaMenu({
   onNavigate,
   className,
   disabled = false,
-  showFeatured = true }) => {
+  showFeatured = true
+}: MegaMenuProps) {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);

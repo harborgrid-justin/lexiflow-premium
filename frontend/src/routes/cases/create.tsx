@@ -10,7 +10,7 @@
  * @module routes/cases/create
  */
 
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { catalogApi, jurisdictionApi } from '@/lib/frontend-api';
 import NewCase from '@/routes/cases/components/create/NewCase';
 import { CaseStatus } from '@/types';

@@ -1,4 +1,4 @@
-import { Migration } from '@/api/admin/schema-api';
+import { Migration } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

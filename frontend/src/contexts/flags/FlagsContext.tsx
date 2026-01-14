@@ -1,85 +1,235 @@
-// src/contexts/flags/FlagsContext.tsx
-import { FEATURES_CONFIG } from "@/config/features/features.config";
-import { apiClient } from "@/services/infrastructure/apiClient";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState, useTransition } from "react";
-import { freezeInDev } from "../utils/immutability";
+// ================================================================================
+// ENTERPRISE REACT CONTEXT FILE - FEATURE FLAGS DOMAIN
+// ================================================================================
+//
+// CANONICAL STRUCTURE:
+// ├── Types
+// ├── State Shape
+// ├── Actions (Action Types)
+// ├── Reducer
+// ├── Selectors
+// ├── Context
+// ├── Provider
+// └── Public Hook
+//
+// POSITION IN ARCHITECTURE:
+//   Frontend API (truth) → Loader/Actions (orchestration) → Context (state) → Views
+//
+// RULES ENFORCED:
+//   ✓ Domain-scoped state only (feature flags)
+//   ✓ No direct HTTP calls (uses FeatureFlagsService)
+//   ✓ No router navigation
+//   ✓ No JSX layout (only provider wrapper)
+//   ✓ Loader-based initialization
+//   ✓ Memoized selectors
+//   ✓ Immutable context values
+//   ✓ Concurrent-safe with useTransition
+//
+// ================================================================================
 
-export type Flags = {
+import { FEATURES_CONFIG } from "@/config/features/features.config";
+import { FeatureFlagsService } from "@/services/domain/feature-flags.service";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from "react";
+
+// ================================================================================
+// Types
+// ================================================================================
+
+export interface Flags {
   enableNewDashboard: boolean;
   enableAdminTools: boolean;
   ocr: boolean;
   aiAssistant: boolean;
   realTimeSync: boolean;
-};
+}
+
+interface FlagsState {
+  flags: Flags;
+  isLoading: boolean;
+  error: string | null;
+}
+
+type FlagsAction =
+  | { type: "flags/fetchStart" }
+  | { type: "flags/fetchSuccess"; payload: Flags }
+  | { type: "flags/fetchFailure"; payload: { error: string } }
+  | { type: "flags/initialize"; payload: Partial<Flags> }
+  | { type: "flags/reset" };
+
+// ================================================================================
+// State Shape
+// ================================================================================
 
 const DEFAULT_FLAGS: Flags = {
   enableNewDashboard: true,
-  enableAdminTools: false, // controlled by RBAC usually
-  ocr: FEATURES_CONFIG.documentComparison, // using document comparison as proxy for OCR features
+  enableAdminTools: false,
+  ocr: FEATURES_CONFIG.documentComparison,
   aiAssistant: FEATURES_CONFIG.aiAssistance,
   realTimeSync: FEATURES_CONFIG.realtimeCollaboration,
 };
 
-interface FlagsStateValue {
-  flags: Flags;
-  isLoading: boolean;
-  isPending: boolean; // GUIDELINE #33: Expose transitional state
-  error: string | null;
+const initialState: FlagsState = {
+  flags: DEFAULT_FLAGS,
+  isLoading: false,
+  error: null,
+};
+
+// ================================================================================
+// Reducer
+// ================================================================================
+
+function flagsReducer(state: FlagsState, action: FlagsAction): FlagsState {
+  switch (action.type) {
+    case "flags/fetchStart":
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+
+    case "flags/fetchSuccess":
+      return {
+        ...state,
+        flags: action.payload,
+        isLoading: false,
+        error: null,
+      };
+
+    case "flags/fetchFailure":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload.error,
+      };
+
+    case "flags/initialize":
+      return {
+        ...state,
+        flags: { ...DEFAULT_FLAGS, ...action.payload },
+        isLoading: false,
+      };
+
+    case "flags/reset":
+      return initialState;
+
+    default:
+      return state;
+  }
+}
+
+// ================================================================================
+// Selectors (Memoized derivations)
+// ================================================================================
+
+interface FlagsSelectors {
+  isFeatureEnabled: (featureName: keyof Flags) => boolean;
+  enabledFeatures: string[];
+  hasAnyAIFeatures: boolean;
+}
+
+function createSelectors(state: FlagsState): FlagsSelectors {
+  const { flags } = state;
+
+  return {
+    isFeatureEnabled: (featureName: keyof Flags) => flags[featureName] === true,
+    enabledFeatures: (Object.keys(flags) as Array<keyof Flags>).filter(
+      (key) => flags[key] === true
+    ),
+    hasAnyAIFeatures: flags.aiAssistant || flags.ocr,
+  };
+}
+
+// ================================================================================
+// Context
+// ================================================================================
+
+interface FlagsStateValue extends FlagsState {
+  selectors: FlagsSelectors;
+  isPending: boolean; // React 18 transition state
 }
 
 interface FlagsActionsValue {
-  refreshFlags: () => Promise<void>;
+  refresh: () => Promise<void>;
+  reset: () => void;
 }
 
-export type FlagsContextValue = FlagsStateValue & FlagsActionsValue;
+const FlagsStateContext = createContext<FlagsStateValue | null>(null);
+const FlagsActionsContext = createContext<FlagsActionsValue | null>(null);
 
-const FlagsStateContext = createContext<FlagsStateValue | undefined>(undefined);
-const FlagsActionsContext = createContext<FlagsActionsValue | undefined>(undefined);
+// ================================================================================
+// Provider
+// ================================================================================
 
-export function FlagsProvider({
-  initial,
-  children
-}: React.PropsWithChildren<{ initial?: Partial<Flags> }>) {
-  const [flags, setFlags] = useState<Flags>({ ...DEFAULT_FLAGS, ...initial });
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export interface FlagsProviderProps {
+  children: React.ReactNode;
+  initial?: Partial<Flags>; // Loader-based initialization
+}
 
-  // GUIDELINE #25-26: Use startTransition for non-urgent context updates
+export function FlagsProvider({ children, initial }: FlagsProviderProps) {
+  const [state, dispatch] = useReducer(flagsReducer, initialState);
   const [isPending, startTransition] = useTransition();
 
-  const refreshFlags = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      // Try to fetch from backend
-      // If endpoint doesn't exist, this will throw, and we'll catch it
-      const response = await apiClient.get<Flags>('/api/features');
+  // Initialize flags on mount
+  useEffect(() => {
+    if (initial) {
+      dispatch({ type: "flags/initialize", payload: initial });
+    } else {
+      // Fetch from service
+      const fetchFlags = async () => {
+        dispatch({ type: "flags/fetchStart" });
+        try {
+          const flags = await FeatureFlagsService.fetchFlags();
+          startTransition(() => {
+            dispatch({ type: "flags/fetchSuccess", payload: flags });
+          });
+        } catch (err) {
+          const message = err instanceof Error ? err.message : "Failed to fetch flags";
+          dispatch({ type: "flags/fetchFailure", payload: { error: message } });
+        }
+      };
 
-      // GUIDELINE #25: Wrap non-urgent state updates in startTransition
-      // Feature flag changes are not urgent - UI can remain interactive during fetch
+      fetchFlags();
+    }
+  }, [initial]);
+
+  // Memoized selectors
+  const selectors = useMemo(() => createSelectors(state), [state]);
+
+  // Domain actions
+  const refresh = useCallback(async () => {
+    dispatch({ type: "flags/fetchStart" });
+    try {
+      const flags = await FeatureFlagsService.fetchFlags();
       startTransition(() => {
-        setFlags({ ...DEFAULT_FLAGS, ...response });
-        setError(null);
+        dispatch({ type: "flags/fetchSuccess", payload: flags });
       });
     } catch (err) {
-      console.warn("Failed to fetch feature flags, using defaults/initial", err);
-      // In production, we might want to log this to a monitoring service
-      // For now, we keep the current flags (defaults + initial)
-      // We don't set error to block the UI, just warn
-    } finally {
-      setIsLoading(false);
+      const message = err instanceof Error ? err.message : "Failed to refresh flags";
+      dispatch({ type: "flags/fetchFailure", payload: { error: message } });
     }
   }, []);
 
-  useEffect(() => {
-    refreshFlags();
-  }, [refreshFlags]);
+  const reset = useCallback(() => {
+    dispatch({ type: "flags/reset" });
+  }, []);
 
-  // GUIDELINE #33: Expose isPending to consumers for transitional UI
+  // Immutable context values
   const stateValue = useMemo<FlagsStateValue>(
-    () => freezeInDev({ flags, isLoading, isPending, error }),
-    [flags, isLoading, isPending, error]
+    () => ({
+      ...state,
+      selectors,
+      isPending,
+    }),
+    [state, selectors, isPending]
   );
-  const actionsValue = useMemo<FlagsActionsValue>(() => freezeInDev({ refreshFlags }), [refreshFlags]);
+
+  const actionsValue = useMemo<FlagsActionsValue>(
+    () => ({
+      refresh,
+      reset,
+    }),
+    [refresh, reset]
+  );
 
   return (
     <FlagsStateContext.Provider value={stateValue}>
@@ -88,7 +238,11 @@ export function FlagsProvider({
       </FlagsActionsContext.Provider>
     </FlagsStateContext.Provider>
   );
-};
+}
+
+// ================================================================================
+// Public Hooks
+// ================================================================================
 
 export function useFlagsState(): FlagsStateValue {
   const context = useContext(FlagsStateContext);
@@ -106,7 +260,7 @@ export function useFlagsActions(): FlagsActionsValue {
   return context;
 }
 
-export function useFlags(): FlagsContextValue {
+export function useFlags() {
   return {
     ...useFlagsState(),
     ...useFlagsActions(),

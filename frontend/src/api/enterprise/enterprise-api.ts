@@ -21,7 +21,7 @@
  *
  * @example
  * ```typescript
- * import { enterpriseApi } from '@/api/enterprise';
+ * import { enterpriseApi } from '@/lib/frontend-api';
  *
  * // Simple GET request
  * const cases = await enterpriseApi.get<Case[]>('/cases');

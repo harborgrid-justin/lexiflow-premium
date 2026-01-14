@@ -22,8 +22,8 @@
  * - Workflow automation
  */
 
-import { api } from '@/api';
-import type { WorkflowInstance } from '@/api/workflow/core';
+import { api } from '@/lib/frontend-api';
+import type { WorkflowInstance } from '@/lib/frontend-api';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';

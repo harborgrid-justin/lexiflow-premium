@@ -12,7 +12,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
+import { AuthApiService } from '@/lib/frontend-api';
 import React, { memo, useEffect, useState } from 'react';
 import { z } from 'zod';
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';

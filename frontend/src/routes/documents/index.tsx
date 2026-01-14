@@ -1,7 +1,7 @@
-import { DocumentManager } from '@/features/operations/documents/DocumentManager';
 import { documentsApi } from '@/lib/frontend-api';
 import type { MetaArgs } from 'react-router';
 import { createListMeta } from '../_shared/meta-utils';
+import { DocumentManager } from './components/DocumentManager';
 
 interface LoaderData {
   count: number;

@@ -15,8 +15,8 @@
 
 import React, {useRef, useState} from 'react';
 import {z} from 'zod';
-import {UsersApiService} from '@/api/auth/users-api';
-import {AuthApiService} from '@/api/auth/auth-api';
+import {UsersApiService} from '@/lib/frontend-api';
+import {AuthApiService} from '@/lib/frontend-api';
 import type {UpdateUserDto, User} from '@/types';
 import {USER_AUTH_PROFILE_TABS} from '@/config/tabs.config';
 

@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Pleading = {
@@ -19,10 +20,10 @@ export interface PleadingsLoaderData {
   pleadings: Pleading[];
 }
 
-export async function pleadingsLoader(): Promise<PleadingsLoaderData> {
+export async function pleadingsLoader() {
   const pleadings = await DataService.pleadings.getAll().catch(() => []);
 
-  return {
+  return defer({
     pleadings: pleadings || [],
-  };
+  });
 }

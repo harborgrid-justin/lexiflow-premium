@@ -1,3 +1,14 @@
+// ================================================================================
+// LEGACY AUTH CONTEXT SHIM
+// ================================================================================
+//
+// This file re-exports the enterprise AuthProvider for backward compatibility.
+// New code should import directly from '@/contexts/auth/AuthProvider'
+//
+// DEPRECATED: Import from '@/contexts/auth/AuthProvider' instead
+//
+// ================================================================================
+
 /**
  * Legacy AuthContext shim.
  *
@@ -7,4 +18,4 @@
  */
 
 export { AuthProvider, useAuth, useAuthActions, useAuthState } from './auth/AuthProvider';
-export type { AuthUser, AuthActionsValue, AuthStateValue } from './auth/authTypes';
+export type { AuthActionsValue, AuthStateValue, AuthUser } from './auth/authTypes';

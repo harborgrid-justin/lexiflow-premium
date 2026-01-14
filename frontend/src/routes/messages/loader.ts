@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Message = {
@@ -22,12 +23,12 @@ export interface MessagesLoaderData {
   unreadCount: number;
 }
 
-export async function messagesLoader(): Promise<MessagesLoaderData> {
+export async function messagesLoader() {
   const messages = await DataService.messages.getAll().catch(() => []);
   const unreadCount = messages.filter((m: Message) => !m.read).length;
 
-  return {
+  return defer({
     messages: messages || [],
     unreadCount,
-  };
+  });
 }

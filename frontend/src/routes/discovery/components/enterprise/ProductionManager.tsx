@@ -4,7 +4,7 @@
  * @description Production set management with Bates numbering, redaction tracking, and production history
  */
 
-import { Production as APIProduction } from '@/api/discovery/productions-api';
+import { Production as APIProduction } from '@/lib/frontend-api';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';

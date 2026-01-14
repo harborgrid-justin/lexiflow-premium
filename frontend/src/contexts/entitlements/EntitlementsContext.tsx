@@ -1,33 +1,64 @@
-// src/contexts/entitlements/EntitlementsContext.tsx
-import { apiClient } from "@/services/infrastructure/apiClient";
-import type { Organization } from "@/types";
-import React, { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
-import { useAuth } from "../auth/AuthContext";
-import { freezeInDev } from "../utils/immutability";
+// ================================================================================
+// ENTERPRISE REACT CONTEXT FILE - ENTITLEMENTS DOMAIN
+// ================================================================================
+//
+// CANONICAL STRUCTURE:
+// ├── Types
+// ├── State Shape
+// ├── Actions (Action Types)
+// ├── Reducer
+// ├── Selectors
+// ├── Context
+// ├── Provider
+// └── Public Hook
+//
+// POSITION IN ARCHITECTURE:
+//   Frontend API (truth) → Loader/Actions (orchestration) → Context (state) → Views
+//
+// RULES ENFORCED:
+//   ✓ Domain-scoped state only (entitlements)
+//   ✓ No direct HTTP calls (uses EntitlementsService)
+//   ✓ No router navigation
+//   ✓ No JSX layout (only provider wrapper)
+//   ✓ Loader-based initialization
+//   ✓ Memoized selectors
+//   ✓ Immutable context values
+//   ✓ Concurrent-safe with useTransition
+//
+// ================================================================================
+
+import { EntitlementsService } from "@/services/domain/entitlements.service";
+import type { User } from "@/types";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from "react";
+
+// ================================================================================
+// Types
+// ================================================================================
 
 export type Plan = "free" | "pro" | "enterprise";
 
-export type Entitlements = {
+export interface Entitlements {
   plan: Plan;
   canUseAdminTools: boolean;
   maxCases: number;
   storageLimitGB: number;
-};
+}
 
-interface EntitlementsStateValue {
+interface EntitlementsState {
   entitlements: Entitlements;
   isLoading: boolean;
-  isPending: boolean; // GUIDELINE #33: Expose transitional state
+  error: string | null;
 }
 
-interface EntitlementsActionsValue {
-  // No actions needed for now - entitlements are computed from auth state
-}
+type EntitlementsAction =
+  | { type: "entitlements/fetchStart" }
+  | { type: "entitlements/fetchSuccess"; payload: Entitlements }
+  | { type: "entitlements/fetchFailure"; payload: { error: string } }
+  | { type: "entitlements/reset" };
 
-export type EntitlementsContextValue = EntitlementsStateValue & EntitlementsActionsValue;
-
-const EntitlementsStateContext = createContext<EntitlementsStateValue | undefined>(undefined);
-const EntitlementsActionsContext = createContext<EntitlementsActionsValue | undefined>(undefined);
+// ================================================================================
+// State Shape
+// ================================================================================
 
 const DEFAULT_ENTITLEMENTS: Entitlements = {
   plan: "free",
@@ -36,76 +67,186 @@ const DEFAULT_ENTITLEMENTS: Entitlements = {
   storageLimitGB: 1,
 };
 
-export const EntitlementsProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { auth } = useAuth();
-  const [entitlements, setEntitlements] = useState<Entitlements>(DEFAULT_ENTITLEMENTS);
-  const [isLoading, setIsLoading] = useState(false);
-  
-  // GUIDELINE #25-26: Use startTransition for non-urgent context updates
+const initialState: EntitlementsState = {
+  entitlements: DEFAULT_ENTITLEMENTS,
+  isLoading: false,
+  error: null,
+};
+
+// ================================================================================
+// Reducer
+// ================================================================================
+
+function entitlementsReducer(
+  state: EntitlementsState,
+  action: EntitlementsAction
+): EntitlementsState {
+  switch (action.type) {
+    case "entitlements/fetchStart":
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+
+    case "entitlements/fetchSuccess":
+      return {
+        ...state,
+        entitlements: action.payload,
+        isLoading: false,
+        error: null,
+      };
+
+    case "entitlements/fetchFailure":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload.error,
+      };
+
+    case "entitlements/reset":
+      return initialState;
+
+    default:
+      return state;
+  }
+}
+
+// ================================================================================
+// Selectors (Memoized derivations)
+// ================================================================================
+
+interface EntitlementsSelectors {
+  isFreePlan: boolean;
+  isProPlan: boolean;
+  isEnterprisePlan: boolean;
+  canCreateMoreCases: (currentCount: number) => boolean;
+  hasAdminAccess: boolean;
+}
+
+function createSelectors(state: EntitlementsState): EntitlementsSelectors {
+  const { entitlements } = state;
+
+  return {
+    isFreePlan: entitlements.plan === "free",
+    isProPlan: entitlements.plan === "pro",
+    isEnterprisePlan: entitlements.plan === "enterprise",
+    canCreateMoreCases: (currentCount: number) =>
+      currentCount < entitlements.maxCases,
+    hasAdminAccess: entitlements.canUseAdminTools,
+  };
+}
+
+// ================================================================================
+// Context
+// ================================================================================
+
+interface EntitlementsStateValue extends EntitlementsState {
+  selectors: EntitlementsSelectors;
+  isPending: boolean; // React 18 transition state
+}
+
+interface EntitlementsActionsValue {
+  refresh: (user: User | null) => Promise<void>;
+  reset: () => void;
+}
+
+const EntitlementsStateContext = createContext<EntitlementsStateValue | null>(null);
+const EntitlementsActionsContext = createContext<EntitlementsActionsValue | null>(null);
+
+// ================================================================================
+// Provider
+// ================================================================================
+
+export interface EntitlementsProviderProps {
+  children: React.ReactNode;
+  initialUser?: User | null; // Derived from auth context
+}
+
+export function EntitlementsProvider({ children, initialUser }: EntitlementsProviderProps) {
+  const [state, dispatch] = useReducer(entitlementsReducer, initialState);
   const [isPending, startTransition] = useTransition();
 
+  // Derive entitlements when user changes
   useEffect(() => {
+    if (!initialUser) {
+      dispatch({ type: "entitlements/reset" });
+      return;
+    }
+
     const fetchEntitlements = async () => {
-      if (auth.status !== "authenticated" || !auth.user) {
-        setEntitlements(DEFAULT_ENTITLEMENTS);
-        return;
-      }
-
-      setIsLoading(true);
+      dispatch({ type: "entitlements/fetchStart" });
       try {
-        // 1. Derive basic entitlements from User Role
-        let plan: Plan = "free";
-        let canUseAdminTools = false;
-        let maxCases = 10;
-        let storageLimitGB = 5;
+        const entitlements = await EntitlementsService.deriveFromUser(initialUser);
 
-        // Map from UserRole type: 'Senior Partner' | 'Associate' | 'Paralegal' | 'Administrator' | 'Client User' | 'Guest'
-        if (auth.user.role === "Administrator") {
-          plan = "enterprise";
-          canUseAdminTools = true;
-        } else if (auth.user.role === "Senior Partner" || auth.user.role === "Associate") {
-          if (auth.user.orgId) {
-            try {
-              const org = await apiClient.get<Organization>(`/organizations/${auth.user.orgId}`);
-              // Logic to map org type/status to limits
-              if (org.organizationType === 'corporation') { // Example mapping
-                maxCases = 1000;
-                storageLimitGB = 1000;
-                plan = "enterprise"; // Override based on org
-              }
-            } catch (e) {
-              console.warn("Could not fetch organization details", e);
-            }
-          }
-        }
-
-        // GUIDELINE #25: Wrap non-urgent state updates in startTransition
-        // Entitlement changes are not urgent - UI can remain interactive during fetch
+        // Use transition for non-urgent updates
         startTransition(() => {
-          setEntitlements({
-            plan,
-            canUseAdminTools,
-            maxCases,
-            storageLimitGB
+          dispatch({
+            type: "entitlements/fetchSuccess",
+            payload: entitlements,
           });
         });
       } catch (err) {
-        console.error("Failed to calculate entitlements", err);
-        // Fallback to defaults or derived from role only
-      } finally {
-        setIsLoading(false);
+        const message = err instanceof Error ? err.message : "Failed to fetch entitlements";
+        dispatch({
+          type: "entitlements/fetchFailure",
+          payload: { error: message },
+        });
       }
     };
 
     fetchEntitlements();
-  }, [auth.status, auth.user]);
+  }, [initialUser]);
 
-  // GUIDELINE #33: Expose isPending to consumers for transitional UI
+  // Memoized selectors
+  const selectors = useMemo(() => createSelectors(state), [state]);
+
+  // Domain actions
+  const refresh = useCallback(async (user: User | null) => {
+    if (!user) {
+      dispatch({ type: "entitlements/reset" });
+      return;
+    }
+
+    dispatch({ type: "entitlements/fetchStart" });
+    try {
+      const entitlements = await EntitlementsService.deriveFromUser(user);
+      startTransition(() => {
+        dispatch({
+          type: "entitlements/fetchSuccess",
+          payload: entitlements,
+        });
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to refresh entitlements";
+      dispatch({
+        type: "entitlements/fetchFailure",
+        payload: { error: message },
+      });
+    }
+  }, []);
+
+  const reset = useCallback(() => {
+    dispatch({ type: "entitlements/reset" });
+  }, []);
+
+  // Immutable context values
   const stateValue = useMemo<EntitlementsStateValue>(
-    () => freezeInDev({ entitlements, isLoading, isPending }),
-    [entitlements, isLoading, isPending]
+    () => ({
+      ...state,
+      selectors,
+      isPending,
+    }),
+    [state, selectors, isPending]
   );
-  const actionsValue = useMemo<EntitlementsActionsValue>(() => freezeInDev({}), []);
+
+  const actionsValue = useMemo<EntitlementsActionsValue>(
+    () => ({
+      refresh,
+      reset,
+    }),
+    [refresh, reset]
+  );
 
   return (
     <EntitlementsStateContext.Provider value={stateValue}>
@@ -114,7 +255,11 @@ export const EntitlementsProvider: React.FC<React.PropsWithChildren> = ({ childr
       </EntitlementsActionsContext.Provider>
     </EntitlementsStateContext.Provider>
   );
-};
+}
+
+// ================================================================================
+// Public Hooks
+// ================================================================================
 
 export function useEntitlementsState(): EntitlementsStateValue {
   const context = useContext(EntitlementsStateContext);
@@ -132,7 +277,7 @@ export function useEntitlementsActions(): EntitlementsActionsValue {
   return context;
 }
 
-export function useEntitlements(): EntitlementsContextValue {
+export function useEntitlements() {
   return {
     ...useEntitlementsState(),
     ...useEntitlementsActions(),

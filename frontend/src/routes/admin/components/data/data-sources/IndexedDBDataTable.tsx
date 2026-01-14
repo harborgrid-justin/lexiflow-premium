@@ -28,7 +28,7 @@ export function IndexedDBDataTable({
   onSave,
   onDelete,
   onCancel
-}) => {
+}) {
   const { theme } = useTheme();
 
   return (

@@ -2,7 +2,7 @@
  * Compliance Domain Service - Enterprise compliance, risk, and regulatory management
  * Production-grade service for conflict checks, ethical walls, and policy enforcement
  *
- * @module services/domain/ComplianceDomain
+ * @module services/domain/compliance.service
  * @description Comprehensive compliance management service providing:
  * - **Risk statistics and metrics** (severity-based aggregation)
  * - **Conflict check management** (client/party conflict detection)

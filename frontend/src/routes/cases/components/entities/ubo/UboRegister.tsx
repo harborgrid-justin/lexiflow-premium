@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { ActionRow, MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';

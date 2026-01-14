@@ -15,7 +15,6 @@
  * @architecture Uses communicationsApi for all operations
  */
 
-import { communicationsApi } from '@/lib/frontend-api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -49,8 +48,8 @@ export const HeaderWithNotifications: React.FC = () => {
     const loadNotifications = async () => {
       try {
         setIsLoading(true);
-        const data = await DataService.notifications.getAll();
-        setNotifications(data as UINotification[]);
+        const result = await communicationsApi.getAllNotifications({ page: 1, limit: 100 });
+        setNotifications(result.ok ? (result.data.data as UINotification[]) : []);
       } catch (error) {
         console.error('[HeaderWithNotifications] Failed to load notifications:', error);
         setNotifications([]); // Show empty state on error
@@ -60,25 +59,18 @@ export const HeaderWithNotifications: React.FC = () => {
     };
 
     loadNotifications();
-
-    // Set up real-time subscription if available
-    const subscription = DataService.notifications.subscribe?.((updatedNotifications: unknown) => {
-      setNotifications(updatedNotifications as UINotification[]);
-    });
-
-    return () => {
-      subscription?.unsubscribe?.();
-    };
   }, []);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const handleMarkAsRead = useCallback(async (id: string) => {
     try {
-      await DataService.notifications.update(id, { read: true });
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-      );
+      const result = await communicationsApi.updateNotification(id, { isRead: true });
+      if (result.ok) {
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+        );
+      }
     } catch (error) {
       console.error('[HeaderWithNotifications] Failed to mark as read:', error);
     }
@@ -86,10 +78,9 @@ export const HeaderWithNotifications: React.FC = () => {
 
   const handleMarkAllAsRead = useCallback(async () => {
     try {
+      const unreadIds = notifications.filter(n => !n.read).map(n => n.id);
       await Promise.all(
-        notifications.filter(n => !n.read).map(n =>
-          DataService.notifications.update(n.id, { read: true })
-        )
+        unreadIds.map(id => communicationsApi.updateNotification(id, { isRead: true }))
       );
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch (error) {
@@ -99,7 +90,7 @@ export const HeaderWithNotifications: React.FC = () => {
 
   const handleDelete = useCallback(async (id: string) => {
     try {
-      await DataService.notifications.delete(id);
+      await communicationsApi.deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (error) {
       console.error('[HeaderWithNotifications] Failed to delete notification:', error);
@@ -108,7 +99,7 @@ export const HeaderWithNotifications: React.FC = () => {
 
   const handleClearAll = useCallback(async () => {
     try {
-      await Promise.all(notifications.map(n => DataService.notifications.delete(n.id)));
+      await Promise.all(notifications.map(n => communicationsApi.deleteNotification(n.id)));
       setNotifications([]);
       setIsPanelOpen(false);
     } catch (error) {
@@ -169,8 +160,8 @@ export const NotificationCenterPage: React.FC = () => {
     const loadNotifications = async () => {
       try {
         setIsLoading(true);
-        const data = await DataService.notifications.getAll();
-        setNotifications(data as UINotification[]);
+        const result = await communicationsApi.getAllNotifications({ page: 1, limit: 100 });
+        setNotifications(result.ok ? (result.data.data as UINotification[]) : []);
       } catch (error) {
         console.error('[NotificationCenterPage] Failed to load:', error);
         setNotifications([]);
@@ -184,7 +175,7 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleMarkAsRead = useCallback(async (id: string) => {
     try {
-      await DataService.notifications.update(id, { read: true });
+      await communicationsApi.updateNotification(id, { isRead: true });
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, read: true } : n))
       );
@@ -196,7 +187,7 @@ export const NotificationCenterPage: React.FC = () => {
   const handleMarkAsReadBulk = useCallback(async (ids: string[]) => {
     try {
       await Promise.all(ids.map(id =>
-        DataService.notifications.update(id, { read: true })
+        communicationsApi.updateNotification(id, { isRead: true })
       ));
       setNotifications((prev) =>
         prev.map((n) => (ids.includes(n.id) ? { ...n, read: true } : n))
@@ -209,7 +200,7 @@ export const NotificationCenterPage: React.FC = () => {
   const handleMarkAllAsRead = useCallback(async () => {
     try {
       await Promise.all(
-        notifications.map(n => DataService.notifications.update(n.id, { read: true }))
+        notifications.map(n => communicationsApi.updateNotification(n.id, { isRead: true }))
       );
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch (error) {
@@ -219,7 +210,7 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleDelete = useCallback(async (id: string) => {
     try {
-      await DataService.notifications.delete(id);
+      await communicationsApi.deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (error) {
       console.error('[NotificationCenterPage] Delete failed:', error);
@@ -228,7 +219,7 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleDeleteBulk = useCallback(async (ids: string[]) => {
     try {
-      await Promise.all(ids.map(id => DataService.notifications.delete(id)));
+      await Promise.all(ids.map(id => communicationsApi.deleteNotification(id)));
       setNotifications((prev) => prev.filter((n) => !ids.includes(n.id)));
     } catch (error) {
       console.error('[NotificationCenterPage] Bulk delete failed:', error);
@@ -237,7 +228,7 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleClearAll = useCallback(async () => {
     try {
-      await Promise.all(notifications.map(n => DataService.notifications.delete(n.id)));
+      await Promise.all(notifications.map(n => communicationsApi.deleteNotification(n.id)));
       setNotifications([]);
     } catch (error) {
       console.error('[NotificationCenterPage] Clear all failed:', error);
@@ -297,9 +288,9 @@ export const NotificationPreferencesPage: React.FC = () => {
     const loadPreferences = async () => {
       try {
         setIsLoading(true);
-        const data = await DataService.notifications.getPreferences?.();
-        if (data) {
-          setPreferences(data as ExtendedNotificationPreferences);
+        const result = await communicationsApi.getNotificationPreferences?.();
+        if (result?.ok) {
+          setPreferences(result.data as ExtendedNotificationPreferences);
         }
       } catch (error) {
         console.error('[NotificationPreferencesPage] Failed to load preferences:', error);
@@ -313,8 +304,10 @@ export const NotificationPreferencesPage: React.FC = () => {
 
   const handleSave = useCallback(async (newPreferences: ExtendedNotificationPreferences) => {
     try {
-      await DataService.notifications.updatePreferences?.(newPreferences);
-      setPreferences(newPreferences);
+      const result = await communicationsApi.updateNotificationPreferences?.(newPreferences);
+      if (result?.ok) {
+        setPreferences(newPreferences);
+      }
     } catch (error) {
       console.error('[NotificationPreferencesPage] Failed to save preferences:', error);
       throw error; // Re-throw to allow UI to handle error

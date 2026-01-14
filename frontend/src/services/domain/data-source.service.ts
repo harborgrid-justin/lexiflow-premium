@@ -1,3 +1,21 @@
+// ================================================================================
+// DATA SOURCE DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → DataSourceService → Frontend API → Backend
+//
+// PURPOSE:
+//   - External data source connections and management
+//   - Data import/export operations
+//   - Schema mapping and transformation
+//
+// USAGE:
+//   Called by DataSourceContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * DataSourceDomain - External data source integration service
  * Provides connection management, synchronization, and data source testing

@@ -35,7 +35,7 @@ import { cn } from '@/shared/lib/cn';
 
 // Types
 import { UserRole } from '@/types';
-import type { GeneratedDocument } from '@/api/domains/drafting';
+import type { GeneratedDocument } from '@/lib/frontend-api';
 
 // ============================================================================
 // TYPES & INTERFACES

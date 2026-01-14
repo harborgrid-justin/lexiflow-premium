@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Jurisdiction = {
@@ -18,10 +19,10 @@ export interface JurisdictionLoaderData {
   jurisdictions: Jurisdiction[];
 }
 
-export async function jurisdictionLoader(): Promise<JurisdictionLoaderData> {
+export async function jurisdictionLoader() {
   const jurisdictions = await DataService.jurisdiction.getAll().catch(() => []);
 
-  return {
+  return defer({
     jurisdictions: jurisdictions || [],
-  };
+  });
 }

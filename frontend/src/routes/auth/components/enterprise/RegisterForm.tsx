@@ -13,7 +13,7 @@
  * - GDPR-compliant data collection
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
+import { AuthApiService } from '@/lib/frontend-api';
 import type { User } from '@/types';
 import React, { memo, useState } from 'react';
 import { z } from 'zod';

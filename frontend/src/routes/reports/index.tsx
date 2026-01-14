@@ -10,7 +10,7 @@
  * @module routes/reports/index
  */
 
-import type { Report } from '@/api/compliance/reports-api';
+import type { Report } from '@/lib/frontend-api';
 import { analyticsApi } from '@/lib/frontend-api';
 import type { ReportCategory } from '@/types/analytics-enterprise';
 import {

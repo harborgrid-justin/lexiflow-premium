@@ -1,6 +1,24 @@
-import { authApi } from "@/api";
+// ================================================================================
+// PROFILE DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → ProfileService → Frontend API → Backend
+//
+// PURPOSE:
+//   - User profile management and preferences
+//   - Permission and role management
+//   - Audit log tracking for user activities
+//
+// USAGE:
+//   Called by ProfileContext and route loaders for profile operations.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 import { AuditLog } from "@/api/admin/audit-logs-api";
 import { adminApi } from "@/api/domains/admin.api";
+import { authApi } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import {
   ExtendedUserProfile,

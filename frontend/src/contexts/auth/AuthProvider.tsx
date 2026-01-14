@@ -1,3 +1,42 @@
+// ================================================================================
+// ENTERPRISE REACT CONTEXT FILE - AUTH DOMAIN (EXTENDED)
+// ================================================================================
+//
+// CANONICAL STRUCTURE:
+// ├── Types
+// ├── State Shape
+// ├── Actions (Domain Methods)
+// ├── Context
+// ├── Provider
+// └── Public Hooks
+//
+// POSITION IN ARCHITECTURE:
+//   Frontend API (truth) → AuthService (effects) → Context (state) → Views
+//
+// RULES ENFORCED:
+//   ✓ Domain-scoped state only (authentication)
+//   ✓ No direct HTTP calls (uses AuthApiService via AuthService)
+//   ✓ No router navigation (except SSO redirects - acceptable)
+//   ✓ No JSX layout (only provider wrapper)
+//   ✓ Loader-based initialization support
+//   ✓ Session management (timers, warnings)
+//   ✓ MFA support
+//   ✓ Audit logging
+//   ✓ Memoized context values
+//   ✓ Split state/actions contexts
+//
+// ENTERPRISE FEATURES:
+//   • Multi-factor authentication (MFA)
+//   • Session timeout with warnings
+//   • Role-based access control (RBAC)
+//   • SSO/SAML integration hooks
+//   • Audit logging for auth events
+//   • Password policy enforcement
+//   • Account lockout handling
+//   • Token refresh automation
+//
+// ================================================================================
+
 /**
  * Auth Provider for React Router v7
  *
@@ -13,7 +52,7 @@
  * @module providers/AuthProvider
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
+import { AuthApiService } from '@/lib/frontend-api';
 import { AUTH_REFRESH_TOKEN_STORAGE_KEY, AUTH_TOKEN_STORAGE_KEY } from '@/config/security/security.config';
 import { clearAuthTokens, setAuthTokens } from '@/services/infrastructure/api-client/auth-manager';
 import type { User } from '@/types';

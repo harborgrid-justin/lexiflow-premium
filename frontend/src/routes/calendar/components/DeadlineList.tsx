@@ -3,7 +3,7 @@
  * Displays upcoming deadlines with priority indicators and court-specific features
  */
 
-import type { CalendarEvent } from '@/api/workflow/calendar-api';
+import type { CalendarEvent } from '@/lib/frontend-api';
 import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
 

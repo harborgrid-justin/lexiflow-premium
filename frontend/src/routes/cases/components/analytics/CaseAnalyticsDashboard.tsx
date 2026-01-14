@@ -23,7 +23,7 @@
  * - Custom report generation
  */
 
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/theme';

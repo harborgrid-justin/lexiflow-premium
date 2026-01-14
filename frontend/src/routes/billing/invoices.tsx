@@ -3,11 +3,11 @@
  * Displays invoice management list with filtering
  */
 
-import { InvoicesApiService } from '@/api/billing';
-import { InvoiceList } from '@/features/operations/billing/components/time-tracking/InvoiceList';
+import { InvoicesApiService } from '@/lib/frontend-api';
 import { Link, useActionData, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { InvoiceList } from './components/InvoiceList';
 
 // ============================================================================
 // Meta Tags

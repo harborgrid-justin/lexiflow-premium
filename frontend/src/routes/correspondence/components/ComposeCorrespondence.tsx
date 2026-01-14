@@ -1,4 +1,4 @@
-import type { DraftingTemplate } from '@/api/domains/drafting';
+import type { DraftingTemplate } from '@/lib/frontend-api';
 import { Form, Link, useNavigate } from 'react-router';
 import type { ComposeLoaderData } from './types';
 

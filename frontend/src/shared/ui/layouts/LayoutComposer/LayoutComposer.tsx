@@ -262,7 +262,7 @@ export function LayoutComposer({
 /**
  * Pre-configured LayoutComposer for standard app layout (header + main + sidebar)
  */
-export function AppLayoutComposer({
+export const AppLayoutComposer: React.FC<{
   header: ReactNode;
   main: ReactNode;
   sidebar?: ReactNode;

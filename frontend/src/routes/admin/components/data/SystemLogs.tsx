@@ -1,5 +1,5 @@
-import { AuditLog } from '@/api';
-import { adminApi } from '@/api/domains/admin.api';
+import { AuditLog } from '@/lib/frontend-api';
+import { adminApi } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';

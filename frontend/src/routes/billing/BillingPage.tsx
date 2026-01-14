@@ -1,4 +1,6 @@
-import { useLoaderData } from 'react-router';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { BillingProvider } from './BillingProvider';
 import { BillingView } from './BillingView';
 import type { clientLoader } from './loader';
@@ -15,13 +17,19 @@ export function BillingPageContent() {
   const data = useLoaderData<typeof clientLoader>();
 
   return (
-    <BillingProvider
-      initialInvoices={data.invoices}
-      initialTransactions={data.transactions}
-      initialRates={data.rates}
-      initialTimeEntries={data.timeEntries}
-    >
-      <BillingView />
-    </BillingProvider>
+    <Suspense fallback={<RouteSkeleton title="Loading Billing" />}>
+      <Await resolve={data} errorElement={<RouteError title="Failed to load billing" />}>
+        {(resolved) => (
+          <BillingProvider
+            initialInvoices={resolved.invoices}
+            initialTransactions={resolved.transactions}
+            initialRates={resolved.rates}
+            initialTimeEntries={resolved.timeEntries}
+          >
+            <BillingView />
+          </BillingProvider>
+        )}
+      </Await>
+    </Suspense>
   );
 }

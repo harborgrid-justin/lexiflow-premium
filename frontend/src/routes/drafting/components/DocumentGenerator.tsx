@@ -4,7 +4,7 @@ import {
   GeneratedDocument,
   GenerateDocumentDto,
   validateVariableValues
-} from '@/api/domains/drafting';
+} from '@/lib/frontend-api';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/theme';

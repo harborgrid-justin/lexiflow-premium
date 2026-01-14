@@ -5,7 +5,7 @@
  * collection tracking, processing status, and review metrics
  */
 
-import { analyticsApi } from '@/api';
+import { analyticsApi } from '@/lib/frontend-api';
 import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';

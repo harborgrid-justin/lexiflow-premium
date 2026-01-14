@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type CalendarEvent = {
@@ -22,15 +23,15 @@ export interface CalendarLoaderData {
   upcomingEvents: CalendarEvent[];
 }
 
-export async function calendarLoader(): Promise<CalendarLoaderData> {
+export async function calendarLoader() {
   const events = await DataService.calendar.getAll().catch(() => []);
   const today = new Date();
   const upcoming = events
     .filter((e: CalendarEvent) => new Date(e.startDate) >= today)
     .slice(0, 10);
 
-  return {
+  return defer({
     events: events || [],
     upcomingEvents: upcoming || [],
-  };
+  });
 }

@@ -4,7 +4,7 @@
  * @description Paralegal-specific dashboard focused on task queue, document review, and support metrics
  */
 
-import { dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
+import { dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { ActivityFeed, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';

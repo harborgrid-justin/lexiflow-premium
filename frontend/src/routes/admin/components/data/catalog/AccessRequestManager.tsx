@@ -1,4 +1,4 @@
-import { AccessRequest } from '@/api/admin/access-requests-api';
+import { AccessRequest } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

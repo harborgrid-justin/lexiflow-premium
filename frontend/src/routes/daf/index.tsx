@@ -12,11 +12,11 @@
  * @module routes/daf/index
  */
 
-import { DafDashboard } from '@/features/operations/daf/DafDashboard';
 import { adminApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
+import { DafDashboard } from './components/DafDashboard';
 
 // ============================================================================
 // Meta Tags

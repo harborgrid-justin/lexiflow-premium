@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type CourtRule = {
@@ -20,10 +21,10 @@ export interface RulesLoaderData {
   rules: CourtRule[];
 }
 
-export async function rulesLoader(): Promise<RulesLoaderData> {
+export async function rulesLoader() {
   const rules = await DataService.rules.getAll().catch(() => []);
 
-  return {
+  return defer({
     rules: rules || [],
-  };
+  });
 }

@@ -4,7 +4,7 @@
  * @description Admin-specific dashboard focused on firm-wide metrics, user activity, and system health
  */
 
-import { type AdminDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
+import { type AdminDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { ChartCard, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';

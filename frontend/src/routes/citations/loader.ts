@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Citation = {
@@ -21,10 +22,10 @@ export interface CitationsLoaderData {
   citations: Citation[];
 }
 
-export async function citationsLoader(): Promise<CitationsLoaderData> {
+export async function citationsLoader() {
   const citations = await DataService.citations.getAll().catch(() => []);
 
-  return {
+  return defer({
     citations: citations || [],
-  };
+  });
 }

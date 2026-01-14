@@ -1,3 +1,21 @@
+// ================================================================================
+// ORGANIZATION DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → OrganizationService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Organization structure and hierarchy management
+//   - Department and team organization
+//   - Multi-tenant organization configuration
+//
+// USAGE:
+//   Called by OrganizationContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * OrganizationDomain - Organization and department management service
  * Provides org structure, department hierarchy, and member management

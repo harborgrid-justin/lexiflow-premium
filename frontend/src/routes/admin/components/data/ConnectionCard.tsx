@@ -31,7 +31,7 @@ export function ConnectionCard({
   onSync,
   onDelete,
   onTest
-}) => {
+}) {
   const { theme } = useTheme();
 
   const getProviderIcon = (type: string) => {

@@ -36,4 +36,4 @@ export {
 } from "@/config/network/api.config";
 
 // Export API object
-export { api } from "@/api";
+export { api } from '@/lib/frontend-api';

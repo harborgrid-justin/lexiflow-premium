@@ -15,26 +15,7 @@
  * 7. Pure and deterministic
  *
  * USAGE:
- * Add to ESLint config:
- * ```json
- * {
- *   "overrides": [{
- *     "files": ["src/lib/frontend-api/**/*.ts"],
- *     "rules": {
- *       "no-restricted-imports": ["error", {
- *         "patterns": [
- *           "react",
- *           "react-dom",
- *           "@/components/*",
- *           "@/contexts/*",
- *           "@/hooks/*",
- *           "*.tsx"
- *         ]
- *       }]
- *     }
- *   }]
- * }
- * ```
+ * Add to ESLint config (see internal docs)
  *
  * REVIEW CHECKLIST:
  * [ ] Does this code bypass the frontend API?
@@ -58,7 +39,9 @@ export type ApiFunction<TArgs extends unknown[], TData> = (
  * Validate that all exports are API functions
  */
 export type ApiModule<T> = {
-  [K in keyof T]: T[K] extends (...args: infer Args) => Promise<Result<infer Data>>
+  [K in keyof T]: T[K] extends (
+    ...args: infer Args
+  ) => Promise<Result<infer Data>>
     ? ApiFunction<Args, Data>
     : never;
 };

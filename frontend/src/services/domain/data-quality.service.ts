@@ -1,3 +1,21 @@
+// ================================================================================
+// DATA QUALITY DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → DataQualityService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Data quality monitoring and validation
+//   - Anomaly detection and cleansing rules
+//   - Data quality metrics and reporting
+//
+// USAGE:
+//   Called by DataQualityContext and route loaders for data quality operations.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 import {
   CleansingRule,
   DataAnomaly,

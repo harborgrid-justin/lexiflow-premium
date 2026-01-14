@@ -16,7 +16,6 @@ import {
   type RouteConfig,
   index,
   layout,
-  prefix,
   route,
 } from "@react-router/dev/routes";
 
@@ -92,10 +91,8 @@ export default [
 
     // Pleadings, Drafting & Litigation
     route("pleadings", "routes/pleadings/index.tsx"),
-    route("pleading_builder", "routes/pleading/builder.tsx"),
     route("drafting", "routes/drafting/index.tsx"),
     route("litigation", "routes/litigation/index.tsx"),
-    route("litigation_builder", "routes/litigation/builder.tsx"),
 
     // Operations & Admin
     route("billing", "routes/billing/index.tsx"),
@@ -137,21 +134,21 @@ export default [
     // Audit Logs (Admin/Auditor)
     route("audit", "routes/audit/index.tsx"),
 
-    // Real Estate Division (nested routes with prefix)
-    ...prefix("real_estate", [
-      route("portfolio_summary", "routes/real-estate/portfolio-summary.tsx"),
-      route("inventory", "routes/real-estate/inventory.tsx"),
-      route("utilization", "routes/real-estate/utilization.tsx"),
-      route("outgrants", "routes/real-estate/outgrants.tsx"),
-      route("solicitations", "routes/real-estate/solicitations.tsx"),
-      route("relocation", "routes/real-estate/relocation.tsx"),
-      route("cost_share", "routes/real-estate/cost-share.tsx"),
-      route("disposal", "routes/real-estate/disposal.tsx"),
-      route("acquisition", "routes/real-estate/acquisition.tsx"),
-      route("encroachment", "routes/real-estate/encroachment.tsx"),
-      route("user_management", "routes/real-estate/user-management.tsx"),
-      route("audit_readiness", "routes/real-estate/audit-readiness.tsx"),
-    ]),
+    // Real Estate Division - DISABLED (pending migration to enterprise API)
+    // ...prefix("real_estate", [
+    //   route("portfolio_summary", "routes/real-estate/portfolio-summary.tsx"),
+    //   route("inventory", "routes/real-estate/inventory.tsx"),
+    //   route("utilization", "routes/real-estate/utilization.tsx"),
+    //   route("outgrants", "routes/real-estate/outgrants.tsx"),
+    //   route("solicitations", "routes/real-estate/solicitations.tsx"),
+    //   route("relocation", "routes/real-estate/relocation.tsx"),
+    //   route("cost_share", "routes/real-estate/cost-share.tsx"),
+    //   route("disposal", "routes/real-estate/disposal.tsx"),
+    //   route("acquisition", "routes/real-estate/acquisition.tsx"),
+    //   route("encroachment", "routes/real-estate/encroachment.tsx"),
+    //   route("user_management", "routes/real-estate/user-management.tsx"),
+    //   route("audit_readiness", "routes/real-estate/audit-readiness.tsx"),
+    // ]),
   ]),
 
   // ============================================================================

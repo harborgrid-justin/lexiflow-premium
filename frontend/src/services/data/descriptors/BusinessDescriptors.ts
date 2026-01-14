@@ -1,7 +1,7 @@
-import { CRMService } from "@/services/domain/CRMDomain";
-import { MarketingService } from "@/services/domain/MarketingDomain";
-import { ProfileDomain } from "@/services/domain/ProfileDomain";
-import { StrategyService } from "@/services/domain/StrategyDomain";
+import { CRMService } from "@/services/domain/crm.service";
+import { MarketingService } from "@/services/domain/marketing.service";
+import { ProfileDomain } from "@/services/domain/profile.service";
+import { StrategyService } from "@/services/domain/strategy.service";
 
 export const BusinessDescriptors: PropertyDescriptorMap = {
   crm: { get: () => CRMService, enumerable: true },

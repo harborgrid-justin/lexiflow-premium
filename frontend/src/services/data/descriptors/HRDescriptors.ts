@@ -1,4 +1,4 @@
-import { api, authApi, litigationApi } from "@/api";
+import { api, authApi, litigationApi } from '@/lib/frontend-api';
 
 export const HRDescriptors: PropertyDescriptorMap = {
   hr: {

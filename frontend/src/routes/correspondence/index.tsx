@@ -7,7 +7,7 @@
  * @module routes/correspondence/index
  */
 
-import type { Correspondence } from '@/api/communications/correspondence-api';
+import type { Correspondence } from '@/lib/frontend-api';
 import { communicationsApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -95,7 +95,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-import CorrespondenceManager from '@/features/operations/correspondence/CorrespondenceManager';
+import { CorrespondenceManager } from './components/CorrespondenceManager';
 
 export default function CorrespondenceIndexRoute() {
   return <CorrespondenceManager />;

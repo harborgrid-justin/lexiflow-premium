@@ -47,8 +47,8 @@
  *   const cases = await api.cases.getAll();
  *
  * Usage - Direct domain imports:
- *   import * as authApi from '@/api/auth';
- *   import * as litigationApi from '@/api/litigation';
+ *   import * as authApi from '@/lib/frontend-api';
+ *   import * as litigationApi from '@/lib/frontend-api';
  */
 
 // ==================== ENTERPRISE FRONTEND API ====================
@@ -119,18 +119,9 @@ export { analyticsApi as frontendAnalyticsApi } from "@/lib/frontend-api/analyti
 export { authApi as frontendAuthApi } from "@/lib/frontend-api/auth";
 export { billingApi as frontendBillingApi } from "@/lib/frontend-api/billing";
 export { casesApi } from "@/lib/frontend-api/cases";
-export {
-  communicationsApi as frontendCommunicationsApi,
-  communicationsApi as frontendCommunicationsApi,
-} from "@/lib/frontend-api/communications";
-export {
-  complianceApi as frontendComplianceApi,
-  complianceApi as frontendComplianceApi,
-} from "@/lib/frontend-api/compliance";
-export {
-  discoveryApi as frontendDiscoveryApi,
-  discoveryApi as frontendDiscoveryApi,
-} from "@/lib/frontend-api/discovery";
+export { communicationsApi as frontendCommunicationsApi } from "@/lib/frontend-api/communications";
+export { complianceApi as frontendComplianceApi } from "@/lib/frontend-api/compliance";
+export { discoveryApi as frontendDiscoveryApi } from "@/lib/frontend-api/discovery";
 export {
   docketApi,
   docketApi as frontendDocketApi,
@@ -142,14 +133,8 @@ export {
 export { hrApi as frontendHrApi } from "@/lib/frontend-api/hr";
 export { integrationsApi as frontendIntegrationsApi } from "@/lib/frontend-api/integrations";
 export { intelligenceApi as frontendIntelligenceApi } from "@/lib/frontend-api/intelligence";
-export {
-  trialApi as frontendTrialApi,
-  trialApi as frontendTrialApi,
-} from "@/lib/frontend-api/trial";
-export {
-  workflowApi as frontendWorkflowApi,
-  workflowApi as frontendWorkflowApi,
-} from "@/lib/frontend-api/workflow";
+export { trialApi as frontendTrialApi } from "@/lib/frontend-api/trial";
+export { workflowApi as frontendWorkflowApi } from "@/lib/frontend-api/workflow";
 
 // Export types from frontend APIs
 export type {
@@ -246,7 +231,7 @@ export type {
 } from "./admin";
 
 // Export data-platform (commented to avoid duplicates - services already exported from admin)
-// Use direct imports when needed: import { dataPlatformApi } from '@/api/domains/data-platform.api';
+// Use direct imports when needed: import { dataPlatformApi } from '@/lib/frontend-api';
 // export * from './data-platform';
 export * from "./hr";
 

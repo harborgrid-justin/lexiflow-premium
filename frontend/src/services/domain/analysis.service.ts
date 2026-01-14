@@ -1,3 +1,21 @@
+// ================================================================================
+// ANALYSIS DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → AnalysisService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Legal case analysis and data visualization
+//   - Statistical analysis and trend identification
+//   - Report generation for analytical insights
+//
+// USAGE:
+//   Called by AnalysisContext and route loaders for analytical operations.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { JudgeProfile } from "@/types";
 

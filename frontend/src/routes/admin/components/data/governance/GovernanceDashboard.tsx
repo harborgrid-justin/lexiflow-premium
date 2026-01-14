@@ -21,7 +21,7 @@ interface GovernanceDashboardProps {
 
 export function GovernanceDashboard({
     rules, isScanning, scanProgress, handleScan, setEditingRule
-}) => {
+}) {
     const { theme } = useTheme();
 
     return (

@@ -21,7 +21,7 @@ export interface WorkflowsLoaderData {
  * Loader for Workflows Dashboard
  * Fetches all workflow-related data in parallel for optimal performance
  */
-export async function workflowsLoader(): Promise<WorkflowsLoaderData> {
+export async function workflowsLoader() {
   // Parallel data fetching for optimal performance
   const [templates, instances, tasks] = await Promise.all([
     DataService.workflow.getTemplates(),
@@ -29,9 +29,9 @@ export async function workflowsLoader(): Promise<WorkflowsLoaderData> {
     DataService.workflow.getTasks(),
   ]);
 
-  return {
+  return defer({
     templates: templates || [],
     instances: instances || [],
     tasks: tasks || [],
-  };
+  });
 }

@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Entity = {
@@ -19,10 +20,10 @@ export interface EntitiesLoaderData {
   entities: Entity[];
 }
 
-export async function entitiesLoader(): Promise<EntitiesLoaderData> {
+export async function entitiesLoader() {
   const entities = await DataService.entities.getAll().catch(() => []);
 
-  return {
+  return defer({
     entities: entities || [],
-  };
+  });
 }

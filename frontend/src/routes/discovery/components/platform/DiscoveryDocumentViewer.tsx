@@ -1,4 +1,4 @@
-import { DOCUMENTS_QUERY_KEYS } from '@/api/admin/documents';
+import { DOCUMENTS_QUERY_KEYS } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

@@ -11,7 +11,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
+import { AuthApiService } from '@/lib/frontend-api';
 import React, { useState } from 'react';
 import { z } from 'zod';
 

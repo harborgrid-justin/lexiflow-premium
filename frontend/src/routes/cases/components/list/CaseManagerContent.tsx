@@ -4,7 +4,7 @@
  * @description Content router for Case Management module tabs
  */
 
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { MatterView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { Case } from '@/types';

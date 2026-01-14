@@ -1,8 +1,23 @@
-/**
- * AssetDomain - Asset and equipment management service
- * Provides asset tracking, assignment, and maintenance scheduling
- * ? Migrated to backend API (2025-12-21)
- */
+// ================================================================================
+// ASSET DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → AssetService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Asset and equipment tracking and management
+//   - Asset assignment to users and cases
+//   - Maintenance scheduling and asset lifecycle tracking
+//
+// USAGE:
+//   Called by AssetContext and route loaders for asset operations.
+//   Never called directly from view components.
+//
+// MIGRATION NOTES:
+//   ✅ Migrated to backend API (2025-12-21)
+//
+// ================================================================================
 
 import { apiClient } from "@/services/infrastructure/apiClient";
 

@@ -24,4 +24,4 @@ export {
 export * from './integration/backendDiscovery';
 
 // Consolidated API Object
-export { api } from '@/api';
+export { api } from '@/lib/frontend-api';

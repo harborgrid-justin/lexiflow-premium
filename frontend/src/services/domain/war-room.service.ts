@@ -1,14 +1,32 @@
+// ================================================================================
+// WAR ROOM DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → WarRoomService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Collaborative case preparation spaces
+//   - Real-time trial preparation coordination
+//   - War room resource and document management
+//
+// USAGE:
+//   Called by WarRoomContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * WarRoomDomain - Backend API integration
  * @updated 2025-12-19
  */
 
-import { api } from "@/api";
 import type {
   CreateAdvisorDto,
   CreateExpertDto,
   UpdateStrategyDto,
 } from "@/api/workflow/war-room-api";
+import { api } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 export const WarRoomService = {

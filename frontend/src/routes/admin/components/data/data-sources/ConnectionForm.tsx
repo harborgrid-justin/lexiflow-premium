@@ -31,7 +31,7 @@ export function ConnectionForm({
   setFormData,
   onSubmit,
   isLoading
-}) => {
+}) {
   const { theme } = useTheme();
 
   if (!isAdding) return null;

@@ -1,6 +1,24 @@
-/**
- * ? Migrated to backend API (2025-12-21)
- */
+// ================================================================================
+// OPERATIONS DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → OperationsService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Operational workflow management and tracking
+//   - Process automation and task orchestration
+//   - Operations metrics and performance monitoring
+//
+// USAGE:
+//   Called by OperationsContext and route loaders.
+//   Never called directly from view components.
+//
+// MIGRATION NOTES:
+//   ✅ Migrated to backend API (2025-12-21)
+//
+// ================================================================================
+
 import { apiClient } from "@/services/infrastructure/apiClient";
 import {
   CostForecast,

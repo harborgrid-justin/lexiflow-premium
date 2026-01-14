@@ -102,7 +102,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
+import { ComplianceDashboard } from './components/ComplianceDashboard';
 
 export default function ComplianceIndexRoute() {
   return <ComplianceDashboard />;

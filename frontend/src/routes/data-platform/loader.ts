@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type DataSource = {
@@ -18,10 +19,10 @@ export interface DataPlatformLoaderData {
   sources: DataSource[];
 }
 
-export async function dataPlatformLoader(): Promise<DataPlatformLoaderData> {
+export async function dataPlatformLoader() {
   const sources = await DataService.dataPlatform.getAll().catch(() => []);
 
-  return {
+  return defer({
     sources: sources || [],
-  };
+  });
 }

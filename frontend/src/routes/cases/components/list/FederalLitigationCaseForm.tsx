@@ -16,8 +16,8 @@
  * 5. All dropdowns support keyboard navigation (WCAG 2.1 AA compliant)
  */
 
-import { api } from '@/api';
-import { Jurisdiction } from '@/api/intelligence/jurisdiction-api';
+import { api } from '@/lib/frontend-api';
+import { Jurisdiction } from '@/lib/frontend-api';
 import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { DataService } from '@/services/data/dataService';

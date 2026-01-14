@@ -3,7 +3,7 @@
  * Displays a list of conversations with search and filtering
  */
 
-import type { Conversation } from '@/api/communications/messaging-api';
+import type { Conversation } from '@/lib/frontend-api';
 import { formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
 

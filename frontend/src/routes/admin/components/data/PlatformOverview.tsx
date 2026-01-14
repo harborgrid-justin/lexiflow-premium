@@ -1,4 +1,4 @@
-import { adminApi } from '@/api/domains/admin.api';
+import { adminApi } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';

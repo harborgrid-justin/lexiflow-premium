@@ -1,3 +1,21 @@
+// ================================================================================
+// MARKETING DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → MarketingService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Marketing campaign management and tracking
+//   - Lead generation and conversion metrics
+//   - Marketing analytics and ROI calculation
+//
+// USAGE:
+//   Called by MarketingContext and route loaders for marketing operations.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { MarketingCampaign, MarketingMetric } from "@/types";
 

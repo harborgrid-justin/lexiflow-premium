@@ -1,3 +1,21 @@
+// ================================================================================
+// COMMUNICATION DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → CommunicationService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Email, SMS, and messaging operations
+//   - Communication template management
+//   - Service job tracking for async communication tasks
+//
+// USAGE:
+//   Called by CommunicationContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 import { CommunicationItem, ServiceJob } from "@/types";
 /**
  * ? Migrated to backend API (2025-12-21)

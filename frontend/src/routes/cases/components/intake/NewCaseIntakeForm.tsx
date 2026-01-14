@@ -14,7 +14,7 @@
  * 6. Document Ingestion
  */
 
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { PATHS } from '@/config/paths.config';
 import { useEnhancedWizard, WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';

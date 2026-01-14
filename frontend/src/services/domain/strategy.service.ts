@@ -1,3 +1,21 @@
+// ================================================================================
+// STRATEGY DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → StrategyService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Legal strategy planning and management
+//   - Case approach and tactics documentation
+//   - Strategy session tracking and notes
+//
+// USAGE:
+//   Called by StrategyContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * +---------------------------------------------------------------------------+
  * �                    LEXIFLOW STRATEGY DOMAIN SERVICE                       �
@@ -5,7 +23,7 @@
  * �                       PhD-Level Systems Architecture                      �
  * +---------------------------------------------------------------------------+
  *
- * @module services/domain/StrategyDomain
+ * @module services/domain/strategy.service
  * @architecture Backend-First Strategy Management
  * @author LexiFlow Engineering Team
  * @since 2025-12-22

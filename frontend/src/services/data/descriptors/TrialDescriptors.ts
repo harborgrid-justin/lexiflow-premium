@@ -1,4 +1,4 @@
-import { api } from "@/api";
+import { api } from '@/lib/frontend-api';
 
 export const TrialDescriptors: PropertyDescriptorMap = {
   trial: {

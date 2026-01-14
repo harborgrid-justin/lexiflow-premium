@@ -29,8 +29,8 @@ import { cn } from '@/shared/lib/cn';
 import { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
 import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
 import { TaskRepository } from '@/services/data/repositories/TaskRepository';
-import { CorrespondenceService } from '@/services/domain/CommunicationDomain';
-import { DocketRepository } from '@/services/domain/DocketDomain';
+import { CorrespondenceService } from '@/services/domain/communication.service';
+import { DocketRepository } from '@/services/domain/docket.service';
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UserId, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
 

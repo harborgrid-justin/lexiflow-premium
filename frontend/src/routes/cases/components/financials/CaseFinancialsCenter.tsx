@@ -17,7 +17,7 @@
  * - Trust accounting
  */
 
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';

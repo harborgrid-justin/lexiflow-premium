@@ -10,9 +10,9 @@
  * - theme.border.default - Border colors
  */
 
-import { useTheme } from '@/theme';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { cn } from '@/shared/lib/cn';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { useTheme } from '@/theme';
 import React from "react";
 
 interface ManagerLayoutProps {
@@ -32,7 +32,7 @@ const sidebarWidthClasses = {
   lg: 'w-80',
 };
 
-export function ManagerLayout({
+export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
   title,
   subtitle,
   actions,

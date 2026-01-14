@@ -1,4 +1,5 @@
 import type { ActionFunctionArgs } from "react-router";
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 import type { DiscoveryRequest, Evidence, ProductionSet } from "../../types";
 
@@ -8,14 +9,14 @@ export interface DiscoveryLoaderData {
   productions: ProductionSet[];
 }
 
-export async function clientLoader(): Promise<DiscoveryLoaderData> {
+export async function clientLoader() {
   const [evidence, requests, productions] = await Promise.all([
     DataService.evidence.getAll(),
     DataService.discovery.getRequests(),
     DataService.discovery.getProductions(),
   ]);
 
-  return { evidence, requests, productions };
+  return defer({ evidence, requests, productions });
 }
 
 export async function action({ request }: ActionFunctionArgs) {

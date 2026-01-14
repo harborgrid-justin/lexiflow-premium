@@ -6,7 +6,7 @@ import {
     type RevenueForecasting,
     type TimekeeperPerformance,
     type WorkInProgressMetrics
-} from '@/api/billing/enterprise-billing.service';
+} from '@/lib/frontend-api';
 import { FinancialReportTab, ReportPeriod } from '@/config/billing.config';
 import { useEffect, useState } from 'react';
 

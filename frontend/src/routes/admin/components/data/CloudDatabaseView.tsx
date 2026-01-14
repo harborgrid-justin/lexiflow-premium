@@ -5,9 +5,9 @@
  * deleting, and testing connections.
  */
 
+import { cn } from '@/shared/lib/cn';
 import type { ThemeContextValue } from '@/theme';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';
 import { ConnectionCard } from './ConnectionCard';
@@ -58,7 +58,7 @@ interface CloudDatabaseContentProps {
   resetForm: () => void;
 }
 
-const CloudDatabaseContent = function CloudDatabaseContent({
+const CloudDatabaseContent = ({
   theme,
   isAdding,
   setIsAdding,
@@ -244,7 +244,7 @@ interface ConnectionFormProps {
   theme: ThemeContextValue['theme'];
 }
 
-const ConnectionForm = function ConnectionForm({
+const ConnectionForm = ({
   selectedProvider,
   providers,
   formData,

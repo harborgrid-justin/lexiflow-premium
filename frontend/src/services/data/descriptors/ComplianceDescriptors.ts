@@ -1,6 +1,6 @@
-import { adminApi, api, authApi, complianceApi } from "@/api";
-import { ComplianceService } from "@/services/domain/ComplianceDomain";
-import { SecurityService } from "@/services/domain/SecurityDomain";
+import { adminApi, api, authApi, complianceApi } from '@/lib/frontend-api';
+import { ComplianceService } from "@/services/domain/compliance.service";
+import { SecurityService } from "@/services/domain/security.service";
 
 export const ComplianceDescriptors: PropertyDescriptorMap = {
   compliance: {

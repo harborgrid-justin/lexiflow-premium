@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type LitigationMatter = {
@@ -19,10 +20,10 @@ export interface LitigationLoaderData {
   matters: LitigationMatter[];
 }
 
-export async function litigationLoader(): Promise<LitigationLoaderData> {
+export async function litigationLoader() {
   const matters = await DataService.litigation.getAll().catch(() => []);
 
-  return {
+  return defer({
     matters: matters || [],
-  };
+  });
 }

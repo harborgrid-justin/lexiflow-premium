@@ -14,9 +14,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useMemo } from 'react';
-import { ChevronRight, Home } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { ChevronRight, Home } from 'lucide-react';
+import { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -95,7 +95,7 @@ export const Breadcrumbs = React.memo<BreadcrumbsProps>(function Breadcrumbs({
   className,
   showIcons = true,
   ariaLabel = 'Breadcrumb navigation',
-}) => {
+}: BreadcrumbsProps) {
   const { theme } = useTheme();
 
   // Filter items based on role permissions

@@ -3,7 +3,7 @@
  * Displays a list of notifications with filtering and grouping
  */
 
-import type { ApiNotification } from '@/api/communications/notifications-api';
+import type { ApiNotification } from '@/lib/frontend-api';
 import { formatDistanceToNow } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 

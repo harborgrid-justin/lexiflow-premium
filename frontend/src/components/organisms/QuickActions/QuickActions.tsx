@@ -22,8 +22,8 @@ import { useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -117,7 +117,7 @@ export const QuickActions = React.memo<QuickActionsProps>(function QuickActions(
   position = 'right',
   disabled = false,
   maxWidth = 'md',
-}) => {
+}: QuickActionsProps) {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);

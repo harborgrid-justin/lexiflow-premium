@@ -6,7 +6,7 @@
 
 export { BluebookParser } from './bluebookParser';
 export { BluebookFormatter } from './bluebookFormatter';
-export { bluebookApi } from '@/api/intelligence/bluebook-api';
+export { bluebookApi } from '@/lib/frontend-api';
 
 // Re-export types
 // Note: Import Bluebook types from @/types, don't re-export them

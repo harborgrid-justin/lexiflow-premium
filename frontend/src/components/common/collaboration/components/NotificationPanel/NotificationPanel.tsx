@@ -6,7 +6,7 @@
 
 import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
-import { NotificationService } from '@/services/domain/NotificationDomain';
+import { NotificationService } from '@/services/domain/notification.service';
 import type { NotificationGroup, UINotification } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { formatDistanceToNow } from 'date-fns';

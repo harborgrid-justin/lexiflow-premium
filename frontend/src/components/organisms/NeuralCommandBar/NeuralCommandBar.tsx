@@ -23,10 +23,10 @@ import { HolographicRouting } from '@/services/infrastructure/holographicRouting
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useListNavigation } from '@/hooks/useListNavigation';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useDebounce } from '@/shared/hooks/useDebounce';
-import { useListNavigation } from '@/hooks/useListNavigation';
+import { useTheme } from '@/theme';
 
 // Components
 import { HighlightedText } from '@/shared/ui/atoms/HighlightedText/HighlightedText';
@@ -48,7 +48,7 @@ interface NeuralCommandBarProps {
  */
 export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(function NeuralCommandBar({
     globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
-}) => {
+}: NeuralCommandBarProps) {
     const { theme } = useTheme();
     const [showResults, setShowResults] = useState(false);
     const [isProcessingIntent, setIsProcessingIntent] = useState(false);

@@ -24,8 +24,8 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { TabbedPageLayout } from '@/shared/ui/layouts/TabbedPageLayout/TabbedPageLayout';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { DashboardProvider } from '../DashboardProvider';
 import { DashboardContent } from './DashboardContent';
-import { DashboardProvider } from '../contexts/DashboardContext';
 
 // Utils & Config
 import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';

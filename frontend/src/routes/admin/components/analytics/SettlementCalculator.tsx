@@ -25,9 +25,9 @@ import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Hooks & Context
+import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 import type { ThemeStateValue } from '@/theme';
 import { useTheme } from '@/theme';
-import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
 // Utils & Services
 import { cn } from '@/shared/lib/cn';
@@ -83,7 +83,7 @@ interface SimulationMetricsDisplayProps {
 /**
  * SimulationParametersPanel - Input controls for simulation parameters
  */
-const SimulationParametersPanel = function SimulationParametersPanel({
+const SimulationParametersPanel = ({
   low,
   high,
   liabilityProb,
@@ -175,7 +175,7 @@ const SimulationMetricsDisplay = function SimulationMetricsDisplay({ metrics, th
 /**
  * SimulationResultsChart - Distribution chart with metrics
  */
-const SimulationResultsChart = function SimulationResultsChart({
+const SimulationResultsChart = ({
   results,
   metrics,
   iterations,

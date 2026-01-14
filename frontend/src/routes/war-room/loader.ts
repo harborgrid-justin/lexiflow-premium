@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type WarRoomSession = {
@@ -20,10 +21,10 @@ export interface WarRoomLoaderData {
   sessions: WarRoomSession[];
 }
 
-export async function warRoomLoader(): Promise<WarRoomLoaderData> {
+export async function warRoomLoader() {
   const sessions = await DataService.warRoom.getAll().catch(() => []);
 
-  return {
+  return defer({
     sessions: sessions || [],
-  };
+  });
 }

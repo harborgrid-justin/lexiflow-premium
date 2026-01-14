@@ -1,4 +1,5 @@
 import type { ActionFunctionArgs } from "react-router";
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 import type { BillingRate, Invoice, TimeEntry, Transaction } from "../../types";
 
@@ -13,7 +14,7 @@ export interface BillingLoaderData {
  * Loader for Billing Dashboard
  * Fetches all billing-related data in parallel for optimal performance
  */
-export async function clientLoader(): Promise<BillingLoaderData> {
+export async function clientLoader() {
   // Parallel data fetching for optimal performance
   const [invoices, transactions, rates, timeEntries] = await Promise.all([
     DataService.invoices.getAll(),
@@ -22,12 +23,12 @@ export async function clientLoader(): Promise<BillingLoaderData> {
     DataService.timeEntries.getAll(),
   ]);
 
-  return {
+  return defer({
     invoices,
     transactions,
     rates,
     timeEntries,
-  };
+  });
 }
 
 /**

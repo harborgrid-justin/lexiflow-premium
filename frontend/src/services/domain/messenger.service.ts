@@ -1,10 +1,28 @@
+// ================================================================================
+// MESSENGER DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → MessengerService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Real-time messaging and chat operations
+//   - Thread and conversation management
+//   - Presence and typing indicators
+//
+// USAGE:
+//   Called by MessengerContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * MessengerDomain - Backend API integration
  * @updated 2025-12-19
  */
 
-import { api } from "@/api";
 import type { Conversation, Message } from "@/api/communications/messaging-api";
+import { api } from "@/lib/frontend-api";
 
 export const MessengerService = {
   getAll: async () => {

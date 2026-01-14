@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from "react-router";
+import { defer } from "react-router";
 import { DataService } from "../../services/dataService";
 
 export async function clientLoader({ request }: LoaderFunctionArgs) {
@@ -7,5 +8,5 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
     DataService.admin.getSettings(),
     DataService.admin.getAuditLogs(),
   ]);
-  return { users, settings, auditLogs };
+  return defer({ users, settings, auditLogs });
 }

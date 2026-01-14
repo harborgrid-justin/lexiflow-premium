@@ -3,10 +3,10 @@
  * Display single invoice with payment tracking and PDF preview
  */
 
-import { InvoicesApiService } from '@/api/billing';
-import { InvoiceDetail } from '@/features/operations/billing/components/time-tracking/InvoiceDetail';
+import { InvoicesApiService } from '@/lib/frontend-api';
 import { Link, useActionData, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { InvoiceDetail } from './components/InvoiceDetail';
 
 // ============================================================================
 // Meta Tags

@@ -2,16 +2,16 @@ import { useState } from 'react';
 
 import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader2, MoreHorizontal, UploadCloud } from 'lucide-react';
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/theme';
-import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
+import { DocumentPreviewPanel } from '@/routes/documents/components/DocumentPreviewPanel';
 import { DataService } from '@/services/data/dataService';
-import { DataLakeItem } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { useTheme } from '@/theme';
+import { DataLakeItem } from '@/types';
 
 export function DataLakeExplorer(): React.ReactElement {
     const { theme } = useTheme();

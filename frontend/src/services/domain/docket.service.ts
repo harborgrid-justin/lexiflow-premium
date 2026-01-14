@@ -5,7 +5,7 @@
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  *
- * @module services/domain/DocketDomain
+ * @module services/domain/docket.service
  * @architecture Backend-First Repository Pattern with PACER Integration
  * @author LexiFlow Engineering Team
  * @since 2025-12-22

@@ -3,11 +3,11 @@
  * Displays expense tracking list with filtering
  */
 
-import { ExpensesApiService } from '@/api/billing';
-import { ExpenseList } from '@/features/operations/billing/components/time-tracking/ExpenseList';
+import { ExpensesApiService } from '@/lib/frontend-api';
 import { Link, useActionData, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { ExpenseList } from './components/ExpenseList';
 
 // ============================================================================
 // Meta Tags

@@ -44,7 +44,7 @@ import { DataService } from "@/services/data/dataService";
 import { Scheduler } from "@/utils/scheduler";
 
 // Types
-import { Contact } from "@/api";
+import { Contact } from '@/lib/frontend-api';
 import { Attachment, Conversation, Message } from "@/types";
 
 // Re-export types for consumers

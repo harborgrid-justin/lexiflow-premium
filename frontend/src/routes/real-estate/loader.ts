@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type RealEstateProperty = {
@@ -20,10 +21,10 @@ export interface RealEstateLoaderData {
   properties: RealEstateProperty[];
 }
 
-export async function realEstateLoader(): Promise<RealEstateLoaderData> {
+export async function realEstateLoader() {
   const properties = await DataService.realEstate.getAll().catch(() => []);
 
-  return {
+  return defer({
     properties: properties || [],
-  };
+  });
 }

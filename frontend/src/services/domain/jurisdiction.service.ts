@@ -1,3 +1,21 @@
+// ================================================================================
+// JURISDICTION DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → JurisdictionService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Court jurisdiction management and rules
+//   - Venue selection and jurisdiction validation
+//   - Court-specific filing requirements
+//
+// USAGE:
+//   Called by JurisdictionContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * ? Migrated to backend API (2025-12-21)
  */

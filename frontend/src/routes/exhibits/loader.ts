@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Exhibit = {
@@ -20,10 +21,10 @@ export interface ExhibitsLoaderData {
   exhibits: Exhibit[];
 }
 
-export async function exhibitsLoader(): Promise<ExhibitsLoaderData> {
+export async function exhibitsLoader() {
   const exhibits = await DataService.exhibits.getAll().catch(() => []);
 
-  return {
+  return defer({
     exhibits: exhibits || [],
-  };
+  });
 }

@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type DraftDocument = {
@@ -20,10 +21,10 @@ export interface DraftingLoaderData {
   drafts: DraftDocument[];
 }
 
-export async function draftingLoader(): Promise<DraftingLoaderData> {
+export async function draftingLoader() {
   const drafts = await DataService.drafting.getAll().catch(() => []);
 
-  return {
+  return defer({
     drafts: drafts || [],
-  };
+  });
 }

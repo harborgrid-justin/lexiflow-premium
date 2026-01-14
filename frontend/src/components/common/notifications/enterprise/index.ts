@@ -42,42 +42,49 @@
 // ============================================================================
 // COMPONENT EXPORTS
 // ============================================================================
-export { NotificationBell } from './NotificationBell';
-export type { NotificationBellProps } from './NotificationBell';
+export { NotificationBell } from "./NotificationBell";
+export type { NotificationBellProps } from "./NotificationBell";
 
-export { NotificationPanel } from './NotificationPanel';
-export type { NotificationPanelProps } from './NotificationPanel';
+export { NotificationPanel } from "./NotificationPanel";
+export type { NotificationPanelProps } from "./NotificationPanel";
 
-export { ToastContainer, ToastContext, useToastNotifications } from './ToastContainer';
+export {
+  ToastContainer,
+  ToastContext,
+  useToastNotifications,
+} from "./ToastContainer";
 export type {
   ToastContainerProps,
-  ToastNotification,
   ToastContextValue,
-} from './ToastContainer';
+  ToastNotification,
+} from "./ToastContainer";
 
-export { NotificationCenter } from './NotificationCenter';
-export type { NotificationCenterProps } from './NotificationCenter';
+export { NotificationCenter } from "./NotificationCenter";
+export type { NotificationCenterProps } from "./NotificationCenter";
 
-export { NotificationPreferences } from './NotificationPreferences';
+export { NotificationPreferences } from "./NotificationPreferences";
 export type {
-  NotificationPreferencesProps,
   ExtendedNotificationPreferences,
-} from './NotificationPreferences';
+  NotificationPreferencesProps,
+} from "./NotificationPreferences";
 
-export { ConnectionStatus } from './ConnectionStatus';
-export type { ConnectionStatusProps, ConnectionState } from './ConnectionStatus';
+export { ConnectionStatus } from "./ConnectionStatus";
+export type {
+  ConnectionState,
+  ConnectionStatusProps,
+} from "./ConnectionStatus";
 
 // ============================================================================
 // RE-EXPORT TYPES FROM CORE
 // ============================================================================
 export type {
-  UINotification,
-  NotificationDTO,
-  SystemNotification,
-  NotificationAction,
-  NotificationGroup,
-  NotificationFilters,
   NotificationPreferences as CoreNotificationPreferences,
-  NotificationType,
+  NotificationAction,
+  NotificationDTO,
+  NotificationFilters,
+  NotificationGroup,
   NotificationPriority,
-} from '@/types/notifications';
+  NotificationType,
+  SystemNotification,
+  UINotification,
+} from "@/types/notifications";

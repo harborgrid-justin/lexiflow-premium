@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type PracticeArea = {
@@ -18,10 +19,10 @@ export interface PracticeLoaderData {
   areas: PracticeArea[];
 }
 
-export async function practiceLoader(): Promise<PracticeLoaderData> {
+export async function practiceLoader() {
   const areas = await DataService.practice.getAll().catch(() => []);
 
-  return {
+  return defer({
     areas: areas || [],
-  };
+  });
 }

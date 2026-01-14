@@ -3,12 +3,12 @@
  * Manage billing rates and rate tables
  */
 
-import { RateTablesApiService } from '@/api/billing';
-import RateTableManagement from '@/features/operations/billing/rate-tables/RateTableManagement';
+import { RateTablesApiService } from '@/lib/frontend-api';
 import { Suspense } from 'react';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import RateTableManagement from './components/RateTableManagement';
 
 // ============================================================================
 // Meta Tags

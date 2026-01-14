@@ -14,7 +14,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { ApiKeysApiService } from '@/api/auth/security-credentials-api';
+import { ApiKeysApiService } from '@/lib/frontend-api';
 import type { ApiKey } from '@/types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { z } from 'zod';

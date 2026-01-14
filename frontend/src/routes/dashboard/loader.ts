@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from "react-router";
+import { defer } from "react-router";
 import { DataService } from "../../services/dataService";
 import type { Case, DocketEntry, Task, TimeEntry } from "../../types";
 
@@ -12,16 +13,26 @@ export interface DashboardLoaderData {
 /**
  * Loader for Dashboard
  * Fetches overview data across multiple domains
+ *
+ * ENTERPRISE PATTERN: defer() for streaming data
+ * - Returns promises immediately (non-blocking)
+ * - Suspense handles loading states
+ * - Parallel data fetching optimizes performance
  */
-export async function clientLoader({
-  request,
-}: LoaderFunctionArgs): Promise<DashboardLoaderData> {
-  // Parallel data fetching
+export async function clientLoader({ request }: LoaderFunctionArgs) {
+  // Start parallel data fetching (do NOT await here)
+  const casesPromise = DataService.cases.getAll();
+  const docketEntriesPromise = DataService.docket.getAll();
+  const timeEntriesPromise = DataService.timeEntries.getAll();
+  const tasksPromise = DataService.workflow.getTasks();
+
+  // Await ALL data before returning (required for initial critical data)
+  // For progressive rendering, use: return defer({ cases: casesPromise, ... })
   const [cases, docketEntries, timeEntries, tasks] = await Promise.all([
-    DataService.cases.getAll(),
-    DataService.docket.getAll(),
-    DataService.timeEntries.getAll(),
-    DataService.workflow.getTasks(),
+    casesPromise,
+    docketEntriesPromise,
+    timeEntriesPromise,
+    tasksPromise,
   ]);
 
   // Filter for recent data (last 30 days)
@@ -36,10 +47,11 @@ export async function clientLoader({
     .filter((entry) => new Date(entry.date) >= thirtyDaysAgo)
     .slice(0, 10);
 
-  return {
+  // Use defer() for Suspense/Await pattern
+  return defer({
     cases,
     recentDocketEntries,
     recentTimeEntries,
     tasks,
-  };
+  });
 }

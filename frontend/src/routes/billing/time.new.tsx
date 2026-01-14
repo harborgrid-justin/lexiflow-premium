@@ -3,10 +3,10 @@
  * Form to create a new time entry with timer
  */
 
-import { TimeEntriesApiService } from '@/api/billing';
-import { TimeEntryForm } from '@/features/operations/billing/components/time-tracking/TimeEntryForm';
+import { TimeEntriesApiService } from '@/lib/frontend-api';
 import { useNavigate, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { TimeEntryForm } from './components/TimeEntryForm';
 
 // ============================================================================
 // Meta Tags

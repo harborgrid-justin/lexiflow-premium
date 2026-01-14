@@ -3,11 +3,11 @@
  * Displays time entries list with filtering and search
  */
 
-import { TimeEntriesApiService } from '@/api/billing';
-import { TimeEntryList } from '@/features/operations/billing/components/time-tracking/TimeEntryList';
+import { TimeEntriesApiService } from '@/lib/frontend-api';
 import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { TimeEntryList } from './components/TimeEntryList';
 
 interface ActionData {
   success: boolean;

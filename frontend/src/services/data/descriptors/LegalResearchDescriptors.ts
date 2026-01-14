@@ -4,10 +4,10 @@ import {
   draftingApi,
   type CreateTemplateDto,
   type UpdateTemplateDto,
-} from "@/api";
+} from '@/lib/frontend-api';
 import { type CreateJurisdictionRuleDto } from "@/api/intelligence/jurisdiction-api";
-import { JurisdictionService } from "@/services/domain/JurisdictionDomain";
-import { ResearchService } from "@/services/domain/ResearchDomain";
+import { JurisdictionService } from "@/services/domain/jurisdiction.service";
+import { ResearchService } from "@/services/domain/research.service";
 
 export const LegalResearchDescriptors: PropertyDescriptorMap = {
   research: {

@@ -31,7 +31,7 @@ import { WORKFLOW_TABS } from './WorkflowTabs';
 
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
-import { useMasterWorkflow } from '../../hooks/useMasterWorkflow';
+import { useMasterWorkflow } from '../../_hooks/useMasterWorkflow';
 
 interface MasterWorkflowProps {
   onSelectCase: (caseId: string) => void;
@@ -41,7 +41,7 @@ interface MasterWorkflowProps {
 export function MasterWorkflow({ onSelectCase, initialTab }: MasterWorkflowProps) {
   // Guideline 34: Side-effect free context read
   const { theme, isPendingThemeChange } = useTheme();
-  
+
   const {
     activeTab,
     viewMode,

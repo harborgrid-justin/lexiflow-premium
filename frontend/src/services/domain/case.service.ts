@@ -5,7 +5,7 @@
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  *
- * @module services/domain/CaseDomain
+ * @module services/domain/case.service
  * @architecture Backend-First Repository Pattern with Fallback Strategy
  * @author LexiFlow Engineering Team
  * @since 2025-12-22

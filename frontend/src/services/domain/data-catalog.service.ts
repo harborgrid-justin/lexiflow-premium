@@ -1,3 +1,21 @@
+// ================================================================================
+// DATA CATALOG DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → DataCatalogService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Data dictionary and metadata management
+//   - Data lake discovery and cataloging
+//   - Schema documentation and lineage tracking
+//
+// USAGE:
+//   Called by DataCatalogContext and route loaders for catalog operations.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 import {
   DataDictionaryItem,
   DataLakeItem,
@@ -8,7 +26,7 @@ import {
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { api } from "@/api";
+import { api } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 export const DataCatalogService = {

@@ -1,6 +1,6 @@
-import { analyticsApi, workflowApi } from "@/api";
-import { AnalysisService } from "@/services/domain/AnalysisDomain";
-import { AnalyticsService } from "@/services/domain/AnalyticsDomain";
+import { analyticsApi, workflowApi } from '@/lib/frontend-api';
+import { AnalysisService } from "@/services/domain/analysis.service";
+import { AnalyticsService } from "@/services/domain/analytics.service";
 
 export const AnalyticsDescriptors: PropertyDescriptorMap = {
   aiOps: {

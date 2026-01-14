@@ -18,7 +18,7 @@
  * - Backend API integration via DataService
  */
 
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';

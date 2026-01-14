@@ -4,10 +4,10 @@
  * Can be placed in header or sidebar
  */
 
-import React from 'react';
-import { Server, Database, HardDrive } from 'lucide-react';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
 import { useDataSource } from '@/providers';
+import { Database, HardDrive, Server } from 'lucide-react';
+import React from 'react';
 
 interface BackendStatusIndicatorProps {
   showLabel?: boolean;
@@ -15,7 +15,7 @@ interface BackendStatusIndicatorProps {
   showPulse?: boolean; // Show pulse animation when monitoring
 }
 
-export function BackendStatusIndicator({
+export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   showLabel = true,
   variant = 'compact',
   showPulse = true

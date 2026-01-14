@@ -2,7 +2,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DOCUMENT_TEMPLATES } from '../config/templates.config';
 import { DocumentTemplate } from '../types';
-import { DocumentsApiService } from '@/api/admin/documents-api';
+import { DocumentsApiService } from '@/lib/frontend-api';
 import { FileText } from 'lucide-react';
 
 const documentsApi = new DocumentsApiService();

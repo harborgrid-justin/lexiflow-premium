@@ -1,4 +1,4 @@
-import { Pipeline } from '@/api/data-platform';
+import { Pipeline } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Activity, ChevronRight, Clock, GitMerge, XCircle } from 'lucide-react';

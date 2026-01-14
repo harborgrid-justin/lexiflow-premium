@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type AssemblyTemplate = {
@@ -19,10 +20,10 @@ export interface DAFLoaderData {
   templates: AssemblyTemplate[];
 }
 
-export async function dafLoader(): Promise<DAFLoaderData> {
+export async function dafLoader() {
   const templates = await DataService.daf.getAll().catch(() => []);
 
-  return {
+  return defer({
     templates: templates || [],
-  };
+  });
 }

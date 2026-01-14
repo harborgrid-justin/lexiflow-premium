@@ -9,7 +9,7 @@
  * - Error handling
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
+import { AuthApiService } from '@/lib/frontend-api';
 import {
   registerSchema,
   validatePasswordStrength,

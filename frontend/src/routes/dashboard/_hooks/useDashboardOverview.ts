@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
+import { dashboardMetricsService } from '@/lib/frontend-api';
 
 export type DateRange = 'week' | 'month' | 'quarter' | 'year';
 

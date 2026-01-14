@@ -2,6 +2,7 @@
  * Reports & Analytics Domain - Data Loader
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Report = {
@@ -19,11 +20,11 @@ export interface ReportsLoaderData {
   recentReports: Report[];
 }
 
-export async function reportsLoader(): Promise<ReportsLoaderData> {
+export async function reportsLoader() {
   const reports = await DataService.reports.getAll().catch(() => []);
 
-  return {
+  return defer({
     reports: reports || [],
     recentReports: (reports || []).slice(0, 5),
-  };
+  });
 }

@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { enterpriseApi } from '@/api/enterprise';
+ * import { enterpriseApi } from '@/lib/frontend-api';
  *
  * // Make API calls with automatic retry and rate limiting
  * const cases = await enterpriseApi.get<Case[]>('/cases');

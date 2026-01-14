@@ -4,25 +4,25 @@ import { lazyWithPreload } from "./lazyWithPreload";
 // Dashboard & Core
 export const Dashboard = lazyWithPreload(
   () =>
-    import("../../features/dashboard/components/Dashboard") as Promise<{
+    import("../../routes/dashboard/components/Dashboard") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const CaseModule = lazyWithPreload(
   () =>
-    import("@features/cases/components/list/CaseManagement").then((m) => ({
-      default: m.CaseManagement,
-    })) as Promise<{ default: React.ComponentType<unknown> }>
+    import("../../routes/cases/components/list/CaseModule") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
 );
 export const NewCasePage = lazyWithPreload(
   () =>
-    import("../../features/cases/components/create/NewCase") as Promise<{
+    import("../../routes/cases/components/create/NewCase") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const DocketManager = lazyWithPreload(
   () =>
-    import("../../features/cases/components/docket/DocketManager") as Promise<{
+    import("../../routes/cases/components/docket/DocketManager") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
@@ -30,43 +30,43 @@ export const DocketManager = lazyWithPreload(
 // Case Management Suite
 export const CaseOverviewDashboard = lazyWithPreload(
   () =>
-    import("../../features/cases/components/overview/CaseOverviewDashboard").then(
+    import("../../routes/cases/components/overview/CaseOverviewDashboard").then(
       (m) => ({ default: m.CaseOverviewDashboard })
     ) as Promise<{ default: React.ComponentType<unknown> }>
 );
 export const CaseCalendar = lazyWithPreload(
   () =>
-    import("../../features/cases/components/calendar/CaseCalendar").then(
-      (m) => ({ default: m.CaseCalendar })
-    ) as Promise<{ default: React.ComponentType<unknown> }>
+    import("../../routes/cases/components/calendar/CaseCalendar").then((m) => ({
+      default: m.CaseCalendar,
+    })) as Promise<{ default: React.ComponentType<unknown> }>
 );
 export const CaseAnalyticsDashboard = lazyWithPreload(
   () =>
-    import("../../features/cases/components/analytics/CaseAnalyticsDashboard").then(
+    import("../../routes/cases/components/analytics/CaseAnalyticsDashboard").then(
       (m) => ({ default: m.CaseAnalyticsDashboard })
     ) as Promise<{ default: React.ComponentType<unknown> }>
 );
 export const NewCaseIntakeForm = lazyWithPreload(
   () =>
-    import("../../features/cases/components/intake/NewCaseIntakeForm").then(
+    import("../../routes/cases/components/intake/NewCaseIntakeForm").then(
       (m) => ({ default: m.NewCaseIntakeForm })
     ) as Promise<{ default: React.ComponentType<unknown> }>
 );
 export const CaseOperationsCenter = lazyWithPreload(
   () =>
-    import("../../features/cases/components/operations/CaseOperationsCenter") as Promise<{
+    import("../../routes/cases/components/operations/CaseOperationsCenter") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const CaseInsightsDashboard = lazyWithPreload(
   () =>
-    import("../../features/cases/components/insights/CaseInsightsDashboard").then(
+    import("../../routes/cases/components/insights/CaseInsightsDashboard").then(
       (m) => ({ default: m.CaseInsightsDashboard })
     ) as Promise<{ default: React.ComponentType<unknown> }>
 );
 export const CaseFinancialsCenter = lazyWithPreload(
   () =>
-    import("../../features/cases/components/financials/CaseFinancialsCenter").then(
+    import("../../routes/cases/components/financials/CaseFinancialsCenter").then(
       (m) => ({ default: m.CaseFinancialsCenter })
     ) as Promise<{ default: React.ComponentType<unknown> }>
 );
@@ -74,101 +74,101 @@ export const CaseFinancialsCenter = lazyWithPreload(
 // Operations & Workflow
 export const CorrespondenceManager = lazyWithPreload(
   () =>
-    import("../../features/operations/correspondence/CorrespondenceManager") as Promise<{
+    import("../../routes/correspondence/components/CorrespondenceManager") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const MasterWorkflow = lazyWithPreload(
   () =>
-    import("../../features/cases/components/workflow/MasterWorkflow") as Promise<{
+    import("../../routes/cases/components/workflow/MasterWorkflow") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const DocumentManager = lazyWithPreload(
   () =>
-    import("../../features/operations/documents/DocumentManager") as Promise<{
+    import("../../routes/documents/components/DocumentManager") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 
 // Litigation
-export const WarRoom = lazyWithPreload(
-  () =>
-    import("../../features/litigation/war-room/WarRoom").then((m) => ({
-      default: m.WarRoom,
-    })) as Promise<{ default: React.ComponentType<unknown> }>
-);
-export const ExhibitManager = lazyWithPreload(
-  () =>
-    import("../../features/litigation/exhibits/ExhibitManager").then((m) => ({
-      default: m.ExhibitManager,
-    })) as Promise<{ default: React.ComponentType<unknown> }>
-);
-export const DiscoveryPlatform = lazyWithPreload(
-  () =>
-    import("../../features/litigation/discovery/DiscoveryPlatform") as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
-export const EvidenceVault = lazyWithPreload(
-  () =>
-    import("../../features/litigation/evidence/EvidenceVault") as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
-export const PleadingBuilder = lazyWithPreload(
-  () =>
-    import("../../features/litigation/pleadings/PleadingBuilder").then((m) => ({
-      default: m.PleadingBuilder,
-    })) as Promise<{ default: React.ComponentType<unknown> }>
-);
-export const LitigationBuilder = lazyWithPreload(
-  () =>
-    import("../../features/litigation/strategy/LitigationBuilder").then(
-      (m) => ({ default: m.LitigationBuilder })
-    ) as Promise<{ default: React.ComponentType<unknown> }>
-);
+// export const WarRoom = lazyWithPreload(
+//   () =>
+//     import("../../routes/litigation/war-room/WarRoom").then((m) => ({
+//       default: m.WarRoom,
+//     })) as Promise<{ default: React.ComponentType<unknown> }>
+// );
+// export const ExhibitManager = lazyWithPreload(
+//   () =>
+//     import("../../routes/litigation/exhibits/ExhibitManager").then((m) => ({
+//       default: m.ExhibitManager,
+//     })) as Promise<{ default: React.ComponentType<unknown> }>
+// );
+// export const DiscoveryPlatform = lazyWithPreload(
+//   () =>
+//     import("../../routes/litigation/discovery/DiscoveryPlatform") as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );
+// export const EvidenceVault = lazyWithPreload(
+//   () =>
+//     import("../../routes/litigation/evidence/EvidenceVault") as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );
+// export const PleadingBuilder = lazyWithPreload(
+//   () =>
+//     import("../../routes/litigation/pleadings/PleadingBuilder").then((m) => ({
+//       default: m.PleadingBuilder,
+//     })) as Promise<{ default: React.ComponentType<unknown> }>
+// );
+// export const LitigationBuilder = lazyWithPreload(
+//   () =>
+//     import("../../routes/litigation/strategy/LitigationBuilder").then((m) => ({
+//       default: m.LitigationBuilder,
+//     })) as Promise<{ default: React.ComponentType<unknown> }>
+// );
 
 // Knowledge & Research
 export const ResearchTool = lazyWithPreload(
   () =>
-    import("../../features/knowledge/research/ResearchTool").then((m) => ({
-      default: m.ResearchTool,
-    })) as Promise<{ default: React.ComponentType<unknown> }>
+    import("../../routes/research/components/ResearchTool") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
 );
 export const FirmOperations = lazyWithPreload(
   () =>
-    import("../../features/knowledge/practice/FirmOperations") as Promise<{
+    import("../../routes/practice/components/FirmOperations") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const JurisdictionManager = lazyWithPreload(
   () =>
-    import("../../features/knowledge/jurisdiction/JurisdictionManager").then(
-      (m) => ({ default: m.JurisdictionManager })
-    ) as Promise<{ default: React.ComponentType<unknown> }>
+    import("../../routes/jurisdiction/components/JurisdictionManager") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
 );
 export const RulesPlatform = lazyWithPreload(
   () =>
-    import("../../features/knowledge/rules/RulesPlatform").then((m) => ({
-      default: m.RulesPlatform,
-    })) as Promise<{ default: React.ComponentType<unknown> }>
+    import("../../routes/rules/components/RulesPlatform") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
 );
 export const KnowledgeBase = lazyWithPreload(
   () =>
-    import("../../features/knowledge/base/KnowledgeBase").then((m) => ({
-      default: m.KnowledgeBase,
-    })) as Promise<{ default: React.ComponentType<unknown> }>
+    import("../../routes/library/components/KnowledgeBase") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
 );
 export const ClauseLibrary = lazyWithPreload(
   () =>
-    import("../../features/knowledge/clauses/ClauseLibrary") as Promise<{
+    import("../../routes/clauses/components/ClauseLibrary") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const CitationManager = lazyWithPreload(
   () =>
-    import("../../features/knowledge/citation/CitationManager") as Promise<{
+    import("../../routes/citations/components/CitationManager") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
@@ -176,92 +176,92 @@ export const CitationManager = lazyWithPreload(
 // Operations & Billing
 export const BillingDashboard = lazyWithPreload(
   () =>
-    import("../../features/operations/billing/BillingDashboard") as Promise<{
+    import("../../routes/billing/components/BillingDashboard") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const ClientCRM = lazyWithPreload(
   () =>
-    import("../../features/operations/crm/ClientCRM") as Promise<{
+    import("../../routes/crm/components/ClientCRM") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const ComplianceDashboard = lazyWithPreload(
   () =>
-    import("../../features/operations/compliance/ComplianceDashboard").then(
+    import("../../routes/compliance/components/ComplianceDashboard").then(
       (m) => ({ default: m.ComplianceDashboard })
     ) as Promise<{ default: React.ComponentType<unknown> }>
 );
 export const SecureMessenger = lazyWithPreload(
   () =>
-    import("../../features/operations/messenger/SecureMessenger") as Promise<{
+    import("../../routes/messages/components/SecureMessenger") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const DafDashboard = lazyWithPreload(
   () =>
-    import("../../features/operations/daf/DafDashboard").then((m) => ({
+    import("../../routes/daf/components/DafDashboard").then((m) => ({
       default: m.DafDashboard,
     })) as Promise<{ default: React.ComponentType<unknown> }>
 );
 
 // Admin & Settings
-export const AdminPanel = lazyWithPreload(
-  () =>
-    import("../../features/admin/AdminPanel") as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
-export const ThemeSettings = lazyWithPreload(
-  () =>
-    import("../../features/admin/ThemeSettingsPage") as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
-export const AdminDatabaseControl = lazyWithPreload(
-  () =>
-    import("../../features/admin/components/data/AdminDatabaseControl") as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
-export const AnalyticsDashboard = lazyWithPreload(
-  () =>
-    import("../../features/admin/components/analytics/AnalyticsDashboard") as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
+// export const AdminPanel = lazyWithPreload(
+//   () =>
+//     import("../../routes/admin/index") as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );
+// export const ThemeSettings = lazyWithPreload(
+//   () =>
+//     import("../../routes/admin/theme-settings") as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );
+// export const AdminDatabaseControl = lazyWithPreload(
+//   () =>
+//     import("../../routes/admin/components/data/AdminDatabaseControl") as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );
+// export const AnalyticsDashboard = lazyWithPreload(
+//   () =>
+//     import("../../routes/admin/components/analytics/AnalyticsDashboard") as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );
 
 // Other
 export const EntityDirector = lazyWithPreload(
   () =>
-    import("../../features/cases/components/entities/EntityDirector") as Promise<{
+    import("../../routes/cases/components/entities/EntityDirector") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 export const CalendarView = lazyWithPreload(
   () =>
-    import("../../features/cases/components/calendar/CalendarView") as Promise<{
+    import("../../routes/cases/components/calendar/CalendarView") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
-export const UserProfileManager = lazyWithPreload(
-  () =>
-    import("../../routes/profile/index") as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
+// export const UserProfileManager = lazyWithPreload(
+//   () =>
+//     import("../../routes/profile/index") as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );
 export const DraftingDashboard = lazyWithPreload(
   () =>
-    import("../../features/drafting/DraftingDashboard") as Promise<{
+    import("../../routes/drafting/components/DraftingDashboard") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );
 
-export const ThemeCustomizer = lazyWithPreload(
-  () =>
-    import("../../features/theme/components/ThemeCustomizer").then((m) => ({
-      default: m.ThemeCustomizer,
-    })) as Promise<{
-      default: React.ComponentType<unknown>;
-    }>
-);
+// export const ThemeCustomizer = lazyWithPreload(
+//   () =>
+//     import("../../routes/theme/components/ThemeCustomizer").then((m) => ({
+//       default: m.ThemeCustomizer,
+//     })) as Promise<{
+//       default: React.ComponentType<unknown>;
+//     }>
+// );

@@ -7,7 +7,7 @@ import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { MessageSquare } from 'lucide-react';
 
-import { Contact } from '@/api/communications/messaging-api';
+import { Contact } from '@/lib/frontend-api';
 
 interface MessengerContactsProps {
   contacts: Contact[];

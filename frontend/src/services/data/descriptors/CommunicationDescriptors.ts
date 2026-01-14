@@ -1,9 +1,9 @@
-import { communicationsApi } from "@/api";
-import { CalendarService } from "@/services/domain/CalendarDomain";
-import { CollaborationService } from "@/services/domain/CollaborationDomain";
-import { CorrespondenceService } from "@/services/domain/CommunicationDomain";
-import { MessengerService } from "@/services/domain/MessengerDomain";
-import { NotificationService } from "@/services/domain/NotificationDomain";
+import { communicationsApi } from '@/lib/frontend-api';
+import { CalendarService } from "@/services/domain/calendar.service";
+import { CollaborationService } from "@/services/domain/collaboration.service";
+import { CorrespondenceService } from "@/services/domain/communication.service";
+import { MessengerService } from "@/services/domain/messenger.service";
+import { NotificationService } from "@/services/domain/notification.service";
 
 export const CommunicationDescriptors: PropertyDescriptorMap = {
   communications: {

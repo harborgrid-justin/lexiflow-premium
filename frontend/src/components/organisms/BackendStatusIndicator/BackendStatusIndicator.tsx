@@ -4,9 +4,9 @@
  * Can be placed in header or sidebar
  */
 
-import { Server, Database, HardDrive } from 'lucide-react';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
 import { useDataSource } from '@/providers';
+import { Database, HardDrive, Server } from 'lucide-react';
 
 interface BackendStatusIndicatorProps {
   showLabel?: boolean;
@@ -18,7 +18,7 @@ export function BackendStatusIndicator({
   showLabel = true,
   variant = 'compact',
   showPulse = true
-}) => {
+}: BackendStatusIndicatorProps) {
   const { isAvailable, isHealthy, latency, lastChecked } = useBackendHealth();
   const { currentSource } = useDataSource();
 

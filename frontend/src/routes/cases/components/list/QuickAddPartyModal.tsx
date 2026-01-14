@@ -11,7 +11,7 @@
  * - Error boundary for graceful failure handling
  */
 
-import { CreatePartyDto, PartyRoleBackend, PartyTypeBackend } from '@/api/litigation';
+import { CreatePartyDto, PartyRoleBackend, PartyTypeBackend } from '@/lib/frontend-api';
 import { type CreateComponentProps } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { Building2, Gavel, User, X } from 'lucide-react';
 import React, { useCallback, useState } from 'react';

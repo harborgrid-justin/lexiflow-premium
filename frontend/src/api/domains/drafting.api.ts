@@ -5,7 +5,7 @@
  * All exports are now re-exported from the drafting/ directory for backward compatibility.
  *
  * New imports should use:
- * import { draftingApi, DraftingApiService } from '@/api/domains/drafting';
+ * import { draftingApi, DraftingApiService } from '@/lib/frontend-api';
  *
  * This file maintains backward compatibility for existing imports.
  */

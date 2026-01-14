@@ -5,7 +5,7 @@
  * �                       PhD-Level Systems Architecture                      �
  * +---------------------------------------------------------------------------+
  *
- * @module services/domain/ResearchDomain
+ * @module services/domain/research.service
  * @architecture Backend-First Legal Research with API Integration
  * @author LexiFlow Engineering Team
  * @since 2025-12-22

@@ -15,7 +15,7 @@
  * - Resource optimization recommendations
  */
 
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';

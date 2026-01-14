@@ -1,17 +1,17 @@
-import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/api/domains/drafting';
+import { useToast } from '@/contexts/toast/ToastContext';
+import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/lib/frontend-api';
+import { cn } from '@/shared/lib/cn';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/theme';
-import { useToast } from '@/contexts/toast/ToastContext';
-import { cn } from '@/shared/lib/cn';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { ApprovalQueue } from './components/ApprovalQueue';
-import { DocumentGenerator } from './components/DocumentGenerator';
-import { DraftingStats } from './components/DraftingStats';
-import { RecentDrafts } from './components/RecentDrafts';
-import { TemplateEditor } from './components/TemplateEditor';
-import { TemplateGallery } from './components/TemplateGallery';
+import { ApprovalQueue } from './ApprovalQueue';
+import { DocumentGenerator } from './DocumentGenerator';
+import { DraftingStats } from './DraftingStats';
+import { RecentDrafts } from './RecentDrafts';
+import { TemplateEditor } from './TemplateEditor';
+import { TemplateGallery } from './TemplateGallery';
 
 type View = 'overview' | 'recent' | 'templates' | 'approvals';
 type EditorView = 'template-editor' | 'document-generator' | null;

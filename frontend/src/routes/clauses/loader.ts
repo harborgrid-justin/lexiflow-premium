@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type Clause = {
@@ -20,10 +21,10 @@ export interface ClausesLoaderData {
   clauses: Clause[];
 }
 
-export async function clausesLoader(): Promise<ClausesLoaderData> {
+export async function clausesLoader() {
   const clauses = await DataService.clauses.getAll().catch(() => []);
 
-  return {
+  return defer({
     clauses: clauses || [],
-  };
+  });
 }

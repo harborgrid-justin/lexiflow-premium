@@ -5,7 +5,7 @@
  * @status PRODUCTION READY
  */
 
-import { litigationApi } from '@/api';
+import { litigationApi } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';

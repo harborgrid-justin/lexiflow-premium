@@ -179,7 +179,7 @@ export async function update(
  * // Use result.data
  * ```
  */
-export async function delete(
+export async function deleteLitigation(
   id: string
 ): Promise<Result<void>> {
   // TODO: Implement delete

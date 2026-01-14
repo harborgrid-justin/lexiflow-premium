@@ -1,5 +1,5 @@
 import { useQuery } from '@/hooks/useQueryHooks';
-import { type AdminDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
+import { type AdminDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
 import { DEFAULT_ADMIN_DASHBOARD_DATA } from '../constants/dashboardConstants';
 
 export function useAdminDashboardData() {

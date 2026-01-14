@@ -1,4 +1,4 @@
-import { dataPlatformApi } from '@/api/data-platform';
+import { dataPlatformApi } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';

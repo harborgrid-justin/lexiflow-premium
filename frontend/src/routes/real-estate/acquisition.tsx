@@ -129,25 +129,11 @@ export default function AcquisitionRoute() {
 // ============================================================================
 
 export { RouteErrorBoundary as ErrorBoundary };
-<ShoppingCart className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-            </div >
-  <div>
-    <p className="text-sm text-gray-500 dark:text-gray-400">Total</p>
-    <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{stats.total}</p>
-  </div>
-          </div >
-        </div >
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-amber-100 p-2 dark:bg-amber-900/30">
-              <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">In Progress</p>
               <p className="text-2xl font-semibold text-amber-600 dark:text-amber-400">{stats.pending}</p>
-            </div>
-          </div>
-        </div>
+            </div >
+          </div >
+        </div >
         <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
           <div className="flex items-center gap-3">
             <div className="rounded-lg bg-emerald-100 p-2 dark:bg-emerald-900/30">
@@ -192,69 +178,69 @@ export { RouteErrorBoundary as ErrorBoundary };
       </button>
     </div>
   ) : (
-  <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
-    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-      <thead className="bg-gray-50 dark:bg-gray-800">
-        <tr>
-          <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Property
-          </th>
-          <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Type
-          </th>
-          <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Status
-          </th>
-          <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Asking Price
-          </th>
-          <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Target Close
-          </th>
-          <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-        {data.map((acquisition) => (
-          <tr key={acquisition.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-            <td className="whitespace-nowrap px-6 py-4">
-              <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                {acquisition.propertyName}
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {acquisition.address}
-              </div>
-            </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-              {acquisition.propertyType}
-            </td>
-            <td className="whitespace-nowrap px-6 py-4">
-              <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getStatusColor(acquisition.status)}`}>
-                {acquisition.status}
-              </span>
-            </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-              {formatCurrency(acquisition.askingPrice)}
-            </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-              {formatDate(acquisition.targetCloseDate)}
-            </td>
-            <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
-              <button
-                onClick={() => navigate(`/real_estate/acquisition/${acquisition.id}`)}
-                className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                View
-              </button>
-            </td>
+    <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead className="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              Property
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              Type
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              Status
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              Asking Price
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              Target Close
+            </th>
+            <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              Actions
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)
+        </thead>
+        <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+          {data.map((acquisition) => (
+            <tr key={acquisition.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+              <td className="whitespace-nowrap px-6 py-4">
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {acquisition.propertyName}
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {acquisition.address}
+                </div>
+              </td>
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                {acquisition.propertyType}
+              </td>
+              <td className="whitespace-nowrap px-6 py-4">
+                <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getStatusColor(acquisition.status)}`}>
+                  {acquisition.status}
+                </span>
+              </td>
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                {formatCurrency(acquisition.askingPrice)}
+              </td>
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                {formatDate(acquisition.targetCloseDate)}
+              </td>
+              <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
+                <button
+                  onClick={() => navigate(`/real_estate/acquisition/${acquisition.id}`)}
+                  className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  View
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
 {/* Create Form Modal */ }

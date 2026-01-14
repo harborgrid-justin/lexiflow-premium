@@ -5,7 +5,7 @@
  * |                       PhD-Level Systems Architecture                      |
  * +---------------------------------------------------------------------------+
  *
- * @module services/domain/SearchDomain
+ * @module services/domain/search.service
  * @architecture Backend-First Full-Text Search with Elasticsearch
  * @author LexiFlow Engineering Team
  * @since 2025-12-22

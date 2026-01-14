@@ -1,4 +1,4 @@
-import { WebhooksApiService, type SystemWebhookConfig } from '@/api/integrations';
+import { WebhooksApiService, type SystemWebhookConfig } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { useModalState, useNotify } from '@/hooks/core';

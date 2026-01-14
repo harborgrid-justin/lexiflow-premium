@@ -3,12 +3,12 @@
  * Displays IOLTA trust accounts with compliance features
  */
 
-import { TrustAccountsApiService } from '@/api/billing';
-import { TrustAccountDashboard } from '@/features/operations/billing/trust/TrustAccountDashboard';
+import { TrustAccountsApiService } from '@/lib/frontend-api';
 import { TrustAccountStatus } from '@/types/trust-accounts';
 import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { TrustAccountDashboard } from './components/TrustAccountDashboard';
 
 // ============================================================================
 // Types

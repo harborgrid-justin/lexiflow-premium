@@ -109,13 +109,13 @@ export { SyncEngine, type Mutation } from "./data/syncEngine";
 // ==================== DOMAIN SERVICES ====================
 // DO NOT export domain services that depend on DataService or IntegrationOrchestrator
 // These cause circular dependencies - import directly instead:
-// import { CaseDomain } from '@/services/domain/CaseDomain';
-// import { AdminDomain } from '@/services/domain/AdminDomain';
-// import { KnowledgeDomain } from '@/services/domain/KnowledgeDomain';
-// import { DataCatalogDomain } from '@/services/domain/DataCatalogDomain';
-// import { DataQualityDomain } from '@/services/domain/DataQualityDomain';
-// import { ProfileDomain } from '@/services/domain/ProfileDomain';
-// import { SecurityDomain } from '@/services/domain/SecurityDomain';
+// import { CaseDomain } from '@/services/domain/case.service';
+// import { AdminDomain } from '@/services/domain/admin.service';
+// import { KnowledgeDomain } from '@/services/domain/knowledge.service';
+// import { DataCatalogDomain } from '@/services/domain/data-catalog.service';
+// import { DataQualityDomain } from '@/services/domain/data-quality.service';
+// import { ProfileDomain } from '@/services/domain/profile.service';
+// import { SecurityDomain } from '@/services/domain/security.service';
 //
 // Safe exports (no dependencies on db.ts, DataService or IntegrationOrchestrator):
 export * from "./domain/AnalyticsDomain";
@@ -128,9 +128,9 @@ export * from "./domain/OperationsDomain";
 // Consolidated backend API services (BACKEND-FIRST as of 2025-12-18)
 export * from "./infrastructure/apiClient";
 // NOTE: Commented out full API barrel export to avoid QUERY_KEYS duplicates, Notification type conflicts, Filter type conflicts, and CalendarEvent conflicts
-// Individual API services can be imported directly from '@/api' when needed
-// export * from '@/api';
-export { api } from "@/api"; // Export the consolidated api object
+// Individual API services can be imported directly from '@/lib/frontend-api' when needed
+// export * from '@/lib/frontend-api';
+export { api } from '@/lib/frontend-api'; // Export the consolidated api object
 export {
   enableLegacyIndexedDB,
   forceBackendMode,

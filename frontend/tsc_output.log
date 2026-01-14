@@ -1,0 +1,205 @@
+src/components/organisms/BackendStatusIndicator/BackendStatusIndicator.tsx(21,4): error TS1144: '{' or ';' expected.
+src/components/organisms/Breadcrumbs/Breadcrumbs.tsx(98,4): error TS1005: '{' expected.
+src/components/organisms/Breadcrumbs/Breadcrumbs.tsx(214,2): error TS1128: Declaration or statement expected.
+src/components/organisms/MegaMenu/MegaMenu.tsx(124,26): error TS1005: '{' expected.
+src/components/organisms/MegaMenu/MegaMenu.tsx(434,2): error TS1128: Declaration or statement expected.
+src/components/organisms/NeuralCommandBar/NeuralCommandBar.tsx(51,4): error TS1005: '{' expected.
+src/components/organisms/NeuralCommandBar/NeuralCommandBar.tsx(228,2): error TS1128: Declaration or statement expected.
+src/components/organisms/QuickActions/QuickActions.tsx(120,4): error TS1005: '{' expected.
+src/components/organisms/QuickActions/QuickActions.tsx(452,2): error TS1128: Declaration or statement expected.
+src/contexts/toast/ToastContext.tsx(212,1): error TS1127: Invalid character.
+src/contexts/toast/ToastContext.tsx(212,2): error TS1434: Unexpected keyword or identifier.
+src/contexts/toast/ToastContext.tsx(213,14): error TS1127: Invalid character.
+src/contexts/toast/ToastContext.tsx(214,5): error TS1128: Declaration or statement expected.
+src/contexts/toast/ToastContext.tsx(216,3): error TS1128: Declaration or statement expected.
+src/contexts/toast/ToastContext.tsx(216,4): error TS1128: Declaration or statement expected.
+src/contexts/toast/ToastContext.tsx(216,25): error TS1005: ';' expected.
+src/contexts/toast/ToastContext.tsx(261,5): error TS1128: Declaration or statement expected.
+src/contexts/toast/ToastContext.tsx(262,3): error TS1109: Expression expected.
+src/contexts/toast/ToastContext.tsx(263,1): error TS1109: Expression expected.
+src/contexts/toast/ToastContext.tsx(264,1): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/governance.ts(22,43): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(22,44): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(22,47): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(22,50): error TS1002: Unterminated string literal.
+src/lib/frontend-api/governance.ts(23,15): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(24,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(24,33): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(25,22): error TS1005: '(' expected.
+src/lib/frontend-api/governance.ts(26,14): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(27,14): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(28,14): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(29,14): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(30,14): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(31,14): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(32,2): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(33,2): error TS1005: ',' expected.
+src/lib/frontend-api/governance.ts(33,10): error TS1003: Identifier expected.
+src/lib/frontend-api/governance.ts(34,8): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(35,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(35,6): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(35,7): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/governance.ts(36,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(36,4): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(37,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(85,10): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(85,19): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(85,39): error TS1005: '{' expected.
+src/lib/frontend-api/governance.ts(85,49): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(85,55): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/governance.ts(85,61): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/governance.ts(85,63): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(105,8): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(105,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+src/lib/frontend-api/governance.ts(105,20): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(105,40): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(105,51): error TS1005: '(' expected.
+src/lib/frontend-api/governance.ts(105,56): error TS1005: ')' expected.
+src/lib/frontend-api/governance.ts(105,61): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(105,70): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(105,87): error TS1443: Module declaration names may only use ' or " quoted strings.
+src/lib/frontend-api/governance.ts(201,20): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(201,33): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/governance.ts(201,34): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(201,41): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+src/lib/frontend-api/governance.ts(201,44): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(201,48): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(201,58): error TS1003: Identifier expected.
+src/lib/frontend-api/governance.ts(207,20): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(207,33): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/governance.ts(207,34): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(207,41): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+src/lib/frontend-api/governance.ts(207,44): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(207,53): error TS1443: Module declaration names may only use ' or " quoted strings.
+src/lib/frontend-api/governance.ts(217,8): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(217,17): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(217,21): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(217,32): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(217,43): error TS1005: '(' expected.
+src/lib/frontend-api/governance.ts(217,44): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(217,56): error TS1005: ';' expected.
+src/lib/frontend-api/governance.ts(217,57): error TS1127: Invalid character.
+src/lib/frontend-api/governance.ts(217,58): error TS1434: Unexpected keyword or identifier.
+src/lib/frontend-api/governance.ts(224,5): error TS1443: Module declaration names may only use ' or " quoted strings.
+src/lib/frontend-api/governance.ts(225,4): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(226,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(226,4): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(227,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(228,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(229,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(230,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(231,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(231,6): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(232,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(233,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(234,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(234,8): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(235,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(236,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(236,6): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(237,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(237,4): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(238,2): error TS1109: Expression expected.
+src/lib/frontend-api/governance.ts(240,1): error TS1160: Unterminated template literal.
+src/lib/frontend-api/litigation.ts(182,23): error TS1359: Identifier expected. 'delete' is a reserved word that cannot be used here.
+src/lib/frontend-api/litigation.ts(183,5): error TS1005: ')' expected.
+src/lib/frontend-api/litigation.ts(184,1): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/litigation.ts(184,2): error TS1128: Declaration or statement expected.
+src/lib/frontend-api/litigation.ts(184,23): error TS1109: Expression expected.
+src/lib/frontend-api/litigation.ts(193,10): error TS1005: ':' expected.
+src/lib/frontend-api/litigation.ts(193,57): error TS1005: ',' expected.
+src/routes/admin/components/analytics/SettlementCalculator.tsx(96,4): error TS1005: '{' expected.
+src/routes/admin/components/analytics/SettlementCalculator.tsx(184,4): error TS1005: '{' expected.
+src/routes/admin/components/audit/AuditLogControls.tsx(19,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/CloudDatabaseView.tsx(70,4): error TS1005: '{' expected.
+src/routes/admin/components/data/CloudDatabaseView.tsx(256,4): error TS1005: '{' expected.
+src/routes/admin/components/data/ConnectionCard.tsx(34,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/catalog/DictionaryItemDetail/DefinitionCard.tsx(14,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/data-sources/ConnectionCard.tsx(19,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/data-sources/ConnectionForm.tsx(34,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/data-sources/IndexedDBDataTable.tsx(31,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/data-sources/IndexedDBStoreList.tsx(17,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/governance/GovernanceDashboard.tsx(24,4): error TS1144: '{' or ';' expected.
+src/routes/admin/components/data/schema/ColumnEditorModal.tsx(30,4): error TS1144: '{' or ';' expected.
+src/routes/billing/components/trust/CreateTrustAccountForm.tsx(78,4): error TS1144: '{' or ';' expected.
+src/routes/billing/components/trust/components/AccountInfoStep.tsx(31,4): error TS1144: '{' or ';' expected.
+src/routes/billing/components/trust/components/BankDetailsStep.tsx(29,4): error TS1144: '{' or ';' expected.
+src/routes/billing/components/trust/components/ComplianceStep.tsx(31,4): error TS1144: '{' or ';' expected.
+src/routes/billing/components/trust/components/FormInput.tsx(32,4): error TS1144: '{' or ';' expected.
+src/routes/billing/components/trust/components/FormNavigation.tsx(29,4): error TS1144: '{' or ';' expected.
+src/routes/billing/components/trust/components/SignatoriesStep.tsx(26,4): error TS1144: '{' or ';' expected.
+src/routes/correspondence/components/CorrespondenceErrorBoundary.tsx(128,2): error TS1005: ')' expected.
+src/routes/correspondence/components/CorrespondenceManager.tsx(280,1): error TS1128: Declaration or statement expected.
+src/routes/dashboard/components/EnhancedDashboardOverview.tsx(57,4): error TS1144: '{' or ';' expected.
+src/routes/dashboard/widgets/ChartCard.tsx(65,4): error TS1144: '{' or ';' expected.
+src/routes/dashboard/widgets/KPICard.tsx(133,4): error TS1144: '{' or ';' expected.
+src/routes/dashboard/widgets/StatWidget.tsx(48,4): error TS1144: '{' or ';' expected.
+src/routes/drafting/components/assembly/Step2FormConfiguration.tsx(27,4): error TS1144: '{' or ';' expected.
+src/routes/drafting/components/assembly/Step3DraftReview.tsx(24,4): error TS1144: '{' or ';' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(144,13): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(145,19): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(146,22): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(147,15): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(148,17): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(149,17): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(150,15): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(151,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(152,15): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(153,18): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(154,21): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(155,21): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(156,16): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(157,3): error TS1137: Expression or comma expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(157,4): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(157,5): error TS1134: Variable declaration expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(158,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(159,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(160,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(161,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(162,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(163,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(164,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(165,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(166,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(167,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(168,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(169,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(170,12): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(171,4): error TS1005: ',' expected.
+src/routes/litigation/components/contexts/LitigationContext.tsx(181,1): error TS1128: Declaration or statement expected.
+src/routes/real-estate/acquisition.tsx(133,13): error TS1128: Declaration or statement expected.
+src/routes/real-estate/acquisition.tsx(138,11): error TS1128: Declaration or statement expected.
+src/routes/real-estate/acquisition.tsx(139,9): error TS1109: Expression expected.
+src/routes/real-estate/acquisition.tsx(140,9): error TS2657: JSX expressions must have one parent element.
+src/routes/real-estate/acquisition.tsx(173,7): error TS1128: Declaration or statement expected.
+src/routes/real-estate/acquisition.tsx(361,5): error TS1128: Declaration or statement expected.
+src/routes/real-estate/acquisition.tsx(362,3): error TS1109: Expression expected.
+src/routes/real-estate/acquisition.tsx(363,1): error TS1128: Declaration or statement expected.
+src/routes/research/components/ResearchSidebar.tsx(13,4): error TS1144: '{' or ';' expected.
+src/routes/research/components/bluebook/FormatOptionsCard.tsx(20,4): error TS1144: '{' or ';' expected.
+src/routes/research/components/bluebook/InputSection.tsx(32,4): error TS1144: '{' or ';' expected.
+src/routes/research/components/bluebook/ResultItem.tsx(20,4): error TS1144: '{' or ';' expected.
+src/routes/research/components/bluebook/ResultsSection.tsx(35,4): error TS1144: '{' or ';' expected.
+src/routes/rules/components/rule-viewer/RuleTreeViewer.tsx(23,4): error TS1144: '{' or ';' expected.
+src/shared/ui/layouts/CenteredLayout/CenteredLayout.tsx(30,4): error TS1144: '{' or ';' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(211,4): error TS1144: '{' or ';' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(266,20): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(267,18): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(268,10): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(268,22): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(269,1): error TS1138: Parameter declaration expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(269,2): error TS1138: Parameter declaration expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(269,4): error TS1109: Expression expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(314,20): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(315,21): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(316,18): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(317,2): error TS1005: ',' expected.
+src/shared/ui/layouts/LayoutComposer/LayoutComposer.tsx(317,4): error TS1109: Expression expected.
+src/shared/ui/layouts/ManagerLayout/ManagerLayout.tsx(44,4): error TS1144: '{' or ';' expected.
+src/shared/ui/organisms/BackendStatusIndicator/BackendStatusIndicator.tsx(22,4): error TS1144: '{' or ';' expected.
+src/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay.tsx(180,18): error TS1005: ',' expected.
+src/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay.tsx(181,12): error TS1003: Identifier expected.
+src/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay.tsx(181,22): error TS1109: Expression expected.
+src/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay.tsx(182,1): error TS1128: Declaration or statement expected.
+src/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay.tsx(182,2): error TS1109: Expression expected.
+src/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay.tsx(182,4): error TS1109: Expression expected.

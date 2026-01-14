@@ -1,11 +1,11 @@
-import type { LoaderFunctionArgs } from "react-router";
+import { defer } from "react-router";
 import { DataService } from "../../services/dataService";
 
-export async function clientLoader({ request }: LoaderFunctionArgs) {
+export async function clientLoader() {
   const [checks, conflicts, deadlines] = await Promise.all([
     DataService.compliance.getChecks(),
     DataService.compliance.getConflicts(),
     DataService.compliance.getDeadlines(),
   ]);
-  return { checks, conflicts, deadlines };
+  return defer({ checks, conflicts, deadlines });
 }

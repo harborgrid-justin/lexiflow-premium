@@ -10,7 +10,7 @@
  * @module routes/admin/audit
  */
 
-import { AdminService } from '@/services/domain/AdminDomain';
+import { AdminService } from '@/services/domain/admin.service';
 import type { AuditLogEntry } from '@/types';
 import { useId, useState } from 'react';
 import { Link } from 'react-router';

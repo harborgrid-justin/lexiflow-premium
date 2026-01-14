@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type AuditLog = {
@@ -21,10 +22,11 @@ export interface AuditLoaderData {
   logs: AuditLog[];
 }
 
-export async function auditLoader(): Promise<AuditLoaderData> {
-  const logs = await DataService.audit.getAll().catch(() => []);
+export async function auditLoader() {
+  const logsPromise = DataService.audit.getAll().catch(() => []);
+  const logs = await logsPromise;
 
-  return {
+  return defer({
     logs: logs || [],
-  };
+  });
 }

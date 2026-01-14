@@ -61,9 +61,9 @@ For each folder in `src/features/[feature]`:
 | **Messages**       | `features/messaging`      | `routes/messages`       | Low      | **Complete** |
 | **Profile**        | `features/profile`        | `routes/profile`        | Low      | **Complete** |
 | **Real Estate**    | `features/real-estate`    | `routes/real-estate`    | Low      | **Complete** |
-| **Reports**        | `features/reports`        | `routes/reports`        | Low      | Pending      |
+| **Reports**        | `features/reports`        | `routes/reports`        | Low      | **Complete** |
 | **Search**         | `features/search`         | `routes/search`         | High     | **Complete** |
-| **Settings**       | `features/settings`       | `routes/settings`       | Low      | Pending      |
+| **Settings**       | `features/settings`       | `routes/settings`       | Low      | **Complete** |
 
 _(List extends to all folders in `src/features/`)_
 

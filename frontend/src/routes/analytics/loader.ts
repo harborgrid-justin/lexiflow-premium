@@ -1,3 +1,4 @@
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 export async function clientLoader() {
@@ -8,5 +9,5 @@ export async function clientLoader() {
       DataService.analytics.getPerformanceMetrics(),
     ]
   );
-  return { caseMetrics, financialMetrics, performanceMetrics };
+  return defer({ caseMetrics, financialMetrics, performanceMetrics });
 }

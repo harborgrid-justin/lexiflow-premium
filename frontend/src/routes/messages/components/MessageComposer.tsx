@@ -4,7 +4,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
-import type { Message } from '@/api/communications/messaging-api';
+import type { Message } from '@/lib/frontend-api';
 import { TIMEOUTS } from '@/config/ports.config';
 
 export interface MessageComposerProps {

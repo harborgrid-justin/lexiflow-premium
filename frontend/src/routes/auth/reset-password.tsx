@@ -4,7 +4,7 @@
  * Handles password reset with token from email
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
+import { AuthApiService } from '@/lib/frontend-api';
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 

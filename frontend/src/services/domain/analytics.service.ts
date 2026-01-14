@@ -2,7 +2,7 @@
  * Analytics Domain Service - Legal intelligence and strategic insights
  * Production-grade service for counsel analysis, judge statistics, and outcome prediction
  *
- * @module services/domain/AnalyticsDomain
+ * @module services/domain/analytics.service
  * @description Comprehensive legal analytics service providing:
  * - **Opposing counsel analytics** (win rates, specialties, strategies)
  * - **Judge statistics** (motion grant rates, ruling patterns, preferences)

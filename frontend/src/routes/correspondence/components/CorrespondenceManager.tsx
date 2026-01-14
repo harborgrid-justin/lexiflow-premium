@@ -22,11 +22,11 @@ import { DataService } from '@/services/data/dataService';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/shared/hooks/useToggle';
+import { useTheme } from '@/theme';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
@@ -272,12 +272,14 @@ function CorrespondenceManagerInternal({ initialTab }: CorrespondenceManagerProp
 
 // Export with ErrorBoundary wrapper for resilience
 const CorrespondenceManager = React.memo<CorrespondenceManagerProps>(function CorrespondenceManager(props) {
-    <CorrespondenceErrorBoundary>
-        <Suspense fallback={<CommunicationLogSkeleton />}>
-            <CorrespondenceManagerInternal {...props} />
-        </Suspense>
-    </CorrespondenceErrorBoundary>
-);
+    return (
+        <CorrespondenceErrorBoundary>
+            <Suspense fallback={<CommunicationLogSkeleton />}>
+                <CorrespondenceManagerInternal {...props} />
+            </Suspense>
+        </CorrespondenceErrorBoundary>
+    );
+});
 
 export default CorrespondenceManager;
 export { CorrespondenceManager };

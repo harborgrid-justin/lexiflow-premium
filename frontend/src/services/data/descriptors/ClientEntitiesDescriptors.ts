@@ -1,4 +1,4 @@
-import { api, integrationsApi, litigationApi } from "@/api";
+import { api, integrationsApi, litigationApi } from '@/lib/frontend-api';
 
 export const ClientEntitiesDescriptors: PropertyDescriptorMap = {
   clients: {

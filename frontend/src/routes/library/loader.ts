@@ -3,6 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
+import { defer } from "react-router";
 import { DataService } from "../../services/data/dataService";
 
 type LibraryItem = {
@@ -19,10 +20,10 @@ export interface LibraryLoaderData {
   items: LibraryItem[];
 }
 
-export async function libraryLoader(): Promise<LibraryLoaderData> {
+export async function libraryLoader() {
   const items = await DataService.library.getAll().catch(() => []);
 
-  return {
+  return defer({
     items: items || [],
-  };
+  });
 }

@@ -16,7 +16,7 @@ export function ConnectionCard({
   onSync,
   onDelete,
   onTest
-}) => {
+}) {
   const { theme } = useTheme();
 
   const getStatusColor = (status: string) => {

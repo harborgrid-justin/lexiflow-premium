@@ -1,5 +1,5 @@
-import { analyticsApi, api } from "@/api";
-import { TransactionService } from "@/services/domain/TransactionDomain";
+import { analyticsApi, api } from '@/lib/frontend-api';
+import { TransactionService } from "@/services/domain/transaction.service";
 import { BillingRepository } from "../repositories/BillingRepository";
 import { RepositoryRegistry } from "../repositories/RepositoryRegistry";
 

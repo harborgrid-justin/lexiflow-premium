@@ -1,6 +1,26 @@
+// ================================================================================
+// NOTIFICATION DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → NotificationService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Real-time notification and alert management
+//   - Read/unread tracking and notification preferences
+//   - Multi-channel notification delivery (email, push, in-app)
+//
+// USAGE:
+//   Called by NotificationContext and route loaders.
+//   Never called directly from view components.
+//
+// MIGRATION NOTES:
+//   Real-time notification and alert service
+//   Provides notification management, read/unread tracking, and channel subscriptions
+//
+// ================================================================================
+
 /**
- * NotificationDomain - Real-time notification and alert service
- * Provides notification management, read/unread tracking, and channel subscriptions
  *
  * ? Migrated to backend API (2025-12-21)
  */
@@ -65,10 +85,9 @@ export const NotificationService = {
     type?: string;
     limit?: number;
   }): Promise<Notification[]> => {
-    return apiClient.get<Notification[]>(
-      "/communications/notifications",
-      { params: filters }
-    );
+    return apiClient.get<Notification[]>("/communications/notifications", {
+      params: filters,
+    });
   },
 
   markAsRead: async (notificationId: string): Promise<boolean> => {

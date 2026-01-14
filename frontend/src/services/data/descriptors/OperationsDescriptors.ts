@@ -1,6 +1,6 @@
-import { adminApi, api, discoveryApi, workflowApi } from "@/api";
-import { AssetService } from "@/services/domain/AssetDomain";
-import { OperationsService } from "@/services/domain/OperationsDomain";
+import { adminApi, api, discoveryApi, workflowApi } from '@/lib/frontend-api';
+import { AssetService } from "@/services/domain/asset.service";
+import { OperationsService } from "@/services/domain/operations.service";
 
 export const OperationsDescriptors: PropertyDescriptorMap = {
   ocr: {

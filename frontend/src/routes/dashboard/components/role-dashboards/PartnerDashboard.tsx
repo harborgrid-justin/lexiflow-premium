@@ -4,7 +4,7 @@
  * @description Partner-specific dashboard focused on revenue, client acquisition, and case outcomes
  */
 
-import { type PartnerDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
+import { type PartnerDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { ChartCard, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';

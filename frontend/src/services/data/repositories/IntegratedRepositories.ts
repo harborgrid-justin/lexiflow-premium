@@ -1,5 +1,5 @@
-import { CaseRepository } from "@/services/domain/CaseDomain";
-import { DocketRepository } from "@/services/domain/DocketDomain";
+import { CaseRepository } from "@/services/domain/case.service";
+import { DocketRepository } from "@/services/domain/docket.service";
 import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
 import {
   IntegrationEventPublisher,

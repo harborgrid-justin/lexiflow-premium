@@ -10,12 +10,12 @@
  * @module routes/crm/index
  */
 
-import { ClientCRM } from '@/features/operations/crm/ClientCRM';
 import { crmApi } from '@/lib/frontend-api';
 import { ClientStatus } from '@/types';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
+import { ClientCRM } from './components/ClientCRM';
 
 // ============================================================================
 // Meta Tags

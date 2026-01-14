@@ -13,7 +13,9 @@
  * @module routes/cases/CaseListPage
  */
 
-import { useLoaderData } from 'react-router';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+import { RouteError, TableRouteSkeleton } from '../_shared/RouteSkeletons';
 import { CaseListProvider } from './CaseListProvider';
 import { CaseListView } from './CaseListView';
 
@@ -22,23 +24,28 @@ import { CaseListView } from './CaseListView';
  *
  * DATA FLOW:
  * 1. Router loader fetches data (parallel)
- * 2. Provider initializes with loader data
- * 3. View renders pure presentation
- *
- * NOTE: Suspense + defer() will be added in Phase 2
- * Currently data is pre-loaded via clientLoader
+ * 2. Suspense boundary (rendering concern)
+ * 3. Await resolves deferred data (data concern)
+ * 4. Provider initializes with resolved data (domain layer)
+ * 5. View renders pure presentation (UI layer)
  */
 export function CaseListPageContent() {
   const data = useLoaderData<typeof import('./loader').clientLoader>();
 
   return (
     <div className="min-h-full">
-      <CaseListProvider
-        initialCases={data.cases}
-        initialInvoices={data.invoices}
-      >
-        <CaseListView />
-      </CaseListProvider>
+      <Suspense fallback={<TableRouteSkeleton title="Loading Cases" />}>
+        <Await resolve={data} errorElement={<RouteError title="Failed to load cases" />}>
+          {(resolved) => (
+            <CaseListProvider
+              initialCases={resolved.cases}
+              initialInvoices={resolved.invoices}
+            >
+              <CaseListView />
+            </CaseListProvider>
+          )}
+        </Await>
+      </Suspense>
     </div>
   );
 }

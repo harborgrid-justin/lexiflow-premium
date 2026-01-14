@@ -1,4 +1,4 @@
-import { BackupSnapshot } from '@/api/data-platform/backups-api';
+import { BackupSnapshot } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';

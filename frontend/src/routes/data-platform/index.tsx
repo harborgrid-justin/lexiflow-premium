@@ -8,7 +8,7 @@
  */
 
 import { AdminDatabaseControl } from '@/routes/admin/components/data/AdminDatabaseControl';
-import { DataSourceService } from '@/services/domain/DataSourceDomain';
+import { DataSourceService } from '@/services/domain/data-source.service';
 import { ActionFunctionArgs } from 'react-router-dom';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

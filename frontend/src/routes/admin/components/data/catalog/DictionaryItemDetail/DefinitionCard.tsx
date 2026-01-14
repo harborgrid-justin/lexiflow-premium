@@ -11,7 +11,7 @@ export function DefinitionCard({
   setFormData,
   onAISuggestion,
   isGenerating,
-}) => {
+}) {
   const { theme } = useTheme();
 
   return (

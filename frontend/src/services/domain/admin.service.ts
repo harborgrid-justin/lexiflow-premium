@@ -1,3 +1,21 @@
+// ================================================================================
+// ADMIN DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → AdminService → Frontend API → Backend
+//
+// PURPOSE:
+//   - System administration operations (users, roles, API keys)
+//   - Audit log management and compliance tracking
+//   - Service connector and integration management
+//
+// USAGE:
+//   Called by AdminContext and route loaders for administrative operations.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 import {
   ApiKey,
   ApiServiceSpec,
@@ -15,8 +33,8 @@ import {
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { authApi } from "@/api";
 import { adminApi } from "@/api/domains/admin.api";
+import { authApi } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 export const AdminService = {

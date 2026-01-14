@@ -1,3 +1,21 @@
+// ================================================================================
+// COLLABORATION DOMAIN SERVICE
+// ================================================================================
+//
+// POSITION IN ARCHITECTURE:
+//   Context/Loader → CollaborationService → Frontend API → Backend
+//
+// PURPOSE:
+//   - Team collaboration and shared workspace management
+//   - Document sharing and co-authoring
+//   - Activity feeds and team notifications
+//
+// USAGE:
+//   Called by CollaborationContext and route loaders.
+//   Never called directly from view components.
+//
+// ================================================================================
+
 /**
  * CollaborationDomain - Team collaboration and workspace management
  * Provides workspaces, comments, invitations, and resource sharing

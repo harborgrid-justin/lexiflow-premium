@@ -1,4 +1,4 @@
-import { DataSource } from '@/api/data-platform/data-sources-api';
+import { DataSource } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';

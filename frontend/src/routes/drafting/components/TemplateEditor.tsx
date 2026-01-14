@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { api } from '@/lib/frontend-api';
 import { useToast } from '@/contexts/toast/ToastContext';
 import {
   ClauseReference,

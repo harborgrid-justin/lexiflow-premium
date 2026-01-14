@@ -1,122 +1,298 @@
-// src/contexts/auth/AuthContext.tsx
-import { authApi } from "@/api/domains/auth.api";
-import { apiClient } from "@/services/infrastructure/apiClient";
+// ================================================================================
+// ENTERPRISE REACT CONTEXT FILE - AUTH DOMAIN
+// ================================================================================
+//
+// CANONICAL STRUCTURE:
+// ├── Types
+// ├── State Shape
+// ├── Actions (Action Types)
+// ├── Reducer
+// ├── Selectors
+// ├── Context
+// ├── Provider
+// └── Public Hook
+//
+// POSITION IN ARCHITECTURE:
+//   Frontend API (truth) → Loader/Actions (orchestration) → Context (state) → Views
+//
+// RULES ENFORCED:
+//   ✓ Domain-scoped state only (auth)
+//   ✓ No direct HTTP calls (uses AuthService)
+//   ✓ No router navigation
+//   ✓ No JSX layout (only provider wrapper)
+//   ✓ Loader-based initialization
+//   ✓ Optimistic state support
+//   ✓ Memoized selectors
+//   ✓ Immutable context values
+//
+// ================================================================================
+
+import { AuthService } from "@/services/domain/auth.service";
 import type { User } from "@/types";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useReducer } from "react";
 
-export type AuthState =
-  | { status: "anonymous"; user: null }
-  | { status: "authenticated"; user: User };
+// ================================================================================
+// Types
+// ================================================================================
 
-type AuthContextValue = {
-  auth: AuthState;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+export type AuthStatus = "anonymous" | "authenticated";
+
+export interface AuthState {
+  status: AuthStatus;
+  user: User | null;
   isLoading: boolean;
   error: string | null;
+  optimistic: {
+    loggingIn: boolean;
+    loggingOut: boolean;
+  };
+}
+
+type AuthAction =
+  | { type: "auth/loginStart"; payload: { email: string } }
+  | { type: "auth/loginSuccess"; payload: { user: User } }
+  | { type: "auth/loginFailure"; payload: { error: string } }
+  | { type: "auth/logoutStart" }
+  | { type: "auth/logoutSuccess" }
+  | { type: "auth/initialize"; payload: { user: User | null } }
+  | { type: "auth/clearError" }
+  | { type: "auth/setLoading"; payload: boolean };
+
+// ================================================================================
+// State Shape
+// ================================================================================
+
+const initialState: AuthState = {
+  status: "anonymous",
+  user: null,
+  isLoading: true,
+  error: null,
+  optimistic: {
+    loggingIn: false,
+    loggingOut: false,
+  },
 };
 
-const AuthContext = createContext<AuthContextValue | null>(null);
+// ================================================================================
+// Reducer
+// ================================================================================
 
-const AUTH_STORAGE_KEY = 'lexiflow_auth_token';
-const AUTH_REFRESH_KEY = 'lexiflow_refresh_token';
+function authReducer(state: AuthState, action: AuthAction): AuthState {
+  switch (action.type) {
+    case "auth/loginStart":
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+        optimistic: { ...state.optimistic, loggingIn: true },
+      };
 
-export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [auth, setAuth] = useState<AuthState>({ status: "anonymous", user: null });
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+    case "auth/loginSuccess":
+      return {
+        ...state,
+        status: "authenticated",
+        user: action.payload.user,
+        isLoading: false,
+        error: null,
+        optimistic: { ...state.optimistic, loggingIn: false },
+      };
 
-  // Initialize auth state
-  useEffect(() => {
-    const initAuth = async () => {
-      const token = localStorage.getItem(AUTH_STORAGE_KEY);
-      if (token) {
-        try {
-          apiClient.setAuthTokens(token, localStorage.getItem(AUTH_REFRESH_KEY) || '');
-          // Verify token and get user profile
-          // Note: Assuming /auth/me or similar exists, otherwise we might need to store user in localstorage
-          // For now, we'll try to fetch profile, if fails, logout
-          // If authApi.auth.getProfile doesn't exist, we might need to rely on stored user or just validate token
-          // Let's assume we can get the current user.
-          // If not available, we might need to rely on what's in localStorage if we stored it there.
+    case "auth/loginFailure":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload.error,
+        optimistic: { ...state.optimistic, loggingIn: false },
+      };
 
-          // For this implementation, we'll try to fetch the user.
-          // If the API doesn't support it, we'd need to adjust.
-          // authApi.users.getProfile() might be what we need if it exists.
-          // Let's check if we can get the current user.
+    case "auth/logoutStart":
+      return {
+        ...state,
+        optimistic: { ...state.optimistic, loggingOut: true },
+      };
 
-          // Fallback: check if we have a user in localStorage
-          const storedUser = localStorage.getItem('lexiflow_user');
-          if (storedUser) {
-            setAuth({ status: "authenticated", user: JSON.parse(storedUser) });
-          } else {
-            // If no user data, we might be anonymous or need to fetch
-            // For now, let's assume anonymous if no user data but token exists (edge case)
-            // or try to fetch if we had an endpoint.
-          }
-        } catch (err) {
-          console.error("Auth initialization failed", err);
-          localStorage.removeItem(AUTH_STORAGE_KEY);
-          localStorage.removeItem(AUTH_REFRESH_KEY);
-          localStorage.removeItem('lexiflow_user');
-        }
-      }
-      setIsLoading(false);
-    };
-    initAuth();
-  }, []);
+    case "auth/logoutSuccess":
+      return {
+        ...initialState,
+        isLoading: false,
+      };
 
+    case "auth/initialize":
+      return {
+        ...state,
+        status: action.payload.user ? "authenticated" : "anonymous",
+        user: action.payload.user,
+        isLoading: false,
+      };
+
+    case "auth/clearError":
+      return {
+        ...state,
+        error: null,
+      };
+
+    case "auth/setLoading":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+
+    default:
+      return state;
+  }
+}
+
+// ================================================================================
+// Selectors (Memoized derivations)
+// ================================================================================
+
+interface AuthSelectors {
+  isAuthenticated: boolean;
+  canAccessAdmin: boolean;
+  userName: string | null;
+  userEmail: string | null;
+}
+
+function createSelectors(state: AuthState): AuthSelectors {
+  return {
+    isAuthenticated: state.status === "authenticated" && state.user !== null,
+    canAccessAdmin: state.user?.role === "Administrator" || false,
+    userName: state.user?.firstName
+      ? `${state.user.firstName} ${state.user.lastName}`.trim()
+      : state.user?.email || null,
+    userEmail: state.user?.email || null,
+  };
+}
+
+// ================================================================================
+// Context
+// ================================================================================
+
+interface AuthStateValue extends AuthState {
+  selectors: AuthSelectors;
+}
+
+interface AuthActionsValue {
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  initialize: (user: User | null) => void;
+  clearError: () => void;
+}
+
+const AuthStateContext = createContext<AuthStateValue | null>(null);
+const AuthActionsContext = createContext<AuthActionsValue | null>(null);
+
+// ================================================================================
+// Provider
+// ================================================================================
+
+export interface AuthProviderProps {
+  children: React.ReactNode;
+  initialUser?: User | null; // Loader-based initialization
+}
+
+export function AuthProvider({ children, initialUser }: AuthProviderProps) {
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
+  // Initialize from loader data on mount
+  React.useEffect(() => {
+    if (initialUser !== undefined) {
+      dispatch({ type: "auth/initialize", payload: { user: initialUser } });
+    } else {
+      // Fallback to service initialization
+      AuthService.initializeFromStorage().then((user) => {
+        dispatch({ type: "auth/initialize", payload: { user } });
+      });
+    }
+  }, [initialUser]);
+
+  // Memoized selectors
+  const selectors = useMemo(() => createSelectors(state), [state]);
+
+  // Domain actions (call service layer, not HTTP directly)
   const login = useCallback(async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(null);
+    dispatch({ type: "auth/loginStart", payload: { email } });
     try {
-      const response = await authApi.auth.login(email, password);
-      const { accessToken, refreshToken, user } = response;
-
-      localStorage.setItem(AUTH_STORAGE_KEY, accessToken);
-      localStorage.setItem(AUTH_REFRESH_KEY, refreshToken);
-      localStorage.setItem('lexiflow_user', JSON.stringify(user));
-
-      apiClient.setAuthTokens(accessToken, refreshToken);
-      setAuth({ status: "authenticated", user });
+      const user = await AuthService.login(email, password);
+      dispatch({ type: "auth/loginSuccess", payload: { user } });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Login failed";
-      setError(message);
+      dispatch({ type: "auth/loginFailure", payload: { error: message } });
       throw err;
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
   const logout = useCallback(async () => {
+    dispatch({ type: "auth/logoutStart" });
     try {
-      // await authApi.auth.logout(); // If endpoint exists
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem(AUTH_REFRESH_KEY);
-      localStorage.removeItem('lexiflow_user');
-      apiClient.clearAuthTokens();
-      setAuth({ status: "anonymous", user: null });
+      await AuthService.logout();
+      dispatch({ type: "auth/logoutSuccess" });
     } catch (err) {
       console.error("Logout failed", err);
+      // Force logout even on error
+      dispatch({ type: "auth/logoutSuccess" });
     }
   }, []);
 
-  const value = useMemo<AuthContextValue>(
+  const initialize = useCallback((user: User | null) => {
+    dispatch({ type: "auth/initialize", payload: { user } });
+  }, []);
+
+  const clearError = useCallback(() => {
+    dispatch({ type: "auth/clearError" });
+  }, []);
+
+  // Immutable context values
+  const stateValue = useMemo<AuthStateValue>(
     () => ({
-      auth,
-      login,
-      logout,
-      isLoading,
-      error
+      ...state,
+      selectors,
     }),
-    [auth, login, logout, isLoading, error]
+    [state, selectors]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+  const actionsValue = useMemo<AuthActionsValue>(
+    () => ({
+      login,
+      logout,
+      initialize,
+      clearError,
+    }),
+    [login, logout, initialize, clearError]
+  );
 
-export const useAuth = (): AuthContextValue => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
-};
+  return (
+    <AuthStateContext.Provider value={stateValue}>
+      <AuthActionsContext.Provider value={actionsValue}>
+        {children}
+      </AuthActionsContext.Provider>
+    </AuthStateContext.Provider>
+  );
+}
+
+// ================================================================================
+// Public Hooks
+// ================================================================================
+
+export function useAuthState(): AuthStateValue {
+  const context = useContext(AuthStateContext);
+  if (!context) {
+    throw new Error("useAuthState must be used within AuthProvider");
+  }
+  return context;
+}
+
+export function useAuthActions(): AuthActionsValue {
+  const context = useContext(AuthActionsContext);
+  if (!context) {
+    throw new Error("useAuthActions must be used within AuthProvider");
+  }
+  return context;
+}
+
+export function useAuth() {
+  return {
+    ...useAuthState(),
+    ...useAuthActions(),
+  };
+}

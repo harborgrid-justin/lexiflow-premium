@@ -1,9 +1,6 @@
-/**
- * @module components/organisms/Sidebar
- * @description Main sidebar navigation component with header, nav, and footer
- */
+// components/sidebar/index.ts
 
-export { Sidebar } from "./Sidebar";
-export { SidebarFooter } from "./SidebarFooter";
-export { SidebarHeader } from "./SidebarHeader";
-export { SidebarNav } from "./SidebarNav";
+export * from './Sidebar';
+export * from './SidebarFooter';
+export * from './SidebarHeader';
+export * from './SidebarNav';

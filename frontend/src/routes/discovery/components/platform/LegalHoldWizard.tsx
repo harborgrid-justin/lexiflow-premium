@@ -12,7 +12,7 @@ import React, { useState } from 'react';
  * - G33: Explicit loading states
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';

@@ -41,28 +41,29 @@ For each folder in `src/features/[feature]`:
 
 ## III. Domain Mapping & Transition Status
 
-| Feature Domain  | Current Location       | Target Location      | Priority | Status       |
-| :-------------- | :--------------------- | :------------------- | :------- | :----------- |
-| **Admin**       | `features/admin`       | `routes/admin`       | High     | **Complete** |
-| **Analytics**   | `features/analytics`   | `routes/analytics`   | Medium   | **Complete** |
-| **Auth**        | `features/auth`        | `routes/auth`        | Critical | **Complete** |
-| **Billing**     | `features/billing`     | `routes/billing`     | High     | **Complete** |
-| **Calendar**    | `features/calendar`    | `routes/calendar`    | Medium   | **Complete** |
-| **Cases**       | `features/cases`       | `routes/cases`       | Critical | **Complete** |
-| **Dashboard**   | `features/dashboard`   | `routes/dashboard`   | High     | **Complete** |
-| **Discovery**   | `features/discovery`   | `routes/discovery`   | Medium   | **Complete** |
-| **Docket**      | `features/docket`      | `routes/docket`      | High     | **Complete** |
-| **Documents**   | `features/documents`   | `routes/documents`   | High     | **Complete** |
-| **Drafting**    | `features/drafting`    | `routes/drafting`    | Low      | **Complete** |
-| **Evidence**    | `features/evidence`    | `routes/evidence`    | Medium   | **Complete** |
-| **Knowledge**   | `features/knowledge`   | `routes/knowledge`   | Medium   | Pending      |
-| **Litigation**  | `features/litigation`  | `routes/litigation`  | High     | **Complete** |
-| **Messages**    | `features/messaging`   | `routes/messages`    | Low      | **Complete** |
-| **Profile**     | `features/profile`     | `routes/profile`     | Low      | **Complete** |
-| **Real Estate** | `features/real-estate` | `routes/real-estate` | Low      | **Complete** |
-| **Reports**     | `features/reports`     | `routes/reports`     | Low      | Pending      |
-| **Search**      | `features/search`      | `routes/search`      | High     | Pending      |
-| **Settings**    | `features/settings`    | `routes/settings`    | Low      | Pending      |
+| Feature Domain     | Current Location          | Target Location         | Priority | Status       |
+| :----------------- | :------------------------ | :---------------------- | :------- | :----------- |
+| **Admin**          | `features/admin`          | `routes/admin`          | High     | **Complete** |
+| **Analytics**      | `features/analytics`      | `routes/analytics`      | Medium   | **Complete** |
+| **Auth**           | `features/auth`           | `routes/auth`           | Critical | **Complete** |
+| **Billing**        | `features/billing`        | `routes/billing`        | High     | **Complete** |
+| **Calendar**       | `features/calendar`       | `routes/calendar`       | Medium   | **Complete** |
+| **Cases**          | `features/cases`          | `routes/cases`          | Critical | **Complete** |
+| **Correspondence** | `features/correspondence` | `routes/correspondence` | Low      | **Complete** |
+| **Dashboard**      | `features/dashboard`      | `routes/dashboard`      | High     | **Complete** |
+| **Discovery**      | `features/discovery`      | `routes/discovery`      | Medium   | **Complete** |
+| **Docket**         | `features/docket`         | `routes/docket`         | High     | **Complete** |
+| **Documents**      | `features/documents`      | `routes/documents`      | High     | **Complete** |
+| **Drafting**       | `features/drafting`       | `routes/drafting`       | Low      | **Complete** |
+| **Evidence**       | `features/evidence`       | `routes/evidence`       | Medium   | **Complete** |
+| **Knowledge**      | `features/knowledge`      | `routes/[sub-routes]`   | Medium   | **Complete** |
+| **Litigation**     | `features/litigation`     | `routes/litigation`     | High     | **Complete** |
+| **Messages**       | `features/messaging`      | `routes/messages`       | Low      | **Complete** |
+| **Profile**        | `features/profile`        | `routes/profile`        | Low      | **Complete** |
+| **Real Estate**    | `features/real-estate`    | `routes/real-estate`    | Low      | **Complete** |
+| **Reports**        | `features/reports`        | `routes/reports`        | Low      | Pending      |
+| **Search**         | `features/search`         | `routes/search`         | High     | **Complete** |
+| **Settings**       | `features/settings`       | `routes/settings`       | Low      | Pending      |
 
 _(List extends to all folders in `src/features/`)_
 

@@ -22,7 +22,7 @@ import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/useModalState';
 import { useQuery } from '@/hooks/useQueryHooks';
 

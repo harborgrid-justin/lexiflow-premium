@@ -32,7 +32,7 @@ import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoa
 import { Modal } from '@/shared/ui/molecules/Modal';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';

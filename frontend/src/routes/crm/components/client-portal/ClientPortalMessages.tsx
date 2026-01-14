@@ -1,0 +1,16 @@
+import { useTheme } from '@/theme';
+import { cn } from '@/shared/lib/cn';
+import { MessageSquare } from 'lucide-react';
+
+export function ClientPortalMessages() {
+    const { theme } = useTheme();
+    return (
+        <div className="p-4">
+            <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>Secure Messages</h3>
+            <div className={cn("p-8 text-center border-2 border-dashed rounded-lg", theme.border.default)}>
+                <MessageSquare className="w-12 h-12 mx-auto mb-2 text-slate-400" />
+                <p className={theme.text.secondary}>No messages yet.</p>
+            </div>
+        </div>
+    );
+};

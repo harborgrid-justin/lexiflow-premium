@@ -21,7 +21,7 @@ import { useState, useCallback } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { ColumnDefinition, EditorOption } from './DataGridColumn';
 

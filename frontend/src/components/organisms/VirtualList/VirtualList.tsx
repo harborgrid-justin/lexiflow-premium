@@ -10,13 +10,13 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { forwardRef, useDeferredValue, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useDeferredValue, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -91,9 +91,7 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     return () => observer.disconnect();
   }, []);
 
-  // All hooks must be called unconditionally
   const safeItems = useMemo(() => deferredItems || [], [deferredItems]);
-  const totalItemsHeight = useMemo(() => safeItems.length * itemHeight, [safeItems.length, itemHeight]);
 
   const overscan = 5;
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
@@ -113,7 +111,7 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     return visible;
   }, [safeItems, startIndex, endIndex, itemHeight]);
 
-  // Safety check for invalid height calculations - after all hooks
+  // Safety check for invalid height calculations
   if (!itemHeight || itemHeight <= 0 || !Number.isFinite(itemHeight)) {
     console.error('[VirtualList] Invalid itemHeight:', itemHeight);
     return (
@@ -126,6 +124,8 @@ const VirtualListComponent = <T = Record<string, unknown>>(
       </div>
     );
   }
+
+  const totalItemsHeight = safeItems.length * itemHeight;
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
@@ -186,7 +186,7 @@ const VirtualListComponent = <T = Record<string, unknown>>(
             >
               {renderItem(data, index)}
             </div>
-          );
+          )
         })}
 
         {footer && (
@@ -206,6 +206,6 @@ const VirtualListComponent = <T = Record<string, unknown>>(
   );
 };
 
-export const VirtualList = forwardRef(VirtualListComponent as unknown as React.ForwardRefRenderFunction<VirtualListRef, VirtualListProps<unknown>>) as <T>(
+export const VirtualList = forwardRef(VirtualListComponent) as <T>(
   props: VirtualListProps<T> & { ref?: React.Ref<VirtualListRef> }
 ) => React.ReactElement;

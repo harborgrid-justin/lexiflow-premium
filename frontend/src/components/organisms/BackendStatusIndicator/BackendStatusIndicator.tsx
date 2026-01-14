@@ -14,7 +14,7 @@ interface BackendStatusIndicatorProps {
   showPulse?: boolean; // Show pulse animation when monitoring
 }
 
-export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
+export function BackendStatusIndicator({
   showLabel = true,
   variant = 'compact',
   showPulse = true
@@ -34,7 +34,8 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
     return isAvailable ? Database : Server;
   };
 
-  const getTooltipText = () => {
+  // DETERMINISTIC RENDERING: Memoize computed values to avoid Date.now() on every render
+  const getTooltipText = React.useMemo(() => {
     const baseStatus = currentSource === 'indexeddb'
       ? `Local Mode - Backend ${isAvailable ? 'detected' : 'not detected'}`
       : !isAvailable
@@ -46,7 +47,7 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
     const lastCheckedDate = typeof lastChecked === 'string' ? new Date(lastChecked) : lastChecked;
     const timeSinceCheck = Math.floor((Date.now() - lastCheckedDate.getTime()) / 1000);
     return `${baseStatus}\nLast checked: ${timeSinceCheck}s ago`;
-  };
+  }, [currentSource, isAvailable, isHealthy, latency, lastChecked]);
 
   const Icon = getIcon();
 
@@ -57,7 +58,7 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
     return (
       <div
         className={`flex items-center gap-2 px-2 py-1 rounded-md ${getStatusColor()} relative`}
-        title={getTooltipText()}
+        title={getTooltipText}
       >
         {shouldPulse && (
           <span className="absolute inset-0 rounded-md bg-emerald-400 animate-ping opacity-20"></span>
@@ -78,7 +79,7 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   return (
     <div
       className={`flex items-center gap-3 px-3 py-2 rounded-lg border ${getStatusColor()} relative overflow-hidden`}
-      title={getTooltipText()}
+      title={getTooltipText}
     >
       {shouldPulse && (
         <span className="absolute inset-0 bg-emerald-400 animate-ping opacity-10"></span>

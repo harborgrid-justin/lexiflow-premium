@@ -1,6 +1,6 @@
 /**
- * @deprecated This module has moved to @/features/theme
- * Please update your imports to use @/features/theme
+ * @deprecated This module has moved to @/theme
+ * Please update your imports to use @/theme
  */
-export { ThemeProvider, useTheme } from '@/features/theme';
-export type { ThemeObject } from '@/features/theme';
+export { ThemeProvider, useTheme } from '@/theme';
+export type { ThemeObject } from '@/theme';

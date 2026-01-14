@@ -26,7 +26,7 @@ import { DiscoveryNavigation } from './layout/DiscoveryNavigation';
 import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';

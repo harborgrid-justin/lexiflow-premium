@@ -1,7 +1,7 @@
 import { AppShell } from "@/components/layouts/AppShell";
 import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
-import { ThemeProvider } from "@/features/theme";
+import { ThemeProvider } from "@/theme";
 import { useAppShellLogic } from "@/hooks/useAppShellLogic";
 import { RouteErrorBoundary } from "@/routes/_shared/RouteErrorBoundary";
 import { requireAuthLoader } from "@/routes/route-guards";

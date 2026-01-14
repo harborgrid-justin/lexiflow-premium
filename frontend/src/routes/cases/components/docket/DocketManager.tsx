@@ -36,7 +36,7 @@ import { DocketSettings } from './DocketSettings';
 import { DocketSheet } from './DocketSheet';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';

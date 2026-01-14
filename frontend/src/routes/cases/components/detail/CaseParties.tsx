@@ -19,7 +19,7 @@ import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog
 import { Modal } from '@/shared/ui/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useCaseParties, GroupByOption } from '@/routes/cases/hooks/useCaseParties';
 
 // Internal Dependencies - Services & Utils

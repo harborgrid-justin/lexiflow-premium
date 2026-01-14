@@ -28,7 +28,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useToggle } from '@/shared/hooks/useToggle';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';

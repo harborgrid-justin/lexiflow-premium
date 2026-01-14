@@ -1,5 +1,5 @@
 import { dataPlatformApi } from '@/api/data-platform';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';

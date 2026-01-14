@@ -1,70 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import { Database, Cloud, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
-import { apiClient } from '@/services/infrastructure/apiClient';
 import { useDataSource } from '@/providers';
-import { BackendHealthMonitor } from '../BackendHealthMonitor/BackendHealthMonitor';
-import { SystemHealthDisplay } from '../SystemHealthDisplay/SystemHealthDisplay';
+import { apiClient } from '@/services/infrastructure/apiClient';
+import { BackendHealthMonitor } from '@/shared/ui/organisms/BackendHealthMonitor/BackendHealthMonitor';
+import { SystemHealthDisplay } from '@/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay';
+import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface ConnectionStatusProps {
   className?: string;
 }
 
-export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = '' }) => {
+export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
+  // HYDRATION-SAFE: Track mounted state for browser-only APIs
+  const [isMounted, setIsMounted] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
   const [showHealthMonitor, setShowHealthMonitor] = useState(false);
   const [showCoverage, setShowCoverage] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   const { currentSource, isBackendApiEnabled: useBackendApi } = useDataSource();
 
+  // Set mounted flag after hydration
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    let isActive = true;
+    setIsMounted(true);
+  }, []);
 
-    // Exponential backoff: 5s, 10s, 20s, 40s, then 60s max
-    const getBackoffDelay = (count: number) => {
-      const baseDelay = 5000;
-      const maxDelay = 60000;
-      return Math.min(baseDelay * Math.pow(2, count), maxDelay);
-    };
-
+  useEffect(() => {
     // Check backend connection if API mode is enabled
     const checkBackend = async () => {
-      if (!isActive || !useBackendApi) {
+      if (!useBackendApi) {
         setBackendStatus('disconnected');
         return;
       }
 
       try {
         await apiClient.healthCheck();
-        if (isActive) {
-          setBackendStatus('connected');
-          setRetryCount(0); // Reset on success
-          // Check again in 30 seconds when connected
-          timeoutId = setTimeout(checkBackend, 30000);
-        }
+        setBackendStatus('connected');
       } catch {
-        if (isActive) {
-          setBackendStatus('disconnected');
-          const newRetryCount = retryCount + 1;
-          setRetryCount(newRetryCount);
-          // Use exponential backoff when disconnected
-          const delay = getBackoffDelay(newRetryCount);
-          console.debug(`[ConnectionStatus] Backend offline, retrying in ${delay / 1000}s...`);
-          timeoutId = setTimeout(checkBackend, delay);
-        }
+        setBackendStatus('disconnected');
       }
     };
 
     checkBackend();
 
-    return () => {
-      isActive = false;
-      clearTimeout(timeoutId);
-    };
-  }, [useBackendApi, retryCount]);
+    // Check periodically
+    const interval = setInterval(checkBackend, 30000); // Every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [useBackendApi]);
 
   useEffect(() => {
+    // HYDRATION-SAFE: Only attach browser listeners after mount
+    if (!isMounted || typeof window === 'undefined') return;
+
     // Listen to network status
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -76,7 +62,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, []);
+  }, [isMounted]);
 
   const getStatusColor = () => {
     if (!useBackendApi) return 'text-blue-600 bg-blue-50';
@@ -142,4 +128,3 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
     </>
   );
 };
-

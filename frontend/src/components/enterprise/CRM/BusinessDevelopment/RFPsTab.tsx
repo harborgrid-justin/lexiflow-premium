@@ -3,7 +3,7 @@
  * @description RFPs tab view component
  */
 
-import type { ThemeObject } from '@/features/theme';
+import type { ThemeObject } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Plus } from 'lucide-react';
 import { RFPCard } from './RFPCard';

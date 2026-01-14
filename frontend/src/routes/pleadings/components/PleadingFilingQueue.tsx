@@ -17,7 +17,7 @@ import { AlertTriangle, CheckCircle, Clock, Send, XCircle } from 'lucide-react';
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';

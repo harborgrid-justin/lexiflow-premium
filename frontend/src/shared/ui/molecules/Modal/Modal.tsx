@@ -18,7 +18,7 @@ import { createPortal } from 'react-dom';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useScrollLock } from '@/hooks/ui';
 
 // Utils & Constants

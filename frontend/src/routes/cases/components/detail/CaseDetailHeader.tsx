@@ -17,7 +17,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 import { ClientPortalModal } from '@features/operations';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 import { QUERY_KEYS } from '@/services/data/queryKeys';

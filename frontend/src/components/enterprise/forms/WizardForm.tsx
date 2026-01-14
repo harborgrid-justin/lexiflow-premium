@@ -13,7 +13,7 @@
  */
 
 import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import type { WizardConfig } from '@/types/forms';
 import { FormField } from './FormField';

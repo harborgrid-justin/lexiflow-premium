@@ -1,4 +1,4 @@
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';

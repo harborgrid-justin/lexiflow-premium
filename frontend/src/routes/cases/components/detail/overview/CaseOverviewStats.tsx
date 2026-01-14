@@ -11,7 +11,7 @@
 // External Dependencies
 import { CheckCircle, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from 'lucide-react';
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 

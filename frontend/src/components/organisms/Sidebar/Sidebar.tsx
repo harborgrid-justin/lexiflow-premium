@@ -1,10 +1,8 @@
 // components/layout/Sidebar.tsx
-import { useTheme } from '@/features/theme';
-import { AppView, User } from '@/types';
+import { SidebarFooter, SidebarHeader } from '@/components';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
-import React from 'react';
-import { SidebarFooter } from './SidebarFooter';
-import { SidebarHeader } from './SidebarHeader';
+import { AppView, User } from '@/types';
 import { SidebarNav } from './SidebarNav';
 
 interface SidebarProps {
@@ -19,7 +17,7 @@ interface SidebarProps {
 /**
  * Sidebar - React 18 optimized with React.memo
  */
-export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, isOpen, onClose, currentUser, onSwitchUser }) => {
+export const Sidebar = React.memo<SidebarProps>(function Sidebar({ activeView, setActiveView, isOpen, onClose, currentUser, onSwitchUser }) {
   const { theme } = useTheme();
 
   return (
@@ -37,10 +35,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
         "fixed inset-y-0 left-0 z-50 w-72 flex flex-col h-full border-r transform transition-transform duration-300 ease-in-out shadow-2xl md:shadow-none touch-pan-y",
         theme.surface.default,
         theme.border.default,
-        // Desktop: Always static and visible
-        "md:translate-x-0 md:static md:inset-auto",
-        // Mobile: Toggle visibility
-        isOpen ? 'translate-x-0' : '-translate-x-full'
+        isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 md:static md:inset-auto'
       )}>
 
         <SidebarHeader onClose={onClose} />
@@ -66,3 +61,6 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
     </>
   );
 });
+
+// React.memo displayName for debugging (Principle #13)
+Sidebar.displayName = 'Sidebar';

@@ -1,6 +1,6 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/shared/ui/atoms/Button';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { LegalEntity } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Clock, Plus, TrendingDown } from 'lucide-react';

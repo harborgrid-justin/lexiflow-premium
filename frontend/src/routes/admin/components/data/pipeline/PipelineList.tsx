@@ -1,5 +1,5 @@
 import { Pipeline } from '@/api/data-platform';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Activity, ChevronRight, Clock, GitMerge, XCircle } from 'lucide-react';
 

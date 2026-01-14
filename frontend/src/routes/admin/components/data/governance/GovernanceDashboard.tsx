@@ -1,7 +1,7 @@
 import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2 } from 'lucide-react';
 import { Card } from '@/shared/ui/molecules/Card';
 import { Button } from '@/shared/ui/atoms/Button';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface GovernanceRule {

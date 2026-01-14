@@ -26,7 +26,7 @@ import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { CitationDetail } from './CitationDetail';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useWindow } from '@/providers';

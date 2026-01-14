@@ -1,5 +1,5 @@
 import { TIMEOUTS } from '@/config/ports.config';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';

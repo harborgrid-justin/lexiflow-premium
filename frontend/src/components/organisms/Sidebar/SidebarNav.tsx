@@ -10,17 +10,17 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useMemo, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { queryClient } from '@/hooks/useQueryHooks';
 import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
+import { queryClient } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useHoverIntent } from '@/shared/hooks/useHoverIntent';
 
 // Utils & Constants
@@ -29,7 +29,7 @@ import { Scheduler } from '@/utils/scheduler';
 import * as styles from './SidebarNav.styles';
 
 // Types
-import type { ModuleDefinition, NavCategory } from '@/types';
+import type { NavCategory, ModuleDefinition } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -58,25 +58,13 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
   }, []);
 
   const visibleItems = useMemo(() => {
-    // Map current user role to authorization levels
-    const isAdmin = currentUserRole === 'admin' || currentUserRole === 'Administrator';
-    const isAttorneyOrAdmin = isAdmin || currentUserRole === 'attorney' || currentUserRole === 'Senior Partner';
-    const isStaff = isAttorneyOrAdmin || currentUserRole === 'paralegal' || currentUserRole === 'staff';
-
+    const isAuthorizedAdmin = currentUserRole === 'Administrator' || currentUserRole === 'Senior Partner';
     return modules.filter(item => {
       // Filter out hidden routes (accessed via other pages, not directly in sidebar)
       if (item.hidden) return false;
-
       // Filter out admin-only routes for non-admin users
-      if (item.requiresAdmin && !isAdmin) return false;
+      return !(item.requiresAdmin && !isAuthorizedAdmin);
 
-      // Filter out attorney-only routes for non-attorney users
-      if (item.requiresAttorney && !isAttorneyOrAdmin) return false;
-
-      // Filter out staff-only routes for client users
-      if (item.requiresStaff && !isStaff) return false;
-
-      return true;
     });
   }, [currentUserRole, modules]);
 
@@ -96,13 +84,13 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
         // 1. Preload Component Code (Lazy Load chunks)
         const component = item.component as unknown as Record<string, unknown>;
         if (component?.preload && typeof component.preload === 'function') (component.preload as () => void)();
-
+        
         // 2. Preload Data (Heavy DB Ops)
         // We only prefetch if the data isn't already fresh in cache
         const prefetchConfig = PREFETCH_MAP[item.id];
         if (prefetchConfig) {
-          // Using a longer stale time for hover-prefetches (2 mins) to avoid redundant DB hits
-          queryClient.fetch(prefetchConfig.key as readonly (string | number | Record<string, unknown> | undefined)[], prefetchConfig.fn, 120000);
+            // Using a longer stale time for hover-prefetches (2 mins) to avoid redundant DB hits
+            queryClient.fetch(prefetchConfig.key as readonly (string | number | Record<string, unknown> | undefined)[], prefetchConfig.fn, 120000);
         }
       }, 'background');
     },
@@ -126,7 +114,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                 const Icon = item.icon;
                 const isActive = activeView === item.id;
                 const isChildActive = item.children?.some(child => child.id === activeView);
-
+                
                 return (
                   <div key={item.id}>
                     <button
@@ -139,7 +127,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                       <span className={styles.navItemLabel}>{item.label}</span>
                       {(isActive || isChildActive) && <div className={styles.getActiveIndicator(theme)}></div>}
                     </button>
-
+                    
                     {/* Submenu for children */}
                     {item.children && item.children.length > 0 && (isActive || isChildActive) && (
                       <div className={styles.getSubmenuContainer(theme)}>

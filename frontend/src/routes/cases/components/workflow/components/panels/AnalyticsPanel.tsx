@@ -5,7 +5,7 @@
 
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, TrendingUp } from 'lucide-react';
 import type { WorkflowAnalytics } from '@/types/workflow-advanced-types';

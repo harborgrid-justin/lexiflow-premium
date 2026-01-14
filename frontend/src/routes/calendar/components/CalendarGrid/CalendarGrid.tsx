@@ -16,7 +16,7 @@ import { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

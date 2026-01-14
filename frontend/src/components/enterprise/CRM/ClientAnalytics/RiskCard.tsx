@@ -3,7 +3,7 @@
  * @description Client risk assessment card component
  */
 
-import type { ThemeObject } from '@/features/theme';
+import type { ThemeObject } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
 import type { ClientRiskAssessment } from './types';

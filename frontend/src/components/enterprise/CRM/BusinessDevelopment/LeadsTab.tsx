@@ -4,7 +4,7 @@
  */
 
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import type { ThemeObject } from '@/features/theme';
+import type { ThemeObject } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Plus, Search } from 'lucide-react';
 import {

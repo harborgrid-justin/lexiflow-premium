@@ -16,7 +16,7 @@ import { BarChart3, Building2, TrendingUp, Users } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { api } from '@/api';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';

@@ -1,4 +1,4 @@
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 import { Loader2, Maximize2, Menu, X } from 'lucide-react';

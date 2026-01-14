@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Clock } from 'lucide-react';
 import { Lead } from '../../types';

@@ -17,7 +17,7 @@ import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';

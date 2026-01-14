@@ -4,7 +4,7 @@ import {
   TrendingUp, Clock, Zap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { apiClient, type SystemHealth, type ServiceHealthStatus } from '@/services/infrastructure/apiClient';
 

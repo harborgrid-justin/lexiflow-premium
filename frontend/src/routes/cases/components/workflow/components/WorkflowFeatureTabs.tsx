@@ -3,7 +3,7 @@
  * @description Tab navigation for workflow designer features
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import type { LucideIcon } from 'lucide-react';
 

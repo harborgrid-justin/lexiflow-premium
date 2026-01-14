@@ -18,7 +18,7 @@ import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 
 // Hooks & Context
 import { LitigationProvider, useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils
 import { cn } from '@/shared/lib/cn';

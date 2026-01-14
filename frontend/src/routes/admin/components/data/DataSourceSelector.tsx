@@ -5,7 +5,7 @@
  * (IndexedDB, PostgreSQL, Cloud Database).
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useDataSource } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 import { Cloud, Database, Power, RefreshCw, Server } from 'lucide-react';

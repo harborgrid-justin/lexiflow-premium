@@ -11,24 +11,17 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ChevronDown, LogOut, Settings } from 'lucide-react';
-import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
-import { cn } from '@/shared/lib/cn';
-import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusIndicator';
 
 // Components
-// UserAvatar component not found - create a simple fallback
-const UserAvatar = ({ user, className }: { user?: { name?: string;[key: string]: unknown }; className?: string }) => (
-  <div className={cn("rounded-full bg-blue-500 text-white flex items-center justify-center text-xs w-8 h-8", className)}>
-    {user?.name?.[0] || 'U'}
-  </div>
-);
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
+import { BackendStatusIndicator } from '@/shared/ui/organisms/BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';
@@ -70,21 +63,21 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
       </div>
 
       <div className={styles.holographicModeContainer}>
-        <span className={styles.getHolographicModeLabel(theme)}>Holographic Mode</span>
-        <button
-          onClick={toggleOrbitalMode}
-          className={styles.getToggleButton(theme, isOrbitalEnabled)}
-          title={isOrbitalEnabled ? "Windowed Interface" : "Flat Interface"}
-        >
-          <span className={styles.getToggleIndicator(isOrbitalEnabled)} />
-        </button>
+          <span className={styles.getHolographicModeLabel(theme)}>Holographic Mode</span>
+          <button
+            onClick={toggleOrbitalMode}
+            className={styles.getToggleButton(theme, isOrbitalEnabled)}
+            title={isOrbitalEnabled ? "Windowed Interface" : "Flat Interface"}
+          >
+            <span className={styles.getToggleIndicator(isOrbitalEnabled)} />
+          </button>
       </div>
 
       <button
         onClick={() => onNavigate(PATHS.PROFILE)}
         className={styles.getUserButton(theme, activeView === PATHS.PROFILE)}
       >
-        <UserAvatar user={currentUser ? { name: currentUser.name || `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() } : undefined} className={styles.userAvatarWrapper} />
+        <UserAvatar name={currentUser?.name || 'Guest'} size="sm" className={styles.userAvatarWrapper} indicatorStatus="online" />
         <div className={styles.userInfoContainer}>
           <p className={styles.getUserName(theme)}>{currentUser?.name || 'Guest'}</p>
           <p className={styles.getUserRole(theme)}>{currentUser?.role || 'User'}</p>
@@ -93,12 +86,12 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
       </button>
 
       <div className={styles.actionButtonsGrid}>
-        <button onClick={() => onNavigate(PATHS.ADMIN)} className={styles.getActionButton(theme)}>
-          <Settings className={styles.actionButtonIcon} /> Settings
-        </button>
-        <button onClick={onSwitchUser} className={styles.getActionButton(theme)}>
-          <LogOut className={styles.actionButtonIcon} /> Switch
-        </button>
+         <button onClick={() => onNavigate(PATHS.ADMIN)} className={styles.getActionButton(theme)}>
+            <Settings className={styles.actionButtonIcon}/> Settings
+         </button>
+         <button onClick={onSwitchUser} className={styles.getActionButton(theme)}>
+            <LogOut className={styles.actionButtonIcon}/> Switch
+         </button>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { DiscoveryRequestWizard } from '../DiscoveryRequestWizard';
 
 // Mock dependencies
-vi.mock('@/features/theme', () => ({
+vi.mock('@/theme', () => ({
   useTheme: () => ({
     theme: {
       background: 'bg-white',

@@ -11,13 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Check, Trash2 } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -59,7 +59,7 @@ export const SwipeableItem = React.memo<SwipeableItemProps>(({
 
   // Touch Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (disabled) return;
+    if (disabled || e.touches.length === 0) return;
     const touch = e.touches[0];
     if (!touch) return;
     startX.current = touch.clientX;
@@ -70,7 +70,7 @@ export const SwipeableItem = React.memo<SwipeableItemProps>(({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current || disabled) return;
+    if (!isDragging.current || disabled || e.touches.length === 0) return;
 
     // If we've already determined this is a scroll interaction, ignore swipe logic
     if (isScrolling.current) return;

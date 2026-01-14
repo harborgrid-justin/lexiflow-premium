@@ -1,15 +1,15 @@
-/**
- * @module features/documents/components
- * @category Document Components
- * @description Document management components
- */
+// components/documents/index.ts
 
-export * from "./DocumentAnnotations";
-export * from "./DocumentCard";
-export * from "./DocumentFilters";
-export * from "./DocumentList";
-export * from "./DocumentRow";
-export * from "./DocumentUploader";
-export * from "./DocumentViewer";
-export * from "./MetadataPanel";
-export * from "./VersionHistory";
+export * from './AdvancedEditor';
+export * from './DocumentAssembly';
+export * from './DocumentDragOverlay';
+export * from './DocumentExplorer';
+export * from './DocumentFilters';
+export * from './DocumentGridCard';
+export * from './DocumentManager';
+export * from './DocumentManagerContent';
+export * from './DocumentTemplates';
+export * from './DocumentToolbar';
+export * from './DocumentVersions';
+export * from './RecentFiles';
+export * from './TagManagementModal';

@@ -11,8 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Scale, X } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
@@ -21,7 +19,7 @@ import { useQuery } from '@/hooks/useQueryHooks'; // CORRECT
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import * as styles from './SidebarHeader.styles';
@@ -44,7 +42,7 @@ interface SidebarHeaderProps {
 /**
  * SidebarHeader - React 18 optimized with React.memo
  */
-export const SidebarHeader = React.memo<SidebarHeaderProps>(({ onClose }) => {
+export const SidebarHeader = React.memo<SidebarHeaderProps>(function SidebarHeader({ onClose }) {
   const { theme } = useTheme();
 
   const { data: tenantConfig } = useQuery<TenantConfig>(

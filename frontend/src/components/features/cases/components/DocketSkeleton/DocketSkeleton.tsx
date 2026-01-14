@@ -4,7 +4,7 @@
  * @description Skeleton screens for docket table and calendar loading states
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import React from "react";
 // ============================================================================

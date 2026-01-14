@@ -39,7 +39,7 @@ import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 

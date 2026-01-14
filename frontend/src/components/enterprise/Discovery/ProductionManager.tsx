@@ -6,7 +6,7 @@
 
 import { Production as APIProduction } from '@/api/discovery/productions-api';
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';

@@ -1,5 +1,5 @@
 // components/research/ShepardizingTool.tsx
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { GeminiService, ShepardizeResult, TreatmentType } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';

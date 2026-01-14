@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { LucideIcon } from 'lucide-react';
 import React, { useRef } from 'react';

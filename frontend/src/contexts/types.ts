@@ -13,7 +13,7 @@ export type {
   ThemeContextValue,
   ThemeProviderProps,
   ThemeStateValue,
-} from "@/features/theme";
+} from "@/theme";
 
 // Toast types
 export type {

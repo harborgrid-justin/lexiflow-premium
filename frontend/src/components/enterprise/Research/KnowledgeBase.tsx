@@ -35,7 +35,7 @@ import { useCallback, useEffect, useState } from 'react';
 // Internal Dependencies
 // ============================================================================
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';
 import type { WikiArticle } from '@/types/legal-research';
 import { cn } from '@/shared/lib/cn';

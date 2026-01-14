@@ -5,7 +5,7 @@
  */
 
 import { type AttorneyDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { ChartCard, DeadlinesList, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';

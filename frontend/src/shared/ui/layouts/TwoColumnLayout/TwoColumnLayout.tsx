@@ -5,7 +5,7 @@
  * Ideal for comparisons, editing workflows, and dual-panel interfaces.
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import React from "react";
 

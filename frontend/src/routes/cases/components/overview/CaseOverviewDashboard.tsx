@@ -32,7 +32,7 @@ import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { CaseStatus } from '@/types';
 import { cn } from '@/shared/lib/cn';

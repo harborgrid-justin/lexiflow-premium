@@ -17,7 +17,7 @@ import { Download, Eye } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Components
 import { FileIcon } from '@/shared/ui/atoms/FileIcon';

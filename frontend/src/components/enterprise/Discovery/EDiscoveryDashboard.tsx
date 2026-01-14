@@ -7,7 +7,7 @@
 
 import { analyticsApi } from '@/api';
 import { KPICard } from '@/components/enterprise/dashboard/KPICard';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';

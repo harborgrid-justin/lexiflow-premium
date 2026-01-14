@@ -4,7 +4,7 @@
  * @description Pipeline visualization chart by status
  */
 
-import { ChartColorService, useTheme } from '@/features/theme';
+import { ChartColorService, useTheme } from '@/theme';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { LeadsByStatus } from '@/types/crm';
 import { getChartTheme } from '@/utils/chartConfig';

@@ -4,7 +4,7 @@
  */
 
 import { Button } from '@/shared/ui/atoms/Button';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Play, Save } from 'lucide-react';
 import type { EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';

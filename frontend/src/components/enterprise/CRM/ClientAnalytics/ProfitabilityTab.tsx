@@ -4,7 +4,7 @@
  */
 
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import type { ThemeObject } from '@/features/theme';
+import type { ThemeObject } from '@/theme';
 import {
   Bar,
   BarChart,

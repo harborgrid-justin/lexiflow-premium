@@ -5,8 +5,8 @@
  * deleting, and testing connections.
  */
 
-import type { ThemeContextValue } from '@/features/theme';
-import { useTheme } from '@/features/theme';
+import type { ThemeContextValue } from '@/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';

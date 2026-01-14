@@ -17,7 +17,7 @@ import { RiskDetail } from './risk/RiskDetail';
 import { RiskList } from './risk/RiskList';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils

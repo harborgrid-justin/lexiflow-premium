@@ -9,7 +9,7 @@
  * - theme.border.default - Card and input borders
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/core';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';

@@ -3,7 +3,7 @@
  * @description Individual win/loss analysis card component
  */
 
-import type { ThemeObject } from '@/features/theme';
+import type { ThemeObject } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import type { WinLossAnalysis } from './types';

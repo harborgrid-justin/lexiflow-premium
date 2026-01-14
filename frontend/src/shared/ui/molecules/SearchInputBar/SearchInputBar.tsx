@@ -6,7 +6,7 @@
 
 import React, { useId } from 'react';
 import { Search } from 'lucide-react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 export type SearchInputBarProps = React.InputHTMLAttributes<HTMLInputElement>;

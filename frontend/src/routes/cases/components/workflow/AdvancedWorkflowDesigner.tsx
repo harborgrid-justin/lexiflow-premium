@@ -13,7 +13,7 @@
  * - Guideline 24: Workflow analytics computations are memoized (useMemo)
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import type { EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';
 import {

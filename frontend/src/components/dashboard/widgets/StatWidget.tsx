@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 // ============================================================================

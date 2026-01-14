@@ -12,7 +12,7 @@
  */
 
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { TabConfigItem } from '@/types/layout';
 import { cn } from '@/shared/lib/cn';
 import React, { ReactNode, useCallback, useMemo } from 'react';

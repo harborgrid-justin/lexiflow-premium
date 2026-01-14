@@ -17,7 +17,7 @@ import { RuleSelector } from '@/shared/ui/molecules/RuleSelector/RuleSelector';
 
 // Context & Utils
 import { useModalState } from '@/hooks/core';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 // Types

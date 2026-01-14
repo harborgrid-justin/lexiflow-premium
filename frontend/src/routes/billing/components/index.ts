@@ -1,7 +1,7 @@
-/**
- * @module features/billing
- * @category Billing Management
- * @description Billing & financial management components
- */
+// components/billing/index.ts
 
-export * from './components';
+export { default as BillingDashboard } from './BillingDashboard';
+export { BillingDashboardContent } from './BillingDashboardContent';
+// BillingInvoices and BillingWIP are dynamically imported - don't export statically
+export { BillingLedger } from './BillingLedger';
+export { BillingOverview } from './BillingOverview';

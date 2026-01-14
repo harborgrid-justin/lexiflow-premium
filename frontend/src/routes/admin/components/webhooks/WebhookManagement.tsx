@@ -1,5 +1,5 @@
 import { WebhooksApiService, type SystemWebhookConfig } from '@/api/integrations';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { useModalState, useNotify } from '@/hooks/core';
 import { QUERY_KEYS } from '@/services/data/queryKeys';

@@ -22,7 +22,7 @@ import { HolographicRouting } from '@/services/infrastructure/holographicRouting
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';

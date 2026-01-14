@@ -4,7 +4,7 @@
  */
 
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Boxes } from 'lucide-react';
 export function ParallelExecutionPanel() {

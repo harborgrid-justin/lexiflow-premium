@@ -10,7 +10,7 @@ import {
   Database, Cloud, Server, AlertTriangle, X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { getStatusColor, getStatusLabel, formatLastSync } from './utils';
 import type { DataSourceConnection } from './types';

@@ -11,18 +11,19 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, Command, CornerDownLeft, Sparkles, X, Zap } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { GeminiService, IntentResult } from '@/services/features/research/geminiService';
+import type { IntentResult } from '@/services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
@@ -45,7 +46,7 @@ interface NeuralCommandBarProps {
 /**
  * NeuralCommandBar - React 18 optimized with useId and useMemo
  */
-export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
+export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(function NeuralCommandBar({
     globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
 }) => {
     const { theme } = useTheme();
@@ -58,27 +59,40 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
 
     useClickOutside(searchRef as React.RefObject<HTMLElement>, () => setShowResults(false));
 
+    // Effect discipline: Synchronize search results with debounced query (Principle #6)
+    // Strict Mode ready: Search is idempotent, cleanup prevents stale results (Principle #7)
     useEffect(() => {
+        let isMounted = true;
+
         const performSearch = async () => {
             if (debouncedSearch.length >= SEARCH_MIN_QUERY_LENGTH && !isProcessingIntent) {
                 const serviceResults = await SearchService.search(debouncedSearch);
-                setResults(serviceResults.slice(0, 10));
-                setShowResults(true);
-            } else {
+                // Only update if still mounted and query hasn't changed
+                if (isMounted) {
+                    setResults(serviceResults.slice(0, 10));
+                    setShowResults(true);
+                }
+            } else if (isMounted) {
                 setResults([]);
                 setShowResults(false);
             }
         };
+
         performSearch();
+
+        // Cleanup: Prevent stale results from updating state
+        return () => {
+            isMounted = false;
+        };
     }, [debouncedSearch, isProcessingIntent]);
 
-    const handleResultSelect = useCallback((result: GlobalSearchResult) => {
+    const handleResultSelect = (result: GlobalSearchResult) => {
         setGlobalSearch('');
         setShowResults(false);
         if (onSearchResultClick) onSearchResultClick(result);
-    }, [onSearchResultClick, setGlobalSearch]);
+    };
 
-    const handleNeuralSubmit = useCallback(async () => {
+    const handleNeuralSubmit = async () => {
         if (globalSearch.length > 10 || /open|go to|draft|create|show/.test(globalSearch.toLowerCase())) {
             setIsProcessingIntent(true);
             const intent = await GeminiService.predictIntent(globalSearch);
@@ -95,7 +109,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
                 onNeuralCommand(intent);
             }
         }
-    }, [globalSearch, onNeuralCommand, setGlobalSearch]);
+    };
 
     // Keyboard Navigation Hook (using unified useListNavigation with simple mode)
     const { focusedIndex: activeIndex, setFocusedIndex: setActiveIndex, handleKeyDown } = useListNavigation({
@@ -164,7 +178,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
                     {results.length > 0 ? (
                         <div className="py-1">
                             {/* Optional Quick Actions Header */}
-                            {results.length > 0 && results[0] && typeof results[0].score === 'number' && results[0].score > 80 && (
+                            {results.length > 0 && results[0]?.score && results[0].score > 80 && (
                                 <div className={cn("px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex justify-between", theme.text.tertiary)}>
                                     <span>Top Matches</span>
                                     <span className="flex items-center gap-1"><Zap className="h-2 w-2" /> Instant</span>

@@ -1,5 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { FileCheck, Printer, Stamp, UploadCloud } from 'lucide-react';
 interface FilingCenterProps {

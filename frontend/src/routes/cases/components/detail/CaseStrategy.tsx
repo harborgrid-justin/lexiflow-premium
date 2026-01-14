@@ -20,7 +20,7 @@ import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useCaseStrategy } from '@/routes/cases/hooks/useCaseStrategy';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';

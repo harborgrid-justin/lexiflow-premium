@@ -13,7 +13,7 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo, useId } from 'react';
 import { AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 // ============================================================================

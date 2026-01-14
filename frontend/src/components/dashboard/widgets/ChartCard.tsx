@@ -7,7 +7,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Download, LucideIcon, Maximize2, RefreshCw } from 'lucide-react';
 

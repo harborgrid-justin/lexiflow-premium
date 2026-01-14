@@ -19,7 +19,7 @@ import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';

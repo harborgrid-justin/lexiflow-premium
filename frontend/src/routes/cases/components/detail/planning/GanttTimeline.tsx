@@ -15,7 +15,7 @@ import { useRef } from 'react';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useScheduleController } from '@/hooks/useScheduleController';
 import { useWindow } from '@/providers';
 

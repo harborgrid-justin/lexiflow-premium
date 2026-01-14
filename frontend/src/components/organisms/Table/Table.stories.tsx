@@ -1,26 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table';
+import { TableContainer } from './Table';
 
-const DemoTable = () => (
-  <TableContainer>
-    <TableHeader>
-      <TableRow>
-        <TableHead>Name</TableHead>
-        <TableHead>Status</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      <TableRow>
-        <TableCell>Item 1</TableCell>
-        <TableCell>Active</TableCell>
-      </TableRow>
-    </TableBody>
-  </TableContainer>
-);
-
-const meta: Meta<typeof DemoTable> = {
+const meta: Meta<typeof TableContainer> = {
   title: 'Components/Organisms/Table/Table',
-  component: DemoTable,
+  component: TableContainer,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -28,7 +11,7 @@ const meta: Meta<typeof DemoTable> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof DemoTable>;
+type Story = StoryObj<typeof TableContainer>;
 
 export const Default: Story = {
   args: {},

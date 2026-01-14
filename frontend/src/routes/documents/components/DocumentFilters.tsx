@@ -1,228 +1,152 @@
-/**
- * DocumentFilters Component
- * Advanced filtering for document search and management
- */
-
-import { useState } from 'react';
-
-export interface DocumentFilterOptions {
-  search?: string;
-  type?: string;
-  status?: string;
-  caseId?: string;
-  dateFrom?: string;
-  dateTo?: string;
-  tags?: string[];
-  ocrProcessed?: boolean;
-  isRedacted?: boolean;
-  author?: string;
-}
+import { useTheme } from '@/theme';
+import { useQuery } from '@/hooks/backend';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
+import {
+    AlertOctagon, CheckCircle2,
+    Clock,
+    Cloud,
+    File,
+    FileText,
+    Folder, FolderOpen,
+    Image as ImageIcon,
+    Loader2,
+    Star,
+    Video
+} from 'lucide-react';
 
 interface DocumentFiltersProps {
-  filters: DocumentFilterOptions;
-  onChange: (filters: DocumentFilterOptions) => void;
-  onClear: () => void;
-  cases?: Array<{ id: string; name: string }>;
+    currentFolder: string;
+    setCurrentFolder: (folder: string) => void;
 }
 
-export function DocumentFilters({ filters, onChange, onClear, cases = [] }: DocumentFiltersProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+interface DocumentStats {
+    smartViews: { id: string; count: number }[];
+    facets: {
+        fileType: { id: string; count: number }[];
+        status: { id: string; count: number }[];
+    };
+}
 
-  const updateFilter = (key: keyof DocumentFilterOptions, value: unknown) => {
-    onChange({ ...filters, [key]: value });
-  };
+export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFiltersProps) {
+    const { theme } = useTheme();
 
-  const activeFilterCount = Object.values(filters).filter(v =>
-    v !== undefined && v !== '' && (Array.isArray(v) ? v.length > 0 : true)
-  ).length;
+    // Enterprise Data Access
+    const { data: folders = [], isLoading } = useQuery<unknown[]>(
+        ['documents', 'folders'],
+        () => DataService.documents.getFolders()
+    );
 
-  const documentTypes = [
-    'Contract',
-    'Pleading',
-    'Motion',
-    'Order',
-    'Evidence',
-    'Correspondence',
-    'Form',
-    'Brief',
-    'Exhibit'
-  ];
+    const { data: stats } = useQuery<DocumentStats>(
+        ['documents', 'stats'],
+        () => DataService.documents.getStats()
+    );
 
-  const statuses = [
-    'Draft',
-    'Review',
-    'Final',
-    'Filed',
-    'Signed',
-    'Sent'
-  ];
+    const smartViews = [
+        { id: 'recent', label: 'Recent Files', icon: Clock },
+        { id: 'favorites', label: 'Favorites', icon: Star },
+        { id: 'missing_meta', label: 'Missing Metadata', icon: AlertOctagon, count: stats?.smartViews?.find((s: Record<string, unknown>) => s.id === 'missing_meta')?.count, color: 'text-amber-600' },
+    ];
 
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-      {/* Search Bar */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 relative">
-            <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              value={filters.search || ''}
-              onChange={(e) => updateFilter('search', e.target.value)}
-              placeholder="Search documents..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
-            />
-          </div>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-          >
-            <span className="flex items-center gap-2">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
-            </span>
-          </button>
-          {activeFilterCount > 0 && (
-            <button
-              onClick={onClear}
-              className="px-4 py-2 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
-            >
-              Clear
-            </button>
-          )}
-        </div>
-      </div>
+    const facets = [
+        {
+            label: 'File Type', items: [
+                { id: 'pdf', label: 'PDF Documents', icon: FileText, count: stats?.facets?.fileType?.find((s: Record<string, unknown>) => s.id === 'pdf')?.count },
+                { id: 'img', label: 'Images', icon: ImageIcon, count: stats?.facets?.fileType?.find((s: Record<string, unknown>) => s.id === 'img')?.count },
+                { id: 'media', label: 'Audio/Video', icon: Video, count: stats?.facets?.fileType?.find((s: Record<string, unknown>) => s.id === 'media')?.count },
+            ]
+        },
+        {
+            label: 'Status', items: [
+                { id: 'final', label: 'Finalized', icon: CheckCircle2, count: stats?.facets?.status?.find((s: Record<string, unknown>) => s.id === 'final')?.count },
+                { id: 'draft', label: 'Drafts', icon: File, count: stats?.facets?.status?.find((s: Record<string, unknown>) => s.id === 'draft')?.count },
+            ]
+        }
+    ];
 
-      {/* Advanced Filters */}
-      {isExpanded && (
-        <div className="p-4 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Document Type */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Document Type
-              </label>
-              <select
-                value={filters.type || ''}
-                onChange={(e) => updateFilter('type', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
-              >
-                <option value="">All Types</option>
-                {documentTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
+    return (
+        <div className="w-full flex flex-col h-full shrink-0">
+            <div className={cn("p-4 border-b", theme.border.default)}>
+                <h3 className={cn("font-bold text-xs uppercase tracking-wide mb-3 px-2", theme.text.tertiary)}>Smart Views</h3>
+                <div className="space-y-0.5">
+                    {smartViews.map(sf => (
+                        <button
+                            key={sf.id}
+                            className={cn(
+                                "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors group",
+                                theme.text.secondary,
+                                `hover:${theme.surface.default}`,
+                                `hover:${theme.primary.text}`
+                            )}
+                        >
+                            <div className="flex items-center">
+                                <sf.icon className={cn("h-4 w-4 mr-3 opacity-70 group-hover:opacity-100", sf.color || "")} />
+                                {sf.label}
+                            </div>
+                            {sf.count && <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full font-bold", theme.surface.default, theme.text.secondary)}>{sf.count}</span>}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                <h3 className={cn("font-bold text-xs uppercase tracking-wide mb-3 px-2", theme.text.tertiary)}>Library Folders</h3>
+                <div className="space-y-0.5 mb-6">
+                    {isLoading ? (
+                        <div className="p-4 flex justify-center"><Loader2 className="animate-spin h-4 w-4 text-slate-400" /></div>
+                    ) : (Array.isArray(folders) ? folders : []).map((folder: unknown) => {
+                        const isActive = currentFolder === (folder as { id: string }).id;
+                        const Icon = isActive ? FolderOpen : Folder;
+                        return (
+                            <button
+                                key={(folder as { id: string }).id}
+                                onClick={() => setCurrentFolder((folder as { id: string }).id)}
+                                className={cn(
+                                    "w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                                    isActive
+                                        ? cn(theme.primary.light, theme.primary.text, "font-semibold")
+                                        : cn(theme.text.secondary, `hover:${theme.surface.default}`, `hover:${theme.primary.text}`)
+                                )}
+                            >
+                                <Icon className={cn("h-4 w-4 mr-3", isActive ? "fill-current opacity-20" : "opacity-50")} />
+                                {(folder as { label: string }).label}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Facets */}
+                {facets.map((facet, idx) => (
+                    <div key={idx} className="mb-6">
+                        <h3 className={cn("font-bold text-xs uppercase tracking-wide mb-2 px-2", theme.text.tertiary)}>{facet.label}</h3>
+                        <div className="space-y-0.5">
+                            {facet.items.map(item => (
+                                <div key={item.id} className={cn("flex items-center justify-between px-3 py-1.5 rounded cursor-pointer group", `hover:${theme.surface.default}`)}>
+                                    <div className={cn("flex items-center text-sm", theme.text.secondary)}>
+                                        <input type="checkbox" className={cn("mr-3 rounded", theme.border.default, theme.primary.text)} />
+                                        {item.label}
+                                    </div>
+                                    <span className={cn("text-xs opacity-60 group-hover:opacity-100", theme.text.tertiary)}>{item.count}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 ))}
-              </select>
             </div>
 
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Status
-              </label>
-              <select
-                value={filters.status || ''}
-                onChange={(e) => updateFilter('status', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
-              >
-                <option value="">All Statuses</option>
-                {statuses.map(status => (
-                  <option key={status} value={status}>{status}</option>
-                ))}
-              </select>
+            <div className={cn("p-4 border-t", theme.surface.highlight, theme.border.default)}>
+                <div className="flex items-center gap-2 mb-2">
+                    <Cloud className={cn("h-4 w-4", theme.primary.text)} />
+                    <span className={cn("text-xs font-bold", theme.text.secondary)}>Storage Quota</span>
+                </div>
+                <div className={cn("w-full rounded-full h-1.5 mb-1 overflow-hidden", theme.border.default, "bg-slate-200 dark:bg-slate-700")}>
+                    <div className={cn("h-1.5 rounded-full", theme.primary.DEFAULT)} style={{ width: '65%' }}></div>
+                </div>
+                <div className={cn("flex justify-between text-[10px] font-medium", theme.text.tertiary)}>
+                    <span>65 GB Used</span>
+                    <span>100 GB Total</span>
+                </div>
             </div>
-
-            {/* Case */}
-            {cases.length > 0 && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Case
-                </label>
-                <select
-                  value={filters.caseId || ''}
-                  onChange={(e) => updateFilter('caseId', e.target.value || undefined)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
-                >
-                  <option value="">All Cases</option>
-                  {cases.map(caseItem => (
-                    <option key={caseItem.id} value={caseItem.id}>{caseItem.name}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            {/* Date From */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                From Date
-              </label>
-              <input
-                type="date"
-                value={filters.dateFrom || ''}
-                onChange={(e) => updateFilter('dateFrom', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
-              />
-            </div>
-
-            {/* Date To */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                To Date
-              </label>
-              <input
-                type="date"
-                value={filters.dateTo || ''}
-                onChange={(e) => updateFilter('dateTo', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
-              />
-            </div>
-
-            {/* Author */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Author
-              </label>
-              <input
-                type="text"
-                value={filters.author || ''}
-                onChange={(e) => updateFilter('author', e.target.value || undefined)}
-                placeholder="Filter by author..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
-              />
-            </div>
-          </div>
-
-          {/* Special Filters */}
-          <div className="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={filters.ocrProcessed || false}
-                onChange={(e) => updateFilter('ocrProcessed', e.target.checked || undefined)}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700 dark:text-gray-300">OCR Processed Only</span>
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={filters.isRedacted || false}
-                onChange={(e) => updateFilter('isRedacted', e.target.checked || undefined)}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Privileged Documents Only</span>
-            </label>
-          </div>
         </div>
-      )}
-    </div>
-  );
+    );
 }

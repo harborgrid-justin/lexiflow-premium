@@ -34,7 +34,7 @@ export type Schema<T> = {
 /**
  * Field validator configuration
  */
-export interface FieldValidator<T> {
+export interface FieldValidator<T = unknown> {
   type: "string" | "number" | "boolean" | "date" | "array" | "object";
   required?: boolean;
   min?: number;
@@ -53,7 +53,9 @@ export function validate<T>(value: unknown, schema: Schema<T>): Result<T> {
 
   const data = value as Record<string, unknown>;
 
-  for (const [fieldName, fieldSchema] of Object.entries(schema)) {
+  for (const [fieldName, fieldSchema] of Object.entries(schema) as Array<
+    [string, FieldValidator]
+  >) {
     const fieldValue = data[fieldName];
 
     // Check required

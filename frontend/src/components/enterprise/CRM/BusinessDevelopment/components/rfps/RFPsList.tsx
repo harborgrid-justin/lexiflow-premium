@@ -4,7 +4,7 @@
  * @description RFP tracker list with header
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Plus } from 'lucide-react';
 import { RFP } from '../../types';

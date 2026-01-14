@@ -1,5 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { RefreshCw, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';

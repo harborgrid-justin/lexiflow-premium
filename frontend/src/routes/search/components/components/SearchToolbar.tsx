@@ -15,7 +15,7 @@ import { Clock, Search } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useSearchToolbar } from '../hooks/useSearchToolbar';
 
 // Utils & Constants

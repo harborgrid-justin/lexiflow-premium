@@ -1,5 +1,5 @@
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold } from 'lucide-react';

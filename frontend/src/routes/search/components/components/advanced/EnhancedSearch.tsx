@@ -1,4 +1,4 @@
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside'; // Assuming shared hook
 import { Command, Search, X } from 'lucide-react';
 import * as styles from './EnhancedSearch.styles';

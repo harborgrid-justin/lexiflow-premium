@@ -14,7 +14,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { PlanningSidebar, ScheduleTimeline } from '@features/cases/components/detail/planning';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
 
 // Utils

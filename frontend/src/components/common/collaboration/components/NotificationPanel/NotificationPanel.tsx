@@ -4,7 +4,7 @@
  * @description Persistent notification panel with action buttons and grouping.
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { NotificationService } from '@/services/domain/NotificationDomain';
 import type { NotificationGroup, UINotification } from '@/types';

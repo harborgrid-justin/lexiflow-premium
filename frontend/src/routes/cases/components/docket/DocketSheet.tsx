@@ -28,7 +28,7 @@ import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useThemeContext } from '@/features/theme';
+import { useThemeContext } from '@/theme';
 import { useWindow } from '@/providers';
 import { useDocketSheet } from '@/routes/cases/hooks/useDocketSheet';
 

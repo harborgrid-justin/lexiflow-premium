@@ -4,7 +4,7 @@
  * @description System health status indicator with real-time monitoring
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {

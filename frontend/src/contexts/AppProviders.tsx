@@ -25,7 +25,7 @@
  * - Enterprise Standard: Domain contexts in routes, not here
  */
 
-import { ThemeProvider } from '@/features/theme';
+import { ThemeProvider } from '@/theme';
 import React from "react";
 import { AuthProvider } from './auth/AuthProvider';
 import { EntitlementsProvider } from './entitlements/EntitlementsContext';

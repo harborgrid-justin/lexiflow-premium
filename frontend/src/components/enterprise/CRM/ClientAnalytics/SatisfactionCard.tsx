@@ -3,7 +3,7 @@
  * @description Client satisfaction metrics card component
  */
 
-import type { ThemeObject } from '@/features/theme';
+import type { ThemeObject } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import {
   PolarAngleAxis,

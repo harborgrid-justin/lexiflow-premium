@@ -24,7 +24,7 @@ import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useCaseFinancials } from '@/routes/cases/hooks/useCaseFinancials';
 
 // Internal Dependencies - Services & Utils

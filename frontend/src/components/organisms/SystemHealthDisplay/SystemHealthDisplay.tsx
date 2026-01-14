@@ -1,7 +1,4 @@
-import { useDataSource } from '@/providers';
-import { CheckCircle, Cloud, Database, XCircle } from 'lucide-react';
-import React from 'react';
-
+import { CheckCircle, Cloud, XCircle } from 'lucide-react';
 interface ServiceCoverageProps {
   className?: string;
   compact?: boolean;
@@ -97,22 +94,11 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
  * ServiceCoverageBadge - React 18 optimized with React.memo
  */
 const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCoverageBadge({ className = '', compact = false }) {
-  const { isBackendApiEnabled } = useDataSource();
+  // const { isBackendApiEnabled } = useDataSource();
 
   const totalServices = SERVICE_COVERAGE.length;
   const backendServices = SERVICE_COVERAGE.filter(s => s.hasBackend).length;
   const coveragePercent = Math.round((backendServices / totalServices) * 100);
-
-  if (!isBackendApiEnabled) {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <Database className="w-4 h-4 text-blue-500" />
-        <span className="text-sm text-gray-600 dark:text-gray-400">
-          Local Storage (All Services)
-        </span>
-      </div>
-    );
-  }
 
   if (compact) {
     return (
@@ -131,10 +117,10 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
     if (!acc[service.category]) {
       acc[service.category] = { total: 0, backend: 0 };
     }
-    const categoryStats = acc[service.category];
-    if (categoryStats) {
-      categoryStats.total++;
-      if (service.hasBackend) categoryStats.backend++;
+    const cat = acc[service.category];
+    if (cat) {
+      cat.total++;
+      if (service.hasBackend) cat.backend++;
     }
     return acc;
   }, {} as Record<string, { total: number; backend: number }>);
@@ -223,10 +209,7 @@ export const SystemHealthDisplay: React.FC<{
             {Object.entries(
               SERVICE_COVERAGE.reduce((acc: Record<string, ServiceInfo[]>, service) => {
                 if (!acc[service.category]) acc[service.category] = [];
-                const categoryServices = acc[service.category];
-                if (categoryServices) {
-                  categoryServices.push(service);
-                }
+                acc[service.category]?.push(service);
                 return acc;
               }, {} as Record<string, ServiceInfo[]>)
             ).map(([category, services]) => (

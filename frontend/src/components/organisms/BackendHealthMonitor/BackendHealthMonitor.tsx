@@ -1,19 +1,26 @@
-import React, { useState, useEffect, useId } from 'react';
-import { 
-  Activity, CheckCircle, AlertTriangle, XCircle, RefreshCw, X, 
-  TrendingUp, Clock, Zap
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
+import { apiClient, type ServiceHealthStatus, type SystemHealth } from '@/services/infrastructure/apiClient';
 import { cn } from '@/shared/lib/cn';
-import { apiClient, type SystemHealth, type ServiceHealthStatus } from '@/services/infrastructure/apiClient';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  RefreshCw,
+  TrendingUp,
+  X,
+  XCircle,
+  Zap
+} from 'lucide-react';
+import { useEffect, useId, useState } from 'react';
 
 interface BackendHealthMonitorProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOpen, onClose }) => {
+export function BackendHealthMonitor({ isOpen, onClose }: BackendHealthMonitorProps) {
   const { theme } = useTheme();
   const [health, setHealth] = useState<SystemHealth | null>(null);
   const [isLoading, setIsLoading] = useState(false);

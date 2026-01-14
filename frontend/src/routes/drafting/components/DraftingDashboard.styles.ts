@@ -1,4 +1,4 @@
-import type { ThemeObject } from "@/features/theme";
+import type { ThemeObject } from "@/theme";
 
 type Theme = ThemeObject;
 

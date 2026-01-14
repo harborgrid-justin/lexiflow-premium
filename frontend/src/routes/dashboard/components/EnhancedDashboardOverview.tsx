@@ -5,7 +5,7 @@
  * Displays real-time metrics, activity feeds, deadlines, and analytics
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useDashboardOverview } from '../hooks/useDashboardOverview';
 import { CHART_COLORS } from '@/config/dashboard.config';
 import { cn } from '@/shared/lib/cn';

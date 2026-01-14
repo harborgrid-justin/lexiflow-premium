@@ -26,7 +26,7 @@ import { MatterInfo } from './MatterInfo';
 import { OverviewSidebar } from './OverviewSidebar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useCaseOverview } from '@/hooks/useCaseOverview';
 import { useQuery } from '@/hooks/useQueryHooks';
 

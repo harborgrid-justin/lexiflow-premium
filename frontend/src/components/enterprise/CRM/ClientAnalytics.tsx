@@ -5,7 +5,7 @@
  * lifetime value calculation, risk assessment, and satisfaction tracking.
  */
 
-import { ChartColorService, useTheme } from '@/features/theme';
+import { ChartColorService, useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';

@@ -29,7 +29,7 @@ import { WorkflowLibrary } from './WorkflowLibrary';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { useMasterWorkflow } from '../../hooks/useMasterWorkflow';
 

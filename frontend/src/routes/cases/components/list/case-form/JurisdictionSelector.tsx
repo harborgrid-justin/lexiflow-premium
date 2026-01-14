@@ -19,7 +19,7 @@ import { useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Data
 import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '@/api/types/federalHierarchy';

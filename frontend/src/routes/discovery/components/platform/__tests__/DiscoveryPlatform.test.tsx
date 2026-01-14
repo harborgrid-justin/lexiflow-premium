@@ -7,7 +7,7 @@ import { render, screen } from '@testing-library/react';
 import { DiscoveryPlatform } from '../DiscoveryPlatform';
 
 // Mock dependencies
-vi.mock('@/features/theme', () => ({
+vi.mock('@/theme', () => ({
   useTheme: () => ({
     theme: {
       background: 'bg-white',

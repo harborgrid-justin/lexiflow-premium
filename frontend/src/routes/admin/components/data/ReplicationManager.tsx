@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 

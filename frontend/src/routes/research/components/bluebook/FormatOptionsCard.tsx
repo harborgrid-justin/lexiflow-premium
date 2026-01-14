@@ -1,5 +1,5 @@
 import { Settings } from 'lucide-react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { CitationFormat } from '@/types/bluebook';
 import type { FormatOptions } from './types';

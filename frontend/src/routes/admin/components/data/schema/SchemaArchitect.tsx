@@ -1,5 +1,5 @@
 import { dataPlatformApi } from '@/api/data-platform';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { useModalState } from '@/hooks/core';
 import { cn } from '@/shared/lib/cn';

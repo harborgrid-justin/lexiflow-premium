@@ -14,7 +14,7 @@ import { Badge } from '@/shared/ui/atoms/Badge';
 import { EvidenceTypeIcon } from '@/shared/ui/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
 
 // Context & Utils
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 // Services

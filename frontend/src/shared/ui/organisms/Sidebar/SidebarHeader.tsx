@@ -21,7 +21,7 @@ import { useQuery } from '@/hooks/useQueryHooks'; // CORRECT
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import * as styles from './SidebarHeader.styles';

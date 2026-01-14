@@ -6,7 +6,7 @@
  * @module routes/crm/client-detail
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';
 import type { Client } from '@/types';
 import { redirect, useLoaderData, useNavigate } from 'react-router';

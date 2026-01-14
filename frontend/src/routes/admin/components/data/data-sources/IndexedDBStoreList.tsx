@@ -1,5 +1,5 @@
 import { Database } from 'lucide-react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import type { StoreInfo } from './types';
 import React from "react";

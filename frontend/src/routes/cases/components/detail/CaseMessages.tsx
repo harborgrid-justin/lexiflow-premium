@@ -16,7 +16,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 

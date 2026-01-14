@@ -1,6 +1,6 @@
 import { AuditLog } from '@/api';
 import { adminApi } from '@/api/domains/admin.api';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { Loader2 } from 'lucide-react';

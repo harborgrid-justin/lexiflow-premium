@@ -20,8 +20,8 @@ import { useCallback, useState } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/features/theme';
-import { DEFAULT_TOKENS } from '@/features/theme';
+import { useTheme } from '@/theme';
+import { DEFAULT_TOKENS } from '@/theme';
 
 // ============================================================================
 // TYPES & INTERFACES

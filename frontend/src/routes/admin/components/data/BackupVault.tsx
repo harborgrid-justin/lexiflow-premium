@@ -1,6 +1,6 @@
 import { dataPlatformApi } from '@/api/data-platform';
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { cn } from '@/shared/lib/cn';

@@ -15,7 +15,7 @@ import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
 import { TagInput } from '@/shared/ui/molecules/TagInput/TagInput';
 
 // Context & Utils
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';

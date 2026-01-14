@@ -1,5 +1,5 @@
 import { History, User, Check, AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 import { AuditLogEntry } from '@/types';

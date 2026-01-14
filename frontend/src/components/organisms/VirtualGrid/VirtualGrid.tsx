@@ -10,13 +10,13 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -165,9 +165,11 @@ export const VirtualGrid = React.memo(<T = Record<string, unknown>>(props: Virtu
             >
               {renderItem(data, index)}
             </div>
-          );
+          )
         })}
       </div>
     </div>
   );
 });
+
+VirtualGrid.displayName = 'VirtualGrid';

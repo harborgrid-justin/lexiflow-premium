@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Activity, ArrowLeft, Cloud, Database, FileText, GitMerge, Loader2, Play, Plus, RefreshCw, Server, Settings } from 'lucide-react';
 
 import { dataPlatformApi, Pipeline } from '@/api/data-platform';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';

@@ -8,7 +8,7 @@
 
 import { requireAuthentication } from '@/utils/route-guards';
 import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/detail";

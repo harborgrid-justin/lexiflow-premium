@@ -28,7 +28,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { ChartColorService, useTheme } from '@/features/theme';
+import { ChartColorService, useTheme } from '@/theme';
 
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';

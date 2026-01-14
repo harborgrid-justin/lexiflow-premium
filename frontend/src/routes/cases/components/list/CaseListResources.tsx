@@ -20,7 +20,7 @@ import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

@@ -17,7 +17,7 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Components
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';

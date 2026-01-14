@@ -19,7 +19,7 @@ import { TaskDependencyManager } from './TaskDependencyManager';
 import { TimeTrackingPanel } from './TimeTrackingPanel';
 import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { ENHANCED_WORKFLOW_TABS, type EnhancedWorkflowTab } from './constants';
 

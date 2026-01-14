@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { Activity, ActivityType } from '@/types/dashboard';
 import { cn } from '@/shared/lib/cn';
 import { formatDistanceToNow } from 'date-fns';

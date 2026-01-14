@@ -52,7 +52,7 @@ import { CaseProjects } from '@/routes/cases/components/detail/projects/CaseProj
 // ============================================================================
 // INTERNAL DEPENDENCIES - HOOKS & CONTEXT
 // ============================================================================
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useCaseDetail } from '@/hooks/useCaseDetail';
 
 // ============================================================================

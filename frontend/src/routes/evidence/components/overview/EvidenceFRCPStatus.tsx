@@ -10,7 +10,7 @@ import { CheckCircle } from 'lucide-react';
 import { Card } from '@/shared/ui/molecules/Card';
 
 // Context & Utils
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {

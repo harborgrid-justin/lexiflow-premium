@@ -4,7 +4,7 @@
  * @description Key metrics summary card for win/loss analysis
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { WinLossAnalysis } from '../../types';

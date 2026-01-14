@@ -1,6 +1,6 @@
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';

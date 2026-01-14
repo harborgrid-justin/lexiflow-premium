@@ -26,7 +26,7 @@
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Save, Trash2, FileText, Scale, Users, DollarSign, Link2 } from 'lucide-react';
 

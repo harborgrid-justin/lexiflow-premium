@@ -5,7 +5,7 @@
  * Provides comprehensive data visualization and analysis capabilities
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import type { BaseDashboardProps, ChartDataPoint } from '@/types/dashboard';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';

@@ -25,7 +25,7 @@ import { Suspense, lazy } from 'react';
 import { useResearchTool } from './hooks/useResearchTool';
 
 // Hooks & Context
-import { useThemeContext } from '@/features/theme';
+import { useThemeContext } from '@/theme';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';

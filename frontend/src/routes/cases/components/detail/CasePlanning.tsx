@@ -19,7 +19,7 @@ import { PlanningSidebar } from './planning/PlanningSidebar';
 import { ScheduleTimeline } from './planning/ScheduleTimeline';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useCasePlanning } from '@/routes/cases/hooks/useCasePlanning';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';

@@ -15,7 +15,7 @@ import { ArrowRight, LayoutTemplate, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Components
 import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid/VirtualGrid';

@@ -10,7 +10,7 @@ import { Button } from '@/shared/ui/atoms/Button';
  * - G28: Pure function of context
  */
 
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Transcript } from '@/types';

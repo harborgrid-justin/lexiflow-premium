@@ -24,7 +24,7 @@ import { queryClient, useQuery } from '@/hooks';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
 
 // Components

@@ -14,7 +14,7 @@ import { AlertCircle, BookOpen, Briefcase, Calendar, DollarSign, Gavel, Globe, S
 import { Card } from '@/shared/ui/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';

@@ -5,7 +5,7 @@ import { LegalRule } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';

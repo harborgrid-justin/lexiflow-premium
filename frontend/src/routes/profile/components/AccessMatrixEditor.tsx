@@ -30,7 +30,7 @@ import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useAccessMatrix } from '../_hooks/useAccessMatrix';
 

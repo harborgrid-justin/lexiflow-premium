@@ -1,7 +1,7 @@
 import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/api/domains/drafting';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useToast } from '@/contexts/toast/ToastContext';
 import { cn } from '@/shared/lib/cn';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';

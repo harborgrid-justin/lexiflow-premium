@@ -1,4 +1,4 @@
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { FormattingRule, PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlertOctagon, AlertTriangle, Info, Zap } from 'lucide-react';

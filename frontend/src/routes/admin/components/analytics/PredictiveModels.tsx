@@ -17,7 +17,7 @@ import { AlertCircle, BrainCircuit, Target, TrendingUp } from 'lucide-react';
 // ============================================================================
 import { api } from '@/api';
 import type { OutcomePrediction } from '@/api/intelligence';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';

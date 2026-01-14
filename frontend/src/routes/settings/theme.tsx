@@ -1,4 +1,4 @@
-import { ThemeCustomizer } from "@/features/theme";
+import { ThemeCustomizer } from "@/theme";
 import type { Route } from "./+types/theme";
 
 export function meta({ }: Route.MetaArgs) {

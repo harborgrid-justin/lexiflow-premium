@@ -4,7 +4,7 @@ import { JSX } from 'react/jsx-runtime';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { Tabs } from '@/shared/ui/molecules/Tabs';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 import { QUALITY_TABS } from '@/config/quality.config';

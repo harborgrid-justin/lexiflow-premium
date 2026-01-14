@@ -3,7 +3,7 @@
  * @category Layout - Mobile
  * @description Mobile-only bottom navigation bar displaying primary navigation items with icons
  * and labels. Fixed at bottom of viewport for thumb-friendly access on mobile devices.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.surface.default - Navigation bar background
  * - theme.border.default - Top border
@@ -14,18 +14,17 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React from 'react';
 import { MoreHorizontal } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
 import { NAVIGATION_ITEMS } from '@/config/nav.config';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { AppView } from '@/types';
@@ -44,12 +43,12 @@ interface MobileBottomNavProps {
 /**
  * MobileBottomNav - React 18 optimized with React.memo
  */
-export const MobileBottomNav = React.memo<MobileBottomNavProps>(({ activeView, setActiveView }) => {
+export const MobileBottomNav = React.memo<MobileBottomNavProps>(function MobileBottomNav({ activeView, setActiveView }) {
   const { theme } = useTheme();
 
   // Show only the most important navigation items on mobile
   const primaryNavItems = NAVIGATION_ITEMS.slice(0, 4);
-  
+
   return (
     <div className={cn(
       "md:hidden fixed bottom-0 left-0 right-0 z-40 border-t shadow-lg",

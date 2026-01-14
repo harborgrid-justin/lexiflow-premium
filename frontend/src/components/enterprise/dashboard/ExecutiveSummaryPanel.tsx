@@ -6,7 +6,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import type { BaseDashboardProps, ExecutiveSummary } from '@/types/dashboard';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';

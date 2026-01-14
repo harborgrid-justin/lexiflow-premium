@@ -53,7 +53,7 @@ export {
 export type { Flags, FlagsContextValue } from "./flags/FlagsContext";
 
 // ThemeContext exports (Infrastructure-level UI)
-export { ThemeProvider, useTheme } from "@/features/theme";
+export { ThemeProvider, useTheme } from "@/theme";
 
 // ToastContext exports (Infrastructure-level notifications)
 export {
@@ -199,4 +199,4 @@ export type * from "./types";
 // ============================================================================
 
 // Theme Context Types
-export type { ThemeMode } from "@/features/theme";
+export type { ThemeMode } from "@/theme";

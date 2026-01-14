@@ -1,6 +1,6 @@
 import { X, GripVertical} from 'lucide-react';
 import { NodeType, getNodeIcon } from './types';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface BuilderPaletteProps {

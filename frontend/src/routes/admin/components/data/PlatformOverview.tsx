@@ -1,5 +1,5 @@
 import { adminApi } from '@/api/domains/admin.api';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';

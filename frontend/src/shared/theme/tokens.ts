@@ -1,16 +1,16 @@
 /**
- * @deprecated This module has been moved to @/features/theme/tokens
+ * @deprecated This module has been moved to @/theme/tokens
  * Please update your imports:
  *
  * Old: import { ThemeMode, tokens } from '@/shared/theme/tokens';
- * New: import { ThemeMode, DEFAULT_LIGHT_TOKENS } from '@/features/theme';
+ * New: import { ThemeMode, DEFAULT_LIGHT_TOKENS } from '@/theme';
  *
  * This re-export will be removed in a future version.
  */
 
 // Re-export everything from centralized location
-export * from "@/features/theme/tokens";
-export type { FontMode, ThemeMode, ThemeDensity } from "@/features/theme/tokens";
+export * from "@/theme/tokens";
+export type { FontMode, ThemeMode, ThemeDensity } from "@/theme/tokens";
 
 export interface DesignTokens {
   fontMode: FontMode;

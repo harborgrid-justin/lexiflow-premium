@@ -10,14 +10,14 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useId } from 'react';
 import { LucideIcon } from 'lucide-react';
+import { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -41,10 +41,10 @@ interface TabNavigationProps {
 /**
  * TabNavigation - React 18 optimized with React.memo and useId
  */
-export const TabNavigation = React.memo<TabNavigationProps>(({ tabs, activeTab, onTabChange, className = '' }) => {
+export const TabNavigation = React.memo<TabNavigationProps>(function TabNavigation({ tabs, activeTab, onTabChange, className = '' }) {
   const { theme } = useTheme();
   const navId = useId();
-  
+
   return (
     <div className={cn("border-b", theme.border.default, className)}>
       <nav id={navId} className="flex space-x-2 overflow-x-auto no-scrollbar px-2" aria-label="Tabs" role="tablist">
@@ -72,3 +72,6 @@ export const TabNavigation = React.memo<TabNavigationProps>(({ tabs, activeTab, 
     </div>
   );
 });
+
+// React.memo displayName for debugging (Principle #13)
+TabNavigation.displayName = 'TabNavigation';

@@ -3,7 +3,7 @@
  * @description Headless hook for Business Development state management
  */
 
-import { ChartColorService, useTheme } from "@/features/theme";
+import { ChartColorService, useTheme } from "@/theme";
 import { useQuery } from "@/hooks/backend";
 import { DataService } from "@/services/data/dataService";
 import { getChartTheme } from "@/utils/chartConfig";

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { cn } from '@/shared/lib/cn';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 
 // ============================================================================
 // TYPES

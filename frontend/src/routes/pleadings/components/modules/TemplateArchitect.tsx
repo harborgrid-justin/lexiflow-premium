@@ -3,7 +3,7 @@ import { LayoutTemplate, Settings, Sliders } from 'lucide-react';
 import { VariableManager } from './template/VariableManager';
 import { JurisdictionRules } from './template/JurisdictionRules';
 import { PleadingVariable } from '@/types';
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface TemplateArchitectProps {

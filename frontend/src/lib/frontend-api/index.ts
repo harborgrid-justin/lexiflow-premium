@@ -116,6 +116,15 @@ export type { FieldValidator, Schema, Validator } from "./schemas";
 // Re-export normalization (for convenience)
 export * from "@/lib/normalization";
 
+// Re-export ALL consolidated API services and classes for full compatibility
+export * from "@/api";
+
+// Re-export backend mode detection from config
+export { isBackendApiEnabled } from "@/config/network/api.config";
+
+// Re-export dataPlatformApi from lib/frontend-api (may override @/api version)
+export { dataPlatformApi } from "./data-platform";
+
 // Domain API modules - export only the API objects to avoid name conflicts
 export { adminApi } from "./admin";
 export { analyticsApi } from "./analytics";

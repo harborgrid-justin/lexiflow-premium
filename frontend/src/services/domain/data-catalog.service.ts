@@ -26,7 +26,7 @@ import {
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { api } from "@/lib/frontend-api";
+import { api } from "@/api";
 import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export const DataCatalogService = {

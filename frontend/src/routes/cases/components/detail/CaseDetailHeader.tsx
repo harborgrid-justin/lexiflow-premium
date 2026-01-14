@@ -9,18 +9,18 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { ArrowLeft, ArrowUpRight, Calendar, CheckSquare, MapPin, MessageCircle, Users } from 'lucide-react';
+import React from 'react';
 // Internal Dependencies - Components
+import { ClientPortalModal } from '@/routes/crm/components/ClientPortalModal';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
-import { ClientPortalModal } from '@features/operations';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';

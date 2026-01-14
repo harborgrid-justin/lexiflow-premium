@@ -9,14 +9,14 @@
 import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Shield, Target } from 'lucide-react';
 import { useState } from 'react';
 
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 
+import { ResearchTool } from '@/routes/research/components/ResearchTool';
+import { WarRoom } from '@/routes/war-room/components/WarRoom';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Tabs } from '@/shared/ui/molecules/Tabs';
-import { ResearchTool } from '@features/knowledge';
-import { WarRoom } from '../war-room/WarRoom';
 import { PlaybookDetailProps } from './types';
 
 export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onApply }) => {

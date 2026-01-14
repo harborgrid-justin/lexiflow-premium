@@ -13,7 +13,6 @@
 import {
   billingApi,
   casesApi,
-  crmApi,
   discoveryApi,
   docketApi,
   documentsApi,
@@ -123,7 +122,10 @@ export const PREFETCH_MAP: Record<
   [PATHS.CRM]: {
     key: queryKeys.clients.all(),
     fn: async () => {
-      const result = await crmApi.getAllClients({ page: 1, limit: 50 });
+      const result = await communicationsApi.getAllClients({
+        page: 1,
+        limit: 50,
+      });
       return result.ok ? result.data.data : [];
     },
   },

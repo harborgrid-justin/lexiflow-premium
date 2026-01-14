@@ -52,7 +52,7 @@
  * @module providers/AuthProvider
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
+import { AuthApiService } from '@/api/auth/auth-api';
 import { AUTH_REFRESH_TOKEN_STORAGE_KEY, AUTH_TOKEN_STORAGE_KEY } from '@/config/security/security.config';
 import { clearAuthTokens, setAuthTokens } from '@/services/infrastructure/api-client/auth-manager';
 import type { User } from '@/types';

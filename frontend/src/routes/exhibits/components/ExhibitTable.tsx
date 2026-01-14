@@ -16,15 +16,15 @@ import { Eye } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
+import { useTheme } from '@/theme';
 
 // Components
+import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
 import { Button } from '@/shared/ui/atoms/Button';
 import { FileIcon } from '@/shared/ui/atoms/FileIcon';
 import { EmptyListState, StatusBadge } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList';
-import { DocumentPreviewPanel } from '@features/operations';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

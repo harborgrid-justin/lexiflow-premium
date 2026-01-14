@@ -31,9 +31,9 @@ import { DataService } from '@/services/data/data-service.service';
 import { useTheme } from '@/theme';
 
 // Components
+import { NexusGraph } from '@/routes/visual/components/NexusGraph';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { NexusGraph } from '@features/visual';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

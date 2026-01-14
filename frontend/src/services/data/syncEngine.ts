@@ -15,7 +15,7 @@ export interface SyncResult {
   errors?: Error[];
 }
 
-class SyncEngine {
+export class SyncEngine {
   private isSyncing = false;
   private pendingChanges: unknown[] = [];
 

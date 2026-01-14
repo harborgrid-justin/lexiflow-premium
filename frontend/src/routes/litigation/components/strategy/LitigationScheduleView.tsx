@@ -11,11 +11,11 @@ import { TrendingUp } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 
 // Internal Components
-import { PlanningSidebar, ScheduleTimeline } from '@features/cases/components/detail/planning';
+import { PlanningSidebar, ScheduleTimeline } from '@/routes/cases/components/detail/planning';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
+import { useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Utils
 import { cn } from '@/shared/lib/cn';

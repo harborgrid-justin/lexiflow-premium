@@ -10,14 +10,14 @@
 import { useCallback, useRef, useState } from 'react';
 
 // Internal Components
+import { BuilderCanvas, BuilderToolbar } from '@/routes/cases/components/workflow/builder';
 import { ContextMenu, type ContextMenuItem } from '@/shared/ui/molecules/ContextMenu';
-import { BuilderCanvas, BuilderToolbar } from '@features/cases/components/workflow/builder';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';
 
 // Hooks & Context
-import { useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
 import { useToggle } from '@/shared/hooks/useToggle';
+import { useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Types
 import { NodeType } from '@/types/workflow-types';

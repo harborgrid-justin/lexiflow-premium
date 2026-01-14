@@ -9,10 +9,10 @@
  */
 
 // External Dependencies
-import { Loader2, FolderOpen } from 'lucide-react';
+import { FolderOpen, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { EvidenceInventory } from '@features/litigation';
+import { EvidenceInventory } from '@/routes/evidence/components/EvidenceInventory';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 
 // Internal Dependencies - Hooks & Context
@@ -36,7 +36,7 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
 
   // isLoading can be derived from the hook's underlying useQuery if needed,
   // but for simplicity we can check the items array.
-  if (!evidenceItems) return <div className="flex justify-center items-center p-8"><Loader2 className="animate-spin h-6 w-6"/></div>;
+  if (!evidenceItems) return <div className="flex justify-center items-center p-8"><Loader2 className="animate-spin h-6 w-6" /></div>;
 
   return (
     <div className="space-y-4 h-full flex flex-col">

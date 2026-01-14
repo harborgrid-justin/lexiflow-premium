@@ -24,8 +24,8 @@ import { useWindow } from '@/providers';
 import { useTheme } from '@/theme';
 
 // Components
+import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { DocumentPreviewPanel } from '@features/operations';
 import { WallItemCard } from './cards/WallItemCard';
 
 // Utils & Constants

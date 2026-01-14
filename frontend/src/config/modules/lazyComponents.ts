@@ -92,42 +92,42 @@ export const DocumentManager = lazyWithPreload(
 );
 
 // Litigation
-// export const WarRoom = lazyWithPreload(
-//   () =>
-//     import("../../routes/litigation/war-room/WarRoom").then((m) => ({
-//       default: m.WarRoom,
-//     })) as Promise<{ default: React.ComponentType<unknown> }>
-// );
-// export const ExhibitManager = lazyWithPreload(
-//   () =>
-//     import("../../routes/litigation/exhibits/ExhibitManager").then((m) => ({
-//       default: m.ExhibitManager,
-//     })) as Promise<{ default: React.ComponentType<unknown> }>
-// );
-// export const DiscoveryPlatform = lazyWithPreload(
-//   () =>
-//     import("../../routes/litigation/discovery/DiscoveryPlatform") as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
-// export const EvidenceVault = lazyWithPreload(
-//   () =>
-//     import("../../routes/litigation/evidence/EvidenceVault") as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
-// export const PleadingBuilder = lazyWithPreload(
-//   () =>
-//     import("../../routes/litigation/pleadings/PleadingBuilder").then((m) => ({
-//       default: m.PleadingBuilder,
-//     })) as Promise<{ default: React.ComponentType<unknown> }>
-// );
-// export const LitigationBuilder = lazyWithPreload(
-//   () =>
-//     import("../../routes/litigation/strategy/LitigationBuilder").then((m) => ({
-//       default: m.LitigationBuilder,
-//     })) as Promise<{ default: React.ComponentType<unknown> }>
-// );
+export const WarRoom = lazyWithPreload(
+  () =>
+    import("../../routes/war-room/components/WarRoom") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const ExhibitManager = lazyWithPreload(
+  () =>
+    import("../../routes/exhibits/components/ExhibitManager") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const DiscoveryPlatform = lazyWithPreload(
+  () =>
+    import("../../routes/discovery/components/platform/DiscoveryPlatform") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const EvidenceVault = lazyWithPreload(
+  () =>
+    import("../../routes/evidence/components/EvidenceVault") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const PleadingBuilder = lazyWithPreload(
+  () =>
+    import("../../routes/pleadings/components/PleadingBuilder") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const LitigationBuilder = lazyWithPreload(
+  () =>
+    import("../../routes/litigation/components/strategy/LitigationBuilder") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
 
 // Knowledge & Research
 export const ResearchTool = lazyWithPreload(
@@ -206,30 +206,30 @@ export const DafDashboard = lazyWithPreload(
 );
 
 // Admin & Settings
-// export const AdminPanel = lazyWithPreload(
-//   () =>
-//     import("../../routes/admin/index") as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
-// export const ThemeSettings = lazyWithPreload(
-//   () =>
-//     import("../../routes/admin/theme-settings") as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
-// export const AdminDatabaseControl = lazyWithPreload(
-//   () =>
-//     import("../../routes/admin/components/data/AdminDatabaseControl") as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
-// export const AnalyticsDashboard = lazyWithPreload(
-//   () =>
-//     import("../../routes/admin/components/analytics/AnalyticsDashboard") as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
+export const AdminPanel = lazyWithPreload(
+  () =>
+    import("../../routes/admin/components/AdminPanel") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const ThemeSettings = lazyWithPreload(
+  () =>
+    import("../../routes/admin/theme-settings") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const AdminDatabaseControl = lazyWithPreload(
+  () =>
+    import("../../routes/admin/components/data/AdminDatabaseControl") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
+export const AnalyticsDashboard = lazyWithPreload(
+  () =>
+    import("../../routes/admin/components/analytics/AnalyticsDashboard") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
 
 // Other
 export const EntityDirector = lazyWithPreload(
@@ -244,12 +244,12 @@ export const CalendarView = lazyWithPreload(
       default: React.ComponentType<unknown>;
     }>
 );
-// export const UserProfileManager = lazyWithPreload(
-//   () =>
-//     import("../../routes/profile/index") as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
+export const UserProfileManager = lazyWithPreload(
+  () =>
+    import("../../routes/profile") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);
 export const DraftingDashboard = lazyWithPreload(
   () =>
     import("../../routes/drafting/components/DraftingDashboard") as Promise<{
@@ -257,11 +257,9 @@ export const DraftingDashboard = lazyWithPreload(
     }>
 );
 
-// export const ThemeCustomizer = lazyWithPreload(
-//   () =>
-//     import("../../routes/theme/components/ThemeCustomizer").then((m) => ({
-//       default: m.ThemeCustomizer,
-//     })) as Promise<{
-//       default: React.ComponentType<unknown>;
-//     }>
-// );
+export const ThemeCustomizer = lazyWithPreload(
+  () =>
+    import("../../theme/components/ThemeCustomizer") as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);

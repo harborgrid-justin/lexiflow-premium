@@ -17,6 +17,58 @@
 
 // ==================== CORE INFRASTRUCTURE ====================
 export * from "./core/errors"; // Domain error classes
+
+// ==================== ENTERPRISE SERVICE LAYER ====================
+// Following ENTERPRISE REACT SERVICES ARCHITECTURE STANDARD
+// Services = Capabilities (browser APIs, side effects)
+// Frontend APIs = Knowledge (data, domain truth)
+
+// Service Registry & Lifecycle
+export { BaseService } from "./core/BaseService";
+export { ServiceError, ServiceState } from "./core/ServiceLifecycle";
+export type { IService, ServiceConfig } from "./core/ServiceLifecycle";
+export {
+  getOrCreateService,
+  registerService,
+  ServiceRegistry,
+} from "./core/ServiceRegistry";
+
+// Bootstrap
+export {
+  areServicesHealthy,
+  getServiceHealth,
+  getServiceUptime,
+  initializeServices,
+  registerServices,
+  shutdownServices,
+} from "./bootstrap";
+
+// Service Implementations
+export { BrowserClipboardService } from "./clipboard/ClipboardService";
+export type { ClipboardService } from "./clipboard/ClipboardService";
+export { WebCryptoService } from "./crypto/CryptoService";
+export type {
+  DecryptionResult,
+  EncryptionResult,
+  CryptoService as ICryptoService,
+} from "./crypto/CryptoService";
+export { EnvironmentFeatureFlagService } from "./featureFlags/FeatureFlagService";
+export type { FeatureFlagService } from "./featureFlags/FeatureFlagService";
+export { BrowserSessionService } from "./session/SessionService";
+export type {
+  SessionEvent,
+  SessionListener,
+  SessionService,
+} from "./session/SessionService";
+export { BrowserStorageService } from "./storage/StorageService";
+export type { StorageOptions, StorageService } from "./storage/StorageService";
+export { ConsoleTelemetryService } from "./telemetry/TelemetryService";
+export type {
+  TelemetryContext,
+  TelemetryEvent,
+  TelemetryService,
+} from "./telemetry/TelemetryService";
+
 // DO NOT export microORM - it causes circular dependencies with db.ts
 // Import directly: import { microORM } from '@/services/core/microORM';
 // DO NOT export Repository - it imports microORM which causes circular dependencies

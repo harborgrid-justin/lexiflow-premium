@@ -1,5 +1,4 @@
-import { BaseService } from "../core/BaseService";
-import { ServiceError } from "../core/ServiceRegistry";
+import { BaseService, ServiceError } from "../core/ServiceLifecycle";
 
 /**
  * ENTERPRISE REACT SERVICE: SessionService
@@ -40,9 +39,7 @@ export class BrowserSessionService
     super("SessionService");
   }
 
-  override async start(): Promise<void> {
-    await super.start();
-
+  protected override async onStart(): Promise<void> {
     // Visibility change listener
     this.visibilityHandler = () => {
       const event: SessionEvent = {
@@ -54,7 +51,7 @@ export class BrowserSessionService
     document.addEventListener("visibilitychange", this.visibilityHandler);
 
     // Before unload listener
-    this.beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+    this.beforeUnloadHandler = (_e: BeforeUnloadEvent) => {
       const event: SessionEvent = {
         type: "beforeunload",
         timestamp: Date.now(),
@@ -86,17 +83,15 @@ export class BrowserSessionService
       window.removeEventListener("storage", this.storageHandler);
     }
     this.listeners.clear();
-    await super.stop();
   }
 
   setItem(key: string, value: string): void {
-    this.ensureStarted();
+    this.ensureRunning();
     try {
       sessionStorage.setItem(key, value);
     } catch (error) {
       throw new ServiceError(
         "SessionService",
-        "WRITE_FAILED",
         error instanceof Error
           ? error.message
           : "Failed to write to session storage"
@@ -105,13 +100,12 @@ export class BrowserSessionService
   }
 
   getItem(key: string): string | null {
-    this.ensureStarted();
+    this.ensureRunning();
     try {
       return sessionStorage.getItem(key);
     } catch (error) {
       throw new ServiceError(
         "SessionService",
-        "READ_FAILED",
         error instanceof Error
           ? error.message
           : "Failed to read from session storage"
@@ -120,13 +114,12 @@ export class BrowserSessionService
   }
 
   removeItem(key: string): void {
-    this.ensureStarted();
+    this.ensureRunning();
     try {
       sessionStorage.removeItem(key);
     } catch (error) {
       throw new ServiceError(
         "SessionService",
-        "DELETE_FAILED",
         error instanceof Error
           ? error.message
           : "Failed to remove from session storage"
@@ -135,13 +128,12 @@ export class BrowserSessionService
   }
 
   clear(): void {
-    this.ensureStarted();
+    this.ensureRunning();
     try {
       sessionStorage.clear();
     } catch (error) {
       throw new ServiceError(
         "SessionService",
-        "CLEAR_FAILED",
         error instanceof Error
           ? error.message
           : "Failed to clear session storage"
@@ -154,7 +146,7 @@ export class BrowserSessionService
   }
 
   addListener(listener: SessionListener): () => void {
-    this.ensureStarted();
+    this.ensureRunning();
     this.listeners.add(listener);
     return () => {
       this.listeners.delete(listener);

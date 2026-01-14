@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import type { ClipboardService } from "../services/clipboard/ClipboardService";
-import { useService } from "./useService";
+import type { IService } from "../services/core/ServiceLifecycle";
+import { ServiceRegistry } from "../services/core/ServiceRegistry";
 
 /**
  * HOOK ADAPTER for ClipboardService
@@ -10,7 +11,9 @@ import { useService } from "./useService";
  */
 
 export function useClipboard() {
-  const clipboardService = useService<ClipboardService>("ClipboardService");
+  const clipboardService = ServiceRegistry.get<IService>(
+    "ClipboardService"
+  ) as unknown as ClipboardService;
 
   const copy = useCallback(
     async (text: string): Promise<boolean> => {

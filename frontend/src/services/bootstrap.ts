@@ -95,7 +95,7 @@ export async function registerServices(): Promise<void> {
       const service = config.factory();
       await registerService(service, {
         lifecycle: "singleton",
-        dependencies: config.dependencies,
+        dependencies: [...config.dependencies],
         autoStart: false, // Manual start in initializeServices
       });
       console.log(`[Bootstrap] ✓ Registered ${name}`);
@@ -204,7 +204,9 @@ export function getServiceUptime(serviceName: string): number | null {
  * Access via window.__LEXIFLOW_SERVICES__ in dev tools
  */
 if (import.meta.env.DEV) {
-  (window as any).__LEXIFLOW_SERVICES__ = {
+  (
+    window as Window & { __LEXIFLOW_SERVICES__?: unknown }
+  ).__LEXIFLOW_SERVICES__ = {
     registry: ServiceRegistry,
     health: getServiceHealth,
     shutdown: shutdownServices,

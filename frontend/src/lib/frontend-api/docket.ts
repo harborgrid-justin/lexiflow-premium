@@ -1,6 +1,16 @@
 /**
  * Docket Frontend API
- * Domain contract for docket entry management
+ * Enterprise-grade API layer for docket entry management
+ *
+ * @module lib/frontend-api/docket
+ * @description Domain-level contract for docket operations per architectural standard:
+ * - Stable contract between UI and backend
+ * - Returns Result<T>, never throws
+ * - Domain errors only
+ * - Input validation
+ * - Data normalization
+ * - No React/UI dependencies
+ * - Pure and deterministic
  */
 
 import {
@@ -15,6 +25,32 @@ import {
   success,
   ValidationError,
 } from "./index";
+
+export interface DocketFilters {
+  caseId: string;
+  dateFrom?: string;
+  dateTo?: string;
+  type?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: "entryDate" | "filedDate" | "docketNumber";
+  sortOrder?: "asc" | "desc";
+}
+
+export interface CreateDocketEntryInput {
+  caseId: string;
+  entryNumber?: string;
+  entryDate: string | Date;
+  description: string;
+  docketNumber?: string;
+  type?: string;
+}
+
+export interface UpdateDocketEntryInput {
+  description?: string;
+  type?: string;
+  metadata?: Record<string, unknown>;
+}
 
 export async function getAll(caseId?: string): Promise<Result<unknown[]>> {
   const params = caseId ? { caseId } : {};

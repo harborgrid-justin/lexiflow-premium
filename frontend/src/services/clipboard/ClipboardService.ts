@@ -1,5 +1,8 @@
-import { BaseService } from "../core/BaseService";
-import { ServiceError } from "../core/ServiceRegistry";
+import {
+  BaseService,
+  ServiceError,
+  type ServiceConfig,
+} from "../core/ServiceLifecycle";
 
 /**
  * ENTERPRISE REACT SERVICE: ClipboardService
@@ -17,7 +20,7 @@ export interface ClipboardService {
 }
 
 export class BrowserClipboardService
-  extends BaseService
+  extends BaseService<ServiceConfig>
   implements ClipboardService
 {
   private supported: boolean = false;
@@ -26,7 +29,7 @@ export class BrowserClipboardService
     super("ClipboardService");
   }
 
-  override async configure(): Promise<void> {
+  protected override onConfigure(): void {
     this.supported = !!navigator.clipboard;
     if (!this.supported) {
       console.warn("[ClipboardService] Clipboard API not supported");
@@ -34,14 +37,10 @@ export class BrowserClipboardService
   }
 
   async copy(text: string): Promise<void> {
-    this.ensureStarted();
+    this.ensureRunning();
 
     if (!this.supported) {
-      throw new ServiceError(
-        "ClipboardService",
-        "UNSUPPORTED",
-        "Clipboard API not available"
-      );
+      throw new ServiceError("ClipboardService", "Clipboard API not available");
     }
 
     try {
@@ -49,21 +48,16 @@ export class BrowserClipboardService
     } catch (error) {
       throw new ServiceError(
         "ClipboardService",
-        "WRITE_FAILED",
         error instanceof Error ? error.message : "Failed to write to clipboard"
       );
     }
   }
 
   async paste(): Promise<string> {
-    this.ensureStarted();
+    this.ensureRunning();
 
     if (!this.supported) {
-      throw new ServiceError(
-        "ClipboardService",
-        "UNSUPPORTED",
-        "Clipboard API not available"
-      );
+      throw new ServiceError("ClipboardService", "Clipboard API not available");
     }
 
     try {
@@ -71,7 +65,6 @@ export class BrowserClipboardService
     } catch (error) {
       throw new ServiceError(
         "ClipboardService",
-        "READ_FAILED",
         error instanceof Error ? error.message : "Failed to read from clipboard"
       );
     }

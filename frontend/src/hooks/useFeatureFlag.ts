@@ -1,6 +1,7 @@
 import { useCallback } from "react";
+import type { IService } from "../services/core/ServiceLifecycle";
+import { ServiceRegistry } from "../services/core/ServiceRegistry";
 import type { FeatureFlagService } from "../services/featureFlags/FeatureFlagService";
-import { useService } from "./useService";
 
 /**
  * HOOK ADAPTER for FeatureFlagService
@@ -10,14 +11,16 @@ import { useService } from "./useService";
  */
 
 export function useFeatureFlag(flag: string): boolean {
-  const featureFlagService =
-    useService<FeatureFlagService>("FeatureFlagService");
+  const featureFlagService = ServiceRegistry.get<IService>(
+    "FeatureFlagService"
+  ) as unknown as FeatureFlagService;
   return featureFlagService.isEnabled(flag);
 }
 
 export function useFeatureFlags(): Record<string, boolean> {
-  const featureFlagService =
-    useService<FeatureFlagService>("FeatureFlagService");
+  const featureFlagService = ServiceRegistry.get<IService>(
+    "FeatureFlagService"
+  ) as unknown as FeatureFlagService;
   return featureFlagService.getFlags();
 }
 

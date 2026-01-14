@@ -1,6 +1,16 @@
 /**
  * Billing Frontend API
- * Domain contract for time entries, invoices, and billing
+ * Enterprise-grade API layer for time entries, invoices, and billing
+ *
+ * @module lib/frontend-api/billing
+ * @description Domain-level contract for billing operations per architectural standard:
+ * - Stable contract between UI and backend
+ * - Returns Result<T>, never throws
+ * - Domain errors only
+ * - Input validation
+ * - Data normalization
+ * - No React/UI dependencies
+ * - Pure and deterministic
  */
 
 import {
@@ -16,6 +26,24 @@ import {
   success,
   ValidationError,
 } from "./index";
+
+export interface TimeEntryFilters {
+  caseId?: string;
+  attorneyId?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  status?: "draft" | "submitted" | "approved" | "billed";
+  page?: number;
+  limit?: number;
+}
+
+export interface CreateTimeEntryInput {
+  caseId: string;
+  attorneyId: string;
+  date: string | Date;
+  hours: number;
+  description: string;
+}
 
 // Time Entries
 export async function getAllTimeEntries(filters?: {

@@ -107,7 +107,8 @@ export class StorageService extends BaseService<StorageServiceConfig> {
     try {
       this.adapter.setItem(prefixedKey, value);
     } catch (error) {
-      this.error(`Failed to set item '${key}':`, error);
+      // Handle quota exceeded errors
+      this.error("Failed to set item", key, error);
       throw error;
     }
   }
@@ -122,16 +123,17 @@ export class StorageService extends BaseService<StorageServiceConfig> {
   }
 
   /**
-   * Check if key exists
+   * Check if item exists
    */
   hasItem(key: string): boolean {
     this.ensureRunning();
     const prefixedKey = this.prefix + key;
-    return this.adapter.hasKey(prefixedKey);
+    return this.adapter.getItem(prefixedKey) !== null;
   }
 
   /**
-   * Get all keys (with prefix filter)
+   * Get all keys with current prefix
+   * Only returns keys matching this service's prefix
    */
   getKeys(): string[] {
     this.ensureRunning();
@@ -141,76 +143,59 @@ export class StorageService extends BaseService<StorageServiceConfig> {
       return allKeys;
     }
 
-    // Filter by prefix and remove prefix from returned keys
     return allKeys
-      .filter((k) => k.startsWith(this.prefix))
-      .map((k) => k.slice(this.prefix.length));
+      .filter((key) => key.startsWith(this.prefix))
+      .map((key) => key.slice(this.prefix.length));
   }
 
   /**
-   * Clear all items (respects prefix)
+   * Clear all items with current prefix
+   * If no prefix, clears all storage (dangerous!)
    */
   clear(): void {
     this.ensureRunning();
 
     if (!this.prefix) {
-      // No prefix = clear all
+      // No prefix - clear all (DANGEROUS)
+      this.log("Clearing ALL storage (no prefix)");
       this.adapter.clear();
       return;
     }
 
-    // With prefix = only clear prefixed keys
-    const keys = this.adapter.keys().filter((k) => k.startsWith(this.prefix));
+    // Clear only prefixed items
+    const keys = this.adapter.keys().filter((key) => key.startsWith(this.prefix));
+    keys.forEach((key) => this.adapter.removeItem(key));
+    this.log(`Cleared ${keys.length} items with prefix '${this.prefix}'`);
+  }
+
+  /**
+   * Get storage size (approximate)
+   * Returns total bytes used by all keys with current prefix
+   */
+  getSize(): number {
+    this.ensureRunning();
+    const keys = this.getKeys();
+    let totalSize = 0;
+
     for (const key of keys) {
-      this.adapter.removeItem(key);
-    }
-  }
-
-  /**
-   * Get JSON item (auto-parse)
-   */
-  getJSON<T>(key: string, defaultValue?: T): T | null {
-    this.ensureRunning();
-    const value = this.getItem(key);
-
-    if (value === null) {
-      return defaultValue ?? null;
+      const value = this.getItem(key);
+      if (value !== null) {
+        // Approximate: key + value + overhead
+        totalSize += key.length + value.length;
+      }
     }
 
-    try {
-      return JSON.parse(value) as T;
-    } catch (error) {
-      this.error(`Failed to parse JSON for key '${key}':`, error);
-      return defaultValue ?? null;
-    }
-  }
-
-  /**
-   * Set JSON item (auto-stringify)
-   */
-  setJSON<T>(key: string, value: T): void {
-    this.ensureRunning();
-
-    try {
-      const json = JSON.stringify(value);
-      this.setItem(key, json);
-    } catch (error) {
-      this.error(`Failed to stringify value for key '${key}':`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get storage size (number of keys with prefix)
-   */
-  size(): number {
-    this.ensureRunning();
-    return this.getKeys().length;
+    return totalSize;
   }
 }
 
-// ============================================================================
-// SINGLETON INSTANCE (Optional)
-// ============================================================================
+/**
+ * Browser storage service alias for enterprise naming
+ */
+export class BrowserStorageService extends StorageService {}
 
-export const storageService = new StorageService();
+/**
+ * Storage options type alias
+ */
+export type StorageOptions = StorageServiceConfig;
+

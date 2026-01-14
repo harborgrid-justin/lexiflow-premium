@@ -1,4 +1,4 @@
-import { BaseService } from "../core/BaseService";
+import { BaseService } from "../core/ServiceLifecycle";
 
 /**
  * ENTERPRISE REACT SERVICE: FeatureFlagService
@@ -24,7 +24,7 @@ export class EnvironmentFeatureFlagService
     super("FeatureFlagService");
   }
 
-  override async configure(): Promise<void> {
+  protected override onConfigure(): void {
     // Load from environment
     const envFlags = this.loadFromEnvironment();
 
@@ -36,12 +36,12 @@ export class EnvironmentFeatureFlagService
   }
 
   isEnabled(flag: string): boolean {
-    this.ensureStarted();
+    this.ensureRunning();
     return this.flags.get(flag) ?? false;
   }
 
   getFlags(): Record<string, boolean> {
-    this.ensureStarted();
+    this.ensureRunning();
     return Object.fromEntries(this.flags);
   }
 

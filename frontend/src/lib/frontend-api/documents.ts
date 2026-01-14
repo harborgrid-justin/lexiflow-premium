@@ -36,11 +36,11 @@ import type { Document } from "@/types";
 import {
   client,
   failure,
+  NotFoundError,
   type PaginatedResult,
   type Result,
   success,
   ValidationError,
-  NotFoundError,
 } from "./index";
 
 /**
@@ -128,7 +128,7 @@ export async function getAllDocuments(
     typeof response.pageSize === "number" ? response.pageSize : items.length;
 
   return success({
-    data: (items as Document[]),
+    data: items as Document[],
     total,
     page,
     pageSize,
@@ -196,9 +196,7 @@ export async function updateDocument(
   }
 
   if (!input || typeof input !== "object" || Object.keys(input).length === 0) {
-    return failure(
-      new ValidationError("At least one field must be updated")
-    );
+    return failure(new ValidationError("At least one field must be updated"));
   }
 
   const result = await client.patch<Document>(`/documents/${id}`, input);
@@ -283,7 +281,7 @@ export async function searchDocuments(
   }
 
   const items = Array.isArray(result.data) ? result.data : [];
-  return success((items as Document[]));
+  return success(items as Document[]);
 }
 
 /**
@@ -332,33 +330,3 @@ export const documentsApi = {
   getDocumentDownloadUrl,
   getDocumentsByCase,
 } as const;
-
-  return success(result.data);
-}
-
-export async function deleteDocument(id: string): Promise<Result<void>> {
-  if (!id) return failure(new ValidationError("Document ID is required"));
-  return client.delete<void>(`/documents/${id}`);
-}
-
-export async function getDocumentVersions(
-  documentId: string
-): Promise<Result<unknown[]>> {
-  if (!documentId)
-    return failure(new ValidationError("Document ID is required"));
-
-  const result = await client.get<unknown>(`/documents/${documentId}/versions`);
-
-  if (!result.ok) return result;
-
-  const items = Array.isArray(result.data) ? result.data : [];
-  return success(items);
-}
-
-export const documentsApi = {
-  getAllDocuments,
-  getDocumentById,
-  uploadDocument,
-  deleteDocument,
-  getDocumentVersions,
-};

@@ -24,13 +24,16 @@ export * from "./core/errors"; // Domain error classes
 // Frontend APIs = Knowledge (data, domain truth)
 
 // Service Registry & Lifecycle
-export { BaseService } from "./core/BaseService";
-export { ServiceError, ServiceState } from "./core/ServiceLifecycle";
+export {
+  BaseService,
+  ServiceError,
+  ServiceState,
+} from "./core/ServiceLifecycle";
 export type { IService, ServiceConfig } from "./core/ServiceLifecycle";
 export {
+  ServiceRegistry,
   getOrCreateService,
   registerService,
-  ServiceRegistry,
 } from "./core/ServiceRegistry";
 
 // Bootstrap

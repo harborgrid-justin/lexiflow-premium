@@ -41,6 +41,16 @@ export interface TelemetryConfig extends ServiceConfig {
   sampleRate?: number;
 }
 
+/**
+ * Telemetry context for event enrichment
+ */
+export interface TelemetryContext {
+  userId?: string;
+  sessionId?: string;
+  environment?: string;
+  [key: string]: string | undefined;
+}
+
 export interface TelemetryEvent {
   /** Event name (e.g., 'button_click', 'page_view') */
   name: string;
@@ -48,6 +58,8 @@ export interface TelemetryEvent {
   properties?: Record<string, string | number | boolean>;
   /** Event timestamp (defaults to Date.now()) */
   timestamp?: number;
+  /** Event context */
+  context?: TelemetryContext;
 }
 
 export interface PerformanceMark {
@@ -209,6 +221,11 @@ export class TelemetryService extends BaseService<TelemetryConfig> {
     this.marks.clear();
   }
 }
+
+/**
+ * Console telemetry service alias for enterprise naming
+ */
+export class ConsoleTelemetryService extends TelemetryService {}
 
 // ============================================================================
 // SINGLETON INSTANCE (Optional)

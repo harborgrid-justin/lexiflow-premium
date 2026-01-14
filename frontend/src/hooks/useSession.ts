@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import type { IService } from "../services/core/ServiceLifecycle";
+import { ServiceRegistry } from "../services/core/ServiceRegistry";
 import type {
   SessionEvent,
   SessionService,
 } from "../services/session/SessionService";
-import { useService } from "./useService";
 
 /**
  * HOOK ADAPTER for SessionService
@@ -13,7 +14,9 @@ import { useService } from "./useService";
  */
 
 export function useSession() {
-  const sessionService = useService<SessionService>("SessionService");
+  const sessionService = ServiceRegistry.get<IService>(
+    "SessionService"
+  ) as unknown as SessionService;
 
   const setItem = useCallback(
     (key: string, value: string) => {
@@ -42,7 +45,9 @@ export function useSession() {
 }
 
 export function useSessionVisibility() {
-  const sessionService = useService<SessionService>("SessionService");
+  const sessionService = ServiceRegistry.get<IService>(
+    "SessionService"
+  ) as unknown as SessionService;
   const [isVisible, setIsVisible] = useState(() => sessionService.isVisible());
 
   useEffect(() => {
@@ -59,7 +64,9 @@ export function useSessionVisibility() {
 }
 
 export function useBeforeUnload(handler: () => void) {
-  const sessionService = useService<SessionService>("SessionService");
+  const sessionService = ServiceRegistry.get<IService>(
+    "SessionService"
+  ) as unknown as SessionService;
 
   useEffect(() => {
     const unsubscribe = sessionService.addListener((event: SessionEvent) => {

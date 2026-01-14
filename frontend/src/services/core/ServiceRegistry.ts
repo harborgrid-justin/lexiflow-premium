@@ -23,6 +23,8 @@
 
 import { IService, ServiceError, ServiceState } from "./ServiceLifecycle";
 
+export { ServiceError };
+
 // ============================================================================
 // SERVICE REGISTRY INTERFACE
 // ============================================================================

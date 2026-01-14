@@ -37,6 +37,7 @@ import type {
   CreateUserDto,
   UpdateUserDto,
   User,
+  UserPreferences,
   UserRole,
   UserStatistics,
 } from "@/types";

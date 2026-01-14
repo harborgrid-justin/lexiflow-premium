@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type DraftDocument = {
   id: string;
@@ -24,7 +23,7 @@ export interface DraftingLoaderData {
 export async function draftingLoader() {
   const drafts = await DataService.drafting.getAll().catch(() => []);
 
-  return defer({
+  return {
     drafts: drafts || [],
   });
 }

@@ -6,6 +6,7 @@
 
 import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
 import { CenteredLayout } from '@/shared/ui/layouts/CenteredLayout/CenteredLayout';
+import React from 'react';
 
 interface CaseIntakePageProps {
   onComplete?: (caseId: string) => void;
@@ -15,8 +16,8 @@ interface CaseIntakePageProps {
 /**
  * CaseIntakePage - React 18 optimized with React.memo
  */
-export const CaseIntakePage = React.memo<CaseIntakePageProps>(({ 
-  onComplete: _onComplete, 
+export const CaseIntakePage = React.memo<CaseIntakePageProps>(({
+  onComplete: _onComplete,
   onCancel: _onCancel
 }) => {
   return (

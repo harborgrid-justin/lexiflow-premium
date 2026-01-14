@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type PracticeArea = {
   id: string;
@@ -22,7 +21,7 @@ export interface PracticeLoaderData {
 export async function practiceLoader() {
   const areas = await DataService.practice.getAll().catch(() => []);
 
-  return defer({
+  return {
     areas: areas || [],
   });
 }

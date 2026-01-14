@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Entity = {
   id: string;
@@ -23,7 +22,7 @@ export interface EntitiesLoaderData {
 export async function entitiesLoader() {
   const entities = await DataService.entities.getAll().catch(() => []);
 
-  return defer({
+  return {
     entities: entities || [],
   });
 }

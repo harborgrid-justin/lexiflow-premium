@@ -1,7 +1,6 @@
 import { DataService } from "@/services/data/data-service.service";
 import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
 import type { LoaderFunctionArgs } from "react-router";
-import { defer } from "react-router";
 
 export interface DashboardLoaderData {
   cases: Case[];
@@ -14,7 +13,7 @@ export interface DashboardLoaderData {
  * Loader for Dashboard
  * Fetches overview data across multiple domains
  *
- * ENTERPRISE PATTERN: defer() for streaming data
+ * ENTERPRISE PATTERN: Direct promise return for streaming data
  * - Returns promises immediately (non-blocking)
  * - Suspense handles loading states
  * - Parallel data fetching optimizes performance
@@ -27,7 +26,7 @@ export async function clientLoader(_args: LoaderFunctionArgs) {
   const tasksPromise = DataService.workflow.getTasks();
 
   // Await ALL data before returning (required for initial critical data)
-  // For progressive rendering, use: return defer({ cases: casesPromise, ... })
+  // For progressive rendering, use: return { cases: casesPromise, ... })
   const [cases, docketEntries, timeEntries, tasks] = await Promise.all([
     casesPromise,
     docketEntriesPromise,
@@ -47,8 +46,8 @@ export async function clientLoader(_args: LoaderFunctionArgs) {
     .filter((entry) => new Date(entry.date) >= thirtyDaysAgo)
     .slice(0, 10);
 
-  // Use defer() for Suspense/Await pattern
-  return defer({
+  // Return promises directly for Suspense/Await pattern
+  return {
     cases,
     recentDocketEntries,
     recentTimeEntries,

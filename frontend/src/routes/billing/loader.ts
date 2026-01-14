@@ -1,7 +1,6 @@
 import { DataService } from "@/services/data/data-service.service";
 import type { BillingRate, Invoice, TimeEntry, Transaction } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
-import { defer } from "react-router";
 
 export interface BillingLoaderData {
   invoices: Invoice[];
@@ -23,7 +22,7 @@ export async function clientLoader() {
     DataService.timeEntries.getAll(),
   ]);
 
-  return defer({
+  return {
     invoices,
     transactions,
     rates,

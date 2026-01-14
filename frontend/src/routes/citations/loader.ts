@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Citation = {
   id: string;
@@ -25,7 +24,7 @@ export interface CitationsLoaderData {
 export async function citationsLoader() {
   const citations = await DataService.citations.getAll().catch(() => []);
 
-  return defer({
+  return {
     citations: citations || [],
   });
 }

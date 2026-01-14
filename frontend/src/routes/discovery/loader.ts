@@ -1,7 +1,6 @@
 import { DataService } from "@/services/data/data-service.service";
 import type { DiscoveryRequest, Evidence, ProductionSet } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
-import { defer } from "react-router";
 
 export interface DiscoveryLoaderData {
   evidence: Evidence[];
@@ -16,7 +15,7 @@ export async function clientLoader() {
     DataService.discovery.getProductions(),
   ]);
 
-  return defer({ evidence, requests, productions });
+  return { evidence, requests, productions };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

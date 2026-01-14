@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Jurisdiction = {
   id: string;
@@ -22,7 +21,7 @@ export interface JurisdictionLoaderData {
 export async function jurisdictionLoader() {
   const jurisdictions = await DataService.jurisdiction.getAll().catch(() => []);
 
-  return defer({
+  return {
     jurisdictions: jurisdictions || [],
   });
 }

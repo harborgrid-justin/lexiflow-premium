@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type RealEstateProperty = {
   id: string;
@@ -24,7 +23,7 @@ export interface RealEstateLoaderData {
 export async function realEstateLoader() {
   const properties = await DataService.realEstate.getAll().catch(() => []);
 
-  return defer({
+  return {
     properties: properties || [],
   });
 }

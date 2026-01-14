@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type CalendarEvent = {
   id: string;
@@ -30,7 +29,7 @@ export async function calendarLoader() {
     .filter((e: CalendarEvent) => new Date(e.startDate) >= today)
     .slice(0, 10);
 
-  return defer({
+  return {
     events: events || [],
     upcomingEvents: upcoming || [],
   });

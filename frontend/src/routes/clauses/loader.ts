@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Clause = {
   id: string;
@@ -24,7 +23,7 @@ export interface ClausesLoaderData {
 export async function clausesLoader() {
   const clauses = await DataService.clauses.getAll().catch(() => []);
 
-  return defer({
+  return {
     clauses: clauses || [],
   });
 }

@@ -8,7 +8,7 @@ import type { FeeAgreement } from '@/types/financial';
 
 export class FeeAgreementsApiService {
   async getAll(filters?: { status?: string; clientName?: string }): Promise<FeeAgreement[]> {
-    const response = await apiClient.get<PaginatedResponse<FeeAgreement>>('/billing/fee-agreements', filters);
+    const response = await apiClient.get<PaginatedResponse<FeeAgreement>>('/billing/fee-agreements', { params: filters });
     return response.data;
   }
 

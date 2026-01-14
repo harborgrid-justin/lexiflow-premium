@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Message = {
   id: string;
@@ -27,7 +26,7 @@ export async function messagesLoader() {
   const messages = await DataService.messages.getAll().catch(() => []);
   const unreadCount = messages.filter((m: Message) => !m.read).length;
 
-  return defer({
+  return {
     messages: messages || [],
     unreadCount,
   });

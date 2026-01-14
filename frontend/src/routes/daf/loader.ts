@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type AssemblyTemplate = {
   id: string;
@@ -23,7 +22,7 @@ export interface DAFLoaderData {
 export async function dafLoader() {
   const templates = await DataService.daf.getAll().catch(() => []);
 
-  return defer({
+  return {
     templates: templates || [],
   });
 }

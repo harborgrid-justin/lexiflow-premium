@@ -5,7 +5,6 @@
 
 import { DataService } from "@/services/data/data-service.service";
 import type { ExtendedUserProfile } from "@/types/system";
-import { defer } from "react-router";
 
 export interface ProfileLoaderData {
   profile: ExtendedUserProfile | null;
@@ -17,7 +16,7 @@ export async function profileLoader() {
     .getCurrent()
     .catch(() => null)) as ExtendedUserProfile | null;
 
-  return defer({
+  return {
     profile,
   });
 }

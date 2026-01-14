@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Exhibit = {
   id: string;
@@ -24,7 +23,7 @@ export interface ExhibitsLoaderData {
 export async function exhibitsLoader() {
   const exhibits = await DataService.exhibits.getAll().catch(() => []);
 
-  return defer({
+  return {
     exhibits: exhibits || [],
   });
 }

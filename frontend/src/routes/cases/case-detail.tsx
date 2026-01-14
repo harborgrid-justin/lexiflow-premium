@@ -90,7 +90,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const documentsPromise = documentsApi.getDocumentsByCase(caseId).then(r => r.ok ? r.data.data : []);
   const partiesPromise = casesApi.getCaseParties(caseId).then(r => r.ok ? r.data.data : []);
 
-  return defer({
+  return {
     caseData,
     // Return promises - Await component will handle resolution
     documents: documentsPromise,

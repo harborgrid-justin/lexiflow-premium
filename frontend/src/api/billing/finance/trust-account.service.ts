@@ -27,7 +27,7 @@ export class TrustAccountService {
     try {
       const response = await apiClient.get<TrustAccount[]>(
         "/billing/trust-accounts",
-        filters
+        { params: filters }
       );
       return Array.isArray(response) ? response : [];
     } catch {
@@ -86,7 +86,7 @@ export class TrustAccountService {
     try {
       const response = await apiClient.get<TrustTransactionEntity[]>(
         `/billing/trust-accounts/${accountId}/transactions`,
-        filters
+        { params: filters }
       );
       return Array.isArray(response) ? response : [];
     } catch {
@@ -163,7 +163,7 @@ export class TrustAccountService {
     try {
       return await apiClient.get<TrustAccount[]>(
         "/billing/trust-accounts/low-balance",
-        { threshold }
+        { params: { threshold } }
       );
     } catch {
       console.warn(

@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type AuditLog = {
   id: string;
@@ -26,7 +25,7 @@ export async function auditLoader() {
   const logsPromise = DataService.audit.getAll().catch(() => []);
   const logs = await logsPromise;
 
-  return defer({
+  return {
     logs: logs || [],
   });
 }

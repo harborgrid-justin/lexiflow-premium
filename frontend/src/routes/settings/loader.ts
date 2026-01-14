@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type SystemSetting = {
   id: string;
@@ -21,7 +20,7 @@ export interface SettingsLoaderData {
 export async function settingsLoader() {
   const settings = await DataService.settings.getAll().catch(() => []);
 
-  return defer({
+  return {
     settings: settings || [],
   });
 }

@@ -9,7 +9,7 @@ import type { EvidenceItem } from '@/types';
 export class EvidenceApiService {
   async getAll(caseId?: string): Promise<EvidenceItem[]> {
     const params = caseId ? { caseId } : {};
-    const response = await apiClient.get<PaginatedResponse<EvidenceItem>>('/evidence', params);
+    const response = await apiClient.get<PaginatedResponse<EvidenceItem>>('/evidence', { params });
     return response.data;
   }
 

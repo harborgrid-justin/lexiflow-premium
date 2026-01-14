@@ -202,7 +202,7 @@ export class CasesApiService {
   }): Promise<Case[]> {
     const response = await apiClient.get<
       { success?: boolean; data?: { data?: Case[]; items?: Case[] } } | Case[]
-    >("/cases", filters);
+    >("/cases", { params: filters });
 
     // Backend returns wrapped response: {success: true, data: {data: [...], total, page, limit, totalPages}, meta: {...}}
     // Handle multiple response formats:

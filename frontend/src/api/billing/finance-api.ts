@@ -452,7 +452,7 @@ export class BillingApiService {
     try {
       const response = await apiClient.get<
         PaginatedResponse<Invoice> | Invoice[]
-      >("/billing/invoices", filters);
+      >("/billing/invoices", { params: filters });
 
       // Handle nested paginated response (NestJS standard response wrapping a paginated result)
       const nestedResponse = response as { data?: { data?: unknown } };
@@ -568,7 +568,7 @@ export class BillingApiService {
       // Backend returns array directly, not paginated
       const response = await apiClient.get<TrustAccount[]>(
         "/billing/trust-accounts",
-        filters
+        { params: filters }
       );
       return Array.isArray(response) ? response : [];
     } catch {
@@ -743,7 +743,7 @@ export class BillingApiService {
     try {
       return await apiClient.get<TrustAccount[]>(
         "/billing/trust-accounts/low-balance",
-        { threshold }
+        { params: { threshold } }
       );
     } catch {
       console.warn(
@@ -874,7 +874,7 @@ export class BillingApiService {
     try {
       const response = await apiClient.get<PaginatedResponse<unknown>>(
         "/clients",
-        { sortBy: "totalBilled", sortOrder: "desc", limit: 4 }
+        { params: { sortBy: "totalBilled", sortOrder: "desc", limit: 4 } }
       );
       return response.data;
     } catch {

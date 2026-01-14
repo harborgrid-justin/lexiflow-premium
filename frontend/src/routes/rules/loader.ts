@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type CourtRule = {
   id: string;
@@ -24,7 +23,7 @@ export interface RulesLoaderData {
 export async function rulesLoader() {
   const rules = await DataService.rules.getAll().catch(() => []);
 
-  return defer({
+  return {
     rules: rules || [],
   });
 }

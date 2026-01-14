@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type DataSource = {
   id: string;
@@ -22,7 +21,7 @@ export interface DataPlatformLoaderData {
 export async function dataPlatformLoader() {
   const sources = await DataService.dataPlatform.getAll().catch(() => []);
 
-  return defer({
+  return {
     sources: sources || [],
   });
 }

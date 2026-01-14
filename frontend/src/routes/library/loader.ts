@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type LibraryItem = {
   id: string;
@@ -23,7 +22,7 @@ export interface LibraryLoaderData {
 export async function libraryLoader() {
   const items = await DataService.library.getAll().catch(() => []);
 
-  return defer({
+  return {
     items: items || [],
   });
 }

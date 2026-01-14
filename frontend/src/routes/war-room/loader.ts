@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type WarRoomSession = {
   id: string;
@@ -24,7 +23,7 @@ export interface WarRoomLoaderData {
 export async function warRoomLoader() {
   const sessions = await DataService.warRoom.getAll().catch(() => []);
 
-  return defer({
+  return {
     sessions: sessions || [],
   });
 }

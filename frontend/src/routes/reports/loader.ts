@@ -3,7 +3,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Report = {
   id: string;
@@ -23,7 +22,7 @@ export interface ReportsLoaderData {
 export async function reportsLoader() {
   const reports = await DataService.reports.getAll().catch(() => []);
 
-  return defer({
+  return {
     reports: reports || [],
     recentReports: (reports || []).slice(0, 5),
   });

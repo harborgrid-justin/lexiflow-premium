@@ -4,7 +4,6 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import { defer } from "react-router";
 
 type Pleading = {
   id: string;
@@ -23,7 +22,7 @@ export interface PleadingsLoaderData {
 export async function pleadingsLoader() {
   const pleadings = await DataService.pleadings.getAll().catch(() => []);
 
-  return defer({
+  return {
     pleadings: pleadings || [],
   });
 }

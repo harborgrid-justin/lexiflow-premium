@@ -63,7 +63,7 @@ export class ExpensesApiService {
    * GET ${API_PREFIX}/billing/expenses?caseId=:caseId
    */
   async getByCaseId(caseId: string): Promise<FirmExpense[]> {
-    const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', { caseId });
+    const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', { params: { caseId } });
     return response.data;
   }
 
@@ -132,7 +132,7 @@ export class ExpensesApiService {
     const formData = new FormData();
     formData.append('file', file);
     return apiClient.post<{ url: string; filename: string; size: number }>(
-      `/billing/expenses/${id}/receipt`, 
+      `/billing/expenses/${id}/receipt`,
       formData
     );
   }
@@ -145,4 +145,3 @@ export class ExpensesApiService {
     return apiClient.get<ExpenseTotals>(`/billing/expenses/case/${caseId}/totals`);
   }
 }
-

@@ -21,7 +21,7 @@ export class InvoiceService {
     try {
       const response = await apiClient.get<
         PaginatedResponse<unknown> | unknown[]
-      >("/billing/invoices", filters);
+      >("/billing/invoices", { params: filters });
 
       return extractPaginatedData(response);
     } catch {

@@ -6,6 +6,7 @@
 
 import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import React from 'react';
 
 interface CaseInsightsPageProps {
   caseId: string;

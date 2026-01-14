@@ -5,7 +5,6 @@
 
 import { DataService } from "@/services/data/data-service.service";
 import type { Citation, ResearchQuery } from "@/types";
-import { defer } from "react-router";
 
 export interface ResearchLoaderData {
   recentSearches: ResearchQuery[];
@@ -20,7 +19,7 @@ export async function researchLoader() {
     DataService.citations.getAll().catch(() => []),
   ]);
 
-  return defer({
+  return {
     recentSearches: recentSearches || [],
     savedResearch: savedResearch || [],
     citations: citations || [],

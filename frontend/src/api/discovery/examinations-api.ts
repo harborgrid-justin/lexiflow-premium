@@ -18,7 +18,7 @@ export class ExaminationsApiService {
     try {
       const response = await apiClient.get<
         PaginatedResponse<Examination> | { items: Examination[] }
-      >("/examinations", filters);
+      >("/examinations", { params: filters });
 
       // Handle paginated response
       if (response && typeof response === "object" && "items" in response) {

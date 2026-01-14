@@ -4,7 +4,7 @@
  * @description Workflow and automation page - process management and task automation
  */
 
-import { MasterWorkflow } from '@/features/cases/components/workflow/MasterWorkflow';
+import { MasterWorkflow } from '@/routes/cases/components/workflow/MasterWorkflow';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface WorkflowPageProps {

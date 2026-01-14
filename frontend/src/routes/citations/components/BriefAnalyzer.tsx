@@ -24,7 +24,7 @@ import { useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
+import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';

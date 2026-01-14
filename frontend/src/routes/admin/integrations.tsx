@@ -7,12 +7,16 @@
  * - Webhook configuration
  * - Integration status monitoring
  *
+ * Enterprise API Pattern:
+ * - Uses @/lib/frontend-api/integrations
+ * - Handles Result<T> returns
+ * - Real-time sync status
+ *
  * @module routes/admin/integrations
  */
 
+import { integrationsApi } from '@/lib/frontend-api';
 import { IntegrationsManager } from '@/routes/admin/integrations/IntegrationsManager';
-import type { Integration } from '@/routes/admin/integrations/types';
-import { DataService } from '@/services/data/dataService';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
@@ -32,76 +36,28 @@ export function meta() {
 // Loader
 // ============================================================================
 
+/**
+ * Load integrations from enterprise API
+ */
 export async function loader() {
-  const integrations: Integration[] = [
-    {
-      id: 'google-gemini',
-      name: 'Google Gemini AI',
-      description: 'AI-powered legal research and document analysis',
-      category: 'ai',
-      status: 'connected',
-      icon: '🤖',
-      lastSync: new Date().toISOString(),
-    },
-    {
-      id: 'google-drive',
-      name: 'Google Drive',
-      description: 'Cloud document storage and synchronization',
-      category: 'storage',
-      status: 'disconnected',
-      icon: '📁',
-    },
-    {
-      id: 'microsoft-365',
-      name: 'Microsoft 365',
-      description: 'Office apps and OneDrive integration',
-      category: 'storage',
-      status: 'disconnected',
-      icon: '📎',
-    },
-    {
-      id: 'slack',
-      name: 'Slack',
-      description: 'Team communication and notifications',
-      category: 'communication',
-      status: 'disconnected',
-      icon: '💬',
-    },
-    {
-      id: 'google-calendar',
-      name: 'Google Calendar',
-      description: 'Calendar sync for court dates and deadlines',
-      category: 'calendar',
-      status: 'disconnected',
-      icon: '📅',
-    },
-    {
-      id: 'stripe',
-      name: 'Stripe',
-      description: 'Payment processing and invoicing',
-      category: 'billing',
-      status: 'disconnected',
-      icon: '💳',
-    },
-    {
-      id: 'quickbooks',
-      name: 'QuickBooks',
-      description: 'Accounting and financial management',
-      category: 'billing',
-      status: 'disconnected',
-      icon: '📊',
-    },
-    {
-      id: 'mixpanel',
-      name: 'Mixpanel',
-      description: 'Product analytics and user tracking',
-      category: 'analytics',
-      status: 'disconnected',
-      icon: '📈',
-    },
-  ];
+  try {
+    // Fetch integrations using new enterprise API
+    const result = await integrationsApi.getAllIntegrations({
+      page: 1,
+      limit: 100,
+    });
 
-  return { integrations };
+    if (result.ok) {
+      return { integrations: result.data.data || [] };
+    }
+
+    // Fallback to empty list if API call fails
+    console.warn("Failed to load integrations from API, using empty list");
+    return { integrations: [] };
+  } catch (error) {
+    console.error("Failed to load integrations:", error);
+    return { integrations: [] };
+  }
 }
 
 // ============================================================================

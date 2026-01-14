@@ -14,9 +14,9 @@
 
 import { DashboardKPIs, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/theme';
-import { ActivityFeed } from '@/features/dashboard/widgets/ActivityFeed';
-import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
-import { KPICard } from '@/features/dashboard/widgets/KPICard';
+import { ActivityFeed } from '@/routes/dashboard/widgets/ActivityFeed';
+import { ChartCard } from '@/routes/dashboard/widgets/ChartCard';
+import { KPICard } from '@/routes/dashboard/widgets/KPICard';
 import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';

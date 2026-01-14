@@ -1,4 +1,4 @@
-import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEntryBuilder';
+import { DocketEntryBuilder } from '@/routes/cases/components/docket/DocketEntryBuilder';
 import { DocketEntry, DocketEntryType } from '@/types';
 import type { DocketId } from '@/types/primitives';
 import type { Meta, StoryObj } from '@storybook/react-vite';

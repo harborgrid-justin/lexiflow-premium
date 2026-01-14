@@ -17,4 +17,4 @@
  */
 
 // Re-export from features/cases/components where these components live
-export * from '@/features/cases/ui/components';
+export * from '@/routes/cases/ui/components';

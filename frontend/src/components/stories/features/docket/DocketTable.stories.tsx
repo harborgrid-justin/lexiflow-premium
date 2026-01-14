@@ -1,4 +1,4 @@
-import { DocketTable } from '@/features/cases/components/docket/DocketTable';
+import { DocketTable } from '@/routes/cases/components/docket/DocketTable';
 import { CaseId, DocketEntry, DocketEntryType, DocketId, DocumentId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';

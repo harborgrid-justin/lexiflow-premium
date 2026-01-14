@@ -1,10 +1,14 @@
 /**
  * Billing Analytics Route
  * Revenue, realization, collection rates, AR aging, and WIP reports
+ *
+ * Enterprise API Pattern:
+ * - Uses @/lib/frontend-api/billing for data fetching
+ * - Handles Result<T> returns
+ * - Graceful error handling with fallbacks
  */
 
 import { BillingAnalytics } from '@/routes/analytics/billing/BillingAnalytics';
-import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -17,29 +21,33 @@ export function meta() {
 
 export async function loader() {
   try {
-    const timeEntries = await DataService.billing.getTimeEntries();
-    const invoices = await DataService.billing.getInvoices();
+    // Fetch billing data using new enterprise API
+    const timeEntriesResult = await billingApi.getAllTimeEntries({ page: 1, limit: 1000 });
+    const invoicesResult = await billingApi.getAllInvoices({ page: 1, limit: 1000 });
+
+    const timeEntries = timeEntriesResult.ok ? timeEntriesResult.data.data : [];
+    const invoices = invoicesResult.ok ? invoicesResult.data.data : [];
 
     // Calculate billing metrics
-    const totalBilled = timeEntries.reduce((sum: number, entry: { rate?: number; hours?: number }) => {
+    const totalBilled = timeEntries.reduce((sum: number, entry: any) => {
       const rate = entry.rate || 0;
       const hours = entry.hours || 0;
       return sum + (rate * hours);
     }, 0);
 
-    const paidInvoices = invoices.filter((inv: { status?: string }) => inv.status === 'Paid');
-    const totalCollected = paidInvoices.reduce((sum: number, inv: { amount?: number }) => sum + (inv.amount || 0), 0);
+    const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid');
+    const totalCollected = paidInvoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
 
-    const pendingInvoices = invoices.filter((inv: { status?: string }) => inv.status === 'Sent' || inv.status === 'Overdue');
-    const outstandingAR = pendingInvoices.reduce((sum: number, inv: { amount?: number }) => sum + (inv.amount || 0), 0);
+    const pendingInvoices = invoices.filter((inv: any) => inv.status === 'sent' || inv.status === 'overdue');
+    const outstandingAR = pendingInvoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
 
     const realizationRate = totalBilled > 0 ? (totalCollected / totalBilled) * 100 : 0;
 
     // Calculate collection days
-    const collectedInvoices = invoices.filter((inv: { status?: string; paidDate?: string }) => inv.status === 'Paid' && inv.paidDate);
-    const collectionDays = collectedInvoices.map((inv: { issueDate?: string; paidDate?: string }) => {
-      if (!inv.issueDate || !inv.paidDate) return 0;
-      const issued = new Date(inv.issueDate).getTime();
+    const collectedInvoices = invoices.filter((inv: any) => inv.status === 'paid' && inv.paidDate);
+    const collectionDays = collectedInvoices.map((inv: any) => {
+      if (!inv.createdAt || !inv.paidDate) return 0;
+      const issued = new Date(inv.createdAt).getTime();
       const paid = new Date(inv.paidDate).getTime();
       return Math.floor((paid - issued) / (1000 * 60 * 60 * 24));
     });

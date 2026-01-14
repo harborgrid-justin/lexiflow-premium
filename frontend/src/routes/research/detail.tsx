@@ -6,7 +6,7 @@
  * @module routes/research/detail
  */
 
-import { DataService } from '@/services/data/dataService';
+import { knowledgeApi } from '@/lib/frontend-api';
 import type { ResearchSession } from '@/types';
 import { useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -37,11 +37,12 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   try {
-    const item = await DataService.knowledge.research.getById(researchId);
-    if (!item) {
+    // Fetch research using new enterprise API
+    const result = await knowledgeApi.getResearchById(researchId);
+    if (!result.ok) {
       throw new Response("Research session not found", { status: 404 });
     }
-    return { item };
+    return { item: result.data };
   } catch (error) {
     console.error("Failed to load research session:", error);
     if (error instanceof Response) throw error;

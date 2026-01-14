@@ -26,7 +26,7 @@ import { CheckSquare, Upload, Wand2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';

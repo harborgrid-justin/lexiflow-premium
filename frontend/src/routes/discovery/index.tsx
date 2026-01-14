@@ -7,7 +7,7 @@
  * @module routes/discovery/index
  */
 
-import { DataService } from '@/services/data/dataService';
+import { discoveryApi } from '@/lib/frontend-api';
 import { DiscoveryType } from '@/types/enums';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -42,9 +42,10 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const caseId = url.searchParams.get("caseId") || undefined;
 
   try {
-    // Fetch discovery processes
-    const items = await DataService.discovery.getAll({ caseId });
-    return { items, totalCount: items.length };
+    // Fetch discovery processes using new enterprise API
+    const result = await discoveryApi.getAllDiscoveryMatters({ caseId, page: 1, limit: 100 });
+    const items = result.ok ? result.data.data : [];
+    return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {
     console.error("Failed to load discovery data", error);
     return { items: [], totalCount: 0 };

@@ -6,7 +6,7 @@
  * @module routes/exhibits/detail
  */
 
-import { DataService } from '@/services/data/dataService';
+import { trialApi } from '@/lib/frontend-api';
 import type { TrialExhibit } from '@/types';
 import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -37,11 +37,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   try {
-    const item = await DataService.exhibits.getById(exhibitId);
-    if (!item) {
+    // Fetch exhibit using new enterprise API
+    const result = await trialApi.getExhibitById(exhibitId);
+    if (!result.ok) {
       throw new Response("Exhibit not found", { status: 404 });
     }
-    return { item };
+    return { item: result.data };
   } catch (error) {
     console.error("Failed to load exhibit", error);
     if (error instanceof Response) throw error;

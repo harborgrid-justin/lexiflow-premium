@@ -6,7 +6,7 @@
  * @module routes/discovery/detail
  */
 
-import { DataService } from '@/services/data/dataService';
+import { discoveryApi } from '@/lib/frontend-api';
 import type { DiscoveryRequest } from '@/types';
 import { redirect, useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -39,11 +39,12 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   try {
-    const item = await DataService.discoveryRequests.getById(discoveryId);
-    if (!item) {
+    // Fetch discovery request using new enterprise API
+    const result = await discoveryApi.getDiscoveryById(discoveryId);
+    if (!result.ok) {
       throw new Response("Discovery request not found", { status: 404 });
     }
-    return { item };
+    return { item: result.data };
   } catch (error) {
     console.error("Failed to load discovery request", error);
     throw new Response("Discovery request not found", { status: 404 });

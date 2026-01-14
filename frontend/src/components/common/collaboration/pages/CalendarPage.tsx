@@ -4,7 +4,7 @@
  * @description Calendar and scheduling page - deadline tracking and event management
  */
 
-import { CalendarMaster } from '@/features/cases/components/calendar/CalendarMaster';
+import { CalendarMaster } from '@/routes/cases/components/calendar/CalendarMaster';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CalendarPageProps {

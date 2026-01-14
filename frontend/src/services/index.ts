@@ -72,6 +72,16 @@ export type {
   TelemetryService,
 } from "./telemetry/TelemetryService";
 
+// Notification Service
+export { BrowserNotificationService } from "./notification/NotificationService";
+export type {
+  Notification,
+  NotificationAction,
+  NotificationPriority,
+  NotificationService,
+  NotificationType,
+} from "./notification/NotificationService";
+
 // DO NOT export microORM - it causes circular dependencies with db.ts
 // Import directly: import { microORM } from '@/services/core/microORM';
 // DO NOT export Repository - it imports microORM which causes circular dependencies

@@ -1,4 +1,4 @@
-import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewer';
+import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';

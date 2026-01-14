@@ -1,4 +1,4 @@
-import { EditorToolbar } from '@/features/discovery/ui/components/EditorToolbar/EditorToolbar';
+import { EditorToolbar } from '@/routes/discovery/components/EditorToolbar/EditorToolbar';
 import { useTheme } from '@/theme';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { GeminiService } from '@/services/features/research/geminiService';

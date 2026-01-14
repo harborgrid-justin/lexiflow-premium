@@ -9,7 +9,7 @@ import { AlertOctagon, Layers, Link, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 // Common Components
-import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';
+import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';

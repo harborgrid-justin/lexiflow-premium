@@ -21,7 +21,7 @@ import { useBillingDashboard } from './hooks/useBillingDashboard';
 
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { ExportMenu } from '@/features/discovery/ui/components/ExportMenu/ExportMenu';
+import { ExportMenu } from '@/routes/discovery/components/ExportMenu/ExportMenu';
 import { Button } from '@/shared/ui/atoms/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 import { PeriodSelector } from '@/shared/ui/molecules/PeriodSelector';

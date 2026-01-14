@@ -11,7 +11,6 @@
  */
 
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
-import { DataService } from '@/services/data/dataService';
 import type { Case, LegalDocument } from '@/types';
 import { useState } from 'react';
 import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
@@ -40,17 +39,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Case ID is required", { status: 400 });
   }
 
-  // Fetch case and documents in parallel
-  const [caseData, documents] = await Promise.all([
-    DataService.cases.getById(caseId),
-    DataService.documents.getByCaseId(caseId),
+  // Fetch case and documents in parallel using new enterprise API
+  const [caseResult, documentsResult] = await Promise.all([
+    casesApi.getCaseById(caseId),
+    documentsApi.getDocumentsByCase(caseId),
   ]);
 
-  if (!caseData) {
+  if (!caseResult.ok) {
     throw new Response("Case Not Found", { status: 404 });
   }
 
-  return { caseData, documents };
+  // Extract documents from paginated result, fallback to empty array on error
+  const documents = documentsResult.ok ? documentsResult.data.data : [];
+
+  return { caseData: caseResult.data, documents };
 }
 
 // ============================================================================

@@ -9,7 +9,7 @@
 import {
   WorkflowConnection,
   WorkflowNode,
-} from "@/features/cases/components/workflow/builder/types";
+} from "@/routes/cases/components/workflow/builder/types";
 import { DateCalculationService } from "@/services/infrastructure/dateCalculationService";
 import {
   CaseId,

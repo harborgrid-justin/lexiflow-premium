@@ -3,8 +3,8 @@
  * Detailed analytics for case outcomes, types, and trends
  */
 
+import { casesApi } from '@/lib/frontend-api';
 import { CaseAnalytics } from '@/routes/analytics/cases/CaseAnalytics';
-import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { CaseStatus } from '@/types/enums';
 import { useLoaderData } from 'react-router';
@@ -28,7 +28,10 @@ type CaseWithAnalytics = Case & {
 
 export async function loader() {
   try {
-    const cases = (await DataService.cases.getAll()) as CaseWithAnalytics[];
+    // Fetch all cases using new enterprise API with pagination
+    const result = await casesApi.getAllCases({ page: 1, limit: 1000 });
+    const cases = result.ok ? result.data.data : [];
+
     // Use CaseStatus enum for type-safe filtering
     const activeCases = cases.filter(c =>
       c.status === CaseStatus.Active ||

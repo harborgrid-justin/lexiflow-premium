@@ -17,4 +17,4 @@
  */
 
 // Re-export from features/discovery/components where these components live
-export * from '@/features/discovery/ui/components';
+export * from '@/routes/discovery/components';

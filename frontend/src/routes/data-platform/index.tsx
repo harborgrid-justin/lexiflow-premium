@@ -7,7 +7,7 @@
  * @module routes/data-platform/index
  */
 
-import { AdminDatabaseControl } from '@/features/admin/components/data/AdminDatabaseControl';
+import { AdminDatabaseControl } from '@/routes/admin/components/data/AdminDatabaseControl';
 import { DataSourceService } from '@/services/domain/DataSourceDomain';
 import { ActionFunctionArgs } from 'react-router-dom';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

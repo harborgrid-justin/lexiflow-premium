@@ -10,9 +10,9 @@
  * @module routes/cases/parties
  */
 
+import { casesApi } from '@/lib/frontend-api';
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
 import { PartiesTable } from '@/routes/cases/ui/components/PartiesTable';
-import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -41,20 +41,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Case ID is required", { status: 400 });
   }
 
-  // Fetch case and parties
-  const [caseData, parties] = await Promise.all([
-    DataService.cases.get(caseId),
-    DataService.parties.getByCaseId(caseId).catch(() => []),
+  // Fetch case and parties using new enterprise API
+  const [caseResult, partiesResult] = await Promise.all([
+    casesApi.getCaseById(caseId),
+    casesApi.getCaseParties(caseId).catch(() => ({ ok: false })),
   ]);
 
-  if (!caseData) {
+  if (!caseResult.ok) {
     throw new Response("Case Not Found", { status: 404 });
   }
 
-  // Use parties from case data if available, otherwise use fetched parties
-  const caseParties = caseData.parties || parties;
+  // Extract parties from result or response
+  const parties = partiesResult.ok ? partiesResult.data.data || partiesResult.data : [];
 
-  return { caseData, parties: caseParties };
+  return { caseData: caseResult.data, parties };
 }
 
 // ============================================================================

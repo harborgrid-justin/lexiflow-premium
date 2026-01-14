@@ -1,4 +1,4 @@
-import { DocketFilterPanel } from '@/features/cases/components/docket/DocketFilterPanel';
+import { DocketFilterPanel } from '@/routes/cases/components/docket/DocketFilterPanel';
 import { Case, CaseId, CaseStatus, MatterType, PartyId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';

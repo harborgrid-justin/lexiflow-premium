@@ -2,7 +2,7 @@ import { Search, Split, Wand2, MoreHorizontal, List, Grid, Filter, Layout } from
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { useWindow } from '@/providers';
-import { DiffViewer } from '@/features/discovery/ui/components/DiffViewer/DiffViewer';
+import { DiffViewer } from '@/routes/discovery/components/DiffViewer/DiffViewer';
 
 interface DocumentToolbarProps {
   selectedDocsCount: number;

@@ -7,8 +7,8 @@
  * @module routes/research/index
  */
 
+import { knowledgeApi } from '@/lib/frontend-api';
 import { ResearchTool } from '@/routes/research/components/ResearchTool';
-import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -35,7 +35,9 @@ export function meta({ data }: Route.MetaArgs) {
  */
 export async function clientLoader() {
   try {
-    const history = await DataService.research.getHistory();
+    // Fetch research history using new enterprise API
+    const result = await knowledgeApi.getResearchHistory({ page: 1, limit: 50 });
+    const history = result.ok ? result.data.data : [];
     return { items: [], totalCount: 0, recentSearches: history };
   } catch (error) {
     console.error("Failed to load research history", error);

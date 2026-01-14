@@ -1,4 +1,4 @@
-import { AnalyticsDashboard } from '@/features/admin/components/analytics/AnalyticsDashboard';
+import { AnalyticsDashboard } from '@/routes/admin/components/analytics/AnalyticsDashboard';
 import { createListMeta } from '../_shared/meta-utils';
 
 export function meta() {

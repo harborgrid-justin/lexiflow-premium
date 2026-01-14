@@ -10,13 +10,12 @@
  * @status PRODUCTION READY - No mock data, modal-based CRUD
  */
 
-import { DataService } from '@/services/data/dataService';
-import type { CaseId, PaginatedResponse } from '@/types';
+import { docketApi } from '@/lib/frontend-api';
+import type { CaseId } from '@/types';
 import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import { DocketList } from './components/DocketList';
-import type { DocketEntry } from './types/types';
 
 // ============================================================================
 // Meta Tags
@@ -41,26 +40,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const page = parseInt(url.searchParams.get("page") || "1", 10);
 
   try {
-    const response = await DataService.docket.getAll({ search, type, page });
+    // Fetch docket entries using new enterprise API
+    const result = await docketApi.getAllEntries({ search, type, page, limit: 50 });
 
-    // Robust handling of API response structure
-    let entries: DocketEntry[] = [];
-    if (Array.isArray(response)) {
-      entries = response;
-    } else if (response && Array.isArray(response.data)) {
-      const paginated = response as PaginatedResponse<DocketEntry>;
-      entries = paginated.data;
+    if (!result.ok) {
+      return {
+        entries: [],
+        totalCount: 0,
+        page: 1,
+        totalPages: 1
+      };
     }
 
     return {
-      entries,
-      totalCount: (response as PaginatedResponse<DocketEntry>).total || entries.length || 0,
-      page: (response as PaginatedResponse<DocketEntry>).page || 1,
-      totalPages: (response as PaginatedResponse<DocketEntry>).totalPages || 1
+      entries: result.data.data,
+      totalCount: result.data.total,
+      page: result.data.page,
+      totalPages: Math.ceil(result.data.total / result.data.pageSize)
     };
   } catch (error) {
     console.error("Failed to load docket entries:", error);
-    throw error; // Let ErrorBoundary handle it
+    return {
+      entries: [],
+      totalCount: 0,
+      page: 1,
+      totalPages: 1
+    };
   }
 }
 

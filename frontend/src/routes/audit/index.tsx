@@ -21,7 +21,7 @@ export function meta() {
   });
 }
 
-import { DataService } from '@/services/data/dataService';
+import { adminApi } from '@/lib/frontend-api';
 
 /**
  * Fetches audit logs on the client side only
@@ -29,7 +29,9 @@ import { DataService } from '@/services/data/dataService';
  */
 export async function clientLoader() {
   try {
-    const logs = await DataService.security.getAuditLogs();
+    // Fetch audit logs using new enterprise API with pagination
+    const result = await adminApi.getAuditLogs({ page: 1, limit: 500 });
+    const logs = result.ok ? result.data.data : [];
     return { logs: logs as AuditLog[] };
   } catch (error) {
     console.error("Failed to load audit logs", error);

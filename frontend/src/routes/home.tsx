@@ -13,9 +13,9 @@
  * @module routes/home
  */
 
-import Dashboard from '@/features/dashboard/components/Dashboard';
 import { useAppController } from '@/hooks/core';
-import { DataService } from '@/services/data/dataService';
+import { casesApi, workflowApi } from '@/lib/frontend-api';
+import Dashboard from '@/routes/dashboard/components/Dashboard';
 import { Suspense } from 'react';
 import { useLoaderData, useNavigate } from 'react-router';
 import type { Route } from "./+types/home";
@@ -45,26 +45,39 @@ export function meta(_: Route.MetaArgs) {
  *
  * Note: Using clientLoader instead of loader because authentication tokens
  * are stored in localStorage which is not available during SSR
+ *
+ * Enterprise API Pattern:
+ * - Uses new @/lib/frontend-api layer
+ * - Handles Result<T> error returns
+ * - Extracts data from paginated results
+ * - Falls back gracefully on errors
  */
 export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
-    const [cases, tasks] = await Promise.all([
-      DataService.cases.getAll(),
-      DataService.tasks.getAll(),
-    ]);
+    // Fetch cases and tasks using new enterprise API
+    const casesResult = await casesApi.getAllCases({ page: 1, limit: 100 });
+    const tasksResult = await workflowApi.getAllTasks({ page: 1, limit: 100 });
 
-    // Ensure we have arrays (defensive programming)
-    const casesArray = Array.isArray(cases) ? cases : [];
-    const tasksArray = Array.isArray(tasks) ? tasks : [];
+    // Handle Result<T> returns - check for ok flag
+    let casesArray = [];
+    let tasksArray = [];
+
+    if (casesResult.ok) {
+      casesArray = casesResult.data.data || [];
+    }
+
+    if (tasksResult.ok) {
+      tasksArray = tasksResult.data.data || [];
+    }
 
     // Calculate metrics
-    const activeCases = casesArray.filter(c => c.status === 'Active').length;
-    const pendingTasks = tasksArray.filter(t => t.status !== 'Completed').length;
-    const highPriorityTasks = tasksArray.filter(t => t.priority === 'High' && t.status !== 'Completed').length;
+    const activeCases = casesArray.filter((c: any) => c.status === 'Active').length;
+    const pendingTasks = tasksArray.filter((t: any) => t.status !== 'Completed').length;
+    const highPriorityTasks = tasksArray.filter((t: any) => t.priority === 'High' && t.status !== 'Completed').length;
 
     // Get recent items
     const recentCases = casesArray
-      .sort((a, b) => {
+      .sort((a: any, b: any) => {
         const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
         const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
         return dateB - dateA;
@@ -74,8 +87,8 @@ export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
     console.log('recent cases data:', recentCases);
 
     const upcomingTasks = tasksArray
-      .filter(t => t.dueDate && t.status !== 'Completed')
-      .sort((a, b) => new Date(a.dueDate || 0).getTime() - new Date(b.dueDate || 0).getTime())
+      .filter((t: any) => t.dueDate && t.status !== 'Completed')
+      .sort((a: any, b: any) => new Date(a.dueDate || 0).getTime() - new Date(b.dueDate || 0).getTime())
       .slice(0, 5);
 
     return {

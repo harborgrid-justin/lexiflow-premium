@@ -7,7 +7,7 @@
  * @module routes/war-room/index
  */
 
-import { DataService } from '@/services/data/dataService';
+import { casesApi } from '@/lib/frontend-api';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -39,7 +39,9 @@ export function meta({ data }: { data: { items: unknown[] } }) {
 
 export async function clientLoader({ request: _ }: LoaderFunctionArgs) {
   try {
-    const cases = await DataService.cases.getAll();
+    // Fetch all cases using new enterprise API
+    const result = await casesApi.getAllCases({ page: 1, limit: 1000 });
+    const cases = result.ok ? result.data.data : [];
     // Filter for cases that might be relevant for war room (e.g. Trial, Litigation)
     const warRoomCases = cases.filter((c: { status: string }) => c.status === 'Active' || c.status === 'Trial');
 

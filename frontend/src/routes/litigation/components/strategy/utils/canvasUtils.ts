@@ -6,7 +6,7 @@
  * @module components/litigation/utils/canvasUtils
  */
 
-import { NodeType } from "@/features/cases/components/workflow/builder/types";
+import { NodeType } from "@/routes/cases/components/workflow/builder/types";
 import { type ContextMenuItem } from "@/shared/ui/molecules/ContextMenu";
 import {
   BoxSelect,

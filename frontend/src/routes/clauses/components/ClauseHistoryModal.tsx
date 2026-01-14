@@ -1,4 +1,4 @@
-import { DiffViewer } from '@/features/discovery/ui/components/DiffViewer/DiffViewer';
+import { DiffViewer } from '@/routes/discovery/components/DiffViewer/DiffViewer';
 import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
 import { Clause, ClauseVersion } from '@/types';

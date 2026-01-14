@@ -1,5 +1,5 @@
-import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewer';
-import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';
+import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';

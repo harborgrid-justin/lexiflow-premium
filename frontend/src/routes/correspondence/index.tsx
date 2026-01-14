@@ -8,7 +8,7 @@
  */
 
 import type { Correspondence } from '@/api/communications/correspondence-api';
-import { DataService } from '@/services/data/dataService';
+import { communicationsApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -38,8 +38,9 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const filter = url.searchParams.get("filter") || "all";
 
   try {
-    // DataService.correspondence returns CorrespondenceService which has getCommunications()
-    const items = await DataService.correspondence.getCommunications();
+    // Fetch correspondence using new enterprise API
+    const result = await communicationsApi.getAllCorrespondence({ page: 1, limit: 100 });
+    const items = result.ok ? result.data.data : [];
 
     // Apply client-side filtering if needed
     const filteredItems = filter === "all"

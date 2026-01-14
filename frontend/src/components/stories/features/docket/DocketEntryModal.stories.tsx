@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocketEntryModal } from '@/features/cases/components/docket/DocketEntryModal';
+import { DocketEntryModal } from '@/routes/cases/components/docket/DocketEntryModal';
 import { DocketEntry, DocketEntryType, DocketId, CaseId, DocumentId } from '@/types';
 
 /**

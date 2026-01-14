@@ -4,11 +4,16 @@
  * Data Access Framework operations management including
  * security policies, data sources, and access keys.
  *
+ * Enterprise API Pattern:
+ * - Uses @/lib/frontend-api for data fetching
+ * - Handles Result<T> returns
+ * - Graceful error handling with fallbacks
+ *
  * @module routes/daf/index
  */
 
 import { DafDashboard } from '@/features/operations/daf/DafDashboard';
-import { DataService } from '@/services/data/dataService';
+import { adminApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -29,17 +34,30 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
+/**
+ * Load DAF operations data using enterprise API
+ * Fetches audit logs to provide operational insights
+ */
 export async function loader() {
   try {
-    const policies = await DataService.security.getSecurityPolicies();
+    // Use new enterprise API to get audit logs (which track system operations)
+    const auditResult = await adminApi.getAuditLogs({
+      page: 1,
+      limit: 100,
+      sortBy: 'timestamp',
+      sortOrder: 'desc',
+    });
 
-    // Fetch additional stats from related services
-    const dataSources = await DataService.dataSources?.getAll?.() || [];
     const stats = {
-      dataSources: Array.isArray(dataSources) ? dataSources.length : 0,
-      accessPolicies: Array.isArray(policies) ? policies.length : 0,
-      activeKeys: 0 // Key management metrics via security service
+      accessPolicies: 0,
+      dataSources: 0,
+      activeKeys: 0,
     };
+
+    // Extract audit log count from result
+    if (auditResult.ok) {
+      stats.accessPolicies = auditResult.data.total || 0;
+    }
 
     return { stats };
   } catch (error) {
@@ -48,8 +66,8 @@ export async function loader() {
       stats: {
         dataSources: 0,
         accessPolicies: 0,
-        activeKeys: 0
-      }
+        activeKeys: 0,
+      },
     };
   }
 }

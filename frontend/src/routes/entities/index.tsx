@@ -7,7 +7,7 @@
  * @module routes/entities/index
  */
 
-import { EntityDirector } from '@/features/cases/components/entities/EntityDirector';
+import { EntityDirector } from '@/routes/cases/components/entities/EntityDirector';
 import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

@@ -1,4 +1,4 @@
-import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';

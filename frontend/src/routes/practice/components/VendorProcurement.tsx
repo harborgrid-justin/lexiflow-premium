@@ -31,7 +31,7 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/theme';
 
 // Components
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';

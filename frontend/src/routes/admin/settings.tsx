@@ -7,8 +7,8 @@
  * @module routes/admin/settings
  */
 
+import { adminApi } from '@/lib/frontend-api';
 import { SystemSettings, type SystemFeatures, type SystemSettingsData } from '@/routes/admin/components/SystemSettings';
-import { DataService } from '@/services/data/dataService';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
@@ -39,7 +39,14 @@ export function meta() {
 
 export async function loader(): Promise<LoaderData> {
   try {
-    const config = await DataService.admin.getSystemSettings();
+    // Fetch system settings using new enterprise API
+    const result = await adminApi.getSystemSettings();
+    const config = result.ok ? result.data : null;
+
+    if (!config) {
+      throw new Error("Failed to fetch settings");
+    }
+
     return {
       settings: {
         backendUrl: config.backendUrl,

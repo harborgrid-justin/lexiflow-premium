@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DocketAnalytics } from '@/features/cases/components/docket/DocketAnalytics';
+import { DocketAnalytics } from '@/routes/cases/components/docket/DocketAnalytics';
 
 
 /**

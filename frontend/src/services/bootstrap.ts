@@ -75,6 +75,13 @@ const SERVICE_MANIFEST = {
     dependencies: [],
     autoStart: true,
   },
+
+  // Notification Service - No dependencies
+  NotificationService: {
+    factory: () => new BrowserNotificationService(),
+    dependencies: [],
+    autoStart: true,
+  },
 } as const;
 
 // ============================================================================

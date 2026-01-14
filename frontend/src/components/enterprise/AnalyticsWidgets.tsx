@@ -20,7 +20,7 @@ import {
   type PracticeAreaPerformanceData,
 } from '@/api/intelligence/enterprise-analytics.service';
 import { useTheme } from '@/theme';
-import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
+import { ChartCard } from '@/routes/dashboard/widgets/ChartCard';
 import { cn } from '@/shared/lib/cn';
 import {
   BarChart3,

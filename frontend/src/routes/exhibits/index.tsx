@@ -7,7 +7,7 @@
  * @module routes/exhibits/index
  */
 
-import { DataService } from '@/services/data/dataService';
+import { trialApi } from '@/lib/frontend-api';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -33,8 +33,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const caseId = url.searchParams.get("caseId") || undefined;
 
   try {
-    const exhibits = await DataService.exhibits.getAll(caseId);
-    return { items: exhibits, totalCount: exhibits.length };
+    // Fetch exhibits using new enterprise API
+    const result = await trialApi.getExhibits({ caseId, page: 1, limit: 100 });
+    const items = result.ok ? result.data.data : [];
+    return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {
     console.error("Failed to load exhibits:", error);
     return { items: [], totalCount: 0 };

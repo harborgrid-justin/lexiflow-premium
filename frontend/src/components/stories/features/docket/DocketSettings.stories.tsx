@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DocketSettings } from '@/features/cases/components/docket/DocketSettings';
+import { DocketSettings } from '@/routes/cases/components/docket/DocketSettings';
 
 /**
  * DocketSettings provides configuration for court integrations and

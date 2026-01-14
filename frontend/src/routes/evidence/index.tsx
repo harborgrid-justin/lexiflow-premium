@@ -7,8 +7,7 @@
  * @module routes/evidence/index
  */
 
-import { DataService } from '@/services/data/dataService';
-import type { EvidenceItem } from '@/types';
+import { evidenceApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -34,14 +33,23 @@ export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);
     const caseId = url.searchParams.get("caseId");
 
-    const evidence = (await DataService.evidence.getAll()) as EvidenceItem[];
+    // Fetch evidence using new enterprise API with pagination
+    const result = caseId
+      ? await evidenceApi.getEvidenceByCase(caseId)
+      : await evidenceApi.getAllEvidence({ page: 1, limit: 100 });
+
+    if (!result.ok) {
+      return { items: [], totalCount: 0 };
+    }
+
+    const items = result.data.data;
     const filteredEvidence = caseId
-      ? evidence.filter(item => item.caseId === caseId)
-      : evidence;
+      ? items
+      : items;
 
     return {
       items: filteredEvidence,
-      totalCount: filteredEvidence.length
+      totalCount: result.data.total
     };
   } catch (error) {
     console.error("Failed to fetch evidence:", error);

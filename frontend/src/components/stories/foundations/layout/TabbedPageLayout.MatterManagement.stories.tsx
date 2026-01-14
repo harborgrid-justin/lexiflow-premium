@@ -5,7 +5,7 @@ import { Activity, BarChart3, Briefcase, Clock, DollarSign, Eye, Lightbulb, Plus
 import React, { Suspense, useState } from 'react';
 
 // Import actual Case Management components
-import { NewCaseIntakeForm } from '@/features/cases/components/intake/NewCaseIntakeForm';
+import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
 import { CaseAnalyticsDashboard, CaseFinancialsCenter, CaseInsightsDashboard, CaseOperationsCenter, CaseOverviewDashboard } from '@features/cases';
 import { CaseCalendar } from '@features/cases/components/calendar/CaseCalendar';
 

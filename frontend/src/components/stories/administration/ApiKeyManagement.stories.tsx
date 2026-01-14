@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ApiKeyManagement } from '@/features/admin/components/api-keys/ApiKeyManagement';
+import { ApiKeyManagement } from '@/routes/admin/components/api-keys/ApiKeyManagement';
 
 /**
  * ApiKeyManagement provides secure API key administration for external integrations

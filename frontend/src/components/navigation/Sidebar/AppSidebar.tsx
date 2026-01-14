@@ -1,4 +1,4 @@
-import { Sidebar } from '@/features/navigation/components/Sidebar';
+import { Sidebar } from '@/shared/ui/organisms/Sidebar';
 import { AppView, User } from '@/types';
 import { memo } from 'react';
 

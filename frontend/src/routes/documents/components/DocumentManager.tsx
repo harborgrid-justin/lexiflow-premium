@@ -26,7 +26,7 @@ import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { DocumentGenerator } from '@/features/drafting/components/DocumentGenerator';
+import { DocumentGenerator } from '@/routes/drafting/components/DocumentGenerator';
 import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config

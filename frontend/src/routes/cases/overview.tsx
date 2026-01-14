@@ -2,10 +2,14 @@
  * Case Overview Sub-Route
  *
  * Displays overview dashboard for a specific case
+ *
+ * Enterprise API Pattern:
+ * - Uses @/lib/frontend-api/cases for data fetching
+ * - Handles Result<T> returns with .ok checks
+ * - Throws on error for proper error boundary handling
  */
 
 import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
-import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/overview";
 
@@ -19,10 +23,14 @@ export async function loader({ params }: Route.LoaderArgs) {
   const { caseId } = params;
   if (!caseId) throw new Response("Case ID is required", { status: 400 });
 
-  const caseData = await DataService.cases.get(caseId);
-  if (!caseData) throw new Response("Not Found", { status: 404 });
+  // Fetch case using new enterprise API
+  const result = await casesApi.getCaseById(caseId);
 
-  return { case: caseData };
+  if (!result.ok) {
+    throw new Response("Case Not Found", { status: 404 });
+  }
+
+  return { case: result.data };
 }
 
 export default function CaseOverviewRoute() {

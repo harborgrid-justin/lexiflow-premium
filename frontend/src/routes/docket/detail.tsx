@@ -6,7 +6,7 @@
  * @module routes/docket/detail
  */
 
-import { DocketDetail } from '@/features/cases/components/docket/DocketDetail';
+import { DocketDetail } from '@/routes/cases/components/docket/DocketDetail';
 import { DataService } from '@/services/data/dataService';
 import type { CaseId } from '@/types';
 import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';

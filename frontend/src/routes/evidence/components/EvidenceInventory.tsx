@@ -17,7 +17,7 @@ import { CheckSquare, Filter, Loader2, Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { Badge } from '@/shared/ui/atoms/Badge';

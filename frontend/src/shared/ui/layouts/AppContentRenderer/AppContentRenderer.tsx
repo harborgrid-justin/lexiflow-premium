@@ -36,7 +36,7 @@ import { AppView, User, Case } from '@/types';
 // ========================================
 // OPTIMIZATION: Lazy load CaseDetailPage to prevent it from being bundled in the main chunk.
 // FIX: Handle named export from CaseDetailPage (exported as CaseDetail for backwards compatibility)
-const CaseDetail = lazy(() => import('@/features/cases/ui/pages/CaseDetailPage').then(m => ({ default: m.CaseDetail })));
+const CaseDetail = lazy(() => import('@/routes/cases/ui/pages/CaseDetailPage').then(m => ({ default: m.CaseDetail })));
 
 // ========================================
 // TYPES & INTERFACES

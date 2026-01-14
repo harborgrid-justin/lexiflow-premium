@@ -1,4 +1,4 @@
-import { DocketStats } from '@/features/cases/components/docket/DocketStats';
+import { DocketStats } from '@/routes/cases/components/docket/DocketStats';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

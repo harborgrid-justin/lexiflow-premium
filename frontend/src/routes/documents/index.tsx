@@ -1,5 +1,5 @@
 import { DocumentManager } from '@/features/operations/documents/DocumentManager';
-import { DataService } from '@/services/data/dataService';
+import { documentsApi } from '@/lib/frontend-api';
 import type { MetaArgs } from 'react-router';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -9,8 +9,10 @@ interface LoaderData {
 
 export async function loader(): Promise<LoaderData> {
   try {
-    const documents = await DataService.documents.getAll();
-    return { count: documents.length };
+    // Fetch documents using new enterprise API with pagination
+    const result = await documentsApi.getAllDocuments({ page: 1, limit: 1000 });
+    const count = result.ok ? result.data.total : 0;
+    return { count };
   } catch {
     return { count: 0 };
   }

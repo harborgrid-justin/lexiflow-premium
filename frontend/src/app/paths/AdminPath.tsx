@@ -1,10 +1,10 @@
 // src/app/paths/AdminPath.tsx
+import { useData } from "@/routes/dashboard";
 import React, { useEffect, useMemo, useState } from "react";
 import { DeterministicLoader } from "../../components/performance/DeterministicLoader";
 import { OptimisticInput } from "../../components/performance/OptimisticInput";
 import { ZeroClsWrapper } from "../../components/performance/ZeroClsWrapper";
 import { useAuth } from "../../contexts/auth/AuthContext";
-import { useData } from "../../contexts/data/DataContext";
 import { useEntitlements } from "../../contexts/entitlements/EntitlementsContext";
 
 export const AdminPath: React.FC = () => {

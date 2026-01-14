@@ -7,8 +7,8 @@
  * @module routes/real-estate/relocation
  */
 
-import { RelocationList } from '@/features/real-estate/relocation/RelocationList';
-import type { RelocationLoaderData } from '@/features/real-estate/relocation/types';
+import { RelocationList } from '@/routes/real-estate/relocation/RelocationList';
+import type { RelocationLoaderData } from '@/routes/real-estate/relocation/types';
 import { DataService } from '@/services/data/dataService';
 import type { RealEstateRelocation } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';

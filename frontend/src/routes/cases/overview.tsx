@@ -4,7 +4,7 @@
  * Displays overview dashboard for a specific case
  */
 
-import { CaseOverviewDashboard } from '@/features/cases/components/overview/CaseOverviewDashboard';
+import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/overview";

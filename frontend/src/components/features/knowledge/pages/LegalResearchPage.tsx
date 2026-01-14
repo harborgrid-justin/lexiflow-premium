@@ -4,7 +4,7 @@
  * @description Legal research page - AI-powered case law and statute research
  */
 
-import { ResearchTool } from '@/features/knowledge/research/ResearchTool';
+import { ResearchTool } from '@/routes/research/components/ResearchTool';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import React from "react";
 

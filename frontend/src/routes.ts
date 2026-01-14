@@ -41,7 +41,7 @@ export default [
   layout("routes/layout.tsx", [
     // Home/Dashboard routes
     index("routes/home.tsx"),
-    route("dashboard", "routes/dashboard.tsx"),
+    route("dashboard", "routes/dashboard/index.tsx"),
 
     // Case Management - Primary Module
     route("cases", "routes/cases/index.tsx"),
@@ -90,13 +90,16 @@ export default [
     route("war_room", "routes/war-room/index.tsx"),
     route("war_room/:roomId", "routes/war-room/detail.tsx"),
 
-    // Pleadings & Drafting
+    // Pleadings, Drafting & Litigation
+    route("pleadings", "routes/pleadings/index.tsx"),
     route("pleading_builder", "routes/pleading/builder.tsx"),
     route("drafting", "routes/drafting/index.tsx"),
+    route("litigation", "routes/litigation/index.tsx"),
     route("litigation_builder", "routes/litigation/builder.tsx"),
 
     // Operations & Admin
     route("billing", "routes/billing/index.tsx"),
+    route("reports", "routes/reports/index.tsx"),
     route("crm", "routes/crm/index.tsx"),
     route("crm/:clientId", "routes/crm/client-detail.tsx"),
     route("compliance", "routes/compliance/index.tsx"),
@@ -128,9 +131,11 @@ export default [
     route("admin/users", "routes/admin/users.tsx"),
     route("admin/roles", "routes/admin/roles.tsx"),
     route("admin/permissions", "routes/admin/permissions.tsx"),
-    route("admin/audit", "routes/admin/audit.tsx"),
     route("admin/integrations", "routes/admin/integrations.tsx"),
     route("admin/backup", "routes/admin/backup.tsx"),
+
+    // Audit Logs (Admin/Auditor)
+    route("audit", "routes/audit/index.tsx"),
 
     // Real Estate Division (nested routes with prefix)
     ...prefix("real_estate", [

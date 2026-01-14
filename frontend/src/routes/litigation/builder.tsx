@@ -7,7 +7,6 @@
  * @module routes/litigation/builder
  */
 
-import { StrategyBuilder, type StrategyTemplate } from '@/features/litigation/components/builder/StrategyBuilder';
 import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { MatterType } from '@/types/enums';
@@ -15,6 +14,7 @@ import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/builder";
+import { StrategyBuilder, type StrategyTemplate } from './components/builder/StrategyBuilder';
 
 // ============================================================================
 // Types

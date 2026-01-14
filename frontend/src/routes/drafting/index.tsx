@@ -1,4 +1,4 @@
-import DraftingDashboard from '@/features/drafting/DraftingDashboard';
+import DraftingDashboard from '@/routes/drafting/DraftingDashboard';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
 

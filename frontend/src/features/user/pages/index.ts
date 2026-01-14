@@ -5,5 +5,4 @@
  * business development/marketing tools
  */
 
-export { ProfilePage } from './ProfilePage';
-export { MarketingPage } from './MarketingPage';
+export { MarketingPage } from "./MarketingPage";

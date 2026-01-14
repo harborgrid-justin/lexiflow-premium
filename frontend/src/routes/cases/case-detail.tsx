@@ -19,7 +19,7 @@
  * @module routes/cases/case-detail
  */
 
-import { CaseDetail } from '@/features/cases/ui/pages/CaseDetailPage';
+import { CaseDetail } from '@/routes/cases/ui/pages/CaseDetailPage';
 import { DataService } from '@/services/data/dataService';
 import { Case, LegalDocument, Party } from '@/types';
 import { Suspense, useCallback } from 'react';

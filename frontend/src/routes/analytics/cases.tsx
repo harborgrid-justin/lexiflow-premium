@@ -3,7 +3,7 @@
  * Detailed analytics for case outcomes, types, and trends
  */
 
-import { CaseAnalytics } from '@/features/analytics/cases/CaseAnalytics';
+import { CaseAnalytics } from '@/routes/analytics/cases/CaseAnalytics';
 import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { CaseStatus } from '@/types/enums';

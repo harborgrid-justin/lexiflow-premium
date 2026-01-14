@@ -9,8 +9,8 @@
 
 import { DataService } from '@/services/data/dataService';
 import type { AcquisitionStatus, RealEstateAcquisition } from '@/services/domain/RealEstateDomain';
-import { AcquisitionManager } from '@/features/real-estate/acquisition/AcquisitionManager';
-import type { AcquisitionLoaderData } from '@/features/real-estate/acquisition/types';
+import { AcquisitionManager } from '@/routes/real-estate/acquisition/AcquisitionManager';
+import type { AcquisitionLoaderData } from '@/routes/real-estate/acquisition/types';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';

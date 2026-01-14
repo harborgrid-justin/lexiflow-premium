@@ -99,6 +99,18 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     category: "Main",
   },
   {
+    id: PATHS.PROFILE,
+    label: "My Profile",
+    icon: Users,
+    category: "Main",
+  },
+  {
+    id: PATHS.SETTINGS,
+    label: "Settings",
+    icon: Settings,
+    category: "Main",
+  },
+  {
     id: PATHS.THEME,
     label: "Theme Settings",
     icon: Palette,
@@ -112,6 +124,12 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     id: PATHS.CASES,
     label: "Case Management",
     icon: Briefcase,
+    category: "Case Work",
+  },
+  {
+    id: PATHS.PLEADINGS,
+    label: "Pleadings",
+    icon: ScrollText,
     category: "Case Work",
   },
   {
@@ -142,6 +160,12 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     id: PATHS.PLEADING_BUILDER,
     label: "Pleading Builder",
     icon: PenTool,
+    category: "Case Work",
+  },
+  {
+    id: PATHS.LITIGATION,
+    label: "Litigation Matters",
+    icon: Gavel,
     category: "Case Work",
   },
   {
@@ -220,7 +244,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   },
   {
     id: PATHS.PRACTICE,
-    label: "Firm Operations",
+    label: "Practice Areas",
     icon: Building2,
     category: "Operations",
   },
@@ -230,7 +254,18 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     icon: DollarSign,
     category: "Operations",
   },
-  { id: PATHS.CRM, label: "Client CRM", icon: Users, category: "Operations" },
+  {
+    id: PATHS.CRM,
+    label: "Client CRM",
+    icon: Users,
+    category: "Operations",
+  },
+  {
+    id: PATHS.REPORTS,
+    label: "Reports",
+    icon: FileSpreadsheet,
+    category: "Operations",
+  },
   {
     id: PATHS.ANALYTICS,
     label: "Analytics",
@@ -318,6 +353,13 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     id: PATHS.COMPLIANCE,
     label: "Compliance",
     icon: ShieldCheck,
+    category: "Admin",
+    requiresAdmin: true,
+  },
+  {
+    id: PATHS.AUDIT,
+    label: "Audit Logs",
+    icon: FileCheck,
     category: "Admin",
     requiresAdmin: true,
   },

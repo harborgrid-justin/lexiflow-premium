@@ -1,14 +1,42 @@
-import { SecureMessenger } from '@/features/operations/messenger/SecureMessenger';
-import type { MetaArgs } from 'react-router';
-import { createListMeta } from '../_shared/meta-utils';
+/**
+ * Messages Route Index
+ *
+ * Enterprise React Architecture - Secure Communications
+ * Exports loader and default component for React Router v7
+ *
+ * @module routes/messages/index
+ */
 
-export function meta(_args: MetaArgs) {
-  return createListMeta({
-    entityType: 'Messages',
-    description: 'Secure internal and external communication',
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
+
+// Export loader from dedicated file
+export { messagesLoader as loader } from './loader';
+
+// Import Page component
+import { MessagesPage } from './MessagesPage';
+
+// ============================================================================
+// Meta Tags
+// ============================================================================
+
+export function meta() {
+  return createMeta({
+    title: 'Messages',
+    description: 'Secure communications and messaging',
   });
 }
 
-export default function MessagesIndexRoute() {
-  return <SecureMessenger />;
+// ============================================================================
+// Component
+// ============================================================================
+
+export default function MessagesRoute() {
+  return <MessagesPage />;
 }
+
+// ============================================================================
+// Error Boundary
+// ============================================================================
+
+export { RouteErrorBoundary as ErrorBoundary };

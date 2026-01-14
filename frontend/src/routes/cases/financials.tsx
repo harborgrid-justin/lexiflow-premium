@@ -2,7 +2,7 @@
  * Case Financials Sub-Route
  */
 
-import { CaseFinancialsCenter } from '@/features/cases/components/financials/CaseFinancialsCenter';
+import { CaseFinancialsCenter } from '@/routes/cases/components/financials/CaseFinancialsCenter';
 import { DataService } from '@/services/data/dataService';
 import { Suspense } from 'react';
 import { useLoaderData } from 'react-router';

@@ -6,13 +6,13 @@
  * @module routes/documents/upload
  */
 
-import { DocumentUploader, type UploadMetadata } from '@/features/documents/ui/components';
-import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/features/theme';
+import { DataService } from '@/services/data/dataService';
 import { useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/upload";
+import { DocumentUploader, type UploadMetadata } from './components';
 
 // ============================================================================
 // Meta Tags

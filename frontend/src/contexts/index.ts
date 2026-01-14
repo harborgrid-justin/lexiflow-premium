@@ -1,19 +1,27 @@
 // context/index.ts
 // ============================================================================
-// Context Providers & Hooks
+// Global Context Providers & Hooks (APP-LEVEL ONLY)
 // ============================================================================
+//
+// Per Enterprise Architecture Standard:
+// - This file contains ONLY app-level/infrastructure contexts
+// - Domain-specific contexts belong in their respective /routes folders
+// - See /routes/cases, /routes/dashboard, /routes/_shared for feature contexts
 //
 // Best Practice Applied (BP4): Export only hooks, not raw contexts
 // This enables invariant checks and future refactors without breaking consumers
 
-// Composed Provider Tree (recommended way to use all providers)
+// ============================================================================
+// ROOT PROVIDER (Composed Infrastructure + App-Level)
+// ============================================================================
+// Composed Provider Tree (recommended way to use all global providers)
 export { AppProviders } from "./AppProviders";
 
-// Case context exports
-export { CaseProvider, useCaseContext, useCaseState, useCaseActions } from "./case/CaseContext";
-export type { CaseContextValue } from "./case/CaseContext";
+// ============================================================================
+// APP-LEVEL CONTEXTS (Global Infrastructure)
+// ============================================================================
 
-// AuthContext exports
+// AuthContext exports (App-level security)
 export {
   AuthProvider,
   useAuth,
@@ -22,16 +30,12 @@ export {
 } from "./AuthContext";
 export type { AuthUser, Organization } from "./AuthContext";
 
-// DataContext exports
-export { DataProvider, useData, useDataState, useDataActions } from "./data/DataContext";
-export type { DashboardItem, DataContextValue } from "./data/DataContext";
-
-// Entitlements exports
+// Entitlements exports (App-level permissions)
 export {
   EntitlementsProvider,
   useEntitlements,
-  useEntitlementsState,
   useEntitlementsActions,
+  useEntitlementsState,
 } from "./entitlements/EntitlementsContext";
 export type {
   Entitlements,
@@ -39,28 +43,19 @@ export type {
   Plan,
 } from "./entitlements/EntitlementsContext";
 
-// Feature flag exports
-export { FlagsProvider, useFlags, useFlagsState, useFlagsActions } from "./flags/FlagsContext";
+// Feature flag exports (App-level configuration)
+export {
+  FlagsProvider,
+  useFlags,
+  useFlagsActions,
+  useFlagsState,
+} from "./flags/FlagsContext";
 export type { Flags, FlagsContextValue } from "./flags/FlagsContext";
 
-// Query Client provider export
-export { QueryClientProvider } from "./query/QueryClientProvider";
-
-// SyncContext exports
-export {
-  SyncContext,
-  SyncProvider,
-  useSync,
-  useSyncActions,
-  useSyncState,
-} from "./sync/SyncContext";
-export type { SyncContextType } from "./sync/SyncContext";
-export type { SyncStatus } from "./sync/SyncContext.types";
-
-// ThemeContext exports (re-exported from centralized location)
+// ThemeContext exports (Infrastructure-level UI)
 export { ThemeProvider, useTheme } from "@/features/theme";
 
-// ToastContext exports
+// ToastContext exports (Infrastructure-level notifications)
 export {
   ToastProvider,
   useToast,
@@ -69,23 +64,66 @@ export {
 } from "./toast/ToastContext";
 export type { ToastType } from "./toast/ToastContext.types";
 
-// WindowContext exports
+// Query Client provider export (Infrastructure-level data fetching)
+export { QueryClientProvider } from "./query/QueryClientProvider";
+
+// ============================================================================
+// DOMAIN-SPECIFIC CONTEXTS (Moved to /routes)
+// ============================================================================
+// These exports are DEPRECATED. Import from route folders instead:
+//
+// - CaseContext → import from "@/routes/cases"
+// - DataContext → import from "@/routes/dashboard"
+// - WindowContext → import from "@/routes/_shared"
+// - SyncContext → import from "@/routes/_shared"
+//
+// Legacy re-exports below will be removed in future release:
+
+// @deprecated Use @/routes/cases instead
+export {
+  CaseProvider,
+  useCaseActions,
+  useCaseContext,
+  useCaseState,
+} from "../routes/cases";
+export type { CaseContextValue } from "../routes/cases";
+
+// @deprecated Use @/routes/dashboard instead
+export {
+  DataProvider,
+  useData,
+  useDataActions,
+  useDataState,
+} from "../routes/dashboard";
+export type { DashboardItem, DataContextValue } from "../routes/dashboard";
+
+// @deprecated Use @/routes/_shared instead
 export {
   WindowProvider,
   useWindow,
   useWindowActions,
   useWindowState,
-} from "./window/WindowContext";
-export type { WindowInstance } from "./window/WindowContext.types";
+} from "../routes/_shared";
+export type { WindowInstance } from "../routes/_shared";
 
-// DataSourceContext exports
+// @deprecated Use @/routes/_shared instead
+export {
+  SyncContext,
+  SyncProvider,
+  useSync,
+  useSyncActions,
+  useSyncState,
+} from "../routes/_shared";
+export type { SyncContextType, SyncStatus } from "../routes/_shared";
+
+// @deprecated Use @/routes/dashboard instead
 export {
   DataSourceProvider,
   useDataSource,
   useDataSourceActions,
   useDataSourceState,
-} from "./data/DataSourceContext";
-export type { DataSourceType } from "./data/DataSourceContext.types";
+} from "../routes/dashboard";
+export type { DataSourceType } from "../routes/dashboard";
 
 // Repository infrastructure exports
 export type {

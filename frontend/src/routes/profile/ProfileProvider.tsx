@@ -2,33 +2,30 @@
  * Profile Domain - State Provider
  */
 
-import React, { createContext, useContext, useMemo } from 'react';
+import type { ExtendedUserProfile } from '@/types/system';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { ProfileLoaderData } from './loader';
 
-type UserProfile = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  department: string;
-  phone: string;
-  avatar?: string;
-  bio?: string;
-};
+export type ProfileTab = 'overview' | 'settings' | 'security' | 'access';
 
 interface ProfileContextValue {
-  profile: UserProfile | null;
+  profile: ExtendedUserProfile | null;
+  activeTab: ProfileTab;
+  setActiveTab: (tab: ProfileTab) => void;
 }
 
 const ProfileContext = createContext<ProfileContextValue | undefined>(undefined);
 
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const loaderData = useLoaderData() as ProfileLoaderData;
+  const [activeTab, setActiveTab] = useState<ProfileTab>('overview');
 
   const contextValue = useMemo<ProfileContextValue>(() => ({
     profile: loaderData.profile,
-  }), [loaderData.profile]);
+    activeTab,
+    setActiveTab,
+  }), [loaderData.profile, activeTab]);
 
   return (
     <ProfileContext.Provider value={contextValue}>

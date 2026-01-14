@@ -109,7 +109,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-import { KnowledgeBase } from '@/features/knowledge/base/KnowledgeBase';
+import { KnowledgeBase } from '@/routes/library/components/KnowledgeBase';
 
 export default function LibraryIndexRoute() {
   return <KnowledgeBase />;

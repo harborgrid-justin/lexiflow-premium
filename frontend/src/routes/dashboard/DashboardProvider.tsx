@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import type { User } from '@/types';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import type { Case, DocketEntry, Task, TimeEntry } from '../../types';
 
 interface DashboardMetrics {
@@ -18,6 +20,9 @@ interface DashboardContextValue {
   timeEntries: TimeEntry[];
   tasks: Task[];
   metrics: DashboardMetrics;
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  currentUser: User | null;
 }
 
 const DashboardContext = createContext<DashboardContextValue | null>(null);
@@ -40,6 +45,9 @@ export function DashboardProvider({
   initialTimeEntries,
   initialTasks
 }: DashboardProviderProps) {
+  const [activeTab, setActiveTab] = useState('overview');
+  const { user } = useAuth(); // Assuming useAuth returns { user }
+
   // Compute dashboard metrics
   const metrics = useMemo<DashboardMetrics>(() => {
     const totalCases = initialCases.length;
@@ -96,8 +104,11 @@ export function DashboardProvider({
     docketEntries: initialDocketEntries,
     timeEntries: initialTimeEntries,
     tasks: initialTasks,
-    metrics
-  }), [initialCases, initialDocketEntries, initialTimeEntries, initialTasks, metrics]);
+    metrics,
+    activeTab,
+    setActiveTab,
+    currentUser: user as User | null
+  }), [initialCases, initialDocketEntries, initialTimeEntries, initialTasks, metrics, activeTab, user]);
 
   return (
     <DashboardContext.Provider value={value}>

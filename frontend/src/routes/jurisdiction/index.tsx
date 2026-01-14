@@ -84,7 +84,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-import { JurisdictionManager } from '@/features/knowledge/jurisdiction/JurisdictionManager';
+import { JurisdictionManager } from '@/routes/jurisdiction/components/JurisdictionManager';
 
 export default function JurisdictionIndexRoute() {
   return <JurisdictionManager />;

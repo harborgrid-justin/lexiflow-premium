@@ -1,4 +1,4 @@
-import { useCaseContext } from '@/contexts/case/CaseContext';
+import { useCaseContext } from '@/routes/cases';
 import { DataService } from '@/services/data/dataService';
 import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { Case } from '@/types/case';

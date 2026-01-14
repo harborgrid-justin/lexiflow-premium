@@ -4,7 +4,7 @@
  * Displays analytics dashboard for a specific case
  */
 
-import { CaseAnalyticsDashboard } from '@/features/cases/components/analytics/CaseAnalyticsDashboard';
+import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/analytics";

@@ -7,8 +7,8 @@
  * @module routes/real-estate/cost-share
  */
 
-import { CostShareList } from '@/features/real-estate/cost-share/CostShareList';
-import type { CostShareLoaderData } from '@/features/real-estate/cost-share/types';
+import { CostShareList } from '@/routes/real-estate/cost-share/CostShareList';
+import type { CostShareLoaderData } from '@/routes/real-estate/cost-share/types';
 import { DataService } from '@/services/data/dataService';
 import type { RealEstateCostShare } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';

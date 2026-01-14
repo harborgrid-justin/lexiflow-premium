@@ -78,7 +78,7 @@ clientLoader.hydrate = true as const;
 // Component
 // ============================================================================
 
-import { FirmOperations } from '@/features/knowledge/practice/FirmOperations';
+import { FirmOperations } from '@/routes/practice/components/FirmOperations';
 
 export default function PracticeIndexRoute() {
   return <FirmOperations />;

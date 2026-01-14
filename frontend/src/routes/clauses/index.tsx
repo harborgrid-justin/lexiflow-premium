@@ -86,7 +86,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-import ClauseLibrary from '@/features/knowledge/clauses/ClauseLibrary';
+import ClauseLibrary from '@/routes/clauses/components/ClauseLibrary';
 
 export default function ClausesIndexRoute() {
   return <ClauseLibrary onSelectClause={() => { }} />;

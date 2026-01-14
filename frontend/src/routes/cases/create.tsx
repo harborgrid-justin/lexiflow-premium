@@ -11,7 +11,7 @@
  */
 
 import { api } from '@/api';
-import NewCase from '@/features/cases/components/create/NewCase';
+import NewCase from '@/routes/cases/components/create/NewCase';
 import { CaseStatus } from '@/types';
 import { requireAuthentication } from '@/utils/route-guards';
 import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';

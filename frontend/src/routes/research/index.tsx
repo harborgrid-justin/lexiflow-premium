@@ -7,7 +7,7 @@
  * @module routes/research/index
  */
 
-import { ResearchTool } from '@/features/knowledge/research/ResearchTool';
+import { ResearchTool } from '@/routes/research/components/ResearchTool';
 import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

@@ -246,7 +246,7 @@ export const CalendarView = lazyWithPreload(
 );
 export const UserProfileManager = lazyWithPreload(
   () =>
-    import("../../features/profile/UserProfileManager") as Promise<{
+    import("../../routes/profile/index") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );

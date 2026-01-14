@@ -4,7 +4,7 @@
  * Displays calendar view for a specific case
  */
 
-import { CaseCalendar } from '@/features/cases/components/calendar/CaseCalendar';
+import { CaseCalendar } from '@/routes/cases/components/calendar/CaseCalendar';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/calendar";

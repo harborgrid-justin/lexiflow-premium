@@ -3,7 +3,7 @@
  * Revenue, realization, collection rates, AR aging, and WIP reports
  */
 
-import { BillingAnalytics } from '@/features/analytics/billing/BillingAnalytics';
+import { BillingAnalytics } from '@/routes/analytics/billing/BillingAnalytics';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import { createMeta } from '../_shared/meta-utils';

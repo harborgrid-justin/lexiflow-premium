@@ -7,7 +7,7 @@
  * @module routes/admin/backup
  */
 
-import { BackupManager, type Backup, type BackupSchedule, type BackupStats } from '@/features/admin/components/BackupManager';
+import { BackupManager, type Backup, type BackupSchedule, type BackupStats } from '@/routes/admin/components/BackupManager';
 import { BackupService } from '@/services/domain/BackupDomain';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

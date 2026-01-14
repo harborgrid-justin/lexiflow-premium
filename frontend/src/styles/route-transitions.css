@@ -1,0 +1,202 @@
+/**
+ * Route Transition Styles
+ *
+ * CSS animations and transitions for route changes.
+ * Provides smooth visual feedback during navigation.
+ */
+
+/* Base transition styles */
+.route-transition {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fade transition */
+.route-transition--fade {
+  transition-property: opacity;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.route-transition--fade.route-transition--entering {
+  opacity: 0;
+}
+
+.route-transition--fade.route-transition--entered {
+  opacity: 1;
+}
+
+.route-transition--fade.route-transition--exiting {
+  opacity: 1;
+}
+
+.route-transition--fade.route-transition--exited {
+  opacity: 0;
+}
+
+/* Slide transition */
+.route-transition--slide {
+  transition-property: transform, opacity;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.route-transition--slide.route-transition--entering {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.route-transition--slide.route-transition--entered {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.route-transition--slide.route-transition--exiting {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.route-transition--slide.route-transition--exited {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* Scale transition */
+.route-transition--scale {
+  transition-property: transform, opacity;
+  transition-duration: 350ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.route-transition--scale.route-transition--entering {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.route-transition--scale.route-transition--entered {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.route-transition--scale.route-transition--exiting {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.route-transition--scale.route-transition--exited {
+  transform: scale(1.05);
+  opacity: 0;
+}
+
+/* Slide-up transition */
+.route-transition--slide-up {
+  transition-property: transform, opacity;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.route-transition--slide-up.route-transition--entering {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.route-transition--slide-up.route-transition--entered {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.route-transition--slide-up.route-transition--exiting {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.route-transition--slide-up.route-transition--exited {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+/* Cross-fade transition with blur */
+.route-transition--blur {
+  transition-property: opacity, filter;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.route-transition--blur.route-transition--entering {
+  opacity: 0;
+  filter: blur(10px);
+}
+
+.route-transition--blur.route-transition--entered {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.route-transition--blur.route-transition--exiting {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.route-transition--blur.route-transition--exited {
+  opacity: 0;
+  filter: blur(10px);
+}
+
+/* Loading spinner overlay during transition */
+.route-transition-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+  animation: loading-bar 1.5s ease-in-out infinite;
+  z-index: 9999;
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Smooth scroll behavior for route changes */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent layout shift during transitions */
+.route-container {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Page transition wrapper */
+.page-transition-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Accessibility - Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .route-transition,
+  .route-transition--fade,
+  .route-transition--slide,
+  .route-transition--scale,
+  .route-transition--slide-up,
+  .route-transition--blur {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode adjustments */
+.dark .route-transition-loading {
+  background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+}

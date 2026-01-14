@@ -7,8 +7,8 @@
  * @module routes/real-estate/inventory
  */
 
-import { InventoryList } from '@/features/real-estate/inventory/InventoryList';
-import type { InventoryLoaderData } from '@/features/real-estate/inventory/types';
+import { InventoryList } from '@/routes/real-estate/inventory/InventoryList';
+import type { InventoryLoaderData } from '@/routes/real-estate/inventory/types';
 import { DataService } from '@/services/data/dataService';
 import type { PropertyStatus, RealEstateProperty } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';

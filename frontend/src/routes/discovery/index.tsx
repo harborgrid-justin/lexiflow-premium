@@ -7,12 +7,12 @@
  * @module routes/discovery/index
  */
 
-import { DiscoveryPlatform } from '@/features/litigation/discovery/DiscoveryPlatform';
 import { DataService } from '@/services/data/dataService';
 import { DiscoveryType } from '@/types/enums';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
+import { DiscoveryPlatform } from './components/platform/DiscoveryPlatform';
 
 // ============================================================================
 // Meta Tags

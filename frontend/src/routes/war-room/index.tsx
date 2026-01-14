@@ -7,11 +7,11 @@
  * @module routes/war-room/index
  */
 
-import { WarRoom } from '@/features/litigation/war-room/WarRoom';
 import { DataService } from '@/services/data/dataService';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { WarRoom } from './components/WarRoom';
 
 // ============================================================================
 // Types

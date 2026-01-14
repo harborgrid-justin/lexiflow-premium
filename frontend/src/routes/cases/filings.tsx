@@ -10,8 +10,8 @@
  * @module routes/cases/filings
  */
 
-import { CaseHeader } from '@/features/cases/ui/components/CaseHeader';
-import { FilingsTable, type Filing } from '@/features/cases/ui/components/FilingsTable';
+import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
+import { FilingsTable, type Filing } from '@/routes/cases/ui/components/FilingsTable';
 import { DataService } from '@/services/data/dataService';
 import type { DocketEntry } from '@/types';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';

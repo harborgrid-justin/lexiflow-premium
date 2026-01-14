@@ -7,7 +7,7 @@
  * @module routes/admin/settings
  */
 
-import { SystemSettings, type SystemFeatures, type SystemSettingsData } from '@/features/admin/components/SystemSettings';
+import { SystemSettings, type SystemFeatures, type SystemSettingsData } from '@/routes/admin/components/SystemSettings';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

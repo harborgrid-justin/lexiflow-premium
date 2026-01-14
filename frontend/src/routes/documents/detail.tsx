@@ -6,18 +6,18 @@
  * @module routes/documents/detail
  */
 
-import {
-  DocumentAnnotations,
-  DocumentViewer,
-  MetadataPanel,
-  VersionHistory
-} from '@/features/documents/ui/components';
 import { DataService } from '@/services/data/dataService';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
+import {
+  DocumentAnnotations,
+  DocumentViewer,
+  MetadataPanel,
+  VersionHistory
+} from './components';
 
 // ============================================================================
 // Meta Tags

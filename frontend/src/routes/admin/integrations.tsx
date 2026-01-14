@@ -10,8 +10,8 @@
  * @module routes/admin/integrations
  */
 
-import { IntegrationsManager } from '@/features/admin/integrations/IntegrationsManager';
-import type { Integration } from '@/features/admin/integrations/types';
+import { IntegrationsManager } from '@/routes/admin/integrations/IntegrationsManager';
+import type { Integration } from '@/routes/admin/integrations/types';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

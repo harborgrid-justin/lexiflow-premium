@@ -147,7 +147,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-import EvidenceVault from '@/features/litigation/evidence/EvidenceVault';
+import EvidenceVault from './components/EvidenceVault';
 
 export default function EvidenceIndexRoute() {
   return <EvidenceVault />;

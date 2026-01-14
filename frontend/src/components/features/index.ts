@@ -13,7 +13,7 @@
  * @example
  * ```tsx
  * import { CaseList } from '@/features/cases/ui';
- * import { DocumentViewer } from '@/features/documents/ui';
+ * import { DocumentViewer } from '@/routes/documents/components';
  * import { DiscoveryDashboard } from '@/features/discovery/ui';
  * ```
  */
@@ -35,7 +35,6 @@ export * from "./litigation";
 
 // Firm operations & administration
 export * from "./operations";
-
 
 // Legal research & knowledge management
 export * from "./knowledge";

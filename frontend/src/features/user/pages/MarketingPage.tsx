@@ -4,7 +4,7 @@
  * @description Marketing and business development page - client acquisition and tracking
  */
 
-import { MarketingDashboard } from '@/features/knowledge/practice/MarketingDashboard';
+import { MarketingDashboard } from '@/routes/practice/components/MarketingDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 /**

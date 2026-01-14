@@ -7,8 +7,8 @@
  * @module routes/real-estate/outgrants
  */
 
-import { OutgrantsList } from '@/features/real-estate/outgrants/OutgrantsList';
-import type { OutgrantsLoaderData } from '@/features/real-estate/outgrants/types';
+import { OutgrantsList } from '@/routes/real-estate/outgrants/OutgrantsList';
+import type { OutgrantsLoaderData } from '@/routes/real-estate/outgrants/types';
 import { DataService } from '@/services/data/dataService';
 import type { RealEstateOutgrant } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';

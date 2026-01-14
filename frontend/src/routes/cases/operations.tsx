@@ -2,7 +2,7 @@
  * Case Operations Sub-Route
  */
 
-import { CaseOperationsCenter } from '@/features/cases/components/operations/CaseOperationsCenter';
+import { CaseOperationsCenter } from '@/routes/cases/components/operations/CaseOperationsCenter';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/operations";

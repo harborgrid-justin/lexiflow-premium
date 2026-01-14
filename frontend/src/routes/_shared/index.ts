@@ -12,34 +12,52 @@
  */
 
 export {
-  RouteErrorBoundary,
-  NotFoundError,
   ForbiddenError,
   GenericError,
-} from './RouteErrorBoundary';
+  NotFoundError,
+  RouteErrorBoundary,
+} from "./RouteErrorBoundary";
 
 export {
+  CardSkeleton,
+  PageHeaderSkeleton,
   RouteLoading,
   RouteLoadingSkeleton,
-  CardSkeleton,
   TableSkeleton,
-  PageHeaderSkeleton,
-} from './RouteLoading';
+} from "./RouteLoading";
+
+export { createCaseMeta, createDetailMeta, createMeta } from "./meta-utils";
 
 export {
-  createMeta,
-  createCaseMeta,
-  createDetailMeta,
-} from './meta-utils';
-
-export {
-  throwNotFound,
-  throwForbidden,
-  throwUnauthorized,
   createJsonResponse,
-} from './loader-utils';
+  throwForbidden,
+  throwNotFound,
+  throwUnauthorized,
+} from "./loader-utils";
 
-export type {
-  RouteErrorBoundaryProps,
-  RouteLoadingProps,
-} from './types';
+export type { RouteErrorBoundaryProps, RouteLoadingProps } from "./types";
+
+// ============================================================================
+// Shared Route Context Exports
+// ============================================================================
+// Cross-cutting contexts used across multiple routes
+
+// WindowContext exports
+export {
+  WindowProvider,
+  useWindow,
+  useWindowActions,
+  useWindowState,
+} from "./window/WindowContext";
+export type { WindowInstance } from "./window/WindowContext.types";
+
+// SyncContext exports
+export {
+  SyncContext,
+  SyncProvider,
+  useSync,
+  useSyncActions,
+  useSyncState,
+} from "./sync/SyncContext";
+export type { SyncContextType } from "./sync/SyncContext";
+export type { SyncStatus } from "./sync/SyncContext.types";

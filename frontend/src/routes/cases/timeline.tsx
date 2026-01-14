@@ -10,8 +10,8 @@
  * @module routes/cases/timeline
  */
 
-import { CaseHeader } from '@/features/cases/ui/components/CaseHeader';
-import { CaseTimeline, type TimelineEvent } from '@/features/cases/ui/components/CaseTimeline';
+import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
+import { CaseTimeline, type TimelineEvent } from '@/routes/cases/ui/components/CaseTimeline';
 import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';

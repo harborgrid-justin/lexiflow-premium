@@ -14,8 +14,8 @@
 
 import { Correspondence } from '@/api/communications/correspondence-api';
 import type { DraftingTemplate } from '@/api/domains/drafting';
-import { ComposeCorrespondence } from '@/features/correspondence/compose/ComposeCorrespondence';
-import type { ComposeActionData, ComposeLoaderData, Recipient } from '@/features/correspondence/compose/types';
+import { ComposeCorrespondence } from '@/routes/correspondence/compose/ComposeCorrespondence';
+import type { ComposeActionData, ComposeLoaderData, Recipient } from '@/routes/correspondence/compose/types';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

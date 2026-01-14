@@ -2,8 +2,8 @@
 import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { DataProvider } from "@/routes/dashboard";
 import { AuthProvider, useAuth } from "../contexts/auth/AuthContext";
-import { DataProvider } from "../contexts/data/DataContext";
 import { EntitlementsProvider, useEntitlements } from "../contexts/entitlements/EntitlementsContext";
 import { FlagsProvider, useFlags } from "../contexts/flags/FlagsContext";
 

@@ -1,23 +1,42 @@
 /**
- * Settings Page - Redirects to Profile
+ * Settings Route Index
  *
- * This page provides a redirect from /settings to /profile
- * to maintain backwards compatibility while avoiding duplicate route IDs.
+ * Enterprise React Architecture - System Settings
+ * Exports loader and default component for React Router v7
+ *
+ * @module routes/settings/index
  */
 
-import { redirect } from 'react-router';
-import type { Route } from './+types/index';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
 
-export async function loader(_args: Route.LoaderArgs) {
-  // Redirect /settings to /profile
-  return redirect('/profile');
+// Export loader from dedicated file
+export { settingsLoader as loader } from './loader';
+
+// Import Page component
+import { SettingsPage } from './SettingsPage';
+
+// ============================================================================
+// Meta Tags
+// ============================================================================
+
+export function meta() {
+  return createMeta({
+    title: 'Settings',
+    description: 'System configuration and preferences',
+  });
 }
 
-export default function SettingsRedirect() {
-  // This component should never render due to the redirect
-  return null;
+// ============================================================================
+// Component
+// ============================================================================
+
+export default function SettingsRoute() {
+  return <SettingsPage />;
 }
 
-export const meta: Route.MetaFunction = () => [
-  { title: 'Settings - LexiFlow' },
-];
+// ============================================================================
+// Error Boundary
+// ============================================================================
+
+export { RouteErrorBoundary as ErrorBoundary };

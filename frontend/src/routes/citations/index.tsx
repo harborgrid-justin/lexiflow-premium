@@ -7,7 +7,7 @@
  * @module routes/citations/index
  */
 
-import { CitationManager } from '@/features/knowledge/citation/CitationManager';
+import { CitationManager } from '@/routes/citations/components/CitationManager';
 import { DataService } from '@/services/data/dataService';
 import type { ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

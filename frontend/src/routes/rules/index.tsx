@@ -7,7 +7,7 @@
  * @module routes/rules/index
  */
 
-import { RulesPlatform } from '@/features/knowledge/rules/RulesPlatform';
+import { RulesPlatform } from '@/routes/rules/components/RulesPlatform';
 import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

@@ -3,57 +3,79 @@
  * @module api/admin/documents/annotations
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Annotation } from '@/features/documents/ui/components';
-import { validateId, validateObject } from './validation';
+import type { Annotation } from "@/routes/documents/types/DocumentAnnotationsProps";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { validateId, validateObject } from "./validation";
 
 /** Get annotations for a document */
-export async function getAnnotations(documentId: string): Promise<Annotation[]> {
-  validateId(documentId, 'getAnnotations');
+export async function getAnnotations(
+  documentId: string
+): Promise<Annotation[]> {
+  validateId(documentId, "getAnnotations");
   try {
-    return await apiClient.get<Annotation[]>(`/documents/${documentId}/annotations`);
+    return await apiClient.get<Annotation[]>(
+      `/documents/${documentId}/annotations`
+    );
   } catch (error) {
-    console.error('[DocumentsApiService.getAnnotations] Error:', error);
+    console.error("[DocumentsApiService.getAnnotations] Error:", error);
     throw new Error(`Failed to fetch annotations for document: ${documentId}`);
   }
 }
 
 /** Add annotation to a document */
-export async function addAnnotation(documentId: string, annotation: Omit<Annotation, 'id' | 'createdAt'>): Promise<Annotation> {
-  validateId(documentId, 'addAnnotation');
-  validateObject(annotation, 'annotation', 'addAnnotation');
+export async function addAnnotation(
+  documentId: string,
+  annotation: Omit<Annotation, "id" | "createdAt">
+): Promise<Annotation> {
+  validateId(documentId, "addAnnotation");
+  validateObject(annotation, "annotation", "addAnnotation");
 
   try {
-    return await apiClient.post<Annotation>(`/documents/${documentId}/annotations`, annotation);
+    return await apiClient.post<Annotation>(
+      `/documents/${documentId}/annotations`,
+      annotation
+    );
   } catch (error) {
-    console.error('[DocumentsApiService.addAnnotation] Error:', error);
+    console.error("[DocumentsApiService.addAnnotation] Error:", error);
     throw new Error(`Failed to add annotation to document: ${documentId}`);
   }
 }
 
 /** Delete annotation */
-export async function deleteAnnotation(documentId: string, annotationId: string): Promise<void> {
-  validateId(documentId, 'deleteAnnotation');
-  validateId(annotationId, 'deleteAnnotation');
+export async function deleteAnnotation(
+  documentId: string,
+  annotationId: string
+): Promise<void> {
+  validateId(documentId, "deleteAnnotation");
+  validateId(annotationId, "deleteAnnotation");
 
   try {
-    await apiClient.delete(`/documents/${documentId}/annotations/${annotationId}`);
+    await apiClient.delete(
+      `/documents/${documentId}/annotations/${annotationId}`
+    );
   } catch (error) {
-    console.error('[DocumentsApiService.deleteAnnotation] Error:', error);
+    console.error("[DocumentsApiService.deleteAnnotation] Error:", error);
     throw new Error(`Failed to delete annotation: ${annotationId}`);
   }
 }
 
 /** Update annotation */
-export async function updateAnnotation(documentId: string, annotationId: string, updates: Partial<Annotation>): Promise<Annotation> {
-  validateId(documentId, 'updateAnnotation');
-  validateId(annotationId, 'updateAnnotation');
-  validateObject(updates, 'updates', 'updateAnnotation');
+export async function updateAnnotation(
+  documentId: string,
+  annotationId: string,
+  updates: Partial<Annotation>
+): Promise<Annotation> {
+  validateId(documentId, "updateAnnotation");
+  validateId(annotationId, "updateAnnotation");
+  validateObject(updates, "updates", "updateAnnotation");
 
   try {
-    return await apiClient.put<Annotation>(`/documents/${documentId}/annotations/${annotationId}`, updates);
+    return await apiClient.put<Annotation>(
+      `/documents/${documentId}/annotations/${annotationId}`,
+      updates
+    );
   } catch (error) {
-    console.error('[DocumentsApiService.updateAnnotation] Error:', error);
+    console.error("[DocumentsApiService.updateAnnotation] Error:", error);
     throw new Error(`Failed to update annotation: ${annotationId}`);
   }
 }

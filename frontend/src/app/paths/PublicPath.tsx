@@ -1,8 +1,8 @@
 // src/app/paths/PublicPath.tsx
+import { useData } from "@/routes/dashboard";
 import React, { useState } from "react";
 import { OptimisticInput } from "../../components/performance/OptimisticInput";
 import { useAuth } from "../../contexts/auth/AuthContext";
-import { useData } from "../../contexts/data/DataContext";
 
 export function PublicPath() {
   const { login, isLoading: authLoading, error: authError } = useAuth();

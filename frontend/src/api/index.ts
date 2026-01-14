@@ -11,6 +11,15 @@
  * - Type-safe: Full TypeScript definitions with DTOs
  * - Backend-first: Defaults to PostgreSQL + NestJS backend (IndexedDB deprecated)
  *
+ * ENTERPRISE FRONTEND API ARCHITECTURE:
+ * - lib/frontend-api/ - NEW enterprise-grade API layer following architectural standard
+ *   - Result<T> return types (no exceptions)
+ *   - Domain errors (not HTTP codes)
+ *   - Input validation at boundary
+ *   - Data normalization layer
+ *   - Pure functions (no React/UI dependencies)
+ *   - Stable contracts between UI and backend
+ *
  * Folder Structure:
  * - auth/ - Authentication, users, permissions, security
  * - litigation/ - Cases, docket, motions, pleadings, parties
@@ -27,7 +36,13 @@
  * - hr/ - Staff management, HR operations
  * - types/ - Shared type definitions and interfaces
  *
- * Usage - Domain-based imports (RECOMMENDED):
+ * Usage - Frontend API (ENTERPRISE STANDARD):
+ *   import { casesApi } from '@/lib/frontend-api/cases';
+ *   const result = await casesApi.getAll();
+ *   if (!result.ok) throw result.error.toResponse();
+ *   return result.data; // Normalized, typed data
+ *
+ * Usage - Domain-based imports (LEGACY):
  *   import { api } from '@/api';
  *   const cases = await api.cases.getAll();
  *
@@ -35,6 +50,119 @@
  *   import * as authApi from '@/api/auth';
  *   import * as litigationApi from '@/api/litigation';
  */
+
+// ==================== ENTERPRISE FRONTEND API ====================
+// Export new enterprise-grade frontend API infrastructure
+// See: lib/frontend-api/README.md for architecture documentation
+
+export {
+  AuthError,
+  BusinessLogicError,
+  camelToSnake,
+  CancelledError,
+  client,
+  combineResults,
+  ConflictError,
+  createClient,
+  // Domain errors
+  DomainError,
+  ErrorType as ErrorTypes,
+  failure,
+  ForbiddenError,
+  isFailure,
+  isSuccess,
+  mapResult,
+  NetworkError,
+  normalizeArray,
+  normalizeBoolean,
+  normalizeCurrency,
+  // Normalization
+  normalizeDate,
+  normalizeEnum,
+  normalizeId,
+  normalizeNumber,
+  normalizePaginatedResponse,
+  normalizeString,
+  NotFoundError,
+  RateLimitError,
+  schemas,
+  ServerError,
+  snakeToCamel,
+  success,
+  TimeoutError,
+  transformKeys,
+  UnknownError,
+  unwrap,
+  validate,
+  ValidationError,
+  validators,
+  // HTTP client
+  type ClientConfig,
+  type ErrorType,
+  type Failure,
+  type FieldError,
+  type FieldValidator,
+  type IDomainError,
+  type PaginatedResult,
+  type RequestOptions,
+  // Core type system
+  type Result,
+  type Schema,
+  type Success,
+  // Validation
+  type Validator,
+} from "@/lib/frontend-api";
+
+// Export domain-specific frontend APIs
+export { adminApi as frontendAdminApi } from "@/lib/frontend-api/admin";
+export { analyticsApi as frontendAnalyticsApi } from "@/lib/frontend-api/analytics";
+export { authApi as frontendAuthApi } from "@/lib/frontend-api/auth";
+export { billingApi as frontendBillingApi } from "@/lib/frontend-api/billing";
+export { casesApi } from "@/lib/frontend-api/cases";
+export {
+  communicationsApi as frontendCommunicationsApi,
+  communicationsApi as frontendCommunicationsApi,
+} from "@/lib/frontend-api/communications";
+export {
+  complianceApi as frontendComplianceApi,
+  complianceApi as frontendComplianceApi,
+} from "@/lib/frontend-api/compliance";
+export {
+  discoveryApi as frontendDiscoveryApi,
+  discoveryApi as frontendDiscoveryApi,
+} from "@/lib/frontend-api/discovery";
+export {
+  docketApi,
+  docketApi as frontendDocketApi,
+} from "@/lib/frontend-api/docket";
+export {
+  documentsApi,
+  documentsApi as frontendDocumentsApi,
+} from "@/lib/frontend-api/documents";
+export { hrApi as frontendHrApi } from "@/lib/frontend-api/hr";
+export { integrationsApi as frontendIntegrationsApi } from "@/lib/frontend-api/integrations";
+export { intelligenceApi as frontendIntelligenceApi } from "@/lib/frontend-api/intelligence";
+export {
+  trialApi as frontendTrialApi,
+  trialApi as frontendTrialApi,
+} from "@/lib/frontend-api/trial";
+export {
+  workflowApi as frontendWorkflowApi,
+  workflowApi as frontendWorkflowApi,
+} from "@/lib/frontend-api/workflow";
+
+// Export types from frontend APIs
+export type {
+  AuthResponse,
+  CaseFilters,
+  CaseStats,
+  CreateCaseInput,
+  DashboardMetrics,
+  LoginInput,
+  UpdateCaseInput,
+} from "@/lib/frontend-api";
+
+// ==================== LEGACY API SERVICES ====================
 
 // Export API configuration utilities
 export {
@@ -45,7 +173,7 @@ export {
   isBackendApiEnabled,
   isIndexedDBMode,
   isProduction,
-  logApiConfig
+  logApiConfig,
 } from "@/config/network/api.config";
 
 // ==================== DOMAIN EXPORTS ====================
@@ -64,7 +192,9 @@ export { workflowApi } from "./domains/workflow.api";
 // Note: domains/data-platform.api exports dataPlatformApi (conflicts with data-platform/index.ts)
 // export { dataPlatformApi } from './domains/data-platform.api';
 export {
-  draftingApi, DraftingApiService, type ClauseReference,
+  draftingApi,
+  DraftingApiService,
+  type ClauseReference,
   type CreateTemplateDto,
   type DraftingStats,
   type DraftingTemplate,
@@ -72,13 +202,13 @@ export {
   type GenerateDocumentDto,
   type TemplateVariable,
   type UpdateGeneratedDocumentDto,
-  type UpdateTemplateDto
+  type UpdateTemplateDto,
 } from "./domains/drafting.api";
 export { hrApi } from "./domains/hr.api";
 export {
   LegalEntitiesApiService,
   type EntityRelationship,
-  type LegalEntityApi
+  type LegalEntityApi,
 } from "./domains/legal-entities.api";
 
 // ==================== ORGANIZED FOLDER EXPORTS ====================
@@ -103,7 +233,7 @@ export {
   MetricsApiService,
   OCRApiService,
   ProcessingJobsApiService,
-  ServiceJobsApiService
+  ServiceJobsApiService,
 } from "./admin";
 // Re-export all admin types
 export type {
@@ -112,7 +242,7 @@ export type {
   OCRRequest,
   ProcessingJob,
   ServiceJob,
-  SystemMetrics
+  SystemMetrics,
 } from "./admin";
 
 // Export data-platform (commented to avoid duplicates - services already exported from admin)

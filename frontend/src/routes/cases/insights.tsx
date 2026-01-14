@@ -2,7 +2,7 @@
  * Case Insights Sub-Route
  */
 
-import { CaseInsightsDashboard } from '@/features/cases/components/insights/CaseInsightsDashboard';
+import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
 import { DataService } from '@/services/data/dataService';
 import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/insights";

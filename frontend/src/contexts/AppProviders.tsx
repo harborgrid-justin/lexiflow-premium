@@ -1,30 +1,36 @@
 /**
- * AppProviders - Composed Provider Tree
+ * AppProviders - Composed Provider Tree (Enterprise Architecture v7)
  *
- * This file composes all application providers in the correct dependency order
- * to prevent circular dependencies. Providers are layered from most primitive
- * (Theme) to most dependent (Window, Sync).
+ * ARCHITECTURE LAYERING (Per Enterprise Standard):
+ * ========================================
+ * OUTER → INFRASTRUCTURE (Theme, Toast, QueryClient)
+ * MID   → APPLICATION     (Auth, Entitlements, Flags)
+ * INNER → DOMAIN          (Loaded per route)
+ *
+ * This file contains ONLY global/app-level providers.
+ * Domain-specific providers (Case, Data, Window, Sync) are loaded
+ * within their respective route components.
  *
  * Dependency Graph:
- * - ThemeProvider (no dependencies)
- * - ToastProvider (no dependencies)
- * - DataSourceProvider (no dependencies)
- * - WindowProvider (depends on Theme)
- * - SyncProvider (depends on Toast)
+ * - ThemeProvider (infrastructure - no dependencies)
+ * - ToastProvider (infrastructure - no dependencies)
+ * - AuthProvider (app-level - no dependencies)
+ * - EntitlementsProvider (app-level - depends on Auth)
+ * - FlagsProvider (app-level - no dependencies)
  *
  * Best Practices Applied:
  * - BP1: Provider composition avoids circular imports
  * - BP3: Dependency injection pattern for cross-provider communication
  * - BP13: Document provider dependencies
+ * - Enterprise Standard: Domain contexts in routes, not here
  */
 
 import { ThemeProvider } from '@/features/theme';
-import { CaseProvider } from './case/CaseContext';
-import { DataSourceProvider } from './data/DataSourceContext';
-import { SyncProvider } from './sync/SyncContext';
-import { ToastProvider as ToastProviderBase, useToast } from './toast/ToastContext';
-import { WindowProvider } from './window/WindowContext';
 import React from "react";
+import { AuthProvider } from './auth/AuthProvider';
+import { EntitlementsProvider } from './entitlements/EntitlementsContext';
+import { FlagsProvider } from './flags/FlagsContext';
+import { ToastProvider as ToastProviderBase } from './toast/ToastContext';
 
 // Wrapper to ensure ToastProvider returns ReactNode
 const ToastProvider = ToastProviderBase as unknown as React.FC<{
@@ -38,70 +44,38 @@ interface AppProvidersProps {
 }
 
 /**
- * Internal wrapper that connects WindowProvider to ThemeContext
- * This avoids circular dependency by keeping the connection isolated
- */
-function WindowProviderWithTheme({ children }: { children: React.ReactNode }) {
-  // Map the full theme to the subset required by WindowProvider
-  // Using semantic Tailwind classes that map to CSS variables
-  const windowTheme = {
-    surface: {
-      default: 'bg-surface',
-      muted: 'bg-surface',
-    },
-    border: {
-      default: 'border-border',
-    },
-    accent: {
-      primary: 'bg-primary',
-    },
-    text: {
-      secondary: 'text-text-muted',
-      tertiary: 'text-text-muted',
-    },
-    interactive: {
-      hover: 'hover:bg-surface',
-    },
-  };
-  return <WindowProvider theme={windowTheme}>{children}</WindowProvider>;
-}
-
-/**
- * Internal wrapper that connects SyncProvider to ToastContext
- * This avoids circular dependency by keeping the connection isolated
- */
-function SyncProviderWithToast({ children }: { children: React.ReactNode }) {
-  const { success, error } = useToast();
-  return (
-    <SyncProvider onSyncSuccess={success} onSyncError={error}>
-      {children}
-    </SyncProvider>
-  );
-}
-
-/**
- * Composed provider tree with proper dependency injection
+ * Composed provider tree following Enterprise Architecture Standard
  *
- * Order matters:
- * 1. ThemeProvider - base layer (no deps)
- * 2. ToastProvider - base layer (no deps)
- * 3. DataSourceProvider - base layer (no deps)
- * 4. WindowProviderWithTheme - needs Theme
- * 5. SyncProviderWithToast - needs Toast
+ * LAYERING (OUTER → INNER):
+ * 1. ThemeProvider       - Infrastructure (CSS variables, dark/light mode)
+ * 2. ToastProvider       - Infrastructure (global notifications)
+ * 3. AuthProvider        - App-level (authentication state)
+ * 4. EntitlementsProvider - App-level (permissions, plans)
+ * 5. FlagsProvider       - App-level (feature flags, config)
+ *
+ * IMPORTANT: Domain contexts (CaseProvider, DataProvider, WindowProvider, SyncProvider)
+ * are NOT here. They are loaded within their respective route components:
+ * - CaseProvider → /routes/cases/CasePage.tsx
+ * - DataProvider → /routes/dashboard/DashboardPage.tsx
+ * - WindowProvider → /routes/_shared (loaded per route as needed)
+ * - SyncProvider → /routes/_shared (loaded per route as needed)
+ *
+ * This follows the Enterprise Standard:
+ *   ROUTER = STATE MACHINE
+ *   CONTEXT = DOMAIN LAYER (per route)
+ *   GLOBAL CONTEXTS = APP-LEVEL ONLY
  */
 export function AppProviders({ children }: AppProvidersProps) {
   return (
     <ThemeProvider>
       <ToastProvider maxVisible={5} maxQueue={50}>
-        <DataSourceProvider>
-          <CaseProvider>
-            <SyncProviderWithToast>
-              <WindowProviderWithTheme>
-                {children}
-              </WindowProviderWithTheme>
-            </SyncProviderWithToast>
-          </CaseProvider>
-        </DataSourceProvider>
+        <AuthProvider>
+          <EntitlementsProvider>
+            <FlagsProvider>
+              {children}
+            </FlagsProvider>
+          </EntitlementsProvider>
+        </AuthProvider>
       </ToastProvider>
     </ThemeProvider>
   );

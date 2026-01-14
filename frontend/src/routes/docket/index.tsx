@@ -10,13 +10,13 @@
  * @status PRODUCTION READY - No mock data, modal-based CRUD
  */
 
-import { DocketList } from '@/features/docket/DocketList';
-import type { DocketEntry } from '@/features/docket/types';
 import { DataService } from '@/services/data/dataService';
 import type { CaseId, PaginatedResponse } from '@/types';
 import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { DocketList } from './components/DocketList';
+import type { DocketEntry } from './types/types';
 
 // ============================================================================
 // Meta Tags

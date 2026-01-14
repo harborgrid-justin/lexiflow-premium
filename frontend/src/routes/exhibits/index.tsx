@@ -73,7 +73,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-import { ExhibitManager } from '@/features/litigation/exhibits/ExhibitManager';
+import { ExhibitManager } from './components/ExhibitManager';
 
 export default function ExhibitsIndexRoute() {
   return <ExhibitManager />;

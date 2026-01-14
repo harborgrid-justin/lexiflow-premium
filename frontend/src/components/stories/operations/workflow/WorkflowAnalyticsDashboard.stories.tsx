@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WorkflowAnalyticsDashboard } from '@/routes/cases/components/workflow/WorkflowAnalyticsDashboard';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * WorkflowAnalyticsDashboard provides workflow performance analytics including
  * bottleneck analysis, completion rates, and process optimization insights.
- * 
+ *
  * ## Features
  * - Workflow performance metrics
  * - Bottleneck analysis

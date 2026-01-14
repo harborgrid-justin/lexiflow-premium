@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EvidenceDashboard } from '@/routes/evidence/components/EvidenceDashboard';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * EvidenceDashboard provides comprehensive evidence management including document
  * tracking, exhibit management, chain of custody, and trial preparation.
- * 
+ *
  * ## Features
  * - Evidence catalog
  * - Exhibit management

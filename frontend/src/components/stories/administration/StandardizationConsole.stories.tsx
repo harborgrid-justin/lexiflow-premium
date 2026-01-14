@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StandardizationConsole } from '@/routes/admin/components/data/quality/StandardizationConsole';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Pages/Standardization Console',

@@ -1,13 +1,13 @@
 /**
  * Document Table Component Story
- * 
+ *
  * Sortable table view for document listing with selection and actions.
  */
 
+import { DocumentTable } from '@/routes/documents/components/table/DocumentTable';
+import { CaseId, DocumentId, LegalDocument, UserId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentTable } from '@/routes/documents/components/table/DocumentTable';
-import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
 
 const meta: Meta<typeof DocumentTable> = {
   title: 'Documents/Document Table',

@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RateTableManagement } from '@/routes/billing/components/rate-tables/RateTableManagement';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * RateTableManagement provides billing rate administration including attorney
  * rates, task-based billing, rate schedules, and client-specific pricing.
- * 
+ *
  * ## Features
  * - Rate table management
  * - Attorney rates

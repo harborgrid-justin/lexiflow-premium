@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WorkflowTemplateBuilder } from '@/routes/cases/components/workflow/WorkflowTemplateBuilder';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * WorkflowTemplateBuilder provides visual workflow design tools for creating
  * reusable matter management workflows with automated task assignment and routing.
- * 
+ *
  * ## Features
  * - Visual workflow designer
  * - Drag-and-drop task creation

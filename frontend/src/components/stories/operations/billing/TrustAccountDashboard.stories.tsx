@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TrustAccountDashboard } from '@/routes/billing/components/trust/TrustAccountDashboard';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * TrustAccountDashboard provides comprehensive trust accounting management with
  * IOLTA compliance, reconciliation, and audit trail for client funds.
- * 
+ *
  * ## Features
  * - Trust account ledger
  * - IOLTA compliance

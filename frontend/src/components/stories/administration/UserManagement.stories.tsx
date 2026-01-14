@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UserManagement } from '@/routes/admin/components/users/UserManagement';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * UserManagement provides comprehensive user administration including role management,
  * permissions, authentication, and access control for the legal platform.
- * 
+ *
  * ## Features
  * - User account management
  * - Role-based access control

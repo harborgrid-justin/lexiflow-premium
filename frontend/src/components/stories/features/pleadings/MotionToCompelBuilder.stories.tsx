@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MotionToCompelBuilder } from '@/routes/discovery/components/platform/MotionToCompelBuilder';
 import { CaseId } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Pages/Motion to Compel Builder',

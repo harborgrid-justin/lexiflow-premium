@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WebhookManagement } from '@/routes/admin/components/webhooks/WebhookManagement';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Pages/Webhook Management',
   component: WebhookManagement,
-  parameters: { 
+  parameters: {
     layout: 'fullscreen',
     backgrounds: {
       default: 'light',
@@ -36,15 +36,15 @@ export const DarkMode: Story = {
   },
 };
 
-export const Mobile: Story = { 
-  parameters: { 
+export const Mobile: Story = {
+  parameters: {
     viewport: { defaultViewport: 'mobile1' },
     backgrounds: { default: 'light' },
   },
 };
 
-export const Tablet: Story = { 
-  parameters: { 
+export const Tablet: Story = {
+  parameters: {
     viewport: { defaultViewport: 'tablet' },
     backgrounds: { default: 'neutral' },
   },

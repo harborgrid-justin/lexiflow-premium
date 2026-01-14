@@ -1,12 +1,12 @@
 /**
  * Document Filters Component Story
- * 
+ *
  * Sidebar filters for document browsing with smart views and folder navigation.
  */
 
+import { DocumentFilters } from '@/routes/documents/components/DocumentFilters';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentFilters } from '@/routes/documents/components/DocumentFilters';
 
 const meta: Meta<typeof DocumentFilters> = {
   title: 'Documents/Document Filters',

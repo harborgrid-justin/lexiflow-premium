@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GovernanceDashboard } from '@/routes/admin/components/data/governance/GovernanceDashboard';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * GovernanceDashboard provides comprehensive data governance oversight with
  * metrics, compliance status, and policy enforcement monitoring.
- * 
+ *
  * ## Features
  * - Governance metrics
  * - Compliance status

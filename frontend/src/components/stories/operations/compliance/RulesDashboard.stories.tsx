@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RulesDashboard } from '@/routes/rules/components/RulesDashboard';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * RulesDashboard provides centralized court rules management with jurisdiction
  * tracking, rule updates, and compliance monitoring.
- * 
+ *
  * ## Features
  * - Rules library
  * - Jurisdiction tracking

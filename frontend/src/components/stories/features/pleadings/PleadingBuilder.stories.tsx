@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PleadingBuilder } from '@/routes/pleadings/components/PleadingBuilder';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * PleadingBuilder is the comprehensive pleading document creation and management
  * page with AI drafting, template management, and court filing integration.
- * 
+ *
  * ## Features
  * - AI-powered drafting assistance
  * - Template library management

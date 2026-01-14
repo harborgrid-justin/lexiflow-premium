@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { KnowledgeCenter } from '@/routes/practice/components/KnowledgeCenter';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * KnowledgeCenter is the firm's legal research and knowledge management platform
  * providing access to legal research, precedents, templates, and practice guides.
- * 
+ *
  * ## Features
  * - Legal research database
  * - Precedent library

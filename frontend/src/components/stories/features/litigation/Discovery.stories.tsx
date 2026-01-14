@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '@/routes/discovery/components/platform/DiscoveryPlatform';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Discovery components provide comprehensive tools for managing the discovery process
  * including requests, productions, depositions, ESI, and compliance.
- * 
+ *
  * ## Features
  * - Discovery request management
  * - Production tracking and review

@@ -1,14 +1,14 @@
 /**
  * Dashboard Page Story
- * 
+ *
  * Main dashboard with real-time firm intelligence and personal productivity center.
  * Features tabbed navigation across overview, tasks, and notifications.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn, expect, userEvent, within } from 'storybook/test';
 import { Dashboard } from '@/routes/dashboard/components/Dashboard';
 import type { User, UserId } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 const meta: Meta<typeof Dashboard> = {
   title: 'Pages/Dashboard',
@@ -107,11 +107,11 @@ export const TasksView: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // Verify tasks tab is active
     const tasksTab = canvas.getByRole('tab', { name: /tasks/i });
     await expect(tasksTab).toHaveAttribute('aria-selected', 'true');
-    
+
     // Verify task list is visible
     const taskElements = canvas.getAllByRole('listitem');
     await expect(taskElements.length).toBeGreaterThan(0);
@@ -138,7 +138,7 @@ export const NotificationsView: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // Verify notifications tab is active
     const notificationsTab = canvas.getByRole('tab', { name: /notifications/i });
     await expect(notificationsTab).toHaveAttribute('aria-selected', 'true');
@@ -225,23 +225,23 @@ export const TabSwitching: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // Start on overview tab
     const overviewTab = canvas.getByRole('tab', { name: /overview/i });
     await expect(overviewTab).toHaveAttribute('aria-selected', 'true');
-    
+
     // Click Tasks tab
     const tasksTab = canvas.getByRole('tab', { name: /tasks/i });
     await userEvent.click(tasksTab);
     await expect(tasksTab).toHaveAttribute('aria-selected', 'true');
     await expect(overviewTab).toHaveAttribute('aria-selected', 'false');
-    
+
     // Click Notifications tab
     const notificationsTab = canvas.getByRole('tab', { name: /notifications/i });
     await userEvent.click(notificationsTab);
     await expect(notificationsTab).toHaveAttribute('aria-selected', 'true');
     await expect(tasksTab).toHaveAttribute('aria-selected', 'false');
-    
+
     // Return to Overview tab
     await userEvent.click(overviewTab);
     await expect(overviewTab).toHaveAttribute('aria-selected', 'true');

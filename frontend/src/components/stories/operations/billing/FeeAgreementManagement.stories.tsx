@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FeeAgreementManagement } from '@/routes/billing/components/fee-agreements/FeeAgreementManagement';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * FeeAgreementManagement provides comprehensive fee agreement administration
  * including template management, client agreements, and billing arrangement tracking.
- * 
+ *
  * ## Features
  * - Agreement templates
  * - Client fee agreements

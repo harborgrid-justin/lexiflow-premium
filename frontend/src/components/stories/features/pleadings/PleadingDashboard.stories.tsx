@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PleadingDashboard } from '@/routes/pleadings/components/PleadingDashboard';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * PleadingDashboard provides centralized pleading document management with
  * status tracking, version control, and court filing integration.
- * 
+ *
  * ## Features
  * - Pleading library
  * - Status tracking

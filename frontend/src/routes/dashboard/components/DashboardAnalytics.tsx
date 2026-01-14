@@ -19,8 +19,8 @@ import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
+import { useTheme } from '@/theme';
 
 // Components
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';

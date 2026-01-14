@@ -23,5 +23,5 @@ export async function practiceLoader() {
 
   return {
     areas: areas || [],
-  });
+  };
 }

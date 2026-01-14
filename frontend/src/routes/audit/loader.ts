@@ -27,5 +27,5 @@ export async function auditLoader() {
 
   return {
     logs: logs || [],
-  });
+  };
 }

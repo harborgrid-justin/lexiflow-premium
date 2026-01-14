@@ -24,5 +24,5 @@ export async function litigationLoader() {
 
   return {
     matters: matters || [],
-  });
+  };
 }

@@ -58,7 +58,7 @@ export class ExternalTriggersService {
   async getEvents(workflowId: string, triggerId: string, limit: number = 50) {
     return apiClient.get<TriggerEvent[]>(
       `${this.baseUrl}/${workflowId}/triggers/${triggerId}/events`,
-      { limit }
+      { params: { limit } }
     );
   }
 

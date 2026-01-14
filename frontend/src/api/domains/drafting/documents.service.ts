@@ -62,14 +62,10 @@ export class DocumentService {
   }
 
   async exportPdf(id: string): Promise<Blob> {
-    return this.client.get<Blob>(`/drafting/documents/${id}/export/pdf`, {
-      responseType: "blob",
-    });
+    return this.client.get<Blob>(`/drafting/documents/${id}/export/pdf`);
   }
 
   async exportDocx(id: string): Promise<Blob> {
-    return this.client.get<Blob>(`/drafting/documents/${id}/export/docx`, {
-      responseType: "blob",
-    });
+    return this.client.get<Blob>(`/drafting/documents/${id}/export/docx`);
   }
 }

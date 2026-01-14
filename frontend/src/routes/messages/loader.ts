@@ -29,5 +29,5 @@ export async function messagesLoader() {
   return {
     messages: messages || [],
     unreadCount,
-  });
+  };
 }

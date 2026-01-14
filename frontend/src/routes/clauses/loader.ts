@@ -25,5 +25,5 @@ export async function clausesLoader() {
 
   return {
     clauses: clauses || [],
-  });
+  };
 }

@@ -22,7 +22,7 @@ export class AnalyticsService {
   ) {
     return apiClient.get<WorkflowAnalytics>(
       `${this.baseUrl}/${workflowId}/analytics`,
-      options
+      { params: options }
     );
   }
 

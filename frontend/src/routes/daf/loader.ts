@@ -24,5 +24,5 @@ export async function dafLoader() {
 
   return {
     templates: templates || [],
-  });
+  };
 }

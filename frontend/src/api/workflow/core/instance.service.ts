@@ -18,7 +18,7 @@ export class WorkflowInstanceService {
     try {
       return await apiClient.get<WorkflowInstance[]>(
         "/workflow/instances",
-        filters
+        filters ? { params: filters } : undefined
       );
     } catch (error) {
       console.error("[WorkflowInstanceService.getInstances] Error:", error);

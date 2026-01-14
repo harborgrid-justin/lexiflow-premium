@@ -23,5 +23,5 @@ export async function researchLoader() {
     recentSearches: recentSearches || [],
     savedResearch: savedResearch || [],
     citations: citations || [],
-  });
+  };
 }

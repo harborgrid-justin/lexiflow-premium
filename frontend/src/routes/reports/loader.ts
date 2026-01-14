@@ -25,5 +25,5 @@ export async function reportsLoader() {
   return {
     reports: reports || [],
     recentReports: (reports || []).slice(0, 5),
-  });
+  };
 }

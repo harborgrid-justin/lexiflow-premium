@@ -25,5 +25,5 @@ export async function warRoomLoader() {
 
   return {
     sessions: sessions || [],
-  });
+  };
 }

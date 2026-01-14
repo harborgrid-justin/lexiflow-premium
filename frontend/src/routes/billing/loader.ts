@@ -27,7 +27,7 @@ export async function clientLoader() {
     transactions,
     rates,
     timeEntries,
-  });
+  };
 }
 
 /**

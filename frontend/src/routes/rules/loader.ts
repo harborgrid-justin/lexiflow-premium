@@ -25,5 +25,5 @@ export async function rulesLoader() {
 
   return {
     rules: rules || [],
-  });
+  };
 }

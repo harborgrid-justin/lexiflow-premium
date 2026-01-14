@@ -24,5 +24,5 @@ export async function libraryLoader() {
 
   return {
     items: items || [],
-  });
+  };
 }

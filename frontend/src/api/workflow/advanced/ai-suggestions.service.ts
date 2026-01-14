@@ -20,7 +20,7 @@ export class AISuggestionsService {
   ) {
     return apiClient.get<AIWorkflowSuggestion[]>(
       `${this.baseUrl}/${workflowId}/ai/suggestions`,
-      options
+      options ? { params: options } : undefined
     );
   }
 

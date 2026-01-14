@@ -22,7 +22,7 @@ export class TemplateLibraryService {
   }) {
     return apiClient.get<WorkflowTemplate[]>(
       `${this.baseUrl}/templates/search`,
-      query
+      { params: query }
     );
   }
 

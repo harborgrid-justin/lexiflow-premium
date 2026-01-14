@@ -91,7 +91,6 @@ export class WorkflowAdvancedApiService {
   async export(workflowId: string, format: "json" | "yaml" | "bpmn") {
     return apiClient.get(`${this.baseUrl}/${workflowId}/export`, {
       params: { format },
-      responseType: "blob",
     });
   }
 

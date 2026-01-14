@@ -24,5 +24,5 @@ export async function pleadingsLoader() {
 
   return {
     pleadings: pleadings || [],
-  });
+  };
 }

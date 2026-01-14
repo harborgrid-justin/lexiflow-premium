@@ -26,5 +26,5 @@ export async function citationsLoader() {
 
   return {
     citations: citations || [],
-  });
+  };
 }

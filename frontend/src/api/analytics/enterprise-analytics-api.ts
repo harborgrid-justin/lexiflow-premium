@@ -3,24 +3,27 @@
  * Comprehensive analytics endpoints for legal platform
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 import type {
-  CaseAnalytics,
-  BillingAnalytics,
-  ProductivityAnalytics,
-  ClientAnalytics,
-  Report,
-  ReportData,
   AuditLog,
   AuditLogFilters,
-} from '@/types/analytics-enterprise';
+  BillingAnalytics,
+  CaseAnalytics,
+  ClientAnalytics,
+  ProductivityAnalytics,
+  Report,
+  ReportData,
+} from "@/types/analytics-enterprise";
 
 export class EnterpriseAnalyticsApiService {
-  private readonly baseUrl = '/analytics/enterprise';
+  private readonly baseUrl = "/analytics/enterprise";
 
   // ==================== CASE ANALYTICS ====================
 
-  async getCaseAnalytics(startDate: string, endDate: string): Promise<CaseAnalytics> {
+  async getCaseAnalytics(
+    startDate: string,
+    endDate: string
+  ): Promise<CaseAnalytics> {
     return apiClient.get<CaseAnalytics>(
       `${this.baseUrl}/cases?start=${startDate}&end=${endDate}`
     );
@@ -31,11 +34,16 @@ export class EnterpriseAnalyticsApiService {
     attorney?: string;
     caseType?: string;
   }): Promise<unknown> {
-    const queryString = new URLSearchParams(params as Record<string, string>).toString();
+    const queryString = new URLSearchParams(
+      params as Record<string, string>
+    ).toString();
     return apiClient.get(`${this.baseUrl}/cases/outcomes?${queryString}`);
   }
 
-  async getCaseWinRateByAttorney(startDate: string, endDate: string): Promise<unknown> {
+  async getCaseWinRateByAttorney(
+    startDate: string,
+    endDate: string
+  ): Promise<unknown> {
     return apiClient.get(
       `${this.baseUrl}/cases/win-rate?start=${startDate}&end=${endDate}`
     );
@@ -43,7 +51,10 @@ export class EnterpriseAnalyticsApiService {
 
   // ==================== BILLING ANALYTICS ====================
 
-  async getBillingAnalytics(startDate: string, endDate: string): Promise<BillingAnalytics> {
+  async getBillingAnalytics(
+    startDate: string,
+    endDate: string
+  ): Promise<BillingAnalytics> {
     return apiClient.get<BillingAnalytics>(
       `${this.baseUrl}/billing?start=${startDate}&end=${endDate}`
     );
@@ -54,7 +65,9 @@ export class EnterpriseAnalyticsApiService {
     client?: string;
     practiceArea?: string;
   }): Promise<unknown> {
-    const queryString = new URLSearchParams(params as Record<string, string>).toString();
+    const queryString = new URLSearchParams(
+      params as Record<string, string>
+    ).toString();
     return apiClient.get(`${this.baseUrl}/billing/realization?${queryString}`);
   }
 
@@ -62,7 +75,9 @@ export class EnterpriseAnalyticsApiService {
     attorney?: string;
     client?: string;
   }): Promise<unknown> {
-    const queryString = new URLSearchParams(params as Record<string, string>).toString();
+    const queryString = new URLSearchParams(
+      params as Record<string, string>
+    ).toString();
     return apiClient.get(`${this.baseUrl}/billing/collection?${queryString}`);
   }
 
@@ -79,7 +94,7 @@ export class EnterpriseAnalyticsApiService {
   }): Promise<unknown> {
     const queryString = params
       ? new URLSearchParams(params as Record<string, string>).toString()
-      : '';
+      : "";
     const url = queryString
       ? `${this.baseUrl}/billing/wip?${queryString}`
       : `${this.baseUrl}/billing/wip`;
@@ -87,7 +102,9 @@ export class EnterpriseAnalyticsApiService {
   }
 
   async getMatterBudgetVsActual(matterId: string): Promise<unknown> {
-    return apiClient.get(`${this.baseUrl}/billing/matter/${matterId}/budget-vs-actual`);
+    return apiClient.get(
+      `${this.baseUrl}/billing/matter/${matterId}/budget-vs-actual`
+    );
   }
 
   // ==================== PRODUCTIVITY ANALYTICS ====================
@@ -117,7 +134,7 @@ export class EnterpriseAnalyticsApiService {
   }): Promise<unknown> {
     const queryString = params
       ? new URLSearchParams(params as Record<string, string>).toString()
-      : '';
+      : "";
     const url = queryString
       ? `${this.baseUrl}/productivity/utilization?${queryString}`
       : `${this.baseUrl}/productivity/utilization`;
@@ -125,7 +142,7 @@ export class EnterpriseAnalyticsApiService {
   }
 
   async getProductivityTrends(
-    granularity: 'daily' | 'weekly' | 'monthly',
+    granularity: "daily" | "weekly" | "monthly",
     startDate: string,
     endDate: string
   ): Promise<unknown> {
@@ -136,19 +153,22 @@ export class EnterpriseAnalyticsApiService {
 
   // ==================== CLIENT ANALYTICS ====================
 
-  async getClientAnalytics(startDate: string, endDate: string): Promise<ClientAnalytics> {
+  async getClientAnalytics(
+    startDate: string,
+    endDate: string
+  ): Promise<ClientAnalytics> {
     return apiClient.get<ClientAnalytics>(
       `${this.baseUrl}/clients?start=${startDate}&end=${endDate}`
     );
   }
 
   async getClientProfitability(params?: {
-    sortBy?: 'revenue' | 'profit' | 'margin';
+    sortBy?: "revenue" | "profit" | "margin";
     limit?: number;
   }): Promise<unknown> {
     const queryString = params
       ? new URLSearchParams(params as Record<string, string>).toString()
-      : '';
+      : "";
     const url = queryString
       ? `${this.baseUrl}/clients/profitability?${queryString}`
       : `${this.baseUrl}/clients/profitability`;
@@ -178,11 +198,13 @@ export class EnterpriseAnalyticsApiService {
     type?: string;
   }): Promise<Report[]> {
     const params = new URLSearchParams();
-    if (filters?.category) params.append('category', filters.category);
-    if (filters?.status) params.append('status', filters.status);
-    if (filters?.type) params.append('type', filters.type);
+    if (filters?.category) params.append("category", filters.category);
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.type) params.append("type", filters.type);
     const queryString = params.toString();
-    const url = queryString ? `${this.baseUrl}/reports?${queryString}` : `${this.baseUrl}/reports`;
+    const url = queryString
+      ? `${this.baseUrl}/reports?${queryString}`
+      : `${this.baseUrl}/reports`;
     return apiClient.get<Report[]>(url);
   }
 
@@ -202,8 +224,14 @@ export class EnterpriseAnalyticsApiService {
     return apiClient.delete(`${this.baseUrl}/reports/${id}`);
   }
 
-  async generateReport(id: string, params?: Record<string, unknown>): Promise<ReportData> {
-    return apiClient.post<ReportData>(`${this.baseUrl}/reports/${id}/generate`, params);
+  async generateReport(
+    id: string,
+    params?: Record<string, unknown>
+  ): Promise<ReportData> {
+    return apiClient.post<ReportData>(
+      `${this.baseUrl}/reports/${id}/generate`,
+      params
+    );
   }
 
   async scheduleReport(
@@ -215,32 +243,32 @@ export class EnterpriseAnalyticsApiService {
       time?: string;
     }
   ): Promise<Report> {
-    return apiClient.post<Report>(`${this.baseUrl}/reports/${id}/schedule`, { schedule });
+    return apiClient.post<Report>(`${this.baseUrl}/reports/${id}/schedule`, {
+      schedule,
+    });
   }
 
   async exportReport(
     id: string,
-    format: 'pdf' | 'excel' | 'csv' | 'html'
+    format: "pdf" | "excel" | "csv" | "html"
   ): Promise<Blob> {
-    return apiClient.get(`${this.baseUrl}/reports/${id}/export/${format}`, {
-      responseType: 'blob',
-    });
+    return apiClient.get(`${this.baseUrl}/reports/${id}/export/${format}`);
   }
 
   // ==================== AUDIT LOGS ====================
 
   async getAuditLogs(filters?: AuditLogFilters): Promise<AuditLog[]> {
     const params = new URLSearchParams();
-    if (filters?.userId) params.append('userId', filters.userId);
-    if (filters?.entityType) params.append('entityType', filters.entityType);
-    if (filters?.entityId) params.append('entityId', filters.entityId);
-    if (filters?.action) params.append('action', filters.action);
-    if (filters?.category) params.append('category', filters.category);
-    if (filters?.startDate) params.append('startDate', filters.startDate);
-    if (filters?.endDate) params.append('endDate', filters.endDate);
-    if (filters?.searchTerm) params.append('search', filters.searchTerm);
+    if (filters?.userId) params.append("userId", filters.userId);
+    if (filters?.entityType) params.append("entityType", filters.entityType);
+    if (filters?.entityId) params.append("entityId", filters.entityId);
+    if (filters?.action) params.append("action", filters.action);
+    if (filters?.category) params.append("category", filters.category);
+    if (filters?.startDate) params.append("startDate", filters.startDate);
+    if (filters?.endDate) params.append("endDate", filters.endDate);
+    if (filters?.searchTerm) params.append("search", filters.searchTerm);
     if (filters?.severity) {
-      filters.severity.forEach(s => params.append('severity', s));
+      filters.severity.forEach((s) => params.append("severity", s));
     }
     const queryString = params.toString();
     const url = queryString
@@ -255,26 +283,24 @@ export class EnterpriseAnalyticsApiService {
 
   async exportAuditLogs(
     filters?: AuditLogFilters,
-    format: 'csv' | 'excel' | 'pdf' = 'csv'
+    format: "csv" | "excel" | "pdf" = "csv"
   ): Promise<Blob> {
     const params = new URLSearchParams();
-    if (filters?.userId) params.append('userId', filters.userId);
-    if (filters?.entityType) params.append('entityType', filters.entityType);
-    if (filters?.action) params.append('action', filters.action);
-    if (filters?.category) params.append('category', filters.category);
-    if (filters?.startDate) params.append('startDate', filters.startDate);
-    if (filters?.endDate) params.append('endDate', filters.endDate);
-    params.append('format', format);
+    if (filters?.userId) params.append("userId", filters.userId);
+    if (filters?.entityType) params.append("entityType", filters.entityType);
+    if (filters?.action) params.append("action", filters.action);
+    if (filters?.category) params.append("category", filters.category);
+    if (filters?.startDate) params.append("startDate", filters.startDate);
+    if (filters?.endDate) params.append("endDate", filters.endDate);
+    params.append("format", format);
     const queryString = params.toString();
-    return apiClient.get(`${this.baseUrl}/audit-logs/export?${queryString}`, {
-      responseType: 'blob',
-    });
+    return apiClient.get(`${this.baseUrl}/audit-logs/export?${queryString}`);
   }
 
   // ==================== COMPLIANCE ====================
 
   async getComplianceReport(
-    reportType: 'sox' | 'hipaa' | 'gdpr' | 'soc2',
+    reportType: "sox" | "hipaa" | "gdpr" | "soc2",
     startDate: string,
     endDate: string
   ): Promise<unknown> {

@@ -27,5 +27,5 @@ export async function evidenceLoader() {
 
   return {
     evidence: evidence || [],
-  });
+  };
 }

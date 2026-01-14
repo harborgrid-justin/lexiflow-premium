@@ -32,5 +32,5 @@ export async function calendarLoader() {
   return {
     events: events || [],
     upcomingEvents: upcoming || [],
-  });
+  };
 }

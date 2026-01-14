@@ -52,5 +52,5 @@ export async function clientLoader(_args: LoaderFunctionArgs) {
     recentDocketEntries,
     recentTimeEntries,
     tasks,
-  });
+  };
 }

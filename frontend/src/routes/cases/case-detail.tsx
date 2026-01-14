@@ -95,7 +95,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     // Return promises - Await component will handle resolution
     documents: documentsPromise,
     parties: partiesPromise,
-  });
+  };
 }
 
 // Force client-side execution for hydration (needed for localStorage auth)

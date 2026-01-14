@@ -4,21 +4,24 @@
  * 100% backend endpoint coverage (10/10 endpoints)
  */
 
-import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
-import type { FirmExpense } from '@/types';
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
+import type { FirmExpense } from "@/types";
 
 export interface ExpenseFilters {
   caseId?: string;
   userId?: string;
   category?: string;
-  status?: 'Draft' | 'Submitted' | 'Approved' | 'Billed' | 'Rejected';
+  status?: "Draft" | "Submitted" | "Approved" | "Billed" | "Rejected";
   startDate?: string;
   endDate?: string;
   billable?: boolean;
   page?: number;
   limit?: number;
   sortBy?: string;
-  order?: 'asc' | 'desc';
+  order?: "asc" | "desc";
 }
 
 export interface CreateExpenseDto {
@@ -54,7 +57,10 @@ export class ExpensesApiService {
    * GET ${API_PREFIX}/billing/expenses
    */
   async getAll(filters?: ExpenseFilters): Promise<FirmExpense[]> {
-    const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', filters as Record<string, unknown>);
+    const response = await apiClient.get<PaginatedResponse<FirmExpense>>(
+      "/billing/expenses",
+      filters as Record<string, unknown>
+    );
     return response.data;
   }
 
@@ -63,7 +69,10 @@ export class ExpensesApiService {
    * GET ${API_PREFIX}/billing/expenses?caseId=:caseId
    */
   async getByCaseId(caseId: string): Promise<FirmExpense[]> {
-    const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', { params: { caseId } });
+    const response = await apiClient.get<PaginatedResponse<FirmExpense>>(
+      "/billing/expenses",
+      { params: { caseId } }
+    );
     return response.data;
   }
 
@@ -72,7 +81,9 @@ export class ExpensesApiService {
    * GET ${API_PREFIX}/billing/expenses/unbilled/:caseId
    */
   async getUnbilled(caseId: string): Promise<FirmExpense[]> {
-    const response = await apiClient.get<PaginatedResponse<FirmExpense>>(`/billing/expenses/unbilled/${caseId}`);
+    const response = await apiClient.get<PaginatedResponse<FirmExpense>>(
+      `/billing/expenses/unbilled/${caseId}`
+    );
     return response.data;
   }
 
@@ -89,7 +100,7 @@ export class ExpensesApiService {
    * POST ${API_PREFIX}/billing/expenses
    */
   async create(expense: CreateExpenseDto): Promise<FirmExpense> {
-    return apiClient.post<FirmExpense>('/billing/expenses', expense);
+    return apiClient.post<FirmExpense>("/billing/expenses", expense);
   }
 
   /**
@@ -113,7 +124,9 @@ export class ExpensesApiService {
    * PUT ${API_PREFIX}/billing/expenses/:id/bill
    */
   async bill(id: string, invoiceId: string): Promise<FirmExpense> {
-    return apiClient.put<FirmExpense>(`/billing/expenses/${id}/bill`, { invoiceId });
+    return apiClient.put<FirmExpense>(`/billing/expenses/${id}/bill`, {
+      invoiceId,
+    });
   }
 
   /**
@@ -128,9 +141,12 @@ export class ExpensesApiService {
    * Upload receipt for expense
    * POST ${API_PREFIX}/billing/expenses/:id/receipt
    */
-  async uploadReceipt(id: string, file: File): Promise<{ url: string; filename: string; size: number }> {
+  async uploadReceipt(
+    id: string,
+    file: File
+  ): Promise<{ url: string; filename: string; size: number }> {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
     return apiClient.post<{ url: string; filename: string; size: number }>(
       `/billing/expenses/${id}/receipt`,
       formData
@@ -142,6 +158,8 @@ export class ExpensesApiService {
    * GET ${API_PREFIX}/billing/expenses/case/:caseId/totals
    */
   async getTotalsByCase(caseId: string): Promise<ExpenseTotals> {
-    return apiClient.get<ExpenseTotals>(`/billing/expenses/case/${caseId}/totals`);
+    return apiClient.get<ExpenseTotals>(
+      `/billing/expenses/case/${caseId}/totals`
+    );
   }
 }

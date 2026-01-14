@@ -23,5 +23,5 @@ export async function jurisdictionLoader() {
 
   return {
     jurisdictions: jurisdictions || [],
-  });
+  };
 }

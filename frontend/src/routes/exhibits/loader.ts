@@ -25,5 +25,5 @@ export async function exhibitsLoader() {
 
   return {
     exhibits: exhibits || [],
-  });
+  };
 }

@@ -59,7 +59,7 @@ export class ApprovalChainsService {
   async getPending(userId: string) {
     return apiClient.get<ApprovalInstance[]>(
       `${this.baseUrl}/approvals/pending`,
-      { userId }
+      { params: { userId } }
     );
   }
 }

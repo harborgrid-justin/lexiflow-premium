@@ -24,5 +24,5 @@ export async function entitiesLoader() {
 
   return {
     entities: entities || [],
-  });
+  };
 }

@@ -313,8 +313,7 @@ export class DashboardMetricsService {
       ? new URLSearchParams(filters as unknown as Record<string, string>)
       : undefined;
     return apiClient.get<Blob>(
-      `${this.baseUrl}/export/${format}${params ? `?${params}` : ""}`,
-      { responseType: "blob" }
+      `${this.baseUrl}/export/${format}${params ? `?${params}` : ""}`
     );
   }
 

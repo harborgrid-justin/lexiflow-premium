@@ -34,7 +34,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   try {
     // Fetch exhibits using new enterprise API
-    const result = await trialApi.getExhibits({ caseId, page: 1, limit: 100 });
+    const result = await trialApi.getAllExhibits({ caseId, page: 1, limit: 100 });
     const items = result.ok ? result.data.data : [];
     return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {

@@ -3,7 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { communicationsApi } from "@/lib/frontend-api";
 
 type Message = {
   id: string;
@@ -23,7 +23,11 @@ export interface MessagesLoaderData {
 }
 
 export async function messagesLoader() {
-  const messages = await DataService.messages.getAll().catch(() => []);
+  const result = await communicationsApi.getAllMessages({
+    page: 1,
+    limit: 100,
+  });
+  const messages = result.ok ? result.data.data : [];
   const unreadCount = messages.filter((m: Message) => !m.read).length;
 
   return {

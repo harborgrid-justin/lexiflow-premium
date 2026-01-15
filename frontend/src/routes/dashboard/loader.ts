@@ -1,5 +1,6 @@
 import { DataService } from "@/services/data/data-service.service";
 import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
+import { handleLoaderAuthError } from "@/utils/loader-helpers";
 import type { LoaderFunctionArgs } from "react-router";
 
 export interface DashboardLoaderData {

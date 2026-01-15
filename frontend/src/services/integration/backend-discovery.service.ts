@@ -4,8 +4,9 @@
  * Does NOT automatically switch - user controls data source selection
  */
 
+import { BACKEND_DISCOVERY_CHECK_INTERVAL_MS } from "@/config/features/services.config";
 import { getApiBaseUrl } from "@/config/network/api.config";
-import { BACKEND_DISCOVERY_CHECK_INTERVAL_MS } from '@/config/features/services.config';
+import { TIMEOUTS } from "@/config/ports.config";
 
 export interface BackendStatus {
   available: boolean;
@@ -17,7 +18,6 @@ export interface BackendStatus {
 }
 
 type BackendStatusCallback = (status: BackendStatus) => void;
-import { TIMEOUTS } from "@/config/ports.config";
 
 class BackendDiscoveryService {
   private status: BackendStatus = {
@@ -76,7 +76,8 @@ class BackendDiscoveryService {
   private async checkBackend(): Promise<void> {
     const startTime = Date.now();
     const endpoint = this.getHealthEndpoint();
-    console.log("[BackendDiscovery] Checking health at:", endpoint);
+    // Reduce console noise - only log on state changes
+    const wasHealthy = this.status.healthy;
 
     try {
       const controller = new AbortController();
@@ -101,7 +102,7 @@ class BackendDiscoveryService {
           version = data.version || data.info?.version;
         } catch (error) {
           // If response isn't JSON, that's okay - silently continue
-          console.debug('[BackendDiscovery] Response is not JSON:', error);
+          console.debug("[BackendDiscovery] Response is not JSON:", error);
         }
 
         this.updateStatus({
@@ -113,9 +114,12 @@ class BackendDiscoveryService {
           error: undefined,
         });
 
-        console.log(
-          `[BackendDiscovery] Backend is ${this.status.healthy ? "healthy" : "available"} (${latency}ms)`
-        );
+        // Only log on status change or first success
+        if (!wasHealthy || !this.status.lastChecked) {
+          console.log(
+            `[BackendDiscovery] Backend is ${this.status.healthy ? "healthy" : "available"} (${latency}ms)`
+          );
+        }
       } else {
         this.updateStatus({
           available: true,
@@ -239,7 +243,7 @@ class BackendDiscoveryService {
 export const backendDiscovery = new BackendDiscoveryService();
 
 // HMR Cleanup - wrapped for Jest compatibility
-if (typeof import.meta !== 'undefined' && import.meta.hot) {
+if (typeof import.meta !== "undefined" && import.meta.hot) {
   import.meta.hot.dispose(() => {
     console.log("[BackendDiscovery] HMR dispose: stopping service");
     backendDiscovery.stop();

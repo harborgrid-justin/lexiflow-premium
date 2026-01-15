@@ -224,7 +224,7 @@ export async function logout(): Promise<Result<void>> {
  * Get current authenticated user
  */
 export async function getCurrentUser(): Promise<Result<AuthResponse["user"]>> {
-  const result = await client.get<AuthResponse["user"]>("/auth/profile");
+  const result = await client.get<AuthResponse["user"]>("/auth/me");
 
   if (!result.ok) return result;
 

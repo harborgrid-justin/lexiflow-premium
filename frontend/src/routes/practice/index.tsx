@@ -35,20 +35,19 @@ export function meta() {
  */
 export async function clientLoader() {
   try {
-    const [staffResult, metricsResult, tasksResult] = await Promise.all([
-      hrApi.getAllStaff({ page: 1, limit: 1000 }),
-      hrApi.getUtilizationMetrics({ page: 1, limit: 100 }),
+    const [staffResult, tasksResult] = await Promise.all([
+      hrApi.getAllEmployees({ page: 1, limit: 1000 }),
       workflowApi.getAllTasks({ page: 1, limit: 1000 }),
     ]);
 
     const staff = staffResult.ok ? staffResult.data.data : [];
-    const metrics = metricsResult.ok ? metricsResult.data.data : [];
     const tasksData = tasksResult.ok ? tasksResult.data.data : [];
 
-    const activeMatters = metrics.reduce((acc: number, m: { cases?: number }) => acc + (m.cases || 0), 0);
-    const avgUtilization = metrics.length > 0
-      ? metrics.reduce((acc: number, m: { utilization?: number }) => acc + (m.utilization || 0), 0) / metrics.length
-      : 0;
+    // Calculate active matters from tasks (placeholder logic)
+    const activeMatters = tasksData.filter((t: { status?: string }) => t.status === 'in-progress').length;
+
+    // Calculate utilization (placeholder - would need real time tracking data)
+    const avgUtilization = staff.length > 0 ? 75 : 0; // Mock 75% utilization
 
     const pendingTasks = tasksData.filter((t: { status?: string }) => t.status !== 'completed').length;
 

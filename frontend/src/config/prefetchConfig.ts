@@ -109,7 +109,7 @@ export const PREFETCH_MAP: Record<
     key: queryKeys.docket.all(),
     fn: async () => {
       try {
-        return await docketApi.getAll({ page: 1, limit: 50 });
+        return await docketApi.getAll(); // No parameters - caseId is optional
       } catch {
         return [];
       }

@@ -9,6 +9,7 @@
 
 import { EntityDirector } from '@/routes/cases/components/entities/EntityDirector';
 import { DataService } from '@/services/data/data-service.service';
+import { communicationsApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -31,7 +32,7 @@ export function meta({ data }: Route.MetaArgs) {
 
 export async function clientLoader() {
   try {
-    const result = await communicationsApi.getAllEntities({ page: 1, limit: 100 });
+    const result = await communicationsApi.getAllClients({ page: 1, limit: 100 });
     const items = result.ok ? result.data.data : [];
     return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {

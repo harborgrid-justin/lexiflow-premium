@@ -106,9 +106,12 @@ function logAuditEvent(event: AuthEvent): void {
       logs.shift();
     }
     localStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(logs));
-    console.log('[Auth Audit]', event);
+    // Only log important auth events to reduce console noise
+    if (event.type === 'login_success' || event.type === 'logout' || event.type === 'login_failure') {
+      console.log('[Auth]', event.type, event.userId || 'unknown');
+    }
   } catch (error) {
-    console.error('Failed to log audit event:', error);
+    console.error('[Auth] Failed to log audit event:', error);
   }
 }
 
@@ -243,6 +246,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Initialize auth state from storage on mount
   useEffect(() => {
+    let isMounted = true;
     const initializeAuth = async () => {
       try {
         // Check for stored token and user
@@ -260,6 +264,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             return;
           }
 
+          if (!isMounted) return;
           setUser(parsedUser);
 
           // Sync token with API client's auth-manager for backend API calls
@@ -277,35 +282,44 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
           startSession();
 
-          // Start automatic token refresh
-          tokenRefreshRef.current = setInterval(async () => {
-            try {
-              const authApi = new AuthApiService();
-              await authApi.refreshToken();
-              logAuditEvent({
-                type: 'token_refresh',
-                timestamp: new Date(),
-                userId: parsedUser.id,
-              });
-            } catch (error) {
-              console.error('Token refresh failed:', error);
-            }
-          }, TOKEN_REFRESH_INTERVAL);
+          // Start automatic token refresh (only if still mounted)
+          if (isMounted) {
+            tokenRefreshRef.current = setInterval(async () => {
+              try {
+                const authApi = new AuthApiService();
+                await authApi.refreshToken();
+                logAuditEvent({
+                  type: 'token_refresh',
+                  timestamp: new Date(),
+                  userId: parsedUser.id,
+                });
+              } catch (error) {
+                console.error('Token refresh failed:', error);
+              }
+            }, TOKEN_REFRESH_INTERVAL);
+          }
         }
       } catch (err) {
         console.error('Failed to initialize auth:', err);
-        setError('Failed to restore session');
+        if (isMounted) {
+          setError('Failed to restore session');
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     initializeAuth();
 
+    // Cleanup function - only clear timers, don't clear auth tokens
     return () => {
+      isMounted = false;
       clearSessionTimers();
     };
-  }, [startSession, clearSessionTimers]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
 
   // Stable action callbacks (BP10)
   const login = useCallback(async (

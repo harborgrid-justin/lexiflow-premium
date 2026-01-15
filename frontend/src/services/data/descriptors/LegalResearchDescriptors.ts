@@ -4,12 +4,17 @@ import {
   draftingApi,
   type CreateTemplateDto,
   type UpdateTemplateDto,
-} from '@/lib/frontend-api';
+} from "@/lib/frontend-api";
 import { type CreateJurisdictionRuleDto } from "@/api/intelligence/jurisdiction-api";
 import { JurisdictionService } from "@/services/domain/jurisdiction.service";
 import { ResearchService } from "@/services/domain/research.service";
+import { KnowledgeService } from "@/services/domain/knowledge.service";
 
 export const LegalResearchDescriptors: PropertyDescriptorMap = {
+  knowledge: {
+    get: () => KnowledgeService,
+    enumerable: true,
+  },
   research: {
     get: () => ResearchService,
     enumerable: true,

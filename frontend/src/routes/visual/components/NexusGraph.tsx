@@ -202,52 +202,56 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
         >
           <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
             {/* Links */}
-            {physicsState.current.links.map((link, i) => (
-              <line
-                key={`link-${link.sourceIndex}-${link.targetIndex}-${i}`}
-                ref={el => { if (el) linkRefs.current[i] = el; }}
-                stroke={theme.chart.grid}
-                strokeWidth="1.5"
-                strokeOpacity="0.4"
-              />
-            ))}
+            <g key="links-group">
+              {physicsState.current.links.map((link, i) => (
+                <line
+                  key={`link-${link.sourceIndex}-${link.targetIndex}-${i}`}
+                  ref={el => { if (el) linkRefs.current[i] = el; }}
+                  stroke={theme.chart.grid}
+                  strokeWidth="1.5"
+                  strokeOpacity="0.4"
+                />
+              ))}
+            </g>
 
             {/* Nodes */}
-            {nodesMeta.map((node, i) => (
-              // Use stable node ID for key (not index) for proper React reconciliation
-              <g
-                key={node.id}
-                ref={el => { if (el) domRefs.current.set(node.id, el); }}
-                className="cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={() => handleNodeClick(i)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleNodeClick(i);
-                  }
-                }}
-                aria-label={`${node.type} node: ${node.label}`}
-              >
-                <circle
-                  r={getNodeRadius(node.type)}
-                  fill={node.type === 'root' ? getStroke('root') : theme.surface.default}
-                  stroke={getStroke(node.type)}
-                  strokeWidth={node.type === 'root' ? 0 : 3}
-                />
-                <text
-                  y={getNodeLabelYOffset(node.type)}
-                  textAnchor="middle"
-                  className={cn(
-                    "text-[10px] font-bold uppercase pointer-events-none",
-                    mode === 'dark' ? "fill-slate-300" : "fill-slate-600"
-                  )}
+            <g key="nodes-group">
+              {nodesMeta.map((node, i) => (
+                // Use stable node ID for key (not index) for proper React reconciliation
+                <g
+                  key={node.id}
+                  ref={el => { if (el) domRefs.current.set(node.id, el); }}
+                  className="cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => handleNodeClick(i)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleNodeClick(i);
+                    }
+                  }}
+                  aria-label={`${node.type} node: ${node.label}`}
                 >
-                  {node.label}
-                </text>
-              </g>
-            ))}
+                  <circle
+                    r={getNodeRadius(node.type)}
+                    fill={node.type === 'root' ? getStroke('root') : theme.surface.default}
+                    stroke={getStroke(node.type)}
+                    strokeWidth={node.type === 'root' ? 0 : 3}
+                  />
+                  <text
+                    y={getNodeLabelYOffset(node.type)}
+                    textAnchor="middle"
+                    className={cn(
+                      "text-[10px] font-bold uppercase pointer-events-none",
+                      mode === 'dark' ? "fill-slate-300" : "fill-slate-600"
+                    )}
+                  >
+                    {node.label}
+                  </text>
+                </g>
+              ))}
+            </g>
           </g>
         </svg>
       </div>

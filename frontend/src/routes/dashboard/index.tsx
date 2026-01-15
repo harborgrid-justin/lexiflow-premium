@@ -10,8 +10,8 @@ import { createMeta } from '../_shared/meta-utils';
 import { DashboardPageContent } from './DashboardPage';
 import { clientLoader } from './loader';
 
-// Export loader
-export { clientLoader as loader };
+// Export client-side loader (must be named 'clientLoader' for React Router v7)
+export { clientLoader };
 
 // Export Error Boundary
 export { RouteErrorBoundary as ErrorBoundary };

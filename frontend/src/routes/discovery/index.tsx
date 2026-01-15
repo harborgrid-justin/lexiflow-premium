@@ -43,8 +43,8 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const caseId = url.searchParams.get("caseId") || undefined;
 
   try {
-    // Fetch discovery processes using new enterprise API
-    const result = await discoveryApi.getAllDiscoveryMatters({ caseId, page: 1, limit: 100 });
+    // Fetch evidence items using new enterprise API
+    const result = await discoveryApi.getAllEvidence({ caseId, page: 1, limit: 100 });
     const items = result.ok ? result.data.data : [];
     return { items, totalCount: result.ok ? result.data.total : 0 };
   } catch (error) {

@@ -40,6 +40,13 @@ export async function get<T>(
     ) {
       return get<T>(endpoint, options);
     }
+    // Don't log expected SSR auth redirects
+    if (
+      error instanceof AuthenticationError &&
+      error.message === "SSR_AUTH_REQUIRED"
+    ) {
+      throw error;
+    }
     console.error("[HttpMethods.get] Error:", error);
     throw error;
   }

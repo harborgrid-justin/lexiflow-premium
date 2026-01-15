@@ -31,7 +31,7 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
     trending: TrendingUp,
   };
 
-  const { tokens, theme } = useTheme();
+  const { tokens } = useTheme();
 
   const colors = {
     blue: {

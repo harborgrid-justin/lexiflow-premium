@@ -4,16 +4,13 @@
  * @description Enterprise KPI card with value, change percentage, trend indicators, and sparklines
  * Designed for executive dashboards with professional styling and animations
  */
-
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-
 export interface KPICardProps {
   /** KPI label/title */
   label: string;
@@ -44,14 +41,11 @@ export interface KPICardProps {
   /** Currency symbol for currency format */
   currency?: string;
 }
-
 // ============================================================================
 // HELPERS
 // ============================================================================
-
 const formatValue = (value: number | string, format: KPICardProps['format'], currency = '$'): string => {
   if (typeof value === 'string') return value;
-
   switch (format) {
     case 'currency':
       return `${currency}${value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
@@ -64,14 +58,12 @@ const formatValue = (value: number | string, format: KPICardProps['format'], cur
       return value.toLocaleString();
   }
 };
-
 const calculateChange = (current: number, previous: number): { percentage: number; trend: 'up' | 'down' | 'neutral' } => {
   if (previous === 0) return { percentage: 0, trend: 'neutral' };
   const percentage = ((current - previous) / previous) * 100;
   const trend = percentage > 0 ? 'up' : percentage < 0 ? 'down' : 'neutral';
   return { percentage, trend };
 };
-
 const getColorConfig = (color: KPICardProps['color'], tokens: any) => {
   switch (color) {
     case 'blue':
@@ -125,11 +117,9 @@ const getColorConfig = (color: KPICardProps['color'], tokens: any) => {
       };
   }
 };
-
 // ============================================================================
 // COMPONENT
 // ============================================================================
-
 export function KPICard({
   label,
   value,
@@ -146,9 +136,8 @@ export function KPICard({
   target,
   currency = '$',
 }: KPICardProps) {
-  const { theme, tokens } = useTheme();
+  const { tokens } = useTheme();
   const [displayValue, setDisplayValue] = useState<number>(0);
-
   // Calculate change if previous value provided
   const change = React.useMemo(() => {
     if (changePercentage !== undefined) {
@@ -159,43 +148,34 @@ export function KPICard({
     }
     return { percentage: 0, trend: trend || 'neutral' };
   }, [value, previousValue, changePercentage, trend]);
-
   // Animate numeric values
   const displayValueRef = useRef(displayValue);
   displayValueRef.current = displayValue;
-
   useEffect(() => {
     if (typeof value === 'number' && !isLoading) {
       const duration = 1000;
       const startTime = performance.now();
       const startValue = displayValueRef.current;
       const endValue = value;
-
       const animate = (currentTime: number) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easeOut = 1 - Math.pow(1 - progress, 3);
-
         setDisplayValue(startValue + (endValue - startValue) * easeOut);
-
         if (progress < 1) {
           requestAnimationFrame(animate);
         }
       };
-
       requestAnimationFrame(animate);
     }
   }, [value, isLoading]);
-
   // Calculate progress to target if provided
   const progressPercent = target && typeof value === 'number' ? (value / target) * 100 : undefined;
-
   const colors = getColorConfig(color, tokens);
   const TrendIcon = change.trend === 'up' ? TrendingUp : change.trend === 'down' ? TrendingDown : Minus;
   const trendColor = change.trend === 'up' ? tokens.colors.success :
     change.trend === 'down' ? tokens.colors.error :
       tokens.colors.textMuted;
-
   return (
     <div
       style={{
@@ -228,7 +208,6 @@ export function KPICard({
           />
         </div>
       )}
-
       {/* Header with icon */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
@@ -257,12 +236,10 @@ export function KPICard({
           </div>
         )}
       </div>
-
       {/* Value */}
       <div style={{ color: tokens.colors.text }} className="text-3xl font-bold mb-3">
         {typeof value === 'number' ? formatValue(displayValue, format, currency) : value}
       </div>
-
       {/* Change indicator */}
       {(changePercentage !== undefined || previousValue !== undefined) && (
         <div className="flex items-center gap-2 mb-2">
@@ -277,7 +254,6 @@ export function KPICard({
           </span>
         </div>
       )}
-
       {/* Target progress bar */}
       {target && progressPercent !== undefined && (
         <div className="mt-3">
@@ -308,5 +284,4 @@ export function KPICard({
     </div>
   );
 };
-
 KPICard.displayName = 'KPICard';

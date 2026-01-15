@@ -68,7 +68,7 @@ export function CRMView() {
   );
 }
 
-function MetricCard({ title, value, icon, theme, tokens }: { title: string; value: number; icon: React.ReactNode; theme: any; tokens: any }) {
+function MetricCard({ title, value, icon, theme, tokens }: { title: string; value: number; icon: React.ReactNode; theme: Record<string, any>; tokens: Record<string, any> }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,
@@ -89,7 +89,7 @@ function MetricCard({ title, value, icon, theme, tokens }: { title: string; valu
   );
 }
 
-function TabButton({ active, onClick, disabled, children, theme, tokens }: { active: boolean; onClick: () => void; disabled?: boolean; children: React.ReactNode; theme: any; tokens: any }) {
+function TabButton({ active, onClick, disabled, children, theme, tokens }: { active: boolean; onClick: () => void; disabled?: boolean; children: React.ReactNode; theme: Record<string, any>; tokens: Record<string, any> }) {
   return (
     <button onClick={onClick} disabled={disabled}
       style={{
@@ -106,7 +106,7 @@ function TabButton({ active, onClick, disabled, children, theme, tokens }: { act
   );
 }
 
-function ClientCard({ client, theme, tokens }: { client: CRMClient; theme: any; tokens: any }) {
+function ClientCard({ client, theme, tokens }: { client: CRMClient; theme: Record<string, any>; tokens: Record<string, any> }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,
@@ -139,7 +139,7 @@ function ClientCard({ client, theme, tokens }: { client: CRMClient; theme: any; 
   );
 }
 
-function ContactRow({ contact, theme, tokens }: { contact: CRMContact; theme: any; tokens: any }) {
+function ContactRow({ contact, theme, tokens }: { contact: CRMContact; theme: Record<string, any>; tokens: Record<string, any> }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,
@@ -167,7 +167,7 @@ function ContactRow({ contact, theme, tokens }: { contact: CRMContact; theme: an
   );
 }
 
-function OpportunityRow({ opportunity, theme, tokens }: { opportunity: CRMOpportunity; theme: any; tokens: any }) {
+function OpportunityRow({ opportunity, theme, tokens }: { opportunity: CRMOpportunity; theme: Record<string, any>; tokens: Record<string, any> }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,

@@ -47,8 +47,9 @@ export function BackendHealthMonitor({ isOpen, onClose }: BackendHealthMonitorPr
     }
   }, [isOpen]);
 
+  const { theme } = useTheme();
+
   const getStatusIcon = (status: ServiceHealthStatus) => {
-    const { tokens } = useTheme();
     switch (status) {
       case 'online':
         return <CheckCircle style={{ height: '1.25rem', width: '1.25rem', color: theme.status.success.text }} />;

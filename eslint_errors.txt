@@ -1,0 +1,429 @@
+/workspaces/lexiflow-premium/frontend/src/components/organisms/_legacy/EnhancedSearch.old.tsx
+  197:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/admin/AdminView.tsx
+  9:11  error  'theme' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  9:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/admin/components/data/schema/SchemaVisualizer.tsx
+  21:20  error  'mode' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/billing/components/enterprise/InvoiceBuilder.tsx
+   1:136  error  'Calendar' is defined but never used. Allowed unused vars must match /^_/u                            @typescript-eslint/no-unused-vars
+   1:146  error  'Copy' is defined but never used. Allowed unused vars must match /^_/u                                @typescript-eslint/no-unused-vars
+   1:152  error  'DollarSign' is defined but never used. Allowed unused vars must match /^_/u                          @typescript-eslint/no-unused-vars
+   1:164  error  'Eye' is defined but never used. Allowed unused vars must match /^_/u                                 @typescript-eslint/no-unused-vars
+   1:169  error  'FileText' is defined but never used. Allowed unused vars must match /^_/u                            @typescript-eslint/no-unused-vars
+   1:179  error  'Globe' is defined but never used. Allowed unused vars must match /^_/u                               @typescript-eslint/no-unused-vars
+   1:186  error  'Minus' is defined but never used. Allowed unused vars must match /^_/u                               @typescript-eslint/no-unused-vars
+   1:193  error  'Percent' is defined but never used. Allowed unused vars must match /^_/u                             @typescript-eslint/no-unused-vars
+   1:202  error  'Plus' is defined but never used. Allowed unused vars must match /^_/u                                @typescript-eslint/no-unused-vars
+   1:208  error  'Save' is defined but never used. Allowed unused vars must match /^_/u                                @typescript-eslint/no-unused-vars
+   1:214  error  'Send' is defined but never used. Allowed unused vars must match /^_/u                                @typescript-eslint/no-unused-vars
+   5:13   error  'RateCard' is defined but never used. Allowed unused vars must match /^_/u                            @typescript-eslint/no-unused-vars
+   6:13   error  'FeeArrangement' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   7:13   error  'Currency' is defined but never used. Allowed unused vars must match /^_/u                            @typescript-eslint/no-unused-vars
+   9:67   error  'onSave' is defined but never used. Allowed unused args must match /^_/u                              @typescript-eslint/no-unused-vars
+   9:75   error  'onSend' is defined but never used. Allowed unused args must match /^_/u                              @typescript-eslint/no-unused-vars
+   9:83   error  'onPreview' is defined but never used. Allowed unused args must match /^_/u                           @typescript-eslint/no-unused-vars
+  10:16   error  'lineItems' is assigned a value but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  10:27   error  'setLineItems' is assigned a value but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  10:83   error  'selectedCurrency' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  10:101  error  'setSelectedCurrency' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  10:156  error  'selectedFeeArrangement' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  10:180  error  'setSelectedFeeArrangement' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  10:238  error  'showRateCardSelector' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  10:260  error  'setShowRateCardSelector' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/billing/components/enterprise/LEDESBilling.tsx
+   1:129  error  'AlertCircle' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   1:142  error  'CheckCircle' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   1:155  error  'Database' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   1:165  error  'Download' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   1:175  error  'FileText' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   1:185  error  'Filter' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   1:193  error  'Search' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   1:201  error  'Send' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+   1:207  error  'Settings' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   1:217  error  'Upload' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   5:13   error  'UTBMSCode' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+   6:13   error  'RateSchedule' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   8:13   error  'EBillingPortal' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  13:73   error  'onImport' is defined but never used. Allowed unused args must match /^_/u                    @typescript-eslint/no-unused-vars
+  14:16   error  'selectedTab' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  14:29   error  'setSelectedTab' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  14:118  error  'searchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  14:131  error  'setSearchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  14:186  error  'setSelectedFormat' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  14:251  error  'showValidation' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  14:312  error  'validationResults' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  14:401  error  'handleExport' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  14:582  error  'handleValidate' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/CaseListView.tsx
+  440:27  error    'contentType' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/calendar/CaseCalendar.tsx
+   1:559  error  'api' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+   7:10   error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   9:22   error  'CalendarIcon' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   9:36   error  'ChevronLeft' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   9:49   error  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   9:70   error  'Download' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+  12:65   error  'caseId' is defined but never used. Allowed unused args must match /^_/u                      @typescript-eslint/no-unused-vars
+  12:88   error  'isDark' is assigned a value but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  12:118  error  'view' is assigned a value but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  12:124  error  'setView' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  12:175  error  'currentDate' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  12:188  error  'setCurrentDate' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  12:235  error  'selectedEvent' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  12:250  error  'setSelectedEvent' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  12:315  error  'showEventModal' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  12:331  error  'setShowEventModal' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  12:376  error  'filterType' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  12:388  error  'setFilterType' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  12:437  error  'filterMatter' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  12:451  error  'setFilterMatter' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  15:9    error  'MonthView' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  19:9    error  'AgendaView' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  22:9    error  'EventDetailModal' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/docket/DocketDetail.tsx
+   1:10   error  'TabNavigation' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   2:10   error  'format' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   3:10   error  'Database' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   3:20   error  'FileText' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   3:30   error  'Layout' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   3:38   error  'Users' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   5:10   error  'Form' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+   6:10   error  'setDeepValue' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   8:10   error  'EditableMetadataField' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  15:13   error  'AppellateData' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  17:34   error  'initialItem' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+  17:76   error  'navigate' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  17:108  error  'fetcher' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  17:139  error  'activeTab' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  17:150  error  'setActiveTab' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  17:192  error  'isEditing' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  17:203  error  'setIsEditing' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/financials/CaseFinancialsCenter.tsx
+   1:454  error  'api' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+   3:10   error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   5:10   error  'Bar' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+   5:15   error  'BarChart' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   5:25   error  'CartesianGrid' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   5:40   error  'Cell' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+   5:57   error  'RechartsTooltip' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   5:74   error  'ResponsiveContainer' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   5:95   error  'XAxis' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+   5:102  error  'YAxis' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+   7:10   error  'Button' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   9:10   error  'Clock' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+   9:17   error  'DollarSign' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   9:29   error  'Download' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   9:39   error  'TrendingUp' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   9:51   error  'Wallet' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+  11:10   error  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+  11:54   error  'Invoice' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+  12:13   error  'Expense' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+  13:13   error  'Matter' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+  14:13   error  'TimeEntry' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  15:73   error  'caseId' is defined but never used. Allowed unused args must match /^_/u                      @typescript-eslint/no-unused-vars
+  15:96   error  'isDark' is assigned a value but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  15:126  error  'dateRange' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  15:137  error  'setDateRange' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  15:208  error  'viewMode' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  15:218  error  'setViewMode' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  16:10   error  'FinancialKPICard' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  18:10   error  'MatterRevenueItem' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  20:10   error  'InvoiceItem' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/insights/CaseInsightsDashboard.tsx
+   1:463  error  'api' is defined but never used. Allowed unused vars must match /^_/u                           @typescript-eslint/no-unused-vars
+   3:10   error  'Button' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+   6:10   error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   7:10   error  'CaseStatus' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   9:10   error  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   9:25   error  'Brain' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+   9:32   error  'Download' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   9:42   error  'Target' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+  11:10   error  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+  11:128  error  'isDark' is assigned a value but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  11:158  error  'dateRange' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  11:169  error  'setDateRange' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  12:10   error  'InsightCard' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  14:10   error  'RiskItem' is assigned a value but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  16:10   error  'BudgetVarianceItem' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  18:10   error  'TeamPerformanceItem' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  20:10   error  'RecommendationItem' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/intake/NewCaseIntakeForm.tsx
+   1:485  error  'PATHS' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   2:10   error  'useEnhancedWizard' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   3:10   error  'useMutation' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   3:23   error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   4:10   error  'api' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   5:10   error  'DataService' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   6:10   error  'cn' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+   7:10   error  'Button' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   8:10   error  'Card' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  10:15   error  'Matter' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  10:23   error  'User' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  11:10   error  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  11:25   error  'ArrowLeft' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  11:36   error  'ArrowRight' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  11:48   error  'CheckCircle' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  11:61   error  'Save' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  19:9    error  'INITIAL_DATA' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  20:10   error  'WIZARD_STEPS' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  21:78   error  'onSuccess' is defined but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  21:102  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  23:10   error  'notify' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/list/CaseDetail.tsx
+   2:10   error  'useMutation' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   2:23   error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   4:10   error  'DataService' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   5:10   error  'queryClient' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   6:10   error  'ConfirmDialog' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   7:10   error  'Matter' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   7:18   error  'MatterPriority' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   7:34   error  'MatterStatus' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   8:10   error  'queryKeys' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   9:10   error  'AlertCircle' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   9:23   error  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   9:38   error  'ArrowLeft' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   9:49   error  'Building2' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   9:60   error  'Calendar' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   9:70   error  'CheckCircle' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   9:83   error  'DollarSign' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   9:95   error  'Edit' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   9:101  error  'FileText' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   9:111  error  'Scale' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+   9:118  error  'Trash2' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   9:126  error  'Users' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  11:17   error  'useEffect' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  12:10   error  'MatterForm' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  12:97   error  'matterId' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  12:107  error  'backToMatters' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  12:122  error  'isValidMatter' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  12:168  error  'editing' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  12:177  error  'setEditing' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  12:215  error  'deleting' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  12:225  error  'setDeleting' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  12:263  error  'deleteModal' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/list/CaseListView.tsx
+   1:278  error  'PATHS' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   2:10   error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   3:10   error  'DataService' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   4:10   error  'cn' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   5:10   error  'Matter' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   5:18   error  'MatterPriority' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+   5:34   error  'MatterStatus' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+   5:48   error  'MatterType' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+   5:60   error  'PracticeArea' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+   6:10   error  'queryKeys' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   7:10   error  'AlertCircle' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   7:23   error  'ArrowUpCircle' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+   7:38   error  'Building2' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   7:49   error  'Calendar' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   7:59   error  'CheckCircle' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   7:72   error  'Clock' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   7:79   error  'DollarSign' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+   7:91   error  'FileText' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   7:101  error  'Filter' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   7:109  error  'Plus' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   7:115  error  'Search' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   7:123  error  'Users' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   7:130  error  'XCircle' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   9:17   error  'useCallback' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   9:30   error  'useMemo' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   9:39   error  'useState' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  10:64   error  'filter' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/list/FederalLitigationCaseForm.tsx
+   1:708  error  'useAutoSave' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   2:10   error  'api' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+   2:15   error  'Jurisdiction' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   3:10   error  'DataService' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   4:10   error  'AutocompleteSelect' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   6:10   error  'AlertCircle' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   6:23   error  'Building' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   6:33   error  'Calendar' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   6:43   error  'FileText' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   6:53   error  'Scale' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+   6:60   error  'Users' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+   7:17   error  'useCallback' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   7:30   error  'useEffect' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  15:106  error  'existingCase' is defined but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  15:120  error  'onSubmit' is defined but never used. Allowed unused args must match /^_/u                  @typescript-eslint/no-unused-vars
+  15:130  error  'onCancel' is defined but never used. Allowed unused args must match /^_/u                  @typescript-eslint/no-unused-vars
+  15:140  error  'enableAutoSave' is assigned a value but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  16:16   error  'state' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  16:23   error  'dispatch' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  16:81   error  'isSubmitting' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  16:95   error  'setIsSubmitting' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/operations/CaseOperationsCenter.tsx
+   1:788  error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   3:10   error  'api' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   7:10   error  'Button' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   9:10   error  'useTheme' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  11:10   error  'Calendar' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  11:20   error  'Kanban' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  11:28   error  'List' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  11:34   error  'Loader2' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  11:43   error  'Plus' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  11:49   error  'Search' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  13:10   error  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  13:19   error  'useState' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  13:49   error  'ViewMode' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  13:162  error  'caseId' is defined but never used. Allowed unused args must match /^_/u                 @typescript-eslint/no-unused-vars
+  14:10   error  'StatCard' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  15:10   error  'TaskItem' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  16:10   error  'ActivityItem' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/overview/CaseOverviewDashboard.tsx
+   1:1179  error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   2:10    error  'api' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+   4:10    error  'Badge' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+   5:10    error  'Button' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   7:10    error  'ErrorState' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   8:10    error  'useTheme' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  10:33    error  'AlertTriangle' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  10:48    error  'Briefcase' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  10:72    error  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  10:101   error  'Loader2' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  10:116   error  'Search' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+  10:124   error  'TrendingUp' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  12:10    error  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  12:19    error  'useState' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  12:54    error  'IntakePipelineStage' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  13:13    error  'ResourceUtilization' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  14:13    error  'RecentActivity' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  15:74    error  'caseId' is defined but never used. Allowed unused args must match /^_/u                    @typescript-eslint/no-unused-vars
+  18:9     error  'KPICard' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  19:10    error  'MetricCard' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  20:10    error  'StatusIcon' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  21:10    error  'ActivityIcon' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  22:10    error  'formatTimestamp' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/crm/components/ClientDirectory.tsx
+  12:10  error  'cn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/crm/components/enterprise/ClientAnalytics.tsx
+  120:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/crm/components/enterprise/ClientPortal.tsx
+  101:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/crm/components/enterprise/IntakeManagement.tsx
+  95:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/dashboard/widgets/KPICard.tsx
+  149:11  error    'theme' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/documents/components/DocumentAnnotations.tsx
+  18:11  error  'theme' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/documents/components/enterprise/AuditTrail.tsx
+  3:32   error  'documentId' is defined but never used. Allowed unused args must match /^_/u                   @typescript-eslint/no-unused-vars
+  3:44   error  'events' is assigned a value but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  3:57   error  'showFilters' is assigned a value but never used. Allowed unused args must match /^_/u         @typescript-eslint/no-unused-vars
+  3:77   error  'enableExport' is assigned a value but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+  3:98   error  'onExport' is defined but never used. Allowed unused args must match /^_/u                     @typescript-eslint/no-unused-vars
+  4:30   error  'searchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  4:43   error  'setSearchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  4:82   error  'filterEventType' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  4:99   error  'setFilterEventType' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  4:169  error  'filterUser' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  4:181  error  'setFilterUser' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  4:230  error  'dateFrom' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  4:240  error  'setDateFrom' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  4:276  error  'dateTo' is assigned a value but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  4:284  error  'setDateTo' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  4:318  error  'expandedEventId' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  4:335  error  'setExpandedEventId' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  4:395  error  'selectedEvents' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  4:411  error  'setSelectedEvents' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/documents/components/enterprise/DocumentManagementSystem.tsx
+  6:57   error  'templates' is assigned a value but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  6:73   error  'checkoutStatus' is assigned a value but never used. Allowed unused args must match /^_/u         @typescript-eslint/no-unused-vars
+  6:94   error  'currentUserId' is defined but never used. Allowed unused args must match /^_/u                   @typescript-eslint/no-unused-vars
+  6:109  error  'onDocumentSelect' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+  6:127  error  'onCheckOut' is defined but never used. Allowed unused args must match /^_/u                      @typescript-eslint/no-unused-vars
+  6:139  error  'onCheckIn' is defined but never used. Allowed unused args must match /^_/u                       @typescript-eslint/no-unused-vars
+  6:150  error  'onCreateFromTemplate' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+  7:44   error  'treeData' is assigned a value but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  7:54   error  'setTreeData' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  7:133  error  'selectedDocument' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  7:151  error  'setSelectedDocument' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  7:219  error  'viewMode' is assigned a value but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  7:229  error  'setViewMode' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  7:295  error  'showTemplateDialog' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  7:315  error  'setShowTemplateDialog' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:364  error  'showMetadataEditor' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  7:384  error  'setShowMetadataEditor' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:433  error  'searchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  7:446  error  'setSearchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  7:485  error  'filterType' is assigned a value but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  7:497  error  'setFilterType' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/documents/components/enterprise/DocumentViewer.tsx
+  6:46   error  'annotations' is assigned a value but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  6:64   error  'redactions' is assigned a value but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  6:81   error  'batesStamp' is defined but never used. Allowed unused args must match /^_/u                        @typescript-eslint/no-unused-vars
+  6:93   error  'showOCRStatus' is assigned a value but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+  6:115  error  'enableAnnotations' is assigned a value but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+  6:141  error  'enableRedaction' is assigned a value but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+  6:165  error  'onAnnotationDelete' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+  6:185  error  'onRedactionDelete' is defined but never used. Allowed unused args must match /^_/u                 @typescript-eslint/no-unused-vars
+  7:34   error  'currentPage' is assigned a value but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  7:47   error  'setCurrentPage' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  7:85   error  'zoom' is assigned a value but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+  7:91   error  'setZoom' is assigned a value but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  7:124  error  'activeToolbarItem' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  7:143  error  'setActiveToolbarItem' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  7:238  error  'showAnnotationPanel' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  7:259  error  'setShowAnnotationPanel' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  7:309  error  'showRedactionPanel' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  7:329  error  'setShowRedactionPanel' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  7:378  error  'showBatesStampDialog' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  7:400  error  'setShowBatesStampDialog' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:451  error  'searchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  7:464  error  'setSearchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  7:503  error  'searchResults' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  7:518  error  'setSearchResults' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  7:598  error  'showThumbnails' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  7:614  error  'setShowThumbnails' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  7:658  error  'viewerRef' is assigned a value but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  7:706  error  'totalPages' is assigned a value but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/documents/components/enterprise/DocumentWorkflow.tsx
+  6:38   error  'workflow' is defined but never used. Allowed unused args must match /^_/u                       @typescript-eslint/no-unused-vars
+  6:48   error  'templates' is assigned a value but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+  6:64   error  'onStepComplete' is defined but never used. Allowed unused args must match /^_/u                 @typescript-eslint/no-unused-vars
+  6:80   error  'onStepReject' is defined but never used. Allowed unused args must match /^_/u                   @typescript-eslint/no-unused-vars
+  6:94   error  'onWorkflowCancel' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  7:36   error  'showCreateDialog' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  7:54   error  'setShowCreateDialog' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  7:101  error  'selectedTemplate' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  7:119  error  'setSelectedTemplate' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  7:190  error  'activeStepId' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  7:204  error  'setActiveStepId' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  7:261  error  'showCommentDialog' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  7:280  error  'setShowCommentDialog' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:328  error  'comment' is assigned a value but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  7:337  error  'setComment' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  7:372  error  'actionType' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  7:384  error  'setActionType' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/shared/components/enterprise/ui/StatusBadge.tsx
+  54:9  error  'themeStyles' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/utils/loader-helpers.ts
+  79:7   error    Unnecessary try/catch wrapper                                                        no-useless-catch
+  83:26  warning  Unused eslint-disable directive (no problems were reported from 'no-useless-catch')

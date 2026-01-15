@@ -69,7 +69,7 @@ const getUrgencyLabel = (date: Date | string): string => {
   return formatDistanceToNow(deadlineDate, { addSuffix: true });
 };
 
-const getPriorityConfig = (priority: Deadline['priority'], tokens: any) => {
+const getPriorityConfig = (priority: Deadline['priority'], tokens: { colors: Record<string, string> }) => {
   switch (priority) {
     case 'critical':
       return {
@@ -103,7 +103,7 @@ const getPriorityConfig = (priority: Deadline['priority'], tokens: any) => {
   }
 };
 
-const getStatusConfig = (status: Deadline['status'], tokens: any) => {
+const getStatusConfig = (status: Deadline['status'], tokens: { colors: Record<string, string> }) => {
   switch (status) {
     case 'completed':
       return {

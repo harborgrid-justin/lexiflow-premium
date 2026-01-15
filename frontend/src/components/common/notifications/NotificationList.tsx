@@ -133,7 +133,7 @@ export function NotificationList({
           </div>
         );
     }
-  }, []);
+  }, [theme]);
 
   if (isLoading) {
     return (

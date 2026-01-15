@@ -47,7 +47,7 @@ export interface ActivityFeedProps {
 // HELPERS
 // ============================================================================
 
-const getActivityConfig = (tokens: any) => ({
+const getActivityConfig = (tokens: any, theme: any) => ({
   case_created: {
     icon: Briefcase,
     color: tokens.colors.blue500,
@@ -98,7 +98,7 @@ const getActivityConfig = (tokens: any) => ({
     color: 'text-yellow-600 dark:text-yellow-400',
     bgColor: 'bg-yellow-100 dark:bg-yellow-900/30',
   },
-};
+});
 
 const formatTimestamp = (timestamp: Date | string): string => {
   try {
@@ -137,7 +137,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   className,
 }) => {
   const { theme, tokens } = useTheme();
-  const { theme: _theme } = useTheme();
+  const activityConfig = React.useMemo(() => getActivityConfig(tokens, theme), [tokens, theme]);
 
   const displayActivities = activities.slice(0, maxItems);
 

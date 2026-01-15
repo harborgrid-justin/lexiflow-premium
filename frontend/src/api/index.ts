@@ -51,7 +51,8 @@
  *   import * as litigationApi from '@/lib/frontend-api';
  */
 
-// ==================== ENTERPRISE FRONTEND API ====================
+// ====================
+ENTERPRISE FRONTEND API ====================
 // Export new enterprise-grade frontend API infrastructure
 // See: lib/frontend-api/README.md for architecture documentation
 
@@ -147,7 +148,8 @@ export type {
   UpdateCaseInput,
 } from "@/lib/frontend-api";
 
-// ==================== LEGACY API SERVICES ====================
+// ====================
+LEGACY API SERVICES ====================
 
 // Export API configuration utilities
 export {
@@ -161,7 +163,8 @@ export {
   logApiConfig,
 } from "@/config/network/api.config";
 
-// ==================== DOMAIN EXPORTS ====================
+// ====================
+DOMAIN EXPORTS ====================
 // Re-export domain API services for direct access
 export { adminApi } from "./domains/admin.api";
 export { analyticsApi } from "./domains/analytics.api";
@@ -196,7 +199,8 @@ export {
   type LegalEntityApi,
 } from "./domains/legal-entities.api";
 
-// ==================== ORGANIZED FOLDER EXPORTS ====================
+// ====================
+ORGANIZED FOLDER EXPORTS ====================
 // Export from organized domain folders
 export * from "./auth";
 export * from "./billing";

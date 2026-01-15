@@ -3,7 +3,8 @@
 
 import { BaseEntity, MetadataRecord } from './primitives';
 
-// ==================== ANALYTICS ====================
+// ====================
+ANALYTICS ====================
 
 export interface AnalyticsEvent extends BaseEntity {
   eventType: string;
@@ -98,7 +99,8 @@ export interface BillingMetrics {
   utilizationRate: number;
 }
 
-// ==================== INTEGRATIONS ====================
+// ====================
+INTEGRATIONS ====================
 
 export interface Integration extends BaseEntity {
   name: string;

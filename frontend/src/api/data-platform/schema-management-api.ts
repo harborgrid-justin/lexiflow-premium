@@ -55,7 +55,8 @@ export interface Snapshot {
  * Provides methods for schema inspection, migrations, and snapshots
  */
 export class SchemaManagementApiService {
-  // ==================== Schema Inspection ====================
+// ====================
+Schema Inspection ====================
   
   /**
    * Get all tables in the database
@@ -81,7 +82,8 @@ export class SchemaManagementApiService {
     }
   }
 
-  // ==================== Migrations ====================
+// ====================
+Migrations ====================
   
   /**
    * Get all migrations
@@ -121,7 +123,8 @@ export class SchemaManagementApiService {
     return await apiClient.post<Migration>(`/schema/migrations/${id}/revert`, {});
   }
 
-  // ==================== Snapshots ====================
+// ====================
+Snapshots ====================
   
   /**
    * Get all schema snapshots
@@ -160,7 +163,8 @@ export class SchemaManagementApiService {
     await apiClient.delete(`/schema/snapshots/${id}`);
   }
 
-  // ==================== Table Operations ====================
+// ====================
+Table Operations ====================
   
   /**
    * Create a new table

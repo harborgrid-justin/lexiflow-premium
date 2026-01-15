@@ -15,10 +15,12 @@
 // This file remains for backward compatibility. New code should use direct imports.
 // ============================================================================
 
-// ==================== CORE INFRASTRUCTURE ====================
+// ====================
+CORE INFRASTRUCTURE ====================
 export * from "./core/errors"; // Domain error classes
 
-// ==================== ENTERPRISE SERVICE LAYER ====================
+// ====================
+ENTERPRISE SERVICE LAYER ====================
 // Following ENTERPRISE REACT SERVICES ARCHITECTURE STANDARD
 // Services = Capabilities (browser APIs, side effects)
 // Frontend APIs = Knowledge (data, domain truth)
@@ -89,11 +91,13 @@ export type {
 // DO NOT export RepositoryFactory - it imports Repository which imports microORM
 // Import directly: import { createRepository } from '@/services/core/RepositoryFactory';
 
-// ==================== INFRASTRUCTURE ADAPTERS ====================
+// ====================
+INFRASTRUCTURE ADAPTERS ====================
 export * from "./infrastructure/adapters/StorageAdapter";
 export * from "./infrastructure/adapters/WindowAdapter";
 
-// ==================== DATA LAYER ====================
+// ====================
+DATA LAYER ====================
 // DO NOT export dataService here - it causes circular dependencies
 // Import directly: import { DataService } from '@/services/data/data-service.service';
 // DO NOT export db here - it causes circular dependencies with microORM and dbSeeder
@@ -106,7 +110,8 @@ export { SyncEngine, type Mutation } from "./data/syncEngine";
 // Import directly: import { UserRepository } from '@/services/data/repositories/UserRepository';
 // All repositories are available via DataService which should be used instead
 
-// ==================== DOMAIN SERVICES ====================
+// ====================
+DOMAIN SERVICES ====================
 // DO NOT export domain services that depend on DataService or IntegrationOrchestrator
 // These cause circular dependencies - import directly instead:
 // import { CaseDomain } from '@/services/domain/case.service';
@@ -124,7 +129,8 @@ export * from "./domain/JurisdictionDomain";
 export * from "./domain/MarketingDomain";
 export * from "./domain/OperationsDomain";
 
-// ==================== BACKEND API SERVICES ====================
+// ====================
+BACKEND API SERVICES ====================
 // Consolidated backend API services (BACKEND-FIRST as of 2025-12-18)
 export * from "./infrastructure/api-client.service";
 // NOTE: Commented out full API barrel export to avoid QUERY_KEYS duplicates, Notification type conflicts, Filter type conflicts, and CalendarEvent conflicts
@@ -142,12 +148,14 @@ export {
 } from "@/config/network/api.config";
 export { api } from "@/lib/frontend-api"; // Export the consolidated api object
 
-// ==================== INTEGRATION & ORCHESTRATION ====================
+// ====================
+INTEGRATION & ORCHESTRATION ====================
 // DO NOT export integrationOrchestrator or handlers here - they cause circular dependencies
 // Import directly: import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 export * from "./integration/backend-discovery.service";
 
-// ==================== INFRASTRUCTURE SERVICES ====================
+// ====================
+INFRASTRUCTURE SERVICES ====================
 export * from "./infrastructure/ai-validation.service";
 export * from "./infrastructure/blob-manager.service";
 export * from "./infrastructure/chainService";
@@ -163,17 +171,20 @@ export * from "./infrastructure/query-client.service";
 export * from "./infrastructure/query-keys.service";
 export * from "./infrastructure/schema-utils.service";
 
-// ==================== SEARCH SERVICES ====================
+// ====================
+SEARCH SERVICES ====================
 export { GraphValidationService } from "./search/graph-validation.service"; // Explicit export to avoid ValidationError conflict with bluebook types
 // DO NOT export searchService - causes circular dependencies
 // Import directly: import { searchService } from '@/services/search/searchService';
 export * from "./search/searchWorker";
 
-// ==================== WORKERS ====================
+// ====================
+WORKERS ====================
 export * from "./workers/cryptoWorker";
 export * from "./workers/workerPool";
 
-// ==================== FEATURE SERVICES ====================
+// ====================
+FEATURE SERVICES ====================
 // Analysis
 export * from "./features/analysis/analysisEngine";
 
@@ -202,10 +213,12 @@ export * from "./features/research/geminiService";
 // Bluebook (keep organized exports)
 export * from "./features/bluebook";
 
-// ==================== AI SERVICES ====================
+// ====================
+AI SERVICES ====================
 export * from "./ai/prompts";
 export * from "./ai/schemas";
 
-// ==================== VALIDATION ====================
+// ====================
+VALIDATION ====================
 // Validation schemas are not re-exported here to avoid barrel file bloat
 // Import directly from './validation/*Schemas' when needed

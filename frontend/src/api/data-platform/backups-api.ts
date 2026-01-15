@@ -44,7 +44,8 @@ export interface BackupSchedule {
  * Provides methods for backup and restore operations
  */
 export class BackupsApiService {
-  // ==================== Snapshots ====================
+// ====================
+Snapshots ====================
   
   /**
    * Get all backup snapshots
@@ -82,7 +83,8 @@ export class BackupsApiService {
     return await apiClient.post(`/backups/snapshots/${id}/restore`, { target });
   }
 
-  // ==================== Schedules ====================
+// ====================
+Schedules ====================
   
   /**
    * Get all backup schedules
@@ -116,7 +118,8 @@ export class BackupsApiService {
     await apiClient.delete(`/backups/schedules/${id}`);
   }
 
-  // ==================== Statistics ====================
+// ====================
+Statistics ====================
   
   /**
    * Get backup statistics

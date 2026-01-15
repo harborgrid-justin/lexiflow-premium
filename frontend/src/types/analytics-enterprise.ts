@@ -5,7 +5,8 @@
 
 import { BaseEntity } from './primitives';
 
-// ==================== METRIC CARDS ====================
+// ====================
+METRIC CARDS ====================
 
 export interface MetricCardData {
   label: string;
@@ -21,7 +22,8 @@ export interface MetricCardData {
   format?: 'number' | 'currency' | 'percentage' | 'duration';
 }
 
-// ==================== CASE ANALYTICS ====================
+// ====================
+CASE ANALYTICS ====================
 
 export interface CaseAnalytics {
   period: { start: string; end: string };
@@ -67,7 +69,8 @@ export interface CaseAnalytics {
   }>;
 }
 
-// ==================== BILLING ANALYTICS ====================
+// ====================
+BILLING ANALYTICS ====================
 
 export interface BillingAnalytics {
   period: { start: string; end: string };
@@ -137,7 +140,8 @@ export interface BillingAnalytics {
   }>;
 }
 
-// ==================== PRODUCTIVITY ANALYTICS ====================
+// ====================
+PRODUCTIVITY ANALYTICS ====================
 
 export interface ProductivityAnalytics {
   period: { start: string; end: string };
@@ -181,7 +185,8 @@ export interface ProductivityAnalytics {
   };
 }
 
-// ==================== CLIENT ANALYTICS ====================
+// ====================
+CLIENT ANALYTICS ====================
 
 export interface ClientAnalytics {
   period: { start: string; end: string };
@@ -229,7 +234,8 @@ export interface ClientAnalytics {
   }>;
 }
 
-// ==================== REPORTS ====================
+// ====================
+REPORTS ====================
 
 export interface Report extends BaseEntity {
   name: string;
@@ -311,7 +317,8 @@ export interface ChartData {
   config?: Record<string, unknown>;
 }
 
-// ==================== AUDIT LOGS ====================
+// ====================
+AUDIT LOGS ====================
 
 export interface AuditLog extends BaseEntity {
   userId?: string;
@@ -376,7 +383,8 @@ export interface AuditLogFilters {
   searchTerm?: string;
 }
 
-// ==================== DASHBOARD WIDGETS ====================
+// ====================
+DASHBOARD WIDGETS ====================
 
 export interface AnalyticsDashboardWidget {
   id: string;
@@ -401,7 +409,8 @@ export interface WidgetConfig {
   animation?: boolean;
 }
 
-// ==================== TIME SERIES ====================
+// ====================
+TIME SERIES ====================
 
 export interface TimeSeriesData {
   timestamp: string;

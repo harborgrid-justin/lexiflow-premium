@@ -43,7 +43,8 @@ export interface AIModel {
  * Provides methods for AI/ML operations
  */
 export class AiOpsApiService {
-  // ==================== Embeddings ====================
+// ====================
+Embeddings ====================
   
   /**
    * Get vector embeddings
@@ -74,7 +75,8 @@ export class AiOpsApiService {
     }
   }
 
-  // ==================== Models ====================
+// ====================
+Models ====================
   
   /**
    * Get all AI models
@@ -108,7 +110,8 @@ export class AiOpsApiService {
     await apiClient.delete(`/ai-ops/models/${id}`);
   }
 
-  // ==================== Statistics ====================
+// ====================
+Statistics ====================
   
   /**
    * Get AI operations statistics

@@ -110,7 +110,7 @@ const getColorStyles = (tokens: any) => ({
     icon: 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/30',
     accent: 'text-gray-600 dark:text-gray-400',
   },
-};
+});
 
 // ============================================================================
 // COMPONENT
@@ -132,7 +132,8 @@ export const KPICard: React.FC<KPICardProps> = ({
   target,
   currency = '$',
 }) => {
-  const { theme: _theme } = useTheme();
+  const { tokens } = useTheme();
+  const colorClasses = React.useMemo(() => getColorStyles(tokens), [tokens]);
   const [displayValue, setDisplayValue] = useState<number>(0);
 
   // Calculate change if previous value provided

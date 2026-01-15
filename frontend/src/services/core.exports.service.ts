@@ -5,25 +5,30 @@
  * Do NOT import domain services or integration handlers here.
  */
 
-// ==================== CORE INFRASTRUCTURE ====================
+// ====================
+CORE INFRASTRUCTURE ====================
 export * from "./core/errors";
 export * from "./core/microORM";
 export * from "./core/Repository";
 export * from "./core/RepositoryFactory";
 
-// ==================== INFRASTRUCTURE ADAPTERS ====================
+// ====================
+INFRASTRUCTURE ADAPTERS ====================
 export * from "./infrastructure/adapters/StorageAdapter";
 export * from "./infrastructure/adapters/WindowAdapter";
 export * from "./infrastructure/api-client.service";
 
-// ==================== DATA LAYER (BASE ONLY) ====================
+// ====================
+DATA LAYER (BASE ONLY) ====================
 export * from "./data/db";
 
-// ==================== QUERY CLIENT ====================
+// ====================
+QUERY CLIENT ====================
 export * from "./infrastructure/query-client.service";
 export * from "./infrastructure/query-keys.service";
 
-// ==================== BACKEND API CONFIG ====================
+// ====================
+BACKEND API CONFIG ====================
 export {
   enableLegacyIndexedDB,
   forceBackendMode,

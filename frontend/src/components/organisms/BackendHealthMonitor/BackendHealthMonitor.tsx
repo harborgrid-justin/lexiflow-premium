@@ -48,15 +48,16 @@ export function BackendHealthMonitor({ isOpen, onClose }: BackendHealthMonitorPr
   }, [isOpen]);
 
   const getStatusIcon = (status: ServiceHealthStatus) => {
+    const { tokens } = useTheme();
     switch (status) {
       case 'online':
-        return <CheckCircle className="h-5 w-5 text-emerald-500" />;
+        return <CheckCircle style={{ height: '1.25rem', width: '1.25rem', color: theme.status.success.text }} />;
       case 'degraded':
-        return <AlertTriangle className="h-5 w-5 text-amber-500" />;
+        return <AlertTriangle style={{ height: '1.25rem', width: '1.25rem', color: theme.status.warning.text }} />;
       case 'offline':
-        return <XCircle className="h-5 w-5 text-rose-500" />;
+        return <XCircle style={{ height: '1.25rem', width: '1.25rem', color: theme.status.error.text }} />;
       default:
-        return <AlertTriangle className="h-5 w-5 text-gray-400" />;
+        return <AlertTriangle style={{ height: '1.25rem', width: '1.25rem', color: theme.text.muted }} />;
     }
   };
 

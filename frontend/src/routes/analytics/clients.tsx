@@ -22,6 +22,7 @@ import {
   Tooltip,
   XAxis, YAxis
 } from 'recharts';
+import { useTheme } from '@/shared/hooks/useTheme';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -47,6 +48,7 @@ export async function loader() {
 
 export default function ClientAnalyticsRoute() {
   const { metrics } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const theme = useTheme();
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 365),
@@ -63,12 +65,12 @@ export default function ClientAnalyticsRoute() {
   ];
 
   const clientByIndustry = [
-    { industry: 'Technology', count: 42, revenue: 2845000, color: '#3B82F6' },
-    { industry: 'Financial Services', count: 28, revenue: 1982000, color: '#10B981' },
-    { industry: 'Healthcare', count: 24, revenue: 1645000, color: '#F59E0B' },
-    { industry: 'Manufacturing', count: 18, revenue: 1234000, color: '#8B5CF6' },
-    { industry: 'Real Estate', count: 15, revenue: 985000, color: '#EF4444' },
-    { industry: 'Other', count: 21, revenue: 1456000, color: '#6B7280' },
+    { industry: 'Technology', count: 42, revenue: 2845000, color: theme.colors.charts.blue },
+    { industry: 'Financial Services', count: 28, revenue: 1982000, color: theme.colors.charts.green },
+    { industry: 'Healthcare', count: 24, revenue: 1645000, color: theme.colors.charts.amber },
+    { industry: 'Manufacturing', count: 18, revenue: 1234000, color: theme.colors.charts.purple },
+    { industry: 'Real Estate', count: 15, revenue: 985000, color: theme.colors.charts.red },
+    { industry: 'Other', count: 21, revenue: 1456000, color: theme.colors.charts.slate },
   ];
 
   const clientBySize = [
@@ -193,11 +195,11 @@ export default function ClientAnalyticsRoute() {
         <ChartCard title="Top Clients by Revenue" subtitle="Highest revenue clients">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={topClientsByRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="client" stroke="#6b7280" angle={-45} textAnchor="end" height={100} />
-              <YAxis stroke="#6b7280" />
+              <CartesianGrid strokeDasharray="3 3" stroke={theme.border.light} />
+              <XAxis dataKey="client" stroke={theme.text.muted} angle={-45} textAnchor="end" height={100} />
+              <YAxis stroke={theme.text.muted} />
               <Tooltip />
-              <Bar dataKey="revenue" fill="#10B981" name="Revenue ($)" />
+              <Bar dataKey="revenue" fill={theme.colors.charts.green} name="Revenue ($)" />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -214,7 +216,7 @@ export default function ClientAnalyticsRoute() {
                 nameKey="industry"
                 label={({ name, value }: { name?: string; value: number }) => `${name} (${value})`}
                 outerRadius={100}
-                fill="#8884d8"
+                fill={theme.colors.charts.blue}
                 dataKey="count"
               >
                 {clientByIndustry.map((entry, index) => (
@@ -230,14 +232,14 @@ export default function ClientAnalyticsRoute() {
         <ChartCard title="Client Profitability" subtitle="Revenue vs profit margin">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={clientProfitability}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="client" stroke="#6b7280" angle={-45} textAnchor="end" height={100} />
-              <YAxis yAxisId="left" stroke="#6b7280" />
-              <YAxis yAxisId="right" orientation="right" stroke="#6b7280" domain={[0, 50]} />
+              <CartesianGrid strokeDasharray="3 3" stroke={theme.border.light} />
+              <XAxis dataKey="client" stroke={theme.text.muted} angle={-45} textAnchor="end" height={100} />
+              <YAxis yAxisId="left" stroke={theme.text.muted} />
+              <YAxis yAxisId="right" orientation="right" stroke={theme.text.muted} domain={[0, 50]} />
               <Tooltip />
               <Legend />
-              <Bar yAxisId="left" dataKey="profit" fill="#3B82F6" name="Profit ($)" />
-              <Line yAxisId="right" type="monotone" dataKey="margin" stroke="#10B981" name="Margin %" />
+              <Bar yAxisId="left" dataKey="profit" fill={theme.colors.charts.blue} name="Profit ($)" />
+              <Line yAxisId="right" type="monotone" dataKey="margin" stroke={theme.colors.charts.green} name="Margin %" />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -246,12 +248,12 @@ export default function ClientAnalyticsRoute() {
         <ChartCard title="Client Retention Trend" subtitle="Retention by cohort year">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={retentionTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="cohort" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" domain={[85, 100]} />
+              <CartesianGrid strokeDasharray="3 3" stroke={theme.border.light} />
+              <XAxis dataKey="cohort" stroke={theme.text.muted} />
+              <YAxis stroke={theme.text.muted} domain={[85, 100]} />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="rate" stroke="#8B5CF6" strokeWidth={2} name="Retention Rate %" />
+              <Line type="monotone" dataKey="rate" stroke={theme.colors.charts.purple} strokeWidth={2} name="Retention Rate %" />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -260,13 +262,13 @@ export default function ClientAnalyticsRoute() {
         <ChartCard title="Clients by Size" subtitle="Distribution by company size">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={clientBySize}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="size" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
+              <CartesianGrid strokeDasharray="3 3" stroke={theme.border.light} />
+              <XAxis dataKey="size" stroke={theme.text.muted} />
+              <YAxis stroke={theme.text.muted} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="count" fill="#F59E0B" name="Count" />
-              <Bar dataKey="avgValue" fill="#3B82F6" name="Avg Value ($)" />
+              <Bar dataKey="count" fill={theme.colors.charts.amber} name="Count" />
+              <Bar dataKey="avgValue" fill={theme.colors.charts.blue} name="Avg Value ($)" />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -275,14 +277,14 @@ export default function ClientAnalyticsRoute() {
         <ChartCard title="Client Engagement" subtitle="Satisfaction and active matters">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={clientEngagement}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="client" stroke="#6b7280" angle={-45} textAnchor="end" height={100} />
-              <YAxis yAxisId="left" stroke="#6b7280" />
-              <YAxis yAxisId="right" orientation="right" stroke="#6b7280" domain={[0, 10]} />
+              <CartesianGrid strokeDasharray="3 3" stroke={theme.border.light} />
+              <XAxis dataKey="client" stroke={theme.text.muted} angle={-45} textAnchor="end" height={100} />
+              <YAxis yAxisId="left" stroke={theme.text.muted} />
+              <YAxis yAxisId="right" orientation="right" stroke={theme.text.muted} domain={[0, 10]} />
               <Tooltip />
               <Legend />
-              <Bar yAxisId="left" dataKey="activeMatters" fill="#10B981" name="Active Matters" />
-              <Line yAxisId="right" type="monotone" dataKey="satisfaction" stroke="#EF4444" name="Satisfaction" />
+              <Bar yAxisId="left" dataKey="activeMatters" fill={theme.colors.charts.green} name="Active Matters" />
+              <Line yAxisId="right" type="monotone" dataKey="satisfaction" stroke={theme.colors.charts.red} name="Satisfaction" />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

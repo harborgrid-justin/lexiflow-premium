@@ -100,7 +100,7 @@ export function LineageCanvas({ data }: LineageCanvasProps) {
                 ctx.fillStyle = type === 0 ? theme.chart.colors.primary : type === 1 ? theme.chart.colors.secondary : type === 2 ? theme.chart.colors.success : theme.chart.colors.warning;
                 ctx.fill();
                 ctx.lineWidth = 3;
-                ctx.strokeStyle = theme.surface.default.includes('slate-900') ? '#1e293b' : '#fff';
+                ctx.strokeStyle = mode === 'dark' ? theme.surface.default : theme.text.primary;
                 ctx.stroke();
 
                 if (nodesMeta && nodesMeta[i]) {

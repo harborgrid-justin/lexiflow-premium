@@ -81,18 +81,25 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
             <h3 style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.text.primary }}>
               Use Timer
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary }}>
               Track time in real-time with built-in timer
             </p>
           </div>
           <button
             type="button"
             onClick={() => setUseTimer(!useTimer)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${useTimer ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
-              }`}
+            style={{
+              backgroundColor: useTimer ? theme.primary.DEFAULT : theme.surface.muted,
+              borderRadius: tokens.borderRadius.full,
+            }}
+            className="relative inline-flex h-6 w-11 items-center transition-colors"
           >
             <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${useTimer ? 'translate-x-6' : 'translate-x-1'
+              style={{
+                backgroundColor: theme.surface.base,
+                borderRadius: tokens.borderRadius.full,
+              }}
+              className={`inline-block h-4 w-4 transform transition-transform ${useTimer ? 'translate-x-6' : 'translate-x-1'
                 }`}
             />
           </button>
@@ -111,15 +118,30 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* Case Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Case/Matter <span className="text-red-500">*</span>
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
+              Case/Matter <span style={{ color: theme.status.error.text }}>*</span>
             </label>
             <select
               name="caseId"
               required
               value={selectedCase}
               onChange={(e) => setSelectedCase(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.normal.xs,
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="focus:outline-none focus:ring-2"
             >
               <option value="">Select a case...</option>
               <option value="C-2024-001">Martinez v. TechCorp</option>
@@ -133,8 +155,13 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
 
           {/* Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Date <span className="text-red-500">*</span>
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
+              Date <span style={{ color: theme.status.error.text }}>*</span>
             </label>
             <input
               type="date"
@@ -143,7 +170,17 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
               value={date}
               onChange={(e) => setDate(e.target.value)}
               max={new Date().toISOString().split('T')[0]}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.normal.xs,
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="focus:outline-none focus:ring-2"
             />
           </div>
         </div>
@@ -152,8 +189,13 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {/* Hours */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Hours <span className="text-red-500">*</span>
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
+              Hours <span style={{ color: theme.status.error.text }}>*</span>
             </label>
             <input
               type="number"
@@ -164,15 +206,35 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
               value={hours}
               onChange={(e) => setHours(parseFloat(e.target.value))}
               disabled={useTimer}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.normal.xs,
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: useTimer ? theme.surface.muted : theme.surface.input,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+                cursor: useTimer ? 'not-allowed' : 'text',
+              }}
+              className="focus:outline-none focus:ring-2"
             />
-            <p className="mt-1 text-xs text-gray-500">Minimum 0.1 (6 minutes)</p>
+            <p style={{
+              marginTop: tokens.spacing.normal.xs,
+              fontSize: tokens.typography.fontSize.xs,
+              color: theme.text.muted,
+            }}>Minimum 0.1 (6 minutes)</p>
           </div>
 
           {/* Rate */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Rate ($/hr) <span className="text-red-500">*</span>
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
+              Rate ($/hr) <span style={{ color: theme.status.error.text }}>*</span>
             </label>
             <input
               type="number"
@@ -182,16 +244,39 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
               step="0.01"
               value={rate}
               onChange={(e) => setRate(parseFloat(e.target.value))}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.normal.xs,
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="focus:outline-none focus:ring-2"
             />
           </div>
 
           {/* Total (calculated) */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
               Total
             </label>
-            <div className="mt-1 block w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
+            <div style={{
+              marginTop: tokens.spacing.normal.xs,
+              width: '100%',
+              borderRadius: tokens.borderRadius.md,
+              border: `1px solid ${theme.border.default}`,
+              backgroundColor: theme.surface.muted,
+              padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+              color: theme.text.primary,
+            }}>
               ${total.toFixed(2)}
             </div>
           </div>
@@ -199,8 +284,13 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Description <span className="text-red-500">*</span>
+          <label style={{
+            display: 'block',
+            fontSize: tokens.typography.fontSize.sm,
+            fontWeight: tokens.typography.fontWeight.medium,
+            color: theme.text.primary,
+          }}>
+            Description <span style={{ color: theme.status.error.text }}>*</span>
           </label>
           <textarea
             name="description"
@@ -209,7 +299,17 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Detailed description of work performed..."
-            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+            style={{
+              marginTop: tokens.spacing.normal.xs,
+              width: '100%',
+              borderRadius: tokens.borderRadius.md,
+              border: `1px solid ${theme.border.default}`,
+              backgroundColor: theme.surface.input,
+              padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+              color: theme.text.primary,
+              boxShadow: tokens.shadows.sm,
+            }}
+            className="focus:outline-none focus:ring-2"
           />
         </div>
 
@@ -217,14 +317,29 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* LEDES Task Code */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
               LEDES Task Code
             </label>
             <select
               name="taskCode"
               value={taskCode}
               onChange={(e) => setTaskCode(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.normal.xs,
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="focus:outline-none focus:ring-2"
             >
               <option value="">Select LEDES code...</option>
               {LEDES_CODES.map((code) => (
@@ -237,14 +352,29 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
 
           {/* Activity Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
               Activity Type
             </label>
             <select
               name="activity"
               value={activityType}
               onChange={(e) => setActivityType(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.normal.xs,
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="focus:outline-none focus:ring-2"
             >
               <option value="">Select activity...</option>
               {ACTIVITY_TYPES.map((type) => (
@@ -267,22 +397,49 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
               checked={billable}
               onChange={(e) => setBillable(e.target.checked)}
               value="true"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              style={{
+                height: tokens.spacing.normal.md,
+                width: tokens.spacing.normal.md,
+                borderRadius: tokens.borderRadius.sm,
+                border: `1px solid ${theme.border.default}`,
+                accentColor: theme.primary.DEFAULT,
+              }}
+              className="focus:ring-2"
             />
-            <label htmlFor="billable" className="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+            <label htmlFor="billable" style={{
+              marginLeft: tokens.spacing.normal.sm,
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              color: theme.text.primary,
+            }}>
               Billable
             </label>
           </div>
 
           {/* Status */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
               Status
             </label>
             <select
               name="status"
               defaultValue="Draft"
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.normal.xs,
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="focus:outline-none focus:ring-2"
             >
               <option value="Draft">Draft</option>
               <option value="Submitted">Submit for Approval</option>
@@ -291,19 +448,43 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
         </div>
 
         {/* Form Actions */}
-        <div className="flex justify-end gap-3 border-t border-gray-200 pt-6 dark:border-gray-700">
+        <div style={{
+          borderTop: `1px solid ${theme.border.default}`,
+          paddingTop: tokens.spacing.normal.lg,
+        }} className="flex justify-end gap-3">
           {onCancel && (
             <button
               type="button"
               onClick={onCancel}
-              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+              style={{
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.base,
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: theme.text.primary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="focus:outline-none focus:ring-2 transition-colors"
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.base}
             >
               Cancel
             </button>
           )}
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            style={{
+              borderRadius: tokens.borderRadius.md,
+              backgroundColor: theme.primary.DEFAULT,
+              padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.surface.base,
+              boxShadow: tokens.shadows.sm,
+            }}
+            className="focus:outline-none focus:ring-2 transition-colors"
           >
             {entry ? 'Update' : 'Create'} Time Entry
           </button>

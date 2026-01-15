@@ -62,19 +62,19 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
           label="Total Evidence"
           value={stats.total}
           icon={Box}
-          className="border-l-4 border-l-blue-600"
+          style={{ borderLeft: `4px solid ${theme.primary.DEFAULT}` }}
         />
         <MetricCard
           label="Digital Assets"
           value={stats.digital}
           icon={HardDrive}
-          className="border-l-4 border-l-purple-600"
+          style={{ borderLeft: `4px solid ${theme.chart.colors.accent}` }}
         />
         <MetricCard
           label="Admissibility Risk"
           value={stats.challenged}
           icon={AlertTriangle}
-          className="border-l-4 border-l-amber-500"
+          style={{ borderLeft: `4px solid ${theme.status.warning.text}` }}
         />
         <MetricCard
           label="Chain Integrity"

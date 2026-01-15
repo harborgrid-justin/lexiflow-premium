@@ -210,7 +210,7 @@ export function QueryConsole({ initialTab = 'editor' }: QueryConsoleProps) {
                             {activeResultsTab === 'visualize' && visualizableData && (
                                 <div className="p-4 h-full">
                                     <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart data={visualizableData.data}><XAxis dataKey={visualizableData.strKey} /><YAxis /><Tooltip /><Bar dataKey={visualizableData.numKey} fill="#8884d8" /></BarChart>
+                                        <BarChart data={visualizableData.data}><XAxis dataKey={visualizableData.strKey} /><YAxis /><Tooltip /><Bar dataKey={visualizableData.numKey} fill={theme.colors.primary.DEFAULT} /></BarChart>
                                     </ResponsiveContainer>
                                 </div>
                             )}

@@ -57,7 +57,7 @@ export function AccountLockedMessage({
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)', padding: tokens.spacing.normal.md }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.colors.gradients.primary, padding: tokens.spacing.normal.md }}>
       <div style={{ maxWidth: '28rem', width: '100%' }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: tokens.spacing.layout.lg }}>
@@ -84,12 +84,12 @@ export function AccountLockedMessage({
           {/* Content */}
           <div className="px-6 py-6 space-y-4">
             {/* Reason */}
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-800 font-medium mb-2">
+            <div style={{ backgroundColor: theme.status.error.bg, borderColor: theme.status.error.border, borderWidth: '1px', borderRadius: tokens.borderRadius.lg, padding: tokens.spacing.normal.lg }}>
+              <p style={{ color: theme.status.error.text, fontWeight: tokens.typography.fontWeight.medium, marginBottom: tokens.spacing.compact.sm }}>
                 {getReasonText()}
               </p>
               {unlockTime && (
-                <p className="text-red-700 text-sm">
+                <p style={{ color: theme.status.error.text, fontSize: tokens.typography.fontSize.sm }}>
                   {getUnlockInfo()}
                 </p>
               )}
@@ -103,20 +103,20 @@ export function AccountLockedMessage({
               <ul className="space-y-2 text-sm" style={{ color: theme.text.secondary }}>
                 {reason === 'failed_attempts' && (
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: theme.colors.blue400 }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Wait for the automatic unlock period to expire</span>
                   </li>
                 )}
                 <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: theme.colors.blue400 }} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Contact your system administrator for immediate assistance</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: theme.colors.blue400 }} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>If you believe this is an error, contact our security team</span>
@@ -162,7 +162,7 @@ export function AccountLockedMessage({
 
         {/* Security Notice */}
         <div className="mt-6 text-center">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs" style={{ color: theme.text.muted }}>
             This security measure protects your account from unauthorized access.
           </p>
         </div>

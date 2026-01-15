@@ -8,6 +8,9 @@
 
 import { useAuthActions } from '@/contexts/auth/AuthProvider';
 import { useTheme } from '@/theme';
+import { useNotify } from '@/hooks/core';
+import { IntegrationOrchestrator } from '@/services/integration/IntegrationOrchestrator';
+import { Button } from '@/shared/ui/atoms/Button';
 import React, { useState } from 'react';
 
 interface MFAVerificationProps {
@@ -18,6 +21,7 @@ interface MFAVerificationProps {
 export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
   const { verifyMFA } = useAuthActions();
   const { theme, tokens } = useTheme();
+  const notify = useNotify();
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,19 +42,37 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
       const success = await verifyMFA(code);
 
       if (success) {
+        // Publish enterprise event
+        IntegrationOrchestrator.publish({
+          type: 'MFA_VERIFICATION_SUCCESS',
+          payload: { method: useBackupCode ? 'backup_code' : 'authenticator' },
+          timestamp: new Date().toISOString(),
+        });
+
+        notify.success('Two-factor authentication successful');
         onSuccess?.();
       } else {
         setError('Invalid verification code. Please try again.');
+        notify.error('Invalid verification code');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Verification failed');
+      const errorMessage = err instanceof Error ? err.message : 'Verification failed';
+      setError(errorMessage);
+      notify.error(`MFA verification failed: ${errorMessage}`);
+
+      // Publish enterprise event for failed verification
+      IntegrationOrchestrator.publish({
+        type: 'MFA_VERIFICATION_FAILED',
+        payload: { error: errorMessage, method: useBackupCode ? 'backup_code' : 'authenticator' },
+        timestamp: new Date().toISOString(),
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.colors.gradients.primary }}>
       <div style={{ width: '100%', maxWidth: '28rem' }}>
         {/* Logo/Branding */}
         <div style={{ textAlign: 'center', marginBottom: tokens.spacing.layout.lg }}>
@@ -81,7 +103,7 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded text-rose-400 text-sm">
+            <div style={{ backgroundColor: theme.status.error.bg, borderColor: theme.status.error.border, borderWidth: '1px', borderRadius: tokens.borderRadius.md, padding: tokens.spacing.normal.md, color: theme.status.error.text, fontSize: tokens.typography.fontSize.sm }}>
               {error}
             </div>
           )}
@@ -107,37 +129,41 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
-              disabled={isLoading || code.length !== 6}
-              style={{ backgroundColor: theme.primary.DEFAULT, color: theme.text.inverse }}
-              className="w-full px-4 py-3 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-medium rounded transition-all"
+              variant="primary"
+              size="md"
+              isLoading={isLoading}
+              disabled={code.length !== 6}
+              className="w-full"
             >
               {isLoading ? 'Verifying...' : 'Verify'}
-            </button>
+            </Button>
           </form>
 
           {/* Alternative Options */}
           <div className="mt-6 pt-6 border-t" style={{ borderColor: theme.border.default }}>
-            <button
+            <Button
+              variant="link"
+              size="sm"
               onClick={() => setUseBackupCode(!useBackupCode)}
-              style={{ color: theme.primary.DEFAULT }}
-              className="text-sm hover:opacity-80 transition-all"
+              className="p-0 h-auto"
             >
               {useBackupCode ? 'Use authenticator code instead' : 'Use a backup code instead'}
-            </button>
+            </Button>
           </div>
 
           {/* Cancel */}
           {onCancel && (
             <div className="mt-4">
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={onCancel}
-                style={{ color: theme.text.secondary }}
-                className="w-full px-4 py-2 hover:opacity-80 transition-all text-sm"
+                className="w-full"
               >
                 Cancel and return to login
-              </button>
+              </Button>
             </div>
           )}
         </div>

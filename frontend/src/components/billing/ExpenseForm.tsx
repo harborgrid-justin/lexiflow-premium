@@ -3,9 +3,10 @@
  * Form for creating/editing expenses with receipt upload
  */
 
-import React, { useState } from 'react';
+import { useTheme } from '@/theme';
 import type { FirmExpense } from '@/types/financial';
 import { FileText, Upload, X } from 'lucide-react';
+import React, { useState } from 'react';
 import { Form } from 'react-router';
 
 interface ExpenseFormProps {
@@ -19,6 +20,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
   onCancel,
   actionError,
 }) => {
+  const { theme, tokens } = useTheme();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
 
@@ -83,7 +85,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* Case Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium" style={{ color: theme.text.primary }}>
               Case/Matter <span className="text-red-500">*</span>
             </label>
             <input
@@ -91,7 +93,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
               name="caseId"
               defaultValue={expense?.id || ''}
               placeholder="Enter case ID"
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{ backgroundColor: theme.surface.input, borderColor: theme.border.default, color: theme.text.primary }}
+              className="mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 transition-all"
             />
           </div>
 
@@ -100,7 +103,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
 
           {/* Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium" style={{ color: theme.text.primary }}>
               Date <span className="text-red-500">*</span>
             </label>
             <input
@@ -109,7 +112,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
               required
               defaultValue={expense?.date || new Date().toISOString().split('T')[0]}
               max={new Date().toISOString().split('T')[0]}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{ backgroundColor: theme.surface.input, borderColor: theme.border.default, color: theme.text.primary }}
+              className="mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-2 transition-all"
             />
           </div>
         </div>
@@ -118,14 +122,30 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {/* Category */}
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Category <span className="text-red-500">*</span>
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.secondary,
+            }}>
+              Category <span style={{ color: theme.status.error.text }}>*</span>
             </label>
             <select
               name="category"
               required
               defaultValue={expense?.category || ''}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.compact.xs,
+                display: 'block',
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                boxShadow: tokens.shadows.sm,
+                color: theme.text.primary,
+              }}
+              className="focus:outline-none focus:ring-2"
             >
               <option value="">Select category...</option>
               {EXPENSE_CATEGORIES.map((cat) => (
@@ -138,12 +158,25 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
 
           {/* Amount */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Amount <span className="text-red-500">*</span>
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.secondary,
+            }}>
+              Amount <span style={{ color: theme.status.error.text }}>*</span>
             </label>
-            <div className="relative mt-1">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <span className="text-gray-500 dark:text-gray-400">$</span>
+            <div style={{ position: 'relative', marginTop: tokens.spacing.compact.xs }}>
+              <div style={{
+                pointerEvents: 'none',
+                position: 'absolute',
+                insetY: '0',
+                left: '0',
+                display: 'flex',
+                alignItems: 'center',
+                paddingLeft: tokens.spacing.normal.md,
+              }}>
+                <span style={{ color: theme.text.muted }}>$</span>
               </div>
               <input
                 type="number"
@@ -152,7 +185,20 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
                 min="0"
                 step="0.01"
                 defaultValue={expense?.amount || ''}
-                className="block w-full rounded-md border border-gray-300 bg-white pl-7 pr-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  borderRadius: tokens.borderRadius.md,
+                  border: `1px solid ${theme.border.default}`,
+                  backgroundColor: theme.surface.input,
+                  paddingLeft: '1.75rem',
+                  paddingRight: tokens.spacing.normal.md,
+                  paddingTop: tokens.spacing.compact.sm,
+                  paddingBottom: tokens.spacing.compact.sm,
+                  boxShadow: tokens.shadows.sm,
+                  color: theme.text.primary,
+                }}
+                className="focus:outline-none focus:ring-2"
               />
             </div>
           </div>
@@ -160,8 +206,13 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Description <span className="text-red-500">*</span>
+          <label style={{
+            display: 'block',
+            fontSize: tokens.typography.fontSize.sm,
+            fontWeight: tokens.typography.fontWeight.medium,
+            color: theme.text.secondary,
+          }}>
+            Description <span style={{ color: theme.status.error.text }}>*</span>
           </label>
           <textarea
             name="description"
@@ -169,7 +220,18 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             rows={3}
             defaultValue={expense?.description || ''}
             placeholder="Detailed description of the expense..."
-            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+            style={{
+              marginTop: tokens.spacing.compact.xs,
+              display: 'block',
+              width: '100%',
+              borderRadius: tokens.borderRadius.md,
+              border: `1px solid ${theme.border.default}`,
+              backgroundColor: theme.surface.input,
+              padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+              boxShadow: tokens.shadows.sm,
+              color: theme.text.primary,
+            }}
+            className="focus:outline-none focus:ring-2"
           />
         </div>
 
@@ -177,7 +239,12 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* Vendor */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.secondary,
+            }}>
               Vendor
             </label>
             <input
@@ -185,19 +252,46 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
               name="vendor"
               defaultValue={expense?.vendor || ''}
               placeholder="Vendor or payee name"
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.compact.xs,
+                display: 'block',
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                boxShadow: tokens.shadows.sm,
+                color: theme.text.primary,
+              }}
+              className="focus:outline-none focus:ring-2"
             />
           </div>
 
           {/* Payment Method */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label style={{
+              display: 'block',
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.secondary,
+            }}>
               Payment Method
             </label>
             <select
               name="paymentMethod"
               defaultValue={expense?.paymentMethod || ''}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              style={{
+                marginTop: tokens.spacing.compact.xs,
+                display: 'block',
+                width: '100%',
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.input,
+                padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                boxShadow: tokens.shadows.sm,
+                color: theme.text.primary,
+              }}
+              className="focus:outline-none focus:ring-2"
             >
               <option value="">Select method...</option>
               {PAYMENT_METHODS.map((method) => (
@@ -211,18 +305,46 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
 
         {/* Receipt Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: tokens.typography.fontSize.sm,
+            fontWeight: tokens.typography.fontWeight.medium,
+            color: theme.text.secondary,
+          }}>
             Receipt
           </label>
-          <div className="mt-1">
+          <div style={{ marginTop: tokens.spacing.compact.xs }}>
             {!selectedFile ? (
-              <label className="flex cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 py-10 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500">
-                <div className="text-center">
-                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              <label style={{
+                display: 'flex',
+                cursor: 'pointer',
+                justifyContent: 'center',
+                borderRadius: tokens.borderRadius.md,
+                border: `2px dashed ${theme.border.default}`,
+                padding: `${tokens.spacing.normal['2xl']} ${tokens.spacing.normal['2xl']}`,
+              }}
+                className="transition-colors"
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = theme.border.light}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = theme.border.default}
+              >
+                <div style={{ textAlign: 'center' }}>
+                  <Upload style={{
+                    margin: '0 auto',
+                    height: '3rem',
+                    width: '3rem',
+                    color: theme.text.muted,
+                  }} />
+                  <p style={{
+                    marginTop: tokens.spacing.compact.sm,
+                    fontSize: tokens.typography.fontSize.sm,
+                    color: theme.text.secondary,
+                  }}>
                     Click to upload receipt
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                  <p style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: theme.text.muted,
+                  }}>
                     PNG, JPG, PDF up to 10MB
                   </p>
                 </div>
@@ -235,35 +357,58 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
                 />
               </label>
             ) : (
-              <div className="rounded-md border border-gray-300 bg-gray-50 p-4 dark:border-gray-600 dark:bg-gray-800">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+              <div style={{
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.muted,
+                padding: tokens.spacing.normal.lg,
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.normal.md }}>
                     {filePreview ? (
                       <img
                         src={filePreview}
                         alt="Receipt preview"
-                        className="h-16 w-16 rounded object-cover"
+                        style={{
+                          height: '4rem',
+                          width: '4rem',
+                          borderRadius: tokens.borderRadius.md,
+                          objectFit: 'cover',
+                        }}
                       />
                     ) : (
-                      <FileText className="h-8 w-8 text-gray-400" />
+                      <FileText style={{ height: '2rem', width: '2rem', color: theme.text.muted }} />
                     )}
                     <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <p style={{
+                        fontSize: tokens.typography.fontSize.sm,
+                        fontWeight: tokens.typography.fontWeight.medium,
+                        color: theme.text.primary,
+                      }}>
                         {selectedFile?.name || 'Receipt'}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p style={{ fontSize: tokens.typography.fontSize.xs, color: theme.text.muted }}>
                         {selectedFile?.size
                           ? `${(selectedFile.size / 1024).toFixed(1)} KB`
-                          : selectedFile?.size
-                            ? `${(selectedFile.size / 1024).toFixed(1)} KB`
-                            : ''}
+                          : ''}
                       </p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={removeFile}
-                    className="rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-700"
+                    style={{
+                      borderRadius: tokens.borderRadius.full,
+                      padding: tokens.spacing.compact.xs,
+                      color: theme.text.muted,
+                    }}
+                    className="transition-colors"
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme.surface.hover; e.currentTarget.style.color = theme.text.secondary; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = theme.text.muted; }}
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -274,34 +419,74 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         </div>
 
         {/* Billable Checkbox */}
-        <div className="flex items-center">
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <input
             type="checkbox"
             name="billable"
             id="billable"
             defaultChecked={true}
             value="true"
-            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            style={{
+              height: '1rem',
+              width: '1rem',
+              borderRadius: tokens.borderRadius.sm,
+              border: `1px solid ${theme.border.default}`,
+            }}
+            className="focus:ring-2"
           />
-          <label htmlFor="billable" className="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+          <label htmlFor="billable" style={{
+            marginLeft: tokens.spacing.compact.sm,
+            display: 'block',
+            fontSize: tokens.typography.fontSize.sm,
+            color: theme.text.primary,
+          }}>
             Billable to client
           </label>
         </div>
 
         {/* Form Actions */}
-        <div className="flex justify-end gap-3 border-t border-gray-200 pt-6 dark:border-gray-700">
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: tokens.spacing.normal.md,
+          borderTop: `1px solid ${theme.border.default}`,
+          paddingTop: tokens.spacing.normal['2xl'],
+        }}>
           {onCancel && (
             <button
               type="button"
               onClick={onCancel}
-              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+              style={{
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.base,
+                padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: theme.text.secondary,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="transition-colors focus:outline-none focus:ring-2"
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.base}
             >
               Cancel
             </button>
           )}
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            style={{
+              borderRadius: tokens.borderRadius.md,
+              backgroundColor: theme.primary.DEFAULT,
+              padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.surface.base,
+              boxShadow: tokens.shadows.sm,
+            }}
+            className="transition-opacity focus:outline-none focus:ring-2"
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
           >
             {expense ? 'Update' : 'Create'} Expense
           </button>

@@ -9,6 +9,7 @@ import { ShutdownService } from "./services/shutdown.service";
 // Note: 19 Global Configuration Services are provided by GlobalConfigModule (loaded before CoreModule)
 
 // Core Controllers
+import { FeaturesController } from "./controllers/features.controller";
 
 // Import Enterprise Modules (in dependency order)
 import { ApiSecurityModule } from "@api-security/api.security.module";

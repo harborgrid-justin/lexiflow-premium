@@ -1,4 +1,5 @@
 import './button.css';
+import { useTheme } from '@/theme';
 
 export interface ButtonProps {
   /** Is this the principal call to action on the page? */
@@ -21,12 +22,39 @@ export const Button = ({
   label,
   ...props
 }: ButtonProps) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+  const { theme } = useTheme();
+
+  const baseStyles = {
+    display: 'inline-block',
+    cursor: 'pointer',
+    border: 0,
+    borderRadius: '3em',
+    fontWeight: 700,
+    lineHeight: 1,
+    fontFamily: "'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+  };
+
+  const sizeStyles = {
+    small: { padding: '10px 16px', fontSize: '12px' },
+    medium: { padding: '11px 20px', fontSize: '14px' },
+    large: { padding: '12px 24px', fontSize: '16px' },
+  };
+
+  const variantStyles = primary
+    ? {
+      backgroundColor: backgroundColor || theme.primary.DEFAULT,
+      color: theme.text.inverse
+    }
+    : {
+      boxShadow: 'rgba(0, 0, 0, 0.15) 0 0 0 1px inset',
+      backgroundColor: backgroundColor || 'transparent',
+      color: theme.text.primary
+    };
+
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
-      style={{ backgroundColor }}
+      style={{ ...baseStyles, ...sizeStyles[size], ...variantStyles }}
       {...props}
     >
       {label}

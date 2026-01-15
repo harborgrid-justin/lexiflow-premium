@@ -150,46 +150,6 @@ export class JurisdictionsController {
     return this.jurisdictionsService.getMapNodes();
   }
 
-  @Get(":id")
-  @ApiOperation({ summary: "Get jurisdiction by ID" })
-  @ApiResponse({ status: 200, description: "Jurisdiction details" })
-  @ApiResponse({ status: 404, description: "Jurisdiction not found" })
-  @ApiParam({ name: "id", description: "Jurisdiction ID" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden" })
-  async findOne(@Param("id") id: string) {
-    return this.jurisdictionsService.findById(id);
-  }
-
-  @Put(":id")
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: "Update jurisdiction" })
-  @ApiResponse({ status: 200, description: "Jurisdiction updated" })
-  @ApiResponse({ status: 404, description: "Jurisdiction not found" })
-  @ApiParam({ name: "id", description: "Jurisdiction ID" })
-  @ApiResponse({ status: 400, description: "Invalid request data" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden" })
-  async update(
-    @Param("id") id: string,
-    @Body() updateDto: UpdateJurisdictionDto
-  ) {
-    return this.jurisdictionsService.update(id, updateDto);
-  }
-
-  @Delete(":id")
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: "Delete jurisdiction" })
-  @ApiResponse({ status: 200, description: "Jurisdiction deleted" })
-  @ApiResponse({ status: 404, description: "Jurisdiction not found" })
-  @ApiParam({ name: "id", description: "Jurisdiction ID" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden" })
-  async remove(@Param("id") id: string) {
-    await this.jurisdictionsService.remove(id);
-    return { message: "Jurisdiction deleted successfully" };
-  }
-
   // ============================================================================
   // RULES
   // ============================================================================
@@ -289,5 +249,45 @@ export class JurisdictionsController {
   async removeRule(@Param("id") id: string) {
     await this.jurisdictionsService.removeRule(id);
     return { message: "Rule deleted successfully" };
+  }
+
+  @Get(":id")
+  @ApiOperation({ summary: "Get jurisdiction by ID" })
+  @ApiResponse({ status: 200, description: "Jurisdiction details" })
+  @ApiResponse({ status: 404, description: "Jurisdiction not found" })
+  @ApiParam({ name: "id", description: "Jurisdiction ID" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async findOne(@Param("id") id: string) {
+    return this.jurisdictionsService.findById(id);
+  }
+
+  @Put(":id")
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: "Update jurisdiction" })
+  @ApiResponse({ status: 200, description: "Jurisdiction updated" })
+  @ApiResponse({ status: 404, description: "Jurisdiction not found" })
+  @ApiParam({ name: "id", description: "Jurisdiction ID" })
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async update(
+    @Param("id") id: string,
+    @Body() updateDto: UpdateJurisdictionDto
+  ) {
+    return this.jurisdictionsService.update(id, updateDto);
+  }
+
+  @Delete(":id")
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: "Delete jurisdiction" })
+  @ApiResponse({ status: 200, description: "Jurisdiction deleted" })
+  @ApiResponse({ status: 404, description: "Jurisdiction not found" })
+  @ApiParam({ name: "id", description: "Jurisdiction ID" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async remove(@Param("id") id: string) {
+    await this.jurisdictionsService.remove(id);
+    return { message: "Jurisdiction deleted successfully" };
   }
 }

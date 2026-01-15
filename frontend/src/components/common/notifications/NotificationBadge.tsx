@@ -3,7 +3,7 @@
  * Displays unread notification count with animated indicator
  */
 
-
+import { useTheme } from '@/theme';
 
 export interface NotificationBadgeProps {
   count: number;
@@ -24,34 +24,51 @@ export function NotificationBadge({
   pulse = false,
   className = '',
 }: NotificationBadgeProps) {
+  const { theme, tokens } = useTheme();
+
   if (count === 0 && !showZero) {
     return null;
   }
 
   const displayCount = count > max ? `${max}+` : count.toString();
 
-  const sizeClasses = {
-    sm: 'h-4 min-w-[1rem] text-[10px] px-1',
-    md: 'h-5 min-w-[1.25rem] text-xs px-1.5',
-    lg: 'h-6 min-w-[1.5rem] text-sm px-2',
+  const sizeStyles = {
+    sm: { height: '1rem', minWidth: '1rem', fontSize: '10px', padding: '0 0.25rem' },
+    md: { height: '1.25rem', minWidth: '1.25rem', fontSize: tokens.typography.fontSize.xs, padding: '0 0.375rem' },
+    lg: { height: '1.5rem', minWidth: '1.5rem', fontSize: tokens.typography.fontSize.sm, padding: '0 0.5rem' },
   };
 
-  const variantClasses = {
-    primary: 'bg-blue-600 text-white',
-    danger: 'bg-red-600 text-white',
-    warning: 'bg-amber-500 text-white',
+  const variantStyles = {
+    primary: { backgroundColor: theme.primary.DEFAULT, color: theme.surface.base },
+    danger: { backgroundColor: theme.status.error.text, color: theme.surface.base },
+    warning: { backgroundColor: theme.status.warning.text, color: theme.surface.base },
   };
 
   return (
-    <span className={`relative inline-flex items-center ${className}`}>
+    <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }} className={className}>
       <span
-        className={`inline-flex items-center justify-center rounded-full font-semibold ${sizeClasses[size]} ${variantClasses[variant]}`}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: tokens.borderRadius.full,
+          fontWeight: tokens.typography.fontWeight.semibold,
+          ...sizeStyles[size],
+          ...variantStyles[variant],
+        }}
       >
         {displayCount}
       </span>
       {pulse && count > 0 && (
         <span
-          className={`absolute inset-0 animate-ping rounded-full opacity-75 ${variantClasses[variant]}`}
+          style={{
+            position: 'absolute',
+            inset: '0',
+            borderRadius: tokens.borderRadius.full,
+            opacity: 0.75,
+            ...variantStyles[variant],
+          }}
+          className="animate-ping"
         ></span>
       )}
     </span>

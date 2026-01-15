@@ -3,9 +3,10 @@
  * Display and filter time entries with bulk operations
  */
 
-import React, { useState } from 'react';
+import { useTheme } from '@/theme';
 import type { TimeEntry } from '@/types/financial';
 import { Check, Clock, DollarSign, Filter } from 'lucide-react';
+import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 interface TimeEntryListProps {
@@ -14,6 +15,7 @@ interface TimeEntryListProps {
 }
 
 export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }) => {
+  const { theme, tokens } = useTheme();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -33,17 +35,25 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      Draft: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      Submitted: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      Approved: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      Billed: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-      Unbilled: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+      Draft: { bg: theme.surface.muted, text: theme.text.secondary },
+      Submitted: { bg: tokens.colors.blue400 + '20', text: tokens.colors.blue600 },
+      Approved: { bg: theme.status.success.bg, text: theme.status.success.text },
+      Billed: { bg: tokens.colors.indigo400 + '20', text: tokens.colors.indigo400 },
+      Unbilled: { bg: theme.status.warning.bg, text: theme.status.warning.text },
     };
 
+    const statusStyle = styles[status as keyof typeof styles] || styles.Draft;
     return (
       <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[status as keyof typeof styles] || styles.Draft
-          }`}
+        style={{
+          backgroundColor: statusStyle.bg,
+          color: statusStyle.text,
+          borderRadius: tokens.borderRadius.full,
+          padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+          fontSize: tokens.typography.fontSize.xs,
+          fontWeight: tokens.typography.fontWeight.semibold,
+        }}
+        className="inline-flex"
       >
         {status}
       </span>
@@ -60,13 +70,14 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          style={{ backgroundColor: theme.surface.elevated, borderColor: theme.border.default, color: theme.text.primary }}
+          className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:opacity-90 transition-all"
         >
           <Filter className="h-4 w-4" />
           Filters
         </button>
 
-        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-4 text-sm" style={{ color: theme.text.secondary }}>
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" />
             <span className="font-medium">{totalHours.toFixed(2)}</span> hours
@@ -79,16 +90,17 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
       </div>
 
       {showFilters && (
-        <Form method="get" className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+        <Form method="get" className="rounded-lg border p-4" style={{ borderColor: theme.border.default, backgroundColor: theme.surface.raised }}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium" style={{ color: theme.text.primary }}>
                 Case
               </label>
               <select
                 name="caseId"
                 defaultValue={(filters?.caseId as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                style={{ backgroundColor: theme.surface.input, borderColor: theme.border.default, color: theme.text.primary }}
+                className="mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 transition-all"
               >
                 <option value="">All Cases</option>
                 <option value="C-2024-001">Martinez v. TechCorp</option>
@@ -97,13 +109,14 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium" style={{ color: theme.text.primary }}>
                 Status
               </label>
               <select
                 name="status"
                 defaultValue={(filters?.status as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                style={{ backgroundColor: theme.surface.input, borderColor: theme.border.default, color: theme.text.primary }}
+                className="mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 transition-all"
               >
                 <option value="">All Statuses</option>
                 <option value="Draft">Draft</option>
@@ -115,13 +128,30 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: theme.text.primary,
+              }}>
                 Billable
               </label>
               <select
                 name="billable"
                 defaultValue={(filters?.billable as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                style={{
+                  marginTop: tokens.spacing.compact.xs,
+                  display: 'block',
+                  width: '100%',
+                  borderRadius: tokens.borderRadius.md,
+                  border: `1px solid ${theme.border.default}`,
+                  backgroundColor: theme.surface.input,
+                  padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  boxShadow: tokens.shadows.sm,
+                  color: theme.text.primary,
+                }}
+                className="focus:outline-none focus:ring-2 transition-all"
               >
                 <option value="">All</option>
                 <option value="true">Billable Only</option>
@@ -132,7 +162,19 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
             <div className="flex items-end">
               <button
                 type="submit"
-                className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                style={{
+                  width: '100%',
+                  borderRadius: tokens.borderRadius.md,
+                  backgroundColor: theme.primary.DEFAULT,
+                  padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.surface.base,
+                  boxShadow: tokens.shadows.sm,
+                }}
+                className="transition-opacity focus:outline-none focus:ring-2"
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
               >
                 Apply Filters
               </button>
@@ -143,17 +185,43 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
 
       {/* Bulk Actions */}
       {selectedIds.length > 0 && (
-        <div className="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-700 dark:bg-blue-900/20">
-          <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderRadius: tokens.borderRadius.lg,
+          border: `1px solid ${theme.primary.DEFAULT}30`,
+          backgroundColor: theme.primary.DEFAULT + '15',
+          padding: tokens.spacing.normal.lg,
+        }}>
+          <span style={{
+            fontSize: tokens.typography.fontSize.sm,
+            fontWeight: tokens.typography.fontWeight.medium,
+            color: theme.primary.DEFAULT,
+          }}>
             {selectedIds.length} selected
           </span>
-          <Form method="post" className="flex gap-2">
+          <Form method="post" style={{ display: 'flex', gap: tokens.spacing.normal.sm }}>
             <input type="hidden" name="ids" value={JSON.stringify(selectedIds)} />
             <button
               type="submit"
               name="intent"
               value="approve-bulk"
-              className="flex items-center gap-2 rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: tokens.spacing.normal.sm,
+                borderRadius: tokens.borderRadius.md,
+                backgroundColor: theme.status.success.text,
+                padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: theme.surface.base,
+                boxShadow: tokens.shadows.sm,
+              }}
+              className="transition-opacity"
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
             >
               <Check className="h-4 w-4" />
               Approve Selected
@@ -163,84 +231,200 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
       )}
 
       {/* Entries Table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
+      <div style={{
+        overflow: 'hidden',
+        borderRadius: tokens.borderRadius.lg,
+        border: `1px solid ${theme.border.default}`,
+        backgroundColor: theme.surface.base,
+        boxShadow: tokens.shadows.sm,
+      }}>
+        <table style={{ minWidth: '100%' }} className="divide-y" style={{ borderColor: theme.border.default }}>
+          <thead style={{ backgroundColor: theme.surface.elevated }}>
             <tr>
-              <th className="px-4 py-3">
+              <th style={{ padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}` }}>
                 <input
                   type="checkbox"
                   checked={selectedIds.length === entries.length && entries.length > 0}
                   onChange={toggleAll}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded focus:ring-2"
                 />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'left',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'left',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Case
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'left',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Description
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'left',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Hours
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'left',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Rate
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'left',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Amount
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'left',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{
+                padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
+                textAlign: 'right',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: theme.text.muted,
+              }}>
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+          <tbody style={{ backgroundColor: theme.surface.base }} className="divide-y" style={{ borderColor: theme.border.default }}>
             {entries.map((entry) => (
-              <tr key={entry.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                <td className="px-4 py-4">
+              <tr key={entry.id}
+                className="transition-colors"
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <td style={{ padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal.lg}` }}>
                   <input
                     type="checkbox"
                     checked={selectedIds.includes(entry.id)}
                     onChange={() => toggleSelection(entry.id)}
-                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 rounded focus:ring-2"
                   />
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td style={{
+                  whiteSpace: 'nowrap',
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.primary,
+                }}>
                   {new Date(entry.date).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td style={{
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.primary,
+                }}>
                   {entry.caseId}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                <td style={{
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.secondary,
+                }}>
                   <div className="max-w-xs truncate" title={entry.description}>
                     {entry.description}
                   </div>
                   {entry.ledesCode && (
-                    <div className="mt-1 text-xs text-gray-500">
+                    <div style={{
+                      marginTop: tokens.spacing.compact.xs,
+                      fontSize: tokens.typography.fontSize.xs,
+                      color: theme.text.muted,
+                    }}>
                       LEDES: {entry.ledesCode}
                     </div>
                   )}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td style={{
+                  whiteSpace: 'nowrap',
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.primary,
+                }}>
                   {entry.duration.toFixed(2)}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td style={{
+                  whiteSpace: 'nowrap',
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.primary,
+                }}>
                   ${entry.rate}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                <td style={{
+                  whiteSpace: 'nowrap',
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.text.primary,
+                }}>
                   ${entry.total.toLocaleString()}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4">
+                <td style={{
+                  whiteSpace: 'nowrap',
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                }}>
                   {getStatusBadge(entry.status)}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                <td style={{
+                  whiteSpace: 'nowrap',
+                  padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
+                  textAlign: 'right',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                }}>
                   <Form method="post" className="inline-flex gap-2">
                     <input type="hidden" name="id" value={entry.id} />
                     {entry.status === 'Submitted' && (
@@ -248,14 +432,20 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                         type="submit"
                         name="intent"
                         value="approve"
-                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                        style={{ color: theme.status.success.text }}
+                        className="transition-opacity"
+                        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+                        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                       >
                         Approve
                       </button>
                     )}
                     <Link
                       to={`/billing/time/${entry.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      style={{ color: theme.primary.DEFAULT }}
+                      className="transition-opacity"
+                      onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+                      onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                     >
                       Edit
                     </Link>
@@ -263,7 +453,10 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                       type="submit"
                       name="intent"
                       value="delete"
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      style={{ color: theme.status.error.text }}
+                      className="transition-opacity"
+                      onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+                      onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                       onClick={(e) => {
                         if (!confirm('Delete this time entry?')) {
                           e.preventDefault();
@@ -280,12 +473,29 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
         </table>
 
         {entries.length === 0 && (
-          <div className="py-12 text-center">
-            <Clock className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+          <div style={{
+            padding: `${tokens.spacing.normal['3xl']} 0`,
+            textAlign: 'center',
+          }}>
+            <Clock style={{
+              margin: '0 auto',
+              height: '3rem',
+              width: '3rem',
+              color: theme.text.muted,
+            }} />
+            <h3 style={{
+              marginTop: tokens.spacing.compact.sm,
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.primary,
+            }}>
               No time entries
             </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p style={{
+              marginTop: tokens.spacing.compact.xs,
+              fontSize: tokens.typography.fontSize.sm,
+              color: theme.text.muted,
+            }}>
               Get started by creating a new time entry.
             </p>
           </div>

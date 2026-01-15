@@ -89,8 +89,8 @@ export function SchemaVisualizer({ tables, onAddColumn, onEditColumn, onRemoveCo
         return links;
     }, [tables]);
 
-    const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
-    const lineColor = mode === 'dark' ? '#64748b' : '#94a3b8';
+    const gridColor = theme.border.light;
+    const lineColor = theme.border.default;
 
     return (
         <div

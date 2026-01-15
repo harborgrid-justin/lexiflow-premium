@@ -41,7 +41,7 @@ export async function clientLoader(args: LoaderFunctionArgs) {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const recentDocketEntries = docketEntries
+    const recentDocketEntries = docketEntries.data
       .filter((entry) => new Date(entry.filingDate) >= thirtyDaysAgo)
       .slice(0, 10);
 

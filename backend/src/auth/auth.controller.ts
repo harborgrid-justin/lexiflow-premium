@@ -156,7 +156,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: "Returns current user" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   async getCurrentUser(@CurrentUser() user: AuthenticatedUser) {
-    return this.usersService.findOne(user.id);
+    return this.usersService.findById(user.id);
   }
 
   @ApiBearerAuth("JWT-auth")

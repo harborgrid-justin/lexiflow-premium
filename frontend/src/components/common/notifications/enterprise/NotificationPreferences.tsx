@@ -4,27 +4,28 @@
  * @description User preferences panel for notification settings
  */
 
-import React, { useState } from 'react';
+import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import type { NotificationPreferences as NotificationPreferencesType } from '@/types/notifications';
 import { motion } from 'framer-motion';
 import {
+  AlertTriangle,
   Bell,
+  Briefcase,
+  Calendar,
+  Clock,
+  CreditCard,
+  FileText,
+  Info,
   Mail,
+  RotateCcw,
+  Save,
+  Slack,
   Smartphone,
   Volume2,
   VolumeX,
-  Clock,
-  Save,
-  RotateCcw,
-  Slack,
-  Calendar,
-  Briefcase,
-  FileText,
-  CreditCard,
-  AlertTriangle,
-  Info,
 } from 'lucide-react';
-import { cn } from '@/shared/lib/cn';
-import type { NotificationPreferences as NotificationPreferencesType } from '@/types/notifications';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -69,6 +70,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   isLoading = false,
   className,
 }) => {
+  const { theme, tokens } = useTheme();
   const [preferences, setPreferences] = useState<ExtendedNotificationPreferences>(
     initialPreferences
   );
@@ -123,17 +125,24 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     <button
       onClick={() => !disabled && onChange(!enabled)}
       disabled={disabled}
+      style={{
+        backgroundColor: enabled ? theme.primary.DEFAULT : theme.surface.muted,
+        borderRadius: tokens.borderRadius.full,
+        ...(disabled && { opacity: 0.5, cursor: 'not-allowed' })
+      }}
       className={cn(
-        'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-        enabled ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600',
-        disabled && 'opacity-50 cursor-not-allowed'
+        'relative inline-flex h-6 w-11 items-center transition-colors focus:outline-none focus:ring-2',
       )}
       role="switch"
       aria-checked={enabled}
     >
       <span
+        style={{
+          backgroundColor: theme.surface.base,
+          borderRadius: tokens.borderRadius.full,
+        }}
         className={cn(
-          'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+          'inline-block h-4 w-4 transform transition-transform',
           enabled ? 'translate-x-6' : 'translate-x-1'
         )}
       />
@@ -149,16 +158,28 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     onChange: (enabled: boolean) => void;
     disabled?: boolean;
   }> = ({ icon: Icon, title, description, enabled, onChange, disabled }) => (
-    <div className="flex items-start justify-between gap-4 p-4 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+    <div style={{
+      backgroundColor: 'transparent',
+      borderRadius: tokens.borderRadius.lg,
+      padding: tokens.spacing.normal.md,
+    }}
+      className="flex items-start justify-between gap-4 transition-colors hover:bg-opacity-50"
+      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+    >
       <div className="flex items-start gap-3 flex-1">
-        <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800">
-          <Icon className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+        <div style={{
+          padding: tokens.spacing.normal.sm,
+          borderRadius: tokens.borderRadius.lg,
+          backgroundColor: theme.surface.muted,
+        }}>
+          <Icon style={{ color: theme.text.secondary }} className="h-5 w-5" />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">
+          <h4 style={{ color: theme.text.primary, fontWeight: tokens.typography.fontWeight.medium }} className="mb-1">
             {title}
           </h4>
-          <p className="text-sm text-slate-600 dark:text-slate-400">{description}</p>
+          <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary }}>{description}</p>
         </div>
       </div>
       <Toggle enabled={enabled} onChange={onChange} disabled={disabled} />
@@ -166,16 +187,16 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   );
 
   return (
-    <div className={cn('flex flex-col h-full bg-slate-50 dark:bg-slate-900', className)}>
+    <div style={{ backgroundColor: theme.surface.elevated }} className={cn('flex flex-col h-full', className)}>
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6">
+      <div style={{ backgroundColor: theme.surface.base, borderBottom: `1px solid ${theme.border.default}`, padding: tokens.spacing.normal.lg }}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
+            <h1 style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: theme.text.primary }} className="flex items-center gap-3">
               <Bell className="h-7 w-7" />
               Notification Preferences
             </h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary, marginTop: tokens.spacing.normal.xs }}>
               Customize how you receive notifications
             </p>
           </div>
@@ -184,7 +205,17 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             {hasChanges && (
               <button
                 onClick={handleReset}
-                className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{
+                  padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.text.primary,
+                  backgroundColor: theme.surface.muted,
+                  borderRadius: tokens.borderRadius.lg,
+                }}
+                className="transition-colors focus:outline-none focus:ring-2"
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.muted}
               >
                 <RotateCcw className="h-4 w-4 inline mr-2" />
                 Reset
@@ -193,12 +224,16 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             <button
               onClick={handleSave}
               disabled={!hasChanges || isLoading}
-              className={cn(
-                'px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500',
-                hasChanges && !isLoading
-                  ? 'bg-blue-600 hover:bg-blue-700'
-                  : 'bg-slate-400 cursor-not-allowed'
-              )}
+              style={{
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: theme.surface.base,
+                backgroundColor: hasChanges && !isLoading ? theme.primary.DEFAULT : theme.surface.muted,
+                borderRadius: tokens.borderRadius.lg,
+                cursor: hasChanges && !isLoading ? 'pointer' : 'not-allowed',
+              }}
+              className="transition-colors focus:outline-none focus:ring-2"
             >
               <Save className="h-4 w-4 inline mr-2" />
               {isLoading ? 'Saving...' : 'Save Changes'}
@@ -215,18 +250,34 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
+            style={{
+              backgroundColor: theme.surface.base,
+              borderRadius: tokens.borderRadius.xl,
+              border: `1px solid ${theme.border.default}`,
+            }}
+            className="overflow-hidden"
           >
-            <div className="p-6 border-b border-slate-200 dark:border-slate-700">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <div style={{
+              padding: tokens.spacing.normal.lg,
+              borderBottom: `1px solid ${theme.border.default}`,
+            }}>
+              <h2 style={{
+                fontSize: tokens.typography.fontSize.lg,
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: theme.text.primary,
+              }} className="flex items-center gap-2">
                 <Bell className="h-5 w-5" />
                 Notification Channels
               </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              <p style={{
+                fontSize: tokens.typography.fontSize.sm,
+                color: theme.text.secondary,
+                marginTop: tokens.spacing.normal.xs,
+              }}>
                 Choose how you want to receive notifications
               </p>
             </div>
-            <div className="divide-y divide-slate-200 dark:divide-slate-700">
+            <div style={{ borderTop: `1px solid ${theme.border.light}` }} className="divide-y">
               <SettingRow
                 icon={Mail}
                 title="Email Notifications"
@@ -270,18 +321,34 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
+            style={{
+              backgroundColor: theme.surface.base,
+              borderRadius: tokens.borderRadius.xl,
+              border: `1px solid ${theme.border.default}`,
+            }}
+            className="overflow-hidden"
           >
-            <div className="p-6 border-b border-slate-200 dark:border-slate-700">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <div style={{
+              padding: tokens.spacing.normal.lg,
+              borderBottom: `1px solid ${theme.border.default}`,
+            }}>
+              <h2 style={{
+                fontSize: tokens.typography.fontSize.lg,
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: theme.text.primary,
+              }} className="flex items-center gap-2">
                 <Info className="h-5 w-5" />
                 Notification Categories
               </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              <p style={{
+                fontSize: tokens.typography.fontSize.sm,
+                color: theme.text.secondary,
+                marginTop: tokens.spacing.normal.xs,
+              }}>
                 Choose which types of notifications you want to receive
               </p>
             </div>
-            <div className="divide-y divide-slate-200 dark:divide-slate-700">
+            <div style={{ borderTop: `1px solid ${theme.border.light}` }} className="divide-y">
               <SettingRow
                 icon={Briefcase}
                 title="Case Notifications"
@@ -329,14 +396,27 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+            style={{
+              backgroundColor: theme.surface.base,
+              borderRadius: tokens.borderRadius.xl,
+              border: `1px solid ${theme.border.default}`,
+              padding: tokens.spacing.normal.lg,
+            }}
           >
-            <div className="mb-4">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <div style={{ marginBottom: tokens.spacing.normal.md }}>
+              <h2 style={{
+                fontSize: tokens.typography.fontSize.lg,
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: theme.text.primary,
+              }} className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
                 Email Digest Frequency
               </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              <p style={{
+                fontSize: tokens.typography.fontSize.sm,
+                color: theme.text.secondary,
+                marginTop: tokens.spacing.normal.xs,
+              }}>
                 How often should we send you email summaries?
               </p>
             </div>
@@ -345,15 +425,18 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 <button
                   key={frequency}
                   onClick={() => updatePreference('digestFrequency', frequency)}
-                  className={cn(
-                    'p-4 rounded-lg border-2 transition-all text-center',
-                    preferences.digestFrequency === frequency
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300'
-                  )}
+                  style={{
+                    padding: tokens.spacing.normal.md,
+                    borderRadius: tokens.borderRadius.lg,
+                    border: `2px solid ${preferences.digestFrequency === frequency ? theme.primary.DEFAULT : theme.border.default}`,
+                    backgroundColor: preferences.digestFrequency === frequency ? `${theme.primary.DEFAULT}15` : 'transparent',
+                    color: preferences.digestFrequency === frequency ? theme.primary.DEFAULT : theme.text.primary,
+                    textAlign: 'center',
+                  }}
+                  className="transition-all"
                 >
-                  <div className="font-semibold">{frequency}</div>
-                  <div className="text-xs mt-1 opacity-75">
+                  <div style={{ fontWeight: tokens.typography.fontWeight.semibold }}>{frequency}</div>
+                  <div style={{ fontSize: tokens.typography.fontSize.xs, marginTop: tokens.spacing.normal.xs, opacity: 0.75 }}>
                     {frequency === 'Realtime' && 'Instant notifications'}
                     {frequency === 'Daily' && 'Once per day'}
                     {frequency === 'Weekly' && 'Once per week'}
@@ -368,15 +451,28 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+            style={{
+              backgroundColor: theme.surface.base,
+              borderRadius: tokens.borderRadius.xl,
+              border: `1px solid ${theme.border.default}`,
+              padding: tokens.spacing.normal.lg,
+            }}
           >
-            <div className="flex items-start justify-between gap-4 mb-4">
+            <div style={{ marginBottom: tokens.spacing.normal.md }} className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <h2 style={{
+                  fontSize: tokens.typography.fontSize.lg,
+                  fontWeight: tokens.typography.fontWeight.bold,
+                  color: theme.text.primary,
+                }} className="flex items-center gap-2">
                   <Clock className="h-5 w-5" />
                   Quiet Hours
                 </h2>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                <p style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.secondary,
+                  marginTop: tokens.spacing.normal.xs,
+                }}>
                   Pause non-urgent notifications during specific hours
                 </p>
               </div>
@@ -394,7 +490,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 className="grid grid-cols-2 gap-4"
               >
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label style={{
+                    display: 'block',
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.text.primary,
+                    marginBottom: tokens.spacing.normal.sm,
+                  }}>
                     Start Time
                   </label>
                   <input
@@ -403,11 +505,25 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     onChange={(e) =>
                       updateNestedPreference('quietHours', 'start', e.target.value)
                     }
-                    className="w-full px-3 py-2 bg-slate-100 dark:bg-slate-700 border-0 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{
+                      width: '100%',
+                      padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                      backgroundColor: theme.surface.input,
+                      border: 0,
+                      borderRadius: tokens.borderRadius.lg,
+                      color: theme.text.primary,
+                    }}
+                    className="focus:outline-none focus:ring-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label style={{
+                    display: 'block',
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.text.primary,
+                    marginBottom: tokens.spacing.normal.sm,
+                  }}>
                     End Time
                   </label>
                   <input
@@ -416,7 +532,15 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     onChange={(e) =>
                       updateNestedPreference('quietHours', 'end', e.target.value)
                     }
-                    className="w-full px-3 py-2 bg-slate-100 dark:bg-slate-700 border-0 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{
+                      width: '100%',
+                      padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                      backgroundColor: theme.surface.input,
+                      border: 0,
+                      borderRadius: tokens.borderRadius.lg,
+                      color: theme.text.primary,
+                    }}
+                    className="focus:outline-none focus:ring-2"
                   />
                 </div>
               </motion.div>
@@ -430,30 +554,63 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between shadow-lg"
+          style={{
+            backgroundColor: theme.surface.base,
+            borderTop: `1px solid ${theme.border.default}`,
+            padding: tokens.spacing.normal.md,
+          }}
+          className="flex items-center justify-between shadow-lg"
         >
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary }}>
             You have unsaved changes
           </p>
           <div className="flex items-center gap-2">
             {onCancel && (
               <button
                 onClick={onCancel}
-                className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                style={{
+                  padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.text.primary,
+                  backgroundColor: 'transparent',
+                  borderRadius: tokens.borderRadius.lg,
+                }}
+                className="transition-colors"
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 Cancel
               </button>
             )}
             <button
               onClick={handleReset}
-              className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors"
+              style={{
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: theme.text.primary,
+                backgroundColor: theme.surface.muted,
+                borderRadius: tokens.borderRadius.lg,
+              }}
+              className="transition-colors"
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.muted}
             >
               Reset
             </button>
             <button
               onClick={handleSave}
               disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+              style={{
+                padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: theme.surface.base,
+                backgroundColor: theme.primary.DEFAULT,
+                borderRadius: tokens.borderRadius.lg,
+              }}
+              className="transition-colors"
             >
               {isLoading ? 'Saving...' : 'Save Changes'}
             </button>

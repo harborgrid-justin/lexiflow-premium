@@ -1,5 +1,6 @@
 import { api } from '@/lib/frontend-api';
 import { useToast } from '@/contexts/toast/ToastContext';
+import { useTheme } from '@/theme';
 import {
   ClauseReference,
   CreateTemplateDto,
@@ -25,6 +26,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   onCancel,
 }) => {
   const { addToast } = useToast();
+  const { theme, tokens } = useTheme();
 
   const [name, setName] = useState(template?.name || '');
   const [description, setDescription] = useState(template?.description || '');
@@ -170,33 +172,74 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col bg-white dark:bg-slate-900">
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: theme.surface.base }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-        <div className="flex items-center space-x-3">
-          <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: tokens.spacing.normal.lg,
+        borderBottom: `1px solid ${theme.border.default}`,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.normal.md }}>
+          <FileText style={{ height: '1.5rem', width: '1.5rem', color: theme.primary.DEFAULT }} />
+          <h2 style={{
+            fontSize: tokens.typography.fontSize.xl,
+            fontWeight: tokens.typography.fontWeight.bold,
+            color: theme.text.primary,
+          }}>
             {template ? 'Edit Template' : 'Create Template'}
           </h2>
         </div>
-        <div className="flex items-center space-x-2">
+        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.normal.sm }}>
           <button
             onClick={() => setShowPreview(!showPreview)}
-            className="px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            style={{
+              padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.secondary,
+              backgroundColor: 'transparent',
+              borderRadius: tokens.borderRadius.lg,
+            }}
+            className="transition-colors"
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             {showPreview ? <Code className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
           <button
             onClick={onCancel}
             disabled={loading}
-            className="px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50"
+            style={{
+              padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: theme.text.secondary,
+              backgroundColor: 'transparent',
+              borderRadius: tokens.borderRadius.lg,
+              opacity: loading ? 0.5 : 1,
+            }}
+            className="transition-colors"
+            onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = theme.surface.hover)}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             <X className="h-4 w-4" />
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center space-x-2"
+            style={{
+              padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
+              backgroundColor: theme.primary.DEFAULT,
+              color: theme.surface.base,
+              borderRadius: tokens.borderRadius.lg,
+              opacity: loading ? 0.5 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: tokens.spacing.normal.sm,
+            }}
+            className="transition-opacity"
           >
             <Save className="h-4 w-4" />
             <span>{loading ? 'Saving...' : 'Save Template'}</span>
@@ -205,46 +248,91 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" style={{ padding: tokens.spacing.normal['2xl'] }}>
           {/* Main Editor */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2" style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.normal['2xl'] }}>
             {/* Basic Info */}
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.normal.lg }}>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label style={{
+                  display: 'block',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.text.secondary,
+                  marginBottom: tokens.spacing.compact.xs,
+                }}>
                   Template Name *
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{
+                    width: '100%',
+                    padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                    border: `1px solid ${theme.border.default}`,
+                    borderRadius: tokens.borderRadius.lg,
+                    backgroundColor: theme.surface.input,
+                    color: theme.text.primary,
+                    fontSize: tokens.typography.fontSize.sm,
+                  }}
+                  className="focus:outline-none focus:ring-2"
                   placeholder="e.g., Motion to Dismiss"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label style={{
+                  display: 'block',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.text.secondary,
+                  marginBottom: tokens.spacing.compact.xs,
+                }}>
                   Description
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={2}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{
+                    width: '100%',
+                    padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                    border: `1px solid ${theme.border.default}`,
+                    borderRadius: tokens.borderRadius.lg,
+                    backgroundColor: theme.surface.input,
+                    color: theme.text.primary,
+                    fontSize: tokens.typography.fontSize.sm,
+                  }}
+                  className="focus:outline-none focus:ring-2"
                   placeholder="Brief description of the template..."
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  <label style={{
+                    display: 'block',
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.text.secondary,
+                    marginBottom: tokens.spacing.compact.xs,
+                  }}>
                     Category *
                   </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as TemplateCategory)}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{
+                      width: '100%',
+                      padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                      border: `1px solid ${theme.border.default}`,
+                      borderRadius: tokens.borderRadius.lg,
+                      backgroundColor: theme.surface.input,
+                      color: theme.text.primary,
+                      fontSize: tokens.typography.fontSize.sm,
+                    }}
+                    className="focus:outline-none focus:ring-2"
                   >
                     {Object.values(TemplateCategory).map((cat) => (
                       <option key={cat} value={cat}>
@@ -255,27 +343,57 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  <label style={{
+                    display: 'block',
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.text.secondary,
+                    marginBottom: tokens.spacing.compact.xs,
+                  }}>
                     Jurisdiction
                   </label>
                   <input
                     type="text"
                     value={jurisdiction}
                     onChange={(e) => setJurisdiction(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{
+                      width: '100%',
+                      padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                      border: `1px solid ${theme.border.default}`,
+                      borderRadius: tokens.borderRadius.lg,
+                      backgroundColor: theme.surface.input,
+                      color: theme.text.primary,
+                      fontSize: tokens.typography.fontSize.sm,
+                    }}
+                    className="focus:outline-none focus:ring-2"
                     placeholder="e.g., Federal"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  <label style={{
+                    display: 'block',
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.text.secondary,
+                    marginBottom: tokens.spacing.compact.xs,
+                  }}>
                     Practice Area
                   </label>
                   <input
                     type="text"
                     value={practiceArea}
                     onChange={(e) => setPracticeArea(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{
+                      width: '100%',
+                      padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                      border: `1px solid ${theme.border.default}`,
+                      borderRadius: tokens.borderRadius.lg,
+                      backgroundColor: theme.surface.input,
+                      color: theme.text.primary,
+                      fontSize: tokens.typography.fontSize.sm,
+                    }}
+                    className="focus:outline-none focus:ring-2"
                     placeholder="e.g., Civil"
                   />
                 </div>
@@ -284,26 +402,65 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
             {/* Content Editor */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: tokens.spacing.compact.sm,
+              }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.text.secondary,
+                }}>
                   Template Content *
                 </label>
-                <div className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: tokens.spacing.normal.sm,
+                  fontSize: tokens.typography.fontSize.xs,
+                }}>
                   <button
                     onClick={() => insertPlaceholder('{{variable_name}}')}
-                    className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                    style={{
+                      padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                      backgroundColor: theme.primary.DEFAULT + '20',
+                      color: theme.primary.DEFAULT,
+                      borderRadius: tokens.borderRadius.md,
+                    }}
+                    className="transition-opacity"
+                    onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                    onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                   >
                     + Variable
                   </button>
                   <button
                     onClick={() => insertPlaceholder('{{case.field}}')}
-                    className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded hover:bg-emerald-200 dark:hover:bg-emerald-900/50"
+                    style={{
+                      padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                      backgroundColor: theme.status.success.bg,
+                      color: theme.status.success.text,
+                      borderRadius: tokens.borderRadius.md,
+                    }}
+                    className="transition-opacity"
+                    onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                    onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                   >
                     + Case Data
                   </button>
                   <button
                     onClick={() => insertPlaceholder('{{clause:0}}')}
-                    className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded hover:bg-amber-200 dark:hover:bg-amber-900/50"
+                    style={{
+                      padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                      backgroundColor: theme.status.warning.bg,
+                      color: theme.status.warning.text,
+                      borderRadius: tokens.borderRadius.md,
+                    }}
+                    className="transition-opacity"
+                    onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                    onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                   >
                     + Clause
                   </button>
@@ -316,12 +473,30 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   rows={20}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                  style={{
+                    width: '100%',
+                    padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                    border: `1px solid ${theme.border.default}`,
+                    borderRadius: tokens.borderRadius.lg,
+                    backgroundColor: theme.surface.input,
+                    color: theme.text.primary,
+                    fontFamily: 'monospace',
+                    fontSize: tokens.typography.fontSize.sm,
+                  }}
+                  className="focus:outline-none focus:ring-2"
                   placeholder="Enter template content with placeholders like {{variable_name}}, {{case.title}}, {{party.plaintiff}}..."
                 />
               ) : (
                 <div
-                  className="w-full min-h-[500px] px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                  style={{
+                    width: '100%',
+                    minHeight: '500px',
+                    padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                    border: `1px solid ${theme.border.default}`,
+                    borderRadius: tokens.borderRadius.lg,
+                    backgroundColor: theme.surface.muted,
+                    color: theme.text.primary,
+                  }}
                   dangerouslySetInnerHTML={renderPreview()}
                 />
               )}
@@ -329,35 +504,79 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
           </div>
 
           {/* Sidebar - Variables & Clauses */}
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.normal['2xl'] }}>
             {/* Variables */}
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Variables</h3>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: tokens.spacing.normal.md,
+              }}>
+                <h3 style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.semibold,
+                  color: theme.text.primary,
+                }}>
+                  Variables
+                </h3>
                 <button
                   onClick={handleAddVariable}
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                  style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: theme.primary.DEFAULT,
+                  }}
+                  className="hover:underline"
                 >
                   + Add
                 </button>
               </div>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: tokens.spacing.normal.sm,
+                maxHeight: '24rem',
+                overflowY: 'auto',
+              }}>
                 {variables.map((variable, index) => (
                   <div
                     key={`variable-${variable.name}-${index}`}
-                    className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
+                    style={{
+                      padding: tokens.spacing.normal.md,
+                      backgroundColor: theme.surface.elevated,
+                      borderRadius: tokens.borderRadius.lg,
+                      border: `1px solid ${theme.border.light}`,
+                    }}
                   >
-                    <div className="flex items-start justify-between mb-2">
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      justifyContent: 'space-between',
+                      marginBottom: tokens.spacing.compact.sm,
+                    }}>
                       <input
                         type="text"
                         value={variable.name}
                         onChange={(e) => handleUpdateVariable(index, { name: e.target.value })}
-                        className="flex-1 text-sm font-mono px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+                        style={{
+                          flex: 1,
+                          fontSize: tokens.typography.fontSize.sm,
+                          fontFamily: 'monospace',
+                          padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                          border: `1px solid ${theme.border.default}`,
+                          borderRadius: tokens.borderRadius.md,
+                          backgroundColor: theme.surface.input,
+                          color: theme.text.primary,
+                        }}
                         placeholder="variable_name"
                       />
                       <button
                         onClick={() => handleRemoveVariable(index)}
-                        className="ml-2 text-red-600 dark:text-red-400 hover:text-red-700"
+                        style={{
+                          marginLeft: tokens.spacing.compact.sm,
+                          color: theme.status.error.text,
+                        }}
+                        className="transition-opacity hover:opacity-70"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -366,14 +585,31 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                       type="text"
                       value={variable.label}
                       onChange={(e) => handleUpdateVariable(index, { label: e.target.value })}
-                      className="w-full text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 mb-1"
+                      style={{
+                        width: '100%',
+                        fontSize: tokens.typography.fontSize.xs,
+                        padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                        border: `1px solid ${theme.border.default}`,
+                        borderRadius: tokens.borderRadius.md,
+                        backgroundColor: theme.surface.input,
+                        color: theme.text.primary,
+                        marginBottom: tokens.spacing.compact.xs,
+                      }}
                       placeholder="Display Label"
                     />
-                    <div className="flex items-center space-x-2">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.normal.sm }}>
                       <select
                         value={variable.type}
                         onChange={(e) => handleUpdateVariable(index, { type: e.target.value as TemplateVariable['type'] })}
-                        className="flex-1 text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+                        style={{
+                          flex: 1,
+                          fontSize: tokens.typography.fontSize.xs,
+                          padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                          border: `1px solid ${theme.border.default}`,
+                          borderRadius: tokens.borderRadius.md,
+                          backgroundColor: theme.surface.input,
+                          color: theme.text.primary,
+                        }}
                       >
                         <option value="text">Text</option>
                         <option value="date">Date</option>
@@ -381,12 +617,17 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                         <option value="select">Select</option>
                         <option value="boolean">Boolean</option>
                       </select>
-                      <label className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                      <label style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        fontSize: tokens.typography.fontSize.xs,
+                        color: theme.text.secondary,
+                      }}>
                         <input
                           type="checkbox"
                           checked={variable.required}
                           onChange={(e) => handleUpdateVariable(index, { required: e.target.checked })}
-                          className="mr-1"
+                          style={{ marginRight: tokens.spacing.compact.xs }}
                         />
                         Required
                       </label>
@@ -394,7 +635,12 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                   </div>
                 ))}
                 {variables.length === 0 && (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 text-center py-4">
+                  <p style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: theme.text.muted,
+                    textAlign: 'center',
+                    padding: `${tokens.spacing.normal.lg} 0`,
+                  }}>
                     No variables defined
                   </p>
                 )}
@@ -403,26 +649,63 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
             {/* Clause References */}
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Clause References</h3>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: tokens.spacing.normal.md,
+              }}>
+                <h3 style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.semibold,
+                  color: theme.text.primary,
+                }}>
+                  Clause References
+                </h3>
                 <button
                   onClick={handleAddClauseRef}
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                  style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: theme.primary.DEFAULT,
+                  }}
+                  className="hover:underline"
                 >
                   + Add
                 </button>
               </div>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: tokens.spacing.normal.sm,
+                maxHeight: '24rem',
+                overflowY: 'auto',
+              }}>
                 {clauseRefs.map((ref, index) => (
                   <div
                     key={index}
-                    className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
+                    style={{
+                      padding: tokens.spacing.normal.md,
+                      backgroundColor: theme.surface.elevated,
+                      borderRadius: tokens.borderRadius.lg,
+                      border: `1px solid ${theme.border.light}`,
+                    }}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="text-xs text-slate-500 dark:text-slate-400">Position {ref.position}</span>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      justifyContent: 'space-between',
+                      marginBottom: tokens.spacing.compact.sm,
+                    }}>
+                      <span style={{
+                        fontSize: tokens.typography.fontSize.xs,
+                        color: theme.text.muted,
+                      }}>
+                        Position {ref.position}
+                      </span>
                       <button
                         onClick={() => handleRemoveClauseRef(index)}
-                        className="text-red-600 dark:text-red-400 hover:text-red-700"
+                        style={{ color: theme.status.error.text }}
+                        className="transition-opacity hover:opacity-70"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -430,7 +713,16 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                     <select
                       value={ref.clauseId}
                       onChange={(e) => handleUpdateClauseRef(index, { clauseId: e.target.value })}
-                      className="w-full text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 mb-1"
+                      style={{
+                        width: '100%',
+                        fontSize: tokens.typography.fontSize.xs,
+                        padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                        border: `1px solid ${theme.border.default}`,
+                        borderRadius: tokens.borderRadius.md,
+                        backgroundColor: theme.surface.input,
+                        color: theme.text.primary,
+                        marginBottom: tokens.spacing.compact.xs,
+                      }}
                     >
                       <option value="">Select Clause</option>
                       {availableClauses.map((clause) => (
@@ -439,19 +731,29 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                         </option>
                       ))}
                     </select>
-                    <label className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <label style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      fontSize: tokens.typography.fontSize.xs,
+                      color: theme.text.secondary,
+                    }}>
                       <input
                         type="checkbox"
                         checked={ref.isOptional}
                         onChange={(e) => handleUpdateClauseRef(index, { isOptional: e.target.checked })}
-                        className="mr-1"
+                        style={{ marginRight: tokens.spacing.compact.xs }}
                       />
                       Optional
                     </label>
                   </div>
                 ))}
                 {clauseRefs.length === 0 && (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 text-center py-4">
+                  <p style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: theme.text.muted,
+                    textAlign: 'center',
+                    padding: `${tokens.spacing.normal.lg} 0`,
+                  }}>
                     No clause references
                   </p>
                 )}

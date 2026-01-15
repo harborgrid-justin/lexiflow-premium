@@ -6,6 +6,7 @@
 
 import type { UINotification } from '@/types/notifications';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { formatDistanceToNow } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -76,6 +77,7 @@ export function NotificationCenter({
   isLoading = false,
   className,
 }: NotificationCenterProps) {
+  const { theme, tokens } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
@@ -196,29 +198,62 @@ export function NotificationCenter({
 
   return (
     <div
-      className={cn(
-        'flex flex-col h-full bg-slate-50 dark:bg-slate-900',
-        className
-      )}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        backgroundColor: theme.surface.muted,
+      }}
+      className={className}
     >
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div style={{
+        backgroundColor: theme.surface.base,
+        borderBottom: `1px solid ${theme.border.default}`,
+        padding: tokens.spacing.normal['2xl'],
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: tokens.spacing.normal['2xl'],
+        }}>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
+            <h1 style={{
+              fontSize: tokens.typography.fontSize['2xl'],
+              fontWeight: tokens.typography.fontWeight.bold,
+              color: theme.text.primary,
+              display: 'flex',
+              alignItems: 'center',
+              gap: tokens.spacing.normal.md,
+            }}>
               <Bell className="h-7 w-7" />
               Notification Center
             </h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            <p style={{
+              fontSize: tokens.typography.fontSize.sm,
+              color: theme.text.secondary,
+              marginTop: tokens.spacing.compact.xs,
+            }}>
               {unreadCount} unread of {totalCount} total notifications
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.normal.sm }}>
             {onOpenPreferences && (
               <button
                 onClick={onOpenPreferences}
-                className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{
+                  padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.text.secondary,
+                  backgroundColor: theme.surface.elevated,
+                  borderRadius: tokens.borderRadius.lg,
+                }}
+                className="transition-colors focus:outline-none focus:ring-2"
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
               >
                 <Settings className="h-4 w-4 inline mr-2" />
                 Preferences
@@ -227,7 +262,17 @@ export function NotificationCenter({
             {unreadCount > 0 && (
               <button
                 onClick={onMarkAllAsRead}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{
+                  padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.surface.base,
+                  backgroundColor: theme.primary.DEFAULT,
+                  borderRadius: tokens.borderRadius.lg,
+                }}
+                className="transition-opacity focus:outline-none focus:ring-2"
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
               >
                 <CheckCheck className="h-4 w-4 inline mr-2" />
                 Mark all read

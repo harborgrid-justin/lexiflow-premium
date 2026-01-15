@@ -117,14 +117,14 @@ export function QualityDashboard({ anomalies, history }: QualityDashboardProps) 
                             <AreaChart data={history}>
                                 <defs>
                                     <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.8} />
-                                        <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                                        <stop offset="5%" stopColor={theme.colors.emerald500} stopOpacity={0.8} />
+                                        <stop offset="95%" stopColor={theme.colors.emerald500} stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
                                 <XAxis dataKey="date" fontSize={10} tickLine={false} axisLine={false} />
                                 <YAxis domain={[0, 100]} hide />
                                 <Tooltip />
-                                <Area type="monotone" dataKey="score" stroke="#10b981" fillOpacity={1} fill="url(#colorScore)" />
+                                <Area type="monotone" dataKey="score" stroke={theme.colors.emerald500} fillOpacity={1} fill="url(#colorScore)" />
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>

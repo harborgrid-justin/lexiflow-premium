@@ -7,8 +7,10 @@
  *
  * CANONICAL COMPOSITION:
  * ✅ RootProviders        - Use this (Infrastructure + Application only)
- * ⚠️  AppProviders        - DEPRECATED (includes DataLayer)
- * ⚠️  DataLayer           - DEPRECATED (domain providers → /routes/[feature]/)
+ *
+ * DEPRECATED (REMOVED):
+ * ❌ AppProviders         - Moved to archived/providers-deprecated/
+ * ❌ DataLayer            - Moved to archived/providers-deprecated/
  *
  * MIGRATION GUIDE: See DATA_LAYER_DEPRECATION.md
  * INTEGRATION GUIDE: See PROVIDER_INTEGRATION_GUIDE.tsx
@@ -20,7 +22,7 @@
 
 /**
  * RootProviders - Canonical composition (Infrastructure + Application)
- * Use in main.tsx to wrap <RouterProvider>
+ * Use in root.tsx to wrap application content
  */
 export { RootProviders, type RootProvidersProps } from "./RootProviders";
 
@@ -29,18 +31,6 @@ export { RootProviders, type RootProvidersProps } from "./RootProviders";
 // ============================================================================
 export { ApplicationLayer } from "./application/ApplicationLayer";
 export { InfrastructureLayer } from "./infrastructure/InfrastructureLayer";
-
-/**
- * @deprecated Use RootProviders instead
- * AppProviders includes DataLayer which is being removed
- */
-export { AppProviders } from "./AppProviders";
-
-/**
- * @deprecated Domain providers belong in /routes/[feature]/
- * DataLayer will be removed in next major version
- */
-export { DataLayer } from "./data/DataLayer";
 
 // ============================================================================
 // APPLICATION LAYER PROVIDERS (Nested Structure)
@@ -85,127 +75,42 @@ export {
 export { ApplicationErrorProvider } from "./application/errorprovider";
 
 // ============================================================================
-// DATA LAYER PROVIDERS (Nested Structure)
+// DEPRECATED DATA LAYER PROVIDERS - MOVED TO ARCHIVED
 // ============================================================================
-export {
-  BillingProvider,
-  useBilling,
-  useBillingActions,
-  useBillingState,
-} from "./data/billingprovider";
-export type {
-  BillingActionsValue,
-  BillingStateValue,
-} from "./data/billingprovider";
-
-export {
-  CasesProvider,
-  useCases,
-  useCasesActions,
-  useCasesState,
-} from "./data/casesprovider";
-export type { CasesActionsValue, CasesStateValue } from "./data/casesprovider";
-
-export {
-  DiscoveryProvider,
-  useDiscovery,
-  useDiscoveryActions,
-  useDiscoveryState,
-} from "./data/discoveryprovider";
-export type {
-  DiscoveryActionsValue,
-  DiscoveryStateValue,
-} from "./data/discoveryprovider";
-
-export {
-  DocumentsProvider,
-  useDocuments,
-  useDocumentsActions,
-  useDocumentsState,
-} from "./data/documentsprovider";
-export type {
-  DocumentsActionsValue,
-  DocumentsStateValue,
-} from "./data/documentsprovider";
-
-export {
-  DocketProvider,
-  useDocket,
-  useDocketActions,
-  useDocketState,
-} from "./data/docketprovider";
-export type {
-  DocketActionsValue,
-  DocketStateValue,
-} from "./data/docketprovider";
-
-export {
-  ClientsProvider,
-  useClients,
-  useClientsActions,
-  useClientsState,
-} from "./data/clientsprovider";
-export type {
-  ClientsActionsValue,
-  ClientsStateValue,
-} from "./data/clientsprovider";
-
-export {
-  TasksProvider,
-  useTasks,
-  useTasksActions,
-  useTasksState,
-} from "./data/tasksprovider";
-export type { TasksActionsValue, TasksStateValue } from "./data/tasksprovider";
-
-export {
-  ComplianceProvider,
-  useCompliance,
-  useComplianceActions,
-  useComplianceState,
-} from "./data/complianceprovider";
-export type {
-  ComplianceActionsValue,
-  ComplianceStateValue,
-} from "./data/complianceprovider";
-
-export {
-  CommunicationsProvider,
-  useCommunications,
-  useCommunicationsActions,
-  useCommunicationsState,
-} from "./data/communicationsprovider";
-export type {
-  CommunicationsActionsValue,
-  CommunicationsStateValue,
-} from "./data/communicationsprovider";
-
-export {
-  AnalyticsProvider,
-  useAnalytics,
-  useAnalyticsActions,
-  useAnalyticsState,
-} from "./data/analyticsprovider";
-export type {
-  AnalyticsActionsValue,
-  AnalyticsStateValue,
-} from "./data/analyticsprovider";
-
-export {
-  TrialProvider,
-  useTrial,
-  useTrialActions,
-  useTrialState,
-} from "./data/trialprovider";
-export type { TrialActionsValue, TrialStateValue } from "./data/trialprovider";
-
-export { HRProvider, useHR, useHRActions, useHRState } from "./data/hrprovider";
-export type { HRActionsValue, HRStateValue } from "./data/hrprovider";
-
-// ============================================================================
-// DATA LAYER ERROR PROVIDER
-// ============================================================================
-export { DataErrorProvider } from "./data/errorprovider";
+/**
+ * Domain providers have been moved to archived/providers-deprecated/data/
+ *
+ * Per Enterprise React Architecture Standard:
+ * - Domain providers belong in /routes/[feature]/ directories
+ * - Use loader-based data fetching with Suspense boundaries
+ * - Initialize providers with data from route loaders
+ *
+ * Migration example:
+ * ```tsx
+ * // routes/cases/index.tsx
+ * export async function loader() {
+ *   const cases = await api.cases.getAll();
+ *   return defer({ cases });
+ * }
+ *
+ * export function Component() {
+ *   const { cases } = useLoaderData<typeof loader>();
+ *   return (
+ *     <Suspense fallback={<Skeleton />}>
+ *       <Await resolve={cases}>
+ *         {(data) => (
+ *           <CasesProvider initialCases={data}>
+ *             <CasesView />
+ *           </CasesProvider>
+ *         )}
+ *       </Await>
+ *     </Suspense>
+ *   );
+ * }
+ * ```
+ *
+ * See DATA_LAYER_DEPRECATION.md for complete migration guide.
+ */
 
 // ============================================================================
 // INFRASTRUCTURE LAYER PROVIDERS (Nested Structure)

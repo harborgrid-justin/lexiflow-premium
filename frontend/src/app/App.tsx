@@ -5,7 +5,6 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useEntitlements } from "@/lib/entitlements/context";
 import { useFlags } from "@/lib/flags/context";
-import { DataProvider } from "@/routes/dashboard";
 
 import { AdminPath } from "./paths/AdminPath";
 import { MemberPath } from "./paths/MemberPath";

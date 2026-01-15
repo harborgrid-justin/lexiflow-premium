@@ -34,7 +34,7 @@ import type { Route } from "./+types/root";
 import "./index.css";
 
 // Import providers
-import { AppProviders, QueryClientProvider } from "@/providers";
+import { RootProviders, QueryClientProvider } from "@/providers";
 
 import { APP_DESCRIPTION, APP_NAME } from '@/config/app.config';
 import React from "react";
@@ -111,9 +111,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="min-h-screen antialiased" style={{ backgroundColor: 'var(--color-background)' }} suppressHydrationWarning>
-        {/* Provider order matters: AppProviders composes all required providers */}
+        {/* RootProviders: Infrastructure + Application layers (React 18 + React Router v7) */}
         <QueryClientProvider>
-          <AppProviders>{children}</AppProviders>
+          <RootProviders>{children}</RootProviders>
         </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />

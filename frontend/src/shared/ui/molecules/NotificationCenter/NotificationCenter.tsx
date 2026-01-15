@@ -77,7 +77,7 @@ const getNotificationColor = (type: NotificationType, theme: ThemeStateValue['th
     case 'error':
       return 'text-red-600 dark:text-red-400';
     case 'info':
-      return 'text-blue-600 dark:text-blue-400';
+      return cn(theme.colors.info);
     case 'system':
     default:
       return theme.text.secondary;
@@ -259,7 +259,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                       onClick={() => handleNotificationClick(notification)}
                       className={cn(
                         'px-4 py-3 transition-colors cursor-pointer relative',
-                        !notification.read && 'bg-blue-50/50 dark:bg-blue-900/10',
+                        !notification.read && cn('bg-blue-50/50 dark:bg-blue-900/10'),
                         `hover:${theme.surface.highlight}`
                       )}
                     >
@@ -276,7 +276,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                               {notification.title}
                             </h4>
                             {!notification.read && (
-                              <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                              <div className={cn("w-2 h-2 rounded-full mt-1.5 shrink-0", theme.colors.primary)} />
                             )}
                           </div>
                           <p

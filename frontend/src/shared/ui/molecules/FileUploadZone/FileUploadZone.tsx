@@ -60,7 +60,7 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
         >
             <input type="file" ref={fileInputRef} className="hidden" onChange={onFileSelect} multiple={multiple} />
             {processing ? (
-                <div className="flex flex-col items-center justify-center text-blue-600">
+                <div className={cn("flex flex-col items-center justify-center", theme.colors.info)}>
                     <Loader2 className="h-10 w-10 animate-spin mb-4" />
                     <p className="font-bold text-lg">{processStage || 'Processing...'}</p>
                     <p className="text-sm text-slate-400 mt-2">Do not close window</p>

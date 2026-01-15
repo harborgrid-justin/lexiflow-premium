@@ -59,7 +59,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         className
       )}
     >
-      <Loader2 className={cn('animate-spin text-blue-600', SIZE_CLASSES[size])} />
+      <Loader2 className={cn('animate-spin', theme.colors.primary, SIZE_CLASSES[size])} />
       {message && (
         <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">{message}</p>
       )}

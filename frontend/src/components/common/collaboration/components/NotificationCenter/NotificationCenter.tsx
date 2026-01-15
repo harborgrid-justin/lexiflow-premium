@@ -179,7 +179,7 @@ export function NotificationCenter() {
               "px-4 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap",
               filter === tab.id
                 ? cn(theme.surface.default, theme.primary.text, "shadow-sm border", theme.border.default)
-                : cn(theme.text.secondary, "hover:bg-black/5")
+                : cn(theme.text.secondary, `hover:${theme.surface.hover}`)
             )}
           >
             {tab.label}
@@ -263,7 +263,7 @@ export function NotificationCenter() {
                 type="checkbox"
                 checked={value}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPreferences({ ...preferences, [key]: e.target.checked })}
-                className="h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                className={cn("h-5 w-5 rounded-md cursor-pointer", theme.border.default, theme.colors.info, theme.border.focus)}
               />
             </label>
           ))}

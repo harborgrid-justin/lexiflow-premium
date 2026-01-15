@@ -161,7 +161,11 @@ export function MatterManagement() {
             <Card
               key={matter.id}
               className="cursor-pointer hover:shadow-md transition-shadow group relative"
-              onClick={() => console.log('View matter', matter.id)}
+              onClick={() => {
+                // TODO: Wire to navigation service
+                // navigate(`/matters/${matter.id}`);
+                console.log('View matter', matter.id);
+              }}
             >
               <div className="p-5 flex flex-col h-full">
                 <div className="flex justify-between items-start mb-3">

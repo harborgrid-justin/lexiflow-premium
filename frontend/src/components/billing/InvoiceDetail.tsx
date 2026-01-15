@@ -19,11 +19,11 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      Draft: 'bg-gray-100 text-gray-800',
-      Sent: 'bg-blue-100 text-blue-800',
-      Paid: 'bg-green-100 text-green-800',
-      Overdue: 'bg-red-100 text-red-800',
-      Cancelled: 'bg-gray-100 text-gray-800',
+      Draft: cn(theme.surface.default, theme.text.secondary, 'dark:bg-slate-800 dark:text-slate-100'),
+      Sent: cn(theme.colors.info, 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-100'),
+      Paid: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-100',
+      Overdue: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-100',
+      Cancelled: cn(theme.surface.default, theme.text.secondary, 'dark:bg-slate-800 dark:text-slate-100'),
     };
 
     return (
@@ -44,12 +44,12 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 className={cn("text-2xl font-bold", theme.text.primary)}>
               Invoice {invoice.invoiceNumber}
             </h1>
             {getStatusBadge(invoice.status)}
           </div>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("mt-1 text-sm", theme.text.secondary)}>
             {invoice.clientName} - {invoice.matterDescription}
           </p>
         </div>
@@ -60,7 +60,7 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
               <input type="hidden" name="intent" value="send" />
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+                className={cn("flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm", theme.colors.primary, `hover:${theme.colors.hoverPrimary}`)}
               >
                 <Send className="h-4 w-4" />
                 Send Invoice
@@ -71,7 +71,7 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
             <input type="hidden" name="intent" value="download-pdf" />
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+              className={cn("flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium shadow-sm", theme.border.default, theme.surface.default, theme.text.primary, `hover:${theme.surface.hover}`)}
             >
               <Download className="h-4 w-4" />
               Download PDF
@@ -81,11 +81,11 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
       </div>
 
       {/* Payment Status Card */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+      <div className={cn("rounded-lg p-6", theme.surface.default, theme.border.default)}>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-4">
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Amount</p>
-            <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+            <p className={cn("text-sm font-medium", theme.text.secondary)}>Total Amount</p>
+            <p className={cn("mt-1 text-2xl font-semibold", theme.text.primary)}>
               ${invoice.totalAmount.toLocaleString()}
             </p>
           </div>

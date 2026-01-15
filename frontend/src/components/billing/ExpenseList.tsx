@@ -172,7 +172,7 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
                   color: theme.button.primary.text,
                   boxShadow: tokens.shadows.sm,
                 }}
-                className="hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className={cn(`hover:${theme.colors.hoverPrimary}`, "focus:outline-none focus:ring-2 focus:ring-offset-2", theme.colors.primary)}
               >
                 Apply Filters
               </button>

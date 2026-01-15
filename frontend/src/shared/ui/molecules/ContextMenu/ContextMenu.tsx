@@ -61,22 +61,22 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, items, onClose }
     >
       {/* IDENTITY-STABLE KEYS: Use label as key */}
       {items.map((item) => {
-          const Icon = item.icon;
-          return (
-            <button
+        const Icon = item.icon;
+        return (
+          <button
             key={item.label}
             onClick={() => { item.action(); onClose(); }}
             className={cn(
-                "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",
-                item.danger
-                ? cn('text-red-600', 'hover:bg-red-50', 'dark:hover:bg-red-900/20')
+              "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",
+              item.danger
+                ? cn(theme.status.error.text, 'hover:bg-red-50 dark:hover:bg-red-900/20')
                 : cn(theme.text.primary, `hover:${theme.surface.highlight}`)
             )}
-            >
+          >
             {Icon && <Icon className="h-4 w-4" />}
             <span>{item.label}</span>
-            </button>
-          );
+          </button>
+        );
       })}
     </div>
   );

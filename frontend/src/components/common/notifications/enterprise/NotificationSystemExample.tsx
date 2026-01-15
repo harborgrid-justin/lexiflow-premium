@@ -410,25 +410,25 @@ export const ToastExample: React.FC = () => {
       <div className="flex gap-4">
         <button
           onClick={showSuccessToast}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          className={cn("px-4 py-2 rounded-lg transition-colors", theme.status.success.background, 'text-white', 'hover:bg-green-700')}
         >
           Show Success Toast
         </button>
         <button
           onClick={showErrorToast}
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          className={cn("px-4 py-2 rounded-lg transition-colors", theme.status.error.background, 'text-white', 'hover:bg-red-700')}
         >
           Show Error Toast
         </button>
         <button
           onClick={showInfoToast}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className={cn("px-4 py-2 rounded-lg transition-colors", theme.colors.primary, 'text-white', `hover:${theme.colors.hoverPrimary}`)}
         >
           Show Info Toast
         </button>
         <button
           onClick={showWarningToast}
-          className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+          className={cn("px-4 py-2 rounded-lg transition-colors", theme.status.warning.background, 'text-white', 'hover:bg-amber-700')}
         >
           Show Warning Toast
         </button>

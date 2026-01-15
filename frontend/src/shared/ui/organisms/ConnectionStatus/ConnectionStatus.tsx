@@ -1,6 +1,8 @@
 import { TIMEOUTS } from '@/config/ports.config';
 import { useDataSource } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
+import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme/ThemeContext';
 import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { BackendHealthMonitor } from '../BackendHealthMonitor/BackendHealthMonitor';
@@ -17,6 +19,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
   const [showCoverage, setShowCoverage] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const { currentSource, isBackendApiEnabled: useBackendApi } = useDataSource();
+  const { theme } = useTheme();
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;

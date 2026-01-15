@@ -118,7 +118,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
           {isQuickActionOpen && (
             <div className={cn("absolute top-full right-0 mt-2 w-48 rounded-lg shadow-xl border overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default)}>
-              <button 
+              <button
                 onClick={async () => {
                   // TODO: Wire to DataService.billing.startTimer()
                   setIsQuickActionOpen(false);
@@ -127,7 +127,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               >
                 <Clock className={cn("h-4 w-4", theme.status.success.icon)} /> Log Time
               </button>
-              <button 
+              <button
                 onClick={async () => {
                   // TODO: Wire to DataService.documents.create()
                   setIsQuickActionOpen(false);
@@ -136,7 +136,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               >
                 <FileText className={cn("h-4 w-4", theme.primary.text)} /> New Document
               </button>
-              <button 
+              <button
                 onClick={async () => {
                   // TODO: Wire to DataService.contacts.createClient()
                   setIsQuickActionOpen(false);
@@ -170,10 +170,26 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               read: false
             },
           ]}
-          onNotificationClick={(notification) => console.log('Notification clicked:', notification)}
-          onNotificationDismiss={(id) => console.log('Dismiss notification:', id)}
-          onMarkAllRead={() => console.log('Mark all as read')}
-          onClearAll={() => console.log('Clear all notifications')}
+          onNotificationClick={async (notification) => {
+            // TODO: Wire to DataService notification tracking
+            // await DataService.notifications.markAsRead(notification.id);
+            console.log('Notification clicked:', notification);
+          }}
+          onNotificationDismiss={async (id) => {
+            // TODO: Wire to DataService
+            // await DataService.notifications.dismiss(id);
+            console.log('Dismiss notification:', id);
+          }}
+          onMarkAllRead={async () => {
+            // TODO: Wire to DataService
+            // await DataService.notifications.markAllAsRead();
+            console.log('Mark all as read');
+          }}
+          onClearAll={async () => {
+            // TODO: Wire to DataService
+            // await DataService.notifications.clearAll();
+            console.log('Clear all notifications');
+          }}
         />
 
         <div className={cn("h-8 w-px mx-1", theme.border.default)}></div>

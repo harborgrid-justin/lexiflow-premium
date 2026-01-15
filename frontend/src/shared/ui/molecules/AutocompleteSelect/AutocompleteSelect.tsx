@@ -257,7 +257,7 @@ const AutocompleteSelectInner = <
       className={`
         px-4 py-2 cursor-pointer transition-colors
         ${isHighlighted ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
-        ${isSelected ? 'bg-blue-100 dark:bg-blue-900/40' : ''}
+        ${isSelected ? cn(theme.surface.active, 'dark:bg-blue-900/40') : ''}
       `}
     >
       <div className="flex items-center justify-between">

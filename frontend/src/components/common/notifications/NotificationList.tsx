@@ -112,10 +112,9 @@ export function NotificationList({
         );
       case 'case_update':
         return (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/20">
-            <svg className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-            </svg>
+          <div className={cn("flex h-10 w-10 items-center justify-center rounded-full", theme.colors.info, "bg-blue-100 dark:bg-blue-900/20")}>            <svg className={cn("h-6 w-6", theme.colors.info, "text-blue-600 dark:text-blue-400")} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+          </svg>
           </div>
         );
       case 'document':
@@ -128,10 +127,9 @@ export function NotificationList({
         );
       default:
         return (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-            <svg className="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+          <div className={cn("flex h-10 w-10 items-center justify-center rounded-full", theme.surface.default)}>            <svg className={cn("h-6 w-6", theme.text.secondary)} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           </div>
         );
     }
@@ -263,7 +261,7 @@ export function NotificationList({
       {Object.keys(groupedNotifications).length === 0 ? (
         <div className="flex flex-col items-center justify-center p-12 text-center">
           <svg
-            className="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600"
+            className={cn("mb-4 h-16 w-16", theme.text.tertiary)}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -275,13 +273,13 @@ export function NotificationList({
               d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
             />
           </svg>
-          <p className="text-sm text-gray-500 dark:text-gray-400">No notifications</p>
+          <p className={cn("text-sm", theme.text.secondary)}>No notifications</p>
         </div>
       ) : (
         <div className="space-y-6">
           {Object.entries(groupedNotifications).map(([dateGroup, groupNotifications]) => (
             <div key={dateGroup}>
-              <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
+              <h3 className={cn("mb-2 text-xs font-semibold uppercase", theme.text.secondary)}>
                 {dateGroup}
               </h3>
               <div className="space-y-2">
@@ -290,8 +288,8 @@ export function NotificationList({
                     key={notification.id}
                     onClick={() => onNotificationClick?.(notification)}
                     className={`group relative flex gap-3 rounded-lg p-4 transition-colors ${notification.read
-                      ? 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-750'
-                      : 'bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30'
+                      ? cn(theme.surface.default, `hover:${theme.surface.hover}`)
+                      : cn('bg-blue-50 dark:bg-blue-900/20', 'hover:bg-blue-100 dark:hover:bg-blue-900/30')
                       } ${onNotificationClick ? 'cursor-pointer' : ''}`}
                   >
                     {/* Icon */}
@@ -301,16 +299,16 @@ export function NotificationList({
                     <div className="flex-1 overflow-hidden">
                       <div className="flex items-start justify-between gap-2">
                         <h4 className={`text-sm font-semibold ${notification.read
-                          ? 'text-gray-900 dark:text-gray-100'
+                          ? theme.text.primary
                           : 'text-blue-900 dark:text-blue-100'
                           }`}>
                           {notification.title}
                         </h4>
-                        <span className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400">
+                        <span className={cn("flex-shrink-0 text-xs", theme.text.secondary)}>
                           {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                         </span>
                       </div>
-                      <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{notification.message}</p>
+                      <p className={cn("mt-1 text-sm", theme.text.secondary)}>{notification.message}</p>
 
                       {/* Action button */}
                       {notification.actionUrl && notification.actionLabel && (

@@ -106,11 +106,10 @@ export function DataSourceSelector() {
   return (
     <div className="space-y-4">
       {/* Real-Time Monitoring Notice */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-3">
-        <Wifi className="h-5 w-5 text-blue-600 mt-0.5 animate-pulse" />
+      <div className={cn("rounded-lg p-3 flex items-start gap-3", 'bg-blue-50 dark:bg-blue-900/30', theme.border.default)}>        <Wifi className={cn("h-5 w-5 mt-0.5 animate-pulse", theme.colors.info)} />
         <div className="flex-1 text-sm">
-          <p className="font-medium text-blue-900 mb-1">Real-Time Backend Monitoring</p>
-          <p className="text-blue-700 text-xs">
+          <p className={cn("font-medium mb-1", 'text-blue-900 dark:text-blue-100')}>Real-Time Backend Monitoring</p>
+          <p className={cn("text-xs", 'text-blue-700 dark:text-blue-200')}>
             Backend status is monitored continuously every 30 seconds, regardless of your current data source.
             You can switch to the backend at any time when it's available.
           </p>
@@ -135,7 +134,7 @@ export function DataSourceSelector() {
             onClick={handleRefresh}
             disabled={isRefreshing}
             style={{ backgroundColor: 'transparent' }}
-            className="p-1 hover:bg-white/50 rounded transition-colors"
+            className={cn("p-1 rounded transition-colors", `hover:bg-white/50`)}
             title="Refresh backend status now"
           >
             <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
@@ -178,7 +177,7 @@ export function DataSourceSelector() {
               className={`
                 w-full text-left p-4 rounded-lg border-2 transition-all
                 ${isSelected
-                  ? 'border-blue-500 bg-blue-50'
+                  ? cn(theme.border.focus, 'bg-blue-50 dark:bg-blue-900/20')
                   : 'border-slate-200 hover:border-slate-300 bg-white'
                 }
                 ${isDisabled
@@ -188,14 +187,14 @@ export function DataSourceSelector() {
               `}
             >
               <div className="flex items-start gap-3">
-                <Icon className={`h-5 w-5 mt-0.5 ${isSelected ? 'text-blue-600' : 'text-slate-600'}`} />
+                <Icon className={cn("h-5 w-5 mt-0.5", isSelected ? theme.colors.info : theme.text.secondary)} />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className={`font-medium ${isSelected ? 'text-blue-900' : 'text-slate-900'}`}>
+                    <span className={cn("font-medium", isSelected ? 'text-blue-900 dark:text-blue-100' : theme.text.primary)}>
                       {option.label}
                     </span>
                     {isSelected && (
-                      <span className="text-xs font-medium px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">
+                      <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full", 'bg-blue-100 dark:bg-blue-900/30', 'text-blue-700 dark:text-blue-200')}>
                         Active
                       </span>
                     )}

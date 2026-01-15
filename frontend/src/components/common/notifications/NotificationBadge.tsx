@@ -92,7 +92,7 @@ export function NotificationIcon({ count, onClick, size = 'md', className = '' }
   return (
     <button
       onClick={onClick}
-      className={`relative rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100 ${className}`}
+      className={cn("relative rounded-lg p-2 transition-colors", theme.text.secondary, `hover:${theme.surface.hover}`, `hover:${theme.text.primary}`, className)}
       title="Notifications"
     >
       <svg

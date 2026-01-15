@@ -85,12 +85,12 @@ const getActivityConfig = (tokens: any) => ({
   },
   team_member_added: {
     icon: UserPlus,
-    color: 'text-blue-600 dark:text-blue-400',
-    bgColor: 'bg-blue-100 dark:bg-blue-900/30',
+    color: theme.colors.info,
+    bgColor: cn('bg-blue-100 dark:bg-blue-900/30'),
   },
   comment_added: {
     icon: MessageSquare,
-    color: 'text-gray-600 dark:text-gray-400',
+    color: theme.text.secondary,
     bgColor: 'bg-gray-100 dark:bg-gray-900/30',
   },
   status_changed: {

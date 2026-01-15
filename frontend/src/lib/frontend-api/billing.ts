@@ -116,6 +116,27 @@ export async function createInvoice(
   return success(normalizeInvoice(result.data));
 }
 
+// Enterprise / Dashboard
+export async function getOverviewStats(): Promise<Result<unknown>> {
+  const result = await client.get<unknown>("/billing/analytics/overview");
+  if (!result.ok) return result;
+  return success(result.data);
+}
+
+export async function getCollections(): Promise<Result<unknown[]>> {
+  const result = await client.get<unknown[]>("/billing/collections");
+  if (!result.ok) return result;
+  return success(Array.isArray(result.data) ? result.data : []);
+}
+
+export async function generateARReport(): Promise<Result<unknown>> {
+  return client.post("/billing/reports/ar-aging", {});
+}
+
+export async function sendCollectionReminders(): Promise<Result<unknown>> {
+  return client.post("/billing/collections/reminders", {});
+}
+
 /**
  * Time Entries sub-module (for descriptor compatibility)
  */
@@ -134,6 +155,10 @@ export const billingApi = {
   getAllInvoices,
   getInvoiceById,
   createInvoice,
+  getOverviewStats,
+  getCollections,
+  generateARReport,
+  sendCollectionReminders,
   // Sub-modules for descriptor compatibility
   timeEntries,
   // Convenience alias

@@ -70,7 +70,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
 
   const getAvatarColor = () => {
     // Generate a consistent color based on user name
-    if (!user?.name) return 'bg-blue-500';
+    if (!user?.name) return theme.colors.primary;
     const colors = [
       'bg-blue-500',
       'bg-purple-500',
@@ -117,7 +117,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
           className={cn(
             'absolute bottom-0 right-0 rounded-full border-2 border-white dark:border-gray-800',
             STATUS_SIZE_MAP[size],
-            isOnline ? 'bg-green-500' : 'bg-gray-400'
+            isOnline ? theme.status.success.background : theme.surface.default
           )}
           title={isOnline ? 'Online' : 'Offline'}
         />

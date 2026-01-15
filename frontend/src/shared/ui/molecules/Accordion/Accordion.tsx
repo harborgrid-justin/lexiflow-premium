@@ -51,16 +51,16 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, d
         <div className={cn("font-medium select-none flex-1", theme.text.primary)}>{title}</div>
         <div className="flex items-center gap-3">
           {actions && <div onClick={e => e.stopPropagation()}>{actions}</div>}
-          <span className={cn("hover:text-blue-600 transition-colors", theme.text.tertiary)} aria-hidden="true">
-            {isOpen ? <ChevronUp className="h-5 w-5"/> : <ChevronDown className="h-5 w-5"/>}
+          <span className={cn("transition-colors", theme.text.tertiary, `hover:${theme.colors.info}`)} aria-hidden="true">
+            {isOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
           </span>
         </div>
       </button>
-      <div 
+      <div
         id={contentId}
         role="region"
         aria-labelledby={buttonId}
-        className="accordion-content" 
+        className="accordion-content"
         data-state={isOpen ? 'open' : 'closed'}
         hidden={!isOpen}
       >

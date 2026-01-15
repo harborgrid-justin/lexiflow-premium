@@ -70,7 +70,7 @@ export const TimelineItem = React.memo<TimelineItemProps>(({
         title={description} // Native tooltip for zero-clutter detail access
       >
         <div className="flex justify-between items-baseline gap-2 w-full">
-          <span className={cn("text-sm font-semibold truncate", theme.text.primary, onClick ? "group-hover:text-blue-600 transition-colors" : "")}>
+          <span className={cn("text-sm font-semibold truncate", theme.text.primary, onClick ? cn("transition-colors", `group-hover:${theme.colors.info}`) : "")}>
             {title}
           </span>
           <DateText date={date} className={cn("font-mono text-[10px] whitespace-nowrap shrink-0 opacity-60", theme.text.tertiary)} />

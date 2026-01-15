@@ -93,7 +93,7 @@ export function NotificationCenter({
       const entityType = (notification as Record<string, unknown>).relatedEntityType;
       switch (entityType) {
         case 'case':
-          return <Briefcase className={cn(iconClass, 'text-blue-500')} />;
+          return <Briefcase className={cn(iconClass, theme.colors.info)} />;
         case 'document':
           return <FileText className={cn(iconClass, 'text-purple-500')} />;
         case 'calendar':
@@ -112,7 +112,7 @@ export function NotificationCenter({
       case 'warning':
         return <AlertTriangle className={cn(iconClass, 'text-amber-500')} />;
       default:
-        return <Info className={cn(iconClass, 'text-blue-500')} />;
+        return <Info className={cn(iconClass, theme.colors.info)} />;
     }
   };
 
@@ -550,7 +550,7 @@ export function NotificationCenter({
                       type="checkbox"
                       checked={selectedIds.has(notification.id)}
                       onChange={() => toggleSelection(notification.id)}
-                      className="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      className={cn("mt-1 h-4 w-4 rounded cursor-pointer", theme.border.default, theme.colors.info)}
                       aria-label={`Select ${notification.title}`}
                     />
 
@@ -592,7 +592,7 @@ export function NotificationCenter({
                             notification.type === 'warning' &&
                             'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
                             notification.type === 'info' &&
-                            'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                            cn('bg-blue-100 dark:bg-blue-900/30', 'text-blue-700 dark:text-blue-300')
                           )}
                         >
                           {notification.type}
@@ -637,7 +637,7 @@ export function NotificationCenter({
                       )}
                       <button
                         onClick={() => onDelete(notification.id)}
-                        className="p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        className={cn("p-2 rounded-lg focus:outline-none focus:ring-2", 'hover:bg-red-100 dark:hover:bg-red-900/30', theme.status.error.text, 'focus:ring-red-500')}
                         title="Delete"
                       >
                         <Trash2 className="h-4 w-4" />

@@ -103,7 +103,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
               onFocus={() => setIsOpen(true)}
               onBlur={() => setTimeout(() => setIsOpen(false), 200)}
             />
-            {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin text-blue-600" />}
+            {isLoading && <Loader2 className={cn("h-4 w-4 mr-2 animate-spin", theme.colors.primary)} />}
           </div>
 
           {isOpen && searchTerm && (
@@ -117,7 +117,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
                   >
                     <div className="flex justify-between items-center mb-0.5">
                       <span className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
-                        <Book className="h-3 w-3 mr-1.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Book className={cn("h-3 w-3 mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity", theme.colors.info)} />
                         {rule.code}
                       </span>
                       <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>{rule.type}</span>

@@ -90,9 +90,9 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
         return {
           icon: RefreshCw,
           label: 'Connecting...',
-          color: 'text-blue-500',
-          bg: 'bg-blue-500',
-          bgLight: 'bg-blue-50 dark:bg-blue-900/20',
+          color: theme.colors.info,
+          bg: theme.colors.primary,
+          bgLight: cn('bg-blue-50 dark:bg-blue-900/20'),
           borderColor: 'border-blue-500',
           pulse: true,
         };
@@ -370,8 +370,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
           className={cn(
             'px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
             state === 'error'
-              ? 'bg-rose-500 hover:bg-rose-600 focus:ring-rose-500'
-              : 'bg-blue-500 hover:bg-blue-600 focus:ring-blue-500'
+              ? cn(theme.status.error.background, 'hover:bg-rose-600', 'focus:ring-rose-500')
+              : cn(theme.colors.primary, `hover:${theme.colors.hoverPrimary}`, theme.border.focus)
           )}
         >
           <RefreshCw className="h-4 w-4 inline mr-2" />

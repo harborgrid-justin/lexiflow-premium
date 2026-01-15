@@ -232,7 +232,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
             className={cn(
               "flex items-center gap-2 px-2 py-1 rounded-md transition-colors",
               isLast ? cn(theme.text.primary, "font-medium") : theme.text.secondary,
-              !isLast && "hover:bg-slate-100 dark:hover:bg-slate-800",
+              !isLast && `hover:${theme.surface.hover}`,
               "focus:outline-none focus:ring-2 focus:ring-blue-500"
             )}
             aria-current={isLast ? 'page' : undefined}

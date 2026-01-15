@@ -347,11 +347,11 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
                         className={cn(
                           'px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
                           action.variant === 'primary' &&
-                          'bg-blue-600 text-white hover:bg-blue-700',
+                          cn(theme.colors.primary, 'text-white', `hover:${theme.colors.hoverPrimary}`),
                           action.variant === 'danger' &&
-                          'bg-red-600 text-white hover:bg-red-700',
+                          cn(theme.status.error.background, 'text-white', 'hover:bg-red-700'),
                           (!action.variant || action.variant === 'secondary') &&
-                          'bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600'
+                          cn(theme.surface.default, theme.text.primary, `hover:${theme.surface.hover}`)
                         )}
                       >
                         {action.label}
@@ -364,7 +364,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
               {/* Close Button */}
               <button
                 onClick={() => removeToast(toast.id)}
-                className="flex-shrink-0 p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={cn("flex-shrink-0 p-1 rounded-lg transition-colors focus:outline-none focus:ring-2", `hover:${theme.surface.hover}`, theme.text.secondary, theme.border.focus)}
                 aria-label="Dismiss notification"
               >
                 <X className="h-4 w-4" />

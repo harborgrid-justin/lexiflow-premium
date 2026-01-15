@@ -1,11 +1,11 @@
+import { IS_PUBLIC_KEY } from "@common/decorators/public.decorator";
 import {
-  Injectable,
   ExecutionContext,
+  Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import { Reflector } from "@nestjs/core";
-import { IS_PUBLIC_KEY } from "@common/decorators/public.decorator";
+import { AuthGuard } from "@nestjs/passport";
 
 /**
  * Enterprise JWT Authentication Guard
@@ -49,12 +49,20 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
   handleRequest<TUser = unknown>(
     err: unknown,
     user: unknown,
-    _info: unknown,
+    info: unknown,
     _context: unknown,
     _status?: unknown
   ): TUser {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
+      if (info instanceof Error) {
+        if (info.message === "jwt expired") {
+          throw new BusinessException(ErrorCodes.AUTH_TOKEN_EXPIRED);
+        }
+        // Map other specific JWT errors to BusinessException if needed
+        // For now, treat others as generic Unauthorized or let them fall through
+      }
+
       throw err || new UnauthorizedException();
     }
     return user as TUser;

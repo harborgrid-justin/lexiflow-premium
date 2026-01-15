@@ -16,9 +16,220 @@ import { createAdminMeta } from '../_shared/meta-utils'; // ====================
 } function formatTimestamp(timestamp: string): string { const date = new Date(timestamp); const now = new Date(); const diff = now.getTime() - date.getTime(); if (diff < 60000) return 'Just now'; if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`; if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`; return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', });
 } // ============================================================================
 // Component
-// ============================================================================ interface Pagination { page: number; limit: number; total: number; totalPages: number;
-} interface LoaderData { logs: AuditLogEntry[]; pagination: Pagination & { totalItems: number }; filters: { actions: string[]; resourceTypes: string[]; };
-} export default function AuditLogsRoute({ loaderData }: { loaderData: LoaderData }) { const { logs, pagination, filters } = loaderData; const formId = useId(); const [selectedAction, setSelectedAction] = useState<string>('all'); const [searchTerm, setSearchTerm] = useState(''); const handleExport = () => { try { const headers = ['Timestamp', 'User', 'Action', 'Resource Type', 'Resource Name', 'IP Address', 'Severity']; const csvRows = [ headers.join(','), ...logs.map(log => [ new Date(log.timestamp).toLocaleString(), log.userEmail || log.user, log.action, log.resourceType || '', log.resourceName || log.resource, log.ipAddress || log.ip, log.severity || 'info' ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')) ]; const csvContent = csvRows.join('\n'); const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement('a'); const url = URL.createObjectURL(blob); link.href = url; link.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); } catch (error) { console.error('Failed to export audit logs:', error); alert('Failed to export audit logs. Please try again.'); } }; return ( <div className="p-8"> {/* Breadcrumb */} <nav className="mb-6 flex items-center gap-2 text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> <Link to="/admin" className="hover:text-[var(--color-text)] dark:hover:text-gray-200"> Admin </Link> <span>/</span> <span className="text-[var(--color-text)]">Audit Logs</span> </nav> {/* Page Header */} <div className="mb-8 flex items-center justify-between"> <div> <h1 className="text-2xl font-bold text-[var(--color-text)]"> Audit Logs </h1> <p className="mt-1 text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> View and export system activity logs </p> </div> <button type="button" onClick={handleExport} className="flex items-center gap-2 rounded-md bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--color-primaryDark)] focus:outline-none focus:ring-2 focus:ring-blue-500" > <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /> </svg> Export CSV </button> </div> {/* Filters */} <div className="mb-6 flex flex-wrap items-center gap-4"> <div className="flex-1"> <label htmlFor={`${formId}-search`} className="sr-only">Search logs</label> <input id={`${formId}-search`} type="text" placeholder="Search by user, resource, or action..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full max-w-md rounded-md border border-[var(--color-border)] px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" /> </div> <div> <label htmlFor={`${formId}-action-filter`} className="sr-only">Filter by action</label> <select id={`${formId}-action-filter`} value={selectedAction} onChange={(e) => setSelectedAction(e.target.value)} className="rounded-md border border-[var(--color-border)] px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" > <option value="all">All Actions</option> {filters.actions.map((action: string) => ( <option key={action} value={action}>{action}</option> ))} </select> </div> </div> {/* Logs Table */} <div className="overflow-hidden rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)]"> <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"> <thead className="bg-[var(--color-surfaceRaised)]"> <tr> <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Timestamp </th> <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> User </th> <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Action </th> <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Resource </th> <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> IP Address </th> <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Details </th> </tr> </thead> <tbody className="divide-y divide-gray-200 bg-[var(--color-surface)] dark:divide-gray-700"> {logs.map((log: AuditLogEntry) => ( <tr key={log.id} className="hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700/50"> <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> <div className="flex items-center gap-2"> {getSeverityIcon(log.severity || 'info')} <span>{formatTimestamp(log.timestamp)}</span> </div> </td> <td className="whitespace-nowrap px-6 py-4"> <div className="text-sm font-medium text-[var(--color-text)]"> {log.userEmail || log.user} </div> </td> <td className="whitespace-nowrap px-6 py-4"> <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getActionColor(log.action)}`}> {log.action} </span> </td> <td className="px-6 py-4"> <div className="text-sm text-[var(--color-text)]"> {log.resourceName || log.resource} </div> <div className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> {log.resourceType || 'Unknown'} • {log.resourceId || ''} </div> </td> <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> {log.ipAddress || log.ip} </td> <td className="whitespace-nowrap px-6 py-4 text-sm"> <button type="button" className="text-[var(--color-primary)] hover:text-blue-800 dark:hover:text-blue-300" > View </button> </td> </tr> ))} </tbody> </table> </div> {/* Pagination */} <div className="mt-6 flex items-center justify-between"> <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Showing page {pagination.page} of {pagination.totalPages} ({pagination.totalItems} total entries) </p> <div className="flex gap-2"> <button type="button" disabled={pagination.page === 1} className="rounded-md border border-[var(--color-border)] px-3 py-1 text-sm disabled:opacity-50" > Previous </button> <button type="button" disabled={pagination.page === pagination.totalPages} className="rounded-md border border-[var(--color-border)] px-3 py-1 text-sm disabled:opacity-50" > Next </button> </div> </div> </div> );
-} // ============================================================================
+// ============================================================================
+
+interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+interface LoaderData {
+  logs: AuditLogEntry[];
+  pagination: Pagination & { totalItems: number };
+  filters: {
+    actions: string[];
+    resourceTypes: string[];
+  };
+}
+
+export default function AuditLogsRoute({ loaderData }: { loaderData: LoaderData }) {
+  const { logs, pagination, filters } = loaderData;
+  const formId = useId();
+
+  const [selectedAction, setSelectedAction] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleExport = () => {
+    try {
+      const headers = ['Timestamp', 'User', 'Action', 'Resource Type', 'Resource Name', 'IP Address', 'Severity'];
+      const csvRows = [
+        headers.join(','),
+        ...logs.map(log => [
+          new Date(log.timestamp).toLocaleString(),
+          log.userEmail || log.user,
+          log.action,
+          log.resourceType || '',
+          log.resourceName || log.resource,
+          log.ipAddress || log.ip,
+          log.severity || 'info'
+        ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
+      ];
+
+      const csvContent = csvRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to export audit logs:', error);
+      alert('Failed to export audit logs. Please try again.');
+    }
+  };
+
+  return (
+    <div className="p-8">
+      {/* Breadcrumb */}
+      <nav className="mb-6 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <Link to="/admin" className="hover:text-gray-700 dark:hover:text-gray-200">
+          Admin
+        </Link>
+        <span>/</span>
+        <span className="text-gray-900 dark:text-gray-100">Audit Logs</span>
+      </nav>
+
+      {/* Page Header */}
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            Audit Logs
+          </h1>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            View and export system activity logs
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={handleExport}
+          className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Export CSV
+        </button>
+      </div>
+
+      {/* Filters */}
+      <div className="mb-6 flex flex-wrap items-center gap-4">
+        <div className="flex-1">
+          <label htmlFor={`${formId}-search`} className="sr-only">Search logs</label>
+          <input
+            id={`${formId}-search`}
+            type="text"
+            placeholder="Search by user, resource, or action..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full max-w-md rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+          />
+        </div>
+        <div>
+          <label htmlFor={`${formId}-action-filter`} className="sr-only">Filter by action</label>
+          <select
+            id={`${formId}-action-filter`}
+            value={selectedAction}
+            onChange={(e) => setSelectedAction(e.target.value)}
+            className="rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="all">All Actions</option>
+            {filters.actions.map((action: string) => (
+              <option key={action} value={action}>{action}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Logs Table */}
+      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-900">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                Timestamp
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                User
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                Action
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                Resource
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                IP Address
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                Details
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+            {logs.map((log: AuditLogEntry) => (
+              <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-2">
+                    {getSeverityIcon(log.severity || 'info')}
+                    <span>{formatTimestamp(log.timestamp)}</span>
+                  </div>
+                </td>
+                <td className="whitespace-nowrap px-6 py-4">
+                  <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    {log.userEmail || log.user}
+                  </div>
+                </td>
+                <td className="whitespace-nowrap px-6 py-4">
+                  <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getActionColor(log.action)}`}>
+                    {log.action}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="text-sm text-gray-900 dark:text-gray-100">
+                    {log.resourceName || log.resource}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {log.resourceType || 'Unknown'} • {log.resourceId || ''}
+                  </div>
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  {log.ipAddress || log.ip}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm">
+                  <button
+                    type="button"
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                  >
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="mt-6 flex items-center justify-between">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Showing page {pagination.page} of {pagination.totalPages} ({pagination.totalItems} total entries)
+        </p>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            disabled={pagination.page === 1}
+            className="rounded-md border border-gray-300 px-3 py-1 text-sm disabled:opacity-50 dark:border-gray-600 dark:text-gray-200"
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            disabled={pagination.page === pagination.totalPages}
+            className="rounded-md border border-gray-300 px-3 py-1 text-sm disabled:opacity-50 dark:border-gray-600 dark:text-gray-200"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
 // Error Boundary
 // ============================================================================ export { RouteErrorBoundary as ErrorBoundary };

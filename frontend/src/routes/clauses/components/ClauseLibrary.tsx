@@ -52,18 +52,25 @@ const ClauseLibrary = function ClauseLibrary({ onSelectClause }: ClauseLibraryPr
     const { data: clauses = [], isLoading, error, refetch } = useQuery(QUERY_KEYS.CLAUSES.ALL, async () => {
         const result = await DataService.clauses.getAll();
         if (!result.ok) throw result.error; // Adapt Result<T> to useQuery expectations
-        return result.data as Clause[]; // Type assertion needed as getAll returns unknown[]
+
+        // Ensure we return an array - handle potential data structure issues
+        const data = result.data;
+        if (Array.isArray(data)) {
+            return data as Clause[];
+        }
+        console.warn('[ClauseLibrary] DataService.clauses.getAll() returned non-array:', data);
+        return [] as Clause[];
     });
 
     const categories = ['Confidentiality', 'Liability', 'Payment Terms', 'Termination', 'Indemnification', 'Dispute Resolution'];
 
-    const filteredClauses = clauses.filter((clause: Clause) => {
+    const filteredClauses = Array.isArray(clauses) ? clauses.filter((clause: Clause) => {
         const matchesSearch = !searchTerm ||
             clause.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             clause.content?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = !selectedCategory || clause.category === selectedCategory;
         return matchesSearch && matchesCategory;
-    });
+    }) : [];
 
     if (error) return <ErrorState message="Failed to load clause library" onRetry={refetch} />;
     if (isLoading) {

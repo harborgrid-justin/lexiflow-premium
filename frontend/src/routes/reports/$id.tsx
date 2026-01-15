@@ -172,12 +172,12 @@ export default function ReportViewerRoute() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+          <button className={cn('inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium', theme.surface.card, theme.text.primary, theme.border.default, `hover:${theme.surface.hover}`)}>
             <RefreshCw className="h-4 w-4" />
             Refresh
           </button>
 
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+          <button className={cn('inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium', theme.surface.card, theme.text.primary, theme.border.default, `hover:${theme.surface.hover}`)}>
             <Share2 className="h-4 w-4" />
             Share
           </button>
@@ -185,12 +185,12 @@ export default function ReportViewerRoute() {
           <div className="relative group">
             <button
               disabled={isExporting}
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              className={cn('inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white disabled:opacity-50', theme.colors.primary, 'hover:opacity-90')}
             >
               <Download className="h-4 w-4" />
               Export
             </button>
-            <div className="absolute right-0 top-full mt-2 hidden w-40 rounded-lg border border-gray-200 bg-white shadow-lg group-hover:block dark:border-gray-700 dark:bg-gray-800">
+            <div className={cn('absolute right-0 top-full mt-2 hidden w-40 rounded-lg border shadow-lg group-hover:block', theme.surface.card, theme.border.default)}>
               <button
                 onClick={() => handleExport('pdf')}
                 className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"

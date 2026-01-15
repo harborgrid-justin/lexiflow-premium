@@ -299,10 +299,10 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
                 className={cn(
                   'flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors',
                   index < currentStepIndex
-                    ? 'bg-blue-600 border-blue-600 text-white'
+                    ? cn('text-white', theme.colors.primary, 'border-transparent')
                     : index === currentStepIndex
-                      ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-                      : 'border-slate-300 dark:border-slate-700 text-slate-400'
+                      ? cn(theme.border.focus, theme.colors.primary)
+                      : cn(theme.border.default, theme.text.tertiary)
                 )}
               >
                 {index < currentStepIndex ? (

@@ -173,10 +173,10 @@ function TabButton({ active, onClick, disabled, children }: {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${active
-        ? 'border-blue-600 text-blue-600'
-        : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-        } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className={cn('px-4 py-2 text-sm font-medium border-b-2 transition-colors', active
+        ? cn(theme.border.focus, theme.colors.primary)
+        : cn('border-transparent', theme.text.secondary, `hover:${theme.text.primary}`)
+        , disabled && 'opacity-50 cursor-not-allowed')}
     >
       {children}
     </button>

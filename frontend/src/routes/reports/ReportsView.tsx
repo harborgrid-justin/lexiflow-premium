@@ -102,7 +102,7 @@ export function ReportsView() {
       <div className="flex-1 overflow-auto px-4 pb-4">
         {isPending && (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: 'var(--color-primary)' }} />
           </div>
         )}
 

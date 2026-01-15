@@ -1,34 +1,34 @@
-import AppDataSource from '@config/data-source';
-import { seedUsers } from './users.seed';
-import { seedClients } from './clients.seed';
-import { seedCases } from './cases.seed';
-import { seedDocuments } from './documents.seed';
-import { seedTimeEntries } from './time-entries.seed';
-import { seedParties } from './parties.seed';
-import { seedCasePhases } from './case-phases.seed';
-import { seedMotions } from './motions.seed';
-import { seedDocketEntries } from './docket-entries.seed';
-import { seedInvoices } from './invoices.seed';
-import { seedEvidenceItems } from './evidence-items.seed';
-import { seedConnectors } from './connectors.seed';
+import AppDataSource from "@config/data-source";
+import { seedCasePhases } from "./case-phases.seed";
+import { seedCases } from "./cases.seed";
+import { seedClients } from "./clients.seed";
+import { seedConnectors } from "./connectors.seed";
+import { seedDocketEntries } from "./docket-entries.seed";
+import { seedDocuments } from "./documents.seed";
+import { seedEvidenceItems } from "./evidence-items.seed";
+import { seedInvoices } from "./invoices.seed";
+import { seedMotions } from "./motions.seed";
+import { seedParties } from "./parties.seed";
+import { seedTimeEntries } from "./time-entries.seed";
+import { seedUsers } from "./users.seed";
 
 async function bootstrap() {
-  console.log('===========================================');
-  console.log('LexiFlow Database Seeding');
-  console.log('===========================================\n');
+  console.log("===========================================");
+  console.log("LexiFlow Database Seeding");
+  console.log("===========================================\n");
 
   // Override synchronize to false for fresh database seeding
   // (prevents TypeORM from trying to drop non-existent indexes)
   const originalEnv = process.env.NODE_ENV;
-  process.env.NODE_ENV = 'production';
+  process.env.NODE_ENV = "production";
 
   const dataSource = AppDataSource;
 
   try {
     // Initialize connection
-    console.log('Connecting to database...');
+    console.log("Connecting to database...");
     await dataSource.initialize();
-    console.log('✓ Connected to database\n');
+    console.log("✓ Connected to database\n");
 
     // Run seeds in order (respecting foreign key dependencies)
     await seedUsers(dataSource);
@@ -43,26 +43,32 @@ async function bootstrap() {
     await seedInvoices(dataSource);
     await seedEvidenceItems(dataSource);
     await seedConnectors(dataSource);
+    await seedClauses(dataSource); // Clauses have no dependencies
 
-    console.log('\n===========================================');
-    console.log('✓ Database seeding completed successfully!');
-    console.log('===========================================\n');
+    console.log("\n===========================================");
+    console.log("✓ Database seeding completed successfully!");
+    console.log("===========================================\n");
 
     // Print summary
-    const userCount = await dataSource.getRepository('User').count();
-    const clientCount = await dataSource.getRepository('Client').count();
-    const caseCount = await dataSource.getRepository('Case').count();
-    const documentCount = await dataSource.getRepository('Document').count();
-    const timeEntryCount = await dataSource.getRepository('TimeEntry').count();
-    const partyCount = await dataSource.getRepository('Party').count();
-    const casePhaseCount = await dataSource.getRepository('CasePhase').count();
-    const motionCount = await dataSource.getRepository('Motion').count();
-    const docketEntryCount = await dataSource.getRepository('DocketEntry').count();
-    const invoiceCount = await dataSource.getRepository('Invoice').count();
-    const evidenceItemCount = await dataSource.getRepository('EvidenceItem').count();
-    const connectorCount = await dataSource.getRepository('Connector').count();
+    const userCount = await dataSource.getRepository("User").count();
+    const clientCount = await dataSource.getRepository("Client").count();
+    const caseCount = await dataSource.getRepository("Case").count();
+    const documentCount = await dataSource.getRepository("Document").count();
+    const timeEntryCount = await dataSource.getRepository("TimeEntry").count();
+    const partyCount = await dataSource.getRepository("Party").count();
+    const casePhaseCount = await dataSource.getRepository("CasePhase").count();
+    const motionCount = await dataSource.getRepository("Motion").count();
+    const docketEntryCount = await dataSource
+      .getRepository("DocketEntry")
+      .count();
+    const invoiceCount = await dataSource.getRepository("Invoice").count();
+    const evidenceItemCount = await dataSource
+      .getRepository("EvidenceItem")
+      .count();
+    const connectorCount = await dataSource.getRepository("Connector").count();
+    const clauseCount = await dataSource.getRepository("Clause").count();
 
-    console.log('Summary:');
+    console.log("Summary:");
     console.log(`  Users:        ${userCount}`);
     console.log(`  Clients:      ${clientCount}`);
     console.log(`  Cases:        ${caseCount}`);
@@ -75,10 +81,10 @@ async function bootstrap() {
     console.log(`  Invoices:     ${invoiceCount}`);
     console.log(`  Evidence Items: ${evidenceItemCount}`);
     console.log(`  Connectors:   ${connectorCount}`);
-    console.log('');
-
+    console.log(`  Clauses:      ${clauseCount}`);
+    console.log("");
   } catch (error) {
-    console.error('\n❌ Error seeding database:', error);
+    console.error("\n❌ Error seeding database:", error);
     process.exit(1);
   } finally {
     // Restore original NODE_ENV
@@ -87,7 +93,7 @@ async function bootstrap() {
     // Close connection
     if (dataSource.isInitialized) {
       await dataSource.destroy();
-      console.log('✓ Database connection closed');
+      console.log("✓ Database connection closed");
     }
   }
 }

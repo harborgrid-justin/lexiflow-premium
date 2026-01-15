@@ -194,7 +194,7 @@ export default function ReportsIndexRoute() {
               defaultValue={search}
               placeholder="Search reports..."
               style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
-              className="w-full rounded-lg border py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className={cn('w-full rounded-lg border py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-1', theme.surface.default, theme.text.primary, theme.border.default, theme.border.focus)}
               onChange={(e) => {
                 const isFirstSearch = search === null;
                 submit(e.currentTarget.form, {

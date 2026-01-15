@@ -30,23 +30,39 @@ export async function clientLoader(args: LoaderFunctionArgs) {
 
     // Await ALL data before returning (required for initial critical data)
     // For progressive rendering, use: return { cases: casesPromise, ... })
-    const [cases, docketEntries, timeEntries, tasks] = await Promise.all([
-      casesPromise,
-      docketEntriesPromise,
-      timeEntriesPromise,
-      tasksPromise,
-    ]);
+    const [casesResult, docketEntriesResult, timeEntriesResult, tasksResult] =
+      await Promise.all([
+        casesPromise,
+        docketEntriesPromise,
+        timeEntriesPromise,
+        tasksPromise,
+      ]);
+
+    // Extract data arrays with defensive checks
+    const cases = Array.isArray(casesResult) ? casesResult : [];
+    const docketEntries = Array.isArray(docketEntriesResult?.data)
+      ? docketEntriesResult.data
+      : Array.isArray(docketEntriesResult)
+        ? docketEntriesResult
+        : [];
+    const timeEntries = Array.isArray(timeEntriesResult)
+      ? timeEntriesResult
+      : [];
+    const tasks = Array.isArray(tasksResult) ? tasksResult : [];
 
     // Filter for recent data (last 30 days)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const recentDocketEntries = docketEntries.data
-      .filter((entry) => new Date(entry.filingDate) >= thirtyDaysAgo)
+    const recentDocketEntries = docketEntries
+      .filter(
+        (entry) =>
+          entry?.filingDate && new Date(entry.filingDate) >= thirtyDaysAgo
+      )
       .slice(0, 10);
 
     const recentTimeEntries = timeEntries
-      .filter((entry) => new Date(entry.date) >= thirtyDaysAgo)
+      .filter((entry) => entry?.date && new Date(entry.date) >= thirtyDaysAgo)
       .slice(0, 10);
 
     // Return promises directly for Suspense/Await pattern

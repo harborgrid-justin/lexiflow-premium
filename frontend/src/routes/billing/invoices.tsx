@@ -166,38 +166,38 @@ export default function InvoicesRoute() {
 
       {/* Stats Cards */}
       <div className="mb-8 grid gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Invoices</p>
-          <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+        <div className={cn('rounded-lg border p-4', theme.surface.card, theme.border.default)}>
+          <p className={cn('text-sm font-medium', theme.text.secondary)}>Total Invoices</p>
+          <p className={cn('mt-1 text-2xl font-semibold', theme.text.primary)}>
             {stats.total}
           </p>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Outstanding</p>
-          <p className="mt-1 text-2xl font-semibold text-yellow-600 dark:text-yellow-400">
+        <div className={cn('rounded-lg border p-4', theme.surface.card, theme.border.default)}>
+          <p className={cn('text-sm font-medium', theme.text.secondary)}>Outstanding</p>
+          <p className={cn('mt-1 text-2xl font-semibold', theme.status.warning.text)}>
             ${stats.outstandingAmount.toLocaleString()}
           </p>
-          <p className="text-xs text-gray-500">{stats.outstanding} invoices</p>
+          <p className={cn('text-xs', theme.text.tertiary)}>{stats.outstanding} invoices</p>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Paid</p>
-          <p className="mt-1 text-2xl font-semibold text-green-600 dark:text-green-400">
+        <div className={cn('rounded-lg border p-4', theme.surface.card, theme.border.default)}>
+          <p className={cn('text-sm font-medium', theme.text.secondary)}>Paid</p>
+          <p className={cn('mt-1 text-2xl font-semibold', theme.status.success.text)}>
             ${stats.paidAmount.toLocaleString()}
           </p>
-          <p className="text-xs text-gray-500">{stats.paid} invoices</p>
+          <p className={cn('text-xs', theme.text.tertiary)}>{stats.paid} invoices</p>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Overdue</p>
-          <p className="mt-1 text-2xl font-semibold text-red-600 dark:text-red-400">
+        <div className={cn('rounded-lg border p-4', theme.surface.card, theme.border.default)}>
+          <p className={cn('text-sm font-medium', theme.text.secondary)}>Overdue</p>
+          <p className={cn('mt-1 text-2xl font-semibold', theme.status.error.text)}>
             {stats.overdue}
           </p>
-          <p className="text-xs text-gray-500">invoices</p>
+          <p className={cn('text-xs', theme.text.tertiary)}>invoices</p>
         </div>
       </div>
 
       {/* Action Result */}
       {actionData?.message && (
-        <div className={`mb-4 rounded-md p-4 ${actionData.success ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
+        <div className={cn('mb-4 rounded-md p-4 border', actionData.success ? cn(theme.status.success.background, theme.status.success.text, 'border-green-200') : cn(theme.status.error.background, theme.status.error.text, 'border-red-200'))}>
           {actionData.message}
         </div>
       )}

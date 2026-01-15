@@ -48,7 +48,6 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
-import { IntegrationOrchestrator } from "@/services/integration/integration-orchestrator.service";
 import { DocketEntry } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
@@ -147,6 +146,8 @@ export class DocketRepository {
   ): Promise<DocketEntry> {
     const created = await this.docketApi.add(entry);
     // Publish integration event
+    const { IntegrationOrchestrator } =
+      await import("@/services/integration/integration-orchestrator.service");
     await IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, {
       entry: created,
       caseId: entry.caseId,

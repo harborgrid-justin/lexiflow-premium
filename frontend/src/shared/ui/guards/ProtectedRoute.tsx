@@ -122,7 +122,7 @@ export function ProtectedRoute({
     return fallback || (
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4" style={{ borderColor: 'var(--color-surfaceHover)', borderTopColor: 'var(--color-primary)' }} />
           <p className={cn("text-sm", theme.text.secondary)}>Loading...</p>
         </div>
       </div>

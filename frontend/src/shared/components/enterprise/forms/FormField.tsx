@@ -13,20 +13,20 @@
  * - Required field indicators
  */
 
-import React, { useId } from 'react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
- 
+import { useTheme } from '@/theme';
+import React, { useId } from 'react';
+
 import type {
-  FieldSchema,
-  TextFieldSchema,
-  NumberFieldSchema,
-  DateFieldSchema,
-  TextAreaFieldSchema,
-  SelectFieldSchema,
   CheckboxFieldSchema,
-  FileFieldSchema,
   CustomFieldSchema,
+  DateFieldSchema,
+  FieldSchema,
+  FileFieldSchema,
+  NumberFieldSchema,
+  SelectFieldSchema,
+  TextAreaFieldSchema,
+  TextFieldSchema,
 } from '@/types/forms';
 
 // ============================================================================
@@ -118,14 +118,14 @@ export const FormField: React.FC<FormFieldProps> = ({
     'w-full px-3 py-2 rounded-lg border transition-all',
     'focus:outline-none focus:ring-2 focus:ring-offset-1',
     error
-      ? 'border-red-500 focus:ring-red-500'
+      ? cn('border-red-500 focus:ring-red-500')
       : warning
-      ? 'border-yellow-500 focus:ring-yellow-500'
-      : cn(theme.border.default, 'focus:ring-blue-500'),
+        ? cn('border-amber-500 focus:ring-amber-500')
+        : cn(theme.border.default, theme.border.focus),
     theme.surface.default,
     theme.text.primary,
-    isDisabled && 'opacity-50 cursor-not-allowed bg-gray-100',
-    isReadOnly && 'bg-gray-50 cursor-default',
+    isDisabled && cn('opacity-50 cursor-not-allowed', theme.surface.hover),
+    isReadOnly && cn(theme.surface.hover, 'cursor-default'),
     fieldClassName
   );
 

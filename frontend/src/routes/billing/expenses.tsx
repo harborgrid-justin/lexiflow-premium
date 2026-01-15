@@ -123,7 +123,7 @@ export default function ExpensesRoute() {
 
       {/* Action Result */}
       {actionData?.message && (
-        <div className={`mb-4 rounded-md p-4 ${actionData.success ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
+        <div className={cn('mb-4 rounded-md p-4 border', actionData.success ? cn(theme.status.success.background, theme.status.success.text, 'border-green-200') : cn(theme.status.error.background, theme.status.error.text, 'border-red-200'))}>
           {actionData.message}
         </div>
       )}

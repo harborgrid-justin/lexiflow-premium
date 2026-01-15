@@ -17,18 +17,21 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusIndicator';
 
 // Components
 // UserAvatar component not found - create a simple fallback
-const UserAvatar = ({ user, className }: { user?: { name?: string;[key: string]: unknown }; className?: string }) => (
-  <div className={cn("rounded-full flex items-center justify-center text-xs w-8 h-8", theme.colors.primary, "text-white", className)}>
-    {user?.name?.[0] || 'U'}
-  </div>
-);
+const UserAvatar = ({ user, className }: { user?: { name?: string;[key: string]: unknown }; className?: string }) => {
+  const { theme } = useTheme();
+  return (
+    <div className={cn("rounded-full flex items-center justify-center text-xs w-8 h-8", className)} style={{ backgroundColor: theme.colors.primary, color: 'white' }}>
+      {user?.name?.[0] || 'U'}
+    </div>
+  );
+};
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';

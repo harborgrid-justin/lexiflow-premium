@@ -145,7 +145,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         'p-6 rounded-xl border transition-all',
         theme.surface.default,
         theme.border.default,
-        onClick && 'cursor-pointer hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700',
+        onClick && cn('cursor-pointer hover:shadow-lg', theme.border.focus),
         !onClick && 'hover:shadow-md',
         className
       )}

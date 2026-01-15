@@ -83,19 +83,28 @@ export const LITIGATION_PORTS: Record<string, Port[]> = {
   ],
 };
 
+// Note: Icon colors use semantic Tailwind for workflow status differentiation
 export const getNodeIcon = (type: NodeType) => {
   switch (type) {
     case "Start":
-      return React.createElement(Play, { className: "h-4 w-4 text-green-600" });
+      return React.createElement(Play, {
+        className: "h-4 w-4",
+        style: { color: "var(--color-success)" },
+      });
     case "End":
-      return React.createElement(Square, { className: "h-4 w-4 text-red-600" });
+      return React.createElement(Square, {
+        className: "h-4 w-4",
+        style: { color: "var(--color-error)" },
+      });
     case "Task":
       return React.createElement(Layout, {
-        className: "h-4 w-4 text-blue-600",
+        className: "h-4 w-4",
+        style: { color: "var(--color-primary)" },
       });
     case "Decision":
       return React.createElement(GitBranch, {
-        className: "h-4 w-4 text-purple-600",
+        className: "h-4 w-4",
+        style: { color: "var(--color-accent)" },
       });
     case "Parallel":
       return React.createElement(BoxSelect, {
@@ -103,7 +112,8 @@ export const getNodeIcon = (type: NodeType) => {
       });
     case "Delay":
       return React.createElement(Clock, {
-        className: "h-4 w-4 text-amber-600",
+        className: "h-4 w-4",
+        style: { color: "var(--color-warning)" },
       });
     case "Phase":
       return React.createElement(Calendar, {
@@ -119,11 +129,13 @@ export const getNodeIcon = (type: NodeType) => {
       });
     case "Comment":
       return React.createElement(MessageSquare, {
-        className: "h-4 w-4 text-slate-500",
+        className: "h-4 w-4",
+        style: { color: "var(--color-textSecondary)" },
       });
     default:
       return React.createElement(Layout, {
-        className: "h-4 w-4 text-blue-600",
+        className: "h-4 w-4",
+        style: { color: "var(--color-primary)" },
       });
   }
 };

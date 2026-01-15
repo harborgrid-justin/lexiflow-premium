@@ -106,17 +106,17 @@ const ToastNotification: React.FC<{
   };
 
   const colors = {
-    success: isDark ? 'bg-emerald-900/20 border-emerald-800 text-emerald-100' : 'bg-emerald-50 border-emerald-200 text-emerald-900',
-    error: isDark ? 'bg-rose-900/20 border-rose-800 text-rose-100' : 'bg-rose-50 border-rose-200 text-rose-900',
-    warning: isDark ? 'bg-amber-900/20 border-amber-800 text-amber-100' : 'bg-amber-50 border-amber-200 text-amber-900',
-    info: isDark ? 'bg-blue-900/20 border-blue-800 text-blue-100' : 'bg-blue-50 border-blue-200 text-blue-900'
+    success: isDark ? 'bg-emerald-900/20 border-emerald-800 text-emerald-100' : cn(theme.status.success.background, 'border-emerald-200'),
+    error: isDark ? 'bg-rose-900/20 border-rose-800 text-rose-100' : cn(theme.status.error.background, 'border-rose-200', theme.status.error.text),
+    warning: isDark ? 'bg-amber-900/20 border-amber-800 text-amber-100' : cn(theme.status.warning.background, 'border-amber-200', theme.status.warning.text),
+    info: isDark ? 'bg-blue-900/20 border-blue-800 text-blue-100' : cn(theme.colors.info, 'border-blue-200 dark:border-blue-800')
   };
 
   const iconColors = {
-    success: 'text-emerald-600 dark:text-emerald-400',
-    error: 'text-rose-600 dark:text-rose-400',
-    warning: 'text-amber-600 dark:text-amber-400',
-    info: 'text-blue-600 dark:text-blue-400'
+    success: cn(theme.status.success.text),
+    error: cn(theme.status.error.text),
+    warning: cn(theme.status.warning.text),
+    info: cn(theme.colors.info)
   };
 
   const Icon = icons[notification.type];

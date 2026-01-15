@@ -194,14 +194,14 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
               {/* Error Header */}
               <div className="mb-4 flex items-center gap-3">
                 {statusCode && (
-                  <span className="text-5xl font-bold text-red-300 dark:text-red-700">
+                  <span className={cn('text-5xl font-bold', theme.status.error.text)}>
                     {statusCode}
                   </span>
                 )}
                 {!statusCode && (
-                  <div className="rounded-full bg-red-100 p-2 dark:bg-red-900/20">
+                  <div className={cn('rounded-full p-2', theme.status.error.background)}>
                     <svg
-                      className="h-6 w-6 text-red-600 dark:text-red-400"
+                      className={cn('h-6 w-6', theme.status.error.text)}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"

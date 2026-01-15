@@ -422,7 +422,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
                 theme.text.primary,
                 hasError
                   ? 'border-rose-500 focus:ring-2 focus:ring-rose-500'
-                  : 'focus:ring-2 focus:ring-blue-500',
+                  : cn('focus:ring-2', theme.border.focus),
                 commonProps.className
               )}
             />
@@ -443,7 +443,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
                 theme.text.primary,
                 hasError
                   ? 'border-rose-500 focus:ring-2 focus:ring-rose-500'
-                  : 'focus:ring-2 focus:ring-blue-500',
+                  : cn('focus:ring-2', theme.border.focus),
                 commonProps.className
               )}
             >
@@ -467,7 +467,8 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
                 {...commonProps}
                 checked={!!value}
                 onChange={(e) => handleFieldChange(field.name, e.target.checked)}
-                className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                className={cn('w-4 h-4 rounded', theme.border.default, 'focus:ring-2', theme.border.focus)}
+                style={{ accentColor: 'var(--color-primary)' }}
               />
               <span className={cn('text-sm', theme.text.primary)}>{field.label}</span>
             </label>
@@ -486,7 +487,8 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
                     checked={value === option.value}
                     onChange={(e) => handleFieldChange(field.name, e.target.value)}
                     disabled={field.disabled || loading}
-                    className="w-4 h-4 border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    className={cn('w-4 h-4', theme.border.default, 'focus:ring-2', theme.border.focus)}
+                    style={{ accentColor: 'var(--color-primary)' }}
                   />
                   <span className={cn('text-sm', theme.text.primary)}>{option.label}</span>
                 </label>

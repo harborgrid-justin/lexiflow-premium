@@ -46,17 +46,17 @@ export const MemberPath: React.FC<{ enableNewDashboard?: boolean }> = ({ enableN
       </div>
 
       {enableNewDashboard ? (
-        <div className="bg-blue-50 p-4 rounded mb-6 border border-blue-100">
+        <div className={cn('p-4 rounded mb-6 border', theme.colors.info, 'border-blue-100')}>
           <h2 className="text-lg font-semibold text-blue-900">New Dashboard Active</h2>
           <p className="text-blue-700">You are viewing the enhanced dashboard experience.</p>
         </div>
       ) : (
-        <div className="bg-gray-50 p-4 rounded mb-6 border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-700">Legacy Dashboard</h2>
+        <div className={cn('p-4 rounded mb-6 border', theme.surface.hover, theme.border.default)}>
+          <h2 className={cn('text-lg font-semibold', theme.text.secondary)}>Legacy Dashboard</h2>
         </div>
       )}
 
-      <div className="bg-white rounded shadow p-6">
+      <div className={cn('rounded shadow p-6', theme.surface.card)}>
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-medium">Your Cases</h3>
           <div className="flex gap-4">

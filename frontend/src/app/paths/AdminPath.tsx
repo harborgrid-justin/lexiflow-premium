@@ -26,18 +26,18 @@ export const AdminPath: React.FC = () => {
   }, [items, filter]);
 
   return (
-    <div className="p-8 bg-slate-50 min-h-screen">
+    <div className={cn('p-8 min-h-screen', theme.surface.hover)}>
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Admin Console</h1>
-          <div className="flex gap-4 mt-2 text-sm text-slate-600">
-            <span>Role: <span className="font-mono bg-slate-200 px-1 rounded">{auth.user?.role}</span></span>
-            <span>Plan: <span className="font-mono bg-slate-200 px-1 rounded uppercase">{entitlements.plan}</span></span>
+          <h1 className={cn('text-2xl font-bold', theme.text.primary)}>Admin Console</h1>
+          <div className={cn('flex gap-4 mt-2 text-sm', theme.text.secondary)}>
+            <span>Role: <span className={cn('font-mono px-1 rounded', theme.surface.card)}>{auth.user?.role}</span></span>
+            <span>Plan: <span className={cn('font-mono px-1 rounded uppercase', theme.surface.card)}>{entitlements.plan}</span></span>
           </div>
         </div>
         <button
           onClick={() => logout()}
-          className="bg-white border border-slate-300 px-4 py-2 rounded hover:bg-slate-50 text-slate-700"
+          className={cn('border px-4 py-2 rounded', theme.surface.card, theme.border.default, `hover:${theme.surface.hover}`, theme.text.primary)}
         >
           Logout
         </button>

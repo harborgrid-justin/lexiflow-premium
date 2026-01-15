@@ -76,8 +76,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
       <Form method="post" encType="multipart/form-data" className="space-y-6">
         {/* Error Message */}
         {actionError && (
-          <div className="rounded-md bg-red-50 p-4 border border-red-200">
-            <p className="text-sm text-red-800">{actionError}</p>
+          <div className={cn('rounded-md p-4 border', theme.status.error.background, 'border-red-200')}>
+            <p className={cn('text-sm', theme.status.error.text)}>{actionError}</p>
           </div>
         )}
 

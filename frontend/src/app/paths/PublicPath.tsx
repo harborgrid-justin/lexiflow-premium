@@ -27,13 +27,13 @@ export function PublicPath() {
         <h2 className="text-xl mb-2">Public Data</h2>
         <button
           onClick={refresh}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className={cn('text-white px-4 py-2 rounded', theme.colors.primary, 'hover:opacity-90')}
         >
           Load Public Data
         </button>
         <ul className="mt-4 space-y-2">
           {items.map((x) => (
-            <li key={x.id} className="p-2 bg-gray-100 rounded">
+            <li key={x.id} className={cn('p-2 rounded', theme.surface.hover)}>
               {x.label}
             </li>
           ))}
@@ -42,10 +42,10 @@ export function PublicPath() {
 
       <hr className="my-8" />
 
-      <div className="bg-white p-6 rounded shadow">
+      <div className={cn('p-6 rounded shadow', theme.surface.card)}>
         <h2 className="text-xl mb-4">Login</h2>
         {authError && (
-          <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+          <div className={cn('p-3 rounded mb-4', theme.status.error.background, theme.status.error.text)}>
             {authError}
           </div>
         )}
@@ -73,7 +73,7 @@ export function PublicPath() {
           <button
             type="submit"
             disabled={authLoading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+            className={cn('w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50', theme.colors.primary, 'hover:opacity-90', theme.border.focus)}
           >
             {authLoading ? "Logging in..." : "Sign In"}
           </button>

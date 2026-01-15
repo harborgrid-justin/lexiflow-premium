@@ -25,15 +25,15 @@ import { useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { EmptyListState } from '@/shared/ui/molecules/EmptyListState/EmptyListState';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { EmptyListState } from '@/components/molecules/EmptyListState/EmptyListState';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { CaseRow } from './CaseRow';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 
 // Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

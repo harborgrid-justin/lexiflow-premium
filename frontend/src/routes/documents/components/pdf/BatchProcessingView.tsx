@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { Button } from '@/components/atoms/Button/Button';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { Cpu } from 'lucide-react';
 
 export function BatchProcessingView() {

@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/cn";
 
 // Use theme surface for container background
 export const containerStyles = "relative overflow-hidden"; // Apply theme.surface.default via style prop

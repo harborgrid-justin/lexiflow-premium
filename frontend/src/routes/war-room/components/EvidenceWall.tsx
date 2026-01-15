@@ -25,11 +25,11 @@ import { useTheme } from '@/theme';
 
 // Components
 import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { WallItemCard } from './cards/WallItemCard';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import type { EvidenceItem, LegalDocument, Motion, WarRoomData } from '@/types';

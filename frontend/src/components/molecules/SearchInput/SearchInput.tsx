@@ -17,13 +17,13 @@ import { Search } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Input, InputProps } from '@/shared/ui/atoms/Input';
+import { Input, InputProps } from '@/components/atoms/Input';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

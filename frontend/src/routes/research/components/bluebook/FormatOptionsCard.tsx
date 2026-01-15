@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { CitationFormat } from '@/types/bluebook';
 import { Settings } from 'lucide-react';

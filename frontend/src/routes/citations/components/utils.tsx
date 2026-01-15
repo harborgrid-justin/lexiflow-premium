@@ -4,7 +4,7 @@
  */
 
 import { CheckCircle, AlertTriangle, X, Book, Scale, FileText } from 'lucide-react';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import React from "react";
 
 /**

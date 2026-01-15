@@ -3,10 +3,10 @@
  * @description Workflow analytics with bottleneck detection and optimization suggestions
  */
 
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlertTriangle, TrendingUp } from 'lucide-react';
 import type { WorkflowAnalytics } from '@/types/workflow-advanced-types';
 

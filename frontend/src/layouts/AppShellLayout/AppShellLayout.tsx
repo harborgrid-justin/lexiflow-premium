@@ -16,7 +16,7 @@ import React, { memo } from 'react';
 import { useTheme } from '@/theme';
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface AppShellLayoutProps {
   sidebar: React.ReactNode;

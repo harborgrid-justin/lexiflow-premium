@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
 import { CleansingRule } from '@/types';
 import { Calendar, CheckCircle, Loader2, Phone, Play, Plus, Type, Wand2 } from 'lucide-react';

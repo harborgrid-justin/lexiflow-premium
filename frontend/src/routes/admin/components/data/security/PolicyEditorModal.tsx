@@ -1,8 +1,8 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { Modal } from '@/components/molecules/Modal';
 import { RLSPolicy, SqlCmd } from '@/types';
 import { Check, Code, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';

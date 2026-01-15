@@ -13,7 +13,7 @@ import { FolderOpen, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { EvidenceInventory } from '@/routes/evidence/components/EvidenceInventory';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useEvidenceManager } from '@/hooks/useEvidenceManager';

@@ -18,7 +18,7 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -27,8 +27,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
-import { sanitizeHtml } from '@/shared/lib/sanitize';
+import { cn } from '@/lib/cn';
+import { sanitizeHtml } from '@/lib/sanitize';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

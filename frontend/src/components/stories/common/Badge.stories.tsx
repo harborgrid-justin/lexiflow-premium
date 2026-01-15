@@ -1,4 +1,4 @@
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Badge } from '@/components/atoms/Badge/Badge';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 

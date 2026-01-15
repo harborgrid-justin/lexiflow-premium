@@ -1,11 +1,11 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { ResearchSession } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Clock, ExternalLink } from 'lucide-react';

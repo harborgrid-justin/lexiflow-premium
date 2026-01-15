@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { LineageLink, LineageNode } from '@/types';
 import { NODE_STRIDE, SimulationNode } from '@/utils/nexusPhysics';
 import { Pause, Play, RefreshCw } from 'lucide-react';

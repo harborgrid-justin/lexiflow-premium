@@ -3,7 +3,7 @@
  * Authorized signatories step for trust account creation
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { FormInput } from './FormInput';
 interface FormState {

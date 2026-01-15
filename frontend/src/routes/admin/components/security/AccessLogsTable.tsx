@@ -1,8 +1,8 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { Download, Search } from 'lucide-react';
 import type { AccessLogEntry } from './types';
 

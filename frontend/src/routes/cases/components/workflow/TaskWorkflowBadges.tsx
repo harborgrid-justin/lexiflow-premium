@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface TaskWorkflowBadgesProps {
   status: string | 'Pending' | 'In Progress' | 'Review' | 'Done';

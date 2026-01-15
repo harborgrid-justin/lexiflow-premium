@@ -5,9 +5,9 @@
  * intake form builder, engagement letter automation, and fee agreement tracking.
  */
 
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import {
   AlertTriangle,
   CheckCircle2,

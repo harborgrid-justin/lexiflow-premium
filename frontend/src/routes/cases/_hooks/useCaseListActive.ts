@@ -4,7 +4,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useSort } from '@/hooks/useSort';
 import { DataService } from '@/services/data/data-service.service';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { Case } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import React, { useCallback } from 'react';

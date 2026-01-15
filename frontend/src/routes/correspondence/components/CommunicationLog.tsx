@@ -21,12 +21,12 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useTheme } from '@/theme';
 
 // Components
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { Badge } from '@/components/atoms/Badge/Badge';
 
 // Utils & Constants
 import { CommunicationStatus } from '@/types/enums';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { CommunicationItem } from '@/types';

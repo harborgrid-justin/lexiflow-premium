@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Ruler } from 'lucide-react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { FormattingRule, PleadingSection } from '@/types';
 
 interface ComplianceHUDProps {

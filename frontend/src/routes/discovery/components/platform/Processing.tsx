@@ -12,17 +12,17 @@
  * - G37: Mutations account for automatic batching
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { ProcessingJob } from '@/types/discovery-enhanced';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
 
 

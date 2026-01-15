@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { TypewriterText } from '@/shared/ui/atoms/TypewriterText';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { TypewriterText } from '@/components/atoms/TypewriterText';
+import { Card } from '@/components/molecules/Card/Card';
 import { ResearchSession } from '@/types';
 import { Bookmark, BookOpen, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { ResearchResultCard } from './ResearchResultCard';

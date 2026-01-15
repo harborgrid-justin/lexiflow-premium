@@ -7,11 +7,11 @@
 
 import { FileText, Link, Split } from 'lucide-react';
 // Common Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Context & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 
 // Types

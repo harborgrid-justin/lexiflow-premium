@@ -2,7 +2,7 @@
  * Reusable form field with label, input, and error display
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export interface FormFieldProps {
   id: string;

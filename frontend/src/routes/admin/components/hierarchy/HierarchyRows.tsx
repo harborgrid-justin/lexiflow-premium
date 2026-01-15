@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { cn } from '@/lib/cn';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { Group, Organization, User as UserType } from '@/types';
 import { Building2, Globe, MoreVertical, Shield } from 'lucide-react';
 interface OrgListItemProps {

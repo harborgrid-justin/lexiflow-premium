@@ -18,10 +18,10 @@ import { Loader2 } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

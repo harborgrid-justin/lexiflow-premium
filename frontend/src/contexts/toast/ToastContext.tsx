@@ -32,7 +32,7 @@
 
 import { TOAST_MAX_QUEUE, TOAST_MAX_VISIBLE } from "@/config/features/contexts.config";
 import { NOTIFICATION_AUTO_DISMISS_MS, NOTIFICATION_ERROR_DISMISS_MS } from "@/config/features/ui.config";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/cn";
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from "lucide-react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useTransition } from "react";
 import type { Toast, ToastProviderProps, ToastType } from "./ToastContext.types";

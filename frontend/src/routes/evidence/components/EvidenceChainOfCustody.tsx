@@ -10,17 +10,17 @@ import { useState } from 'react';
 
 // Common Components
 import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { Modal } from '@/components/molecules/Modal';
 
 // Context & Utils
 import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/shared/lib/cn';
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { cn } from '@/lib/cn';
+import { getTodayString } from '@/lib/dateUtils';
 
 // Services & Types
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';

@@ -17,7 +17,7 @@
 import { Badge } from '../Badge/Badge';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { StatusRegistry } from '@/utils/statusRegistry';
 import React from "react";
 

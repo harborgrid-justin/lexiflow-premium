@@ -1,5 +1,5 @@
 import { apiClient, type ServiceHealthStatus, type SystemHealth } from '@/services/infrastructure/apiClient';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { AnimatePresence, motion } from 'framer-motion';
 import {

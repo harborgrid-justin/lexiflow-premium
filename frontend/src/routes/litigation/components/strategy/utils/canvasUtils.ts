@@ -7,7 +7,7 @@
  */
 
 import { NodeType } from "@/routes/cases/components/workflow/builder/types";
-import { type ContextMenuItem } from "@/shared/ui/molecules/ContextMenu";
+import { type ContextMenuItem } from "@/components/molecules/ContextMenu";
 import {
   BoxSelect,
   Copy,

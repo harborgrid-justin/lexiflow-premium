@@ -4,13 +4,13 @@
  * Manage data collection from custodians and sources
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { Modal } from '@/components/molecules/Modal';
 import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
@@ -19,7 +19,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DataCollection } from '@/types/discovery-enhanced';
 import { CaseId } from '@/types/primitives';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlertTriangle, CheckCircle, Clock, Database, Download, Pause, Play, Plus } from 'lucide-react';
 import { useState } from 'react';
 

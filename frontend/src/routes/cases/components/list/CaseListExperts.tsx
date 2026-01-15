@@ -16,8 +16,8 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Types

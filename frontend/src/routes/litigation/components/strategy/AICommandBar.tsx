@@ -12,8 +12,8 @@ import { useState } from 'react';
 import { useNotify } from '@/hooks/useNotify';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { AIValidationService } from '@/services/infrastructure/aiValidation';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
 import { AICommandBarProps } from './types';
 

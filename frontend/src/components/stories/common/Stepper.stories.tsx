@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
+import { Button } from '@/components/atoms/Button/Button';
+import { Stepper } from '@/components/molecules/Stepper/Stepper';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

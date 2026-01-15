@@ -22,8 +22,8 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { NotificationCenter } from '@/shared/ui/molecules/NotificationCenter';
-import { UserAvatar } from '@/shared/ui/molecules/UserAvatar';
+import { NotificationCenter } from '@/components/molecules/NotificationCenter';
+import { UserAvatar } from '@/components/molecules/UserAvatar';
 import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
 import { ConnectivityHUD } from '../ConnectivityHUD/ConnectivityHUD';
 import { NeuralCommandBar } from '../NeuralCommandBar/NeuralCommandBar';
@@ -35,11 +35,11 @@ import { GlobalSearchResult } from '@/services/search/searchService';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
-import { useInterval } from '@/shared/hooks/useInterval';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useInterval } from '@/hooks/useInterval';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { User as UserType } from '@/types';

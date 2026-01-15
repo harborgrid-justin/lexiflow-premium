@@ -7,7 +7,7 @@
 
 import { useTheme } from '@/theme';
 import type { Client } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import {
   AlertCircle,
   Briefcase,

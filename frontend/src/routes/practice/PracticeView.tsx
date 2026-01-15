@@ -2,7 +2,7 @@
  * Practice Domain - View Component
  */
 
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Briefcase, Users } from 'lucide-react';
 import { useId } from 'react';
 import { usePractice } from './PracticeProvider';

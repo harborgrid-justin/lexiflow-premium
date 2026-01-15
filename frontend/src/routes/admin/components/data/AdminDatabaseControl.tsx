@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Loader2, Maximize2, Menu, X } from 'lucide-react';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { DataPlatformSidebar } from './DataPlatformSidebar';

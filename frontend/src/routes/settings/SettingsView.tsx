@@ -2,7 +2,7 @@
  * Settings Domain - View Component
  */
 
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Bell, Link, Settings as SettingsIcon, Shield } from 'lucide-react';
 import React from 'react';
 import { useSettings } from './SettingsProvider';

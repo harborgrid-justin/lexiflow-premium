@@ -19,7 +19,7 @@ import { useTheme } from '@/theme';
 import { useSearchToolbar } from '../hooks/useSearchToolbar';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

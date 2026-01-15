@@ -19,7 +19,7 @@ import { Users, Briefcase, Stethoscope, Microscope, BrainCircuit, Gavel } from '
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

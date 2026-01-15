@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { Button } from '@/components/atoms/Button/Button';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { AlertTriangle, FileText, Loader2, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
 import { useComplianceRisk } from './hooks/useComplianceRisk';

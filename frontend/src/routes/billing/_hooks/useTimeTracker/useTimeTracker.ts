@@ -7,7 +7,7 @@
 
 import { billingApi } from '@/lib/frontend-api';
 import { useMutation } from "@/hooks/backend";
-import { showToast } from "@/shared/ui/organisms/notifications/Toast";
+import { showToast } from "@/components/organisms/notifications/Toast";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface TimeTrackerState {

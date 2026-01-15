@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { Button } from '@/components/atoms/Button/Button';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 

@@ -5,7 +5,7 @@
  */
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Search, Plus } from 'lucide-react';
 import React from "react";
 

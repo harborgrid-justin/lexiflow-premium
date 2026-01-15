@@ -31,10 +31,10 @@ import { DataService } from '@/services/data/data-service.service';
 import { ChartColorService, useTheme } from '@/theme';
 
 // Components
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { MarketingCampaign, MarketingMetric } from '@/types';

@@ -5,7 +5,7 @@
  * Replaces repeated loading UI patterns
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 

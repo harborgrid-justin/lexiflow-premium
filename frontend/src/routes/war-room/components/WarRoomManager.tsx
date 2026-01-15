@@ -10,10 +10,10 @@ import { Target, Search, AlertCircle, Briefcase, Clock, Shield } from 'lucide-re
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Case } from '@/types';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 interface WarRoomManagerProps {
   onSelectCase: (caseId: string) => void;

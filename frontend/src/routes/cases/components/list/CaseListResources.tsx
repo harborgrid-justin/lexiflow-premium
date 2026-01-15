@@ -16,8 +16,8 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

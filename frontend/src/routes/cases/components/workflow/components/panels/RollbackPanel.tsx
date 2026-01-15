@@ -3,10 +3,10 @@
  * @description State snapshots and rollback functionality
  */
 
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Database, Undo2 } from 'lucide-react';
 import type { WorkflowSnapshot } from '@/types/workflow-advanced-types';
 

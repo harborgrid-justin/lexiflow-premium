@@ -17,10 +17,10 @@ import React from 'react';
 // ============================================================================
 // Components
 import { EvidenceCustodyLog } from '@/routes/evidence/components/EvidenceCustodyLog';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { ProgressBar } from '@/shared/ui/atoms/ProgressBar';
-import { Card } from '@/shared/ui/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { ProgressBar } from '@/components/atoms/ProgressBar';
+import { Card } from '@/components/molecules/Card';
 
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
@@ -33,7 +33,7 @@ import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

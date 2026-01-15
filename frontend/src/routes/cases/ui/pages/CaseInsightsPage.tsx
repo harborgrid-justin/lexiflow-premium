@@ -5,7 +5,7 @@
  */
 
 import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
-import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import React from 'react';
 
 interface CaseInsightsPageProps {

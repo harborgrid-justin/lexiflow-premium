@@ -23,12 +23,12 @@ import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import type { WarRoomData } from '@/types';

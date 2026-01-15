@@ -2,7 +2,7 @@
  * Reusable textarea field with label
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export interface FormTextareaProps {
   id: string;

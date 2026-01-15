@@ -6,7 +6,7 @@
  */
 
 import { CHART_COLORS } from '@/config/dashboard.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import {
   AlertCircle,
@@ -34,7 +34,7 @@ import {
 import { useDashboardOverview } from '../_hooks/useDashboardOverview';
 
 // Components
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '../widgets';
 
 // ============================================================================

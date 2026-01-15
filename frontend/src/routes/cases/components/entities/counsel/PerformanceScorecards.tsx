@@ -1,10 +1,10 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Card } from '@/components/molecules/Card/Card';
 import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
-import { Badge } from '@/shared/ui/atoms/Badge';
+import { Badge } from '@/components/atoms/Badge';
 import { Star, DollarSign, Scale} from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import React from "react";
 
 interface PerformanceScorecardsProps {

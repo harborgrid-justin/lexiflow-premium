@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Edit2, Trash2 } from 'lucide-react';
 import { Category } from './EntitySidebar';
 

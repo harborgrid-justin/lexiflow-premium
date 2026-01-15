@@ -1,12 +1,12 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Citation } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Bookmark, BookmarkMinus, FileText, Scale } from 'lucide-react';

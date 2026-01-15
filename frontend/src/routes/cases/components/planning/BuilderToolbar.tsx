@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { ArrowRight, Database, LayoutTemplate, MousePointer2, Save, Square, Type } from 'lucide-react';
 interface BuilderToolbarProps {
   className?: string;

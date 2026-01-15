@@ -10,13 +10,13 @@
 // External Dependencies
 import { Plus } from 'lucide-react';
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface DocketToolbarProps {
   activeCaseTitle?: string;

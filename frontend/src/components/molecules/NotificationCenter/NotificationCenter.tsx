@@ -5,8 +5,8 @@
  */
 
 import { ThemeStateValue, useTheme } from '@/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
-import { cn } from '@/shared/lib/cn';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { cn } from '@/lib/cn';
 import {
   AlertCircle,
   Bell,

@@ -18,20 +18,20 @@ import { CheckSquare, Filter, Loader2, Plus } from 'lucide-react';
 // ============================================================================
 // Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { EvidenceTypeIcon } from '@/shared/ui/atoms/EvidenceTypeIcon';
+import { FilterPanel } from '@/components/organisms/FilterPanel';
+import { VirtualList } from '@/components/organisms/VirtualList';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon';
 
 // Context & Utils
 import { EvidenceFilters } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useTheme } from '@/theme';
 import { AdmissibilityStatusEnum } from '@/types/enums';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { EvidenceItem } from '@/types';

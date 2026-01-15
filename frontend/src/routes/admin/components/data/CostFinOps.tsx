@@ -1,14 +1,14 @@
 import { AlertTriangle, DollarSign, Loader2, TrendingDown } from 'lucide-react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { CostForecast, InfrastructureCostMetric } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export function CostFinOps() {
     const { theme } = useTheme();

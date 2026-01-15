@@ -12,14 +12,14 @@ import { AlertTriangle, CheckCircle, Key } from 'lucide-react';
 import { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const DocketSettings: React.FC = () => {
     const { theme } = useTheme();

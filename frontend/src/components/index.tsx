@@ -18,9 +18,9 @@
  * USAGE:
  * Import from the appropriate level or use barrel exports:
  * ```tsx
- * import { Button, Badge } from '@/shared/ui/atoms';
- * import { Card, Modal } from '@/shared/ui/molecules';
- * import { Sidebar, Table } from '@/shared/ui/organisms';
+ * import { Button, Badge } from '@/components/atoms';
+ * import { Card, Modal } from '@/components/molecules';
+ * import { Sidebar, Table } from '@/components/organisms';
  * import { TabbedPageLayout } from '@/components/layouts';
  * import { CaseListPage } from '@/components/pages';
  * ```
@@ -30,7 +30,7 @@
 // ATOMIC DESIGN LAYERS
 // ============================================================================
 // NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES
-// Import directly from '@/shared/ui/atoms', '@/components/ui/molecules', etc.
+// Import directly from '@/components/atoms', '@/components/ui/molecules', etc.
 // export * from './atoms';
 // export * from './molecules';
 // export * from './organisms';
@@ -40,7 +40,7 @@
 // UI COMPONENT LIBRARY
 // ============================================================================
 // NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES
-// Import directly from '@/shared/ui/atoms', '@/components/ui/molecules', etc.
+// Import directly from '@/components/atoms', '@/components/ui/molecules', etc.
 // export * from './ui';
 
 // ============================================================================

@@ -1,6 +1,6 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Calendar, Camera, Database, Download, RefreshCw } from 'lucide-react';
 import React from "react";
 /**

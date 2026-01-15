@@ -1,8 +1,8 @@
 import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
 import { Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 import { EMPTY_TEMPLATES } from './AdminConfig';

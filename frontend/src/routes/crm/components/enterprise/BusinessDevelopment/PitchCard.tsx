@@ -4,7 +4,7 @@
  */
 
 import type { ThemeObject } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Calendar } from 'lucide-react';
 import type { Pitch } from './types';
 import { formatCurrency, getStatusColor } from './utils';

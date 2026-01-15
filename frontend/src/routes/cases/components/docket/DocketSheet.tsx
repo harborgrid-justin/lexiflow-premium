@@ -18,8 +18,8 @@ import React, { useEffect } from 'react';
 // ============================================================================
 // Components
 import { DocketTableSkeleton } from '@/routes/cases/ui/components/DocketSkeleton/DocketSkeleton';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { Modal } from '@/components/molecules/Modal';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketEntryModal } from './DocketEntryModal';
 import { DocketFilterPanel } from './DocketFilterPanel';
@@ -33,7 +33,7 @@ import { useDocketSheet } from '@/routes/cases/_hooks/useDocketSheet';
 import { useThemeContext } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { CaseId, DocketEntry } from '@/types';

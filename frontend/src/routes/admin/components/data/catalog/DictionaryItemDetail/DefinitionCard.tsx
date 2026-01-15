@@ -1,7 +1,7 @@
-import { cn } from '@/shared/lib/cn';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { Card } from '@/shared/ui/molecules/Card';
+import { cn } from '@/lib/cn';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/theme';
 import { Wand2 } from 'lucide-react';
 

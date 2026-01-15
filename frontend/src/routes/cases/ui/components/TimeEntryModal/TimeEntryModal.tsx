@@ -23,13 +23,13 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { Modal } from '@/components/molecules/Modal/Modal';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { CaseId, TimeEntryPayload } from '@/types';

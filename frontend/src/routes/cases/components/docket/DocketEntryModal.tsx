@@ -12,16 +12,16 @@
 import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/shared/ui/molecules/Modal';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { DocketEntry } from '@/types';

@@ -1,5 +1,5 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/shared/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/atoms/Button';
 /**
  * TranscriptManager.tsx
  * Deposition transcript management and search
@@ -14,12 +14,12 @@ import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { Transcript } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { CheckCircle, Clock, FileText, Search, Upload } from 'lucide-react';
 import { useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { Input } from '@/shared/ui/atoms/Input';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Input } from '@/components/atoms/Input';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { useModalState } from '@/hooks/core';
 
 export const TranscriptManager: React.FC = () => {

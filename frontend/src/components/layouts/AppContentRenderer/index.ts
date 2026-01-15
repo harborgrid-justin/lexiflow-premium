@@ -3,4 +3,4 @@
  * @description Re-export AppContentRenderer from ui/layouts for backward compatibility
  */
 
-export * from "@/shared/ui/layouts/AppContentRenderer";
+export * from "@/layouts/AppContentRenderer";

@@ -9,12 +9,12 @@ import { AlertOctagon, CheckCircle, Link, RefreshCw, ShieldCheck } from 'lucide-
 import { useEffect, useRef, useState } from 'react';
 
 // Common Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Services & Types
 import { queryClient } from '@/hooks/useQueryHooks';

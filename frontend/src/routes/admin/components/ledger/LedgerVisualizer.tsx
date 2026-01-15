@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
 import { ChainedLogEntry, IntegrityReport } from '@/services/infrastructure/chainService';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlertOctagon, ArrowRight, Box, Link, ShieldCheck, Terminal, X } from 'lucide-react';
 import { useState } from 'react';
 

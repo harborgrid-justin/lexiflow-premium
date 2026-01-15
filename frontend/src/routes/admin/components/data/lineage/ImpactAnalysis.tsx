@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { AlertTriangle, ArrowRight, Database, FileText, Layers } from 'lucide-react';
 import React from 'react';

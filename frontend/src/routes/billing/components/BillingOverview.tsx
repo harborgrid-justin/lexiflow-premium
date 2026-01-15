@@ -21,16 +21,16 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, Tooltip, XAx
 import { useBillingOverviewData } from './hooks/useBillingOverviewData';
 
 // Hooks & Context
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { useTheme } from '@/theme';
 
 // Components
-import { Currency } from '@/shared/ui/atoms/Currency';
-import { Card } from '@/shared/ui/molecules/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard';
+import { Currency } from '@/components/atoms/Currency';
+import { Card } from '@/components/molecules/Card';
+import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { Client } from '@/types';

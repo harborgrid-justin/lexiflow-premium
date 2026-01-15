@@ -1,7 +1,7 @@
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { useTheme } from '@/theme';
 import { Conversation } from '@/hooks/useSecureMessenger';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Briefcase, ExternalLink } from 'lucide-react';
 interface ConversationRowProps {
   conv: Conversation;

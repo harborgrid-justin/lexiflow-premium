@@ -5,7 +5,7 @@
  */
 
 import { ModuleRegistry } from "@/services/infrastructure/module-registry.service";
-import type { BreadcrumbItem } from "@/shared/ui/molecules/Breadcrumbs";
+import type { BreadcrumbItem } from "@/components/molecules/Breadcrumbs";
 import { useMemo } from "react";
 import { useLocation, useParams } from "react-router";
 

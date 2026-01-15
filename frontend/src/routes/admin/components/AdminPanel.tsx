@@ -20,12 +20,12 @@ import { useSessionStorage } from '@/hooks/core';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { AdminPanelContent } from './AdminPanelContent';
 
 // Utils & Config
 import { ADMIN_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

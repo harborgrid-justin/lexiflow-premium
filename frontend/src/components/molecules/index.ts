@@ -5,7 +5,7 @@
  *
  * NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES
  * Import directly from specific paths:
- * import { Card } from '@/shared/ui/molecules/Card/Card';
+ * import { Card } from '@/components/molecules/Card/Card';
  */
 
 // export * from '../ui/molecules';

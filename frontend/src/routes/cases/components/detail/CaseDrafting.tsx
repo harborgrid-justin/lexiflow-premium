@@ -22,7 +22,7 @@ import { useTheme } from '@/theme';
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Clause } from '@/types';

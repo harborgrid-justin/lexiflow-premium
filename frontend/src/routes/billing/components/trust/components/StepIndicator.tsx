@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import type { LucideIcon } from 'lucide-react';
 export interface Step {
   id: number;

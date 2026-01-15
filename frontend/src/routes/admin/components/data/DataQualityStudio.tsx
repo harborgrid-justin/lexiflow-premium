@@ -1,10 +1,10 @@
 import { Edit2, Loader2, Plus, RefreshCw, Sparkles } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Modal } from '@/shared/ui/molecules/Modal';
-import { Tabs } from '@/shared/ui/molecules/Tabs';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Tabs } from '@/components/molecules/Tabs';
 import { useTheme } from '@/theme';
 
 import { QUALITY_TABS } from '@/config/quality.config';

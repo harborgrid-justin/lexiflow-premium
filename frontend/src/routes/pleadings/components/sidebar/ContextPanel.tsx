@@ -1,13 +1,13 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { BookOpen, ChevronRight, FileText, Loader2, Plus, Scale, Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
-import { useDebounce } from '@/shared/hooks/useDebounce';
+import { useDebounce } from '@/hooks/useDebounce';
 import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
 import { CaseRepository } from '@/services/domain/case.service';
 import { DocketRepository } from '@/services/domain/docket.service';

@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from '@/theme';
 import { Settings, Shield, Users } from 'lucide-react';
 import { useAdmin } from './AdminProvider';

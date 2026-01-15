@@ -1,6 +1,6 @@
 import { Archive } from 'lucide-react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export function MessengerArchived() {
   const { theme } = useTheme();

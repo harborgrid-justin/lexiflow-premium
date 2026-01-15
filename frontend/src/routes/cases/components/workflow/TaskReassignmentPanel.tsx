@@ -19,10 +19,10 @@ import { User, ArrowRight, RefreshCcw } from 'lucide-react';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

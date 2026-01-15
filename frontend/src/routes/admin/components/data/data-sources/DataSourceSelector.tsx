@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
 import { useDataSource } from '@/providers';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Cloud, Database, Power, RefreshCw, Server } from 'lucide-react';
 import { useState } from 'react';
 

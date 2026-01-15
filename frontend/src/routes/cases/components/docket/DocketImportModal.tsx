@@ -13,9 +13,9 @@ import { ArrowRight, FileCode, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Modal } from '@/shared/ui/molecules/Modal';
-import { Stepper } from '@/shared/ui/molecules/Stepper';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Stepper } from '@/components/molecules/Stepper';
 import { ParsedDocketPreview } from './ParsedDocketPreview';
 
 // Internal Dependencies - Hooks & Context
@@ -26,7 +26,7 @@ import { useTheme } from '@/theme';
 import { FallbackDocketParser } from '@/services/features/discovery/fallbackDocketParser';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface DocketImportModalProps {
   isOpen: boolean;

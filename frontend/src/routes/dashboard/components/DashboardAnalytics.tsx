@@ -19,16 +19,16 @@ import { Bar, BarChart, CartesianGrid, Cell, Tooltip, XAxis, YAxis } from 'recha
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

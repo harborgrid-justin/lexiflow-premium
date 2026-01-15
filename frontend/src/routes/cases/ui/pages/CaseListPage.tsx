@@ -5,7 +5,7 @@
  */
 
 import { CaseManagement } from '@/routes/cases/components/list/CaseManagement';
-import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import React from 'react';
 
 interface CaseListPageProps {

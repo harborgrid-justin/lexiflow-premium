@@ -1,12 +1,12 @@
 import { useQuery } from '@/hooks/backend';
 import { useModalState } from '@/hooks/core';
 import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { Modal } from '@/components/molecules/Modal';
 import { useTheme } from '@/theme';
 import { useEffect, useMemo, useState } from 'react';
 import { MigrationHistory } from './MigrationHistory';

@@ -1,4 +1,4 @@
-import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { format } from 'date-fns';
 import { Database, FileText, Layout, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';

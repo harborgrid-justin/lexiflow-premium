@@ -1,4 +1,4 @@
-import { MetricCard } from '@/shared/ui/molecules/MetricCard';
+import { MetricCard } from '@/components/molecules/MetricCard';
 import { Clock, Database, HardDrive } from 'lucide-react';
 interface BackupMetricsProps {
     latestCreated?: string;

@@ -22,14 +22,14 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 
 // ========================================

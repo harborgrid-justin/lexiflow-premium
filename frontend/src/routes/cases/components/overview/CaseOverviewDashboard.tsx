@@ -1,10 +1,10 @@
 /** * Matter Overview Dashboard - Enterprise Matter Management Command Center * * @module MatterOverviewDashboard * @description Centralized oversight of all matter management operations * * REACT V18 CONTEXT CONSUMPTION COMPLIANCE: * - Guideline 21: Pure render logic with complex data aggregation (useMemo) * - Guideline 28: Theme (isDark) determines chart styling (pure function) * - Guideline 34: useTheme() is side-effect free read * - Guideline 33: Uses isPendingThemeChange for dashboard transitions * - Guideline 24: KPI metrics and status distributions are memoized * * Features: * - Real-time KPI metrics (active matters, intake pipeline, deadlines) * - Matter status distribution with drill-down capability * - Intake pipeline visualization with stage metrics * - Resource allocation and team utilization * - Recent activity feed with smart prioritization * - Quick action menu for common operations * - Advanced search and filtering * * @architecture * - React Query for data fetching and caching * - Real-time updates via WebSocket (future enhancement) * - Responsive grid layout with adaptive breakpoints * - Optimistic UI updates for instant feedback */ import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/lib/frontend-api';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/theme';
 import { CaseStatus } from '@/types';
 import { Activity, AlertCircle, AlertTriangle, Briefcase, CheckCircle, ChevronRight, Circle, Clock, Loader2, Plus, Search, TrendingUp, XCircle

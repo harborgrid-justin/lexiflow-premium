@@ -32,13 +32,13 @@ import { useTheme } from '@/theme';
 
 // Components
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
-import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
+import { Card } from '@/components/molecules/Card/Card';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

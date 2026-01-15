@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';
 
@@ -23,7 +23,7 @@ import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { CaseId, Project, ProjectId, WorkflowTask } from '@/types';

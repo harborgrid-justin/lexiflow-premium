@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const CodingPanel: React.FC = () => {
   const { theme } = useTheme();

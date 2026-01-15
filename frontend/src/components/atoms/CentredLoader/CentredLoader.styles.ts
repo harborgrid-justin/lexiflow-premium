@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/cn";
 
 export const containerStyles =
   "flex h-full w-full items-center justify-center p-8 flex-col gap-2";

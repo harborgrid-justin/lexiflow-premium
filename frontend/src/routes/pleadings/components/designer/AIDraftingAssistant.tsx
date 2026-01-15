@@ -1,8 +1,8 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
+import { Button } from '@/components/atoms/Button/Button';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from '@/theme';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlertCircle, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
 import { useState } from 'react';
 

@@ -9,13 +9,13 @@ import { useState } from 'react';
 import { User, Activity, Link, Sparkles } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/shared/ui/molecules/Card';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { EvidenceTypeIcon } from '@/shared/ui/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Services
 import { GeminiService } from '@/services/features/research/geminiService';

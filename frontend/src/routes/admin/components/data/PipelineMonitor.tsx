@@ -5,9 +5,9 @@ import { Activity, ArrowLeft, Cloud, Database, FileText, GitMerge, Loader2, Play
 import { useMutation, useQuery } from '@/hooks/backend';
 import type { Pipeline } from '@/lib/frontend-api';
 import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { useTheme } from '@/theme';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';

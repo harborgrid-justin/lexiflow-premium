@@ -3,8 +3,8 @@ import { Migration } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
 import { CheckCircle, Clock, FileCode, Loader2, RotateCcw, XCircle } from 'lucide-react';
 /**
  * MigrationHistory - React 18 optimized with React.memo

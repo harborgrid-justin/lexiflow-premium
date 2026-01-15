@@ -11,15 +11,15 @@
 // External Dependencies
 import { Calendar, FileText, Gavel, GitBranch, MessageSquare, Users } from 'lucide-react';
 // Internal Dependencies - Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge, BadgeProps } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge, BadgeProps } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Motion } from '@/types';

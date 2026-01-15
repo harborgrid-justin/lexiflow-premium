@@ -2,7 +2,7 @@
  * Audit Domain - View Component
  */
 
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { AlertCircle, AlertTriangle, Info, Shield } from 'lucide-react';
 import React, { useId } from 'react';
 import { useAudit } from './AuditProvider';

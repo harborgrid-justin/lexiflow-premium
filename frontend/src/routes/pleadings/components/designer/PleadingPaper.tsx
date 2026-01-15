@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { FormattingRule } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface PleadingPaperProps {
     rules: FormattingRule;

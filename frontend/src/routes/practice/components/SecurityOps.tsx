@@ -26,11 +26,11 @@ import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { SuffixTree } from '@/utils/datastructures/suffixTree';
 
 // ============================================================================

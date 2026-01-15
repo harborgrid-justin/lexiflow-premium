@@ -5,7 +5,7 @@
  * Provides smooth loading animations for various dashboard components
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 interface SkeletonProps {

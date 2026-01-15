@@ -21,20 +21,20 @@ import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useInterval } from '@/shared/hooks/useInterval';
+import { useInterval } from '@/hooks/useInterval';
 import { useNotify } from '@/hooks/useNotify';
 import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
 import { TIMEOUTS } from '@/config/ports.config';
 
 // Components
-import { FileAttachment } from '@/shared/ui/molecules/FileAttachment/FileAttachment';
+import { FileAttachment } from '@/components/molecules/FileAttachment/FileAttachment';
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

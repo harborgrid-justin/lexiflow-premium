@@ -1,10 +1,10 @@
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { MessageSquare } from 'lucide-react';
 
 import { Contact } from '@/lib/frontend-api';

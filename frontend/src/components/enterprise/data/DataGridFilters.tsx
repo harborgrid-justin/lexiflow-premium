@@ -22,7 +22,7 @@ import { useState, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { ColumnDefinition, EditorOption } from './DataGridColumn';
 
 // ============================================================================

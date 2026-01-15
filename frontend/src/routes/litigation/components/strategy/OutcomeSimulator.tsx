@@ -12,16 +12,16 @@ import { useCallback, useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // Internal Components
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Card } from '@/shared/ui/molecules/Card';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { Card } from '@/components/molecules/Card';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 
 // Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Scheduler } from '@/utils/scheduler';
 import { SimulationEngine } from '@/utils/simulationEngine';
 

@@ -16,37 +16,37 @@
  * import { CentredLoader, EmptyListState } from './components/common/layout';
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import React from 'react';
 
 // Re-export StatusBadge for compatibility (commented out - component doesn't exist)
-// export { StatusBadge } from '@/shared/ui/atoms';
+// export { StatusBadge } from '@/components/atoms';
 
 // Re-export all layout components from their new locations (commented out - components don't exist yet)
-// export { CentredLoader } from '@/shared/ui/atoms';
-// export type { CentredLoaderProps } from '@/shared/ui/atoms';
+// export { CentredLoader } from '@/components/atoms';
+// export type { CentredLoaderProps } from '@/components/atoms';
 
-// export { EmptyListState } from '@/shared/ui/molecules';
-// export type { EmptyListStateProps } from '@/shared/ui/molecules';
+// export { EmptyListState } from '@/components/molecules';
+// export type { EmptyListStateProps } from '@/components/molecules';
 
-// export { SectionTitle } from '@/shared/ui/atoms';
-// export type { SectionTitleProps } from '@/shared/ui/atoms';
+// export { SectionTitle } from '@/components/atoms';
+// export type { SectionTitleProps } from '@/components/atoms';
 
-// export { InfoGrid } from '@/shared/ui/molecules';
-// export type { InfoGridProps, InfoGridItem } from '@/shared/ui/molecules';
+// export { InfoGrid } from '@/components/molecules';
+// export type { InfoGridProps, InfoGridItem } from '@/components/molecules';
 
-// export { SearchInputBar } from '@/shared/ui/molecules';
-// export type { SearchInputBarProps } from '@/shared/ui/molecules';
+// export { SearchInputBar } from '@/components/molecules';
+// export type { SearchInputBarProps } from '@/components/molecules';
 
-// export { ActionRow } from '@/shared/ui/molecules';
-// export type { ActionRowProps } from '@/shared/ui/molecules';
+// export { ActionRow } from '@/components/molecules';
+// export type { ActionRowProps } from '@/components/molecules';
 
-// export { TabStrip } from '@/shared/ui/molecules';
-// export type { TabStripProps } from '@/shared/ui/molecules';
+// export { TabStrip } from '@/components/molecules';
+// export type { TabStripProps } from '@/components/molecules';
 
-// export { ModalFooter } from '@/shared/ui/molecules';
-// export type { ModalFooterProps } from '@/shared/ui/molecules';
+// export { ModalFooter } from '@/components/molecules';
+// export type { ModalFooterProps } from '@/components/molecules';
 
 // Stub components for backward compatibility
 export const EmptyListState: React.FC<{ title?: string; message?: string; icon?: React.ReactNode; action?: React.ReactNode; className?: string }> = ({ title = 'No items', message, icon, action, className }) => {

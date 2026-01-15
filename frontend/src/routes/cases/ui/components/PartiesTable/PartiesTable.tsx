@@ -7,7 +7,7 @@
  * @module components/features/cases/PartiesTable
  */
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/lib/utils';
 import type { Party } from '@/types';
 import { useState } from 'react';
 

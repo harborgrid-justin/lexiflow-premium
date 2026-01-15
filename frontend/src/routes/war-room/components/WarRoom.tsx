@@ -42,11 +42,11 @@ import { DataService } from "@/services/data/data-service.service";
 import { useTheme } from "@/providers";
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { WAR_ROOM_TAB_CONFIG } from '@/config/tabs.config';
 
 // Types

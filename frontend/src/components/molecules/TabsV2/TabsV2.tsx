@@ -17,7 +17,7 @@
 
 import React, { useRef } from 'react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { LucideIcon } from 'lucide-react';
 
 // ============================================================================

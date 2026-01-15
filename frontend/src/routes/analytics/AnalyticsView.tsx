@@ -1,4 +1,4 @@
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { BarChart3, Clock, DollarSign, TrendingUp } from 'lucide-react';
 import { useAnalytics } from './AnalyticsProvider';
 

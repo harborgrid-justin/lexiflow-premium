@@ -11,10 +11,10 @@
  * - Guideline 33: Uses isPendingThemeChange for workflow transitions
  */
 
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { AlertTriangle, Loader2, Play, Plus, RefreshCw } from 'lucide-react';
 
 import { CaseWorkflowList } from './CaseWorkflowList';
@@ -29,7 +29,7 @@ import { WorkflowLibrary } from './WorkflowLibrary';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { useMasterWorkflow } from '../../_hooks/useMasterWorkflow';
 

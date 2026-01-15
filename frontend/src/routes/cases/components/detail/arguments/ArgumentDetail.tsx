@@ -13,10 +13,10 @@ import { useState } from 'react';
 import { X, Save, Trash2, Wand2, Plus, Fingerprint, Scale, AlertTriangle } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Input } from '@/components/atoms/Input';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { ArgumentCoreInfo } from './ArgumentCoreInfo';
 
 // Internal Dependencies - Hooks & Context
@@ -24,7 +24,7 @@ import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { LegalArgument, EvidenceItem, Citation, EvidenceId } from '@/types';

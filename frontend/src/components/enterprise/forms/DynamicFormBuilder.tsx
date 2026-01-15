@@ -15,7 +15,7 @@
 
 import { useEnhancedAutoSave } from '@/hooks/useEnhancedAutoSave';
 import { useEnhancedFormValidation } from '@/hooks/useEnhancedFormValidation';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import type {
   FieldSchema,

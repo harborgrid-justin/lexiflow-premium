@@ -4,7 +4,7 @@
  * @description Standard sidebar/card section header typography
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import React from "react";
 
 export interface SectionTitleProps {

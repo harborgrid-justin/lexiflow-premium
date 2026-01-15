@@ -10,9 +10,9 @@
  * - Guideline 33: Uses isPendingThemeChange for list transitions
  */
 
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/theme';
 import { Case, WorkflowTask } from '@/types';
 import { CheckCircle, ChevronRight, Clock, GitBranch, Search, Settings, Users } from 'lucide-react';

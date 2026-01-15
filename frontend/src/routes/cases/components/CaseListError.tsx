@@ -10,7 +10,7 @@
  * @module routes/cases/components/CaseListError
  */
 
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { AlertCircle, Home, RefreshCw } from 'lucide-react';
 import { Link, useAsyncError } from 'react-router';
 

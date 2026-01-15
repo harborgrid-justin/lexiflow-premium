@@ -4,7 +4,7 @@
  * Provides graceful error handling and prevents financial data corruption
  */
 
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { AlertTriangle, DollarSign, Home, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
 

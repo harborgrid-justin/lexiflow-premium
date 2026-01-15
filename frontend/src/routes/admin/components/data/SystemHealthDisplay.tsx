@@ -7,7 +7,7 @@
 
 import { useTheme } from '@/theme';
 import { useDataSource } from '@/providers';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Activity } from 'lucide-react';
 import { useState } from 'react';
 import { BACKEND_ENABLED_SERVICES } from './constants';

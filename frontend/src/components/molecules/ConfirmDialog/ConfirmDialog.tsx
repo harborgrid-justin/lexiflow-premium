@@ -24,7 +24,7 @@ import { Button } from '../../atoms/Button/Button';
 import { Modal } from '../Modal/Modal';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

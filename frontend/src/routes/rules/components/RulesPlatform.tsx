@@ -26,14 +26,14 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
 // Utils & Config
 import { RULES_PLATFORM_TABS, RulesView } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

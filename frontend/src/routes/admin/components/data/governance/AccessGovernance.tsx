@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Info, Lock, Shield, XCircle } from 'lucide-react';
 interface RolePermission {

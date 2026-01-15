@@ -3,7 +3,7 @@
  */
 
 import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Calendar, MapPin, Plus, Users } from 'lucide-react';
 import React from 'react';
 import { useWarRoom } from './WarRoomProvider';

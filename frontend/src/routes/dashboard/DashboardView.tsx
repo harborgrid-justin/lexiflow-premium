@@ -1,6 +1,6 @@
 import { TabbedPageLayout } from '@/components/layouts';
 import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Suspense, useMemo } from 'react';
 import { useDashboard } from './DashboardProvider';
 

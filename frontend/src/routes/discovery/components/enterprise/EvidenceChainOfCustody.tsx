@@ -5,8 +5,8 @@
  */
 
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import {

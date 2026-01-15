@@ -28,12 +28,12 @@ import { useTheme } from '@/theme';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
 
 // Components
-import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import type { CalendarEventItem, User, WorkflowTask } from '@/types';

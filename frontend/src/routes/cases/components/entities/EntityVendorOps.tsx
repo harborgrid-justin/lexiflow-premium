@@ -20,11 +20,11 @@ import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
 import { useTheme } from '@/theme';
 
 // Components
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { LegalEntity } from '@/types';

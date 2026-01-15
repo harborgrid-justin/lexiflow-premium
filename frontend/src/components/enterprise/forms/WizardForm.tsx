@@ -13,7 +13,7 @@
  */
 
 import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import type { WizardConfig } from '@/types/forms';
 import React from "react";

@@ -1,6 +1,6 @@
 import { Type, Layout, List, PenTool, Hash, GripVertical, FileText } from 'lucide-react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface SidebarLibraryProps {
   onAddSection: (type: string) => void;

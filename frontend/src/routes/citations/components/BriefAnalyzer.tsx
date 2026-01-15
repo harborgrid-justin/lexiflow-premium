@@ -25,9 +25,9 @@ import { useMemo, useState } from 'react';
 // ============================================================================
 // Components
 import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -39,7 +39,7 @@ import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';
 import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

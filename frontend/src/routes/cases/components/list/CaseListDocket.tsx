@@ -25,10 +25,10 @@ import React, { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -36,7 +36,7 @@ import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 

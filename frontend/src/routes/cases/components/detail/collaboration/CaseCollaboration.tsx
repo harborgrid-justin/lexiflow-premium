@@ -15,8 +15,8 @@ import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
 // Internal Dependencies - Components
 import { ConferralLog } from './ConferralLog';
 import { DiscoveryPlanBuilder } from './DiscoveryPlanBuilder';
-import { Card } from '@/shared/ui/molecules/Card';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { StipulationRequest } from '@/types';

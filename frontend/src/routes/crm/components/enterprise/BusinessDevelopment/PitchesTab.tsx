@@ -4,7 +4,7 @@
  */
 
 import type { ThemeObject } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Plus } from 'lucide-react';
 import { PitchCard } from './PitchCard';
 import type { Pitch } from './types';

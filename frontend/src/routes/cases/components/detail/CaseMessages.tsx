@@ -12,8 +12,8 @@
 import { Send, Paperclip, Lock, Shield, FileText, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { Button } from '@/components/atoms/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
@@ -23,7 +23,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Case, Conversation, Message, User } from '@/types';

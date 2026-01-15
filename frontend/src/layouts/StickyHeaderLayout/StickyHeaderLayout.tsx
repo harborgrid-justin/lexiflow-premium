@@ -6,7 +6,7 @@
  */
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import React from "react";
 
 interface StickyHeaderLayoutProps {

@@ -5,8 +5,8 @@
  */
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { Card } from '@/components/molecules/Card/Card';
 import { WinLossAnalysis } from '../../types';
 import React from "react";
 

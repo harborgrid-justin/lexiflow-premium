@@ -8,8 +8,8 @@ import { dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { ActivityFeed, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { cn } from '@/lib/cn';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { AlertTriangle, CheckCircle2, Clock, FileText } from 'lucide-react';
 export const ParalegalDashboard: React.FC = () => {
   const { theme } = useTheme();

@@ -23,16 +23,16 @@ import { GlobalSearchResult, SearchService } from '@/services/search/searchServi
 
 // Hooks & Context
 import { useListNavigation } from '@/hooks/useListNavigation';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
-import { useDebounce } from '@/shared/hooks/useDebounce';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useTheme } from '@/theme';
 
 // Components
-import { HighlightedText } from '@/shared/ui/atoms/HighlightedText/HighlightedText';
+import { HighlightedText } from '@/components/atoms/HighlightedText/HighlightedText';
 
 // Utils & Constants
 import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '@/config/features/search.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface NeuralCommandBarProps {
     globalSearch: string;

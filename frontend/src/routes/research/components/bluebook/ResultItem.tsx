@@ -1,5 +1,5 @@
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
 import { useTheme } from '@/theme';
 import { ValidationSeverity } from '@/types/bluebook';
 import { AlertTriangle, CheckCircle2, Copy, Eye, EyeOff, Trash2 } from 'lucide-react';

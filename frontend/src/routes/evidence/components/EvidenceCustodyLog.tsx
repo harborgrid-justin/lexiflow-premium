@@ -9,12 +9,12 @@ import { Download, Filter, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 // Common Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/atoms/Button/Button';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';

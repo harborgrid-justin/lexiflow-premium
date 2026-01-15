@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';
+import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';
 
 const meta = {
   title: 'Pages/Notification Center',

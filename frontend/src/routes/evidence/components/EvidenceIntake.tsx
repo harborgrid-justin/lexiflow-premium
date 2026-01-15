@@ -9,16 +9,16 @@ import { ArrowLeft, CheckCircle, Link, Loader2, Save, ShieldCheck, UploadCloud }
 import { useEffect, useRef, useState } from 'react';
 
 // Common Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
-import { TagInput } from '@/shared/ui/molecules/TagInput/TagInput';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Stepper } from '@/components/molecules/Stepper/Stepper';
+import { TagInput } from '@/components/molecules/TagInput/TagInput';
 
 // Context & Utils
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 
 // Services & Types

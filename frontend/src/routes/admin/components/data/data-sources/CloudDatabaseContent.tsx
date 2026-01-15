@@ -3,7 +3,7 @@ import { useTheme } from '@/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AnimatePresence } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';
 import { useState } from 'react';

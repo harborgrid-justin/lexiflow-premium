@@ -4,7 +4,7 @@
  */
 
 import type { ThemeObject } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import type { ClientProfitability } from './types';
 import { formatCurrency, formatPercentage } from './utils';

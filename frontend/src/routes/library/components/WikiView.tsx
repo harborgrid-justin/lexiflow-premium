@@ -26,11 +26,11 @@ import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { WikiArticle } from '@/types';

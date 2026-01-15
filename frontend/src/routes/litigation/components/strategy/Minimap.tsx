@@ -9,7 +9,7 @@
 import { useCallback, useMemo, useRef } from 'react';
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { MinimapProps } from './types';
 import {
   calculateCenterPan,

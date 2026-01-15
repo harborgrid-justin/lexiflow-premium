@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Card } from '@/shared/ui/molecules/Card';
+import { cn } from '@/lib/cn';
+import { Input } from '@/components/atoms/Input';
+import { Card } from '@/components/molecules/Card';
 import { Shield } from 'lucide-react';
 import { CardSectionProps } from './types';
 

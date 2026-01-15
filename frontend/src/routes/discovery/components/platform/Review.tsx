@@ -15,16 +15,16 @@
  */
 
 import React, { useCallback, useMemo, useState, useTransition } from 'react';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
 import { useCallback, useMemo, useState, useTransition } from 'react';
 

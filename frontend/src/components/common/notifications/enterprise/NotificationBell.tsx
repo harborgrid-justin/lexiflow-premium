@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Bell } from 'lucide-react';
 

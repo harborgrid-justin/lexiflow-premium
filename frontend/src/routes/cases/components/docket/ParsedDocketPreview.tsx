@@ -11,14 +11,14 @@
 // External Dependencies
 import { Briefcase, Calendar, CheckCircle, ExternalLink, FileText, Hash, Users } from 'lucide-react';
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Type Definitions for Parsed Docket Data
 interface ParsedParty {

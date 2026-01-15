@@ -1,11 +1,11 @@
 /** * Matter Financials Center - Comprehensive Financial Management * * @module MatterFinancialsCenter * @description Complete financial oversight and billing management * * Features: * - Billing overview and analytics * - Budget tracking and forecasting * - Expense management * - Time entry overview * - Profitability analysis * - Realization rates * - Collection tracking * - Financial reports * - Invoice generation * - Trust accounting */ import { api } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Bar, BarChart, CartesianGrid, Cell, Tooltip as RechartsTooltip, ResponsiveContainer, XAxis, YAxis
-} from 'recharts'; import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+} from 'recharts'; import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { Clock, DollarSign, Download, TrendingUp, Wallet
 } from 'lucide-react';
 import { useMemo, useState } from 'react'; interface Invoice { id: string; invoiceNumber: string; caseId?: string; totalAmount?: number; amount?: number; status?: string; invoiceDate?: string; date?: string; createdAt?: string; caseTitle?: string; matterName?: string;

@@ -19,10 +19,10 @@ import { Wifi, CloudOff, RefreshCw, AlertTriangle, Activity } from 'lucide-react
 // Hooks & Context
 import { useSync } from '@/hooks/useSync';
 import { useTheme } from '@/theme';
-import { useInterval } from '@/shared/hooks/useInterval';
+import { useInterval } from '@/hooks/useInterval';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

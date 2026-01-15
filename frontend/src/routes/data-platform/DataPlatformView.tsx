@@ -3,7 +3,7 @@
  */
 
 import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { CheckCircle, Database, Plus, XCircle } from 'lucide-react';
 import React from 'react';
 import { useDataPlatform } from './DataPlatformProvider';

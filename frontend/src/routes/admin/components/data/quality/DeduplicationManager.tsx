@@ -1,10 +1,10 @@
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/theme';
 import { DedupeCluster } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';

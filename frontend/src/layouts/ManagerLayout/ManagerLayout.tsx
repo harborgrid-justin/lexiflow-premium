@@ -10,8 +10,8 @@
  * - theme.border.default - Border colors
  */
 
-import { cn } from '@/shared/lib/cn';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { cn } from '@/lib/cn';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from '@/theme';
 import React from "react";
 

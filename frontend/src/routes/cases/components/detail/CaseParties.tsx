@@ -11,19 +11,19 @@
 // External Dependencies
 import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User } from 'lucide-react';
 // Internal Dependencies - Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { Modal } from '@/shared/ui/molecules/Modal';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { Modal } from '@/components/molecules/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
 import { GroupByOption, useCaseParties } from '@/routes/cases/_hooks/useCaseParties';
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Party } from '@/types';

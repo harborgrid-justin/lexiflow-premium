@@ -3,7 +3,7 @@
  * Reusable form input with validation and error display
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { AlertCircle } from 'lucide-react';
 interface FormInputProps {

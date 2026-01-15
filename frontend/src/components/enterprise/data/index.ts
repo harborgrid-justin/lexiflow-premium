@@ -15,7 +15,7 @@
  *
  * @example
  * ```tsx
- * import { DataGrid, createColumns, textColumn, numberColumn } from '@/shared/components/enterprise/data';
+ * import { DataGrid, createColumns, textColumn, numberColumn } from '@/components/enterprise/data';
  *
  * interface User {
  *   id: number;

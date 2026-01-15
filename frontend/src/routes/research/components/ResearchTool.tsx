@@ -30,8 +30,8 @@ import { useThemeContext } from '@/theme';
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
 import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { cn } from '@/lib/cn';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Types

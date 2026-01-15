@@ -7,7 +7,7 @@
  * @module components/features/cases/CaseHeader
  */
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/lib/utils';
 import type { Case } from '@/types';
 import { Link } from 'react-router';
 import { CaseQuickActions } from '../CaseQuickActions';

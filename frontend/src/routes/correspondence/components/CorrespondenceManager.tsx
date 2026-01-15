@@ -25,12 +25,12 @@ import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { useModalState } from '@/hooks/core';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { CommunicationLog } from './CommunicationLog';
 import { ComposeMessageModal } from './ComposeMessageModal';
 import { CorrespondenceDetail } from './CorrespondenceDetail';
@@ -40,7 +40,7 @@ import { CreateServiceJobModal } from './CreateServiceJobModal';
 import { ServiceTracker } from './ServiceTracker';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { CommunicationItem, ServiceJob } from '@/types';

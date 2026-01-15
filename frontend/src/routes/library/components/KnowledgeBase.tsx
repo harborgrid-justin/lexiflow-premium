@@ -21,13 +21,13 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { KnowledgeContent } from './KnowledgeContent';
 
 // Utils & Config
 import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

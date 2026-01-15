@@ -19,10 +19,10 @@ import { Gavel, FileText, Bookmark, Eye, ArrowUpRight, CheckCircle, AlertTriangl
 import { useTheme } from '@/theme';
 
 // Components
-import { FileIcon } from '@/shared/ui/atoms/FileIcon';
+import { FileIcon } from '@/components/atoms/FileIcon';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

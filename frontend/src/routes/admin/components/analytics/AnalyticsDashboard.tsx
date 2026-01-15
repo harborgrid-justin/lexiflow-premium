@@ -18,8 +18,8 @@ import { Suspense, useState, useTransition } from 'react';
 // ============================================================================
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // Hooks & Context
@@ -30,7 +30,7 @@ import { api } from '@/lib/frontend-api';
 
 // Utils & Config
 import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // MAIN COMPONENT

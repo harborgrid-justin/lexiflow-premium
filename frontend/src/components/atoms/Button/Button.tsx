@@ -19,7 +19,7 @@ import { Loader2 } from 'lucide-react';
 // import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { baseStyles, getVariants, sizes } from './Button.styles';
 
 // ============================================================================

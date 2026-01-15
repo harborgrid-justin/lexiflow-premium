@@ -20,7 +20,7 @@ import { Target, Gavel } from "lucide-react";
 import { useTheme } from "@/providers";
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import type { Case } from "@/types";

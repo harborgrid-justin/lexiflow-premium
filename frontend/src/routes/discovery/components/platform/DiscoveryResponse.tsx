@@ -18,8 +18,8 @@ import { useCallback, useEffect, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
 import { useAutoSave } from "@/hooks/core";
@@ -30,7 +30,7 @@ import { useTheme } from "@/providers";
 // Services & Utils
 import { GeminiService } from "@/services";
 import { validateDiscoveryRequestSafe } from '@/services/validation/discoverySchemas';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

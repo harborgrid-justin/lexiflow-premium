@@ -1,4 +1,4 @@
-import { ContextMenu } from '@/shared/ui/molecules/ContextMenu/ContextMenu';
+import { ContextMenu } from '@/components/molecules/ContextMenu/ContextMenu';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Copy, Edit, Trash2 } from 'lucide-react';
 import React from 'react';

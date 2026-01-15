@@ -22,12 +22,12 @@ import { useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
@@ -35,7 +35,7 @@ import { useTheme } from '@/theme';
 import { useAccessMatrix } from '../_hooks/useAccessMatrix';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { AccessEffect, ExtendedUserProfile } from '@/types';

@@ -31,19 +31,19 @@ import { DataService } from '@/services/data/data-service.service';
 import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { getTodayString } from '@/lib/dateUtils';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { FirmAsset } from '@/types';

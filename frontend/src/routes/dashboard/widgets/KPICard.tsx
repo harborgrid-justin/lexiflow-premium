@@ -4,7 +4,7 @@
  * @description Enterprise KPI card with value, change percentage, trend indicators, and sparklines
  * Designed for executive dashboards with professional styling and animations
  */
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import type { DesignTokens } from '@/theme/tokens';
 import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';

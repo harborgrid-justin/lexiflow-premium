@@ -12,16 +12,16 @@ import { Suspense, lazy } from 'react';
 
 // Internal Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
-import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 import { LitigationProvider, useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Constants & Types
 import { LITIGATION_TABS } from './constants';

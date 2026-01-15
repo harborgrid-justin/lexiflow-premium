@@ -18,7 +18,7 @@ import { useTheme } from '@/theme';
 import { useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types

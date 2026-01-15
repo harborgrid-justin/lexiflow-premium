@@ -22,15 +22,15 @@ import { useBillingDashboard } from './hooks/useBillingDashboard';
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { ExportMenu } from '@/routes/discovery/components/ExportMenu/ExportMenu';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
-import { PeriodSelector } from '@/shared/ui/molecules/PeriodSelector';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { PeriodSelector } from '@/components/molecules/PeriodSelector';
 import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
 import { BILLING_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

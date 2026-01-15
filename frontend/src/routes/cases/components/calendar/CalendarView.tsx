@@ -21,11 +21,11 @@ import { useCalendarView } from './hooks/useCalendarView';
 
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Utils & Config
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Lazy load sub-components
 const CalendarMaster = lazy(() => import('./CalendarMaster').then(m => ({ default: m.CalendarMaster })));

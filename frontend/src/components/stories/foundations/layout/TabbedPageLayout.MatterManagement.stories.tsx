@@ -1,5 +1,5 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Activity, BarChart3, Briefcase, Clock, DollarSign, Eye, Lightbulb, Plus, Settings, TrendingUp } from 'lucide-react';
 import { Suspense, useState } from 'react';

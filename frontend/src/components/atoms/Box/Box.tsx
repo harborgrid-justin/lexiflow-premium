@@ -7,7 +7,7 @@
  * abstraction over div elements with design system integration.
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { 
   spacingClasses, 
   bgClasses, 

@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
 import { SearchResult } from '@/types';
 import { ExternalLink } from 'lucide-react';
 interface ResearchResultCardProps {

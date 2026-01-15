@@ -5,7 +5,7 @@
 
 import { TabbedPageLayout } from '@/components/layouts';
 import { USER_PROFILE_TAB_CONFIG } from '@/config/tabs.config';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Suspense } from 'react';
 import { useProfile } from './ProfileProvider';
 import { AccessMatrixEditor } from './components/AccessMatrixEditor';

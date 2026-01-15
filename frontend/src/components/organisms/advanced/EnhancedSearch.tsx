@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { Command, Search, X } from 'lucide-react';
 import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import * as styles from './EnhancedSearch.styles';

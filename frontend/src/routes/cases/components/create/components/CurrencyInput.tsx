@@ -2,7 +2,7 @@
  * Currency input with $ prefix styling
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export interface CurrencyInputProps {
   id: string;

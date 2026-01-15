@@ -1,8 +1,8 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/shared/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
 import { LegalEntity } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { CheckCircle, Clock, Plus, TrendingDown } from 'lucide-react';
 interface Rate {
     firm: string;

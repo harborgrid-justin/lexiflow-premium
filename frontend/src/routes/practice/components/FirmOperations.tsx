@@ -21,8 +21,8 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Sub-components
 const HRManager = lazy(() => import('./hr/HRManager').then(m => ({ default: m.HRManager })));

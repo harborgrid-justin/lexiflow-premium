@@ -1,5 +1,5 @@
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { yieldToMain } from '@/utils/apiUtils';
 import { AlertTriangle, Eye, EyeOff, ShieldAlert } from 'lucide-react';

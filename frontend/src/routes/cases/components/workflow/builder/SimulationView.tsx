@@ -1,5 +1,5 @@
 import { Terminal, PlayCircle } from 'lucide-react';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 export function SimulationView() {
   return (

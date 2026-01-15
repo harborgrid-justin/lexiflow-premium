@@ -7,7 +7,7 @@
 import { memo } from 'react';
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Database, Key, Lock, ShieldCheck } from 'lucide-react';
 
 interface DafDashboardProps {

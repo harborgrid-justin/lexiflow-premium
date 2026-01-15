@@ -31,8 +31,8 @@ import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { db } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { IdGenerator } from "@/shared/lib/idGenerator";
-import { validateTemplate } from "@/shared/lib/validation";
+import { IdGenerator } from "@/lib/idGenerator";
+import { validateTemplate } from "@/lib/validation";
 import {
   Case,
   CaseId,

@@ -16,11 +16,11 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/useModalState';
@@ -29,7 +29,7 @@ import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

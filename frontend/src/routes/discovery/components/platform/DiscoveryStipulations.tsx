@@ -32,12 +32,12 @@ import { AlertCircle, CheckCircle, FileQuestion, FileText, Loader2, Plus, XCircl
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
+import { Modal } from '@/components/molecules/Modal/Modal';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -47,8 +47,8 @@ import { useNotify } from '@/hooks/useNotify';
 // Services & Utils
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { IdGenerator } from '@/shared/lib/idGenerator';
+import { cn } from '@/lib/cn';
+import { IdGenerator } from '@/lib/idGenerator';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

@@ -1,7 +1,7 @@
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from '@/theme';
 import { PleadingSection } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold } from 'lucide-react';
 interface PropertyPanelProps {
     section?: PleadingSection;

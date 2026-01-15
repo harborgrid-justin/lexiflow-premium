@@ -23,7 +23,7 @@ import { useTheme } from '@/theme';
 
 // Utils & Data
 import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '@/lib/frontend-api/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

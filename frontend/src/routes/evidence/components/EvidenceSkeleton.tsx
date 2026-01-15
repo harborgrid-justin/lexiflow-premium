@@ -4,7 +4,7 @@
  */
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 /**
  * Skeleton for Evidence Inventory list

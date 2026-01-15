@@ -2,10 +2,10 @@ import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useState } from 'react';
 // import { BookOpen, AlertCircle } from 'lucide-react';
 
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-// import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { Modal } from '@/components/molecules/Modal/Modal';
+// import { Badge } from '@/components/atoms/Badge';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/data-service.service';
 import { Citation } from '@/types';

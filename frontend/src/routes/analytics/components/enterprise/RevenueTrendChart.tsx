@@ -33,7 +33,7 @@ import {
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // ============================================================================
 // TYPES & INTERFACES

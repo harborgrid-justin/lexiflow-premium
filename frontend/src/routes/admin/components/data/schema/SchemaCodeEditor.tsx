@@ -1,7 +1,7 @@
-import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
+import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { encodeHtmlEntities } from '@/shared/lib/sanitize';
+import { cn } from '@/lib/cn';
+import { encodeHtmlEntities } from '@/lib/sanitize';
 import React from "react";
 interface SchemaCodeEditorProps {
     ddl: string;

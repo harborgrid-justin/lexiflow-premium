@@ -10,7 +10,7 @@
  * 
  * USAGE:
  * ```tsx
- * import { SearchToolbar, FilterPanel } from '@/shared/ui/organisms/search';
+ * import { SearchToolbar, FilterPanel } from '@/components/organisms/search';
  * ```
  */
 

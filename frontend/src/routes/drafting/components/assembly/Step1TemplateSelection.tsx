@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Loader2 } from 'lucide-react';
 import { useDocumentTemplates } from './hooks/useDocumentTemplates';
 

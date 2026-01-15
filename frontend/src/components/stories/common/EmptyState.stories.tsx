@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { Button } from '@/components/atoms/Button/Button';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileText, Inbox, Search } from 'lucide-react';
 import React from "react";

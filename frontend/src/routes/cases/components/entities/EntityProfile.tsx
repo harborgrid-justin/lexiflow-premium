@@ -31,12 +31,12 @@ import { DataService } from '@/services/data/data-service.service';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms/Button';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { EntityRelationship, LegalEntity } from '@/types';

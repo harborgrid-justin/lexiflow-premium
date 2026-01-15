@@ -1,11 +1,11 @@
 import { useQuery } from '@/hooks/backend';
 import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useTheme } from '@/theme';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { AlignLeft, Bot, Download, Play } from 'lucide-react';

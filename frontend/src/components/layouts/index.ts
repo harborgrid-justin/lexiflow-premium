@@ -9,4 +9,4 @@
  * import { AppShellLayout, PageContainerLayout } from '@/components/layouts';
  */
 
-export * from "@/shared/ui/layouts";
+export * from "@/layouts";

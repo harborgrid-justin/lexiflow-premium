@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Cloud, Database, HardDrive } from 'lucide-react';
 import { useState } from 'react';

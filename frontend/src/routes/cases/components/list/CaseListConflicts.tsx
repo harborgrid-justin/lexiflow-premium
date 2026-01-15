@@ -24,7 +24,7 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -32,7 +32,7 @@ import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

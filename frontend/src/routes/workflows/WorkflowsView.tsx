@@ -1,5 +1,5 @@
 /** * Workflows Domain - View Component * Enterprise React Architecture Pattern * * Responsibilities: * - UI rendering (presentation) * - User interaction handlers * - Accessibility features * - React 18 concurrent features */ import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import type { Task, WorkflowInstance, WorkflowTemplate } from '@/types';
 import { AlertTriangle, CheckCircle, Clock, Play, Plus } from 'lucide-react';
 import React, { useId } from 'react';

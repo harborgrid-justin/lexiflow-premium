@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 
 /**
  * ErrorState component displays error messages with retry actions.

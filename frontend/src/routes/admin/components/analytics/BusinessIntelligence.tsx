@@ -18,9 +18,9 @@ import { BarChart3, Building2, TrendingUp, Users } from 'lucide-react';
 import { api } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { cn } from '@/lib/cn';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -12,7 +12,7 @@
 import { X, FileText, Gavel, Scale, Activity } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 
 // Internal Dependencies - Types
 export interface OppositionEntity {
@@ -29,7 +29,7 @@ export interface OppositionEntity {
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface OppositionDetailProps {
   entity: OppositionEntity;

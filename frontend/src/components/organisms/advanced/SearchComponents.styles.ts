@@ -4,7 +4,7 @@
  * @description Style definitions for SearchComponents (CategoryFilter, SuggestionItem).
  */
 
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/cn";
 
 // CategoryFilter styles
 export const categoryFilterContainer = "flex gap-1 px-2 py-1 border-b";

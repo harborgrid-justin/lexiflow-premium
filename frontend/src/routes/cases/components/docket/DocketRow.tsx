@@ -11,14 +11,14 @@
 import { Bell, Clock, ExternalLink, Eye, FileText, Gavel, Hash, Lock } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { DocketEntry, DocketEntryType } from '@/types';

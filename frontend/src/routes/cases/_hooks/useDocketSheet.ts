@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { useModalState } from '@/hooks/core';
-import { IdGenerator } from '@/shared/lib/idGenerator';
+import { IdGenerator } from '@/lib/idGenerator';
 import { Case, CaseId, DocketEntry } from '@/types';
 
 type FilterType = 'all' | 'filings' | 'orders';

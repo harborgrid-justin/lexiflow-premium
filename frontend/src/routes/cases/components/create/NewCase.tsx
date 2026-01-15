@@ -23,10 +23,10 @@
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from '@/theme';
 import { DollarSign, FileText, Link2, Save, Scale, Trash2, Users } from 'lucide-react';
 

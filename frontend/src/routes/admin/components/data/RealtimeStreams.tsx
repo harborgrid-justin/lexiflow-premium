@@ -1,11 +1,11 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { Activity, AlertCircle, CheckCircle, Plus, Radio, Users, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { DataStream, RealtimeStreamsProps } from './RealtimeStreams.types';

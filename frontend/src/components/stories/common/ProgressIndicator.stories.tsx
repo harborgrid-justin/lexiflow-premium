@@ -1,4 +1,4 @@
-import { ProgressIndicator } from '@/shared/ui/atoms/ProgressIndicator/ProgressIndicator';
+import { ProgressIndicator } from '@/components/atoms/ProgressIndicator/ProgressIndicator';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

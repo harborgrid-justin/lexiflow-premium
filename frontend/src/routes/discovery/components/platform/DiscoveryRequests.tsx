@@ -27,19 +27,19 @@ import { CheckSquare, Upload, Wand2 } from 'lucide-react';
 // ============================================================================
 // Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { useWindow } from '@/providers';
 
 // Utils
 import { DiscoveryRequestStatusEnum } from '@/types/enums';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -1,6 +1,6 @@
 import { Pipeline } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Activity, ChevronRight, Clock, GitMerge, XCircle } from 'lucide-react';
 
 interface PipelineListProps {

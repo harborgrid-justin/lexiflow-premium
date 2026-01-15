@@ -1,4 +1,4 @@
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { AlertCircle, Calendar, Shield } from 'lucide-react';
 import { useCompliance } from './ComplianceProvider';
 

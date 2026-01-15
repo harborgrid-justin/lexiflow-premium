@@ -25,11 +25,11 @@ import { useState } from 'react';
 // ============================================================================
 // Components
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Modal } from '@/components/molecules/Modal';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/useModalState';
@@ -39,7 +39,7 @@ import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const CaseListIntake: React.FC = () => {
   // Guideline 34: Side-effect free context read

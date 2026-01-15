@@ -29,14 +29,14 @@ import { useWindow } from '@/providers';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { TagList } from '@/shared/ui/molecules/TagList/TagList';
+import { Button } from '@/components/atoms/Button/Button';
+import { TagList } from '@/components/molecules/TagList/TagList';
 import { PIIPanel } from '../preview/PIIPanel';
 import { PreviewContent } from '../preview/PreviewContent';
 import { PreviewHeader } from '../preview/PreviewHeader';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { LegalDocument, UserRole } from '@/types';

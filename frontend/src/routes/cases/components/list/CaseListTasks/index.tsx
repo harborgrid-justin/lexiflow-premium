@@ -1,8 +1,8 @@
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { TaskRow } from './TaskRow';
 import { TaskHeader } from './TaskHeader';
 import { useCaseListTasks } from './useCaseListTasks';

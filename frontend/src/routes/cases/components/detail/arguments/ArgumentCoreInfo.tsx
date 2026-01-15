@@ -11,14 +11,14 @@
 // External Dependencies
 import { Wand2 } from 'lucide-react';
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Button } from '@/components/atoms/Button';
+import { TextArea } from '@/components/atoms/TextArea';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { LegalArgument } from '@/types';

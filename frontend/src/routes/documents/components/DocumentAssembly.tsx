@@ -9,8 +9,8 @@ import { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/core';
-import { cn } from '@/shared/lib/cn';
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { cn } from '@/lib/cn';
+import { getTodayString } from '@/lib/dateUtils';
 import { queryKeys } from '@/utils/queryKeys';
 import { Step1TemplateSelection, Step2FormConfiguration, Step3DraftReview } from './assembly';
 

@@ -1,9 +1,9 @@
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { CaseId, CustodianInterview } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { MessageSquare, Plus } from 'lucide-react';
 
 import { InterviewList } from './interviews/InterviewList';

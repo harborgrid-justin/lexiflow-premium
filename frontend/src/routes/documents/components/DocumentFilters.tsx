@@ -1,6 +1,6 @@
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import {
     AlertOctagon, CheckCircle2,

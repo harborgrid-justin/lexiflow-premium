@@ -5,7 +5,7 @@
  * metrics, and action buttons.
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import {

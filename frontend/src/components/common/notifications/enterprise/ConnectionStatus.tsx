@@ -4,7 +4,7 @@
  * @description Real-time WebSocket connection status indicator with animations
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,

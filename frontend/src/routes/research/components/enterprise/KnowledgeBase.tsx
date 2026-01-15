@@ -34,11 +34,11 @@ import { useCallback, useEffect, useState } from 'react';
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import type { WikiArticle } from '@/types/legal-research';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // Types & Interfaces

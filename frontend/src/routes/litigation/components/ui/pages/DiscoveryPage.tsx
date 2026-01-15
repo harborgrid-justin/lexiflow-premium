@@ -6,7 +6,7 @@
 
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 import DiscoveryDashboard from '@/routes/discovery/components/platform/dashboard/DiscoveryDashboard';
-import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import React from "react";
 
 interface DiscoveryPageProps {

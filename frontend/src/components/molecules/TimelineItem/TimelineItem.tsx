@@ -19,10 +19,10 @@ import React from 'react';
 import { useTheme } from '@/theme';
 
 // Components
-import { DateText } from '@/shared/ui/atoms/DateText';
+import { DateText } from '@/components/atoms/DateText';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

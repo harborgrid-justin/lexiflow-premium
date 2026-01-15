@@ -1,7 +1,7 @@
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from '@/theme';
 import { RetryError, retryWithBackoff } from '@/utils/retryWithBackoff';
 import { AlertCircle, FileText, RefreshCw, Sparkles, Wand2, WifiOff } from 'lucide-react';

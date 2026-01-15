@@ -20,12 +20,12 @@ import React, { Suspense, useState, useTransition } from 'react';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { JURISDICTION_TABS, JurisdictionView } from './utils';
 
 const JurisdictionFederal = React.lazy(() => import('./JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));

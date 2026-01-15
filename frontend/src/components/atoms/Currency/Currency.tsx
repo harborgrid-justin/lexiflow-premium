@@ -4,7 +4,7 @@
  * @description Formatted currency display using standardized Formatters
  */
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { currencyStyles } from './Currency.styles';
 

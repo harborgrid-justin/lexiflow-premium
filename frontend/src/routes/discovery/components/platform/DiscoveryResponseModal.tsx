@@ -1,13 +1,13 @@
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { DiscoveryRequest } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Wand2 } from 'lucide-react';
 import { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)

@@ -20,11 +20,11 @@ import { MapPin, Truck, User } from 'lucide-react';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Badge } from '@/components/atoms/Badge/Badge';
 
 // Utils & Constants
 import { ServiceStatus } from '@/types/enums';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { ServiceJob } from '@/types';

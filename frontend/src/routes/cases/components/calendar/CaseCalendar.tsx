@@ -1,11 +1,11 @@
 /** * Matter Calendar - Comprehensive Matter Timeline & Scheduling * * @module MatterCalendar * @description Enterprise calendar view for matter management * * Features: * - Multi-view calendar (month, week, day, agenda) * - Matter deadlines and court dates * - Team availability and conflicts * - Drag-and-drop scheduling * - Recurring event support * - Color-coded matter categorization * - Deadline reminders and notifications * - Integration with team calendars * - Conflict detection * - Export to external calendars (iCal, Google, Outlook) */ import { api } from '@/lib/frontend-api';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, Download, MapPin
 } from 'lucide-react';
 import { useMemo, useState } from 'react'; type CalendarView = 'month' | 'week' | 'day' | 'agenda'; interface CalendarEvent { id: string; matterId: string; matterTitle: string; title: string; type: 'hearing' | 'deadline' | 'meeting' | 'filing' | 'trial' | 'other'; startTime: string; endTime?: string; location?: string; attendees?: string[]; description?: string; priority: 'high' | 'medium' | 'low'; status: 'scheduled' | 'confirmed' | 'completed' | 'cancelled'; reminder?: number; // minutes before recurring?: { frequency: 'daily' | 'weekly' | 'monthly'; until?: string; };

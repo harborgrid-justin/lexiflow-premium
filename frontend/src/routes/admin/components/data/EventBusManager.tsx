@@ -2,10 +2,10 @@ import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
 import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';
 import { useState } from 'react';
 

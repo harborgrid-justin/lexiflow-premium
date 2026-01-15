@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Card } from '@/components/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
+import { Stepper } from '@/components/molecules/Stepper/Stepper';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
 import { InitialDisclosureWizardProps } from './types';

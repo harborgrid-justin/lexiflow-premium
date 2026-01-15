@@ -13,22 +13,22 @@ import { CheckCircle, Loader2, Mail, Phone, Plus, Users, Video } from 'lucide-re
 import { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { Modal } from '@/components/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToast } from '@/providers';
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { getTodayString } from '@/lib/dateUtils';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { CaseId, ConferralMethod, ConferralResult, ConferralSession, UUID } from '@/types';

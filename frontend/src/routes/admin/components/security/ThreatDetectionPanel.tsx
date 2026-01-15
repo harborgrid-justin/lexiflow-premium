@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { Card } from '@/components/molecules/Card/Card';
 import { CheckCircle, Shield, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import type { ThreatCheckResult } from './types';

@@ -3,8 +3,8 @@ import { useQuery } from '@/hooks/backend';
 import { useModalState } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/shared/lib/cn';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { cn } from '@/lib/cn';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 

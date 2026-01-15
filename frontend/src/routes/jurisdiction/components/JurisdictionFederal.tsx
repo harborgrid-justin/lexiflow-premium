@@ -23,12 +23,12 @@ import { DataService } from '@/services/data/data-service.service';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export function JurisdictionFederal() {
   const { theme } = useTheme();

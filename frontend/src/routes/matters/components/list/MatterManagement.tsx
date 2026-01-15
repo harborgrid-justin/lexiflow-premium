@@ -8,9 +8,9 @@
 import { litigationApi } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
-import { cn } from '@/shared/lib/cn';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { cn } from '@/lib/cn';
+import { Card } from '@/components/molecules/Card/Card';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { Matter } from '@/types';
 import { format } from 'date-fns';
 import { Briefcase, Calendar, LayoutGrid, List, MoreVertical, Plus, Search } from 'lucide-react';

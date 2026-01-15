@@ -1,9 +1,9 @@
 import { BackupSnapshot } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { StatusBadge } from '@/shared/ui/atoms/StatusBadge';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { StatusBadge } from '@/components/atoms/StatusBadge';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { Archive, Clock, Database, Download } from 'lucide-react';
 interface SnapshotListProps {
     snapshots: BackupSnapshot[];

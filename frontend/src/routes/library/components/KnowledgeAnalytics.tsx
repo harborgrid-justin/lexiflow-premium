@@ -23,14 +23,14 @@ import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // Components
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES

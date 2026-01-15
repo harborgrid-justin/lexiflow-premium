@@ -8,12 +8,12 @@
 import { MapPin } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/shared/ui/molecules/Card';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import React from "react";
 
 interface EvidenceLocationProps {

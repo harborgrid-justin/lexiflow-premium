@@ -1,8 +1,8 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Wand2 } from 'lucide-react';
 
 interface FormData {

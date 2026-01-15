@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import { Activity, AlertTriangle, Cloud, Database, RefreshCw, Server, ShieldCheck, Trash2, X } from 'lucide-react';

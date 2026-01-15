@@ -5,7 +5,7 @@
 
 import { analyticsApi } from '@/lib/frontend-api';
 import { ChartCard } from '@/routes/analytics/components/enterprise';
-import { exportToCSV, exportToExcel } from '@/shared/components/enterprise/data/export';
+import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
 import { jsPDF } from 'jspdf';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';

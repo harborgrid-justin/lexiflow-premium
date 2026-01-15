@@ -28,24 +28,24 @@ import { useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
-import { Button } from '@/shared/ui/atoms/Button';
-import { ErrorState } from '@/shared/ui/molecules/ErrorState';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
+import { ErrorState } from '@/components/molecules/ErrorState';
 import { ExhibitStats } from './ExhibitStats';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { useToggle } from '@/shared/hooks/useToggle';
-import { cn } from '@/shared/lib/cn';
+import { useToggle } from '@/hooks/useToggle';
+import { cn } from '@/lib/cn';
 
 // Data & Types
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { CaseId, TrialExhibit } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { getTodayString } from '@/lib/dateUtils';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { RefreshCw, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AccessMatrix } from './security/AccessMatrix';

@@ -1,5 +1,5 @@
 import type { Meta } from '@storybook/react-vite';
-import { TabsV2, ParentTabItem } from '@/shared/ui/molecules/TabsV2/TabsV2';
+import { TabsV2, ParentTabItem } from '@/components/molecules/TabsV2/TabsV2';
 import React, { useState } from 'react';
 import {
   Briefcase, Folder, Activity, Plus, Settings, Clock, DollarSign,

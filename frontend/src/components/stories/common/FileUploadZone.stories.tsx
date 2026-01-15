@@ -1,4 +1,4 @@
-import { FileUploadZone } from '@/shared/ui/molecules/FileUploadZone/FileUploadZone';
+import { FileUploadZone } from '@/components/molecules/FileUploadZone/FileUploadZone';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
 

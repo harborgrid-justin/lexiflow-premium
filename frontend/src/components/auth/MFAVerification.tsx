@@ -10,7 +10,7 @@ import { useAuthActions } from '@/contexts/auth/AuthProvider';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/core';
 import { IntegrationOrchestrator } from '@/services/integration/IntegrationOrchestrator';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import React, { useState } from 'react';
 
 interface MFAVerificationProps {

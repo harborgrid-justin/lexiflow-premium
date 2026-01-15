@@ -33,11 +33,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useDebounce } from '@/shared/hooks/useDebounce';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import * as styles from './CommandPalette.styles';
 
 // Types

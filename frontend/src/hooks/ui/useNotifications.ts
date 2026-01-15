@@ -44,7 +44,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNotificationWebSocket, WebSocketNotification } from './useNotificationWebSocket';
 import { NotificationsApiService } from '@/lib/frontend-api';
-import { showToast } from '@/shared/ui/organisms/notifications/Toast';
+import { showToast } from '@/components/organisms/notifications/Toast';
 
 /**
  * Notification type (matches backend)

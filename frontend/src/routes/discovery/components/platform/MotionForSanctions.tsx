@@ -1,9 +1,9 @@
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { Card } from '@/shared/ui/molecules/Card';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { Card } from '@/components/molecules/Card';
+import { Modal } from '@/components/molecules/Modal';
 /**
  * MotionForSanctions.tsx
  * Motion for sanctions builder for discovery violations
@@ -20,7 +20,7 @@ import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { SanctionMotion } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { FileWarning, Gavel, Plus } from 'lucide-react';
 import { useState } from 'react';

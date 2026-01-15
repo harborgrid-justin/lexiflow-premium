@@ -6,7 +6,7 @@
  * Provides consistent spacing and alignment for stacked layouts.
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { directionClasses, spacingClasses, alignClasses, justifyClasses } from './Stack.styles';
 import React from "react";
 

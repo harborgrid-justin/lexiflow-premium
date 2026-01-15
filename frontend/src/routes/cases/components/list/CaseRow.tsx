@@ -19,14 +19,14 @@ import { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Currency } from '@/shared/ui/atoms/Currency/Currency';
-import { StatusBadge } from '@/shared/ui/atoms/StatusBadge/StatusBadge';
+import { Currency } from '@/components/atoms/Currency/Currency';
+import { StatusBadge } from '@/components/atoms/StatusBadge/StatusBadge';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 
 // Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

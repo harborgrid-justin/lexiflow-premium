@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
-import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CaseOverviewPageProps {
   caseId?: string;

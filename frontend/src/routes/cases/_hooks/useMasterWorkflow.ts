@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useMemo, useTransition } from 'react'
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { useNotify } from '@/hooks/useNotify';
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { getTodayString } from '@/lib/dateUtils';
 import { TaskStatusBackend, WorkflowTask, WorkflowTemplateData, Case } from '@/types';
 import { Process, WorkflowView } from '../components/workflow/types';
 import { WORKFLOW_TABS } from '../components/workflow/WorkflowTabs';

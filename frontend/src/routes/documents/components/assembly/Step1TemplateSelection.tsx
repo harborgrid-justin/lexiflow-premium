@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Briefcase, File, FileText, Loader2, Scale } from 'lucide-react';
 interface Step1TemplateSelectionProps {
   onSelectTemplate: (templateName: string) => void;

@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Card } from '@/shared/ui/molecules/Card';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge';
+import { Card } from '@/components/molecules/Card';
 import { DataDictionaryItem } from '@/types';
 interface TechSpecsCardProps {
   formData: DataDictionaryItem;

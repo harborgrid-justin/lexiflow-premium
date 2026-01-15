@@ -9,16 +9,16 @@ import { CheckCircle, Plus, Scale, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
 
 // Common Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { RuleSelector } from '@/shared/ui/molecules/RuleSelector/RuleSelector';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { RuleSelector } from '@/components/molecules/RuleSelector/RuleSelector';
 
 // Context & Utils
 import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { EvidenceItem } from '@/types';

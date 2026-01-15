@@ -23,11 +23,11 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { ChartColorService, useTheme } from '@/theme';
 
 // Components
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
 // ✅ Migrated to backend API (2025-12-21)
 

@@ -2,7 +2,7 @@
  * Jurisdiction Domain - View Component
  */
 
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Building2, Scale } from 'lucide-react';
 import React, { useId } from 'react';
 import { useJurisdiction } from './JurisdictionProvider';

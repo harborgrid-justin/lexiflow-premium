@@ -1,5 +1,5 @@
 import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { FileText, Grid, List } from 'lucide-react';
 import { useDocuments } from './DocumentsProvider';
 

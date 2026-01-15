@@ -1,8 +1,8 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)

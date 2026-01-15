@@ -3,7 +3,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { TimelineEvent } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Calendar, Link, Loader2, Plus } from 'lucide-react';
 

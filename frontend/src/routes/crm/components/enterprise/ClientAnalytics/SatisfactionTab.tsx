@@ -2,7 +2,7 @@
  * @module components/enterprise/CRM/ClientAnalytics/SatisfactionTab
  */
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Card } from '@/components/molecules/Card/Card';
 import type { ThemeObject } from '@/theme';
 import { SatisfactionCard } from './SatisfactionCard';
 import type { ClientSatisfaction } from './types';

@@ -14,7 +14,7 @@ import { useMemo, useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { ScheduleTimeline } from './planning/ScheduleTimeline';
 
@@ -25,7 +25,7 @@ import { useCasePlanning } from '@/routes/cases/_hooks/useCasePlanning';
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types & Interfaces

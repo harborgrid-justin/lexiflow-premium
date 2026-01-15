@@ -20,7 +20,7 @@ import { Bold, Italic, Underline, List, AlignLeft, AlignCenter, AlignRight, High
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -5,8 +5,8 @@
  * Replaces repeated error UI patterns
  */
 
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import React from 'react';
 

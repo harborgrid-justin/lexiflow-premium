@@ -11,10 +11,10 @@
  * - theme.surface.highlight - Sub-tab background
  */
 
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from '@/theme';
 import { TabConfigItem } from '@/types/layout';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
 export type { TabConfigItem };

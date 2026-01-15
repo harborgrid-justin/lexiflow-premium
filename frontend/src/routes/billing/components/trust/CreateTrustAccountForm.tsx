@@ -17,7 +17,7 @@
  */
 
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Card } from '@/components/molecules/Card/Card';
 import type { CreateTrustAccountDto, TrustAccountStatus } from '@/types/trust-accounts';
 import { TrustAccountType as AccountType } from '@/types/trust-accounts';
 import { Building, CheckCircle, Landmark, Shield, Users } from 'lucide-react';

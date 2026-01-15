@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { MarketingDashboard } from '@/routes/practice/components/MarketingDashboard';
-import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 
 /**
  * MarketingPage - React 18 optimized with React.memo

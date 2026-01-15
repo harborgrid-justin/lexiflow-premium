@@ -16,10 +16,10 @@ import { Mail, Plus, Shield, Wand2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -30,7 +30,7 @@ import { useTheme } from '@/theme';
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

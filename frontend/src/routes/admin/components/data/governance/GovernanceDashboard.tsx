@@ -1,6 +1,6 @@
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/theme';
 import { AlertTriangle, Edit2, FileSearch, Scale, ShieldCheck } from 'lucide-react';
 

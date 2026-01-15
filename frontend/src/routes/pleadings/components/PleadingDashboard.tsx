@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useModalState } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid/VirtualGrid';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { Input } from '@/shared/ui/atoms/Input/Input';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Input } from '@/components/atoms/Input/Input';
 import { Case, CaseId, UserId, DocumentId } from '@/types';
 
 interface PleadingDashboardProps {

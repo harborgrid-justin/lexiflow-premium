@@ -11,21 +11,21 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Currency } from '@/shared/ui/atoms/Currency/Currency';
-import { Input } from '@/shared/ui/atoms/Input';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { SearchInput } from '@/shared/ui/molecules/SearchInput/SearchInput';
-import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
-import { SwipeableItem } from '@/shared/ui/organisms/SwipeableItem';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Currency } from '@/components/atoms/Currency/Currency';
+import { Input } from '@/components/atoms/Input';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { SearchInput } from '@/components/molecules/SearchInput/SearchInput';
+import { FilterPanel } from '@/components/organisms/FilterPanel';
+import { SwipeableItem } from '@/components/organisms/SwipeableItem';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Filter } from 'lucide-react';
 import { ActiveCaseTable } from './ActiveCaseTable';
 
 import { CASE_STATUS_VARIANTS, CASE_TYPES } from '@/config/cases.config';
 import { UseCaseListReturn } from '@/hooks/useCaseList';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Case, CaseStatus } from '@/types';
 import { useCaseListActive } from '../../_hooks/useCaseListActive';
 

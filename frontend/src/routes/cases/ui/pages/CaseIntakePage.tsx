@@ -5,7 +5,7 @@
  */
 
 import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
-import { CenteredLayout } from '@/shared/ui/layouts/CenteredLayout/CenteredLayout';
+import { CenteredLayout } from '@/layouts/CenteredLayout/CenteredLayout';
 import React from 'react';
 
 interface CaseIntakePageProps {

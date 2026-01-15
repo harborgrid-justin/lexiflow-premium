@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 
 import { CheckCircle, Loader2, Power, ShieldAlert } from 'lucide-react';
 
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Modal } from '@/components/molecules/Modal';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 import { RegionMap } from './replication/RegionMap';
 

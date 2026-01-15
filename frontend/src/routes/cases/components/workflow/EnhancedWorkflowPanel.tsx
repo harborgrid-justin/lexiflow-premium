@@ -11,8 +11,8 @@
  * - Guideline 33: Uses isPendingThemeChange for panel transitions
  */
 
-import { cn } from '@/shared/lib/cn';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { cn } from '@/lib/cn';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { useTheme } from '@/theme';
 import { useState } from 'react';
 import { ApprovalWorkflow } from './ApprovalWorkflow';

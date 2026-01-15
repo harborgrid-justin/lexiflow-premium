@@ -4,8 +4,8 @@
  * ✅ Backend-ready with proper data handling (2025-12-21)
  */
 
-import { cn } from '@/shared/lib/cn';
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { cn } from '@/lib/cn';
+import { getTodayString } from '@/lib/dateUtils';
 import { useTheme } from '@/theme';
 import { Calendar, FileText, Sparkles, User } from 'lucide-react';
 interface Step2FormConfigurationProps {

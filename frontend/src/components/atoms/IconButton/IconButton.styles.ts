@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/cn";
 
 // Note: Icon button variants - migrate to inline styles with theme for dynamic colors
 export const variantClasses = {

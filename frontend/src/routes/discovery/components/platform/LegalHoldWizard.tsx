@@ -13,16 +13,16 @@ import React, { useState } from 'react';
  */
 
 import { useTheme } from '@/theme';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { DataService } from '@/services/data/data-service.service';
 import { useNotify } from '@/hooks/useNotify';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import { LegalHoldEnhanced } from '@/types/discovery-enhanced';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { Save, X } from 'lucide-react';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface LegalHoldWizardProps {
     caseId?: string;

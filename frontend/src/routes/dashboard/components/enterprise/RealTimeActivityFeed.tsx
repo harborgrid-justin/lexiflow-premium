@@ -5,7 +5,7 @@
  * Displays recent activities, events, and notifications in real-time
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import type { Activity as ActivityType, ActivityType as ActivityTypeEnum, BaseDashboardProps } from '@/types/dashboard';
 import { AnimatePresence, motion } from 'framer-motion';

@@ -1,17 +1,17 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { Clause } from '@/types';
 import { BookOpen, Check, Copy, History, Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { filterClauses } from './clauseList.utils';
 // ✅ Migrated to backend API (2025-12-21)
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 interface ClauseListProps {
     onSelectClause: (clause: Clause) => void;

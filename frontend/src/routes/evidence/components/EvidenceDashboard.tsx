@@ -10,13 +10,13 @@ import { Activity, AlertTriangle, Box, HardDrive, ShieldCheck } from 'lucide-rea
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 // Common Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Services & Types
 import { ViewMode } from '@/hooks/useEvidenceManager';

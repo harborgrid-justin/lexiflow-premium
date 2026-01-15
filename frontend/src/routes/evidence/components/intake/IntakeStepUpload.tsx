@@ -7,10 +7,10 @@
 
 import { CheckCircle, Link, Loader2, ShieldCheck, UploadCloud } from 'lucide-react';
 // Common Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 
 // Context & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 
 // Services

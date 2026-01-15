@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { Button } from '@/components/atoms/Button';
 import { CustodianInterview } from '@/types';
 
 interface InterviewModalProps {

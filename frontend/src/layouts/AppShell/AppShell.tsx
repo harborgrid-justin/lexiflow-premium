@@ -21,14 +21,14 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { BreadcrumbItem, Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
+import { BreadcrumbItem, Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 // Note: Logic hooks (time capture, global query status, breadcrumbs) are lifted to the controller.
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ========================================
 // TYPES & INTERFACES

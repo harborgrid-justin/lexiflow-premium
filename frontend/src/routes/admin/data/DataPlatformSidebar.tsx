@@ -25,7 +25,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { DATA_PLATFORM_MENU, type MenuItem } from '@config/tabs.config';
 
 // Types

@@ -13,16 +13,16 @@ import { useState, useEffect } from 'react';
 import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Button } from '@/shared/ui/atoms/Button';
-import { RuleSelector } from '@/shared/ui/molecules/RuleSelector/RuleSelector';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Input } from '@/components/atoms/Input';
+import { Button } from '@/components/atoms/Button';
+import { RuleSelector } from '@/components/molecules/RuleSelector/RuleSelector';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Motion, MotionType, LegalDocument, DocumentId } from '@/types';

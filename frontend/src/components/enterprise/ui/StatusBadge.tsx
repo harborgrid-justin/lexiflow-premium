@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import React from "react";
 

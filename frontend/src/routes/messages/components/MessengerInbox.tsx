@@ -14,7 +14,7 @@
 import { useSecureMessenger } from '@/hooks/useSecureMessenger';
 
 // Components
-import { SplitView } from '@/shared/ui/organisms/SplitView';
+import { SplitView } from '@/components/organisms/SplitView';
 import { MessengerChatList } from './MessengerChatList';
 import { MessengerChatWindow } from './MessengerChatWindow';
 

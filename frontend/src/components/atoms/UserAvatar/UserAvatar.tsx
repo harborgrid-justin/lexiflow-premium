@@ -19,7 +19,7 @@ import React from 'react';
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { User } from '@/types';

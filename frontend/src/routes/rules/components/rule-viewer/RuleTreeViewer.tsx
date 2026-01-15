@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { LegalRule } from '@/types';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 

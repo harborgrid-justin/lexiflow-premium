@@ -24,11 +24,11 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/theme';
 
 // Components
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES

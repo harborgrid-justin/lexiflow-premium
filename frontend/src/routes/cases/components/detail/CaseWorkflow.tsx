@@ -12,7 +12,7 @@
 import { BookOpen, Cpu, Sparkles } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { WorkflowAutomations } from './workflow/WorkflowAutomations';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
 
@@ -21,7 +21,7 @@ import { useCaseWorkflow } from '@/routes/cases/_hooks/useCaseWorkflow';
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { WorkflowStage } from '@/types';

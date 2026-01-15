@@ -3,9 +3,9 @@
  * @description Leads tab view component
  */
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Card } from '@/components/molecules/Card/Card';
 import type { ThemeObject } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Plus, Search } from 'lucide-react';
 import {
   Bar,

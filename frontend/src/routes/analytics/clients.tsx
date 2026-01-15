@@ -22,7 +22,7 @@ import {
   Tooltip,
   XAxis, YAxis
 } from 'recharts';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useTheme } from '@/hooks/useTheme';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 

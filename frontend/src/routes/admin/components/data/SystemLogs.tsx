@@ -2,7 +2,7 @@ import { AuditLog } from '@/lib/frontend-api';
 import { adminApi } from '@/lib/frontend-api';
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Loader2 } from 'lucide-react';
 export function SystemLogs() {
   const { theme } = useTheme();

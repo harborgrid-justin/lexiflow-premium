@@ -10,7 +10,7 @@
  *
  * USAGE:
  * ```tsx
- * import { Table, ErrorBoundary, Sidebar } from '@/shared/ui/organisms';
+ * import { Table, ErrorBoundary, Sidebar } from '@/components/organisms';
  * ```
  */
 

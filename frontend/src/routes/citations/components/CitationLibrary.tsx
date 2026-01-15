@@ -18,11 +18,11 @@ import { useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { CitationDetail } from './CitationDetail';
 
 // Hooks & Context
@@ -33,7 +33,7 @@ import { useWindow } from '@/providers';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

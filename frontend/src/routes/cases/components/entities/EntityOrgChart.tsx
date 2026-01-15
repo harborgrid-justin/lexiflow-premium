@@ -25,10 +25,10 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
 
 // Components
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { LegalEntity } from '@/types';

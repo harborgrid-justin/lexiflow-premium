@@ -4,7 +4,7 @@
  * @description Enterprise toast notification system with sound, animations, and priority handling
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import type { UINotification } from '@/types/notifications';
 import { AnimatePresence, motion } from 'framer-motion';

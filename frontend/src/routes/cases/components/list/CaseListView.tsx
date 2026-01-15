@@ -1,7 +1,7 @@
 /** * @module components/matters/MatterListView * @category Matter Management * @description Filterable matter list view with search and statistics * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling */ import { PATHS } from '@/config/paths.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Matter, MatterPriority, MatterStatus, MatterType, PracticeArea } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertCircle, ArrowUpCircle, Building2, Calendar, CheckCircle, Clock, DollarSign, FileText, Filter, Plus, Search, Users, XCircle

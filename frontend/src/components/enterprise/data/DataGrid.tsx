@@ -26,7 +26,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { ColumnDefinition } from './DataGridColumn';
 import { ColumnResizer } from './DataGridColumnResizer';
 import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';

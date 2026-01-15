@@ -21,10 +21,10 @@ import { DataService } from '@/services/data/data-service.service';
 import { useTheme } from '@/theme';
 
 // Components
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

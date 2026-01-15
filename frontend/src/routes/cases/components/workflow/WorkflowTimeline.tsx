@@ -20,10 +20,10 @@ import { useState } from 'react';
 import { useTheme } from '@/theme';
 
 // Components
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { TaskStatusBackend, WorkflowStage } from '@/types';

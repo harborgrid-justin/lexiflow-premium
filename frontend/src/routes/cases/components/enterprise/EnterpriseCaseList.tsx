@@ -1,4 +1,4 @@
-/** * Enterprise Case List Component * * Advanced case management interface with: * - Multi-column filtering and saved filter views * - Bulk operations (status updates, assignments, exports) * - Advanced search across case fields * - Customizable column display * - Sorting and pagination * - Quick actions menu * * @module components/enterprise/CaseManagement/EnterpriseCaseList */ import { cn } from '@/shared/lib/utils';
+/** * Enterprise Case List Component * * Advanced case management interface with: * - Multi-column filtering and saved filter views * - Bulk operations (status updates, assignments, exports) * - Advanced search across case fields * - Customizable column display * - Sorting and pagination * - Quick actions menu * * @module components/enterprise/CaseManagement/EnterpriseCaseList */ import { cn } from '@/lib/utils';
 import { Case, CaseStatus } from '@/types';
 import { Archive, Download, Edit, Filter, MoreVertical, Save, Search, Settings, Trash2, Upload, UserPlus
 } from 'lucide-react';

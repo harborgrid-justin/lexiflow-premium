@@ -1,4 +1,4 @@
-import { Pagination } from '@/shared/ui/molecules/Pagination/Pagination';
+import { Pagination } from '@/components/molecules/Pagination/Pagination';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 

@@ -1,4 +1,4 @@
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { ThemeProvider } from '@/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';

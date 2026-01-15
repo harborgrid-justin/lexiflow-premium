@@ -1,7 +1,7 @@
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from '@/theme';
 interface ColumnData {
     name?: string;

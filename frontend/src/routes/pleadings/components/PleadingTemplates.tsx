@@ -18,10 +18,10 @@ import { ArrowRight, LayoutTemplate, Loader2 } from 'lucide-react';
 import { useTheme } from '@/theme';
 
 // Components
-import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid/VirtualGrid';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { PleadingTemplate } from '@/types';

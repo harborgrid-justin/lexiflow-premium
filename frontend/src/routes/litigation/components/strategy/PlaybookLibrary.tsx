@@ -27,11 +27,11 @@ import { useTheme } from '@/theme';
 import { useLitigationActions } from '../contexts/LitigationContext';
 
 // Components
-import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Playbook } from '@/types/playbook';
 import { extractCategories, filterPlaybooks, getDifficultyBorderColor, getDifficultyColor } from './utils';
 

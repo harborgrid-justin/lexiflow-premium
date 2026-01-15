@@ -9,15 +9,15 @@
 
 import { BookOpen, Settings, X } from 'lucide-react';
 // Internal Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
 
 // Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { LitigationPropertiesProps } from './types';

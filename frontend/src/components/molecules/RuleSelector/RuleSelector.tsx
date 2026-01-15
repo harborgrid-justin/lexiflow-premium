@@ -21,12 +21,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { RuleService } from '@/services/features/rules/rules';
 
 // Hooks & Context
-import { useDebounce } from '@/shared/hooks/useDebounce';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { LegalRule } from '@/types';

@@ -5,7 +5,7 @@
  */
 
 import { PleadingDashboard } from '@/routes/pleadings/components/PleadingDashboard';
-import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import type { PleadingDocument } from '@/types';
 import React from "react";
 

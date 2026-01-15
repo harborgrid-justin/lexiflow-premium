@@ -28,7 +28,7 @@ import { useCaseDocuments } from '@/routes/cases/_hooks/useCaseDocuments';
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { LegalDocument } from '@/types';

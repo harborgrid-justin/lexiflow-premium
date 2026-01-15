@@ -11,13 +11,13 @@
 // External Dependencies
 import { AlertCircle, ChevronDown, ChevronRight, GripVertical, Plus } from 'lucide-react';
 // Internal Dependencies - Components
-import { Badge } from '@/shared/ui/atoms/Badge';
+import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { CasePhase, WorkflowTask } from '@/types';

@@ -7,7 +7,7 @@
  * @module components/features/cases/CaseStatusBadge
  */
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/lib/utils';
 import type { CaseStatus } from '@/types/enums';
 
 export interface CaseStatusBadgeProps {

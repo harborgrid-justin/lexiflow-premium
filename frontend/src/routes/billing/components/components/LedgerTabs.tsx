@@ -1,4 +1,4 @@
-import { Tabs } from "@/shared/ui/molecules/Tabs/Tabs";
+import { Tabs } from "@/components/molecules/Tabs/Tabs";
 
 interface LedgerTabsProps {
   activeTab: 'operating' | 'trust';

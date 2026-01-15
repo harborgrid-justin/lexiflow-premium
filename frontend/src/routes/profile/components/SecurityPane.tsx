@@ -20,8 +20,8 @@ import { Clock, Globe, Key, LogOut, Monitor, Smartphone } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks
 import { useSecuritySettings } from '../_hooks/useSecuritySettings';

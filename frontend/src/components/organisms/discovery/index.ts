@@ -12,7 +12,7 @@
  *
  * USAGE:
  * ```tsx
- * import { PDFViewer, DiffViewer, SignaturePad } from '@/shared/ui/organisms/discovery';
+ * import { PDFViewer, DiffViewer, SignaturePad } from '@/components/organisms/discovery';
  * ```
  */
 

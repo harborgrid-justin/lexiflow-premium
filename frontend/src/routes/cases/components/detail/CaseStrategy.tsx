@@ -13,10 +13,10 @@ import { Plus, Scale, Shield, Target } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
@@ -26,7 +26,7 @@ import { useCaseStrategy } from '@/routes/cases/_hooks/useCaseStrategy';
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 // import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces

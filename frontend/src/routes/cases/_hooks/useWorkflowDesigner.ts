@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { DataService } from '@/services/data/data-service.service';
 import { useNotify } from '@/hooks/useNotify';
 import { WorkflowTemplateData, WorkflowTemplateId, NodeType } from '@/types';

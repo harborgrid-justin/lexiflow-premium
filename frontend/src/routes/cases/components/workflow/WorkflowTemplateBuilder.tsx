@@ -1,7 +1,7 @@
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from '@/theme';
 import { WorkflowTemplateData } from '@/types';
 import { ArrowLeft, Loader2, Rocket, Save } from 'lucide-react';

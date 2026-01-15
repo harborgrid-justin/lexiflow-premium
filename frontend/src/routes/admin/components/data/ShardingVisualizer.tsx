@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { ConsistentHashRing } from '@/utils/datastructures/consistentHashRing';
 import { ArrowRight, Database, Plus, Server, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';

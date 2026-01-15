@@ -26,11 +26,11 @@ import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from './TemplatePreview';
-import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { WorkflowTemplateData } from '@/types';

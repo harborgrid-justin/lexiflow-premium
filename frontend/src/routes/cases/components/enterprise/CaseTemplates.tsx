@@ -1,4 +1,4 @@
-/** * Case Templates Component * * Matter template management for different practice areas: * - Pre-configured templates for common case types * - Quick case creation from templates * - Template customization and cloning * - Practice area categorization * - Template library management * * @module components/enterprise/CaseManagement/CaseTemplates */ import { cn } from '@/shared/lib/utils';
+/** * Case Templates Component * * Matter template management for different practice areas: * - Pre-configured templates for common case types * - Quick case creation from templates * - Template customization and cloning * - Practice area categorization * - Template library management * * @module components/enterprise/CaseManagement/CaseTemplates */ import { cn } from '@/lib/utils';
 import { Case, CaseStatus, MatterType } from '@/types';
 import { Building, Copy, DollarSign, Edit, FileText, Heart, Home, Plus, Scale, Search, Shield, Star, Users, X
 } from 'lucide-react';

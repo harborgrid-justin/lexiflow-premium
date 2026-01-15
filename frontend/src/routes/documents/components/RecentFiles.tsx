@@ -1,12 +1,12 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/atoms/Button/Button';
+import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import { LegalDocument } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Clock, Eye, FolderOpen, Loader2 } from 'lucide-react';
 
 export function RecentFiles() {

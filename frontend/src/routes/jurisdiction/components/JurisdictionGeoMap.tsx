@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Layers, Map, Navigation, RefreshCw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import {

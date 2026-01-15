@@ -28,19 +28,19 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/theme';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 
 // Components
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { Button } from '@/components/atoms/Button/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
 import { Advisor, AdvisorList } from './advisory/AdvisorList';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

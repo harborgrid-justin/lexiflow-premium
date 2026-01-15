@@ -7,7 +7,7 @@
  * @module components/features/cases/CaseTimeline
  */
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/lib/utils';
 import { format, formatDistanceToNow } from 'date-fns';
 
 export interface TimelineEvent {

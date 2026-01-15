@@ -1,8 +1,8 @@
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/theme';
 import { LegalDocument } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 interface DocumentGridCardProps {
     doc: LegalDocument;
     isSelected: boolean;

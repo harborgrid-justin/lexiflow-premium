@@ -1,6 +1,6 @@
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from '@/theme';
 import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
 import React from "react";

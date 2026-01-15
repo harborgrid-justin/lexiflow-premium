@@ -20,11 +20,11 @@ import { useTheme } from '@/theme';
 import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
-import { ChatBubble } from '@/shared/ui/molecules/ChatBubble/ChatBubble';
-import { FileAttachment } from '@/shared/ui/molecules/FileAttachment/FileAttachment';
+import { ChatBubble } from '@/components/molecules/ChatBubble/ChatBubble';
+import { FileAttachment } from '@/components/molecules/FileAttachment/FileAttachment';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

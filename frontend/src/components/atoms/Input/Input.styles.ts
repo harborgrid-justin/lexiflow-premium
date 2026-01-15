@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const labelStyles = 'block text-xs font-semibold uppercase tracking-wide mb-1.5 ml-0.5 text-text-muted';
 

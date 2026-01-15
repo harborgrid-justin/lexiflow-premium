@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { LoadingState } from '@/shared/ui/molecules/LoadingState/LoadingState';
+import { LoadingState } from '@/components/molecules/LoadingState/LoadingState';
 
 /**
  * LoadingState component displays loading indicators.

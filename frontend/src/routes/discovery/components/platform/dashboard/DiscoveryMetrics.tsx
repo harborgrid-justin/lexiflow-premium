@@ -1,5 +1,5 @@
 
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 
 interface DiscoveryMetricsProps {

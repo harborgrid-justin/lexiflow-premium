@@ -1,11 +1,11 @@
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
-import { useDebounce } from '@/shared/hooks/useDebounce';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { useDebounce } from '@/hooks/useDebounce';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { Modal } from '@/components/molecules/Modal';
 import { AlertTriangle, Loader2, Plus, ShieldCheck, UserPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

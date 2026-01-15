@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const TypewriterText: React.FC<{ text?: string }> = ({ text }) => {
     const [displayedText, setDisplayedText] = useState('');

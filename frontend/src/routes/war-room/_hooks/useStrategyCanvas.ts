@@ -21,7 +21,7 @@ import {
   MoveNodeCommand,
   UpdateNodeCommand,
 } from "@/services/infrastructure/command-history.service";
-import { ContextMenuItem } from "@/shared/ui/molecules/ContextMenu/ContextMenu";
+import { ContextMenuItem } from "@/components/molecules/ContextMenu/ContextMenu";
 import { CANVAS_CONSTANTS } from "@/types/canvas-constants";
 import {
   createTypedNode,

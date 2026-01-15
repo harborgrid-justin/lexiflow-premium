@@ -15,7 +15,7 @@ import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'luci
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Case } from '@/types';

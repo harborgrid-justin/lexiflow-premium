@@ -7,7 +7,7 @@
 
 import { useTheme } from '@/theme';
 import type { BaseDashboardProps, ChartDataPoint } from '@/types/dashboard';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,

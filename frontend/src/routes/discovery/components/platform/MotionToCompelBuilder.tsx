@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { DiscoveryRequest } from '@/types';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Badge } from '@/shared/ui/atoms/Badge';
+import { Card } from '@/components/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
 /**
  * MotionToCompelBuilder.tsx
@@ -15,8 +15,8 @@ import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } fr
  */
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { sanitizeHtml } from '@/shared/lib/sanitize';
+import { cn } from '@/lib/cn';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { useNotify } from '@/hooks/useNotify';
 import { useMultiSelection } from '@/hooks/useMultiSelection';

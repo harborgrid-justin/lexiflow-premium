@@ -15,9 +15,9 @@
 
 import masterConfig from '@/config/master.config';
 import { useTheme } from '@/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
-import { cn } from '@/shared/lib/cn';
-import { sanitizeHtml } from '@/shared/lib/sanitize';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { cn } from '@/lib/cn';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { Calendar, Clock, Command, Hash, Search, Tag, TrendingUp, X } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 

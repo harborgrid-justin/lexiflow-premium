@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Book, Briefcase, Building, Database, FileText, Users } from 'lucide-react';
 
 export type Category = 'users' | 'cases' | 'clients' | 'clauses' | 'documents';

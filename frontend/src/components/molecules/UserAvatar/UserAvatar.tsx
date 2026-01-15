@@ -4,7 +4,7 @@
  * @description User avatar component with automatic initials, customizable size, and theme support.
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { User } from 'lucide-react';
 import React from 'react';
 

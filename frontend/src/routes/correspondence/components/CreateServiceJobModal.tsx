@@ -1,14 +1,14 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
 import { CaseId, ServiceJob, UserId } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { useState } from 'react';
 

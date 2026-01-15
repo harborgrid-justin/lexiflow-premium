@@ -21,10 +21,10 @@ import { SearchService } from '@/services/search/search.service';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

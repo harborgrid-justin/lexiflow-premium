@@ -1,4 +1,4 @@
-import { AppHeader } from '@/shared/ui/organisms/AppHeader';
+import { AppHeader } from '@/components/organisms/AppHeader';
 import { IntentResult } from '@/types/intelligence';
 import { memo, useState } from 'react';
 

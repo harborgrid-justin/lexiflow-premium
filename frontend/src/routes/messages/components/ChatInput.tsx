@@ -26,7 +26,7 @@ import { useTheme } from '@/theme';
 import { Attachment } from '@/hooks/useSecureMessenger';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

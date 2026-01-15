@@ -13,7 +13,7 @@
  * - Required field indicators
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import React, { useId } from 'react';
 

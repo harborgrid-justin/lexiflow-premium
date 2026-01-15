@@ -1,9 +1,9 @@
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
-import { MetricTile, SearchInputBar } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { MetricTile, SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
 import { useTheme } from '@/theme';
 import { LegalEntity } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';

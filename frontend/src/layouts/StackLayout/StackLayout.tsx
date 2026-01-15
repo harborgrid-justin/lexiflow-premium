@@ -5,7 +5,7 @@
  * Ideal for forms, toolbars, and linear content flow.
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import React, { memo } from 'react';
 
 interface StackLayoutProps {

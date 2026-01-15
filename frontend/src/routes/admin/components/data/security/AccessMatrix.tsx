@@ -3,7 +3,7 @@ import { useTheme } from '@/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { RLSPermissionLevel as PermissionLevel, RolePermission } from '@/types/data-quality';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Info, Lock, Shield, XCircle } from 'lucide-react';

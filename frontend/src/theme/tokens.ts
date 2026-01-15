@@ -2,7 +2,7 @@
  * @deprecated This module has been moved to @/theme/tokens
  * Please update your imports:
  *
- * Old: import { ThemeMode, tokens } from '@/shared/theme/tokens';
+ * Old: import { ThemeMode, tokens } from '@/theme/tokens';
  * New: import { ThemeMode, DEFAULT_LIGHT_TOKENS } from '@/theme';
  *
  * This re-export will be removed in a future version.

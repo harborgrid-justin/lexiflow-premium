@@ -1,7 +1,7 @@
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
 import { OperatingLedger, TrustLedger } from '@/routes/practice/components/finance';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { Plus } from 'lucide-react';
 import { memo, useCallback, useState } from 'react';
 import { LedgerTabs } from './components/LedgerTabs';

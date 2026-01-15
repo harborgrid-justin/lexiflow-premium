@@ -19,10 +19,10 @@ import { ArrowRight, BarChart, Clock, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge';
+import { Badge } from '@/components/atoms/Badge';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { WorkflowTemplateData } from '@/types';

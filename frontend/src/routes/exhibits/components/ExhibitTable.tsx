@@ -21,13 +21,13 @@ import { useTheme } from '@/theme';
 
 // Components
 import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
-import { Button } from '@/shared/ui/atoms/Button';
-import { FileIcon } from '@/shared/ui/atoms/FileIcon';
-import { EmptyListState, StatusBadge } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList';
+import { Button } from '@/components/atoms/Button';
+import { FileIcon } from '@/components/atoms/FileIcon';
+import { EmptyListState, StatusBadge } from '@/components/organisms/_legacy/RefactoredCommon';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { TrialExhibit } from '@/types';

@@ -28,8 +28,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { Button } from '@/shared/ui/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/atoms/Button';
 import { DocketAnalytics } from './DocketAnalytics';
 import { DocketCalendar } from './DocketCalendar';
 import { DocketSettings } from './DocketSettings';
@@ -39,7 +39,7 @@ import { DocketSheet } from './DocketSheet';
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 type DocketView = 'all' | 'filings' | 'orders' | 'calendar' | 'upcoming' | 'stats' | 'sync';
 

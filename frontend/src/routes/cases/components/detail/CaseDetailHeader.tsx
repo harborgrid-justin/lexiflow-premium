@@ -13,8 +13,8 @@ import { ArrowLeft, ArrowUpRight, Calendar, CheckSquare, MapPin, MessageCircle, 
 import React from 'react';
 // Internal Dependencies - Components
 import { ClientPortalModal } from '@/routes/crm/components/ClientPortalModal';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -24,7 +24,7 @@ import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Case, CaseId, ClientStatus, EntityId, PaymentTerms } from '@/types';

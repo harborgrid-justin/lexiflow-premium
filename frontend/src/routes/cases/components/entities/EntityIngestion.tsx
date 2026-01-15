@@ -19,11 +19,11 @@ import { UploadCloud, CheckCircle, RefreshCw, Link, AlertTriangle } from 'lucide
 import { useTheme } from '@/theme';
 
 // Components
-import { Card } from '@/shared/ui/molecules/Card';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

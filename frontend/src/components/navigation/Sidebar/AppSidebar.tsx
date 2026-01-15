@@ -1,4 +1,4 @@
-import { Sidebar } from '@/shared/ui/organisms/Sidebar';
+import { Sidebar } from '@/components/organisms/Sidebar';
 import { AppView, User, UserRole } from '@/types';
 import { memo } from 'react';
 

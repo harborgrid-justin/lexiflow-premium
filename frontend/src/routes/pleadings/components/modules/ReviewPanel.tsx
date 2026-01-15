@@ -1,9 +1,9 @@
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import { CaseId, TaskId, TaskPriorityBackend, TaskStatusBackend, UserId, WorkflowTask } from '@/types';
 import { PleadingComment } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { CheckCircle, MessageSquare, MessagesSquare, Send } from 'lucide-react';
 import { useState } from 'react';
 

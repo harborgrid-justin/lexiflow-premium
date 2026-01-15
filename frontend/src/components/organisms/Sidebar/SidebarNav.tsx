@@ -21,7 +21,7 @@ import { ModuleRegistry } from '@/services/infrastructure/module-registry.servic
 
 // Hooks & Context
 import { useTheme } from '@/theme';
-import { useHoverIntent } from '@/shared/hooks/useHoverIntent';
+import { useHoverIntent } from '@/hooks/useHoverIntent';
 
 // Utils & Constants
 import { PREFETCH_MAP } from '@/config/prefetchConfig';

@@ -1,6 +1,6 @@
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
-import { Tabs } from '@/shared/ui/molecules/Tabs';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { Tabs } from '@/components/molecules/Tabs';
 import { Client } from '@/types';
 import { Activity, FileText, Lock, MessageSquare, Shield, UploadCloud, X } from 'lucide-react';
 import { Suspense, lazy, useState } from 'react';

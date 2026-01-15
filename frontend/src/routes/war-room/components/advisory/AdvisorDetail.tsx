@@ -20,10 +20,10 @@ import { X, FileText, Download, Clock, CheckCircle } from 'lucide-react';
 import { useTheme } from '@/theme';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import type { Advisor } from './AdvisorList';

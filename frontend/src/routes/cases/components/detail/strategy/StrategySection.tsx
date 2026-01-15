@@ -12,16 +12,16 @@
 import { ExternalLink, BookOpen, CheckCircle, Box, AlertTriangle, X } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/shared/ui/molecules/Card';
-import { Badge } from '@/shared/ui/atoms/Badge';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
 import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { LegalArgument, Defense, Citation, EvidenceItem } from '@/types';

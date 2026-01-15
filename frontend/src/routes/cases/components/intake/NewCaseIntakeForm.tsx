@@ -3,10 +3,10 @@ import { useEnhancedWizard, WizardStep } from '@/hooks/useEnhancedWizard/useEnha
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card';
-import { showToast } from '@/shared/ui/organisms/notifications/Toast';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { showToast } from '@/components/organisms/notifications/Toast';
 import type { Matter, User } from '@/types';
 import { AlertTriangle, ArrowLeft, ArrowRight, CheckCircle, Save
 } from 'lucide-react';

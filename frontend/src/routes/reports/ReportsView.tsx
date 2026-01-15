@@ -3,7 +3,7 @@
  */
 
 import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Calendar, FileText, Plus, TrendingUp } from 'lucide-react';
 import { useId } from 'react';
 import { useReports } from './ReportsProvider';

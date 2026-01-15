@@ -9,7 +9,7 @@
  * 
  * USAGE:
  * ```tsx
- * import { NotificationCenter, NotificationPanel } from '@/shared/ui/organisms/collaboration';
+ * import { NotificationCenter, NotificationPanel } from '@/components/organisms/collaboration';
  * ```
  */
 

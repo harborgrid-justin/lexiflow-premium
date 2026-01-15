@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useCaseNavigation } from '@/routes/cases/_hooks/useCaseNavigation';
 import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/services/infrastructure/queryClient';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
 import { Matter, MatterPriority, MatterStatus } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertCircle, AlertTriangle, ArrowLeft, Building2, Calendar, CheckCircle, DollarSign, Edit, FileText, Scale, Trash2, Users

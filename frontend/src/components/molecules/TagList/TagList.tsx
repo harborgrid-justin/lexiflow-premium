@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export interface TagListProps {
   tags: string[];

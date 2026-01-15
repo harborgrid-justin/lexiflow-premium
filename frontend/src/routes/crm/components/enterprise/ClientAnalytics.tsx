@@ -8,9 +8,9 @@
 import { useQuery } from '@/hooks/backend';
 import { crmApi } from '@/lib/frontend-api';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/shared/lib/cn';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { cn } from '@/lib/cn';
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { ChartColorService, useTheme } from '@/theme';
 import { getChartTheme } from '@/utils/chartConfig';
 import {

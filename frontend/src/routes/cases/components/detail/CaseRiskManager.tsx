@@ -11,8 +11,8 @@
 // External Dependencies
 import { AlertTriangle, Loader2, Plus, ShieldAlert, TrendingUp } from 'lucide-react';
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { Button } from '@/components/atoms/Button';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { RiskDetail } from './risk/RiskDetail';
 import { RiskList } from './risk/RiskList';
 
@@ -22,7 +22,7 @@ import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { useCaseRisks } from '@/routes/cases/_hooks/useCaseRisks';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Case, Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '@/types';

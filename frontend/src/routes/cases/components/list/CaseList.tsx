@@ -27,8 +27,8 @@ import { CaseListContent } from './CaseListContent';
 // ============================================================================
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Hooks
 import { useCaseList } from '@/hooks/useCaseList';
@@ -36,7 +36,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils & Config
 import { CASE_LIST_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

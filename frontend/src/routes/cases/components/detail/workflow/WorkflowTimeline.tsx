@@ -13,13 +13,13 @@ import { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, ArrowRight } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { WorkflowStage, TaskStatusBackend } from '@/types';

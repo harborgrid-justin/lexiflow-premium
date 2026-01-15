@@ -4,7 +4,7 @@
  */
 
 import type { ThemeObject } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import type { WinLossAnalysis } from './types';
 

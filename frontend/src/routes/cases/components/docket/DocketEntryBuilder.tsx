@@ -13,9 +13,9 @@ import { CheckSquare, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
@@ -24,10 +24,10 @@ import { useNotify } from '@/hooks/useNotify';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
-import { cn } from '@/shared/lib/cn';
-import { getTodayString } from '@/shared/lib/dateUtils';
+import { cn } from '@/lib/cn';
+import { getTodayString } from '@/lib/dateUtils';
 import { sanitizeDocketEntry, validateDocketEntry } from '@/utils/docketValidation';
-import { IdGenerator } from '@/shared/lib/idGenerator';
+import { IdGenerator } from '@/lib/idGenerator';
 
 // Types & Interfaces
 import { Case, CaseId, DocketEntry, DocketEntryType, TaskId, TaskPriorityBackend, TaskStatusBackend, WorkflowTask } from '@/types';

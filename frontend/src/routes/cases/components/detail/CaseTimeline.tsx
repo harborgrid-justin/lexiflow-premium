@@ -11,9 +11,9 @@
 import { BookOpen, Filter, List } from 'lucide-react';
 
 import { useCaseTimeline } from '@/routes/cases/_hooks/useCaseTimeline';
-import { cn } from '@/shared/lib/cn';
-import { TimelineItem } from '@/shared/ui/molecules/TimelineItem/TimelineItem';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { cn } from '@/lib/cn';
+import { TimelineItem } from '@/components/molecules/TimelineItem/TimelineItem';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { TimelineEvent } from '@/types';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
 

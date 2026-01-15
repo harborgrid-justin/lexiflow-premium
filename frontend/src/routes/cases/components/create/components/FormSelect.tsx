@@ -2,7 +2,7 @@
  * Reusable select field with label and error display
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export interface FormSelectOption {
   label: string;

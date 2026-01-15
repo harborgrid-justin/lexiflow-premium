@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import { LineageLink, LineageNode } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 import { ImpactAnalysis } from './lineage/ImpactAnalysis';
 import { LineageCanvas } from './lineage/LineageCanvas';

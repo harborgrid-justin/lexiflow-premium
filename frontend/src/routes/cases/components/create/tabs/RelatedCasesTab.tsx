@@ -2,7 +2,7 @@
  * Related cases tab component
  */
 
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { Link2, X } from 'lucide-react';
 import { RelatedCase } from '../hooks/useRelatedCases';
 

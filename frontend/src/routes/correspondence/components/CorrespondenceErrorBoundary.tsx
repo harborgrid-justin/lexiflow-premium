@@ -4,8 +4,8 @@
  * @description Error boundary for correspondence components with fallback UI
  */
 
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';

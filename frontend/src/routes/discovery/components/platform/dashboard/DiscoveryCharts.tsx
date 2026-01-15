@@ -1,8 +1,8 @@
 import { ChartColorService, useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
+import { Card } from '@/components/molecules/Card/Card';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 // ✅ Migrated to backend API (2025-12-21)
 import { Loader2 } from 'lucide-react';

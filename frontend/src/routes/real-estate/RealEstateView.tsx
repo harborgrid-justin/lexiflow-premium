@@ -3,7 +3,7 @@
  */
 
 import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Building2, FileText, MapPin, Plus } from 'lucide-react';
 import React, { useId } from 'react';
 import { useRealEstate } from './RealEstateProvider';

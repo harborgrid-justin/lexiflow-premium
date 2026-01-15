@@ -14,7 +14,7 @@ import { useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
@@ -23,7 +23,7 @@ import { useMutation } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { DocumentRepository } from '@/services/data/repositories/DocumentRepository';

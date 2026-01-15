@@ -1,4 +1,4 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Plus, Save, Trash2 } from 'lucide-react';
 import React from "react";

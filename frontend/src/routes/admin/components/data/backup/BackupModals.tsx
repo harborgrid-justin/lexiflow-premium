@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
 import { AlertCircle, Clock, Database } from 'lucide-react';
 import type { CreateSnapshotModalProps, RestoreSnapshotModalProps } from './BackupModals.types';
 

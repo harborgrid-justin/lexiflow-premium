@@ -16,12 +16,12 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { Suspense, ReactNode, useState, useEffect, useCallback } from 'react';
-import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 
 // ============================================================================
 // TYPES & INTERFACES

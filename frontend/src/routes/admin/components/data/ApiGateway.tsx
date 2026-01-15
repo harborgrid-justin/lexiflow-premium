@@ -14,8 +14,8 @@ import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/data-service.service';
 import { ApiMethod, ApiServiceSpec } from '@/types';
-import { cn } from '@/shared/lib/cn';
-import { encodeHtmlEntities } from '@/shared/lib/sanitize';
+import { cn } from '@/lib/cn';
+import { encodeHtmlEntities } from '@/lib/sanitize';
 
 // Internal CodeBlock component for syntax highlighting
 function CodeBlock({ code }: { code: string }): React.JSX.Element {

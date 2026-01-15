@@ -12,7 +12,7 @@
  *
  * USAGE:
  * ```tsx
- * import { RiskMeter, Kanban, TimeEntryModal } from '@/shared/ui/organisms/cases';
+ * import { RiskMeter, Kanban, TimeEntryModal } from '@/components/organisms/cases';
  * ```
  */
 

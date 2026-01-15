@@ -20,11 +20,11 @@ import React, { useId } from 'react';
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Primitives
-import { Box } from '@/shared/ui/atoms/Box/Box';
-import { Text } from '@/shared/ui/atoms/Text/Text';
+import { Box } from '@/components/atoms/Box/Box';
+import { Text } from '@/components/atoms/Text/Text';
 
 // ============================================================================
 // TYPES & INTERFACES

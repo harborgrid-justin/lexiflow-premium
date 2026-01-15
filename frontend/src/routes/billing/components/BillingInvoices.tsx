@@ -26,14 +26,14 @@ import { useBillingInvoices } from './hooks/useBillingInvoices';
 import { getInvoiceBadgeVariant } from './utils/invoiceUtils';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Utils & Constants
 // Removed unused billingQueryKeys and InvoiceStatusEnum
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Formatters } from '@/utils/formatters';
 
 // Types

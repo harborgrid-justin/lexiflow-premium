@@ -17,7 +17,7 @@ import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 interface CaseOverviewStatsProps {
     caseId?: string;

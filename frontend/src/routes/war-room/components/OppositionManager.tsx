@@ -27,21 +27,21 @@ import { queryKeys } from '@/utils/queryKeys';
 // Hooks & Context
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/theme';
 
 // Components
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { Button } from '@/shared/ui/atoms/Button';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
-import { ErrorState } from '@/shared/ui/molecules/ErrorState';
-import { Modal } from '@/shared/ui/molecules/Modal';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { Button } from '@/components/atoms/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { ErrorState } from '@/components/molecules/ErrorState';
+import { Modal } from '@/components/molecules/Modal';
 import { OppositionDetail } from './opposition/OppositionDetail';
 import { OppositionEntity, OppositionList } from './opposition/OppositionList';
 import { OppositionSidebar } from './opposition/OppositionSidebar';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

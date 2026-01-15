@@ -18,7 +18,7 @@
  */
 
 import { EntityAutocompleteConfig, useEntityAutocomplete } from '@/hooks/useEntityAutocomplete';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { AlertCircle, Check, Loader, Plus, Search } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';

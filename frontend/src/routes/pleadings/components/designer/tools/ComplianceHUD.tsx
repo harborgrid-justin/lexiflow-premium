@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
 import { FormattingRule, PleadingSection } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { AlertOctagon, AlertTriangle, Info, Zap } from 'lucide-react';
 import { useMemo } from 'react';
 

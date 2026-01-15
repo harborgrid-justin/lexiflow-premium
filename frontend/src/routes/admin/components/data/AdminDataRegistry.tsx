@@ -1,8 +1,8 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { cn } from '@/lib/cn';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { HardDrive, Loader2, Server } from 'lucide-react';
 interface DataFile {
   name: string;

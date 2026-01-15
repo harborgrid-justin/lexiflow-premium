@@ -21,12 +21,12 @@ import { useTheme } from '@/theme';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { SearchInputBar } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { Badge } from '@/components/atoms/Badge';
+import { SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { LegalEntity } from '@/types';

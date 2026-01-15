@@ -1,7 +1,7 @@
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
@@ -12,8 +12,8 @@ import { useHistory } from '@/hooks/useHistory';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useNotify } from '@/hooks/useNotify';
 import { VersionConflictError } from '@/services/data/repositories/PleadingRepository';
-import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { queryKeys } from '@/utils/queryKeys';
 import { PleadingDesignerProps, ViewMode } from './types';
 

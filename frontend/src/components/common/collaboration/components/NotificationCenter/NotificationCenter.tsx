@@ -22,13 +22,13 @@ import { useToast } from '@/providers';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 
 // Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

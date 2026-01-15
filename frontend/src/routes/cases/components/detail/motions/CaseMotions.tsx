@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { Plus, RefreshCw } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
@@ -27,7 +27,7 @@ import { useWindow } from '@/providers';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '@/types';

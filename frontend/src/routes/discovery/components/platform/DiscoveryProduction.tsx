@@ -18,8 +18,8 @@ import { useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -29,7 +29,7 @@ import { useTheme } from '@/theme';
 // Services & Utils
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { validateProductionConfigSafe } from '@/services/validation/discoverySchemas';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Lazy load DocumentService for bundle optimization
 const loadDocumentService = async () => {

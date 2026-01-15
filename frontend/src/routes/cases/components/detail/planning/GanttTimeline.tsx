@@ -12,7 +12,7 @@
 import { useRef } from 'react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Badge } from '@/components/atoms/Badge/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
@@ -20,7 +20,7 @@ import { useScheduleController } from '@/hooks/useScheduleController';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { ScheduleHelpers } from '@/utils/scheduleHelpers';
 
 // Types & Interfaces

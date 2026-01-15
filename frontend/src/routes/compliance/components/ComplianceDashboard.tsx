@@ -20,15 +20,15 @@ import { Suspense } from 'react';
 import { ComplianceView, useComplianceDashboard } from './hooks/useComplianceDashboard';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { TabbedPageLayout } from '@/shared/ui/layouts/TabbedPageLayout/TabbedPageLayout';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout } from '@/layouts/TabbedPageLayout/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import type { TabConfigItem } from '@/types/layout';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config
 import { COMPLIANCE_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

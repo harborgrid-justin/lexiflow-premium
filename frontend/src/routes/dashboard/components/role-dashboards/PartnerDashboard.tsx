@@ -8,8 +8,8 @@ import { type PartnerDashboardData, dashboardMetricsService } from '@/lib/fronte
 import { useTheme } from '@/theme';
 import { ChartCard, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { cn } from '@/lib/cn';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Award, DollarSign, Target, TrendingUp, Users } from 'lucide-react';
 import {
   Bar,

@@ -1,6 +1,6 @@
 import { IntegrityReport } from '@/services/infrastructure/chainService';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
 import { Download, GitCommit, LayoutList, Loader2, RefreshCw, Shield, ShieldCheck, Skull } from 'lucide-react';
 interface AuditLogControlsProps {

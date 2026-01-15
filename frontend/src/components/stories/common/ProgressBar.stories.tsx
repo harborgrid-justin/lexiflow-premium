@@ -1,4 +1,4 @@
-import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
+import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

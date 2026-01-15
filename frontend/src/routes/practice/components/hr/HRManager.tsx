@@ -1,13 +1,13 @@
 import { useTheme } from '@/theme';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { StaffMember, UserId } from '@/types';
 import { AlertCircle, Award, Loader2, MoreHorizontal, Plus, Trash2, TrendingUp, User, Users } from 'lucide-react';
 import React from 'react';
@@ -18,8 +18,8 @@ type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
 import { useModalState } from '@/hooks/core';
 import { useStaff } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
-import { getTodayString } from '@/shared/lib/dateUtils';
-import { IdGenerator } from '@/shared/lib/idGenerator';
+import { getTodayString } from '@/lib/dateUtils';
+import { IdGenerator } from '@/lib/idGenerator';
 
 // ============================================================================
 // CONSTANTS

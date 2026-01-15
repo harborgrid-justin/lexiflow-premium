@@ -1,7 +1,7 @@
-import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
+import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/theme';
 import { LegalDocument } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { CheckCircle2, ChevronDown, Lock } from 'lucide-react';
 
 interface PreviewHeaderProps {

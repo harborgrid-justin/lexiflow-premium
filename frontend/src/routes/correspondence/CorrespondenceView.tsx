@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { FileText, Layout, Mail } from 'lucide-react';
 import { useCorrespondence } from './CorrespondenceProvider';
 

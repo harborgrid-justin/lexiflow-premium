@@ -20,9 +20,9 @@ import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { DateText } from '@/shared/ui/atoms/DateText/DateText';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { DateText } from '@/components/atoms/DateText/DateText';
 
 // Types
 import { CalendarEventItem } from '@/types';

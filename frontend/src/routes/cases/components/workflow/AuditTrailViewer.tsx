@@ -1,12 +1,12 @@
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { AuditLogEntry } from '@/types';
 import { AlertCircle, Check, History, Loader2, RefreshCw, User } from 'lucide-react';
 import React from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { queryKeys } from '@/utils/queryKeys';
 import { AuditEvent } from './types';
 

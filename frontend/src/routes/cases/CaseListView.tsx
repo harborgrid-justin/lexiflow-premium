@@ -19,9 +19,9 @@
  * @module routes/cases/CaseListView
  */
 
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from '@/theme';
 import { Case } from '@/types';
 import {

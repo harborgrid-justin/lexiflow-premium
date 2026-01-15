@@ -1,8 +1,8 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Button } from '@/components/atoms/Button/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from '@/theme';
 import { LegalDocument } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Plus, X } from 'lucide-react';
 import { useState } from 'react';
 

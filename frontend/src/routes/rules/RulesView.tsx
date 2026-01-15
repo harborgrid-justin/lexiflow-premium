@@ -2,7 +2,7 @@
  * Rules Domain - View Component
  */
 
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Scale } from 'lucide-react';
 import React, { useId } from 'react';
 import { useRules } from './RulesProvider';

@@ -5,7 +5,7 @@
  * Displays case updates, document uploads, tasks completed, and system events
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import { Activity, ActivityType } from '@/types/dashboard';
 import { formatDistanceToNow } from 'date-fns';

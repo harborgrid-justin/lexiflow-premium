@@ -20,9 +20,9 @@ import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Too
 // ============================================================================
 import { getChartTheme } from '@/utils/chartConfig';
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
@@ -30,7 +30,7 @@ import type { ThemeStateValue } from '@/theme';
 import { useTheme } from '@/theme';
 
 // Utils & Services
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

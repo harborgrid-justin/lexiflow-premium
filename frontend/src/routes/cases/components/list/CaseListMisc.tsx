@@ -22,15 +22,15 @@ import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { Case } from '@/types';

@@ -8,8 +8,8 @@ import { type AdminDashboardData, dashboardMetricsService } from '@/lib/frontend
 import { useTheme } from '@/theme';
 import { ChartCard, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { cn } from '@/lib/cn';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Activity, AlertCircle, Server, Users } from 'lucide-react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 

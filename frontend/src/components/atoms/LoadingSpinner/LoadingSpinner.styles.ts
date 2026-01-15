@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const containerStyles = "flex items-center justify-center text-slate-500";
 export const spinnerStyles = "animate-spin";

@@ -11,12 +11,12 @@ import { useCallback, useRef, useState } from 'react';
 
 // Internal Components
 import { BuilderCanvas, BuilderToolbar } from '@/routes/cases/components/workflow/builder';
-import { ContextMenu, type ContextMenuItem } from '@/shared/ui/molecules/ContextMenu';
+import { ContextMenu, type ContextMenuItem } from '@/components/molecules/ContextMenu';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';
 
 // Hooks & Context
-import { useToggle } from '@/shared/hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Types

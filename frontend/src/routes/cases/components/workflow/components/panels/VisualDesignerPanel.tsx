@@ -3,10 +3,10 @@
  * @description Visual workflow canvas with quick action buttons
  */
 
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Boxes, Clock, Database, GitBranch, Layers, UserCheck, Webhook } from 'lucide-react';
 interface VisualDesignerPanelProps {
   onAddConditionalBranch: () => void;

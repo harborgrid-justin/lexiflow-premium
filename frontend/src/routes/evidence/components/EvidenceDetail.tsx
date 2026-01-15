@@ -7,8 +7,8 @@
 
 import { ArrowLeft, ExternalLink, FileSearch, Lock, Stamp } from 'lucide-react';
 // Common Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms/Button/Button';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 // Sub-components
 import { EvidenceAdmissibility } from './EvidenceAdmissibility';
@@ -21,7 +21,7 @@ import { EvidenceStructure } from './EvidenceStructure';
 import { useTheme } from '@/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Services & Types
 import { useMutation } from '@/hooks/useQueryHooks';

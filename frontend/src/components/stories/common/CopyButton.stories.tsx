@@ -1,4 +1,4 @@
-import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
+import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 

@@ -1,4 +1,4 @@
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { Gavel } from 'lucide-react';
 import { useDocket } from './DocketProvider';
 

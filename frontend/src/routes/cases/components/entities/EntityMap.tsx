@@ -20,7 +20,7 @@ import { useTheme } from '@/theme';
 import { JurisdictionGeoMap } from '@/routes/jurisdiction/components/JurisdictionGeoMap';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { LegalEntity } from '@/types';

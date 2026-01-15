@@ -6,7 +6,7 @@
 
 import React, { useMemo } from 'react';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 /**
  * Content type for skeleton generation

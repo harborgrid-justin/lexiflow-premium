@@ -8,8 +8,8 @@ import { type AttorneyDashboardData, dashboardMetricsService } from '@/lib/front
 import { useTheme } from '@/theme';
 import { ChartCard, DeadlinesList, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/shared/lib/cn';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { cn } from '@/lib/cn';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Briefcase, Calendar, Clock, FileText, Target, TrendingUp } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 

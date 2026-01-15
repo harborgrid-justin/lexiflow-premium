@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Activity, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useDataSource } from '@/providers';
 
 const BACKEND_SERVICES = [

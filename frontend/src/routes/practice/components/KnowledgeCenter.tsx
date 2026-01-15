@@ -24,16 +24,16 @@ import { DataService } from '@/services/data/data-service.service';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';
 import { PrecedentsView } from '../base/PrecedentsView';
 import { QAView } from '../base/QAView';
 import { WikiView } from '../base/WikiView';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

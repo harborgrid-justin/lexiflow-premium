@@ -7,7 +7,7 @@
 import React from 'react';
 import { useModalState } from '@/hooks/core';
 import { NotificationService } from '@/services/domain/notification.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import type { NotificationGroup, UINotification } from '@/types';
 import { formatDistanceToNow } from 'date-fns';

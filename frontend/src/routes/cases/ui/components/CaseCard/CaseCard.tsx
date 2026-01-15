@@ -7,7 +7,7 @@
  * @module components/features/cases/CaseCard
  */
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/lib/utils';
 import type { Case } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router';

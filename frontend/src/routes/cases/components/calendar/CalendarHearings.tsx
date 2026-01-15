@@ -22,11 +22,11 @@ import { DataService } from '@/services/data/data-service.service';
 import { useTheme } from '@/theme';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import { CalendarEventItem } from '@/types';

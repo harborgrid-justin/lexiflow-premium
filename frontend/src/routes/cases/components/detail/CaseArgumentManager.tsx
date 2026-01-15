@@ -19,8 +19,8 @@ import { Filter, Plus, Target } from 'lucide-react';
 import { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { Button } from '@/components/atoms/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { ArgumentDetail } from './arguments/ArgumentDetail';
 import { ArgumentList } from './arguments/ArgumentList';
 
@@ -28,7 +28,7 @@ import { ArgumentList } from './arguments/ArgumentList';
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Case, EvidenceItem, LegalArgument } from '@/types';

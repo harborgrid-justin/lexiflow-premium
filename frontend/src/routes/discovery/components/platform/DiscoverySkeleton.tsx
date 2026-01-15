@@ -5,7 +5,7 @@
  */
 
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 // Base skeleton component with shimmer animation
 const Skeleton: React.FC<{ className?: string }> = ({ className }) => {
   const { theme } = useTheme();

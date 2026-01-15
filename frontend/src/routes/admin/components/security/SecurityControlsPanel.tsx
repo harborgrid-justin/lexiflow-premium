@@ -1,6 +1,6 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { Card } from '@/components/molecules/Card/Card';
 import { Clock, Globe, Lock, Smartphone } from 'lucide-react';
 import type { SecurityControl } from './types';
 

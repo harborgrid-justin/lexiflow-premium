@@ -7,11 +7,11 @@
 import { CheckCircle } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/shared/ui/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {
   const { theme } = useTheme();

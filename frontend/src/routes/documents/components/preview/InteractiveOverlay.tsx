@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Move, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { PDFTool } from './AcrobatToolbar';

@@ -1,4 +1,4 @@
-import { TabNavigation } from '@/shared/ui/organisms/TabNavigation';
+import { TabNavigation } from '@/components/organisms/TabNavigation';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BarChart3, Calendar, FileText, Users } from 'lucide-react';
 import React, { useState } from 'react';

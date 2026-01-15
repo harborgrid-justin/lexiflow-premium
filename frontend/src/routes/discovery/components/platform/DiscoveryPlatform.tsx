@@ -19,9 +19,9 @@ import { lazy, Suspense, useCallback, useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
 import { DiscoveryNavigation } from './layout/DiscoveryNavigation';
 
@@ -35,7 +35,7 @@ import { DiscoveryProvider, useDiscoveryActions, useDiscoveryState } from './con
 // Services & Utils
 import { DiscoveryRepository } from '@/services/api/discoveryRepository';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
 import { queryKeys } from '@/utils/queryKeys';
 

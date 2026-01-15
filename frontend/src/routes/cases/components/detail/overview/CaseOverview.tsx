@@ -17,8 +17,8 @@
 // External Dependencies
 import { Users } from 'lucide-react';
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { Button } from '@/components/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { CaseOverviewModals } from './CaseOverviewModals';
 import { CaseOverviewStats } from './CaseOverviewStats';
@@ -33,7 +33,7 @@ import { useTheme } from '@/theme';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Case, Party, TimeEntry } from '@/types';

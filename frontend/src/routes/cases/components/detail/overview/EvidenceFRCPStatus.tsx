@@ -11,13 +11,13 @@
 import { CheckCircle } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/shared/ui/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {
   const { theme } = useTheme();

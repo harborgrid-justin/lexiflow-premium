@@ -1,6 +1,6 @@
 import { FileText, CheckCircle, DollarSign, Flag, Gavel, Calendar, Scroll, Briefcase } from 'lucide-react';
 import { Theme } from '@/theme/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const getEventIcon = (type: string) => {
   switch (type) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
 import { EvidenceVaultContent } from './EvidenceVaultContent';
 import { EvidenceDetail } from './EvidenceDetail';
-import { LoadingSpinner } from '@/shared/ui/atoms/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from '@/components/atoms/LoadingSpinner/LoadingSpinner';
 
 export default function EvidenceVault() {
   const {

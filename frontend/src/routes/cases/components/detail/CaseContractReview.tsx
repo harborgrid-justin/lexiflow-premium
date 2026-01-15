@@ -17,7 +17,7 @@ import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 export const CaseContractReview: React.FC = () => {
   const { theme } = useTheme();

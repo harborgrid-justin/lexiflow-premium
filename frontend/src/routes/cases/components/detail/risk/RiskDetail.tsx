@@ -13,9 +13,9 @@ import { useState } from 'react';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
 import { RiskMatrix } from './RiskMatrix';
 
 // Internal Dependencies - Hooks & Context
@@ -23,7 +23,7 @@ import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Risk, RiskLevel, RiskCategory, RiskStatusEnum, RiskProbability, RiskImpact } from '@/types';

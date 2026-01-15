@@ -1,8 +1,8 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
+import { cn } from '@/lib/cn';
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { Activity, AlertTriangle, CheckCircle, FileText, Loader2, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';

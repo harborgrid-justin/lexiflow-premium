@@ -19,12 +19,12 @@ import { Mail, MapPin, Phone, Scale, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Components
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
 

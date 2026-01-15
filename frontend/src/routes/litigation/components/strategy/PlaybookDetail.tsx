@@ -10,13 +10,13 @@ import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Sh
 import { useState } from 'react';
 
 import { useWindow } from '@/providers';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 
 import { ResearchTool } from '@/routes/research/components/ResearchTool';
 import { WarRoom } from '@/routes/war-room/components/WarRoom';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Tabs } from '@/shared/ui/molecules/Tabs';
+import { Button } from '@/components/atoms/Button';
+import { Tabs } from '@/components/molecules/Tabs';
 import { PlaybookDetailProps } from './types';
 
 export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onApply }) => {

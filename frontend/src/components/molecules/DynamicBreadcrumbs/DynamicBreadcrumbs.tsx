@@ -5,8 +5,8 @@
  */
 
 import { useTheme } from '@/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
-import { cn } from '@/shared/lib/cn';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { cn } from '@/lib/cn';
 import { ChevronDown, ChevronRight, Clock, Home } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

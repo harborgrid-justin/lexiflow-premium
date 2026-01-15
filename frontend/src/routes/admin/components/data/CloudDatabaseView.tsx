@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import type { ThemeContextValue } from '@/theme';
 import { useTheme } from '@/theme';
 import { AnimatePresence, motion } from 'framer-motion';

@@ -32,11 +32,11 @@ import { useTheme } from '@/theme';
 
 // Components
 import { NexusGraph } from '@/routes/visual/components/NexusGraph';
-import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { DisjointSet } from '@/utils/datastructures/disjointSet';
 
 // Types

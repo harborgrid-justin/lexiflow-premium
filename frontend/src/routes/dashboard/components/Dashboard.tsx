@@ -21,15 +21,15 @@ import React, { Suspense, useTransition } from 'react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { TabbedPageLayout } from '@/shared/ui/layouts/TabbedPageLayout/TabbedPageLayout';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout } from '@/layouts/TabbedPageLayout/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { DashboardProvider } from '../DashboardProvider';
 import { DashboardContent } from './DashboardContent';
 
 // Utils & Config
 import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types
 import type { User } from '@/types';

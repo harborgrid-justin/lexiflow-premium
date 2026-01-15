@@ -7,9 +7,9 @@ import {
   GenerateDocumentDto,
 } from '@/lib/frontend-api';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { cn } from '@/shared/lib/cn';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
+import { cn } from '@/lib/cn';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/theme';
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';

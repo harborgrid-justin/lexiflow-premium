@@ -59,7 +59,7 @@ import { useCaseDetail } from '@/hooks/useCaseDetail';
 // INTERNAL DEPENDENCIES - SERVICES & UTILS
 // ============================================================================
 import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

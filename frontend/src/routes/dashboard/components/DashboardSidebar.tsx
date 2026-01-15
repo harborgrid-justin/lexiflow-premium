@@ -24,13 +24,13 @@ import { PATHS } from '@/config/paths.config';
 import { useNavigate } from 'react-router-dom';
 
 // Components
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { DateText } from '@/shared/ui/atoms/DateText/DateText';
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { Button } from '@/components/atoms/Button/Button';
+import { DateText } from '@/components/atoms/DateText/DateText';
+import { Card } from '@/components/molecules/Card/Card';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

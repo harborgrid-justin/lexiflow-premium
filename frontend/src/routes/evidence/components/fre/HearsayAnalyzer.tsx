@@ -7,12 +7,12 @@
 
 import { AlertTriangle, CheckCircle, FileText, Wand2 } from 'lucide-react';
 // Common Components
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Context & Utils
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';

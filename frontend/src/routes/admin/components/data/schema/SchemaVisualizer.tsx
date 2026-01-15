@@ -1,7 +1,7 @@
 import { useTheme } from '@/theme';
 import { useCanvasDrag } from '@/hooks/ui';
-import { cn } from '@/shared/lib/cn';
-import { ContextMenu } from '@/shared/ui/molecules/ContextMenu/ContextMenu';
+import { cn } from '@/lib/cn';
+import { ContextMenu } from '@/components/molecules/ContextMenu/ContextMenu';
 import { Database, Edit2, Key, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ContextData, ContextMenuItem, ContextMenuType, TableColumn, TableData } from './schemaTypes';

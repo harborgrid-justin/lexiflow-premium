@@ -2,10 +2,10 @@
 import type { WorkflowInstance } from '@/lib/frontend-api';
 import { api } from '@/lib/frontend-api';
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { cn } from '@/shared/lib/cn';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from '@/theme';
 import type { User } from '@/types';
 import { Calendar, Kanban, List, Loader2, Plus, Search

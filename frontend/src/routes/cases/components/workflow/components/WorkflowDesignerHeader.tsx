@@ -3,9 +3,9 @@
  * @description Header section for Advanced Workflow Designer with title and action buttons
  */
 
-import { Button } from '@/shared/ui/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { Play, Save } from 'lucide-react';
 import type { EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';
 

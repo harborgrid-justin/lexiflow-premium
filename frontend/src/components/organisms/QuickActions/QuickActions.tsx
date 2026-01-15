@@ -23,11 +23,11 @@ import { PlusCircle, X } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTheme } from '@/theme';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import * as styles from './QuickActions.styles';
 
 // Types

@@ -1,10 +1,10 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { PleadingComment, PleadingDocument, PleadingSection, PleadingVariable } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import jsPDF from 'jspdf';
 import { ArrowLeft, BookOpen, Download, FileText, LayoutTemplate, Link, MessageSquare, Save, UploadCloud } from 'lucide-react';
 import { useCallback, useState } from 'react';

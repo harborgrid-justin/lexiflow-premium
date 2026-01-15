@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { HardDrive, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DataSourceSelector } from './DataSourceSelector';

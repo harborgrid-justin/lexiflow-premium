@@ -215,7 +215,7 @@ export function DataGridExample() {
       <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="mt-8 border rounded-lg p-4">
         <h3 className="font-semibold text-gray-900 mb-2">Usage Example:</h3>
         <pre style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }} className="text-xs p-4 rounded overflow-x-auto">
-          {`import { DataGrid, createColumns, textColumn, numberColumn } from '@/shared/components/enterprise/data';
+          {`import { DataGrid, createColumns, textColumn, numberColumn } from '@/components/enterprise/data';
 
 const columns = createColumns<User>([
   textColumn('name', 'Name', 'name', { editable: true }),

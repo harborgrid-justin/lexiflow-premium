@@ -1,12 +1,12 @@
 import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/shared/lib/cn';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Modal } from '@/shared/ui/molecules/Modal';
-import { ModalFooter } from '@/shared/ui/molecules/ModalFooter';
-import { Tabs } from '@/shared/ui/molecules/Tabs';
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { Modal } from '@/components/molecules/Modal';
+import { ModalFooter } from '@/components/molecules/ModalFooter';
+import { Tabs } from '@/components/molecules/Tabs';
 import { GovernancePolicy } from '@/types';
 import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';
 import { FileText, Plus } from 'lucide-react';

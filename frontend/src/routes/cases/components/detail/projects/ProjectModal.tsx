@@ -11,16 +11,16 @@
 import { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
+import { Button } from '@/components/atoms/Button/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 
 // Types & Interfaces
 import { Project } from '@/types';

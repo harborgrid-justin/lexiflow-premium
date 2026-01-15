@@ -30,15 +30,15 @@ import { useTheme } from '@/theme';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { Modal } from '@/components/molecules/Modal/Modal';
 
 // Utils & Config
 import { PLEADING_BUILDER_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/shared/lib/cn';
-import { validateTemplate } from '@/shared/lib/validation';
+import { cn } from '@/lib/cn';
+import { validateTemplate } from '@/lib/validation';
 
 // Types
 import { Case, PleadingDocument, PleadingTemplate } from '@/types';

@@ -1,5 +1,5 @@
 import { SearchService } from "@/services/search/search.service";
-import { useClickOutside } from "@/shared/hooks/useClickOutside";
+import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEffect, useId, useRef, useState } from "react";
 
 interface UseSearchToolbarProps {

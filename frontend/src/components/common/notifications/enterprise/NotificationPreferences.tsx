@@ -4,7 +4,7 @@
  * @description User preferences panel for notification settings
  */
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/lib/cn';
 import { useTheme } from '@/theme';
 import type { NotificationPreferences as NotificationPreferencesType } from '@/types/notifications';
 import { motion } from 'framer-motion';

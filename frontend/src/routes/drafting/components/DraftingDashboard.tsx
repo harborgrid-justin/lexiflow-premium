@@ -1,8 +1,8 @@
 import { useToast } from '@/contexts/toast/ToastContext';
 import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/lib/frontend-api';
-import { cn } from '@/shared/lib/cn';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
+import { cn } from '@/lib/cn';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/theme';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';

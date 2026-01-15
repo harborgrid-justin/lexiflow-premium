@@ -1,6 +1,6 @@
 import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { ValidationSeverity } from '@/types/bluebook';
 import { AlertTriangle, CheckCircle2, Copy, Eye, EyeOff, Trash2 } from 'lucide-react';
 import type { FormattingResult } from './types';

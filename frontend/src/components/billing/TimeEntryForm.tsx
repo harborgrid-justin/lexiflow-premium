@@ -4,7 +4,7 @@
  * Includes LEDES code support and validation
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { TimeEntry } from '@/types/financial';
 import React, { useState } from 'react';
 import { Form } from 'react-router';

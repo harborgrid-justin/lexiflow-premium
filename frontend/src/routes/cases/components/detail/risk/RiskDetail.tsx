@@ -19,7 +19,7 @@ import { TextArea } from '@/components/atoms/TextArea';
 import { RiskMatrix } from './RiskMatrix';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';

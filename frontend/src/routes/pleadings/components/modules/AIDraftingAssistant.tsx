@@ -2,7 +2,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { RetryError, retryWithBackoff } from '@/utils/retryWithBackoff';
 import { AlertCircle, FileText, RefreshCw, Sparkles, Wand2, WifiOff } from 'lucide-react';
 import { useState } from 'react';

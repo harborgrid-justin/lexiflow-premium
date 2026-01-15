@@ -3,7 +3,7 @@
  * Please update your imports:
  *
  * Old: import { ChartColorService } from "@/services/theme/chart-color.service";
- * New: import { ChartColorService } from "@/theme";
+ * New: import { ChartColorService } from "@/contexts/ThemeContext";
  *
  * This re-export will be removed in a future version.
  */

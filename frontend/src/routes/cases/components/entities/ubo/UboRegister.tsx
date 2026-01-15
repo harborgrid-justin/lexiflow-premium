@@ -5,7 +5,7 @@ import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { LegalEntity } from '@/types';
 import { cn } from '@/lib/cn';

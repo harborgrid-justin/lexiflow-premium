@@ -4,7 +4,7 @@
  * Stores state in localStorage to persist across page reloads
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Clock, Pause, Play, Square } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 

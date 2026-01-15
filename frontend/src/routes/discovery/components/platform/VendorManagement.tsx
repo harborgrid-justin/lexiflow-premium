@@ -47,7 +47,7 @@ import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useModalState } from '@/hooks/core';
 
 // Services & Utils

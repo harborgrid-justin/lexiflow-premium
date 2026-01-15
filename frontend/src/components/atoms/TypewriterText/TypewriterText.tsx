@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 export const TypewriterText: React.FC<{ text?: string }> = ({ text }) => {

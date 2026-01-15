@@ -14,12 +14,14 @@
 
 import { FEATURES_CONFIG } from '@/config/features/features.config';
 import { UI_CONFIG } from '@/config/features/ui.config';
+import { ThemeObject } from '@/lib/theme/ThemeContext.types';
 import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from '@/lib/theme/tokens';
 import { DataService } from '@/services/data/data-service.service';
-import { ThemeObject } from '@/types/theme.types';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
 
-export type { ThemeObject } from '@/types/theme.types';
+export { ChartColorService } from '@/lib/theme/chartColorService';
+export * from '@/lib/theme/ThemeContext.types';
+export * from '@/lib/theme/tokens';
 
 // ============================================================================
 // Internal Hook: useSyncLocalStorage

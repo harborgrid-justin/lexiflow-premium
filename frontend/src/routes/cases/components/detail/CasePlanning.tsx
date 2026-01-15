@@ -22,7 +22,7 @@ import { ScheduleTimeline } from './planning/ScheduleTimeline';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useCasePlanning } from '@/routes/cases/_hooks/useCasePlanning';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

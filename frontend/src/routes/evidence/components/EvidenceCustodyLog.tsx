@@ -13,7 +13,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { Button } from '@/components/atoms/Button/Button';
 
 // Context & Utils
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 // Services & Types

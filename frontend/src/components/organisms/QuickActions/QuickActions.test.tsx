@@ -4,11 +4,11 @@
  * @description Unit tests for QuickActions component
  */
 
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { QuickActions } from './QuickActions';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Briefcase, Clock, FileText, UserPlus } from 'lucide-react';
+import { describe, expect, it, vi } from 'vitest';
 import type { QuickActionGroup } from './QuickActions';
-import { Clock, FileText, UserPlus, Briefcase } from 'lucide-react';
+import { QuickActions } from './QuickActions';
 
 // Mock useTheme
 vi.mock('@/contexts/theme/ThemeContext', () => ({
@@ -22,7 +22,7 @@ vi.mock('@/contexts/theme/ThemeContext', () => ({
 }));
 
 // Mock useClickOutside
-vi.mock('@/shared/hooks/useClickOutside', () => ({
+vi.mock('@/hooks/useClickOutside', () => ({
   useClickOutside: vi.fn(),
 }));
 

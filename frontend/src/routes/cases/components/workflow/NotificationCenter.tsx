@@ -2,7 +2,7 @@ import { Bell, Check, X, BellOff } from 'lucide-react';
 import { DataService } from '@/services/data/data-service.service';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { SystemNotification } from '@/types';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

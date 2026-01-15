@@ -19,7 +19,7 @@ import { CheckSquare, Loader2 } from 'lucide-react';
 // Services & Data
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';

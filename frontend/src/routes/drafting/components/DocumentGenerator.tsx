@@ -1,16 +1,16 @@
 import { validateVariableValues } from '@/api/domains/drafting/utils';
-import { useToast } from '@/contexts/toast/ToastContext';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
+import { cn } from '@/lib/cn';
 import {
   draftingApi,
   DraftingTemplate,
   GeneratedDocument,
   GenerateDocumentDto,
 } from '@/lib/frontend-api';
+import { useToast } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { cn } from '@/lib/cn';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 

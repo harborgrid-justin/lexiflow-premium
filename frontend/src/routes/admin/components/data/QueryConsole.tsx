@@ -6,7 +6,7 @@ import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { AlignLeft, Bot, Download, Play } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';

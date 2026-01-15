@@ -9,7 +9,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { LegalDocument } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';

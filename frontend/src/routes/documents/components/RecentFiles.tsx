@@ -3,7 +3,7 @@ import { Button } from '@/components/atoms/Button/Button';
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { DataService } from '@/services/data/data-service.service';
 import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';

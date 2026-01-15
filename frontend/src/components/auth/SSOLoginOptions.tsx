@@ -8,7 +8,7 @@
 
 import { useAuthActions } from '@/contexts/auth/AuthProvider';
 import type { SSOProvider } from '@/contexts/auth/authTypes';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useState } from 'react';
 
 interface SSOLoginOptionsProps {

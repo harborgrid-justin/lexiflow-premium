@@ -1,7 +1,7 @@
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { TaskRow } from './TaskRow';
 import { TaskHeader } from './TaskHeader';

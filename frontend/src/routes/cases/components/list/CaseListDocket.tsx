@@ -32,7 +32,7 @@ import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';

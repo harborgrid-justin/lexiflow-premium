@@ -3,7 +3,7 @@
  *
  * Showcases the 150+ theme customization options in action
  */
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Info, Layout, Palette, Sparkles, Type } from 'lucide-react';
 
 export default function ThemeDemo() {

@@ -2,7 +2,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckSquare, Lock } from 'lucide-react';
 import React from 'react';

@@ -10,11 +10,11 @@
 // /routes/[feat]/ → Domain (CaseProvider, DataProvider, WindowProvider, SyncProvider)
 //
 // WHAT BELONGS HERE:
-// ✓ Authentication & Authorization (Auth, Permissions)
+// ✓ Authentication & Authorization (Auth)
 // ✓ Entitlements & Feature Flags (Entitlements, Flags)
-// ✓ Infrastructure (Theme, Toast, QueryClient)
 //
 // WHAT DOES NOT BELONG HERE:
+// ✗ Infrastructure contexts (Theme, Toast, QueryClient → /providers/)
 // ✗ Domain contexts (CaseProvider → /routes/cases/)
 // ✗ Data contexts (DataProvider → /routes/dashboard/)
 // ✗ Window/Sync contexts (→ /routes/_shared/)
@@ -37,8 +37,8 @@ export {
   useAuth,
   useAuthActions,
   useAuthState,
-} from "./AuthContext";
-export type { AuthUser, Organization } from "./AuthContext";
+} from "./auth/AuthContext";
+export type { AuthUser, Organization } from "./auth/AuthContext";
 
 // Entitlements exports (App-level permissions)
 export {
@@ -62,21 +62,6 @@ export {
 } from "./flags/FlagsContext";
 export type { Flags, FlagsContextValue } from "./flags/FlagsContext";
 
-// ThemeContext exports (Infrastructure-level UI)
-export { ThemeProvider, useTheme } from "@/theme";
-
-// ToastContext exports (Infrastructure-level notifications)
-export {
-  ToastProvider,
-  useToast,
-  useToastActions,
-  useToastState,
-} from "./toast/ToastContext";
-export type { ToastType } from "./toast/ToastContext.types";
-
-// Query Client provider export (Infrastructure-level data fetching)
-export { QueryClientProvider } from "./query/QueryClientProvider";
-
 // ============================================================================
 // DOMAIN CONTEXTS (Live in /routes/)
 // ============================================================================
@@ -95,70 +80,6 @@ export { QueryClientProvider } from "./query/QueryClientProvider";
 //
 // RULE: Domain contexts load with their routes, not globally.
 // ============================================================================
-// Repository infrastructure exports
-export type {
-  BaseRepository,
-  BatchRepository,
-  CaseRepository,
-  ComplianceRepository,
-  ConflictResult,
-  DataOwnership,
-  DocumentRepository,
-  AuthProvider as RepositoryAuthProvider,
-  RepositoryConfig,
-  RepositoryFactory,
-  RepositoryLogger,
-  RepositoryMetrics,
-  RepositoryRegistry,
-  RepositoryTracer,
-  ScanResult,
-  SearchOptions,
-  SearchResult,
-  SearchableRepository,
-  Span,
-} from "./repository/types";
-
-export type {
-  DataSourceConfig,
-  DataSourceEnvironmentConfig,
-  ObservabilityConfig,
-  RetryConfig,
-  TimeoutConfig,
-} from "./repository/config";
-
-export {
-  DEFAULT_OBSERVABILITY,
-  DEFAULT_RETRY,
-  DEFAULT_TIMEOUTS,
-  DataSourceConfigBuilder,
-  ENVIRONMENT_CONFIGS,
-  createConfigFromEnv,
-  createTestConfig,
-} from "./repository/config";
-
-export {
-  BusinessRuleError,
-  ConcurrencyError,
-  ConflictError,
-  ErrorFactory,
-  ForbiddenError,
-  NetworkError,
-  NotFoundError,
-  RateLimitError,
-  RepositoryError,
-  ServerError,
-  TimeoutError,
-  UnauthorizedError,
-  ValidationError,
-  getErrorSeverity,
-  getUserMessage,
-  isRepositoryError,
-  isRetryableError,
-} from "./repository/errors";
-
-export type { ValidationFailure } from "./repository/errors";
-
-// ============================================================================
 // Type Exports (Consolidated)
 // ============================================================================
 // Import all types from the consolidated types file for convenience
@@ -169,4 +90,4 @@ export type * from "./types";
 // ============================================================================
 
 // Theme Context Types
-export type { ThemeMode } from "@/theme";
+export type { ThemeMode } from "@/contexts/ThemeContext";

@@ -30,7 +30,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { EditorOption, EditorType } from './DataGridColumn';
 

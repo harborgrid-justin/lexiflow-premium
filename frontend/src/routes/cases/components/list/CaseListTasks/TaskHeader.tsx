@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import type { TaskHeaderProps } from './types';
 

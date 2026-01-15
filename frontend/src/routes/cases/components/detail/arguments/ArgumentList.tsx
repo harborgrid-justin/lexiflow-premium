@@ -16,7 +16,7 @@ import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

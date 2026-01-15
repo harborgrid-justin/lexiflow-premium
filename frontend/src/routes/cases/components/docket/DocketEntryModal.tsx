@@ -18,7 +18,7 @@ import { Badge } from '@/components/atoms/Badge';
 import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

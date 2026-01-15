@@ -1,5 +1,5 @@
 import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { encodeHtmlEntities } from '@/lib/sanitize';
 import React from "react";

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CitationFormat } from '@/types/bluebook';
 import { Settings } from 'lucide-react';
 import React from "react";

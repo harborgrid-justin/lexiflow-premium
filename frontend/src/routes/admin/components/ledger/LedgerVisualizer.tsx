@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { ChainedLogEntry, IntegrityReport } from '@/services/infrastructure/chainService';
 import { cn } from '@/lib/cn';
 import { AlertOctagon, ArrowRight, Box, Link, ShieldCheck, Terminal, X } from 'lucide-react';

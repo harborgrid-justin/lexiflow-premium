@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 import { Modal } from '@/components/molecules/Modal';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 

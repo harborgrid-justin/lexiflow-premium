@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { DedupeCluster } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { ArrowRight, CheckCircle, GitMerge, Layers } from 'lucide-react';

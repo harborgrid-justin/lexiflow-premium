@@ -3,7 +3,7 @@
  * @description Loading skeleton components for Evidence Vault
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 /**

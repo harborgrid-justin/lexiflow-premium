@@ -14,7 +14,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';
 import {
   Boxes,

@@ -6,7 +6,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CheckCircle, Copy, Download, Loader2, Save, Sparkles } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 

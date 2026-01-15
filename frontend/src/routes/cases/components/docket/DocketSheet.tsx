@@ -17,9 +17,9 @@ import React, { useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { DocketTableSkeleton } from '@/routes/cases/ui/components/DocketSkeleton/DocketSkeleton';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { Modal } from '@/components/molecules/Modal';
+import { DocketTableSkeleton } from '@/routes/cases/ui/components/DocketSkeleton/DocketSkeleton';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketEntryModal } from './DocketEntryModal';
 import { DocketFilterPanel } from './DocketFilterPanel';
@@ -28,9 +28,9 @@ import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
+import { useThemeContext } from '@/contexts/ThemeContext';
 import { useWindow } from '@/providers';
 import { useDocketSheet } from '@/routes/cases/_hooks/useDocketSheet';
-import { useThemeContext } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

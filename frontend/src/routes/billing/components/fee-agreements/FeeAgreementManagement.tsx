@@ -7,7 +7,7 @@ import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { AlertTriangle, CheckCircle, Clock, Edit, FileText, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { FeeAgreement, useFeeAgreements } from './hooks/useFeeAgreements';

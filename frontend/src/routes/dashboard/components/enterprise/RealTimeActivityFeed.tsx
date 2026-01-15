@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { Activity as ActivityType, ActivityType as ActivityTypeEnum, BaseDashboardProps } from '@/types/dashboard';
 import { AnimatePresence, motion } from 'framer-motion';
 import {

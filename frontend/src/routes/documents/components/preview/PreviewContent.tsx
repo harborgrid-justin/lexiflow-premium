@@ -3,7 +3,7 @@ import { SignaturePad } from '@/routes/discovery/components/SignaturePad/Signatu
 import { Button } from '@/components/atoms/Button/Button';
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
 import { useState } from 'react';

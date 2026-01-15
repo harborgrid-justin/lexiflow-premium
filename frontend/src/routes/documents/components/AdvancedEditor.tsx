@@ -3,7 +3,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { useToggle } from '@/hooks/useToggle';
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { RotateCcw, Wand2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

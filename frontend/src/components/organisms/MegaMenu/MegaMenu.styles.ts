@@ -4,7 +4,7 @@
  * @description Style definitions for MegaMenu component.
  */
 
-import type { ThemeObject } from "@/theme";
+import type { ThemeObject } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/cn";
 
 // Define type locally to avoid circular dependency

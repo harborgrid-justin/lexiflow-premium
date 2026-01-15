@@ -9,7 +9,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CommunicationItem, CommunicationType, UserId } from '@/types';
 import { CommunicationStatus } from '@/types/enums';
 import { queryKeys } from '@/utils/queryKeys';

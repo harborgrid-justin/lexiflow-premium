@@ -1,7 +1,7 @@
 import type { DraftingTemplate } from '@/lib/frontend-api';
 import { Form, Link, useNavigate } from 'react-router';
 import type { ComposeLoaderData } from './types';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface ComposeCorrespondenceProps {
   data: ComposeLoaderData;

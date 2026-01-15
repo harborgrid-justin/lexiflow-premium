@@ -4,7 +4,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import type { ThemeObject } from '@/theme';
+import type { ThemeObject } from '@/contexts/ThemeContext';
 import {
   PolarAngleAxis,
   PolarGrid,

@@ -2,7 +2,7 @@ import { ToastProvider } from '@/providers';
 import { PleadingAnalytics, PleadingDashboard, PleadingDrafts, PleadingFilingQueue, PleadingTemplates } from '@/routes/pleadings/components';
 import { PleadingBuilder } from '@/routes/pleadings/components/PleadingBuilder';
 import PleadingDesigner from '@/routes/pleadings/components/PleadingDesigner';
-import { ThemeProvider } from '@/theme';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import type { PleadingDocument } from '@/types';
 import type { CaseId, DocumentId } from '@/types/primitives';
 import type { Meta, StoryObj } from '@storybook/react-vite';

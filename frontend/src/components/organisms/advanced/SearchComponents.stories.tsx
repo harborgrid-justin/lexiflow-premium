@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CategoryFilter, SuggestionItem } from './SearchComponents';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { SearchCategory } from './types';
 import React from "react";
 

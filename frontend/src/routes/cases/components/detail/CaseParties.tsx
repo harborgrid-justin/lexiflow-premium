@@ -20,7 +20,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 
 // Internal Dependencies - Hooks & Context
 import { GroupByOption, useCaseParties } from '@/routes/cases/_hooks/useCaseParties';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

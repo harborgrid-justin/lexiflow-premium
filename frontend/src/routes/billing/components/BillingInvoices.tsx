@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { CheckCircle, Download, Filter, Mail, Plus } from 'lucide-react';
+import React from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
@@ -19,7 +19,7 @@ import { CheckCircle, Download, Filter, Mail, Plus } from 'lucide-react';
 // Removed unused DataService
 
 // Hooks & Context
-import { useThemeContext } from '@/theme';
+import { useThemeContext } from '@/contexts/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useBillingInvoices } from './hooks/useBillingInvoices';

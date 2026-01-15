@@ -5,7 +5,7 @@ import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CaseStatus } from '@/types';
 import { Activity, AlertCircle, AlertTriangle, Briefcase, CheckCircle, ChevronRight, Circle, Clock, Loader2, Plus, Search, TrendingUp, XCircle
 } from 'lucide-react';

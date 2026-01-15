@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { WebhooksApiService, type SystemWebhookConfig } from '@/lib/frontend-api';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { useModalState, useNotify } from '@/hooks/core';
 import { QUERY_KEYS } from '@/services/data/queryKeys';

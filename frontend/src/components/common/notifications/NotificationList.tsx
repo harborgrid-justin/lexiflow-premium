@@ -4,7 +4,7 @@
  */
 
 import type { ApiNotification } from '@/lib/frontend-api';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { formatDistanceToNow } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 

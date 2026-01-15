@@ -25,7 +25,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 // Hooks & Context
 import { useModalState } from '@/hooks/useModalState';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';

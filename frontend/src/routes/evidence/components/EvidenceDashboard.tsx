@@ -15,7 +15,7 @@ import { Card } from '@/components/molecules/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Context & Utils
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 // Services & Types

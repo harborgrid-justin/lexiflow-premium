@@ -18,17 +18,19 @@
  * @module providers/infrastructure
  */
 
-import { ToastProvider as ToastProviderBase } from '@/contexts/toast/ToastContext';
-import { ThemeProvider } from '@/theme';
+import { ThemeProvider } from './ThemeProvider';
+// TODO: ToastProvider needs to be implemented in infrastructure layer
+// import { ToastProvider as ToastProviderBase } from './ToastProvider';
 import React from "react";
 import { EnvProvider } from './EnvProvider';
+import { LayoutProvider } from './LayoutProvider';
 
 // Type assertion for ToastProvider to ensure ReactNode return
-const ToastProvider = ToastProviderBase as unknown as React.FC<{
-  children: React.ReactNode;
-  maxVisible?: number;
-  maxQueue?: number;
-}>;
+// const ToastProvider = ToastProviderBase as unknown as React.FC<{
+//   children: React.ReactNode;
+//   maxVisible?: number;
+//   maxQueue?: number;
+// }>;
 
 interface InfrastructureLayerProps {
   children: React.ReactNode;
@@ -38,9 +40,10 @@ export function InfrastructureLayer({ children }: InfrastructureLayerProps) {
   return (
     <EnvProvider>
       <ThemeProvider>
-        <ToastProvider maxVisible={5} maxQueue={50}>
+        <LayoutProvider>
+          {/* TODO: Add ToastProvider when implemented */}
           {children}
-        </ToastProvider>
+        </LayoutProvider>
       </ThemeProvider>
     </EnvProvider>
   );

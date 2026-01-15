@@ -17,7 +17,7 @@ import { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useComplianceConflicts } from './hooks/useComplianceConflicts';
 
 // Components

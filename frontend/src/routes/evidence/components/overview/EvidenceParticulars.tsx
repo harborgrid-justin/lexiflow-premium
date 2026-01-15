@@ -14,7 +14,7 @@ import { Badge } from '@/components/atoms/Badge';
 import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
 
 // Context & Utils
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 // Services

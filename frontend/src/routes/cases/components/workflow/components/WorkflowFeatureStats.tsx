@@ -3,7 +3,7 @@
  * @description Feature statistics banner showing workflow metrics
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Boxes, Clock, GitBranch, Sparkles, UserCheck } from 'lucide-react';
 import type { AIWorkflowSuggestion, EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';

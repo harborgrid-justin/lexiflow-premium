@@ -4,7 +4,7 @@
  */
 
 import type { FirmExpense } from '@/types/financial';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { DollarSign, FileText, Filter, Receipt } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form, Link } from 'react-router';

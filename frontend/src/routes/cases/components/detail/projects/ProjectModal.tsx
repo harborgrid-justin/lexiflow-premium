@@ -17,7 +17,7 @@ import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { Button } from '@/components/atoms/Button/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

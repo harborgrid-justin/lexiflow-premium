@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useDataSource } from '@/providers';
 import { cn } from '@/lib/cn';
 import { Cloud, Database, Power, RefreshCw, Server } from 'lucide-react';

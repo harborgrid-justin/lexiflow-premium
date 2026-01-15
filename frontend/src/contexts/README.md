@@ -10,6 +10,7 @@
 
 **This directory contains GLOBAL APPLICATION-LEVEL contexts only.**
 
+Infrastructure contexts have been migrated to `/providers/infrastructure/` following the Enterprise React Architecture Standard.
 Domain-specific contexts have been migrated to `/routes/[domain]/` following the Enterprise React Architecture Standard.
 
 ---

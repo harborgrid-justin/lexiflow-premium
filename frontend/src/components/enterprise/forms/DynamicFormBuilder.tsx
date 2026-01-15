@@ -16,7 +16,7 @@
 import { useEnhancedAutoSave } from '@/hooks/useEnhancedAutoSave';
 import { useEnhancedFormValidation } from '@/hooks/useEnhancedFormValidation';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type {
   FieldSchema,
   FormConfig,

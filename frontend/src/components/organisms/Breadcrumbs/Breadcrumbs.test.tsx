@@ -4,12 +4,11 @@
  * @description Unit tests for Breadcrumbs component
  */
 
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { ThemeProvider } from '@/theme';
-import { Breadcrumbs } from './Breadcrumbs';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { FileText, Folder } from 'lucide-react';
+import { describe, expect, it, vi } from 'vitest';
 import type { BreadcrumbItem } from './Breadcrumbs';
-import { Folder, FileText } from 'lucide-react';
+import { Breadcrumbs } from './Breadcrumbs';
 
 // Mock useTheme to avoid provider issues
 vi.mock('@/contexts/theme/ThemeContext', async () => {

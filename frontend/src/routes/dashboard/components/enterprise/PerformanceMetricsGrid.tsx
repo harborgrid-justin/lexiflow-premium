@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { BaseDashboardProps, PerformanceMetric } from '@/types/dashboard';
 import { AnimatePresence, motion } from 'framer-motion';
 import {

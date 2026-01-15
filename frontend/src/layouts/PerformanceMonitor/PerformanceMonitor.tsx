@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { AlertTriangle, CheckCircle } from 'lucide-react';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';

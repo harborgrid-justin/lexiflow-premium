@@ -6,7 +6,7 @@
 
 import { memo } from 'react';
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Database, Key, Lock, ShieldCheck } from 'lucide-react';
 

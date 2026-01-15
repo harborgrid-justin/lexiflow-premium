@@ -36,7 +36,7 @@ import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 
 // Context & Utils
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useToggle } from '@/hooks/useToggle';
 import { cn } from '@/lib/cn';
 

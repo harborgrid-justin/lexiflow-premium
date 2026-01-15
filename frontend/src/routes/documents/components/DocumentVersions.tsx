@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { DocumentVersion, LegalDocument, UserRole } from '@/types';
 import { AlertTriangle, History, RotateCcw, X } from 'lucide-react';
 

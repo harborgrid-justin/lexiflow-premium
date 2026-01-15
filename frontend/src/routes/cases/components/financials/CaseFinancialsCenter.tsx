@@ -1,5 +1,5 @@
 /** * Matter Financials Center - Comprehensive Financial Management * * @module MatterFinancialsCenter * @description Complete financial oversight and billing management * * Features: * - Billing overview and analytics * - Budget tracking and forecasting * - Expense management * - Time entry overview * - Profitability analysis * - Realization rates * - Collection tracking * - Financial reports * - Invoice generation * - Trust accounting */ import { api } from '@/lib/frontend-api';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/lib/cn';
 import { Bar, BarChart, CartesianGrid, Cell, Tooltip as RechartsTooltip, ResponsiveContainer, XAxis, YAxis

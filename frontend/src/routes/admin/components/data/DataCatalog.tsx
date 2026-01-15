@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';

@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';
 import { LucideIcon, TrendingDown, TrendingUp } from 'lucide-react';

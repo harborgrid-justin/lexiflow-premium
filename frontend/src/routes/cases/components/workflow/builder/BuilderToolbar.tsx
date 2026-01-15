@@ -1,5 +1,5 @@
 import { Menu, ZoomIn, ZoomOut } from 'lucide-react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 interface BuilderToolbarProps {

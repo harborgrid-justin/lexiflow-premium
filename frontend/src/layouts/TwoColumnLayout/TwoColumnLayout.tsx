@@ -5,7 +5,7 @@
  * Ideal for comparisons, editing workflows, and dual-panel interfaces.
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import React from "react";
 

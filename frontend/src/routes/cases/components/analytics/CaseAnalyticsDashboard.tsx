@@ -28,7 +28,7 @@ import { api } from '@/lib/frontend-api';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CaseStatus } from '@/types';
 import {
   ArrowDown,

@@ -25,5 +25,8 @@ export * from "./idGenerator";
 export * from "./sanitize";
 export * from "./validation";
 
+// Immutability utilities
+export * from "./immutability";
+
 // General utilities
 // export * from "./utils"; // Avoid duplicate export of cn

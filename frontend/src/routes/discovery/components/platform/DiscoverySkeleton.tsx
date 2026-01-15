@@ -4,7 +4,7 @@
  * Provides shimmer effects for better perceived performance
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 // Base skeleton component with shimmer animation
 const Skeleton: React.FC<{ className?: string }> = ({ className }) => {

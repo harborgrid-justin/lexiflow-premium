@@ -4,7 +4,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { MetricTile, SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { LegalEntity } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Briefcase, Building, GraduationCap, Linkedin, Mail, Network } from 'lucide-react';

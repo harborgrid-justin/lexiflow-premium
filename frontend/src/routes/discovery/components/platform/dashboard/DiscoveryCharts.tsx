@@ -1,4 +1,4 @@
-import { ChartColorService, useTheme } from '@/theme';
+import { ChartColorService, useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { Card } from '@/components/molecules/Card/Card';

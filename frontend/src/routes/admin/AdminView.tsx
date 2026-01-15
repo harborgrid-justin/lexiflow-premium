@@ -1,6 +1,6 @@
 import { Button } from '@/components/atoms/Button/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Settings, Shield, Users } from 'lucide-react';
 import { useAdmin } from './AdminProvider';
 

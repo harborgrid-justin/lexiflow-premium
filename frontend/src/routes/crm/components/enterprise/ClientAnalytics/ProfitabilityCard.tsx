@@ -3,7 +3,7 @@
  * @description Individual client profitability card
  */
 
-import type { ThemeObject } from '@/theme';
+import type { ThemeObject } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import type { ClientProfitability } from './types';

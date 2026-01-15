@@ -4,7 +4,7 @@
  * @description List of pitch activities with header
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Plus } from 'lucide-react';
 import { Pitch } from '../../types';

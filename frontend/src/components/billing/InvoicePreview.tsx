@@ -3,7 +3,7 @@
  * PDF-like preview of invoice with professional formatting
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { Invoice } from '@/types/financial';
 import React from 'react';
 

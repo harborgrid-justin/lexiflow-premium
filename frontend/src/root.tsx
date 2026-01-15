@@ -34,8 +34,7 @@ import type { Route } from "./+types/root";
 import "./index.css";
 
 // Import providers
-import { QueryClientProvider } from "@/contexts/query/QueryClientProvider";
-import { AppProviders } from "@/providers";
+import { AppProviders, QueryClientProvider } from "@/providers";
 
 import { APP_DESCRIPTION, APP_NAME } from '@/config/app.config';
 import React from "react";

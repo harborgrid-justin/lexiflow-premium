@@ -1,6 +1,6 @@
 import { FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/atoms/Badge';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { TaskStatusBackend } from '@/types';
 import type { TaskRowProps } from './types';

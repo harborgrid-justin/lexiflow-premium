@@ -2,7 +2,7 @@ import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
 import { Suspense, lazy, useCallback, useState } from 'react';

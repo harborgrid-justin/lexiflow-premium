@@ -12,7 +12,7 @@ import { Card } from '@/components/molecules/Card/Card';
 
 // Context & Utils
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Types
 import { EvidenceItem } from '@/types';

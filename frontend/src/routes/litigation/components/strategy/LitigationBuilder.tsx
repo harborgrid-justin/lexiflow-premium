@@ -17,7 +17,7 @@ import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { LitigationProvider, useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Utils

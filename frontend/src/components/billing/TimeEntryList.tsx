@@ -3,7 +3,7 @@
  * Display and filter time entries with bulk operations
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { TimeEntry } from '@/types/financial';
 import { Check, Clock, DollarSign, Filter } from 'lucide-react';
 import React, { useState } from 'react';

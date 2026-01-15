@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';

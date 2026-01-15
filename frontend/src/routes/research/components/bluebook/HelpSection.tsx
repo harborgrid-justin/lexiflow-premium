@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card/Card';
 import { Book, FileCode, FileText, Flag, Scale } from 'lucide-react';

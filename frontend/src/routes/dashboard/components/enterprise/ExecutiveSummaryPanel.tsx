@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { BaseDashboardProps, ExecutiveSummary } from '@/types/dashboard';
 import { motion } from 'framer-motion';
 import React, { useMemo } from 'react';

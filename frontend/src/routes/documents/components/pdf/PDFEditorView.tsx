@@ -4,7 +4,7 @@ import { SignaturePad } from '@/routes/discovery/components/SignaturePad/Signatu
 import { Button } from '@/components/atoms/Button/Button';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';

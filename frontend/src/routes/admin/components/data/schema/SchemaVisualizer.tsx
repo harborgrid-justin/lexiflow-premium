@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useCanvasDrag } from '@/hooks/ui';
 import { cn } from '@/lib/cn';
 import { ContextMenu } from '@/components/molecules/ContextMenu/ContextMenu';

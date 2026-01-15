@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';

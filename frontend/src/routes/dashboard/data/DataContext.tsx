@@ -3,7 +3,7 @@ import { adminApi } from "@/api/domains/admin.api";
 import { litigationApi } from "@/api/domains/litigation.api";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
-import { freezeInDev } from "@/contexts/utils/immutability";
+import { freezeInDev } from "@/lib/immutability";
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from "react";
 
 export type DashboardItem =

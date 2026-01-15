@@ -1,4 +1,4 @@
-import { AdvancedThemeCustomizer } from "@/theme";
+import { AdvancedThemeCustomizer } from "@/components/theme/AdvancedThemeCustomizer";
 import type { Route } from "./+types/theme";
 
 export function meta(_args: Route.MetaArgs) {

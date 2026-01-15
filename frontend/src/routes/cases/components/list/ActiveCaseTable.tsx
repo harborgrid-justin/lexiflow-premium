@@ -30,7 +30,7 @@ import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { CaseRow } from './CaseRow';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Utils
 import { cn } from '@/lib/cn';

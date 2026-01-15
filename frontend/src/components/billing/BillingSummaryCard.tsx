@@ -3,7 +3,7 @@
  * Summary card showing billing metrics and KPIs
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Clock, DollarSign, FileText, TrendingDown, TrendingUp } from 'lucide-react';
 import React from 'react';
 

@@ -13,7 +13,7 @@ import { CheckCircle, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from '
 // Internal Dependencies - Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';

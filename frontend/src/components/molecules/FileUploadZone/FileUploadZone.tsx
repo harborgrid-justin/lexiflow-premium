@@ -20,7 +20,7 @@ import React, { useRef } from 'react';
 import { DocumentService } from '@/services/features/documents/documents';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Components
 import { Button } from '@/components/atoms/Button';

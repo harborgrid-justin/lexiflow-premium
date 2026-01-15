@@ -2,7 +2,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { WorkflowTemplateData } from '@/types';
 import { ArrowLeft, Loader2, Rocket, Save } from 'lucide-react';
 import { useWorkflowDesigner } from '../../_hooks/useWorkflowDesigner';

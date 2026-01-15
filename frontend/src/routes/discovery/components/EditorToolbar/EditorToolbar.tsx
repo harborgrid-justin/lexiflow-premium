@@ -17,7 +17,7 @@ import { Bold, Italic, Underline, List, AlignLeft, AlignCenter, AlignRight, High
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

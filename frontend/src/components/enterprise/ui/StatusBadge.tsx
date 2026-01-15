@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import React from "react";
 
 // ============================================================================

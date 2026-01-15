@@ -5,7 +5,7 @@
  * invoice viewing/payment, secure messaging, and appointment scheduling.
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { Client } from '@/types';
 import { cn } from '@/lib/cn';
 import {

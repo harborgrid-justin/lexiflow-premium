@@ -25,7 +25,7 @@ import { ArgumentDetail } from './arguments/ArgumentDetail';
 import { ArgumentList } from './arguments/ArgumentList';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

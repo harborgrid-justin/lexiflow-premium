@@ -4,7 +4,7 @@
  * @description Intelligent breadcrumb navigation with dropdown menus and recent paths tracking.
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/lib/cn';
 import { ChevronDown, ChevronRight, Clock, Home } from 'lucide-react';

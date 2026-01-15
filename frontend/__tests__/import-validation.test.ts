@@ -4,7 +4,7 @@
  */
 
 // Mock backendDiscovery to avoid import.meta issues in Jest
-jest.mock('@/services/integration/backendDiscovery', () => ({
+jest.mock("@/services/integration/backendDiscovery", () => ({
   backendDiscovery: {
     getStatus: jest.fn(() => ({ available: true, healthy: true })),
     subscribe: jest.fn(() => () => {}),
@@ -21,7 +21,7 @@ jest.mock('@/services/integration/backendDiscovery', () => ({
 // ═══════════════════════════════════════════════════════════════════════════
 // Repository interfaces
 // Configuration
-import type {BaseRepository, RepositoryRegistry,} from '../index';
+import type { BaseRepository, RepositoryRegistry } from "@/providers";
 // Providers and hooks
 // Errors
 import {
@@ -37,13 +37,9 @@ import {
   isRetryableError,
   NotFoundError,
   UnauthorizedError,
-  useDataSource,
-  useSync,
   useTheme,
   useToast,
-  useWindow,
-  ValidationError,
-} from '../index';
+} from "@/providers";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                    VALIDATION TESTS
@@ -78,8 +74,8 @@ function testRepositoryTypes() {
 function testConfiguration() {
   const config = createConfigFromEnv();
   const testConfig = createTestConfig();
-  const builder = new DataSourceConfigBuilder('production');
-  
+  const builder = new DataSourceConfigBuilder("production");
+
   return { config, testConfig, builder, DEFAULT_TIMEOUTS, DEFAULT_RETRY };
 }
 
@@ -88,15 +84,23 @@ function testConfiguration() {
  */
 function testErrors() {
   const error = new UnauthorizedError();
-  const notFound = new NotFoundError('Case', '123');
-  const validation = new ValidationError('Validation failed', []);
-  
+  const notFound = new NotFoundError("Case", "123");
+  const validation = new ValidationError("Validation failed", []);
+
   const isRepoError = isRepositoryError(error);
   const isRetryable = isRetryableError(error);
   const message = getUserMessage(error);
   const severity = getErrorSeverity(error);
-  
-  return { error, notFound, validation, isRepoError, isRetryable, message, severity };
+
+  return {
+    error,
+    notFound,
+    validation,
+    isRepoError,
+    isRetryable,
+    message,
+    severity,
+  };
 }
 
 /**
@@ -118,8 +122,8 @@ export const ALL_IMPORTS_VALIDATED = true;
 //                    TEST SUITE
 // ═══════════════════════════════════════════════════════════════════════════
 
-describe('Import Validation', () => {
-  it('should have all provider hooks accessible', () => {
+describe("Import Validation", () => {
+  it("should have all provider hooks accessible", () => {
     const hooks = testProviderHooks();
     expect(hooks.useDataSource).toBeDefined();
     expect(hooks.useTheme).toBeDefined();
@@ -128,13 +132,13 @@ describe('Import Validation', () => {
     expect(hooks.useWindow).toBeDefined();
   });
 
-  it('should have all repository types accessible', () => {
+  it("should have all repository types accessible", () => {
     const types = testRepositoryTypes();
     expect(types.repo).toBeDefined();
     expect(types.registry).toBeDefined();
   });
 
-  it('should have configuration accessible', () => {
+  it("should have configuration accessible", () => {
     const config = testConfiguration();
     expect(config.config).toBeDefined();
     expect(config.testConfig).toBeDefined();
@@ -143,7 +147,7 @@ describe('Import Validation', () => {
     expect(config.DEFAULT_RETRY).toBeDefined();
   });
 
-  it('should have error classes accessible', () => {
+  it("should have error classes accessible", () => {
     const errors = testErrors();
     expect(errors.error).toBeInstanceOf(UnauthorizedError);
     expect(errors.notFound).toBeInstanceOf(NotFoundError);
@@ -154,13 +158,13 @@ describe('Import Validation', () => {
     expect(errors.severity).toBeDefined();
   });
 
-  it('should have environment configs accessible', () => {
+  it("should have environment configs accessible", () => {
     const configs = testEnvironmentConfigs();
     expect(configs.devConfig).toBeDefined();
     expect(configs.prodConfig).toBeDefined();
   });
 
-  it('should validate all imports successfully', () => {
+  it("should validate all imports successfully", () => {
     expect(ALL_IMPORTS_VALIDATED).toBe(true);
   });
 });

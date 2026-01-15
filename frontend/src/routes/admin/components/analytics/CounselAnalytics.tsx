@@ -19,7 +19,7 @@ import { AlertTriangle, Scale, TrendingUp, Users } from 'lucide-react';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Utils
 import { cn } from '@/lib/cn';

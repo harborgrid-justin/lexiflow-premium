@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { AlertTriangle, Edit2, FileSearch, Scale, ShieldCheck } from 'lucide-react';
 
 // interface GovernanceDashboardProps {

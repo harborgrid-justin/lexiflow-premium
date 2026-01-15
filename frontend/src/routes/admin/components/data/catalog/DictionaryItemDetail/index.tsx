@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useMutation } from '@/hooks/backend';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/data-service.service';

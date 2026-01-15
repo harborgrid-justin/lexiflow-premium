@@ -10,7 +10,7 @@
 import { X, GripVertical } from 'lucide-react';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Utils
 import { cn } from '@/lib/cn';

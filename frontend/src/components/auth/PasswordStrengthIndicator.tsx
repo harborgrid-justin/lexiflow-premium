@@ -7,7 +7,7 @@
  */
 
 import { useAuthState } from '@/contexts/auth/AuthProvider';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useMemo } from 'react';
 
 interface PasswordStrengthIndicatorProps {

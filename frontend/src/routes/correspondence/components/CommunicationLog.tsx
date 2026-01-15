@@ -18,7 +18,7 @@ import { ArrowDownLeft, ArrowUpRight, Mail, Paperclip, Shield } from 'lucide-rea
 // ============================================================================
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Components
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';

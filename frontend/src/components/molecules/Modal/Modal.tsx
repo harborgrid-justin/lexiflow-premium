@@ -19,7 +19,7 @@ import { createPortal } from 'react-dom';
 // ============================================================================
 // Hooks & Context
 import { useScrollLock } from '@/hooks/ui';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

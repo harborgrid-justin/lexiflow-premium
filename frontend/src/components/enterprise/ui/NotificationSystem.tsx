@@ -37,7 +37,7 @@ import { createPortal } from 'react-dom';
 // ============================================================================
 import { cn } from '@/lib/cn';
 import { } from '@/components/atoms//';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // ============================================================================
 // TYPES & INTERFACES

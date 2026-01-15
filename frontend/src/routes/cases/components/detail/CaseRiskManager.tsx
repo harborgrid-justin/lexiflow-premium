@@ -18,7 +18,7 @@ import { RiskList } from './risk/RiskList';
 
 // Internal Dependencies - Hooks & Context
 import { useWindow } from '@/providers';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { useCaseRisks } from '@/routes/cases/_hooks/useCaseRisks';

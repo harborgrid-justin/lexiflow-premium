@@ -4,7 +4,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 interface FormNavigationProps {
   currentStep: number;

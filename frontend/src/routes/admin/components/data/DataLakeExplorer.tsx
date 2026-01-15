@@ -10,7 +10,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { DataLakeItem } from '@/types';
 
 export function DataLakeExplorer(): React.ReactElement {

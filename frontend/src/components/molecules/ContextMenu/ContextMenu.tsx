@@ -17,7 +17,7 @@ import { LucideIcon } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Utils & Constants

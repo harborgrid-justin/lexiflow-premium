@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { TimelineEvent } from '@/types';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { getEventIcon, getEventColor } from '../components/detail/timeline/utils';
 
 export function useCaseTimeline(events: TimelineEvent[]) {

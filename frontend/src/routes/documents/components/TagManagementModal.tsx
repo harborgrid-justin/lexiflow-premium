@@ -1,6 +1,6 @@
 import { Button } from '@/components/atoms/Button/Button';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
 import { Plus, X } from 'lucide-react';

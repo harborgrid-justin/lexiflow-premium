@@ -13,7 +13,7 @@
  * @module routes/_shared/RouteLoading
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { memo } from 'react';
 import type { RouteLoadingProps, SkeletonProps } from './types';
 

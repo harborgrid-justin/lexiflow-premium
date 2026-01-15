@@ -25,13 +25,13 @@ import { Suspense, lazy } from 'react';
 import { useResearchTool } from './hooks/useResearchTool';
 
 // Hooks & Context
-import { useThemeContext } from '@/theme';
+import { useThemeContext } from '@/contexts/ThemeContext';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
 import { cn } from '@/lib/cn';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Types

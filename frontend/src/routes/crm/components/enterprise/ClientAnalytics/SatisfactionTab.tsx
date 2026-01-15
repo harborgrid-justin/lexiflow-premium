@@ -3,7 +3,7 @@
  */
 
 import { Card } from '@/components/molecules/Card/Card';
-import type { ThemeObject } from '@/theme';
+import type { ThemeObject } from '@/contexts/ThemeContext';
 import { SatisfactionCard } from './SatisfactionCard';
 import type { ClientSatisfaction } from './types';
 

@@ -5,7 +5,7 @@
  * Displays historical trends with AI-powered predictions
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { BaseDashboardProps, TimeSeriesDataPoint, TrendData } from '@/types/dashboard';
 import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';

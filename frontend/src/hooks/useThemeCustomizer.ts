@@ -1,12 +1,3 @@
-/**
- * useThemeCustomizer Hook
- *
- * Enterprise React Architecture - Hook Layer
- * Theme customizer logic following React 18 patterns.
- *
- * @module hooks/useThemeCustomizer
- */
-
 import { useTheme } from "@/contexts/ThemeContext";
 import { DesignTokens, ThemeDensity } from "@/lib/theme/tokens";
 import { DataService } from "@/services/data/data-service.service";

@@ -7,7 +7,7 @@ import { CaseId, DocumentId, LegalDocument } from '@/types';
 import { Minus, Wand2, X } from 'lucide-react';
 import { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useNotify } from '@/hooks/core';
 import { cn } from '@/lib/cn';
 import { getTodayString } from '@/lib/dateUtils';

@@ -24,7 +24,7 @@ import React, { memo } from 'react';
 import { BreadcrumbItem, Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 // Note: Logic hooks (time capture, global query status, breadcrumbs) are lifted to the controller.
 
 // Utils & Constants

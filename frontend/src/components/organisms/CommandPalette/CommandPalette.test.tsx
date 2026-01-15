@@ -4,11 +4,11 @@
  * @description Unit tests for CommandPalette component
  */
 
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { CommandPalette } from './CommandPalette';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Briefcase, FileText, Users } from 'lucide-react';
+import { describe, expect, it, vi } from 'vitest';
 import type { CommandItem } from './CommandPalette';
-import { FileText, Briefcase, Users } from 'lucide-react';
+import { CommandPalette } from './CommandPalette';
 
 // Mock useTheme
 vi.mock('@/contexts/theme/ThemeContext', () => ({
@@ -22,7 +22,7 @@ vi.mock('@/contexts/theme/ThemeContext', () => ({
 }));
 
 // Mock useDebounce
-vi.mock('@/shared/hooks/useDebounce', () => ({
+vi.mock('@/hooks/useDebounce', () => ({
   useDebounce: (value: string) => value,
 }));
 

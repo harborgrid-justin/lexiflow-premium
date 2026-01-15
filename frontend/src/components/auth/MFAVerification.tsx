@@ -7,7 +7,7 @@
  */
 
 import { useAuthActions } from '@/contexts/auth/AuthProvider';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useNotify } from '@/hooks/core';
 import { IntegrationOrchestrator } from '@/services/integration/IntegrationOrchestrator';
 import { Button } from '@/components/atoms/Button';

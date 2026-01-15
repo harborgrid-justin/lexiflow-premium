@@ -6,7 +6,7 @@
  */
 
 import { litigationApi } from '@/lib/frontend-api';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card/Card';

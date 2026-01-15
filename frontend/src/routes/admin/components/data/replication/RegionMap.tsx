@@ -1,6 +1,6 @@
 import React from 'react';
 import { Globe, Server, Wifi } from 'lucide-react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 interface RegionMapProps {

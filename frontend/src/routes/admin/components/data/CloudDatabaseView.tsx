@@ -5,12 +5,12 @@
  * deleting, and testing connections.
  */
 
-import React from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
-import type { ThemeContextValue } from '@/theme';
-import { useTheme } from '@/theme';
+import type { ThemeContextValue } from "@/lib/theme/ThemeContext.types";
 import { AnimatePresence, motion } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';
+import React from 'react';
 import { ConnectionCard } from './ConnectionCard';
 import { DataSourceSelector } from './DataSourceSelector';
 import { SystemHealthDisplay } from './SystemHealthDisplay';

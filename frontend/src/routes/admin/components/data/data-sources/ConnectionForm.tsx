@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { motion } from 'framer-motion';
 import { Cloud, Database, HardDrive } from 'lucide-react';
 import type { CloudProvider } from './types';

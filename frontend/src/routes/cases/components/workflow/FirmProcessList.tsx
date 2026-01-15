@@ -2,7 +2,7 @@ import { Card } from '@/components/molecules/Card/Card';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { MoreHorizontal, Play, Search } from 'lucide-react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { Process } from './types';

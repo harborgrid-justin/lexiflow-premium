@@ -9,7 +9,7 @@ import { ParallelTasksManager } from './ParallelTasksManager';
 import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/data-service.service';

@@ -1,4 +1,4 @@
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { BarChart3, Briefcase, Building, Database, DollarSign, FileCheck, GraduationCap, Import, Map as MapIcon, Network, Scale, Share2, ShieldAlert, Users } from 'lucide-react';
 export type DirectorView =

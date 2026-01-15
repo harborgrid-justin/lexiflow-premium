@@ -11,7 +11,7 @@ import { Button } from '@/components/atoms/Button';
  * - G28: Pure function of context
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { DiscoveryRequest } from '@/types';

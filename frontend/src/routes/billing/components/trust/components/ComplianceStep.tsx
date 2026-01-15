@@ -4,7 +4,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { TrustAccountType } from '@/types/trust-accounts';
 import { FormInput } from './FormInput';
 interface FormState {

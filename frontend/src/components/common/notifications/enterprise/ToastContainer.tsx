@@ -5,7 +5,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { UINotification } from '@/types/notifications';
 import { AnimatePresence, motion } from 'framer-motion';
 import {

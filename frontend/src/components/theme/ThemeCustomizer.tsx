@@ -1,6 +1,6 @@
+import { useThemeCustomizer } from '@/hooks/useThemeCustomizer';
+import { ThemeDensity } from '@/lib/theme/tokens';
 import React, { useState } from 'react';
-import { useThemeCustomizer } from '../hooks/useThemeCustomizer';
-import { ThemeDensity } from '../tokens';
 
 export const ThemeCustomizer: React.FC = () => {
   const [
@@ -57,8 +57,8 @@ export const ThemeCustomizer: React.FC = () => {
             key={tab}
             onClick={() => setActiveTab(tab as any)}
             className={`px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2 ${activeTab === tab
-                ? 'border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-900/10'
-                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+              ? 'border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-900/10'
+              : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}

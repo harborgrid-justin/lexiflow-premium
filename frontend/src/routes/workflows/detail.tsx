@@ -7,7 +7,7 @@
  */
 
 import { api } from '@/services/api';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { requireAuthentication } from '@/utils/route-guards';
 import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
 import { createDetailMeta } from '../_shared/meta-utils';

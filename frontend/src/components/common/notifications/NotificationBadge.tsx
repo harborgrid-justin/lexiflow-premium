@@ -3,7 +3,7 @@
  * Displays unread notification count with animated indicator
  */
 
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export interface NotificationBadgeProps {
   count: number;

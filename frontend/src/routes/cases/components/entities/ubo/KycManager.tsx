@@ -4,7 +4,7 @@ import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { Badge } from '@/components/atoms/Badge';
 import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { LegalEntity } from '@/types';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import React from "react";
 

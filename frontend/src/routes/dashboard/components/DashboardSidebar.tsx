@@ -18,7 +18,7 @@ import { AlertCircle, ArrowRight, FileText, TrendingUp } from 'lucide-react';
 import { useBillingStats } from '../_hooks/useDashboardData';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 import { PATHS } from '@/config/paths.config';
 import { useNavigate } from 'react-router-dom';

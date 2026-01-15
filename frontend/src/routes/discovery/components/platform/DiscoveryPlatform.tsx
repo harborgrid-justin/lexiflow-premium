@@ -29,7 +29,7 @@ import { DiscoveryNavigation } from './layout/DiscoveryNavigation';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { DiscoveryProvider, useDiscoveryActions, useDiscoveryState } from './contexts/DiscoveryContext';
 
 // Services & Utils

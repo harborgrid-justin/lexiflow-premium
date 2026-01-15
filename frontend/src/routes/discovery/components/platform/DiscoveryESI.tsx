@@ -26,7 +26,7 @@ import { Card } from '@/components/molecules/Card';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Config
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';

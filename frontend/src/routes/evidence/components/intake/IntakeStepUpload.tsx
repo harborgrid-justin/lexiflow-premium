@@ -11,7 +11,7 @@ import { Button } from '@/components/atoms/Button/Button';
 
 // Context & Utils
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Services
 import { DocumentService } from '@/services/features/documents/documents';

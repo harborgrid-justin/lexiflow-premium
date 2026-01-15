@@ -17,7 +17,7 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Components
 import { UserAvatar } from '@/components/atoms/UserAvatar';

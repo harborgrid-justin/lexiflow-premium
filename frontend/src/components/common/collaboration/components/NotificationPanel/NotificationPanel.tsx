@@ -8,7 +8,7 @@ import React from 'react';
 import { useModalState } from '@/hooks/core';
 import { NotificationService } from '@/services/domain/notification.service';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { NotificationGroup, UINotification } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { AlertCircle, AlertTriangle, Bell, CheckCircle, Clock, Info, X } from 'lucide-react';

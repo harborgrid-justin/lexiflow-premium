@@ -5,7 +5,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { NotificationPreferences as NotificationPreferencesType } from '@/types/notifications';
 import { motion } from 'framer-motion';
 import {

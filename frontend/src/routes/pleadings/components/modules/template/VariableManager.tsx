@@ -1,6 +1,6 @@
 import { Variable, Database, RefreshCw } from 'lucide-react';
 import { PleadingVariable } from '@/types';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 
 interface VariableManagerProps {

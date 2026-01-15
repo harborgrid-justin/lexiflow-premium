@@ -7,7 +7,7 @@
 
 import { CHART_COLORS } from '@/config/dashboard.config';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   AlertCircle,
   Briefcase,

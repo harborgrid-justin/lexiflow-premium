@@ -1,4 +1,4 @@
-import { useTheme } from "@/theme";
+import { useTheme } from "@/contexts/ThemeContext";
 import { DataService } from "@/services/data/data-service.service";
 import { ExtendedUserProfile } from "@/types";
 import { useCallback, useState } from "react";

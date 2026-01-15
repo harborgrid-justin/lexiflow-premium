@@ -17,7 +17,7 @@ import { Building2, User, Gavel, Briefcase, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Components

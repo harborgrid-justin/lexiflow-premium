@@ -28,7 +28,7 @@ import { OverviewSidebar } from './OverviewSidebar';
 // Internal Dependencies - Hooks & Context
 import { useCaseOverview } from '@/hooks/useCaseOverview';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';

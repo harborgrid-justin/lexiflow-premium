@@ -12,7 +12,7 @@
  */
 
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { CheckCircle, Loader2, X, XCircle } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';

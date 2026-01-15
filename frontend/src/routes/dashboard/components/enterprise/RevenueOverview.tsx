@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';
 import { Calendar, DollarSign, TrendingUp } from 'lucide-react';

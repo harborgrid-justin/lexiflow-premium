@@ -2,11 +2,11 @@ import { FEATURES_CONFIG } from '@/config/features/features.config';
 import { UI_CONFIG } from '@/config/features/ui.config';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
 // DataService imported for hydration
+import { ThemeObject } from '@/lib/theme/ThemeContext.types';
+import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from '@/lib/theme/tokens';
 import { DataService } from '@/services/data/data-service.service';
-import { ThemeObject } from './ThemeContext.types';
-import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from './tokens';
 
-export type { ThemeObject } from './ThemeContext.types';
+export type { ThemeObject } from '@/lib/theme/ThemeContext.types';
 
 // ============================================================================
 // Internal Hook: useSyncLocalStorage

@@ -1,7 +1,7 @@
 import { useWindow } from '@/providers';
 import { DiffViewer } from '@/routes/discovery/components/DiffViewer/DiffViewer';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Filter, Grid, Layout, List, MoreHorizontal, Search, Split, Wand2 } from 'lucide-react';
 
 interface DocumentToolbarProps {

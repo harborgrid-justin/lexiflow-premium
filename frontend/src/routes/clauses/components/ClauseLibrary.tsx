@@ -28,7 +28,7 @@ import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLo
 import { Card } from '@/components/molecules/Card/Card';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Clause } from '@/types';
 
 // ============================================================================

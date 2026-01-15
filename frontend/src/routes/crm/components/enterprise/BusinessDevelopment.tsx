@@ -8,7 +8,7 @@
 
 import React, { useState } from 'react';
 
-import { ChartColorService, useTheme } from '@/theme';
+import { ChartColorService, useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';

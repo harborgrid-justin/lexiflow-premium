@@ -4,11 +4,11 @@
  * @description Unit tests for MegaMenu component
  */
 
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { MegaMenu } from './MegaMenu';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Briefcase, FileText } from 'lucide-react';
+import { describe, expect, it, vi } from 'vitest';
 import type { MegaMenuSection } from './MegaMenu';
-import { Briefcase, FileText, Users } from 'lucide-react';
+import { MegaMenu } from './MegaMenu';
 
 // Mock useTheme
 vi.mock('@/contexts/theme/ThemeContext', () => ({
@@ -23,7 +23,7 @@ vi.mock('@/contexts/theme/ThemeContext', () => ({
 }));
 
 // Mock useClickOutside
-vi.mock('@/shared/hooks/useClickOutside', () => ({
+vi.mock('@/hooks/useClickOutside', () => ({
   useClickOutside: vi.fn(),
 }));
 

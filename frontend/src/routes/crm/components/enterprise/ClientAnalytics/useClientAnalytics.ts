@@ -3,7 +3,7 @@
  * @description Headless hook for Client Analytics state management
  */
 
-import { ChartColorService, useTheme } from "@/theme";
+import { ChartColorService, useTheme } from "@/contexts/ThemeContext";
 import { useQuery } from "@/hooks/backend";
 import { DataService } from "@/services/data/data-service.service";
 import { QUERY_KEYS } from "@/services/data/query-keys.service";

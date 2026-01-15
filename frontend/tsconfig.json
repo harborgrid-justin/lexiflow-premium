@@ -64,16 +64,19 @@
       "@/*": ["src/*"],
 
       /* Shared Layer - Business-agnostic reusables */
-      "@shared/*": ["src/shared/*"],
-      "@shared/ui/*": ["src/shared/ui/*"],
-      "@shared/lib/*": ["src/shared/lib/*"],
-      "@shared/hooks/*": ["src/shared/hooks/*"],
+      "@shared/ui/*": ["src/components/*"],
+      "@shared/lib/*": ["src/lib/*"],
+      "@shared/hooks/*": ["src/hooks/*"],
+      "@shared/services/*": ["src/services/*"],
+      "@shared/types/*": ["src/types/*"],
+      "@shared/utils/*": ["src/utils/*"],
+      "@shared/theme/*": ["src/theme/*"],
 
       /* Legacy compatibility aliases (to be deprecated) */
-      "@ui/*": ["src/shared/ui/*"],
-      "@components/*": ["src/shared/ui/*"],
-      "@components/ui/*": ["src/shared/ui/*"],
-      "@theme/*": ["src/shared/theme/*"],
+      "@ui/*": ["src/components/*"],
+      "@components/*": ["src/components/*"],
+      "@components/ui/*": ["src/components/*"],
+      "@theme/*": ["src/theme/*"],
       "@utils/*": ["src/utils/*"],
 
       /* Features - Domain business logic */

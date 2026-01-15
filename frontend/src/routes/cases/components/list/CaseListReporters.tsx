@@ -19,7 +19,7 @@ import { Mic2, Plus } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

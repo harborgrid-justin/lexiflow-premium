@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Calendar } from 'lucide-react';
 import { Pitch } from '../../types';

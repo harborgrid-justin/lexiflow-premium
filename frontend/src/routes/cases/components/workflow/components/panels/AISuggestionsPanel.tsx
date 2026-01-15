@@ -5,7 +5,7 @@
 
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/cn';
 import { Sparkles } from 'lucide-react';
 import type { AIWorkflowSuggestion } from '@/types/workflow-advanced-types';

@@ -21,7 +21,7 @@ import { useMemo, useTransition } from 'react';
 // Hooks & Context
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useWindow } from '@/providers';
-import { useTheme } from '@/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Components
 import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';

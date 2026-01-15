@@ -201,7 +201,7 @@ DataGridToolbar.displayName = 'DataGridToolbar';
 function getActionVariantClasses(variant: 'primary' | 'secondary' | 'danger', theme: ReturnType<typeof useTheme>['theme']): string {
   switch (variant) {
     case 'primary':
-      return 'bg-blue-500 text-white border border-blue-500 hover:bg-blue-600';
+      return cn('text-white border transition-colors', 'bg-blue-500 border-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700');
     case 'danger':
       return 'bg-red-500 text-white border border-red-500 hover:bg-red-600';
     case 'secondary':

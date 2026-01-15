@@ -16,6 +16,7 @@
  */
 
 import { communicationsApi } from '@/lib/frontend-api';
+import { useTheme } from '@/theme';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -108,10 +109,20 @@ export const HeaderWithNotifications: React.FC = () => {
     }
   }, [notifications]);
 
+  const { theme, tokens } = useTheme();
+
   return (
-    <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4">
+    <header style={{
+      backgroundColor: theme.surface.base,
+      borderBottom: `1px solid ${theme.border.default}`,
+      padding: tokens.spacing.normal.lg
+    }}>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+        <h1 style={{
+          fontSize: tokens.typography.fontSize.xl,
+          fontWeight: tokens.typography.fontWeight.bold,
+          color: theme.text.primary
+        }}>
           LexiFlow Premium
         </h1>
 
@@ -140,7 +151,7 @@ export const HeaderWithNotifications: React.FC = () => {
 
           {/* Loading state indicator */}
           {isLoading && (
-            <div className="text-xs text-slate-400">Loading...</div>
+            <div style={{ fontSize: tokens.typography.fontSize.xs, color: theme.text.muted }}>Loading...</div>
           )}
         </div>
       </div>

@@ -80,7 +80,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
   }, []);
 
   const getStatusColor = () => {
-    if (!useBackendApi) return 'text-blue-600 bg-blue-50';
+    if (!useBackendApi) return cn(theme.colors.info, 'dark:bg-blue-950/50');
     if (backendStatus === 'connected' && isOnline) return 'text-emerald-600 bg-emerald-50';
     if (backendStatus === 'checking') return 'text-amber-600 bg-amber-50';
     return 'text-rose-600 bg-rose-50';
@@ -115,20 +115,20 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
         <button
           onClick={() => setShowCoverage(true)}
           style={{ backgroundColor: 'var(--color-surfaceHover)' }}
-          className="p-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+          className={cn("p-1.5 rounded-full transition-colors", `hover:${theme.surface.hover}`)}
           title="View Service Coverage"
         >
-          <Info className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          <Info className={cn("w-4 h-4", theme.text.secondary)} />
         </button>
 
         {useBackendApi && (
           <button
             onClick={() => setShowHealthMonitor(true)}
             style={{ backgroundColor: 'transparent' }}
-            className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+            className={cn("p-1.5 rounded-full transition-colors", `hover:${theme.surface.hover}`)}
             title="View Backend Health Monitor"
           >
-            <Activity className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            <Activity className={cn("w-4 h-4", theme.text.secondary)} />
           </button>
         )}
       </div>

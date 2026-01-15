@@ -195,7 +195,7 @@ export class CasesService implements OnModuleDestroy {
       .where("case.status = :status", { status: CaseStatus.ACTIVE })
       .getRawOne<{ avgAge: string }>();
 
-    const avgAge = result?.avgAge || '0';
+    const avgAge = result?.avgAge || "0";
     const conversionRate = 0;
 
     const stats: CaseStatsDto = {
@@ -449,14 +449,19 @@ export class CasesService implements OnModuleDestroy {
   }
 
   async findOne(id: string): Promise<CaseResponseDto> {
+    console.log(`[CasesService.findOne] Lookup ID: ${id}`);
+
     // Check cache first
     const cached = this.caseCache.get(id);
     if (
       cached &&
       this.isCacheValid(cached.timestamp, this.QUERY_CACHE_TTL_MS)
     ) {
+      console.log(`[CasesService.findOne] Cache HIT for ${id}`);
       return cached.data;
     }
+
+    console.log(`[CasesService.findOne] Cache MISS for ${id}. Querying DB...`);
 
     // Enforce LRU on case cache
     this.enforceCacheLRU(this.caseCache, this.MAX_CASE_CACHE_SIZE);
@@ -466,8 +471,11 @@ export class CasesService implements OnModuleDestroy {
     });
 
     if (!caseEntity) {
+      console.log(`[CasesService.findOne] Not found in DB: ${id}`);
       throw new NotFoundException(`Case with ID ${id} not found`);
     }
+
+    console.log(`[CasesService.findOne] Found in DB: ${caseEntity.id}`);
 
     const response = this.toCaseResponse(caseEntity);
 

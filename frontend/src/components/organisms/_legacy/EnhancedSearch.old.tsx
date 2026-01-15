@@ -194,7 +194,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   autoFocus = false,
   className,
 }) => {
-  const { theme } = useTheme();
+  const { theme, tokens } = useTheme();
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<SearchCategory>('all');
   const [isOpen, setIsOpen] = useState(false);

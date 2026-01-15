@@ -1,5 +1,6 @@
 import { CheckCircle, Cloud, XCircle } from 'lucide-react';
 import React from 'react';
+import { useTheme } from '@/theme';
 interface ServiceCoverageProps {
   className?: string;
   compact?: boolean;
@@ -95,7 +96,7 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
  * ServiceCoverageBadge - React 18 optimized with React.memo
  */
 const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCoverageBadge({ className = '', compact = false }) {
-  // const { isBackendApiEnabled } = useDataSource();
+  const { theme, tokens } = useTheme();
 
   const totalServices = SERVICE_COVERAGE.length;
   const backendServices = SERVICE_COVERAGE.filter(s => s.hasBackend).length;
@@ -103,11 +104,11 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
 
   if (compact) {
     return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <Cloud className="w-4 h-4 text-emerald-500" />
-        <span className="text-sm text-gray-600 dark:text-gray-400">
-          Backend: <span className="font-semibold text-emerald-600 dark:text-emerald-400">{backendServices}/{totalServices}</span>
-          <span className="text-xs text-gray-500 ml-1">({coveragePercent}%)</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.compact.xs }} className={className}>
+        <Cloud style={{ width: '1rem', height: '1rem', color: theme.status.success.text }} />
+        <span style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary }}>
+          Backend: <span style={{ fontWeight: tokens.typography.fontWeight.semibold, color: theme.status.success.text }}>{backendServices}/{totalServices}</span>
+          <span style={{ fontSize: tokens.typography.fontSize.xs, color: theme.text.muted, marginLeft: tokens.spacing.compact.xs }}>({coveragePercent}%)</span>
         </span>
       </div>
     );
@@ -127,35 +128,57 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
   }, {} as Record<string, { total: number; backend: number }>);
 
   return (
-    <div className={`space-y-3 ${className}`}>
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.normal.md }} className={className}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h3 style={{
+          fontSize: tokens.typography.fontSize.sm,
+          fontWeight: tokens.typography.fontWeight.semibold,
+          color: theme.text.primary
+        }}>
           Backend Service Coverage
         </h3>
-        <div className="flex items-center gap-2">
-          <Cloud className="w-4 h-4 text-emerald-500" />
-          <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.compact.xs }}>
+          <Cloud style={{ width: '1rem', height: '1rem', color: theme.status.success.text }} />
+          <span style={{
+            fontSize: tokens.typography.fontSize.sm,
+            fontWeight: tokens.typography.fontWeight.bold,
+            color: theme.status.success.text
+          }}>
             {backendServices}/{totalServices} ({coveragePercent}%)
           </span>
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.compact.xs }}>
         {Object.entries(categories).map(([category, stats]) => {
           const categoryPercent = Math.round((stats.backend / stats.total) * 100);
           return (
-            <div key={category} className="space-y-1">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-gray-700 dark:text-gray-300">{category}</span>
-                <span className="text-gray-500 dark:text-gray-400">
+            <div key={category} style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.compact.xs }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: tokens.typography.fontSize.xs
+              }}>
+                <span style={{ fontWeight: tokens.typography.fontWeight.medium, color: theme.text.secondary }}>{category}</span>
+                <span style={{ color: theme.text.muted }}>
                   {stats.backend}/{stats.total} ({categoryPercent}%)
                 </span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+              <div style={{
+                width: '100%',
+                backgroundColor: theme.surface.muted,
+                borderRadius: tokens.borderRadius.full,
+                height: '0.5rem'
+              }}>
                 <div
-                  className={`h-2 rounded-full transition-all ${categoryPercent === 100 ? 'bg-emerald-500' : 'bg-amber-500'
-                    }`}
-                  style={{ width: `${categoryPercent}%` }}
+                  style={{
+                    height: '0.5rem',
+                    borderRadius: tokens.borderRadius.full,
+                    transition: 'all 0.3s',
+                    backgroundColor: categoryPercent === 100 ? theme.status.success.bg : theme.status.warning.bg,
+                    width: `${categoryPercent}%`
+                  }}
                 />
               </div>
             </div>
@@ -163,8 +186,15 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
         })}
       </div>
 
-      <div className="pt-3 border-t border-gray-200 dark:border-slate-700">
-        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+      <div style={{
+        paddingTop: tokens.spacing.normal.md,
+        borderTop: `1px solid ${theme.border.default}`
+      }}>
+        <p style={{
+          fontSize: tokens.typography.fontSize.xs,
+          color: theme.text.muted,
+          fontStyle: 'italic'
+        }}>
           When backend mode is enabled, {backendServices} services use PostgreSQL.
           {totalServices - backendServices > 0 && (
             <> {totalServices - backendServices} services still use local IndexedDB storage.</>
@@ -179,22 +209,62 @@ export const SystemHealthDisplay: React.FC<{
   isOpen: boolean;
   onClose: () => void;
 }> = ({ isOpen, onClose }) => {
+  const { theme, tokens } = useTheme();
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={onClose}>
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        zIndex: 50,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+      onClick={onClose}
+    >
       <div
-        className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto mx-4"
+        style={{
+          backgroundColor: theme.surface.base,
+          borderRadius: tokens.borderRadius.lg,
+          boxShadow: tokens.shadows.xl,
+          maxWidth: '42rem',
+          width: '100%',
+          maxHeight: '80vh',
+          overflowY: 'auto',
+          margin: '0 1rem'
+        }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+        <div style={{ padding: tokens.spacing.normal['2xl'] }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: tokens.spacing.normal.lg
+          }}>
+            <h2 style={{
+              fontSize: tokens.typography.fontSize.xl,
+              fontWeight: tokens.typography.fontWeight.bold,
+              color: theme.text.primary
+            }}>
               Service Coverage Report
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              style={{
+                color: theme.text.muted,
+                transition: 'color 0.2s',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: tokens.typography.fontSize.xl
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = theme.text.secondary}
+              onMouseLeave={(e) => e.currentTarget.style.color = theme.text.muted}
             >
               ✕
             </button>

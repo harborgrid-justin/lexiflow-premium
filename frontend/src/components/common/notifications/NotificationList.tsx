@@ -4,6 +4,7 @@
  */
 
 import type { ApiNotification } from '@/lib/frontend-api';
+import { useTheme } from '@/theme';
 import { formatDistanceToNow } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -30,6 +31,7 @@ export function NotificationList({
   showFilters = true,
   className = '',
 }: NotificationListProps) {
+  const { theme, tokens } = useTheme();
   const [filter, setFilter] = useState<'all' | 'unread' | 'high'>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
 
@@ -137,8 +139,14 @@ export function NotificationList({
 
   if (isLoading) {
     return (
-      <div className={`flex items-center justify-center p-8 ${className}`}>
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }} className={className}>
+        <div style={{
+          width: '2rem',
+          height: '2rem',
+          border: `4px solid ${theme.primary.DEFAULT}`,
+          borderTopColor: 'transparent',
+          borderRadius: '50%'
+        }} className="animate-spin" />
       </div>
     );
   }
@@ -147,14 +155,31 @@ export function NotificationList({
     <div className={`flex flex-col ${className}`}>
       {/* Header with filters */}
       {showFilters && (
-        <div className="mb-4 flex flex-col gap-3 border-b border-gray-200 pb-4 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Notifications</h2>
-            <div className="flex gap-2">
+        <div style={{
+          marginBottom: tokens.spacing.normal.lg,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: tokens.spacing.normal.md,
+          borderBottom: `1px solid ${theme.border.default}`,
+          paddingBottom: tokens.spacing.normal.lg
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <h2 style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: theme.text.primary }}>Notifications</h2>
+            <div style={{ display: 'flex', gap: tokens.spacing.compact.xs }}>
               {onMarkAllAsRead && (
                 <button
                   onClick={onMarkAllAsRead}
-                  className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.primary.DEFAULT,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                  onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
                 >
                   Mark all as read
                 </button>
@@ -162,7 +187,18 @@ export function NotificationList({
               {onClearAll && (
                 <button
                   onClick={onClearAll}
-                  className="text-sm font-medium text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.text.secondary,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = theme.text.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = theme.text.secondary}
                 >
                   Clear all
                 </button>
@@ -171,15 +207,25 @@ export function NotificationList({
           </div>
 
           {/* Filters */}
-          <div className="flex gap-2">
+          <div style={{ display: 'flex', gap: tokens.spacing.compact.xs }}>
             {(['all', 'unread', 'high'] as const).map((filterType) => (
               <button
                 key={filterType}
                 onClick={() => setFilter(filterType)}
-                className={`rounded-md px-3 py-1 text-sm font-medium capitalize ${filter === filterType
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-                  }`}
+                style={{
+                  borderRadius: tokens.borderRadius.md,
+                  padding: `${tokens.spacing.compact.xs} ${tokens.spacing.normal.md}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  textTransform: 'capitalize',
+                  backgroundColor: filter === filterType ? theme.primary.DEFAULT + '20' : 'transparent',
+                  color: filter === filterType ? theme.primary.DEFAULT : theme.text.secondary,
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => filter !== filterType && (e.currentTarget.style.backgroundColor = theme.surface.hover)}
+                onMouseLeave={(e) => filter !== filterType && (e.currentTarget.style.backgroundColor = 'transparent')}
               >
                 {filterType === 'high' ? 'High Priority' : filterType}
               </button>
@@ -190,7 +236,15 @@ export function NotificationList({
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+            style={{
+              borderRadius: tokens.borderRadius.md,
+              border: `1px solid ${theme.border.default}`,
+              backgroundColor: theme.surface.input,
+              padding: `${tokens.spacing.compact.xs} ${tokens.spacing.normal.md}`,
+              fontSize: tokens.typography.fontSize.sm,
+              color: theme.text.primary
+            }}
+            className="focus:outline-none focus:ring-2"
           >
             <option value="all">All Types</option>
             <option value="info">Info</option>

@@ -92,7 +92,7 @@ interface FeeAgreement {
 // ============================================================================
 
 export const IntakeManagement: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, tokens } = useTheme();
   const [activeTab, setActiveTab] = useState<'requests' | 'forms' | 'conflicts' | 'agreements'>('requests');
   const [showFormBuilder, setShowFormBuilder] = useState(false);
 

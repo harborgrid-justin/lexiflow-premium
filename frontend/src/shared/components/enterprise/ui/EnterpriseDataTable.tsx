@@ -367,7 +367,7 @@ export const EnterpriseDataTable = <T extends Record<string, unknown>>({
         className={cn(
           'flex items-center border-b transition-colors',
           theme.border.default,
-          isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'
+          isSelected ? cn(theme.surface.active, 'dark:bg-blue-900/20') : cn(`hover:${theme.surface.hover}`, 'dark:hover:bg-slate-800/50')
         )}
       >
         {selectable && (
@@ -532,7 +532,7 @@ export const EnterpriseDataTable = <T extends Record<string, unknown>>({
               {savedViews.map((view) => (
                 <div
                   key={view.id}
-                  className={cn('flex items-center justify-between p-2 rounded hover:bg-slate-50 dark:hover:bg-slate-800')}
+                  className={cn('flex items-center justify-between p-2 rounded', `hover:${theme.surface.hover}`)}
                 >
                   <button
                     onClick={() => loadView(view)}
@@ -589,7 +589,7 @@ export const EnterpriseDataTable = <T extends Record<string, unknown>>({
                 className={cn(
                   'flex items-center gap-2 flex-1 text-left',
                   theme.text.primary,
-                  column.sortable !== false && 'hover:text-blue-600 dark:hover:text-blue-400'
+                  column.sortable !== false && cn(theme.colors.hoverPrimary, 'dark:hover:text-blue-400')
                 )}
               >
                 <span>{column.header}</span>

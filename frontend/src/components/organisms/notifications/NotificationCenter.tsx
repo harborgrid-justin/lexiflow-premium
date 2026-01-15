@@ -15,6 +15,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useTheme } from '@/theme';
 import {
   Bell,
   X,
@@ -95,27 +96,27 @@ const getNotificationIcon = (type: Notification['type']): React.ReactNode => {
 /**
  * Get color for notification type
  */
-const getNotificationColor = (type: Notification['type']): string => {
+const getNotificationColor = (type: Notification['type'], theme: ReturnType<typeof useTheme>['theme']) => {
   switch (type) {
     case 'case_update':
-      return 'text-blue-600 bg-blue-50';
+      return { color: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
     case 'document':
-      return 'text-purple-600 bg-purple-50';
+      return { color: theme.chart.colors.accent, backgroundColor: theme.chart.colors.accent + '20' };
     case 'deadline':
-      return 'text-amber-600 bg-amber-50';
+      return { color: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
     case 'task':
-      return 'text-green-600 bg-green-50';
+      return { color: theme.status.success.text, backgroundColor: theme.status.success.bg };
     case 'message':
-      return 'text-blue-600 bg-blue-50';
+      return { color: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
     case 'invoice':
-      return 'text-emerald-600 bg-emerald-50';
+      return { color: theme.status.success.text, backgroundColor: theme.status.success.bg };
     case 'warning':
-      return 'text-amber-600 bg-amber-50';
+      return { color: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
     case 'error':
-      return 'text-red-600 bg-red-50';
+      return { color: theme.status.error.text, backgroundColor: theme.status.error.bg };
     case 'system':
     case 'info':
-      return 'text-slate-600 bg-slate-50';
+      return { color: theme.text.muted, backgroundColor: theme.surface.muted };
   }
 };
 
@@ -144,7 +145,9 @@ const NotificationItem: React.FC<{
   onMarkAsRead: (id: string) => void;
   onDelete: (id: string) => void;
   onClick?: (notification: Notification) => void;
-}> = ({ notification, onMarkAsRead, onDelete, onClick }) => {
+  theme: ReturnType<typeof useTheme>['theme'];
+  tokens: ReturnType<typeof useTheme>['tokens'];
+}> = ({ notification, onMarkAsRead, onDelete, onClick, theme, tokens }) => {
   const handleClick = (): void => {
     if (!notification.read) {
       onMarkAsRead(notification.id);
@@ -164,12 +167,18 @@ const NotificationItem: React.FC<{
 
   return (
     <div
-      className={`
-        group relative p-4 border-b border-gray-100 cursor-pointer
-        transition-colors duration-150
-        ${!notification.read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-gray-50'}
-      `}
+      style={{
+        position: 'relative',
+        padding: tokens.spacing.normal.lg,
+        borderBottom: `1px solid ${theme.border.light}`,
+        cursor: 'pointer',
+        backgroundColor: !notification.read ? theme.primary.DEFAULT + '10' : 'transparent',
+        transition: 'background-color 0.15s'
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = !notification.read ? theme.primary.DEFAULT + '15' : theme.surface.hover}
+      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = !notification.read ? theme.primary.DEFAULT + '10' : 'transparent'}
       onClick={handleClick}
+      className="group"
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -181,12 +190,17 @@ const NotificationItem: React.FC<{
     >
       {/* Unread indicator */}
       {!notification.read && (
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600" />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '0.25rem', backgroundColor: theme.primary.DEFAULT }} />
       )}
 
-      <div className="flex items-start gap-3">
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing.normal.md }}>
         {/* Icon */}
-        <div className={`flex-shrink-0 p-2 rounded-lg ${getNotificationColor(notification.type)}`}>
+        <div style={{
+          flexShrink: 0,
+          padding: tokens.spacing.compact.sm,
+          borderRadius: tokens.borderRadius.lg,
+          ...getNotificationColor(notification.type, theme)
+        }}>
           {getNotificationIcon(notification.type)}
         </div>
 
@@ -254,6 +268,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   isLoading = false,
   className = '',
 }) => {
+  const { theme, tokens } = useTheme();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -328,22 +343,20 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
             <div className="flex gap-2">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                  filter === 'all'
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'all'
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
+                  }`}
                 type="button"
               >
                 All
               </button>
               <button
                 onClick={() => setFilter('unread')}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                  filter === 'unread'
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'unread'
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
+                  }`}
                 type="button"
               >
                 Unread
@@ -394,6 +407,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                   onMarkAsRead={onMarkAsRead}
                   onDelete={onDelete}
                   onClick={onNotificationClick}
+                  theme={theme}
+                  tokens={tokens}
                 />
               ))
             )}

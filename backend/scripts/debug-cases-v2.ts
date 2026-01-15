@@ -14,15 +14,18 @@ async function run() {
     console.log(`${c.id} - ${c.caseNumber} - ${c.title}`);
   });
 
-  if (cases.length > 0) {
+  if (cases.length > 0 && cases[0]) {
     console.log("\nAttempting findOne for first case...");
     const firstId = cases[0].id;
     const found = await caseRepo.findOne({ where: { id: firstId } });
     if (found) {
-        console.log(`[SUCCESS] Found case ${firstId}`);
+      console.log(`[SUCCESS] Found case ${firstId}`);
     } else {
-        console.log(`[FAILURE] Could not find case ${firstId}`);
+      console.log(`[FAILURE] Could not find case ${firstId}`);
     }
   }
+
+  await app.close();
+}
 
 run();

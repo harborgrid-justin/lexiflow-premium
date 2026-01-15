@@ -91,6 +91,7 @@ export default [
 
     // Pleadings, Drafting & Litigation
     route("pleadings", "routes/pleadings/index.tsx"),
+    route("pleading_builder", "routes/pleadings/builder-page.tsx"),
     route("drafting", "routes/drafting/index.tsx"),
     route("litigation", "routes/litigation/index.tsx"),
     route("litigation_builder", "routes/litigation/builder.tsx"),

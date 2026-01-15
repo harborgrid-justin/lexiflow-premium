@@ -212,7 +212,7 @@ export function DataGrid<T extends Record<string, unknown>>({
   const sortState = controlledSortState ?? internalSortState;
   const setSortState = onSortChange ?? setInternalSortState;
   const filters = controlledFilters ?? internalFilters;
-  console.log('filter state:', filters);
+  // Filter state management for enterprise data filtering
   const setFilters = onFilterChange ?? setInternalFilters;
   const currentPage = controlledCurrentPage ?? internalCurrentPage;
   const setCurrentPage = onPageChange ?? setInternalCurrentPage;
@@ -247,7 +247,7 @@ export function DataGrid<T extends Record<string, unknown>>({
               const maxNum = typeof filter.max === 'number' ? filter.max : Number(filter.max);
               if (!isNaN(minNum) && numValue < minNum) return false;
               if (!isNaN(maxNum) && numValue > maxNum) {
-                console.log('Value exceeds max:', numValue, maxNum);
+                // Value exceeds max validation
                 return false;
               }
               return true;

@@ -89,7 +89,8 @@ export const AppShell = memo<AppShellProps>(({
     )}>
       {/* Global Fetching Indicator */}
       <div className={cn(
-        "absolute top-0 left-0 right-0 h-0.5 z-[9000] bg-blue-500 transition-opacity duration-300",
+        "absolute top-0 left-0 right-0 h-0.5 z-[9000] transition-opacity duration-300",
+        theme.colors.primary,
         isFetching ? "opacity-100" : "opacity-0"
       )}>
         <div className="absolute inset-0 bg-inherit opacity-50 animate-pulse"></div>

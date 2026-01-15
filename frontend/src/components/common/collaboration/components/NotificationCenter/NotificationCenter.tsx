@@ -124,10 +124,10 @@ export function NotificationCenter() {
 
   const getTypeColor = (type: Notification['type']) => {
     switch (type) {
-      case 'success': return 'text-green-500';
-      case 'warning': return 'text-amber-500';
-      case 'error': return 'text-red-500';
-      default: return 'text-blue-500';
+      case 'success': return theme.status.success.text;
+      case 'warning': return theme.status.warning.text;
+      case 'error': return theme.status.error.text;
+      default: return theme.primary.DEFAULT;
     }
   };
 

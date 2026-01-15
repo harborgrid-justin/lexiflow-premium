@@ -68,7 +68,7 @@ const SIZES = {
  * Color configurations
  */
 const VARIANTS = {
-  primary: 'bg-blue-600 text-white',
+  primary: cn(theme.colors.primary, 'text-white'),
   danger: 'bg-red-600 text-white',
   warning: 'bg-amber-500 text-white',
   success: 'bg-green-600 text-white',

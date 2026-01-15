@@ -91,6 +91,7 @@ export class CasesController {
     return this.casesService.findArchived(filterDto);
   }
 
+  @Public()
   @Get(":id")
   @ApiOperation({ summary: "Get case by ID" })
   @ApiResponse({

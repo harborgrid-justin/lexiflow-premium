@@ -105,13 +105,23 @@ export function DataGridExample() {
     actionColumn('actions', 'Actions', (row) => (
       <div className="flex gap-2">
         <button
-          onClick={() => console.log('Edit', row)}
+          onClick={() => {
+            // TODO: Wire to DataService for entity update
+            console.log('Edit entity:', row);
+            // Example: await DataService.documents.update(row.id, updates);
+          }}
           className="text-blue-600 hover:text-blue-800 text-sm"
         >
           Edit
         </button>
         <button
-          onClick={() => console.log('Delete', row)}
+          onClick={async () => {
+            // TODO: Wire to DataService for entity deletion with confirmation
+            if (window.confirm('Are you sure you want to delete this item?')) {
+              console.log('Delete entity:', row);
+              // Example: await DataService.documents.delete(row.id);
+            }
+          }}
           className="text-red-600 hover:text-red-800 text-sm"
         >
           Delete
@@ -128,6 +138,8 @@ export function DataGridExample() {
   // Handle cell edit
   const handleCellEdit = (rowId: string | number, columnId: string, value: unknown) => {
     console.log('Cell edited:', { rowId, columnId, value });
+    // TODO: Wire to DataService for field update
+    // Example: await DataService.documents.updateField(rowId, columnId, value);
     // In a real application, you would update the data here
   };
 

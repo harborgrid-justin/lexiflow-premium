@@ -118,13 +118,31 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
           {isQuickActionOpen && (
             <div className={cn("absolute top-full right-0 mt-2 w-48 rounded-lg shadow-xl border overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default)}>
-              <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
+              <button 
+                onClick={async () => {
+                  // TODO: Wire to DataService.billing.startTimer()
+                  setIsQuickActionOpen(false);
+                }}
+                className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}
+              >
                 <Clock className={cn("h-4 w-4", theme.status.success.icon)} /> Log Time
               </button>
-              <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
+              <button 
+                onClick={async () => {
+                  // TODO: Wire to DataService.documents.create()
+                  setIsQuickActionOpen(false);
+                }}
+                className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}
+              >
                 <FileText className={cn("h-4 w-4", theme.primary.text)} /> New Document
               </button>
-              <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
+              <button 
+                onClick={async () => {
+                  // TODO: Wire to DataService.contacts.createClient()
+                  setIsQuickActionOpen(false);
+                }}
+                className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}
+              >
                 <UserPlus className="h-4 w-4 text-purple-600 dark:text-purple-400" /> New Client
               </button>
             </div>

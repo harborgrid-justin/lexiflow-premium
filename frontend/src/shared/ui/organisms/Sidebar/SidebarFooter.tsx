@@ -25,7 +25,7 @@ import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusI
 // Components
 // UserAvatar component not found - create a simple fallback
 const UserAvatar = ({ user, className }: { user?: { name?: string;[key: string]: unknown }; className?: string }) => (
-  <div className={cn("rounded-full bg-blue-500 text-white flex items-center justify-center text-xs w-8 h-8", className)}>
+  <div className={cn("rounded-full flex items-center justify-center text-xs w-8 h-8", theme.colors.primary, "text-white", className)}>
     {user?.name?.[0] || 'U'}
   </div>
 );

@@ -69,7 +69,7 @@ export function ProtectedRoute({
   redirectTo = '/login',
 }: ProtectedRouteProps) {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
   const { user, isLoading, isAuthenticated } = useAuthState();
 
   useEffect(() => {
@@ -123,7 +123,7 @@ console.log('useNavigate:', navigate);
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
-          <p className="text-sm text-gray-600">Loading...</p>
+          <p className={cn("text-sm", theme.text.secondary)}>Loading...</p>
         </div>
       </div>
     );

@@ -2,6 +2,7 @@ import { useDataSource } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { BackendHealthMonitor } from '@/shared/ui/organisms/BackendHealthMonitor/BackendHealthMonitor';
 import { SystemHealthDisplay } from '@/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay';
+import { useTheme } from '@/theme';
 import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -10,6 +11,7 @@ interface ConnectionStatusProps {
 }
 
 export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
+  const { theme, tokens } = useTheme();
   // HYDRATION-SAFE: Track mounted state for browser-only APIs
   const [isMounted, setIsMounted] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
@@ -65,10 +67,10 @@ export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
   }, [isMounted]);
 
   const getStatusColor = () => {
-    if (!useBackendApi) return 'text-blue-600 bg-blue-50';
-    if (backendStatus === 'connected' && isOnline) return 'text-emerald-600 bg-emerald-50';
-    if (backendStatus === 'checking') return 'text-amber-600 bg-amber-50';
-    return 'text-rose-600 bg-rose-50';
+    if (!useBackendApi) return { color: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
+    if (backendStatus === 'connected' && isOnline) return { color: theme.status.success.text, backgroundColor: theme.status.success.bg };
+    if (backendStatus === 'checking') return { color: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
+    return { color: theme.status.error.text, backgroundColor: theme.status.error.bg };
   };
 
   const getStatusText = () => {
@@ -89,29 +91,57 @@ export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
     return <AlertCircle className="w-4 h-4" />;
   };
 
+  const statusStyle = getStatusColor();
+
   return (
     <>
       <div className="flex items-center gap-2">
-        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${getStatusColor()} ${className}`}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: tokens.spacing.compact.xs,
+            padding: `${tokens.spacing.compact.xs} ${tokens.spacing.normal.md}`,
+            borderRadius: tokens.borderRadius.full,
+            fontSize: tokens.typography.fontSize.xs,
+            fontWeight: tokens.typography.fontWeight.medium,
+            ...statusStyle
+          }}
+          className={className}
+        >
           {getIcon()}
           <span>{getStatusText()}</span>
         </div>
 
         <button
           onClick={() => setShowCoverage(true)}
-          className="p-1.5 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+          style={{
+            padding: tokens.spacing.compact.xs,
+            borderRadius: tokens.borderRadius.full,
+            backgroundColor: theme.surface.elevated,
+            transition: 'background-color 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
           title="View Service Coverage"
         >
-          <Info className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          <Info style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
         </button>
 
         {useBackendApi && (
           <button
             onClick={() => setShowHealthMonitor(true)}
-            className="p-1.5 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+            style={{
+              padding: tokens.spacing.compact.xs,
+              borderRadius: tokens.borderRadius.full,
+              backgroundColor: theme.surface.elevated,
+              transition: 'background-color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
             title="View Backend Health Monitor"
           >
-            <Activity className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            <Activity style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
           </button>
         )}
       </div>

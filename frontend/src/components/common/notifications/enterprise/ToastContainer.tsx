@@ -5,6 +5,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import type { UINotification } from '@/types/notifications';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -79,6 +80,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
   className,
   gap = 8,
 }) => {
+  const { theme, tokens } = useTheme();
   // HYDRATION-SAFE: Track mounted state for browser-only APIs
   const [isMounted, setIsMounted] = React.useState(false);
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
@@ -177,13 +179,13 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
     const iconClass = 'h-5 w-5';
     switch (type) {
       case 'success':
-        return <CheckCircle className={cn(iconClass, 'text-emerald-500')} />;
+        return <CheckCircle style={{ color: theme.status.success.text }} className={iconClass} />;
       case 'error':
-        return <AlertCircle className={cn(iconClass, 'text-rose-500')} />;
+        return <AlertCircle style={{ color: theme.status.error.text }} className={iconClass} />;
       case 'warning':
-        return <AlertTriangle className={cn(iconClass, 'text-amber-500')} />;
+        return <AlertTriangle style={{ color: theme.status.warning.text }} className={iconClass} />;
       default:
-        return <Info className={cn(iconClass, 'text-blue-500')} />;
+        return <Info style={{ color: theme.primary.DEFAULT }} className={iconClass} />;
     }
   };
 
@@ -191,13 +193,13 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
   const getColorScheme = (type: ToastNotification['type']) => {
     switch (type) {
       case 'success':
-        return 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20';
+        return { borderColor: theme.status.success.text, backgroundColor: theme.status.success.bg };
       case 'error':
-        return 'border-rose-500 bg-rose-50 dark:bg-rose-900/20';
+        return { borderColor: theme.status.error.text, backgroundColor: theme.status.error.bg };
       case 'warning':
-        return 'border-amber-500 bg-amber-50 dark:bg-amber-900/20';
+        return { borderColor: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
       default:
-        return 'border-blue-500 bg-blue-50 dark:bg-blue-900/20';
+        return { borderColor: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
     }
   };
 
@@ -299,12 +301,24 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
               initial="initial"
               animate="animate"
               exit="exit"
-              className={cn(
-                'pointer-events-auto flex items-start gap-3 w-96 max-w-full p-4 rounded-xl border-2 shadow-2xl backdrop-blur-sm',
-                getColorScheme(toast.type),
-                toast.priority === 'urgent' && 'ring-2 ring-red-500 ring-offset-2',
-                'bg-white/95 dark:bg-slate-800/95'
-              )}
+              style={{
+                pointerEvents: 'auto',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: tokens.spacing.normal.md,
+                width: '24rem',
+                maxWidth: '100%',
+                padding: tokens.spacing.normal.lg,
+                borderRadius: tokens.borderRadius.xl,
+                border: `2px solid ${getColorScheme(toast.type).borderColor}`,
+                backgroundColor: getColorScheme(toast.type).backgroundColor,
+                boxShadow: tokens.shadows.xl,
+                backdropFilter: 'blur(8px)',
+                ...(toast.priority === 'urgent' && {
+                  outline: `2px solid ${theme.status.error.text}`,
+                  outlineOffset: '2px'
+                })
+              }}
               role="alert"
               aria-live={toast.priority === 'urgent' ? 'assertive' : 'polite'}
             >
@@ -313,10 +327,10 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">
+                <h4 style={{ fontWeight: tokens.typography.fontWeight.semibold, fontSize: tokens.typography.fontSize.sm, color: theme.text.primary, marginBottom: tokens.spacing.compact.xs }}>
                   {toast.title}
                 </h4>
-                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary, lineHeight: '1.5' }}>
                   {toast.message}
                 </p>
 
@@ -377,19 +391,27 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           onClick={toggleSound}
-          className={cn(
-            'fixed z-[10000] p-2 rounded-full shadow-lg transition-colors pointer-events-auto',
-            'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700',
-            position.includes('right') ? 'right-4' : 'left-4',
-            position.includes('top') ? 'top-20' : 'bottom-20'
-          )}
+          style={{
+            position: 'fixed',
+            zIndex: 10000,
+            padding: tokens.spacing.compact.sm,
+            borderRadius: tokens.borderRadius.full,
+            boxShadow: tokens.shadows.lg,
+            backgroundColor: theme.surface.elevated,
+            pointerEvents: 'auto',
+            transition: 'background-color 0.2s',
+            ...(position.includes('right') ? { right: '1rem' } : { left: '1rem' }),
+            ...(position.includes('top') ? { top: '5rem' } : { bottom: '5rem' })
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
           aria-label={isSoundEnabled ? 'Disable sound' : 'Enable sound'}
           title={isSoundEnabled ? 'Disable sound' : 'Enable sound'}
         >
           {isSoundEnabled ? (
-            <Volume2 className="h-4 w-4 text-slate-700 dark:text-slate-300" />
+            <Volume2 style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
           ) : (
-            <VolumeX className="h-4 w-4 text-slate-700 dark:text-slate-300" />
+            <VolumeX style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
           )}
         </motion.button>
       )}

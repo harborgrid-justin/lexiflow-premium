@@ -258,7 +258,7 @@ export function DataGridPagination({
                 "px-3 py-1 text-sm rounded border transition-colors min-w-[2.5rem]",
                 theme.border.default,
                 isActive
-                  ? "bg-blue-500 text-white border-blue-500 font-medium"
+                  ? cn(theme.colors.primary, "text-white font-medium")
                   : cn("hover:bg-opacity-80", theme.surface.default, theme.text.primary)
               )}
             >

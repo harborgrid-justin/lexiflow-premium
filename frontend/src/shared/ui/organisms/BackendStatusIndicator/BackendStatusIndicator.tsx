@@ -29,7 +29,7 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   }, []);
 
   const getStatusColor = () => {
-    if (currentSource === 'indexeddb') return 'text-slate-500 bg-slate-100';
+    if (currentSource === 'indexeddb') return cn(theme.text.tertiary, theme.surface.default);
     if (!isAvailable) return 'text-rose-500 bg-rose-100';
     if (isHealthy) return 'text-emerald-500 bg-emerald-100';
     return 'text-amber-500 bg-amber-100';

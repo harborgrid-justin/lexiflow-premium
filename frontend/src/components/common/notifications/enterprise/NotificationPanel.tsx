@@ -7,6 +7,7 @@
 import React, { useMemo } from 'react';
 import type { UINotification } from '@/types/notifications';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { formatDistanceToNow } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -73,6 +74,8 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
   className,
   isLoading = false,
 }) => {
+  const { theme, tokens } = useTheme();
+
   // Calculate unread count
   const unreadCount = useMemo(
     () => notifications.filter((n) => !n.read).length,
@@ -169,23 +172,50 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
             aria-modal="true"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
-              <div className="flex items-center gap-2">
-                <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: tokens.spacing.normal.lg,
+              borderBottom: `1px solid ${theme.border.default}`,
+              backgroundColor: theme.surface.elevated
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.compact.xs }}>
+                <h3 style={{ fontWeight: tokens.typography.fontWeight.bold, fontSize: tokens.typography.fontSize.lg, color: theme.text.primary }}>
                   Notifications
                 </h3>
                 {unreadCount > 0 && (
-                  <span className="px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">
+                  <span style={{
+                    padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                    fontSize: tokens.typography.fontSize.xs,
+                    fontWeight: tokens.typography.fontWeight.bold,
+                    backgroundColor: theme.status.error.bg,
+                    color: theme.surface.base,
+                    borderRadius: tokens.borderRadius.full
+                  }}>
                     {unreadCount}
                   </span>
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.compact.xs }}>
                 {unreadCount > 0 && (
                   <button
                     onClick={onMarkAllAsRead}
-                    className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
+                    style={{
+                      fontSize: tokens.typography.fontSize.xs,
+                      fontWeight: tokens.typography.fontWeight.medium,
+                      color: theme.primary.DEFAULT,
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                      borderRadius: tokens.borderRadius.md,
+                      textDecoration: 'none'
+                    }}
+                    className="focus:outline-none focus:ring-2"
+                    onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                    onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
                     aria-label="Mark all as read"
                   >
                     <CheckCheck className="h-4 w-4 inline mr-1" />
@@ -194,7 +224,18 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                 )}
                 <button
                   onClick={onClose}
-                  className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{
+                    padding: tokens.spacing.compact.xs,
+                    borderRadius: tokens.borderRadius.lg,
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: theme.text.muted,
+                    transition: 'background-color 0.2s'
+                  }}
+                  className="focus:outline-none focus:ring-2"
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                   aria-label="Close notifications panel"
                 >
                   <X className="h-5 w-5" />
@@ -205,18 +246,25 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
             {/* Notifications List */}
             <div className="flex-1 overflow-y-auto overscroll-contain">
               {isLoading ? (
-                <div className="p-8 text-center">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                <div style={{ padding: '2rem', textAlign: 'center' }}>
+                  <div style={{
+                    display: 'inline-block',
+                    width: '2rem',
+                    height: '2rem',
+                    border: `4px solid ${theme.primary.DEFAULT}`,
+                    borderRightColor: 'transparent',
+                    borderRadius: '50%'
+                  }} className="animate-spin" role="status">
                     <span className="sr-only">Loading notifications...</span>
                   </div>
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="p-8 text-center">
-                  <Bell className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
-                  <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                <div style={{ padding: '2rem', textAlign: 'center' }}>
+                  <Bell style={{ width: '3rem', height: '3rem', margin: '0 auto 0.75rem', color: theme.text.muted }} />
+                  <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.muted, fontWeight: tokens.typography.fontWeight.medium }}>
                     No notifications
                   </p>
-                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                  <p style={{ fontSize: tokens.typography.fontSize.xs, color: theme.text.muted, marginTop: tokens.spacing.compact.xs }}>
                     You're all caught up!
                   </p>
                 </div>
@@ -230,14 +278,16 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 20, height: 0 }}
                         transition={{ duration: 0.2, delay: index * 0.05 }}
-                        className={cn(
-                          'p-4 transition-colors cursor-pointer group',
-                          !notification.read
-                            ? 'bg-blue-50/50 dark:bg-blue-900/10'
-                            : 'bg-white dark:bg-slate-800',
-                          'hover:bg-slate-50 dark:hover:bg-slate-700/50'
-                        )}
+                        style={{
+                          padding: tokens.spacing.normal.lg,
+                          backgroundColor: !notification.read ? theme.primary.DEFAULT + '10' : theme.surface.base,
+                          transition: 'background-color 0.2s',
+                          cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = !notification.read ? theme.primary.DEFAULT + '10' : theme.surface.base}
                         onClick={() => !notification.read && onMarkAsRead(notification.id)}
+                        className="group"
                       >
                         <div className="flex items-start gap-3">
                           {/* Icon */}
@@ -328,18 +378,52 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
 
             {/* Footer */}
             {notifications.length > 0 && (
-              <div className="p-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-between gap-2">
+              <div style={{
+                padding: tokens.spacing.normal.md,
+                borderTop: `1px solid ${theme.border.default}`,
+                backgroundColor: theme.surface.elevated,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: tokens.spacing.compact.xs
+              }}>
                 {onViewAll && (
                   <button
                     onClick={onViewAll}
-                    className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
+                    style={{
+                      fontSize: tokens.typography.fontSize.sm,
+                      fontWeight: tokens.typography.fontWeight.medium,
+                      color: theme.primary.DEFAULT,
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                      borderRadius: tokens.borderRadius.md,
+                      textDecoration: 'none'
+                    }}
+                    className="focus:outline-none focus:ring-2"
+                    onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                    onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
                   >
                     View all notifications
                   </button>
                 )}
                 <button
                   onClick={onClearAll}
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: theme.text.secondary,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+                    borderRadius: tokens.borderRadius.md,
+                    transition: 'color 0.2s'
+                  }}
+                  className="focus:outline-none focus:ring-2"
+                  onMouseEnter={(e) => e.currentTarget.style.color = theme.text.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = theme.text.secondary}
                   aria-label="Clear all notifications"
                 >
                   Clear all

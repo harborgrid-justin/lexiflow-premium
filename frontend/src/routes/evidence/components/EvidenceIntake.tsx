@@ -146,8 +146,23 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
     <div className="max-w-3xl mx-auto py-6 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <button onClick={handleBack} className={cn("mr-4 transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`)}><ArrowLeft className="h-6 w-6" /></button>
-          <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Evidence Intake Wizard</h2>
+          <button
+            onClick={handleBack}
+            style={{
+              marginRight: tokens.spacing.normal.md,
+              color: theme.text.secondary,
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = theme.text.primary}
+            onMouseLeave={(e) => e.currentTarget.style.color = theme.text.secondary}
+          >
+            <ArrowLeft className="h-6 w-6" />
+          </button>
+          <h2 style={{
+            fontSize: tokens.typography.fontSize['2xl'],
+            fontWeight: tokens.typography.fontWeight.bold,
+            color: theme.text.primary
+          }}>Evidence Intake Wizard</h2>
         </div>
         {isSaving && (
           <div className="flex items-center text-xs text-blue-600">

@@ -249,7 +249,7 @@ export function statusColumn<T extends Record<string, unknown>>(
 ): ColumnDefinition<T> {
   const defaultConfig = statusConfig || {
     active: { label: 'Active', color: 'bg-green-100 text-green-800' },
-    inactive: { label: 'Inactive', color: 'bg-gray-100 text-gray-800' },
+    inactive: { label: 'Inactive', color: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100' },
     pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
     error: { label: 'Error', color: 'bg-red-100 text-red-800' },
   };
@@ -267,7 +267,7 @@ export function statusColumn<T extends Record<string, unknown>>(
     cell: ({ value }) => {
       const config = defaultConfig[String(value)?.toLowerCase()] || {
         label: String(value),
-        color: 'bg-gray-100 text-gray-800',
+        color: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100',
       };
 
       return (

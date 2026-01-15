@@ -193,7 +193,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
                                     </div>
 
                                     {activeIndex === index && (
-                                        <div className="hidden sm:flex items-center gap-2 text-[10px] text-blue-600 font-medium animate-in fade-in slide-in-from-left-1">
+                                        <div className={cn("hidden sm:flex items-center gap-2 text-[10px] font-medium animate-in fade-in slide-in-from-left-1", theme.colors.info)}>
                                             Open <CornerDownLeft className="h-3 w-3" />
                                         </div>
                                     )}

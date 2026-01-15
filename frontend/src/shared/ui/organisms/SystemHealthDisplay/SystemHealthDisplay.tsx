@@ -106,9 +106,9 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <Cloud className="w-4 h-4 text-emerald-500" />
-        <span className="text-sm text-gray-600 dark:text-gray-400">
+        <span className={cn("text-sm", theme.text.secondary)}>
           Backend: <span className="font-semibold text-emerald-600 dark:text-emerald-400">{backendServices}/{totalServices}</span>
-          <span className="text-xs text-gray-500 ml-1">({coveragePercent}%)</span>
+          <span className={cn("text-xs ml-1", theme.text.tertiary)}>({coveragePercent}%)</span>
         </span>
       </div>
     );
@@ -147,8 +147,8 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
           return (
             <div key={category} className="space-y-1">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-gray-700 dark:text-gray-300">{category}</span>
-                <span className="text-gray-500 dark:text-gray-400">
+                <span className={cn("font-medium", theme.text.primary)}>{category}</span>
+                <span className={theme.text.secondary}>
                   {stats.backend}/{stats.total} ({categoryPercent}%)
                 </span>
               </div>
@@ -164,8 +164,8 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
         })}
       </div>
 
-      <div className="pt-3 border-t border-gray-200 dark:border-slate-700">
-        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+      <div className={cn("pt-3", theme.border.default, "border-t")}>
+        <p className={cn("text-xs italic", theme.text.tertiary)}>
           When backend mode is enabled, {backendServices} services use PostgreSQL.
           {totalServices - backendServices > 0 && (
             <> {totalServices - backendServices} services still use local IndexedDB storage.</>
@@ -191,12 +191,12 @@ export const SystemHealthDisplay: React.FC<{
       >
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            <h2 className={cn("text-xl font-bold", theme.text.primary)}>
               Service Coverage Report
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              className={cn(theme.text.secondary, `hover:${theme.text.primary}`)}
             >
               ✕
             </button>
@@ -205,7 +205,7 @@ export const SystemHealthDisplay: React.FC<{
           <ServiceCoverageBadge />
 
           <div className="mt-6 space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            <h3 className={cn("text-sm font-semibold", theme.text.primary)}>
               Service Details
             </h3>
 
@@ -220,7 +220,7 @@ export const SystemHealthDisplay: React.FC<{
               }, {} as Record<string, ServiceInfo[]>)
             ).map(([category, services]) => (
               <div key={category} className="space-y-2">
-                <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                <h4 className={cn("text-xs font-semibold uppercase tracking-wide", theme.text.primary)}>
                   {category}
                 </h4>
                 <div className="grid grid-cols-2 gap-2">
@@ -235,7 +235,7 @@ export const SystemHealthDisplay: React.FC<{
                       ) : (
                         <XCircle className="w-3 h-3 text-gray-400 flex-shrink-0" />
                       )}
-                      <span className={service.hasBackend ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}>
+                      <span className={service.hasBackend ? theme.text.primary : theme.text.tertiary}>
                         {service.name}
                       </span>
                     </div>

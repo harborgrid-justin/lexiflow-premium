@@ -98,7 +98,7 @@ interface AppointmentSlot {
 // ============================================================================
 
 export const ClientPortal: React.FC<{ client?: Client }> = () => {
-  const { theme } = useTheme();
+  const { theme, tokens } = useTheme();
   const [activeTab, setActiveTab] = useState<'documents' | 'cases' | 'invoices' | 'messages' | 'appointments'>('documents');
   const [messageText, setMessageText] = useState('');
   const [_selectedDocument, _setSelectedDocument] = useState<string | null>(null);

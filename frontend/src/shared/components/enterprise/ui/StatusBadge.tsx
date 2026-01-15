@@ -52,7 +52,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   const { theme, isDark } = useTheme();
   const isDarkMode = isDark;
   const themeStyles = isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900';
-  console.log('StatusBadge theme:', { theme, isDarkMode, themeStyles });
+  // Theme applied via useTheme hook
 
   const variants: Record<StatusVariant, string> = {
     success: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800',
@@ -103,7 +103,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       {status}
     </span>
   );
-  console.log('content data:', content);
+  // Content rendering based on type
 
   if (animated) {
     return (

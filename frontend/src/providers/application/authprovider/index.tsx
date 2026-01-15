@@ -1,38 +1,42 @@
-// ================================================================================
-// ENTERPRISE REACT CONTEXT FILE - AUTH DOMAIN (EXTENDED)
-// ================================================================================
-//
-// CANONICAL STRUCTURE:
-// ├── Types
-// ├── State Shape
-// ├── Actions (Domain Methods)
-// ├── Context
-// ├── Provider
-// └── Public Hooks
-//
-// POSITION IN ARCHITECTURE:
-//   Frontend API (truth) → AuthService (effects) → Context (state) → Views
-//
-// RULES ENFORCED:
-//   ✓ Domain-scoped state only (authentication)
-//   ✓ No direct HTTP calls (uses AuthApiService via AuthService)
-//   ✓ No router navigation (except SSO redirects - acceptable)
-//   ✓ No JSX layout (only provider wrapper)
-//   ✓ Loader-based initialization support
-//   ✓ Session management (timers, warnings)
-//   ✓ MFA support
-//   ✓ Audit logging
-//   ✓ Memoized context values
-//   ✓ Split state/actions contexts
-//
-// ENTERPRISE FEATURES:
-//   • Multi-factor authentication (MFA)
-//   • Session timeout with warnings
-//   • Role-based access control (RBAC)
-//   • SSO/SAML integration hooks
-//   • Audit logging for auth events
-//   • Password policy enforcement
-//   • Account lockout handling
+/**
+ * ================================================================================
+ * AUTH PROVIDER - APPLICATION LAYER
+ * ================================================================================
+ *
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * React v18 + Loader Integration + MFA + Session Management
+ *
+ * RESPONSIBILITIES:
+ * • Authentication state management
+ * • Login/logout operations with transitions
+ * • Multi-factor authentication (MFA)
+ * • Session timeout management
+ * • Role-based access control (RBAC)
+ * • SSO/SAML integration
+ * • Audit logging for auth events
+ *
+ * REACT 18 PATTERNS:
+ * ✓ Loader-first initialization (server → loader → provider)
+ * ✓ useTransition for non-urgent operations
+ * ✓ Split state/actions contexts
+ * ✓ Memoized context values
+ * ✓ Proper cleanup in effects
+ * ✓ StrictMode compatible
+ *
+ * ENTERPRISE FEATURES:
+ * • Multi-factor authentication (MFA)
+ * • Session timeout with warnings
+ * • Role-based access control (RBAC)
+ * • SSO/SAML integration hooks
+ * • Audit logging for auth events
+ * • Password policy enforcement
+ * • Account lockout handling
+ *
+ * DATA FLOW:
+ * SERVER → LOADER → AUTH PROVIDER → COMPONENT VIEWS
+ *
+ * @module providers/application/authprovider
+ */
 //   • Token refresh automation
 //
 // DATA FLOW:
@@ -55,12 +59,17 @@
  * @module providers/application/authprovider
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
-import { AUTH_REFRESH_TOKEN_STORAGE_KEY, AUTH_TOKEN_STORAGE_KEY } from '@/config/security/security.config';
+import {
+  AUTH_REFRESH_TOKEN_STORAGE_KEY,
+  AUTH_TOKEN_STORAGE_KEY,
+  SESSION_TIMEOUT_MS,
+  SESSION_WARNING_MS
+} from '@/config/security/security.config';
 import { AuthActionsContext, AuthStateContext } from '@/lib/auth/contexts';
 import type { AuthActionsValue, AuthEvent, AuthLoginResult, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from '@/lib/auth/types';
+import { apiClient } from '@/services/infrastructure/api-client.service';
 import { clearAuthTokens, setAuthTokens } from '@/services/infrastructure/api-client/auth-manager';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { startTransition, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 interface LoginUserResponse {
   id: string;
@@ -88,10 +97,11 @@ interface LoginUserResponse {
 const AUTH_STORAGE_KEY = AUTH_TOKEN_STORAGE_KEY;
 const REFRESH_STORAGE_KEY = AUTH_REFRESH_TOKEN_STORAGE_KEY;
 const AUTH_USER_KEY = 'lexiflow_auth_user';
-const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
-const SESSION_WARNING_TIME = 5 * 60 * 1000; // 5 minutes before timeout
+const SESSION_TIMEOUT = SESSION_TIMEOUT_MS; // From config
+const SESSION_WARNING_TIME = SESSION_WARNING_MS; // From config
 const TOKEN_REFRESH_INTERVAL = 15 * 60 * 1000; // 15 minutes
 const AUDIT_LOG_KEY = 'lexiflow_audit_log';
+// MFA enablement is checked from user.mfaEnabled, not a global constant
 
 // Default password policy
 const DEFAULT_PASSWORD_POLICY: PasswordPolicy = {
@@ -198,21 +208,26 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
   const logout = useCallback(async (): Promise<void> => {
     const userId = userRef.current?.id;
     try {
-      const authApi = new AuthApiService();
-      await authApi.logout();
+      // Use apiClient directly (service layer)
+      await apiClient.post('/auth/logout', {});
 
       // Clear storage
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(AUTH_USER_KEY);
+      localStorage.removeItem(REFRESH_STORAGE_KEY);
 
       // Also clear tokens from API client's auth-manager
       clearAuthTokens();
 
       clearSessionTimers();
-      setUser(null);
-      setSession(null);
-      setRequiresMFA(false);
-      setError(null);
+
+      // Use startTransition for non-urgent state updates
+      startTransition(() => {
+        setUser(null);
+        setSession(null);
+        setRequiresMFA(false);
+        setError(null);
+      });
 
       logAuditEvent({
         type: 'logout',
@@ -224,10 +239,15 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
       // Still clear local state even if API fails
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(AUTH_USER_KEY);
+      localStorage.removeItem(REFRESH_STORAGE_KEY);
+      clearAuthTokens();
       clearSessionTimers();
-      setUser(null);
-      setSession(null);
-      setRequiresMFA(false);
+
+      startTransition(() => {
+        setUser(null);
+        setSession(null);
+        setRequiresMFA(false);
+      });
     }
   }, [clearSessionTimers]);
 
@@ -317,8 +337,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
           if (isMounted) {
             tokenRefreshRef.current = setInterval(async () => {
               try {
-                const authApi = new AuthApiService();
-                await authApi.refreshToken();
+                await apiClient.post('/auth/refresh', {});
                 logAuditEvent({
                   type: 'token_refresh',
                   timestamp: new Date(),
@@ -365,11 +384,10 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
 
     try {
       console.log('[AuthProvider] Starting login for:', email);
-      const authApi = new AuthApiService();
-      const response = await authApi.login(email, password);
+      const response = await apiClient.post<{ user: LoginUserResponse; accessToken: string; refreshToken: string }>('/auth/login', { email, password });
       console.log('[AuthProvider] Login response received:', { hasToken: !!response.accessToken, userId: response.user?.id });
 
-      const userResponse = response.user as LoginUserResponse;
+      const userResponse = response.user;
 
       // Convert API user response to AuthUser format
       const authUser: AuthUser = {
@@ -431,7 +449,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
       // Start automatic token refresh
       tokenRefreshRef.current = setInterval(async () => {
         try {
-          await authApi.refreshToken();
+          await apiClient.post('/auth/refresh', {});
           logAuditEvent({
             type: 'token_refresh',
             timestamp: new Date(),
@@ -471,8 +489,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
     }
 
     try {
-      const authApi = new AuthApiService();
-      const response = await authApi.verifyMFA(code);
+      const response = await apiClient.post<{ verified: boolean; accessToken?: string; refreshToken?: string; user?: AuthUser }>('/auth/verify-mfa', { code });
 
       if (response.verified && response.accessToken && response.refreshToken && response.user) {
         // Store tokens and user
@@ -490,7 +507,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
         // Start automatic token refresh
         tokenRefreshRef.current = setInterval(async () => {
           try {
-            await authApi.refreshToken();
+            await apiClient.post('/auth/refresh', {});
             logAuditEvent({
               type: 'token_refresh',
               timestamp: new Date(),
@@ -520,8 +537,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
 
   const refreshToken = useCallback(async (): Promise<boolean> => {
     try {
-      const authApi = new AuthApiService();
-      const response = await authApi.refreshToken();
+      const response = await apiClient.post<{ accessToken: string; refreshToken: string }>('/auth/refresh', {});
       localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
       localStorage.setItem(REFRESH_STORAGE_KEY, response.refreshToken);
 
@@ -558,8 +574,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
   }, [user]);
 
   const enableMFA = useCallback(async (): Promise<MFASetup> => {
-    const authApi = new AuthApiService();
-    const response = await authApi.enableMFA();
+    const response = await apiClient.post<MFASetup>('/auth/mfa/enable', {});
 
     if (user) {
       logAuditEvent({
@@ -577,8 +592,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
   }, [user]);
 
   const disableMFA = useCallback(async (): Promise<void> => {
-    const authApi = new AuthApiService();
-    await authApi.disableMFA();
+    await apiClient.post('/auth/mfa/disable', {});
 
     if (user) {
       logAuditEvent({
@@ -594,8 +608,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
   }, [user]);
 
   const changePassword = useCallback(async (currentPassword: string, newPassword: string): Promise<void> => {
-    const authApi = new AuthApiService();
-    await authApi.changePassword(currentPassword, newPassword);
+    await apiClient.post('/auth/change-password', { currentPassword, newPassword });
 
     if (user) {
       logAuditEvent({

@@ -81,7 +81,7 @@ export function SessionProvider({
       };
       setSession(newSession);
       setLastActivity(Date.now());
-      localStorage.setItem('session', JSON.stringify(newSession));
+      localStorage.setItem('lexiflow-session', JSON.stringify(newSession));
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to create session'));
       console.error('[SessionProvider] Failed to create session:', err);
@@ -104,7 +104,7 @@ export function SessionProvider({
         lastActivity: new Date().toISOString()
       };
       setSession(refreshedSession);
-      localStorage.setItem('session', JSON.stringify(refreshedSession));
+      localStorage.setItem('lexiflow-session', JSON.stringify(refreshedSession));
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to refresh session'));
       console.error('[SessionProvider] Failed to refresh session:', err);
@@ -126,7 +126,7 @@ export function SessionProvider({
         lastActivity: new Date().toISOString()
       };
       setSession(extendedSession);
-      localStorage.setItem('session', JSON.stringify(extendedSession));
+      localStorage.setItem('lexiflow-session', JSON.stringify(extendedSession));
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to extend session'));
       console.error('[SessionProvider] Failed to extend session:', err);
@@ -138,7 +138,7 @@ export function SessionProvider({
 
   const endSession = useCallback(async (): Promise<void> => {
     setSession(null);
-    localStorage.removeItem('session');
+    localStorage.removeItem('lexiflow-session');
     setLastActivity(Date.now());
   }, []);
 
@@ -158,7 +158,7 @@ export function SessionProvider({
         setSession(updatedSession);
         // Use transition for non-urgent localStorage write
         startTransition(() => {
-          localStorage.setItem('session', JSON.stringify(updatedSession));
+          localStorage.setItem('lexiflow-session', JSON.stringify(updatedSession));
         });
       }
     }
@@ -203,18 +203,18 @@ export function SessionProvider({
 
   // Restore session from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('session');
+    const stored = localStorage.getItem('lexiflow-session');
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Session;
         if (new Date(parsed.expiresAt).getTime() > Date.now()) {
           setSession(parsed);
         } else {
-          localStorage.removeItem('session');
+          localStorage.removeItem('lexiflow-session');
         }
       } catch (err) {
         console.error('[SessionProvider] Failed to restore session:', err);
-        localStorage.removeItem('session');
+        localStorage.removeItem('lexiflow-session');
       }
     }
   }, []); // Empty deps - only run once on mount
@@ -227,7 +227,7 @@ export function SessionProvider({
         // Save current session state before unmount
         if (session) {
           try {
-            localStorage.setItem('session', JSON.stringify(session));
+            localStorage.setItem('lexiflow-session', JSON.stringify(session));
           } catch (err) {
             console.error('[SessionProvider] Failed to save session on unmount:', err);
           }

@@ -38,6 +38,7 @@ import {
 import "@/index.css";
 
 // Import root providers
+import { ApplicationLayer } from "@/providers/application/ApplicationLayer";
 import { InfrastructureLayer } from "@/providers";
 
 // ============================================================================
@@ -59,7 +60,9 @@ export function RootLayout() {
       </head>
       <body>
         <InfrastructureLayer>
-          <Outlet />
+          <ApplicationLayer>
+            <Outlet />
+          </ApplicationLayer>
         </InfrastructureLayer>
         <ScrollRestoration />
         <Scripts />

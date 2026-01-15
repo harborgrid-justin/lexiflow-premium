@@ -93,9 +93,9 @@ export class ApplicationErrorProvider extends Component<
     };
 
     try {
-      const logs = JSON.parse(localStorage.getItem('errorLogs') || '[]');
+      const logs = JSON.parse(localStorage.getItem('lexiflow-app-error-logs') || '[]');
       logs.push(errorLog);
-      localStorage.setItem('errorLogs', JSON.stringify(logs.slice(-50))); // Keep last 50
+      localStorage.setItem('lexiflow-app-error-logs', JSON.stringify(logs.slice(-50))); // Keep last 50
     } catch (err) {
       console.error('[ApplicationErrorBoundary] Failed to log error:', err);
     }

@@ -1,12 +1,27 @@
-// ================================================================================
-// ENTERPRISE REACT CONTEXT FILE - CURRENT USER (APPLICATION)
-// ================================================================================
-
 /**
- * User Provider
+ * ================================================================================
+ * USER PROVIDER - APPLICATION LAYER
+ * ================================================================================
  *
- * Manages current user state, profile, and permissions.
- * Part of the Application Layer - provides current user context.
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * React v18 + Loader Integration + Permissions
+ *
+ * RESPONSIBILITIES:
+ * • Current user profile management
+ * • User permissions and roles
+ * • Loader-based initialization
+ * • LocalStorage fallback (SSR-safe)
+ * • Profile updates
+ *
+ * REACT 18 PATTERNS:
+ * ✓ Loader-first initialization
+ * ✓ Split state/actions contexts
+ * ✓ Memoized context values
+ * ✓ SSR-safe localStorage access
+ * ✓ StrictMode compatible
+ *
+ * DATA FLOW:
+ * SERVER → LOADER → USER PROVIDER → COMPONENT VIEWS
  *
  * @module providers/application/userprovider
  */
@@ -33,7 +48,7 @@ export function UserProvider({ children, autoLoad = true, initialUser }: Enhance
     // Fallback to localStorage (SSR-safe)
     if (typeof window !== 'undefined') {
       try {
-        const stored = localStorage.getItem('currentUser');
+        const stored = localStorage.getItem('lexiflow-current-user');
         if (stored) {
           return JSON.parse(stored) as UserProfile;
         }
@@ -68,7 +83,7 @@ export function UserProvider({ children, autoLoad = true, initialUser }: Enhance
     setError(null);
     try {
       // In production, this would fetch from the API
-      const stored = localStorage.getItem('currentUser');
+      const stored = localStorage.getItem('lexiflow-current-user');
       if (stored) {
         const user = JSON.parse(stored) as UserProfile;
         setCurrentUser(user);
@@ -93,7 +108,7 @@ export function UserProvider({ children, autoLoad = true, initialUser }: Enhance
     try {
       const updated = { ...currentUser, ...updates };
       setCurrentUser(updated);
-      localStorage.setItem('currentUser', JSON.stringify(updated));
+      localStorage.setItem('lexiflow-current-user', JSON.stringify(updated));
 
       // In production, update via API
       await (DataService.hr as unknown as { updateUser: (id: string, data: Partial<UserProfile>) => Promise<UserProfile> }).updateUser(currentUser.id, updates);
@@ -135,7 +150,7 @@ export function UserProvider({ children, autoLoad = true, initialUser }: Enhance
     setCurrentUser(null);
     setPermissions([]);
     setRoles([]);
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('lexiflow-current-user');
   }, []);
 
   const refreshPermissions = useCallback(async () => {
@@ -145,7 +160,7 @@ export function UserProvider({ children, autoLoad = true, initialUser }: Enhance
     setError(null);
     try {
       // In production, fetch from API
-      const stored = localStorage.getItem('currentUser');
+      const stored = localStorage.getItem('lexiflow-current-user');
       if (stored) {
         const user = JSON.parse(stored) as UserProfile;
         const userPerms = user.preferences?.permissions as string[] | undefined;

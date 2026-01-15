@@ -94,9 +94,9 @@ export class InfrastructureErrorProvider extends Component<
     };
 
     try {
-      const logs = JSON.parse(localStorage.getItem('errorLogs') || '[]');
+      const logs = JSON.parse(localStorage.getItem('lexiflow-error-logs') || '[]');
       logs.push(errorLog);
-      localStorage.setItem('errorLogs', JSON.stringify(logs.slice(-50))); // Keep last 50
+      localStorage.setItem('lexiflow-error-logs', JSON.stringify(logs.slice(-50))); // Keep last 50
     } catch (err) {
       console.error('[InfrastructureErrorBoundary] Failed to log error:', err);
     }

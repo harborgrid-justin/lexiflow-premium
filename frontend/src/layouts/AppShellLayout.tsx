@@ -5,22 +5,28 @@
  *
  * RESPONSIBILITIES:
  * - Authentication enforcement via loader
- * - App-level providers (Auth, Permissions, Query Client)
- * - Sidebar + TopBar + Main content area
+ * - Global layout structure (Sidebar + TopBar + Content)
+ * - Integration with LayoutProvider for sidebar state
+ * - Navigation state coordination
  * - Layout-level error boundary
- * - Navigation state management
  *
  * DATA FLOW:
  * loader() checks auth
  *   → AppShellLayout renders
- *     → App-level providers (Auth, Permissions, QueryClient)
+ *     → LayoutProvider provides global layout state
  *       → Sidebar + TopBar + Outlet
  *
  * ENTERPRISE PATTERN:
  * - Loader enforces authentication (server-aware)
- * - Context provides auth state (app-level)
- * - NO domain contexts here (route components)
- * - Clean separation: layout vs content
+ * - LayoutProvider manages sidebar/panel state (global)
+ * - Providers in RootLayout > ApplicationLayer (DRY)
+ * - Clean separation: layout structure vs content
+ *
+ * REACT 18 INTEGRATION:
+ * ✓ Consumes LayoutProvider for coordinated state
+ * ✓ Sidebar state persists across route changes
+ * ✓ Memoized callbacks prevent unnecessary re-renders
+ * ✓ No duplicate provider wrapping
  *
  * @module layouts/AppShellLayout
  */
@@ -28,10 +34,7 @@
 import { AppShell } from "@/components/layouts/AppShell";
 import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
-import { AuthProvider } from '@/providers/application/AuthProvider';
-import { EntitlementsProvider } from "@/lib/entitlements/context";
-import { FlagsProvider } from "@/lib/flags/context";
-import { QueryClientProvider } from "@/unknown_fix_me/QueryClientProvider";
+import { useLayout } from '@/providers/application/layoutprovider';
 import { useAppShellLogic } from "@/hooks/useAppShellLogic";
 import { requireAuthLoader } from "@/utils/route-guards";
 import {
@@ -60,26 +63,26 @@ export async function loader(args: LoaderFunctionArgs) {
 /**
  * App Shell Layout
  * Provides authenticated app structure with sidebar and top bar
+ * Providers are now in RootLayout > ApplicationLayer
  */
 export default function AppShellLayout() {
-  return (
-    <QueryClientProvider>
-      <AuthProvider>
-        <EntitlementsProvider>
-          <FlagsProvider>
-            <AppShellContent />
-          </FlagsProvider>
-        </EntitlementsProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  );
+  return <AppShellContent />;
 }
 
 /**
  * App Shell Content
  * Renders the actual layout structure (sidebar, topbar, main content)
+ * Now integrated with global LayoutProvider for coordinated state
  */
 function AppShellContent() {
+  // Global layout state from LayoutProvider
+  const {
+    sidebarOpen,
+    sidebarCollapsed,
+    toggleSidebar,
+    toggleSidebarCollapsed
+  } = useLayout();
+
   // Controller: Handles all state, navigation, and business logic
   const { state, handlers } = useAppShellLogic();
 
@@ -100,8 +103,10 @@ function AppShellContent() {
       // Composed Slots
       sidebar={
         <AppSidebar
-          isOpen={state.isSidebarOpen}
-          onToggle={handlers.handleToggleSidebar}
+          isOpen={sidebarOpen}
+          isCollapsed={sidebarCollapsed}
+          onToggle={toggleSidebar}
+          onToggleCollapsed={toggleSidebarCollapsed}
           activeItem={state.activeView}
           userName={state.currentUser?.name}
           userEmail={state.currentUser?.email}

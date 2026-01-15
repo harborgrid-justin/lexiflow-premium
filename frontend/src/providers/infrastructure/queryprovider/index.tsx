@@ -1,22 +1,32 @@
 /**
  * ================================================================================
- * QUERY CLIENT PROVIDER - INFRASTRUCTURE LAYER (Standalone)
+ * QUERY CLIENT PROVIDER - INFRASTRUCTURE LAYER
  * ================================================================================
  *
- * ENTERPRISE LAYERING: INFRASTRUCTURE LAYER
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * React v18 + Custom Query Implementation
  *
  * RESPONSIBILITIES:
- * - Query client context for data fetching
- * - Singleton pattern for global query state
- * - Server-state synchronization
+ * • Query client context for data fetching
+ * • Singleton pattern for global query state
+ * • Server-state synchronization
+ * • Cache management
+ * • Request deduplication
+ *
+ * REACT 18 PATTERNS:
+ * ✓ Singleton queryClient (services/queryClient.ts)
+ * ✓ No context needed (direct import pattern)
+ * ✓ Suspense-compatible
+ * ✓ Concurrent rendering safe
+ * ✓ StrictMode compatible
  *
  * RULES:
- * - Must NOT depend on Application or Domain layers
- * - Provides data fetching infrastructure
- * - No business logic
+ * • Must NOT depend on Application or Domain layers
+ * • Provides data fetching infrastructure
+ * • No business logic
  *
  * DATA FLOW:
- * QUERY CLIENT → HOOKS → COMPONENTS
+ * SERVER → QUERY CLIENT → HOOKS → COMPONENTS
  *
  * @module providers/infrastructure/queryprovider
  */

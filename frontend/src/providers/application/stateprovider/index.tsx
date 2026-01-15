@@ -57,7 +57,7 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
   const [isPending, startPrefTransition] = useTransition();
 
   const [preferences, setPreferences] = useState<AppPreferences>(() => {
-    const stored = localStorage.getItem('appPreferences');
+    const stored = localStorage.getItem('lexiflow-app-preferences');
     if (stored) {
       try {
         return { ...DEFAULT_PREFERENCES, ...JSON.parse(stored), ...initialPreferences };
@@ -69,22 +69,22 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
   });
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
-    const stored = localStorage.getItem('sidebarCollapsed');
+    const stored = localStorage.getItem('lexiflow-sidebar-collapsed');
     return stored === 'true';
   });
 
   const [activeView, setActiveViewState] = useState<string | null>(null);
   const [recentItems, setRecentItems] = useState<string[]>(() => {
-    const stored = localStorage.getItem('recentItems');
+    const stored = localStorage.getItem('lexiflow-recent-items');
     return stored ? JSON.parse(stored) : [];
   });
   const [bookmarks, setBookmarks] = useState<string[]>(() => {
-    const stored = localStorage.getItem('bookmarks');
+    const stored = localStorage.getItem('lexiflow-bookmarks');
     return stored ? JSON.parse(stored) : [];
   });
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [lastSync, setLastSync] = useState<string | null>(
-    localStorage.getItem('lastSync')
+    localStorage.getItem('lexiflow-last-sync')
   );
 
   const updatePreferences = useCallback((updates: Partial<AppPreferences>) => {
@@ -92,7 +92,7 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
     startPrefTransition(() => {
       setPreferences(prev => {
         const updated = { ...prev, ...updates };
-        localStorage.setItem('appPreferences', JSON.stringify(updated));
+        localStorage.setItem('lexiflow-app-preferences', JSON.stringify(updated));
         return updated;
       });
     });
@@ -101,7 +101,7 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed(prev => {
       const newValue = !prev;
-      localStorage.setItem('sidebarCollapsed', String(newValue));
+      localStorage.setItem('lexiflow-sidebar-collapsed', String(newValue));
       return newValue;
     });
   }, []);
@@ -114,7 +114,7 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
     setRecentItems(prev => {
       const filtered = prev.filter(id => id !== itemId);
       const updated = [itemId, ...filtered].slice(0, 20); // Keep last 20
-      localStorage.setItem('recentItems', JSON.stringify(updated));
+      localStorage.setItem('lexiflow-recent-items', JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -123,7 +123,7 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
     setBookmarks(prev => {
       if (prev.includes(itemId)) return prev;
       const updated = [...prev, itemId];
-      localStorage.setItem('bookmarks', JSON.stringify(updated));
+      localStorage.setItem('lexiflow-bookmarks', JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -131,14 +131,14 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
   const removeBookmark = useCallback((itemId: string) => {
     setBookmarks(prev => {
       const updated = prev.filter(id => id !== itemId);
-      localStorage.setItem('bookmarks', JSON.stringify(updated));
+      localStorage.setItem('lexiflow-bookmarks', JSON.stringify(updated));
       return updated;
     });
   }, []);
 
   const clearRecentItems = useCallback(() => {
     setRecentItems([]);
-    localStorage.removeItem('recentItems');
+    localStorage.removeItem('lexiflow-recent-items');
   }, []);
 
   const updateOnlineStatus = useCallback((online: boolean) => {
@@ -148,7 +148,7 @@ export function StateProvider({ children, initialPreferences }: StateProviderPro
   const updateLastSync = useCallback(() => {
     const now = new Date().toISOString();
     setLastSync(now);
-    localStorage.setItem('lastSync', now);
+    localStorage.setItem('lexiflow-last-sync', now);
   }, []);
 
   // Monitor online/offline status

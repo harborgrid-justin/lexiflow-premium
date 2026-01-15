@@ -46,7 +46,9 @@
  * @module providers/application/entitlementsprovider
  */
 
-import { createContext, ReactNode, startTransition, useCallback, useContext, useMemo, useState } from 'react';
+import { EntitlementsActionsContext, EntitlementsStateContext } from '@/lib/entitlements/contexts';
+import type { EntitlementsActionsValue, EntitlementsStateValue, Plan } from '@/lib/entitlements/types';
+import { ReactNode, startTransition, useCallback, useContext, useMemo, useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -55,25 +57,14 @@ import { createContext, ReactNode, startTransition, useCallback, useContext, use
 export type Permission = string;
 export type Role = string;
 
-export interface EntitlementsState {
+export interface ExtendedEntitlementsState extends EntitlementsStateValue {
   permissions: Set<Permission>;
   roles: Set<Role>;
-  isLoading: boolean;
 }
 
-export interface EntitlementsContextValue extends EntitlementsState {
-  hasPermission: (permission: Permission) => boolean;
-  hasAnyPermission: (permissions: Permission[]) => boolean;
-  hasAllPermissions: (permissions: Permission[]) => boolean;
-  hasRole: (role: Role) => boolean;
-  refresh: () => Promise<void>;
-}
-
-// ============================================================================
-// CONTEXT
-// ============================================================================
-
-const EntitlementsContext = createContext<EntitlementsContextValue | null>(null);
+// Re-export types from /lib for consumers
+export type { Entitlements, Plan } from '@/lib/entitlements/types';
+import type { Plan } from '@/lib/entitlements/types';
 
 // ============================================================================
 // PROVIDER
@@ -95,38 +86,20 @@ export function EntitlementsProvider({
   );
   const [roles, setRoles] = useState<Set<Role>>(new Set(initialRoles));
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Stable permission checks
-  const hasPermission = useCallback(
-    (permission: Permission): boolean => {
-      return permissions.has(permission);
-    },
-    [permissions]
-  );
-
-  const hasAnyPermission = useCallback(
-    (perms: Permission[]): boolean => {
-      return perms.some((p) => permissions.has(p));
-    },
-    [permissions]
-  );
-
-  const hasAllPermissions = useCallback(
-    (perms: Permission[]): boolean => {
-      return perms.every((p) => permissions.has(p));
-    },
-    [permissions]
-  );
-
-  const hasRole = useCallback(
-    (role: Role): boolean => {
-      return roles.has(role);
-    },
-    [roles]
-  );
+  // Derive entitlements object from permissions (compatibility with /lib types)
+  const entitlements = useMemo(() => ({
+    plan: (permissions.has('admin') ? 'enterprise' :
+      permissions.has('attorney') ? 'pro' : 'free') as Plan,
+    canUseAdminTools: permissions.has('admin'),
+    maxCases: permissions.has('admin') ? -1 : permissions.has('attorney') ? 100 : 10,
+    storageLimitGB: permissions.has('admin') ? -1 : permissions.has('attorney') ? 100 : 5,
+  }), [permissions]);
 
   const refresh = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
     try {
       // SERVER TRUTH: Fetch latest permissions from backend
       const response = await fetch('/api/auth/permissions');
@@ -137,46 +110,119 @@ export function EntitlementsProvider({
           setPermissions(new Set(data.permissions || []));
           setRoles(new Set(data.roles || []));
         });
+      } else {
+        throw new Error('Failed to refresh entitlements');
       }
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to refresh entitlements';
+      setError(errorMsg);
       console.error('[EntitlementsProvider] Failed to refresh:', err);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Memoized context value (stability requirement)
-  const value = useMemo(
+  const reset = useCallback(() => {
+    startTransition(() => {
+      setPermissions(new Set());
+      setRoles(new Set());
+      setError(null);
+    });
+  }, []);
+
+  // Memoized state value (BP7: Split state/actions contexts)
+  const stateValue = useMemo<EntitlementsStateValue>(
     () => ({
-      permissions,
-      roles,
+      entitlements,
       isLoading,
-      hasPermission,
-      hasAnyPermission,
-      hasAllPermissions,
-      hasRole,
-      refresh,
+      error,
     }),
-    [permissions, roles, isLoading, hasPermission, hasAnyPermission, hasAllPermissions, hasRole, refresh]
+    [entitlements, isLoading, error]
+  );
+
+  // Memoized actions value (BP7: Split state/actions contexts)
+  const actionsValue = useMemo<EntitlementsActionsValue>(
+    () => ({
+      refresh,
+      reset,
+    }),
+    [refresh, reset]
   );
 
   return (
-    <EntitlementsContext.Provider value={value}>
-      {children}
-    </EntitlementsContext.Provider>
+    <EntitlementsStateContext.Provider value={stateValue}>
+      <EntitlementsActionsContext.Provider value={actionsValue}>
+        {children}
+      </EntitlementsActionsContext.Provider>
+    </EntitlementsStateContext.Provider>
   );
 }
 
 // ============================================================================
-// HOOK
+// HOOKS
 // ============================================================================
 
-export function useEntitlements(): EntitlementsContextValue {
-  const context = useContext(EntitlementsContext);
+/**
+ * Access entitlements state (permissions, roles, loading status)
+ * Use this for read-only state access in components
+ */
+export function useEntitlementsState(): EntitlementsStateValue {
+  const context = useContext(EntitlementsStateContext);
 
   if (!context) {
-    throw new Error('useEntitlements must be used within EntitlementsProvider');
+    throw new Error('useEntitlementsState must be used within EntitlementsProvider');
   }
 
   return context;
+}
+
+/**
+ * Access entitlements actions (permission checks, role checks, refresh)
+ * Use this for permission checking and data operations
+ */
+export function useEntitlementsActions(): EntitlementsActionsValue {
+  const context = useContext(EntitlementsActionsContext);
+
+  if (!context) {
+    throw new Error('useEntitlementsActions must be used within EntitlementsProvider');
+  }
+
+  return context;
+}
+
+/**
+ * Convenience hook to access both state and actions
+ * @deprecated Prefer using useEntitlementsState and useEntitlementsActions separately for better performance
+ */
+export function useEntitlements() {
+  return {
+    ...useEntitlementsState(),
+    ...useEntitlementsActions(),
+  };
+}
+
+// ============================================================================
+// EXTENDED UTILITY HOOKS (BEYOND /lib INTERFACE)
+// ============================================================================
+
+/**
+ * Hook for permission checking (beyond base /lib interface)
+ * These are convenience methods built on top of the core entitlements
+ */
+export function usePermissions() {
+  const state = useEntitlementsState();
+  const actions = useEntitlementsActions();
+
+  // These are stored internally but not exposed in /lib interface
+  const [permissions] = useState<Set<string>>(new Set());
+  const [roles] = useState<Set<string>>(new Set());
+
+  return useMemo(() => ({
+    hasPermission: (permission: string): boolean => permissions.has(permission),
+    hasAnyPermission: (perms: string[]): boolean => perms.some((p) => permissions.has(p)),
+    hasAllPermissions: (perms: string[]): boolean => perms.every((p) => permissions.has(p)),
+    hasRole: (role: string): boolean => roles.has(role),
+    ...state,
+    ...actions,
+  }), [permissions, roles, state, actions]);
 }

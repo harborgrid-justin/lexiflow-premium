@@ -78,7 +78,7 @@ export function ConfigProvider({ children, initialConfig }: ConfigProviderProps)
     setError(null);
     try {
       // In production, fetch from API or remote config service
-      const stored = localStorage.getItem('appConfig');
+      const stored = localStorage.getItem('lexiflow-app-config');
       if (stored) {
         const loadedConfig = JSON.parse(stored) as Partial<AppConfig>;
         setConfig((prev) => ({ ...prev, ...loadedConfig }));
@@ -100,7 +100,7 @@ export function ConfigProvider({ children, initialConfig }: ConfigProviderProps)
       // Persist to localStorage (NON-URGENT - could use transition)
       startTransition(() => {
         try {
-          localStorage.setItem('appConfig', JSON.stringify(updated));
+          localStorage.setItem('lexiflow-app-config', JSON.stringify(updated));
         } catch (err) {
           console.error('[ConfigProvider] Failed to persist config:', err);
         }
@@ -116,7 +116,7 @@ export function ConfigProvider({ children, initialConfig }: ConfigProviderProps)
 
   const resetConfig = useCallback(() => {
     setConfig(DEFAULT_CONFIG);
-    localStorage.removeItem('appConfig');
+    localStorage.removeItem('lexiflow-app-config');
   }, []);
 
   const isFeatureEnabled = useCallback((featureName: string): boolean => {

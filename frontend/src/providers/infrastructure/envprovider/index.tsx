@@ -1,17 +1,26 @@
 /**
  * ================================================================================
- * ENVIRONMENT PROVIDER - CONFIGURATION INFRASTRUCTURE
+ * ENVIRONMENT PROVIDER - INFRASTRUCTURE LAYER
  * ================================================================================
  *
- * Provides read-only access to environment variables and runtime config.
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * React v18 + Read-Only Configuration
  *
  * RESPONSIBILITIES:
- * - Expose VITE_* environment variables
- * - Provide feature flag state from env
- * - Detect runtime environment (dev/staging/prod)
- * - NO business logic
- * - NO API calls
- * - NO side effects
+ * • Expose VITE_* environment variables
+ * • Provide feature flag state from environment
+ * • Detect runtime environment (dev/staging/prod)
+ * • Read-only configuration access
+ * • NO business logic
+ * • NO API calls
+ * • NO side effects
+ *
+ * REACT 18 PATTERNS:
+ * ✓ Memoized configuration
+ * ✓ Pure read-only state
+ * ✓ SSR-safe
+ * ✓ No side effects
+ * ✓ Singleton pattern
  *
  * USAGE:
  * const { apiUrl, isDevelopment, features } = useEnv();

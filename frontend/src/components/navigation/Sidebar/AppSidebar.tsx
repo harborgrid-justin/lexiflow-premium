@@ -4,7 +4,9 @@ import { memo } from 'react';
 
 export interface AppSidebarProps {
   isOpen: boolean;
+  isCollapsed?: boolean;
   onToggle: () => void;
+  onToggleCollapsed?: () => void;
   activeItem?: string;
   userName?: string;
   userEmail?: string;
@@ -14,7 +16,9 @@ export interface AppSidebarProps {
 
 export const AppSidebar = memo<AppSidebarProps>(({
   isOpen,
+  isCollapsed = false,
   onToggle,
+  onToggleCollapsed,
   activeItem,
   userName,
   userEmail,

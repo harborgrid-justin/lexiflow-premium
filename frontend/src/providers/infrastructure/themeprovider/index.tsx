@@ -1,10 +1,39 @@
+/**
+ * ================================================================================
+ * THEME PROVIDER - INFRASTRUCTURE LAYER
+ * ================================================================================
+ *
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * React v18 + useSyncExternalStore + Transitions
+ *
+ * RESPONSIBILITIES:
+ * • Global theme state (light/dark mode)
+ * • Design token management
+ * • Theme density (comfortable/compact/spacious)
+ * • LocalStorage persistence
+ * • SSR-safe hydration
+ * • CSS variable injection
+ *
+ * REACT 18 PATTERNS:
+ * ✓ useSyncExternalStore for localStorage (Guideline 32)
+ * ✓ useTransition for non-urgent theme changes
+ * ✓ Memoized context values
+ * ✓ StrictMode compatible
+ * ✓ Proper cleanup in effects
+ *
+ * CROSS-CUTTING CAPABILITY:
+ * Available to ALL providers and components via useTheme()
+ * Affects visual appearance across entire application
+ *
+ * @module providers/infrastructure/themeprovider
+ */
+
 import { FEATURES_CONFIG } from '@/config/features/features.config';
 import { UI_CONFIG } from '@/config/features/ui.config';
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
-// DataService imported for hydration
 import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from '@/lib/theme/tokens';
 import { ThemeObject } from '@/lib/theme/types';
 import { DataService } from '@/services/data/data-service.service';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
 
 export type { ThemeObject } from '@/lib/theme/types';
 
@@ -366,7 +395,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
       // Skip if user is not authenticated
       try {
-        const token = localStorage.getItem('lexiflow_auth_token');
+        const token = localStorage.getItem('lexiflow-auth-token');
         if (!token) {
           // console.log('[ThemeContext] Skipping theme hydration - not authenticated');
           return;

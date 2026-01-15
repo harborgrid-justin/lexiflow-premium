@@ -151,8 +151,7 @@ const ROUTES = {
 export function App() {
   return (
     <BrowserRouter>
-      <AppProviders initialFlags={{ enableNewDashboard: true, enableAdminTools: true }}>
-        <DataProvider>
+      <RootProviders>
           <Routes>
             {/* Public route */}
             <Route path={ROUTES.public.path} element={ROUTES.public.element} />
@@ -180,8 +179,7 @@ export function App() {
             {/* Fallback */}
             <Route path="*" element={<Navigate to={ROUTES.public.path} replace />} />
           </Routes>
-        </DataProvider>
-      </AppProviders>
+      </RootProviders>
     </BrowserRouter>
   );
 };

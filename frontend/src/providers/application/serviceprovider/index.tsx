@@ -36,9 +36,15 @@
  * @module providers/application/serviceprovider
  */
 
+import { HealthApiService, SyncApiService } from '@/api/admin';
+import { adminApi } from '@/lib/frontend-api/admin';
 import { ServiceActionsContext, ServiceStateContext } from '@/lib/service/contexts';
 import type { ServiceActionsValue, ServiceHealth, ServiceProviderProps, ServiceStateValue } from '@/lib/service/types';
+import { getServiceHealth } from '@/services/bootstrap';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
+const healthApi = new HealthApiService();
+const syncApi = new SyncApiService();
 
 export function ServiceProvider({ children, healthCheckInterval = 60000 }: ServiceProviderProps) {
   const [services, setServices] = useState<ServiceHealth[]>([]);
@@ -48,18 +54,64 @@ export function ServiceProvider({ children, healthCheckInterval = 60000 }: Servi
 
   const checkHealth = useCallback(async (serviceName?: string): Promise<ServiceHealth[]> => {
     try {
-      // In production, ping actual service endpoints
-      const mockServices: ServiceHealth[] = [
-        { name: 'api', status: 'healthy', lastCheck: new Date().toISOString(), responseTime: 120 },
-        { name: 'database', status: 'healthy', lastCheck: new Date().toISOString(), responseTime: 45 },
-        { name: 'storage', status: 'healthy', lastCheck: new Date().toISOString(), responseTime: 80 },
-      ];
+      const now = new Date().toISOString();
+      const healthChecks: ServiceHealth[] = [];
 
+      // If specific service requested, check that one
       if (serviceName) {
-        const filtered = mockServices.filter(s => s.name === serviceName);
+        const startTime = performance.now();
+
+        switch (serviceName) {
+          case 'database': {
+            const dbHealth = await healthApi.checkDatabase();
+            healthChecks.push({
+              name: 'database',
+              status: dbHealth.status === 'pass' ? 'healthy' : 'degraded',
+              lastCheck: now,
+              responseTime: dbHealth.responseTime,
+            });
+            break;
+          }
+          case 'redis': {
+            const redisHealth = await healthApi.checkRedis();
+            healthChecks.push({
+              name: 'redis',
+              status: redisHealth.status === 'pass' ? 'healthy' : 'degraded',
+              lastCheck: now,
+              responseTime: redisHealth.responseTime,
+            });
+            break;
+          }
+          case 'api': {
+            const systemHealthResult = await adminApi.getSystemHealth();
+            if (systemHealthResult.ok) {
+              healthChecks.push({
+                name: 'api',
+                status: systemHealthResult.data.status === 'healthy' ? 'healthy' : 'degraded',
+                lastCheck: now,
+                responseTime: Math.round(performance.now() - startTime),
+              });
+            }
+            break;
+          }
+          default: {
+            // Check frontend services via bootstrap
+            const frontendHealth = getServiceHealth();
+            const service = frontendHealth.find(s => s.name === serviceName);
+            if (service) {
+              healthChecks.push({
+                name: service.name,
+                status: service.healthy ? 'healthy' : 'degraded',
+                lastCheck: now,
+                responseTime: 0,
+              });
+            }
+          }
+        }
+
         setServices(prev => {
           const updated = [...prev];
-          filtered.forEach(service => {
+          healthChecks.forEach(service => {
             const idx = updated.findIndex(s => s.name === service.name);
             if (idx >= 0) {
               updated[idx] = service;
@@ -69,11 +121,49 @@ export function ServiceProvider({ children, healthCheckInterval = 60000 }: Servi
           });
           return updated;
         });
-        return filtered;
+        return healthChecks;
       }
 
-      setServices(mockServices);
-      return mockServices;
+      // Check all services
+      const startTime = performance.now();
+
+      // 1. System health (includes database, cache, external services)
+      const systemHealthResult = await adminApi.getSystemHealth();
+      if (systemHealthResult.ok) {
+        const health = systemHealthResult.data;
+        healthChecks.push({
+          name: 'api',
+          status: health.status === 'healthy' ? 'healthy' : 'degraded',
+          lastCheck: now,
+          responseTime: Math.round(performance.now() - startTime),
+        });
+        healthChecks.push({
+          name: 'database',
+          status: health.database === 'connected' ? 'healthy' : 'down',
+          lastCheck: now,
+          responseTime: 0,
+        });
+        healthChecks.push({
+          name: 'cache',
+          status: health.cache === 'connected' ? 'healthy' : 'down',
+          lastCheck: now,
+          responseTime: 0,
+        });
+      }
+
+      // 2. Frontend services health
+      const frontendHealth = getServiceHealth();
+      frontendHealth.forEach(service => {
+        healthChecks.push({
+          name: service.name,
+          status: service.healthy ? 'healthy' : 'degraded',
+          lastCheck: now,
+          responseTime: 0,
+        });
+      });
+
+      setServices(healthChecks);
+      return healthChecks;
     } catch (err) {
       console.error('[ServiceProvider] Health check failed:', err);
       return [];
@@ -82,31 +172,63 @@ export function ServiceProvider({ children, healthCheckInterval = 60000 }: Servi
 
   const syncData = useCallback(async () => {
     try {
-      // In production, sync with backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setLastSync(new Date().toISOString());
-      console.log('[ServiceProvider] Data synced successfully');
+      // Get sync status from backend
+      const status = await syncApi.getStatus();
+
+      setLastSync(status.lastSyncTime);
+      setPendingOperations(status.pending + status.failed);
+
+      console.log('[ServiceProvider] Data sync status updated', {
+        pending: status.pending,
+        failed: status.failed,
+        conflicts: status.conflicts,
+        healthy: status.isHealthy,
+      });
     } catch (err) {
-      console.error('[ServiceProvider] Sync failed:', err);
+      console.error('[ServiceProvider] Sync status check failed:', err);
       throw err;
     }
   }, []);
 
   const retryFailedOperations = useCallback(async () => {
     try {
-      // In production, retry queued operations
-      console.log('[ServiceProvider] Retrying failed operations...');
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setPendingOperations(0);
+      // Get failed operations from sync queue
+      const queueResult = await syncApi.getQueue({ status: 'failed', limit: 100 });
+      const failedIds = queueResult.data.map(item => item.id);
+
+      if (failedIds.length === 0) {
+        console.log('[ServiceProvider] No failed operations to retry');
+        setPendingOperations(0);
+        return;
+      }
+
+      // Retry all failed operations
+      const result = await syncApi.retryFailed(failedIds);
+
+      console.log(`[ServiceProvider] Retried ${result.updated} failed operations`);
+
+      // Update pending count
+      const status = await syncApi.getStatus();
+      setPendingOperations(status.pending + status.failed);
     } catch (err) {
       console.error('[ServiceProvider] Retry failed:', err);
       throw err;
     }
   }, []);
 
-  const clearQueue = useCallback(() => {
-    setPendingOperations(0);
-    console.log('[ServiceProvider] Operation queue cleared');
+  const clearQueue = useCallback(async () => {
+    try {
+      // Clear completed sync items from backend queue
+      const result = await syncApi.clearCompleted();
+      console.log(`[ServiceProvider] Cleared ${result.deleted} completed operations`);
+
+      // Update pending count
+      const status = await syncApi.getStatus();
+      setPendingOperations(status.pending + status.failed);
+    } catch (err) {
+      console.error('[ServiceProvider] Clear queue failed:', err);
+      setPendingOperations(0);
+    }
   }, []);
 
   // Monitor online status

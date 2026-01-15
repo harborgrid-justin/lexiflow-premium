@@ -38,6 +38,7 @@ export {
   SyncApiService,
   type AdminSyncConflict,
   type AdminSyncStatus,
+  type SyncQueueItem,
   type SyncResult,
 } from "./sync-api";
 export {

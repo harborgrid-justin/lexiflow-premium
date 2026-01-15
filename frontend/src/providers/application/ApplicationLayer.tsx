@@ -111,6 +111,7 @@ import { FlagsProvider, FlagsProviderProps } from "@/lib/flags/context";
 import { AuthProvider } from "@/providers/application/authprovider";
 import { ApplicationErrorProvider } from "@/providers/application/errorprovider";
 import { LayoutProvider } from "@/providers/application/layoutprovider";
+import { RoleProvider } from "@/providers/application/roleprovider";
 import { ServiceProvider } from "@/providers/application/serviceprovider";
 import { StateProvider } from "@/providers/application/stateprovider";
 import { UserProvider } from "@/providers/application/userprovider";
@@ -146,15 +147,17 @@ export function ApplicationLayer({
       <AuthProvider initialAuth={initialAuth}>
         <FlagsProvider initial={initialFlags}>
           <EntitlementsProvider>
-            <ServiceProvider healthCheckInterval={60000}>
-              <StateProvider>
-                <UserProvider autoLoad={true} initialUser={initialUser}>
-                  <LayoutProvider>
-                    {children}
-                  </LayoutProvider>
-                </UserProvider>
-              </StateProvider>
-            </ServiceProvider>
+            <RoleProvider>
+              <ServiceProvider healthCheckInterval={60000}>
+                <StateProvider>
+                  <UserProvider autoLoad={true} initialUser={initialUser}>
+                    <LayoutProvider>
+                      {children}
+                    </LayoutProvider>
+                  </UserProvider>
+                </StateProvider>
+              </ServiceProvider>
+            </RoleProvider>
           </EntitlementsProvider>
         </FlagsProvider>
       </AuthProvider>

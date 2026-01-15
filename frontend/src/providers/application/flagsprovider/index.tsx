@@ -1,21 +1,30 @@
 /**
  * ================================================================================
- * FLAGS PROVIDER - APPLICATION LAYER (Standalone)
+ * FLAGS PROVIDER - APPLICATION LAYER
  * ================================================================================
  *
- * ENTERPRISE LAYERING: APPLICATION LAYER (GLOBAL)
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * React v18 + Feature Flags + Loader Integration
  *
  * RESPONSIBILITIES:
- * - Feature flag state management
- * - Flag evaluation and resolution
- * - Dynamic feature enablement
- * - A/B testing configuration
+ * • Feature flag state management
+ * • Flag evaluation and resolution
+ * • Dynamic feature enablement
+ * • A/B testing configuration
+ * • Loader-based initialization
+ *
+ * REACT 18 PATTERNS:
+ * ✓ Memoized flag state
+ * ✓ Split state/actions contexts
+ * ✓ Server-authoritative flags
+ * ✓ Loader hydration support
+ * ✓ StrictMode compatible
  *
  * RULES:
- * - Depends ONLY on Infrastructure Layer
- * - Must NOT depend on Domain Layer
- * - Provides feature availability context
- * - Flags are server-authoritative
+ * • Depends ONLY on Infrastructure Layer
+ * • Must NOT depend on Domain Layer
+ * • Flags are server-authoritative
+ * • No business logic
  *
  * DATA FLOW:
  * SERVER (flags endpoint) → LOADER → FLAGS PROVIDER → CONSUMER COMPONENTS
@@ -23,7 +32,8 @@
  * @module providers/application/flagsprovider
  */
 
-import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import type { FlagsActionsValue, FlagsStateValue } from '@/lib/flags/types';
+import { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -31,22 +41,17 @@ import { createContext, ReactNode, useCallback, useContext, useMemo, useState } 
 
 export type FeatureFlags = Record<string, boolean | string | number>;
 
-export interface FlagsState {
-  flags: FeatureFlags;
-  isLoading: boolean;
+interface ExtendedFlagsState extends FlagsStateValue {
+  // Extended state if needed
 }
 
-export interface FlagsContextValue extends FlagsState {
+interface ExtendedFlagsActions extends FlagsActionsValue {
   isEnabled: (flag: string) => boolean;
   getValue: <T = unknown>(flag: string, defaultValue?: T) => T;
-  refresh: () => Promise<void>;
 }
 
-// ============================================================================
-// CONTEXT
-// ============================================================================
-
-const FlagsContext = createContext<FlagsContextValue | null>(null);
+// Re-export types from /lib for consumers
+export type { Flags } from '@/lib/flags/types';
 
 // ============================================================================
 // PROVIDER

@@ -3,14 +3,16 @@
  * Data synchronization and conflict resolution
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface AdminSyncStatus {
-  lastSyncAt?: string;
-  nextSyncAt?: string;
-  status: 'idle' | 'syncing' | 'error';
-  pendingChanges: number;
+  pending: number;
+  syncing: number;
+  completed: number;
+  failed: number;
   conflicts: number;
+  lastSyncTime: string | null;
+  isHealthy: boolean;
 }
 
 export interface AdminSyncConflict {
@@ -19,10 +21,12 @@ export interface AdminSyncConflict {
   entityId: string;
   localVersion: unknown;
   remoteVersion: unknown;
-  conflictType: 'update_update' | 'update_delete' | 'create_create';
+  conflictType: "update_update" | "update_delete" | "create_create";
   detectedAt: string;
   resolvedAt?: string;
-  resolution?: 'local' | 'remote' | 'merge' | 'manual';
+  resolution?: "local" | "remote" | "merge" | "manual";
+  resolved: boolean;
+  resolvedBy?: string;
   metadata?: Record<string, unknown>;
 }
 
@@ -34,29 +38,63 @@ export interface SyncResult {
   errors?: string[];
 }
 
+export interface SyncQueueItem {
+  id: string;
+  status: "pending" | "syncing" | "completed" | "failed";
+  entityType: string;
+  entityId: string;
+  operation: "create" | "update" | "delete";
+  data: unknown;
+  error?: string;
+  retryCount: number;
+  createdAt: string;
+  syncedAt?: string;
+}
+
 export class SyncApiService {
-  private readonly baseUrl = '/sync';
+  private readonly baseUrl = "/sync";
 
   async getStatus(): Promise<AdminSyncStatus> {
     return apiClient.get<AdminSyncStatus>(`${this.baseUrl}/status`);
   }
 
-  async triggerSync(): Promise<SyncResult> {
-    return apiClient.post<SyncResult>(`${this.baseUrl}/trigger`, {});
+  async getQueue(filters?: {
+    status?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<{
+    data: SyncQueueItem[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    return apiClient.get(`${this.baseUrl}/queue`, { params: filters });
   }
 
-  async getConflicts(): Promise<AdminSyncConflict[]> {
-    return apiClient.get<AdminSyncConflict[]>(`${this.baseUrl}/conflicts`);
+  async getConflicts(filters?: {
+    resolved?: boolean;
+    page?: number;
+    limit?: number;
+  }): Promise<{ data: AdminSyncConflict[]; total: number }> {
+    return apiClient.get(`${this.baseUrl}/conflicts`, { params: filters });
   }
 
-  async resolveConflict(conflictId: string, resolution: 'local' | 'remote' | 'merge', mergedData?: unknown): Promise<void> {
+  async resolveConflict(
+    conflictId: string,
+    resolution: "local" | "remote" | "merge",
+    userId: string
+  ): Promise<AdminSyncConflict> {
     return apiClient.post(`${this.baseUrl}/conflicts/${conflictId}/resolve`, {
       resolution,
-      mergedData,
+      userId,
     });
   }
 
-  async getPendingChanges(): Promise<unknown[]> {
-    return apiClient.get(`${this.baseUrl}/pending`);
+  async retryFailed(ids: string[]): Promise<{ updated: number }> {
+    return apiClient.post(`${this.baseUrl}/retry`, { ids });
+  }
+
+  async clearCompleted(): Promise<{ deleted: number }> {
+    return apiClient.post(`${this.baseUrl}/clear-completed`, {});
   }
 }

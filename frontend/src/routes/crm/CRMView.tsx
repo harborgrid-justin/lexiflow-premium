@@ -68,7 +68,17 @@ export function CRMView() {
   );
 }
 
-function MetricCard({ title, value, icon, theme, tokens }: { title: string; value: number; icon: React.ReactNode; theme: Record<string, any>; tokens: Record<string, any> }) {
+import type { DesignTokens } from '@/theme/tokens';
+
+interface ThemeColors {
+  surface: { base: string };
+  border: { default: string };
+  text: { primary: string; secondary: string };
+  primary: { DEFAULT: string };
+  status: { success: { bg: string; text: string } };
+}
+
+function MetricCard({ title, value, icon, theme, tokens }: { title: string; value: number; icon: React.ReactNode; theme: ThemeColors; tokens: DesignTokens }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,
@@ -89,7 +99,7 @@ function MetricCard({ title, value, icon, theme, tokens }: { title: string; valu
   );
 }
 
-function TabButton({ active, onClick, disabled, children, theme, tokens }: { active: boolean; onClick: () => void; disabled?: boolean; children: React.ReactNode; theme: Record<string, any>; tokens: Record<string, any> }) {
+function TabButton({ active, onClick, disabled, children, theme, tokens }: { active: boolean; onClick: () => void; disabled?: boolean; children: React.ReactNode; theme: ThemeColors; tokens: DesignTokens }) {
   return (
     <button onClick={onClick} disabled={disabled}
       style={{
@@ -106,7 +116,7 @@ function TabButton({ active, onClick, disabled, children, theme, tokens }: { act
   );
 }
 
-function ClientCard({ client, theme, tokens }: { client: CRMClient; theme: Record<string, any>; tokens: Record<string, any> }) {
+function ClientCard({ client, theme, tokens }: { client: CRMClient; theme: ThemeColors; tokens: DesignTokens }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,
@@ -139,7 +149,7 @@ function ClientCard({ client, theme, tokens }: { client: CRMClient; theme: Recor
   );
 }
 
-function ContactRow({ contact, theme, tokens }: { contact: CRMContact; theme: Record<string, any>; tokens: Record<string, any> }) {
+function ContactRow({ contact, theme, tokens }: { contact: CRMContact; theme: ThemeColors; tokens: DesignTokens }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,
@@ -167,7 +177,7 @@ function ContactRow({ contact, theme, tokens }: { contact: CRMContact; theme: Re
   );
 }
 
-function OpportunityRow({ opportunity, theme, tokens }: { opportunity: CRMOpportunity; theme: Record<string, any>; tokens: Record<string, any> }) {
+function OpportunityRow({ opportunity, theme, tokens }: { opportunity: CRMOpportunity; theme: ThemeColors; tokens: DesignTokens }) {
   return (
     <div style={{
       backgroundColor: theme.surface.base,

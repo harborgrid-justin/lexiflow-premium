@@ -2,9 +2,9 @@
 import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { AuthProvider, useAuth } from "@/contexts/auth/AuthContext";
-import { EntitlementsProvider, useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
-import { FlagsProvider, useFlags } from "@/contexts/flags/FlagsContext";
+import { useAuth } from "@/contexts/auth/AuthContext";
+import { useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
+import { useFlags } from "@/contexts/flags/FlagsContext";
 import { DataProvider } from "@/routes/dashboard";
 
 import { AdminPath } from "./paths/AdminPath";
@@ -152,41 +152,37 @@ const ROUTES = {
 export function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <FlagsProvider initial={{ enableNewDashboard: true, enableAdminTools: true }}>
-          <EntitlementsProvider>
-            <DataProvider>
-              <Routes>
-                {/* Public route */}
-                <Route path={ROUTES.public.path} element={ROUTES.public.element} />
+      <AppProviders initialFlags={{ enableNewDashboard: true, enableAdminTools: true }}>
+        <DataProvider>
+          <Routes>
+            {/* Public route */}
+            <Route path={ROUTES.public.path} element={ROUTES.public.element} />
 
-                {/* Group-gated member route */}
-                <Route
-                  path={ROUTES.app.path}
-                  element={<GuardedRoute policy={ROUTES.app.policy} element={ROUTES.app.element} />}
-                />
+            {/* Group-gated member route */}
+            <Route
+              path={ROUTES.app.path}
+              element={<GuardedRoute policy={ROUTES.app.policy} element={ROUTES.app.element} />}
+            />
 
-                {/* Group + flag + entitlement-gated admin route */}
-                <Route
-                  path={ROUTES.admin.path}
-                  element={<GuardedRoute policy={ROUTES.admin.policy} element={ROUTES.admin.element} />}
-                />
+            {/* Group + flag + entitlement-gated admin route */}
+            <Route
+              path={ROUTES.admin.path}
+              element={<GuardedRoute policy={ROUTES.admin.policy} element={ROUTES.admin.element} />}
+            />
 
-                {/* Flag-triggered “parallel” member path */}
-                <Route
-                  path={ROUTES.newDashboard.path}
-                  element={
-                    <GuardedRoute policy={ROUTES.newDashboard.policy} element={ROUTES.newDashboard.element} />
-                  }
-                />
+            {/* Flag-triggered “parallel” member path */}
+            <Route
+              path={ROUTES.newDashboard.path}
+              element={
+                <GuardedRoute policy={ROUTES.newDashboard.policy} element={ROUTES.newDashboard.element} />
+              }
+            />
 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to={ROUTES.public.path} replace />} />
-              </Routes>
-            </DataProvider>
-          </EntitlementsProvider>
-        </FlagsProvider>
-      </AuthProvider>
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to={ROUTES.public.path} replace />} />
+          </Routes>
+        </DataProvider>
+      </AppProviders>
     </BrowserRouter>
   );
 };

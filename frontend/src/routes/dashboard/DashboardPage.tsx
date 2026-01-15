@@ -1,73 +1,221 @@
-import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
-import { DashboardProvider } from './DashboardProvider';
-import { DashboardView } from './DashboardView';
-import type { clientLoader } from './loader';
-
 /**
- * Dashboard Page - Data Orchestration Layer
+ * ================================================================================
+ * DASHBOARD PAGE - ORCHESTRATION LAYER
+ * ================================================================================
  *
- * ENTERPRISE ARCHITECTURE PATTERN:
- * - Suspense wraps the entire page (rendering boundary)
- * - Await resolves deferred loader data (data boundary)
- * - Provider initializes with resolved data (domain layer)
- * - View renders pure presentation (UI layer)
+ * RESPONSIBILITIES:
+ * - Load data from router loader
+ * - Set up Suspense boundaries (rendering concern)
+ * - Set up Await boundaries (data concern)
+ * - Initialize domain provider
+ * - Render pure view component
+ * - Handle navigation with transitions
+ *
+ * ENTERPRISE PATTERN:
+ * Suspense (rendering boundary)
+ *   → Await (data boundary - only for deferred data)
+ *     → Provider (domain layer)
+ *       → View (pure presentation)
  *
  * DATA FLOW:
- * Router loader → defer() → Suspense → Await → Provider → View
+ * useLoaderData() → Suspense → Await → Provider → View
+ *
+ * CRITICAL RULES:
+ * - NO business logic in this file
+ * - NO direct data manipulation
+ * - ONLY orchestration and boundaries
+ * - View is pure and receives context
+ *
+ * @module routes/dashboard/DashboardPage
+ */
+
+import { PageFrame } from "@/layouts/PageFrame";
+import type { DocketEntry, TimeEntry } from "@/types";
+import { Suspense, startTransition } from "react";
+import { Await, useLoaderData, useNavigate, useNavigation } from "react-router";
+import { DashboardProvider } from "./DashboardProvider";
+import { DashboardView } from "./DashboardView";
+import type { clientLoader } from "./loader";
+
+/**
+ * Dashboard Page - Orchestration Component
+ *
+ * PATTERN:
+ * 1. useLoaderData() - Get deferred data from loader
+ * 2. Critical data (cases, tasks) available immediately
+ * 3. Suspense - Rendering boundary for deferred data
+ * 4. Await - Data boundary for streaming data
+ * 5. Provider - Domain context (transforms data)
+ * 6. View - Pure presentation (no side effects)
  */
 export function DashboardPageContent() {
   const data = useLoaderData<typeof clientLoader>();
+  const navigation = useNavigation();
+  const navigate = useNavigate();
+
+  // Observe router state for transitions
+  const isNavigating = navigation.state !== "idle";
+
+  /**
+   * Navigation handler with transition
+   * Wraps navigation in startTransition for non-blocking UI
+   */
+  const handleNavigate = (path: string) => {
+    startTransition(() => {
+      navigate(path);
+    });
+  };
+
+  // Guard against undefined data
+  if (!data) {
+    return <DeferredDataSkeleton title="Loading dashboard..." />;
+  }
 
   return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <Await resolve={data} errorElement={<DashboardError />}>
-        {(resolved) => (
-          <DashboardProvider
-            initialCases={resolved.cases}
-            initialDocketEntries={resolved.recentDocketEntries}
-            initialTimeEntries={resolved.recentTimeEntries}
-            initialTasks={resolved.tasks}
-          >
-            <DashboardView />
-          </DashboardProvider>
-        )}
-      </Await>
-    </Suspense>
+    <PageFrame
+      title="Command Center"
+      breadcrumbs={[{ label: "Dashboard" }]}
+    >
+      {/* Main content with critical data (already loaded) */}
+      <DashboardProvider
+        initialCases={data.cases}
+        initialTasks={data.tasks}
+      >
+        <DashboardView />
+
+        {/* Deferred data sections with nested Suspense */}
+        <div className="mt-6 space-y-6">
+          <Suspense fallback={<DeferredDataSkeleton title="Recent Docket" />}>
+            <Await resolve={data.recentDocketEntries} errorElement={<DeferredDataError />}>
+              {(docketEntries) => (
+                <DashboardRecentDocket entries={docketEntries} />
+              )}
+            </Await>
+          </Suspense>
+
+          <Suspense fallback={<DeferredDataSkeleton title="Recent Time" />}>
+            <Await resolve={data.recentTimeEntries} errorElement={<DeferredDataError />}>
+              {(timeEntries) => (
+                <DashboardRecentTime entries={timeEntries} />
+              )}
+            </Await>
+          </Suspense>
+        </div>
+      </DashboardProvider>
+    </PageFrame>
   );
 }
 
 /**
- * Dashboard Skeleton - Suspense Fallback
- * Shows while loader data is resolving
+ * Deferred Data Skeleton
+ * Shows while deferred data is streaming
  */
-function DashboardSkeleton() {
+function DeferredDataSkeleton({ title }: { title: string }) {
   return (
-    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen animate-pulse">
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-8 rounded w-1/4" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map(i => (
-            <div key={i} style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-32 rounded" />
-          ))}
-        </div>
-        <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-96 rounded" />
+    <div
+      style={{ backgroundColor: "var(--color-surface)" }}
+      className="p-4 rounded-lg"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-slate-700">{title}</h3>
+        <div
+          style={{ backgroundColor: "var(--color-surfaceHover)" }}
+          className="h-6 w-20 rounded animate-pulse"
+        />
+      </div>
+      <div className="space-y-2">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            style={{ backgroundColor: "var(--color-surfaceHover)" }}
+            className="h-16 rounded animate-pulse"
+          />
+        ))}
       </div>
     </div>
   );
 }
 
 /**
- * Dashboard Error - Error Boundary
- * Shows when loader fails
+ * Deferred Data Error
+ * Shows when deferred data fails to load
  */
-function DashboardError() {
+function DeferredDataError() {
   return (
-    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <h2 className="text-2xl font-bold text-rose-600">Failed to load dashboard</h2>
-        <p style={{ color: 'var(--color-textMuted)' }}>Please refresh the page or contact support</p>
-      </div>
+    <div
+      style={{ backgroundColor: "var(--color-surface)" }}
+      className="p-4 rounded-lg border-2 border-rose-200"
+    >
+      <p className="text-rose-600 text-sm">Failed to load data</p>
+    </div>
+  );
+}
+
+/**
+ * Dashboard Recent Docket
+ * Displays recent docket entries (deferred data)
+ */
+function DashboardRecentDocket({ entries }: { entries: DocketEntry[] }) {
+  return (
+    <div
+      style={{ backgroundColor: "var(--color-surface)" }}
+      className="p-4 rounded-lg"
+    >
+      <h3 className="font-semibold mb-4 text-slate-700">Recent Docket Entries</h3>
+      {entries.length > 0 ? (
+        <div className="space-y-2">
+          {entries.slice(0, 5).map((entry) => (
+            <div
+              key={entry.id}
+              className="p-3 rounded border border-slate-200 hover:bg-slate-50 transition"
+            >
+              <p className="text-sm font-medium">{entry.entryNumber || 'N/A'}</p>
+              <p className="text-xs text-slate-600">
+                {entry.filingDate ? new Date(entry.filingDate).toLocaleDateString() : 'N/A'}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-slate-500">No recent entries</p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Dashboard Recent Time
+ * Displays recent time entries (deferred data)
+ */
+function DashboardRecentTime({ entries }: { entries: TimeEntry[] }) {
+  return (
+    <div
+      style={{ backgroundColor: "var(--color-surface)" }}
+      className="p-4 rounded-lg"
+    >
+      <h3 className="font-semibold mb-4 text-slate-700">Recent Time Entries</h3>
+      {entries.length > 0 ? (
+        <div className="space-y-2">
+          {entries.slice(0, 5).map((entry) => (
+            <div
+              key={entry.id}
+              className="p-3 rounded border border-slate-200 hover:bg-slate-50 transition"
+            >
+              <p className="text-sm font-medium">{entry.description || 'Time entry'}</p>
+              <div className="flex items-center justify-between mt-1">
+                <p className="text-xs text-slate-600">
+                  {entry.date ? new Date(entry.date).toLocaleDateString() : 'N/A'}
+                </p>
+                <p className="text-xs font-semibold text-blue-600">
+                  {entry.hours || 0}h
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-slate-500">No recent time entries</p>
+      )}
     </div>
   );
 }

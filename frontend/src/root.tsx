@@ -34,9 +34,8 @@ import type { Route } from "./+types/root";
 import "./index.css";
 
 // Import providers
-import { AuthProvider } from "@/contexts/auth/AuthProvider";
 import { QueryClientProvider } from "@/contexts/query/QueryClientProvider";
-import { AppProviders } from "@/providers/AppProviders";
+import { AppProviders } from "@/providers";
 
 import { APP_DESCRIPTION, APP_NAME } from '@/config/app.config';
 import React from "react";
@@ -115,9 +114,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="min-h-screen antialiased" style={{ backgroundColor: 'var(--color-background)' }} suppressHydrationWarning>
         {/* Provider order matters: AppProviders composes all required providers */}
         <QueryClientProvider>
-          <AuthProvider>
-            <AppProviders>{children}</AppProviders>
-          </AuthProvider>
+          <AppProviders>{children}</AppProviders>
         </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />

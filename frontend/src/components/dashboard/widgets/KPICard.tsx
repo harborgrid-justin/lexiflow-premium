@@ -72,7 +72,9 @@ const calculateChange = (current: number, previous: number): { percentage: numbe
   return { percentage, trend };
 };
 
-const getColorStyles = (tokens: any) => ({
+import type { DesignTokens } from '@/theme/tokens';
+
+const getColorStyles = (tokens: DesignTokens) => ({
   blue: {
     bg: tokens.colors.blue400 + '15',
     border: tokens.colors.blue400,

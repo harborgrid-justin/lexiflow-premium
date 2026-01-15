@@ -1,21 +1,24 @@
-// ================================================================================
-// LEGACY AUTH CONTEXT SHIM
-// ================================================================================
-//
-// This file re-exports the enterprise AuthProvider for backward compatibility.
-// New code should import directly from '@/contexts/auth/AuthProvider'
-//
-// DEPRECATED: Import from '@/contexts/auth/AuthProvider' instead
-//
-// ================================================================================
-
 /**
- * Legacy AuthContext shim.
+ * ================================================================================
+ * AUTH CONTEXT - RE-EXPORT FROM AUTH SUBFOLDER
+ * ================================================================================
  *
- * The enterprise AuthProvider lives in ./auth/AuthProvider. This file
- * re-exports that implementation to preserve backward compatibility
- * for modules that still import from '@/contexts/AuthContext'.
+ * Per Enterprise React Architecture Standard:
+ * - This is an APP-LEVEL context (authentication state)
+ * - Implementation lives in ./auth/ subfolder
+ * - This file provides convenient re-export
+ *
+ * ARCHITECTURE:
+ * /contexts/auth/
+ *   ├── AuthContext.tsx    - Context definition
+ *   ├── AuthProvider.tsx   - Provider component
+ *   ├── authTypes.ts       - TypeScript types
+ *   └── authUtils.ts       - Helper functions
+ *
+ * USAGE:
+ * import { useAuth } from '@/contexts'
+ * const { user, isAuthenticated } = useAuth();
  */
 
 export { AuthProvider, useAuth, useAuthActions, useAuthState } from './auth/AuthProvider';
-export type { AuthActionsValue, AuthStateValue, AuthUser } from './auth/authTypes';
+export type { AuthActionsValue, AuthStateValue, AuthUser, Organization } from './auth/authTypes';

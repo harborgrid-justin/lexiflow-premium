@@ -30,8 +30,8 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
-import { ChartColorService } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { ChartColorService } from '@/theme';
 import { getChartTheme } from '@/utils/chartConfig';
 
 // Types
@@ -58,10 +58,18 @@ export function CRMDashboard() {
     sources: []
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: clientsResponse } = useQuery<any>(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: casesResponse } = useQuery<any>(QUERY_KEYS.CASES.ALL, () => DataService.cases.getAll());
+  interface ClientsResponse {
+    data?: Client[];
+    [key: string]: unknown;
+  }
+
+  interface CasesResponse {
+    data?: Case[];
+    [key: string]: unknown;
+  }
+
+  const { data: clientsResponse } = useQuery<Client[] | ClientsResponse>(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
+  const { data: casesResponse } = useQuery<Case[] | CasesResponse>(QUERY_KEYS.CASES.ALL, () => DataService.cases.getAll());
   const { data: leads = [] } = useQuery<CRMLead[]>(QUERY_KEYS.CRM.LEADS, () => DataService.crm.getLeads());
 
   // Handle paginated response format from backend

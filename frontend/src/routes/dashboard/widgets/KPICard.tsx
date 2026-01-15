@@ -6,6 +6,7 @@
  */
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
+import type { DesignTokens } from '@/theme/tokens';
 import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 // ============================================================================
@@ -64,7 +65,8 @@ const calculateChange = (current: number, previous: number): { percentage: numbe
   const trend = percentage > 0 ? 'up' : percentage < 0 ? 'down' : 'neutral';
   return { percentage, trend };
 };
-const getColorConfig = (color: KPICardProps['color'], tokens: any) => {
+
+const getColorConfig = (color: KPICardProps['color'], tokens: DesignTokens) => {
   switch (color) {
     case 'blue':
       return {

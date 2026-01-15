@@ -180,7 +180,14 @@ function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: stri
 }
 
 // Renamed locally to avoid conflict if we decide to re-export or just clarity
-function EventParamsCard({ event }: { event: any }) {
+interface CalendarEvent {
+  title: string;
+  startDate: string;
+  type: 'hearing' | 'deadline' | string;
+  [key: string]: unknown;
+}
+
+function EventParamsCard({ event }: { event: CalendarEvent }) {
   return (
     <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">

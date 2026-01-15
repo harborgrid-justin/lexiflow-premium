@@ -5,14 +5,14 @@
  * relationship mapping, contact management, and opportunity pipeline.
  */
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { crmApi } from '@/lib/frontend-api';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import type { Client } from "@/types";
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { useTheme } from '@/theme';
+import type { Client } from "@/types";
 import {
   ArrowUpRight,
   Award,
@@ -43,14 +43,19 @@ export const EnterpriseCRM: React.FC = () => {
     const result = await crmApi.getAllClients({ page: 1, limit: 1000 });
     return result.ok ? result.data.data : [];
   });
-  
+
   const { data: opportunities = [] } = useQuery(QUERY_KEYS.CRM.OPPORTUNITIES, async () => {
     const result = await crmApi.getOpportunities({ page: 1, limit: 100 });
     return result.ok ? result.data.data : [];
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: relationships = [] } = useQuery<any[]>(QUERY_KEYS.CRM.RELATIONSHIPS, async () => {
+  interface CRMRelationship {
+    id: string;
+    type: string;
+    [key: string]: unknown;
+  }
+
+  const { data: relationships = [] } = useQuery<CRMRelationship[]>(QUERY_KEYS.CRM.RELATIONSHIPS, async () => {
     const result = await crmApi.getRelationships({ page: 1, limit: 100 });
     return result.ok ? result.data.data : [];
   });

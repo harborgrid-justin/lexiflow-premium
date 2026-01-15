@@ -18,24 +18,24 @@ declare module "react-window" {
     children: ComponentType<{
       index: number;
       style: CSSProperties;
-      data?: any;
+      data?: unknown;
     }>;
     className?: string;
     direction?: "ltr" | "rtl" | "horizontal" | "vertical";
     height: number | string;
     initialScrollOffset?: number;
-    innerElementType?: string | ComponentType<any>;
-    innerRef?: React.Ref<any>;
+    innerElementType?: string | ComponentType<Record<string, unknown>>;
+    innerRef?: React.Ref<HTMLElement>;
     innerTagName?: string; // deprecated
     itemCount: number;
-    itemData?: any;
-    itemKey?: (index: number, data: any) => any;
+    itemData?: unknown;
+    itemKey?: (index: number, data: unknown) => React.Key;
     itemSize: number | ((index: number) => number);
     layout?: "vertical" | "horizontal";
-    onItemsRendered?: (props: ListOnItemsRenderedProps) => any;
-    onScroll?: (props: ListOnScrollProps) => any;
-    outerElementType?: string | ComponentType<any>;
-    outerRef?: React.Ref<any>;
+    onItemsRendered?: (props: ListOnItemsRenderedProps) => void;
+    onScroll?: (props: ListOnScrollProps) => void;
+    outerElementType?: string | ComponentType<Record<string, unknown>>;
+    outerRef?: React.Ref<HTMLElement>;
     outerTagName?: string; // deprecated
     overscanCount?: number;
     style?: CSSProperties;

@@ -1,12 +1,26 @@
+/**
+ * ================================================================================
+ * LAYOUT ROUTE - APP SHELL WRAPPER
+ * ================================================================================
+ *
+ * ENTERPRISE PATTERN:
+ * This file now delegates to layouts/AppShellLayout.tsx
+ * Domain contexts (CaseProvider, DataSourceProvider, WindowProvider) have been
+ * moved to their respective route components per enterprise architecture.
+ *
+ * MIGRATION COMPLETE:
+ * - ThemeProvider → RootProviders (in root.tsx)
+ * - Auth/Permissions → AppShellLayout
+ * - Domain contexts → Route components
+ *
+ * @module routes/layout
+ */
+
 import { AppShell } from "@/components/layouts/AppShell";
 import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
 import { useAppShellLogic } from "@/hooks/useAppShellLogic";
 import { RouteErrorBoundary } from "@/routes/_shared/RouteErrorBoundary";
-import { WindowProvider } from "@/routes/_shared/window/WindowContext";
-import { CaseProvider } from "@/routes/cases/CaseProvider";
-import { DataSourceProvider } from "@/routes/dashboard/data/DataSourceContext";
-import { ThemeProvider } from "@/theme";
 import { requireAuthLoader } from "@/utils/route-guards";
 import { Outlet, useRouteError } from "react-router";
 
@@ -14,62 +28,55 @@ import { Outlet, useRouteError } from "react-router";
 export const loader = requireAuthLoader;
 
 /**
- * Root Layout Component
+ * Layout Component (Enterprise Architecture)
  *
- * This component acts as the "View" in the MVC pattern for the application shell.
- * It strictly handles rendering and composition, delegating all logic to the
- * useAppShellLogic hook (Controller).
+ * SIMPLIFIED: No domain contexts here
+ * - Domain contexts live in route components
+ * - App-level contexts in AppShellLayout (from router.tsx)
+ * - Pure shell rendering with Outlet for child routes
  */
 export default function Layout() {
   // Controller: Handles all state, navigation, and business logic
   const { state, handlers } = useAppShellLogic();
 
   return (
-    <ThemeProvider>
-      <WindowProvider>
-        <CaseProvider>
-          <DataSourceProvider>
-            <AppShell
-              // Active State
-              activeView={state.activeView}
-              selectedCaseId={state.selectedCaseId}
+    <AppShell
+      // Active State
+      activeView={state.activeView}
+      selectedCaseId={state.selectedCaseId}
 
-              // Data & UI State
-              isFetching={state.isQueryFetching}
-              breadcrumbs={state.breadcrumbs}
-              timeTracker={state.timeTracker}
+      // Data & UI State
+      isFetching={state.isQueryFetching}
+      breadcrumbs={state.breadcrumbs}
+      timeTracker={state.timeTracker}
 
-              // Action Handlers
-              onNavigate={handlers.handleNavigate}
+      // Action Handlers
+      onNavigate={handlers.handleNavigate}
 
-              // Composed Slots
-              sidebar={
-                <AppSidebar
-                  isOpen={state.isSidebarOpen}
-                  onToggle={handlers.handleToggleSidebar}
-                  activeItem={state.activeView}
-                  userName={state.currentUser?.name}
-                  userEmail={state.currentUser?.email}
-                  userRole={state.currentUser?.role}
-                  onNavigate={handlers.handleNavigate}
-                />
-              }
-              headerContent={
-                <TopBar
-                  onSearch={handlers.handleGlobalSearch}
-                  onNeuralCommand={handlers.handleNeuralCommand}
-                  onResultClick={handlers.handleSearchResultClick}
-                  onToggleSidebar={handlers.handleToggleSidebar}
-                />
-              }
-            >
-              {/* Child Routes */}
-              <Outlet />
-            </AppShell>
-          </DataSourceProvider>
-        </CaseProvider>
-      </WindowProvider>
-    </ThemeProvider>
+      // Composed Slots
+      sidebar={
+        <AppSidebar
+          isOpen={state.isSidebarOpen}
+          onToggle={handlers.handleToggleSidebar}
+          activeItem={state.activeView}
+          userName={state.currentUser?.name}
+          userEmail={state.currentUser?.email}
+          userRole={state.currentUser?.role}
+          onNavigate={handlers.handleNavigate}
+        />
+      }
+      headerContent={
+        <TopBar
+          onSearch={handlers.handleGlobalSearch}
+          onNeuralCommand={handlers.handleNeuralCommand}
+          onResultClick={handlers.handleSearchResultClick}
+          onToggleSidebar={handlers.handleToggleSidebar}
+        />
+      }
+    >
+      {/* Child Routes (with their own domain contexts) */}
+      <Outlet />
+    </AppShell>
   );
 }
 

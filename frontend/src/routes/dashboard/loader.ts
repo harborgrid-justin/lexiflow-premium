@@ -1,77 +1,113 @@
+/**
+ * ================================================================================
+ * DASHBOARD LOADER - DATA AUTHORITY
+ * ================================================================================
+ *
+ * RESPONSIBILITIES:
+ * - Fetch all required data for dashboard
+ * - Return deferred promises for progressive rendering
+ * - Handle authentication errors
+ * - Parallel data fetching for performance
+ *
+ * ENTERPRISE PATTERN:
+ * - Loader owns data truth (server-aware, deterministic)
+ * - Returns raw data (no transformation)
+ * - Uses defer() for streaming non-critical data
+ * - Handles errors at data layer
+ *
+ * DATA FLOW:
+ * loader() → defer({ critical, deferred }) → Suspense → Await → Provider
+ *
+ * @module routes/dashboard/loader
+ */
+
 import { DataService } from "@/services/data/data-service.service";
 import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
 import { handleLoaderAuthError } from "@/utils/loader-helpers";
-import type { LoaderFunctionArgs } from "react-router";
+import { defer, type LoaderFunctionArgs } from "react-router";
 
 export interface DashboardLoaderData {
+  // Critical data (awaited before render)
   cases: Case[];
-  recentDocketEntries: DocketEntry[];
-  recentTimeEntries: TimeEntry[];
   tasks: Task[];
+
+  // Deferred data (streamed after initial render)
+  recentDocketEntries: Promise<DocketEntry[]>;
+  recentTimeEntries: Promise<TimeEntry[]>;
 }
 
 /**
- * Loader for Dashboard
- * Fetches overview data across multiple domains
+ * Dashboard Loader
  *
- * ENTERPRISE PATTERN: Direct promise return for streaming data
- * - Returns promises immediately (non-blocking)
+ * PATTERN: Critical + Deferred Data
+ * - cases, tasks: Awaited before render (needed for metrics)
+ * - docket, timeEntries: Streamed after initial render (progressive enhancement)
+ *
+ * OPTIMIZATION:
+ * - Parallel fetching with Promise.all()
+ * - Use defer() for non-critical data
  * - Suspense handles loading states
- * - Parallel data fetching optimizes performance
  */
 export async function clientLoader(args: LoaderFunctionArgs) {
   try {
-    // Start parallel data fetching (do NOT await here)
-    const casesPromise = DataService.cases.getAll();
-    const docketEntriesPromise = DataService.docket.getAll();
-    const timeEntriesPromise = DataService.timeEntries.getAll();
-    // DataService.workflow doesn't have getTasks, use api.tasks instead
-    const tasksPromise = DataService.tasks?.getAll?.() || Promise.resolve([]);
+    // Critical data (MUST be available before render)
+    const criticalData = Promise.all([
+      DataService.cases.getAll(),
+      DataService.tasks?.getAll?.() || Promise.resolve([]),
+    ]);
 
-    // Await ALL data before returning (required for initial critical data)
-    // For progressive rendering, use: return { cases: casesPromise, ... })
-    const [casesResult, docketEntriesResult, timeEntriesResult, tasksResult] =
-      await Promise.all([
-        casesPromise,
-        docketEntriesPromise,
-        timeEntriesPromise,
-        tasksPromise,
-      ]);
+    // Deferred data (streams after initial render)
+    const docketEntriesPromise = DataService.docket.getAll().then((result) => {
+      const entries = Array.isArray(result?.data)
+        ? result.data
+        : Array.isArray(result)
+          ? result
+          : [];
 
-    // Extract data arrays with defensive checks
+      // Filter for recent (last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      return entries
+        .filter(
+          (entry) =>
+            entry?.filingDate && new Date(entry.filingDate) >= thirtyDaysAgo
+        )
+        .slice(0, 10);
+    });
+
+    const timeEntriesPromise = DataService.timeEntries
+      .getAll()
+      .then((result) => {
+        const entries = Array.isArray(result) ? result : [];
+
+        // Filter for recent (last 30 days)
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        return entries
+          .filter(
+            (entry) => entry?.date && new Date(entry.date) >= thirtyDaysAgo
+          )
+          .slice(0, 10);
+      });
+
+    // Await critical data
+    const [casesResult, tasksResult] = await criticalData;
+
+    // Extract arrays with defensive checks
     const cases = Array.isArray(casesResult) ? casesResult : [];
-    const docketEntries = Array.isArray(docketEntriesResult?.data)
-      ? docketEntriesResult.data
-      : Array.isArray(docketEntriesResult)
-        ? docketEntriesResult
-        : [];
-    const timeEntries = Array.isArray(timeEntriesResult)
-      ? timeEntriesResult
-      : [];
     const tasks = Array.isArray(tasksResult) ? tasksResult : [];
 
-    // Filter for recent data (last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-    const recentDocketEntries = docketEntries
-      .filter(
-        (entry) =>
-          entry?.filingDate && new Date(entry.filingDate) >= thirtyDaysAgo
-      )
-      .slice(0, 10);
-
-    const recentTimeEntries = timeEntries
-      .filter((entry) => entry?.date && new Date(entry.date) >= thirtyDaysAgo)
-      .slice(0, 10);
-
-    // Return promises directly for Suspense/Await pattern
-    return {
+    // Return deferred loader data
+    // Critical data is available immediately
+    // Deferred promises will be resolved via <Await>
+    return defer({
       cases,
-      recentDocketEntries,
-      recentTimeEntries,
       tasks,
-    };
+      recentDocketEntries: docketEntriesPromise,
+      recentTimeEntries: timeEntriesPromise,
+    });
   } catch (error) {
     // Handle authentication errors (SSR redirect or client re-throw)
     handleLoaderAuthError(error, args);
@@ -81,11 +117,18 @@ export async function clientLoader(args: LoaderFunctionArgs) {
       "[Dashboard Loader] Non-auth error, returning empty data:",
       error
     );
-    return {
+
+    return defer({
       cases: [],
-      recentDocketEntries: [],
-      recentTimeEntries: [],
       tasks: [],
-    };
+      recentDocketEntries: Promise.resolve([]),
+      recentTimeEntries: Promise.resolve([]),
+    });
   }
 }
+
+/**
+ * Server Loader (for SSR)
+ * Delegates to main loader
+ */
+export const loader = clientLoader;

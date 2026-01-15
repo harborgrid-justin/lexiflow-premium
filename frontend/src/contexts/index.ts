@@ -1,21 +1,31 @@
-// context/index.ts
-// ============================================================================
-// Global Context Providers & Hooks (APP-LEVEL ONLY)
-// ============================================================================
+// ================================================================================
+// CONTEXTS INDEX - APP-LEVEL CONTEXTS ONLY
+// ================================================================================
 //
-// Per Enterprise Architecture Standard:
-// - This file contains ONLY app-level/infrastructure contexts
-// - Domain-specific contexts belong in their respective /routes folders
-// - See /routes/cases, /routes/dashboard, /routes/_shared for feature contexts
+// Per Enterprise React Architecture Standard:
 //
-// Best Practice Applied (BP4): Export only hooks, not raw contexts
-// This enables invariant checks and future refactors without breaking consumers
+// ARCHITECTURE LAYERING:
+// /providers/     → Infrastructure (Env, Theme, Toast)
+// /contexts/      → App-level (Auth, Permissions, Entitlements, Flags) ← THIS FILE
+// /routes/[feat]/ → Domain (CaseProvider, DataProvider, WindowProvider, SyncProvider)
+//
+// WHAT BELONGS HERE:
+// ✓ Authentication & Authorization (Auth, Permissions)
+// ✓ Entitlements & Feature Flags (Entitlements, Flags)
+// ✓ Infrastructure (Theme, Toast, QueryClient)
+//
+// WHAT DOES NOT BELONG HERE:
+// ✗ Domain contexts (CaseProvider → /routes/cases/)
+// ✗ Data contexts (DataProvider → /routes/dashboard/)
+// ✗ Window/Sync contexts (→ /routes/_shared/)
+//
+// Best Practice: Export hooks, not raw contexts
+// ============================================================================
 
 // ============================================================================
 // ROOT PROVIDER (Composed Infrastructure + App-Level)
 // ============================================================================
-// Composed Provider Tree (recommended way to use all global providers)
-export { AppProviders } from "./AppProviders";
+// Moved to '@/providers/AppProviders' - Use direct import or import from '@/providers'
 
 // ============================================================================
 // APP-LEVEL CONTEXTS (Global Infrastructure)
@@ -68,63 +78,23 @@ export type { ToastType } from "./toast/ToastContext.types";
 export { QueryClientProvider } from "./query/QueryClientProvider";
 
 // ============================================================================
-// DOMAIN-SPECIFIC CONTEXTS (Moved to /routes)
+// DOMAIN CONTEXTS (Live in /routes/)
 // ============================================================================
-// These exports are DEPRECATED. Import from route folders instead:
+// Per Enterprise Standard, domain contexts are route-specific:
 //
-// - CaseContext → import from "@/routes/cases"
-// - DataContext → import from "@/routes/dashboard"
-// - WindowContext → import from "@/routes/_shared"
-// - SyncContext → import from "@/routes/_shared"
+// CASE MANAGEMENT:
+//   import { CaseProvider, useCaseContext } from '@/routes/cases'
 //
-// Legacy re-exports below will be removed in future release:
-
-// @deprecated Use @/routes/cases instead
-export type { CaseContextValue } from "@/routes/cases";
-export {
-  CaseProvider,
-  useCaseActions,
-  useCaseContext,
-  useCaseState,
-} from "../routes/cases";
-
-// @deprecated Use @/routes/dashboard instead
-export type { DashboardItem, DataContextValue } from "@/routes/dashboard";
-export {
-  DataProvider,
-  useData,
-  useDataActions,
-  useDataState,
-} from "../routes/dashboard";
-
-// @deprecated Use @/routes/_shared instead
-export type { WindowInstance } from "@/routes/_shared";
-export {
-  WindowProvider,
-  useWindow,
-  useWindowActions,
-  useWindowState,
-} from "../routes/_shared";
-
-// @deprecated Use @/routes/_shared instead
-export type { SyncContextType, SyncStatus } from "@/routes/_shared";
-export {
-  SyncContext,
-  SyncProvider,
-  useSync,
-  useSyncActions,
-  useSyncState,
-} from "../routes/_shared";
-
-// @deprecated Use @/routes/dashboard instead
-export type { DataSourceType } from "@/routes/dashboard";
-export {
-  DataSourceProvider,
-  useDataSource,
-  useDataSourceActions,
-  useDataSourceState,
-} from "../routes/dashboard";
-
+// DASHBOARD DATA:
+//   import { DataProvider, useData } from '@/routes/dashboard'
+//   import { DataSourceProvider, useDataSource } from '@/routes/dashboard'
+//
+// SHARED UTILITIES:
+//   import { WindowProvider, useWindow } from '@/routes/_shared'
+//   import { SyncProvider, useSync } from '@/routes/_shared'
+//
+// RULE: Domain contexts load with their routes, not globally.
+// ============================================================================
 // Repository infrastructure exports
 export type {
   BaseRepository,

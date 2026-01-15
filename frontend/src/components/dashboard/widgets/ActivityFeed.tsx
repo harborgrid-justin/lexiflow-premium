@@ -7,7 +7,7 @@
 
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
-import { Activity, ActivityType } from '@/types/dashboard';
+import { Activity } from '@/types/dashboard';
 import { formatDistanceToNow } from 'date-fns';
 import {
   AlertTriangle,
@@ -16,10 +16,9 @@ import {
   Clock,
   DollarSign,
   FileText,
-  LucideIcon,
   MessageSquare,
   Upload,
-  UserPlus,
+  UserPlus
 } from 'lucide-react';
 import React from 'react';
 // ============================================================================
@@ -47,7 +46,13 @@ export interface ActivityFeedProps {
 // HELPERS
 // ============================================================================
 
-const getActivityConfig = (tokens: any, theme: any) => ({
+import type { DesignTokens } from '@/theme/tokens';
+
+interface ThemeType {
+  [key: string]: unknown;
+}
+
+const getActivityConfig = (tokens: DesignTokens, theme: ThemeType) => ({
   case_created: {
     icon: Briefcase,
     color: tokens.colors.blue500,

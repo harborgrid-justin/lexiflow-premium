@@ -1,3 +1,11 @@
+
+/workspaces/lexiflow-premium/frontend/src/api/workflow/war-room-api.ts
+  41:0  error  Parsing error: Unexpected keyword or identifier
+
+/workspaces/lexiflow-premium/frontend/src/components/dashboard/widgets/ActivityFeed.tsx
+  10:20  error  'ActivityType' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  19:3   error  'LucideIcon' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+
 /workspaces/lexiflow-premium/frontend/src/components/organisms/_legacy/EnhancedSearch.old.tsx
   197:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
 
@@ -5,8 +13,20 @@
   9:11  error  'theme' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
   9:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
 
+/workspaces/lexiflow-premium/frontend/src/routes/admin/audit.tsx
+  240:0  error  Parsing error: '}' expected
+
 /workspaces/lexiflow-premium/frontend/src/routes/admin/components/data/schema/SchemaVisualizer.tsx
   21:20  error  'mode' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/admin/index.tsx
+  32:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/audit/index.tsx
+  9:0  error  Parsing error: Declaration or statement expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/billing/components/enterprise/EnterpriseBilling.tsx
+  15:1  error  Parsing error: ')' expected
 
 /workspaces/lexiflow-premium/frontend/src/routes/billing/components/enterprise/InvoiceBuilder.tsx
    1:136  error  'Calendar' is defined but never used. Allowed unused vars must match /^_/u                            @typescript-eslint/no-unused-vars
@@ -61,7 +81,10 @@
   14:582  error  'handleValidate' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
 
 /workspaces/lexiflow-premium/frontend/src/routes/cases/CaseListView.tsx
-  440:27  error    'contentType' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  440:27  error  'contentType' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/billing.tsx
+  6:0  error  Parsing error: Declaration or statement expected
 
 /workspaces/lexiflow-premium/frontend/src/routes/cases/components/calendar/CaseCalendar.tsx
    1:559  error  'api' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
@@ -106,6 +129,21 @@
   17:150  error  'setActiveTab' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
   17:192  error  'isEditing' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
   17:203  error  'setIsEditing' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/enterprise/CaseBudget.tsx
+  15:6  error  Parsing error: ';' expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/enterprise/CaseTeam.tsx
+  14:6  error  Parsing error: ';' expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/enterprise/CaseTemplates.tsx
+  17:6  error  Parsing error: ';' expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/enterprise/EnhancedCaseTimeline.tsx
+  14:6  error  Parsing error: ';' expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/enterprise/EnterpriseCaseList.tsx
+  16:6  error  Parsing error: ';' expected
 
 /workspaces/lexiflow-premium/frontend/src/routes/cases/components/financials/CaseFinancialsCenter.tsx
    1:454  error  'api' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
@@ -266,6 +304,9 @@
   16:81   error  'isSubmitting' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
   16:95   error  'setIsSubmitting' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
 
+/workspaces/lexiflow-premium/frontend/src/routes/cases/components/list/QuickAddPartyModal.tsx
+  14:0  error  Parsing error: '}' expected
+
 /workspaces/lexiflow-premium/frontend/src/routes/cases/components/operations/CaseOperationsCenter.tsx
    1:788  error  'useQuery' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
    3:10   error  'api' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
@@ -310,6 +351,9 @@
   21:10    error  'ActivityIcon' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
   22:10    error  'formatTimestamp' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
 
+/workspaces/lexiflow-premium/frontend/src/routes/cases/ui/components/DocketSkeleton/DocketSkeleton.tsx
+  21:0  error  Parsing error: '}' expected
+
 /workspaces/lexiflow-premium/frontend/src/routes/crm/components/ClientDirectory.tsx
   12:10  error  'cn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
 
@@ -321,9 +365,6 @@
 
 /workspaces/lexiflow-premium/frontend/src/routes/crm/components/enterprise/IntakeManagement.tsx
   95:18  error  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
-
-/workspaces/lexiflow-premium/frontend/src/routes/dashboard/widgets/KPICard.tsx
-  149:11  error    'theme' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
 
 /workspaces/lexiflow-premium/frontend/src/routes/documents/components/DocumentAnnotations.tsx
   18:11  error  'theme' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
@@ -421,9 +462,44 @@
   7:372  error  'actionType' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
   7:384  error  'setActionType' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
 
+/workspaces/lexiflow-premium/frontend/src/routes/real-estate/audit-readiness.tsx
+  15:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/real-estate/disposal.tsx
+  15:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/real-estate/encroachment.tsx
+  15:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/real-estate/portfolio-summary.tsx
+  14:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/real-estate/solicitations.tsx
+  15:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/real-estate/user-management.tsx
+  15:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/real-estate/utilization.tsx
+  14:0  error  Parsing error: Property or signature expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/research/components/enterprise/CitationManager.tsx
+  16:13  error  Parsing error: ';' expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/research/components/enterprise/ResearchMemo.tsx
+  16:13  error  Parsing error: ';' expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/workflows/index.tsx
+  69:0  error  Parsing error: ',' expected
+
+/workspaces/lexiflow-premium/frontend/src/routes/workflows/instance.$instanceId.tsx
+  24:0  error  Parsing error: '}' expected
+
 /workspaces/lexiflow-premium/frontend/src/shared/components/enterprise/ui/StatusBadge.tsx
   54:9  error  'themeStyles' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
 
 /workspaces/lexiflow-premium/frontend/src/utils/loader-helpers.ts
-  79:7   error    Unnecessary try/catch wrapper                                                        no-useless-catch
-  83:26  warning  Unused eslint-disable directive (no problems were reported from 'no-useless-catch')
+  79:7  error  Unnecessary try/catch wrapper  no-useless-catch
+
+✖ 398 problems (398 errors, 0 warnings)
+

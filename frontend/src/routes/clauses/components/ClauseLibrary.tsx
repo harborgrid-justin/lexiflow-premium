@@ -17,7 +17,6 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
@@ -29,6 +28,7 @@ import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoa
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { useTheme } from '@/theme';
 import { Clause } from '@/types';
 
 // ============================================================================
@@ -50,7 +50,9 @@ const ClauseLibrary = function ClauseLibrary({ onSelectClause }: ClauseLibraryPr
 
     // Fetch real clauses from DataService
     const { data: clauses = [], isLoading, error, refetch } = useQuery(QUERY_KEYS.CLAUSES.ALL, async () => {
-        return await DataService.clauses.getAll();
+        const result = await DataService.clauses.getAll();
+        if (!result.ok) throw result.error; // Adapt Result<T> to useQuery expectations
+        return result.data as Clause[]; // Type assertion needed as getAll returns unknown[]
     });
 
     const categories = ['Confidentiality', 'Liability', 'Payment Terms', 'Termination', 'Indemnification', 'Dispute Resolution'];

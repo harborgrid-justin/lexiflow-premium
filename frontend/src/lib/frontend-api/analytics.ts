@@ -170,7 +170,9 @@ const outcomePredictions = {
     return await client.get<unknown[]>("/analytics/outcome-predictions");
   },
   async getPredictionByCaseId(caseId: string) {
-    return await client.get<unknown>(`/analytics/outcome-predictions/case/${caseId}`);
+    return await client.get<unknown>(
+      `/analytics/outcome-predictions/case/${caseId}`
+    );
   },
 };
 
@@ -179,7 +181,9 @@ const outcomePredictions = {
  */
 const search = {
   async query(query: string) {
-    return await client.get<unknown[]>("/analytics/search", { params: { q: query } });
+    return await client.get<unknown[]>("/analytics/search", {
+      params: { q: query },
+    });
   },
 };
 
@@ -200,10 +204,10 @@ const billingAnalytics = {
  */
 const clauses = {
   async getAll() {
-    return await client.get<unknown[]>("/analytics/clauses");
+    return await client.get<unknown[]>("/clauses");
   },
   async analyze(text: string) {
-    return await client.post<unknown>("/analytics/clauses/analyze", { text });
+    return await client.post<unknown>("/clauses/analyze", { text });
   },
 };
 

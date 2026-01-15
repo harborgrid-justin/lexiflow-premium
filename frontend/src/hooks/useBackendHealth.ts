@@ -154,12 +154,8 @@ export function useBackendHealth(): UseBackendHealthReturn {
   const [status, setStatus] = useState<BackendStatus>(() => {
     try {
       const initialStatus = backendDiscovery.getStatus();
-      // Only log in development or on significant state changes
-      if (process.env.NODE_ENV === "development" && !initialStatus.available) {
-        console.warn(
-          "[useBackendHealth] Backend unavailable on initialization"
-        );
-      }
+      // Don't log on initialization - it's expected that backend may not be available yet
+      // Only log actual state changes in the subscription callback below
       return initialStatus;
     } catch (error) {
       console.error("[useBackendHealth] Error initializing status:", error);

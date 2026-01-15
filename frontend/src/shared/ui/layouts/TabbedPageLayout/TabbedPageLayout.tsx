@@ -77,7 +77,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
                   : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
-              <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)} />
+              <parent.icon className="h-4 w-4 mr-2" style={{ color: activeParentTab.id === parent.id ? 'var(--color-primary)' : 'var(--color-textTertiary)' }} />
               {parent.label}
             </button>
           ))}
@@ -97,7 +97,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
                     : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
                 )}
               >
-                <tab.icon className={cn("h-3.5 w-3.5", activeTabId === tab.id ? theme.primary.text : theme.text.tertiary)} />
+                <tab.icon className="h-3.5 w-3.5" style={{ color: activeTabId === tab.id ? 'var(--color-primary)' : 'var(--color-textTertiary)' }} />
                 {tab.label}
               </button>
             ))}

@@ -27,6 +27,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         ? {
             clientPort: 443,
             protocol: "wss",
+            host: `${process.env.CODESPACE_NAME}-${PORTS.FRONTEND}.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
           }
         : undefined,
       proxy: {

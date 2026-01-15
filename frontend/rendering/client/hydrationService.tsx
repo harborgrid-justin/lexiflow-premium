@@ -53,7 +53,16 @@ export class HydrationService {
 
         hydrateRoot(document, element, {
           onRecoverableError: (error) => {
-            console.error("[HydrationService] Recoverable error:", error);
+            // Only log recoverable errors in development if they're not Suspense hydration issues
+            if (process.env.NODE_ENV === "development") {
+              const errorMessage = error instanceof Error ? error.message : String(error);
+              // Suppress common Suspense hydration warnings
+              if (errorMessage.includes("Suspense boundary received an update before it finished hydrating")) {
+                // This is expected behavior in React 18 - no action needed
+                return;
+              }
+              console.error("[HydrationService] Recoverable error:", error);
+            }
             this.config.onHydrationError?.(error);
           },
         });

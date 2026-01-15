@@ -542,18 +542,26 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   useEffect(() => {
     const root = document.documentElement;
     const currentSpacing = tokens.spacing[density];
-    const { colors, shadows, borderRadius, typography, transitions, zIndex, fontMode, layout } = tokens;
+    const { colors, shadows, borderRadius, typography, transitions, zIndex, fontMode, layout, animations, effects, semantic } = tokens;
 
     // Guideline 24: Cleanup for StrictMode - remove previous values
     const cleanupCallbacks: Array<() => void> = [];
 
-    // Inject Colors
+    // Inject Colors - All color properties (80+)
     Object.entries(colors).forEach(([key, val]) => {
-      root.style.setProperty(`--color-${key}`, val as string);
-      cleanupCallbacks.push(() => root.style.removeProperty(`--color-${key}`));
+      if (typeof val === 'object' && val !== null) {
+        // Nested objects like charts, annotations, gradients
+        Object.entries(val).forEach(([subKey, subVal]) => {
+          root.style.setProperty(`--color-${key}-${subKey}`, subVal as string);
+          cleanupCallbacks.push(() => root.style.removeProperty(`--color-${key}-${subKey}`));
+        });
+      } else {
+        root.style.setProperty(`--color-${key}`, val as string);
+        cleanupCallbacks.push(() => root.style.removeProperty(`--color-${key}`));
+      }
     });
 
-    // Inject Spacing
+    // Inject Spacing (16 properties per density)
     Object.entries(currentSpacing).forEach(([key, val]) => {
       root.style.setProperty(`--spacing-${key}`, val as string);
       cleanupCallbacks.push(() => root.style.removeProperty(`--spacing-${key}`));
@@ -572,13 +580,28 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       () => root.style.removeProperty('--font-app')
     );
 
+    // Typography weights (8)
     Object.entries(typography.weights).forEach(([key, val]) => {
       root.style.setProperty(`--weight-${key}`, val as string);
       cleanupCallbacks.push(() => root.style.removeProperty(`--weight-${key}`));
     });
+
+    // Typography sizes (12)
     Object.entries(typography.sizes).forEach(([key, val]) => {
       root.style.setProperty(`--size-${key}`, val as string);
       cleanupCallbacks.push(() => root.style.removeProperty(`--size-${key}`));
+    });
+
+    // Line heights (5)
+    Object.entries(typography.lineHeight).forEach(([key, val]) => {
+      root.style.setProperty(`--line-height-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--line-height-${key}`));
+    });
+
+    // Letter spacing (5)
+    Object.entries(typography.letterSpacing).forEach(([key, val]) => {
+      root.style.setProperty(`--letter-spacing-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--letter-spacing-${key}`));
     });
 
     // Inject Borders & Shadows
@@ -586,23 +609,72 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty(`--radius-${key}`, val as string);
       cleanupCallbacks.push(() => root.style.removeProperty(`--radius-${key}`));
     });
+
     Object.entries(shadows).forEach(([key, val]) => {
       root.style.setProperty(`--shadow-${key}`, val as string);
       cleanupCallbacks.push(() => root.style.removeProperty(`--shadow-${key}`));
     });
 
-    // Inject Utils
+    // Inject Transitions (8)
     Object.entries(transitions).forEach(([key, val]) => {
       root.style.setProperty(`--transition-${key}`, val as string);
       cleanupCallbacks.push(() => root.style.removeProperty(`--transition-${key}`));
     });
+
+    // Inject Z-Index (10)
     Object.entries(zIndex).forEach(([key, val]) => {
       root.style.setProperty(`--z-${key}`, String(val));
       cleanupCallbacks.push(() => root.style.removeProperty(`--z-${key}`));
     });
+
+    // Inject Layout (15)
     Object.entries(layout).forEach(([key, val]) => {
       root.style.setProperty(`--layout-${key}`, String(val));
       cleanupCallbacks.push(() => root.style.removeProperty(`--layout-${key}`));
+    });
+
+    // Inject Animations
+    // Animation durations (4)
+    Object.entries(animations.duration).forEach(([key, val]) => {
+      root.style.setProperty(`--animation-duration-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--animation-duration-${key}`));
+    });
+
+    // Animation easing (6)
+    Object.entries(animations.easing).forEach(([key, val]) => {
+      root.style.setProperty(`--animation-easing-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--animation-easing-${key}`));
+    });
+
+    // Animation keyframes (6)
+    Object.entries(animations.keyframes).forEach(([key, val]) => {
+      root.style.setProperty(`--animation-keyframe-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--animation-keyframe-${key}`));
+    });
+
+    // Inject Effects
+    // Blur (4)
+    Object.entries(effects.blur).forEach(([key, val]) => {
+      root.style.setProperty(`--effect-blur-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--effect-blur-${key}`));
+    });
+
+    // Opacity (4)
+    Object.entries(effects.opacity).forEach(([key, val]) => {
+      root.style.setProperty(`--effect-opacity-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--effect-opacity-${key}`));
+    });
+
+    // Backdrop (4)
+    Object.entries(effects.backdrop).forEach(([key, val]) => {
+      root.style.setProperty(`--effect-backdrop-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--effect-backdrop-${key}`));
+    });
+
+    // Inject Semantic (7)
+    Object.entries(semantic).forEach(([key, val]) => {
+      root.style.setProperty(`--semantic-${key}`, val as string);
+      cleanupCallbacks.push(() => root.style.removeProperty(`--semantic-${key}`));
     });
 
     // Guideline 24: Cleanup for StrictMode double-invocation

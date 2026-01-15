@@ -19,6 +19,7 @@ export {
 } from "./ThemeContext";
 export type { ThemeObject } from "./ThemeContext";
 
+export { default as AdvancedThemeCustomizer } from "./components/AdvancedThemeCustomizer";
 export { default as ThemeCustomizer } from "./components/ThemeCustomizer";
 
 // Theme services (chart colors, utilities, etc.)

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Database, Cloud, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
-import { apiClient } from '@/services/infrastructure/apiClient';
 import { TIMEOUTS } from '@/config/ports.config';
 import { useDataSource } from '@/providers';
+import { apiClient } from '@/services/infrastructure/apiClient';
+import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { BackendHealthMonitor } from '../BackendHealthMonitor/BackendHealthMonitor';
 import { SystemHealthDisplay } from '../SystemHealthDisplay/SystemHealthDisplay';
 
@@ -123,7 +123,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
         {useBackendApi && (
           <button
             onClick={() => setShowHealthMonitor(true)}
-            className="p-1.5 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+            style={{ backgroundColor: 'var(--color-surface)' }}
+            className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             title="View Backend Health Monitor"
           >
             <Activity className="w-4 h-4 text-gray-600 dark:text-gray-400" />
@@ -143,4 +144,3 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
     </>
   );
 };
-

@@ -13,8 +13,8 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { Suspense, lazy } from 'react';
 import { HelpCircle, Lock } from 'lucide-react';
+import React, { Suspense, lazy } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -29,7 +29,7 @@ import { ModuleRegistry } from '@/services/infrastructure/module-registry.servic
 import { PATHS } from '@/config/paths.config';
 
 // Types
-import { AppView, User, Case } from '@/types';
+import { AppView, Case, User } from '@/types';
 
 // ========================================
 // LAZY LOADED COMPONENTS
@@ -95,7 +95,7 @@ export const AppContentRenderer = ({
       return (
         <div className="flex flex-col justify-center items-center h-full text-slate-500 animate-fade-in">
           <div className="bg-red-50 p-6 rounded-full mb-4 border border-red-100">
-            <Lock className="h-12 w-12 text-red-500"/>
+            <Lock className="h-12 w-12 text-red-500" />
           </div>
           <h3 className="text-xl font-bold text-slate-800">Access Denied</h3>
           <p className="text-sm mt-2 max-w-md text-center text-slate-600">
@@ -110,7 +110,7 @@ export const AppContentRenderer = ({
     const dynamicProps: Record<string, unknown> = { currentUser };
 
     if (initialTab) {
-        dynamicProps.initialTab = initialTab;
+      dynamicProps.initialTab = initialTab;
     }
 
     if (activeView === PATHS.CASES || activeView === PATHS.PLEADING_BUILDER) {
@@ -122,7 +122,7 @@ export const AppContentRenderer = ({
     }
 
     if (activeView === PATHS.LITIGATION_BUILDER) {
-        dynamicProps.navigateToCaseTab = navigateToCaseTab;
+      dynamicProps.navigateToCaseTab = navigateToCaseTab;
     }
 
     if (activeView === PATHS.BILLING) {
@@ -152,12 +152,12 @@ export const AppContentRenderer = ({
   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-full text-slate-400">
-      <div className="bg-slate-100 p-4 rounded-full mb-4">
-        <HelpCircle className="h-10 w-10 text-slate-300"/>
+    <div style={{ color: 'var(--color-textMuted)' }} className="flex flex-col justify-center items-center h-full">
+      <div style={{ backgroundColor: 'var(--color-surface)' }} className="p-4 rounded-full mb-4">
+        <HelpCircle style={{ color: 'var(--color-border)' }} className="h-10 w-10" />
       </div>
       <p className="text-xl font-semibold">Module Not Found</p>
-      <p className="text-sm mt-2">The requested module <span className="font-mono bg-slate-100 px-1 rounded text-slate-600">"{activeView}"</span> is not registered in the dynamic runtime.</p>
+      <p className="text-sm mt-2">The requested module <span style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }} className="font-mono px-1 rounded">"{activeView}"</span> is not registered in the dynamic runtime.</p>
     </div>
   );
 };

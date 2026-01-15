@@ -36,7 +36,7 @@ export function ReportsView() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
-        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
           <div className="flex items-center gap-3">
             <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <div>
@@ -78,13 +78,15 @@ export function ReportsView() {
               placeholder="Search reports..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full px-4 py-2 rounded-lg border"
             />
           </div>
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+            className="px-4 py-2 rounded-lg border"
             aria-label="Filter by type"
           >
             <option value="all">All Types</option>
@@ -133,7 +135,7 @@ type Report = {
 
 function ReportCard({ report }: { report: Report }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <div className="font-medium text-slate-900 dark:text-white mb-1">

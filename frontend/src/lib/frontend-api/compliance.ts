@@ -118,6 +118,29 @@ export async function createEthicalWall(input: {
 }
 
 /**
+ * Conflict Checks sub-module (for descriptor compatibility)
+ */
+const conflictChecks = {
+  run: runConflictCheck,
+  async getAll() {
+    return await client.get<unknown[]>("/compliance/conflict-checks");
+  },
+  async getById(id: string) {
+    return await client.get<unknown>(`/compliance/conflict-checks/${id}`);
+  },
+};
+
+/**
+ * Compliance Reporting sub-module (for descriptor compatibility)
+ */
+const complianceReporting = {
+  getAll: getComplianceReports,
+  async generate(input: unknown) {
+    return await client.post<unknown>("/compliance/reports", input);
+  },
+};
+
+/**
  * Compliance API module
  */
 export const complianceApi = {
@@ -125,4 +148,7 @@ export const complianceApi = {
   getComplianceReports,
   getEthicalWalls,
   createEthicalWall,
+  // Sub-modules for descriptor compatibility
+  conflictChecks,
+  complianceReporting,
 } as const;

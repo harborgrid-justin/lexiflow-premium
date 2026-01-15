@@ -3,9 +3,9 @@
  * @description Error boundary for graceful degradation in discovery center
  * Catches React errors and provides fallback UI with recovery options
  */
-import {Component, ErrorInfo, ReactNode} from 'react';
-import {AlertTriangle, RefreshCw, Home} from 'lucide-react';
-import {Button} from '@/shared/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
+import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
     children: ReactNode;
@@ -26,19 +26,20 @@ interface ErrorFallbackProps {
 }
 
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({
-                                                         error,
-                                                         errorInfo,
-                                                         onReset,
-                                                         onReturnHome
-                                                     }) => {
+    error,
+    errorInfo,
+    onReset,
+    onReturnHome
+}) => {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4">
+        <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen flex items-center justify-center p-4">
             <div
-                className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 p-8">
+                style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+                className="max-w-2xl w-full rounded-lg shadow-xl border p-8">
                 {/* Error Header */}
                 <div className="flex items-center gap-4 mb-6">
                     <div className="p-3 bg-red-100 dark:bg-red-900/20 rounded-full">
-                        <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400"/>
+                        <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
@@ -52,7 +53,8 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
                 {/* Error Details */}
                 <div
-                    className="mb-6 p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                    style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }}
+                    className="mb-6 p-4 rounded-lg border">
                     <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Error Details:
                     </h3>
@@ -66,8 +68,8 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
                                 Component Stack
                             </summary>
                             <pre className="mt-2 text-xs text-slate-600 dark:text-slate-400 overflow-auto max-h-40">
-                {errorInfo.componentStack}
-              </pre>
+                                {errorInfo.componentStack}
+                            </pre>
                         </details>
                     )}
                 </div>

@@ -20,5 +20,5 @@
  */
 
 // Re-export everything from the modularized sync engine
-export { SyncEngine } from "./sync/syncEngine";
+export { SyncEngine } from "./sync/sync-engine.service";
 export type { Mutation } from "./sync/types/syncTypes";

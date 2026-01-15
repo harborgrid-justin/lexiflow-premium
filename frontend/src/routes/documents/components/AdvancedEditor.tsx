@@ -1,9 +1,9 @@
 import { EditorToolbar } from '@/routes/discovery/components/EditorToolbar/EditorToolbar';
-import { useTheme } from '@/theme';
-import { useToggle } from '@/shared/hooks/useToggle';
 import { GeminiService } from '@/services/features/research/geminiService';
+import { useToggle } from '@/shared/hooks/useToggle';
 import { cn } from '@/shared/lib/cn';
 import { sanitizeHtml } from '@/shared/lib/sanitize';
+import { useTheme } from '@/theme';
 import { RotateCcw, Wand2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -175,11 +175,12 @@ export const AdvancedEditor = ({ initialContent, onSave, placeholder }: Advanced
         )}
 
         {aiToolbarToggle.isOpen && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-96 bg-white rounded-lg shadow-2xl border border-slate-200 p-2 flex gap-2 animate-in fade-in slide-in-from-bottom-2 z-20">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="absolute bottom-6 left-1/2 -translate-x-1/2 w-96 rounded-lg shadow-2xl border p-2 flex gap-2 animate-in fade-in slide-in-from-bottom-2 z-20">
             <div className="flex-1 relative">
               <Wand2 className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-600" />
               <input
-                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                className="w-full pl-9 pr-3 py-2 text-sm border rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
                 placeholder="Ask AI to rewrite selection..."
                 value={aiPrompt}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAiPrompt(e.target.value)}

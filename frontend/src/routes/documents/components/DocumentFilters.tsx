@@ -1,7 +1,7 @@
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import {
     AlertOctagon, CheckCircle2,
     Clock,
@@ -139,7 +139,7 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
                     <Cloud className={cn("h-4 w-4", theme.primary.text)} />
                     <span className={cn("text-xs font-bold", theme.text.secondary)}>Storage Quota</span>
                 </div>
-                <div className={cn("w-full rounded-full h-1.5 mb-1 overflow-hidden", theme.border.default, "bg-slate-200 dark:bg-slate-700")}>
+                <div style={{ backgroundColor: 'var(--color-border)' }} className={cn("w-full rounded-full h-1.5 mb-1 overflow-hidden")}>
                     <div className={cn("h-1.5 rounded-full", theme.primary.DEFAULT)} style={{ width: '65%' }}></div>
                 </div>
                 <div className={cn("flex justify-between text-[10px] font-medium", theme.text.tertiary)}>

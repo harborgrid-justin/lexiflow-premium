@@ -5,12 +5,73 @@
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
-import { Calendar, Clock, MapPin, Plus, Users } from 'lucide-react';
-import React from 'react';
+import { Calendar as CalendarIcon, Clock, Plus } from 'lucide-react';
+import React, { useCallback } from 'react';
 import { useCalendar } from './CalendarProvider';
+import { CalendarEvent } from './components/CalendarEvent/CalendarEvent';
+import { CalendarGrid } from './components/CalendarGrid/CalendarGrid';
+import { CalendarToolbar } from './components/CalendarToolbar/CalendarToolbar';
 
 export function CalendarView() {
-  const { upcomingEvents, metrics, viewMode, setViewMode, isPending } = useCalendar();
+  const {
+    events,
+    upcomingEvents,
+    metrics,
+    viewMode,
+    setViewMode,
+    selectedDate,
+    setSelectedDate,
+    isPending
+  } = useCalendar();
+
+  // Navigation handlers
+  const handlePrev = useCallback(() => {
+    const newDate = new Date(selectedDate);
+    if (viewMode === 'month') {
+      newDate.setMonth(newDate.getMonth() - 1);
+    } else {
+      newDate.setDate(newDate.getDate() - 7);
+    }
+    setSelectedDate(newDate);
+  }, [selectedDate, viewMode, setSelectedDate]);
+
+  const handleNext = useCallback(() => {
+    const newDate = new Date(selectedDate);
+    if (viewMode === 'month') {
+      newDate.setMonth(newDate.getMonth() + 1);
+    } else {
+      newDate.setDate(newDate.getDate() + 7);
+    }
+    setSelectedDate(newDate);
+  }, [selectedDate, viewMode, setSelectedDate]);
+
+  const handleToday = useCallback(() => {
+    setSelectedDate(new Date());
+  }, [setSelectedDate]);
+
+  const monthLabel = selectedDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+  const renderCell = useCallback((date: Date) => {
+    const dayEvents = events.filter(e => {
+      const eDate = new Date(e.startDate);
+      return eDate.getDate() === date.getDate() &&
+        eDate.getMonth() === date.getMonth() &&
+        eDate.getFullYear() === date.getFullYear();
+    });
+
+    return (
+      <div className="flex flex-col gap-1 p-1">
+        {dayEvents.map(event => (
+          <CalendarEvent
+            key={event.id}
+            title={event.title}
+            variant={event.type === 'hearing' ? 'critical' : 'default'}
+            isCompact={true}
+          />
+        ))}
+      </div>
+    );
+  }, [events]);
 
   return (
     <div className="h-full flex flex-col">
@@ -25,9 +86,9 @@ export function CalendarView() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 text-sm sm:text-base">
         <MetricCard
-          icon={<Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
+          icon={<CalendarIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
           label="Total Events"
           value={metrics.totalEvents}
         />
@@ -37,57 +98,68 @@ export function CalendarView() {
           value={metrics.todayCount}
         />
         <MetricCard
-          icon={<Calendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />}
+          icon={<CalendarIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />}
           label="Upcoming"
           value={metrics.upcomingCount}
         />
       </div>
 
-      <div className="px-4 pb-4">
-        <div className="flex gap-2">
-          <ViewButton active={viewMode === 'month'} onClick={() => setViewMode('month')}>
-            Month
-          </ViewButton>
-          <ViewButton active={viewMode === 'week'} onClick={() => setViewMode('week')}>
-            Week
-          </ViewButton>
-          <ViewButton active={viewMode === 'day'} onClick={() => setViewMode('day')}>
-            Day
-          </ViewButton>
-          <ViewButton active={viewMode === 'list'} onClick={() => setViewMode('list')}>
-            List
-          </ViewButton>
+      <div className="flex-1 flex flex-col min-h-0 px-4 pb-4">
+        <div className="mb-4">
+          <CalendarToolbar
+            label={monthLabel}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onToday={handleToday}
+            view={viewMode === 'list' ? 'list' : 'month'}
+            onViewChange={(v) => setViewMode(v)}
+          />
         </div>
-      </div>
 
-      <div className="flex-1 overflow-auto px-4 pb-4">
-        {isPending && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-          </div>
-        )}
+        <div className="flex-1 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm relative">
+          {isPending && (
+            <div className="absolute inset-0 z-10 bg-white/50 dark:bg-black/50 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+            </div>
+          )}
 
-        {!isPending && viewMode === 'list' && (
-          <div className="space-y-3">
-            {upcomingEvents.map(event => (
-              <EventCard key={event.id} event={event} />
-            ))}
-            {upcomingEvents.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No upcoming events
+          {viewMode === 'month' && (
+            <div className="h-full overflow-y-auto">
+              <CalendarGrid
+                currentDate={selectedDate}
+                renderCell={renderCell}
+                onDateClick={(date) => console.log('Clicked', date)}
+              />
+            </div>
+          )}
+
+          {viewMode === 'list' && (
+            <div className="h-full overflow-y-auto p-4 space-y-3">
+              {upcomingEvents.map(event => (
+                <EventParamsCard key={event.id} event={event} />
+              ))}
+              {upcomingEvents.length === 0 && (
+                <div className="text-center py-12 text-slate-600 dark:text-slate-400">
+                  No upcoming events
+                </div>
+              )}
+            </div>
+          )}
+
+          {(viewMode === 'week' || viewMode === 'day') && (
+            <div className="h-full flex items-center justify-center text-center p-8">
+              <div className="max-w-md">
+                <CalendarIcon className="w-16 h-16 mx-auto mb-4 text-slate-300 dark:text-slate-600" />
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                  {viewMode === 'week' ? 'Week' : 'Day'} View Coming Soon
+                </h3>
+                <p className="text-slate-500 dark:text-slate-400">
+                  We are currently working on optimizing the granular views. Please use the Month or List view for now.
+                </p>
               </div>
-            )}
-          </div>
-        )}
-
-        {!isPending && viewMode !== 'list' && (
-          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-8 text-center">
-            <Calendar className="w-16 h-16 mx-auto mb-4 text-slate-400" />
-            <p className="text-slate-600 dark:text-slate-400">
-              Calendar view coming soon
-            </p>
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -107,64 +179,26 @@ function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: stri
   );
 }
 
-function ViewButton({ active, onClick, children }: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
+// Renamed locally to avoid conflict if we decide to re-export or just clarity
+function EventParamsCard({ event }: { event: any }) {
   return (
-    <button
-      onClick={onClick}
-      className={`px-4 py-2 rounded-lg font-medium transition-colors ${active
-        ? 'bg-blue-600 text-white'
-        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
-        }`}
-    >
-      {children}
-    </button>
-  );
-}
-
-type CalendarEvent = {
-  id: string;
-  title: string;
-  type: string;
-  startDate: string;
-  endDate?: string;
-  location?: string;
-  caseId?: string;
-  attendees?: string[];
-  status: string;
-};
-
-function EventCard({ event }: { event: CalendarEvent }) {
-  return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">
         <div className="flex-1">
           <div className="font-medium text-slate-900 dark:text-white">{event.title}</div>
-          <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+          <div className="text-sm text-slate-600 dark:text-slate-400 mt-1 flex items-center gap-2">
+            <Clock className="w-4 h-4" />
             {new Date(event.startDate).toLocaleString()}
           </div>
         </div>
-        <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400">
+        <span className={`px-2 py-1 rounded text-xs font-medium
+          ${event.type === 'hearing'
+            ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400'
+            : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+          }`}>
           {event.type}
         </span>
       </div>
-      <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
-        {event.location && (
-          <span className="flex items-center gap-1">
-            <MapPin className="w-4 h-4" />
-            {event.location}
-          </span>
-        )}
-        {event.attendees && event.attendees.length > 0 && (
-          <span className="flex items-center gap-1">
-            <Users className="w-4 h-4" />
-            {event.attendees.length} attendees
-          </span>
-        )}
-      </div>
     </div>
-  );
+  )
 }

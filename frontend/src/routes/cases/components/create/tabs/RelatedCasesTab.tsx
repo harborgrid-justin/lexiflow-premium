@@ -43,7 +43,8 @@ export const RelatedCasesTab: React.FC<RelatedCasesTabProps> = ({
           {relatedCases.map((rc, index) => (
             <div
               key={index}
-              className="flex items-start gap-4 p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700"
+              style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }}
+              className="flex items-start gap-4 p-4 rounded-lg border"
             >
               <div className="flex-1 grid grid-cols-3 gap-4">
                 <input

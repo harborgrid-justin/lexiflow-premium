@@ -5,10 +5,9 @@
  * Displays case updates, document uploads, tasks completed, and system events
  */
 
-import React from 'react';
+import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import { Activity, ActivityType } from '@/types/dashboard';
-import { cn } from '@/shared/lib/cn';
 import { formatDistanceToNow } from 'date-fns';
 import {
   AlertTriangle,
@@ -22,6 +21,7 @@ import {
   Upload,
   UserPlus,
 } from 'lucide-react';
+import React from 'react';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -145,10 +145,10 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
       <div className={cn('space-y-4', className)}>
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex gap-3 animate-pulse">
-            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
+            <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+              <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
+              <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
             </div>
           </div>
         ))}

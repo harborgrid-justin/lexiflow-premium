@@ -63,10 +63,10 @@ function DashboardSkeleton() {
  */
 function DashboardError() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen flex items-center justify-center">
       <div className="text-center space-y-4">
         <h2 className="text-2xl font-bold text-rose-600">Failed to load dashboard</h2>
-        <p className="text-slate-600 dark:text-slate-400">Please refresh the page or contact support</p>
+        <p style={{ color: 'var(--color-textMuted)' }}>Please refresh the page or contact support</p>
       </div>
     </div>
   );

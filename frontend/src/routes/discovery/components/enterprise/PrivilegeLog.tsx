@@ -4,10 +4,10 @@
  * @description Privilege log management with batch tagging and export to court format
  */
 
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -272,7 +272,7 @@ export const PrivilegeLog: React.FC<PrivilegeLogProps> = ({
               <span className={cn('text-sm font-medium', theme.text.primary)}>
                 {selectedEntries.size} selected
               </span>
-              <div className="h-4 w-px bg-gray-300 dark:bg-gray-600" />
+              <div style={{ backgroundColor: 'var(--color-border)' }} className="h-4 w-px" />
               <span className={cn('text-xs', theme.text.secondary)}>Batch Actions:</span>
             </div>
             <div className="flex gap-2">

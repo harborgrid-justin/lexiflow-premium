@@ -143,12 +143,12 @@ function MetricCard({ title, value, icon, trend, subtitle }: {
   subtitle?: string;
 }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-slate-600 dark:text-slate-400">{title}</span>
+        <span style={{ color: 'var(--color-textMuted)' }} className="text-sm">{title}</span>
         {icon}
       </div>
-      <div className="text-2xl font-semibold text-slate-900 dark:text-white mb-1">
+      <div style={{ color: 'var(--color-text)' }} className="text-2xl font-semibold mb-1">
         {value}
       </div>
       {(trend || subtitle) && (
@@ -185,18 +185,18 @@ function TabButton({ active, onClick, disabled, children }: {
 
 function InvoiceRow({ invoice }: { invoice: Invoice }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="flex items-center justify-between">
         <div>
-          <div className="font-medium text-slate-900 dark:text-white">
+          <div style={{ color: 'var(--color-text)' }} className="font-medium">
             Invoice #{invoice.invoiceNumber}
           </div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">
+          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">
             {invoice.clientName} • Due {new Date(invoice.dueDate).toLocaleDateString()}
           </div>
         </div>
         <div className="text-right">
-          <div className="text-lg font-semibold text-slate-900 dark:text-white">
+          <div style={{ color: 'var(--color-text)' }} className="text-lg font-semibold">
             ${invoice.totalAmount.toLocaleString()}
           </div>
           <div className={`text-xs font-medium ${invoice.status === 'paid' ? 'text-emerald-600' :
@@ -213,13 +213,13 @@ function InvoiceRow({ invoice }: { invoice: Invoice }) {
 
 function TransactionRow({ transaction }: { transaction: Transaction }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="flex items-center justify-between">
         <div>
-          <div className="font-medium text-slate-900 dark:text-white">
+          <div style={{ color: 'var(--color-text)' }} className="font-medium">
             {transaction.description}
           </div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">
+          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">
             {new Date(transaction.date).toLocaleDateString()} • {transaction.method}
           </div>
         </div>
@@ -236,21 +236,21 @@ function TimeEntryRow({ entry }: { entry: TimeEntry }) {
   const hours = entry.duration || 0;
   const rate = entry.rate || 0;
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <div className="font-medium text-slate-900 dark:text-white">
+          <div style={{ color: 'var(--color-text)' }} className="font-medium">
             {entry.description}
           </div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">
+          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">
             {entry.userId} • {new Date(entry.date).toLocaleDateString()}
           </div>
         </div>
         <div className="text-right">
-          <div className="text-lg font-semibold text-slate-900 dark:text-white">
+          <div style={{ color: 'var(--color-text)' }} className="text-lg font-semibold">
             {hours}h
           </div>
-          <div className="text-xs text-slate-600 dark:text-slate-400">
+          <div style={{ color: 'var(--color-textMuted)' }} className="text-xs">
             ${(hours * rate).toFixed(2)}
           </div>
         </div>
@@ -261,8 +261,8 @@ function TimeEntryRow({ entry }: { entry: TimeEntry }) {
 
 function RateCard({ rate }: { rate: BillingRate }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
-      <div className="font-medium text-slate-900 dark:text-white mb-2">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
+      <div style={{ color: 'var(--color-text)' }} className="font-medium mb-2">
         {rate.title}
       </div>
       <div className="text-2xl font-bold text-blue-600 mb-1">

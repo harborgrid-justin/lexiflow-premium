@@ -3,9 +3,9 @@
  * Card-based display for documents in grid view
  */
 
-import { Link } from 'react-router';
 import type { LegalDocument } from '@/types/documents';
 import { formatDate } from '@/utils/formatters';
+import { Link } from 'react-router';
 
 interface DocumentCardProps {
   document: LegalDocument;
@@ -119,7 +119,8 @@ export function DocumentCard({ document, onDelete, onDownload, selected, onSelec
           {document.tags.slice(0, 3).map((tag, idx) => (
             <span
               key={idx}
-              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+              style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textMuted)' }}
+              className="inline-flex items-center px-2 py-0.5 rounded text-xs"
             >
               {tag}
             </span>
@@ -134,7 +135,8 @@ export function DocumentCard({ document, onDelete, onDownload, selected, onSelec
       <div className="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
         <button
           onClick={() => onDownload?.(document.id)}
-          className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+          style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}
+          className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-600"
           title="Download"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

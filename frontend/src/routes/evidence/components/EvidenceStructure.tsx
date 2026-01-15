@@ -11,8 +11,8 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Context & Utils
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 
 // Types
 import { EvidenceItem } from '@/types';
@@ -70,7 +70,7 @@ export const EvidenceStructure: React.FC<EvidenceStructureProps> = ({ selectedIt
           <div className={cn("relative pl-6 border-l-2 ml-4 space-y-8 py-2", theme.border.default)}>
             <div className="relative">
               <div className={cn("absolute -left-[33px] h-6 w-6 rounded-full border-4 border-transparent flex items-center justify-center", theme.primary.DEFAULT)}>
-                <div className="h-2 w-2 bg-white rounded-full"></div>
+                <div style={{ backgroundColor: 'var(--color-surface)' }} className="h-2 w-2 rounded-full"></div>
               </div>
               <h4 className={cn("font-bold text-sm", theme.text.primary)}>Ingestion & Hashing</h4>
               <p className={cn("text-xs mt-1", theme.text.secondary)}>Master file uploaded and SHA-256 hash generated.</p>
@@ -105,7 +105,7 @@ export const EvidenceStructure: React.FC<EvidenceStructureProps> = ({ selectedIt
               <span className={cn("block text-sm font-bold", theme.status.success.text)}>Structure Verified</span>
               <span className={cn("text-xs", theme.status.success.text)}>All chunks match master parent hash.</span>
             </div>
-            <div className="h-8 w-8 bg-white/20 rounded-full flex items-center justify-center">
+            <div style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} className="h-8 w-8 rounded-full flex items-center justify-center">
               <Link className={cn("h-4 w-4", theme.status.success.text)} />
             </div>
           </div>

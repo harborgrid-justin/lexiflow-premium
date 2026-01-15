@@ -290,6 +290,18 @@ export async function syncIntegration(
   });
 }
 
+/**
+ * Organizations sub-module (stub implementation)
+ */
+const organizations = {
+  async getAll() {
+    return await client.get<unknown[]>("/integrations/organizations");
+  },
+  async getById(id: string) {
+    return await client.get<unknown>(`/integrations/organizations/${id}`);
+  },
+};
+
 export const integrationsApi = {
   getAllIntegrations,
   getIntegrationById,
@@ -299,4 +311,6 @@ export const integrationsApi = {
   enableIntegration,
   disableIntegration,
   syncIntegration,
+  // Sub-modules for descriptor compatibility
+  organizations,
 };

@@ -1,7 +1,7 @@
-import { LegalDocument, DocumentVersion, UserRole } from '@/types';
-import { History, RotateCcw, AlertTriangle, X } from 'lucide-react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { DocumentVersion, LegalDocument, UserRole } from '@/types';
+import { AlertTriangle, History, RotateCcw, X } from 'lucide-react';
 
 interface DocumentVersionsProps {
   document: LegalDocument;
@@ -25,14 +25,14 @@ export function DocumentVersions({ document, userRole, onRestore, onClose }: Doc
             </h3>
             <p className={cn("text-sm", theme.text.secondary)}>{document.title}</p>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)}
           >
             <X className="h-5 w-5" />
           </button>
         </div>
-        
+
         <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
           {!canRestore && (
             <div className={cn("p-3 rounded-md flex items-center text-sm", theme.status.warning.bg, theme.status.warning.text)}>
@@ -42,9 +42,9 @@ export function DocumentVersions({ document, userRole, onRestore, onClose }: Doc
           )}
 
           <div className={cn("border rounded-lg p-4 relative", theme.status.success.border, theme.status.success.bg)}>
-             <span className={cn("absolute top-3 right-3 text-xs font-bold px-2 py-0.5 rounded", theme.status.success.text, "bg-white/50")}>CURRENT</span>
-             <h4 className={cn("text-sm font-bold", theme.text.primary)}>Current Version</h4>
-             <p className={cn("text-xs mt-1", theme.text.secondary)}>Last modified: {document.lastModified}</p>
+            <span style={{ backgroundColor: 'rgba(255,255,255,0.5)' }} className={cn("absolute top-3 right-3 text-xs font-bold px-2 py-0.5 rounded", theme.status.success.text)}>CURRENT</span>
+            <h4 className={cn("text-sm font-bold", theme.text.primary)}>Current Version</h4>
+            <p className={cn("text-xs mt-1", theme.text.secondary)}>Last modified: {document.lastModified}</p>
           </div>
 
           {document.versions.length === 0 && (
@@ -62,7 +62,7 @@ export function DocumentVersions({ document, userRole, onRestore, onClose }: Doc
                 </div>
               </div>
               {canRestore && (
-                <button 
+                <button
                   onClick={() => onRestore(version)}
                   className={cn("flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors", theme.primary.light, theme.primary.text, `hover:${theme.surface.default}`)}
                 >

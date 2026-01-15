@@ -177,7 +177,7 @@ export const KPICard: React.FC<KPICardProps> = ({
 
   const colors = colorClasses[color];
   const TrendIcon = change.trend === 'up' ? TrendingUp : change.trend === 'down' ? TrendingDown : Minus;
-  const trendColor = change.trend === 'up' ? 'text-green-600' : change.trend === 'down' ? 'text-red-600' : 'text-gray-600';
+  const trendColor = change.trend === 'up' ? 'text-green-600' : change.trend === 'down' ? 'text-red-600' : 'text-slate-600';
 
   return (
     <div
@@ -195,8 +195,8 @@ export const KPICard: React.FC<KPICardProps> = ({
     >
       {/* Loading overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-10">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+        <div className="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-10">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-blue-600" />
         </div>
       )}
 

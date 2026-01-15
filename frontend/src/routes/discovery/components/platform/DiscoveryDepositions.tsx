@@ -10,24 +10,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
 import { Calendar, CheckSquare, FileText, MapPin, Mic2, Plus, User, Video } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
+import { useTheme } from '@/theme';
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';
@@ -87,7 +87,7 @@ export const DiscoveryDepositions: React.FC<DiscoveryDepositionsProps> = ({ case
         openWindow(
             'schedule-depo',
             'Schedule Deposition',
-            <div className="p-6 space-y-4 bg-white">
+            <div style={{ backgroundColor: 'var(--color-surface)' }} className="p-6 space-y-4">
                 <Input label="Witness Name" value={newDepo.witnessName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({ ...newDepo, witnessName: e.target.value })} placeholder="e.g. Jane Doe" />
                 <div className="grid grid-cols-2 gap-4">
                     <Input label="Date" type="date" value={newDepo.date || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({ ...newDepo, date: e.target.value })} />

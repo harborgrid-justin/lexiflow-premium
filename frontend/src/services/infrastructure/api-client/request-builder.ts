@@ -24,9 +24,14 @@ async function ensureValidToken(): Promise<void> {
   }
 
   if (isRefreshing) {
-    // Already refreshing, wait a moment and continue
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    return;
+    // Already refreshing, wait until it's done
+    while (isRefreshing) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    // Re-check just in case
+    if (!isTokenExpiringSoon(5)) {
+      return;
+    }
   }
 
   if (isTokenExpiringSoon(5)) {

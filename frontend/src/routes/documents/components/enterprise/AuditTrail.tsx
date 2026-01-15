@@ -250,7 +250,7 @@ export function AuditTrail({
   };
 
   return (
-    <div className="h-full flex flex-col bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="h-full flex flex-col rounded-lg border">
       {/* Header */}
       <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-4">
@@ -267,7 +267,8 @@ export function AuditTrail({
             {selectedEvents.size > 0 && (
               <button
                 onClick={clearSelection}
-                className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}
+                className="px-3 py-1.5 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
               >
                 Clear Selection
               </button>
@@ -347,7 +348,7 @@ export function AuditTrail({
 
       {/* Bulk Actions */}
       {filteredEvents.length > 0 && (
-        <div className="px-6 py-2 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="px-6 py-2 border-b">
           <button
             onClick={selectAllFiltered}
             className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
@@ -444,7 +445,7 @@ export function AuditTrail({
                               </h5>
                               <div className="space-y-2">
                                 {event.changes.map((change, idx) => (
-                                  <div key={idx} className="text-xs bg-gray-50 dark:bg-gray-700/50 p-2 rounded">
+                                  <div key={idx} style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="text-xs p-2 rounded">
                                     <div className="font-medium text-gray-700 dark:text-gray-300 mb-1">
                                       {change.field}
                                     </div>
@@ -471,7 +472,7 @@ export function AuditTrail({
                               <h5 className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Additional Details
                               </h5>
-                              <div className="text-xs bg-gray-50 dark:bg-gray-700/50 p-2 rounded font-mono">
+                              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="text-xs p-2 rounded font-mono">
                                 <pre className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
                                   {JSON.stringify(event.details, null, 2)}
                                 </pre>

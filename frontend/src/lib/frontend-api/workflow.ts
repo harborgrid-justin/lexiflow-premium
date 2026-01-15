@@ -344,6 +344,36 @@ export async function bulkUpdateTasks(
 }
 
 /**
+ * Risks sub-module (stub implementation)
+ */
+const risks = {
+  async getAll() {
+    return await client.get<unknown[]>("/workflow/risks");
+  },
+  async getById(id: string) {
+    return await client.get<unknown>(`/workflow/risks/${id}`);
+  },
+  async create(data: unknown) {
+    return await client.post<unknown>("/workflow/risks", data);
+  },
+};
+
+/**
+ * War Room sub-module (stub implementation)
+ */
+const warRoom = {
+  async getSessions() {
+    return await client.get<unknown[]>("/workflow/war-room");
+  },
+  async createSession(data: unknown) {
+    return await client.post<unknown>("/workflow/war-room", data);
+  },
+  async joinSession(sessionId: string) {
+    return await client.post<void>(`/workflow/war-room/${sessionId}/join`);
+  },
+};
+
+/**
  * Workflow API module
  */
 export const workflowApi = {
@@ -359,4 +389,7 @@ export const workflowApi = {
   searchTasks,
   getUpcomingTasks,
   bulkUpdateTasks,
+  // Sub-modules for descriptor compatibility
+  risks,
+  warRoom,
 } as const;

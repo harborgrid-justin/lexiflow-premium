@@ -1,7 +1,7 @@
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
 import { yieldToMain } from '@/utils/apiUtils';
-import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, Eye, EyeOff, ShieldAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -148,7 +148,7 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
                     <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
                     <p>Redaction is permanent. A new version of the document will be created.</p>
                 </div>
-                <Button variant="primary" className="w-full bg-slate-900 hover:bg-slate-800" onClick={handleRedactAll} disabled={isScanning}>
+                <Button variant="primary" className="w-full" onClick={handleRedactAll} disabled={isScanning}>
                     Redact Selected
                 </Button>
             </div>

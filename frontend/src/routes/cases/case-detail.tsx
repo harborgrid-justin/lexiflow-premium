@@ -31,7 +31,7 @@ import { createCaseMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/case-detail";
 
 function CardSkeleton() {
-  return <div className="h-64 rounded-lg bg-gray-200 dark:bg-gray-700" />;
+  return <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-64 rounded-lg" />;
 }
 
 // ============================================================================
@@ -228,8 +228,8 @@ function CaseDetailSkeleton() {
     <div className="animate-pulse p-8">
       {/* Header Skeleton */}
       <div className="mb-8">
-        <div className="mb-2 h-8 w-64 rounded bg-gray-200 dark:bg-gray-700" />
-        <div className="h-4 w-48 rounded bg-gray-200 dark:bg-gray-700" />
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="mb-2 h-8 w-64 rounded" />
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-4 w-48 rounded" />
       </div>
 
       {/* Tabs Skeleton */}
@@ -237,7 +237,8 @@ function CaseDetailSkeleton() {
         {Array.from({ length: 5 }).map((_, i) => (
           <div
             key={i}
-            className="h-10 w-24 rounded-t bg-gray-200 dark:bg-gray-700"
+            style={{ backgroundColor: 'var(--color-surfaceHover)' }}
+            className="h-10 w-24 rounded-t"
           />
         ))}
       </div>

@@ -30,8 +30,8 @@ import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
+import { useTheme } from '@/theme';
 import { useAccessMatrix } from '../_hooks/useAccessMatrix';
 
 // Utils & Constants
@@ -118,7 +118,7 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                 </div>
             )}
 
-            <div className="flex-1 overflow-hidden rounded-lg border shadow-sm bg-white">
+            <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex-1 overflow-hidden rounded-lg border shadow-sm">
                 <TableContainer className="h-full border-0 rounded-none shadow-none">
                     <TableHeader>
                         <TableHead>Resource</TableHead>
@@ -132,7 +132,7 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                     <TableBody>
                         {permissions.map(perm => (
                             <TableRow key={perm.id}>
-                                <TableCell className="font-mono text-xs font-bold text-slate-700">{perm.resource}</TableCell>
+                                <TableCell style={{ color: 'var(--color-text)' }} className="font-mono text-xs font-bold">{perm.resource}</TableCell>
                                 <TableCell>
                                     <span className={cn("px-2 py-1 rounded text-xs border font-medium", theme.surface.highlight, theme.border.default)}>
                                         {perm.action.toUpperCase()}
@@ -152,18 +152,18 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                                         <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded border border-amber-200">
                                             {perm.conditions.length} Active Rules
                                         </span>
-                                    ) : <span className="text-slate-400 text-xs">-</span>}
+                                    ) : <span style={{ color: 'var(--color-textMuted)' }} className="text-xs">-</span>}
                                 </TableCell>
                                 <TableCell>
                                     {perm.expiration ? (
                                         <div className="flex items-center text-xs text-red-600 font-medium">
                                             <Clock className="h-3 w-3 mr-1" /> {formatDateDisplay(perm.expiration)}
                                         </div>
-                                    ) : <span className="text-slate-400 text-xs">Never</span>}
+                                    ) : <span style={{ color: 'var(--color-textMuted)' }} className="text-xs">Never</span>}
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
-                                        <button className="p-1 hover:bg-slate-100 rounded text-blue-600"><Edit2 className="h-4 w-4" /></button>
+                                        <button style={{ '--hover-bg': 'var(--color-surfaceHover)' } as React.CSSProperties} className="p-1 hover:bg-slate-100 rounded text-blue-600"><Edit2 className="h-4 w-4" /></button>
                                         <button onClick={() => handleDeleteClick(perm.id)} className="p-1 hover:bg-red-50 rounded text-red-600"><Trash2 className="h-4 w-4" /></button>
                                     </div>
                                 </TableCell>
@@ -194,8 +194,9 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Action</label>
+                            <label style={{ color: 'var(--color-textMuted)' }} className="block text-xs font-bold uppercase mb-1">Action</label>
                             <select
+                                style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
                                 className="w-full p-2 border rounded text-sm"
                                 value={newPerm.action}
                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateNewPermField('action', e.target.value)}
@@ -209,7 +210,7 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Effect</label>
+                            <label style={{ color: 'var(--color-textMuted)' }} className="block text-xs font-bold uppercase mb-1">Effect</label>
                             <select
                                 className="w-full p-2 border rounded text-sm"
                                 value={newPerm.effect}
@@ -223,8 +224,9 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Scope</label>
+                            <label style={{ color: 'var(--color-textMuted)' }} className="block text-xs font-bold uppercase mb-1">Scope</label>
                             <select
+                                style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
                                 className="w-full p-2 border rounded text-sm"
                                 value={newPerm.scope}
                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateNewPermField('scope', e.target.value)}

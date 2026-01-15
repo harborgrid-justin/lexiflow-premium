@@ -139,6 +139,75 @@ export async function getCustomReport(
 }
 
 /**
+ * Citations sub-module (stub implementation)
+ */
+const citations = {
+  async getAll() {
+    return await client.get<unknown[]>("/analytics/citations");
+  },
+  async getByCaseId(caseId: string) {
+    return await client.get<unknown[]>(`/analytics/citations/case/${caseId}`);
+  },
+};
+
+/**
+ * Judge Stats sub-module (stub implementation)
+ */
+const judgeStats = {
+  async getAll() {
+    return await client.get<unknown[]>("/analytics/judge-stats");
+  },
+  async getByJudgeId(judgeId: string) {
+    return await client.get<unknown>(`/analytics/judge-stats/${judgeId}`);
+  },
+};
+
+/**
+ * Outcome Predictions sub-module (stub implementation)
+ */
+const outcomePredictions = {
+  async getPredictions() {
+    return await client.get<unknown[]>("/analytics/outcome-predictions");
+  },
+  async getPredictionByCaseId(caseId: string) {
+    return await client.get<unknown>(`/analytics/outcome-predictions/case/${caseId}`);
+  },
+};
+
+/**
+ * Search sub-module (stub implementation)
+ */
+const search = {
+  async query(query: string) {
+    return await client.get<unknown[]>("/analytics/search", { params: { q: query } });
+  },
+};
+
+/**
+ * Billing Analytics sub-module (stub implementation)
+ */
+const billingAnalytics = {
+  async getMetrics() {
+    return await client.get<unknown>("/analytics/billing");
+  },
+  async getByClientId(clientId: string) {
+    return await client.get<unknown>(`/analytics/billing/client/${clientId}`);
+  },
+};
+
+/**
+ * Clauses sub-module (stub implementation)
+ */
+const clauses = {
+  async getAll() {
+    return await client.get<unknown[]>("/analytics/clauses");
+  },
+  async analyze(text: string) {
+    return await client.post<unknown>("/analytics/clauses/analyze", { text });
+  },
+};
+
+/**
  * Analytics API module
  */
 export const analyticsApi = {
@@ -147,4 +216,11 @@ export const analyticsApi = {
   getRevenueAnalytics,
   getTeamMetrics,
   getCustomReport,
+  // Sub-modules
+  citations,
+  judgeStats,
+  outcomePredictions,
+  search,
+  billingAnalytics,
+  clauses,
 } as const;

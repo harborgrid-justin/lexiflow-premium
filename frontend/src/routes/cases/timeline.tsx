@@ -115,7 +115,7 @@ export default function CaseTimelineRoute() {
   const { caseData, events } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
-    <div className="min-h-full bg-gray-50 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-full">
       {/* Case Header */}
       <CaseHeader case={caseData} showBreadcrumbs />
 
@@ -124,8 +124,8 @@ export default function CaseTimelineRoute() {
         {/* Page Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Case Timeline</h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <h2 style={{ color: 'var(--color-text)' }} className="text-2xl font-bold">Case Timeline</h2>
+            <p style={{ color: 'var(--color-textMuted)' }} className="mt-1 text-sm">
               Chronological view of case events and milestones
             </p>
           </div>
@@ -145,7 +145,7 @@ export default function CaseTimelineRoute() {
         </div>
 
         {/* Timeline */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
           <CaseTimeline events={events} showFilters />
         </div>
       </div>

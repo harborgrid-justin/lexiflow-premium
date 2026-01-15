@@ -55,7 +55,7 @@ export function DocumentsView() {
 
 function MetricCard({ title, value }: { title: string; value: number }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">{title}</div>
       <div className="text-2xl font-semibold text-slate-900 dark:text-white">{value}</div>
     </div>
@@ -64,7 +64,7 @@ function MetricCard({ title, value }: { title: string; value: number }) {
 
 function DocumentCard({ document }: { document: Document }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-500 transition-colors cursor-pointer">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4 hover:border-blue-500 transition-colors cursor-pointer">
       <FileText className="w-8 h-8 text-blue-600 mb-2" />
       <div className="font-medium text-slate-900 dark:text-white text-sm mb-1">{document.title}</div>
       <div className="text-xs text-slate-600 dark:text-slate-400">{document.category}</div>
@@ -74,7 +74,7 @@ function DocumentCard({ document }: { document: Document }) {
 
 function DocumentRow({ document }: { document: Document }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between hover:border-blue-500 transition-colors cursor-pointer">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4 flex items-center justify-between hover:border-blue-500 transition-colors cursor-pointer">
       <div className="flex items-center gap-3">
         <FileText className="w-5 h-5 text-blue-600" />
         <div>

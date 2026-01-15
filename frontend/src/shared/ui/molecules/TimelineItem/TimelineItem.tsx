@@ -52,13 +52,13 @@ export const TimelineItem = React.memo<TimelineItemProps>(({
     >
       {/* Connecting Line */}
       {!isLast && (
-        <div className={cn("absolute left-[11px] top-6 bottom-[-24px] w-0.5 transition-colors", theme.border.default, "group-hover:bg-slate-300")}></div>
+        <div style={{ borderColor: 'var(--color-border)' }} className={cn("absolute left-[11px] top-6 bottom-[-24px] w-0.5 transition-colors hover:bg-slate-300")}></div>
       )}
 
       {/* Icon Dot */}
       <div className={cn(
-          "absolute left-0 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full border-2 border-white shadow-sm flex items-center justify-center text-white z-10 transition-transform duration-200 group-hover:scale-110",
-          colorClass
+        "absolute left-0 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full border-2 border-white shadow-sm flex items-center justify-center text-white z-10 transition-transform duration-200 group-hover:scale-110",
+        colorClass
       )}>
         {icon}
       </div>
@@ -70,16 +70,16 @@ export const TimelineItem = React.memo<TimelineItemProps>(({
         title={description} // Native tooltip for zero-clutter detail access
       >
         <div className="flex justify-between items-baseline gap-2 w-full">
-            <span className={cn("text-sm font-semibold truncate", theme.text.primary, onClick ? "group-hover:text-blue-600 transition-colors" : "")}>
-                {title}
-            </span>
-            <DateText date={date} className={cn("font-mono text-[10px] whitespace-nowrap shrink-0 opacity-60", theme.text.tertiary)} />
+          <span className={cn("text-sm font-semibold truncate", theme.text.primary, onClick ? "group-hover:text-blue-600 transition-colors" : "")}>
+            {title}
+          </span>
+          <DateText date={date} className={cn("font-mono text-[10px] whitespace-nowrap shrink-0 opacity-60", theme.text.tertiary)} />
         </div>
 
         {description && (
-            <p className={cn("text-xs truncate opacity-60 mt-0.5 font-medium", theme.text.secondary)}>
-                {description}
-            </p>
+          <p className={cn("text-xs truncate opacity-60 mt-0.5 font-medium", theme.text.secondary)}>
+            {description}
+          </p>
         )}
       </div>
     </div>

@@ -62,13 +62,13 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
           </div>
 
           <div className="flex flex-wrap gap-4 text-sm mt-2">
-            <div className="flex items-center gap-2 text-slate-500">
+            <div style={{ color: 'var(--color-textMuted)' }} className="flex items-center gap-2">
               <Mail className="h-4 w-4" /> {profile.email}
             </div>
-            <div className="flex items-center gap-2 text-slate-500">
+            <div style={{ color: 'var(--color-textMuted)' }} className="flex items-center gap-2">
               <Phone className="h-4 w-4" /> {FormattersService.phone(profile.phone) || '(555) 123-4567'}
             </div>
-            <div className="flex items-center gap-2 text-slate-500">
+            <div style={{ color: 'var(--color-textMuted)' }} className="flex items-center gap-2">
               <MapPin className="h-4 w-4" /> {profile.office || 'N/A'}
             </div>
           </div>
@@ -78,16 +78,16 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Professional Details">
           <div className="space-y-4">
-            <div className="flex justify-between items-center py-2 border-b border-dashed border-slate-200">
-              <span className="text-sm font-medium text-slate-500">Role</span>
+            <div style={{ borderColor: 'var(--color-border)' }} className="flex justify-between items-center py-2 border-b border-dashed">
+              <span style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Role</span>
               <span className="text-sm font-bold">{profile.role}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-dashed border-slate-200">
-              <span className="text-sm font-medium text-slate-500">Entity ID</span>
-              <span className="text-sm font-mono bg-slate-100 px-2 py-1 rounded">{profile.entityId}</span>
+            <div style={{ borderColor: 'var(--color-border)' }} className="flex justify-between items-center py-2 border-b border-dashed">
+              <span style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Entity ID</span>
+              <span style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="text-sm font-mono px-2 py-1 rounded">{profile.entityId}</span>
             </div>
             <div className="py-2">
-              <span className="text-sm font-medium text-slate-500 block mb-2">Skills & Expertise</span>
+              <span style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium block mb-2">Skills & Expertise</span>
               <div className="flex flex-wrap gap-2">
                 {profile.skills.map(skill => (
                   <span key={skill} className={cn("px-2 py-1 rounded-full text-xs border font-medium", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
@@ -108,7 +108,7 @@ export function ProfileOverview({ profile }: ProfileOverviewProps) {
                     <Scale className="h-5 w-5 text-purple-600" />
                     <div>
                       <p className="text-sm font-bold">{bar.state} Bar Association</p>
-                      <p className="text-xs text-slate-500">Bar #{bar.number}</p>
+                      <p style={{ color: 'var(--color-textMuted)' }} className="text-xs">Bar #{bar.number}</p>
                     </div>
                   </div>
                   <Badge variant="success">{bar.status}</Badge>

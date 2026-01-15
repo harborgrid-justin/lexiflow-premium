@@ -98,7 +98,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   return (
     <div className={cn("h-full flex flex-col", theme.background)}>
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="border-b px-6 py-4">
         <Breadcrumbs
           items={[
             { label: 'Matter Management', onClick: handleCancel },
@@ -155,7 +155,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
           {/* Conflict Warning */}
           <ConflictWarning show={conflictStatus === 'conflict'} />
 
-          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
             {activeTab === 'intake' && (
               <IntakeTab
                 formData={formData}

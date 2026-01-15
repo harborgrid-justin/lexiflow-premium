@@ -4,9 +4,9 @@
  * @description Trial exhibit organization with exhibit lists and presentation mode
  */
 
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -355,7 +355,7 @@ export const ExhibitOrganizer: React.FC<ExhibitOrganizerProps> = ({
     return (
       <div className="fixed inset-0 bg-black z-50 flex flex-col">
         {/* Presentation Header */}
-        <div className="bg-gray-900 text-white p-4 flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }} className="p-4 flex items-center justify-between border-b">
           <div className="flex items-center gap-4">
             <Button variant="secondary" size="sm" onClick={exitPresentationMode}>
               <Minimize2 className="h-4 w-4 mr-2" />
@@ -383,7 +383,8 @@ export const ExhibitOrganizer: React.FC<ExhibitOrganizerProps> = ({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="max-w-6xl w-full bg-white dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden"
+              style={{ backgroundColor: 'var(--color-surface)' }}
+              className="max-w-6xl w-full rounded-lg shadow-2xl overflow-hidden"
             >
               <div className="p-8">
                 <div className="mb-6">
@@ -402,7 +403,7 @@ export const ExhibitOrganizer: React.FC<ExhibitOrganizerProps> = ({
                 </div>
 
                 {/* Exhibit Preview */}
-                <div className="bg-gray-100 dark:bg-gray-700 rounded-lg aspect-video flex items-center justify-center mb-6">
+                <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="rounded-lg aspect-video flex items-center justify-center mb-6">
                   <div className="text-center">
                     {getTypeIcon(currentExhibit?.type || 'document')}
                     <p className="mt-4 text-gray-600 dark:text-gray-400">
@@ -440,7 +441,7 @@ export const ExhibitOrganizer: React.FC<ExhibitOrganizerProps> = ({
         </div>
 
         {/* Keyboard shortcuts hint */}
-        <div className="bg-gray-900 text-white p-2 text-center text-xs">
+        <div style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)', borderColor: 'var(--color-border)' }} className="border-t p-2 text-center text-xs">
           Use arrow keys or buttons to navigate • ESC to exit
         </div>
       </div>

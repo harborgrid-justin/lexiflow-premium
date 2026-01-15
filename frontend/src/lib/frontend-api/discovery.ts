@@ -309,6 +309,21 @@ export async function exportEvidence(
 }
 
 /**
+ * Productions sub-module (stub implementation)
+ */
+const productions = {
+  async getAll() {
+    return await client.get<unknown[]>("/discovery/productions");
+  },
+  async getById(id: string) {
+    return await client.get<unknown>(`/discovery/productions/${id}`);
+  },
+  async create(data: unknown) {
+    return await client.post<unknown>("/discovery/productions", data);
+  },
+};
+
+/**
  * Discovery API module
  */
 export const discoveryApi = {
@@ -321,4 +336,6 @@ export const discoveryApi = {
   searchEvidence,
   getEvidenceByCase,
   exportEvidence,
+  // Sub-modules for descriptor compatibility
+  productions,
 } as const;

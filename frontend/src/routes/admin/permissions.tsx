@@ -89,22 +89,22 @@ export default function AdminPermissionsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Total Permissions</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">{permissions.length}</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Total Permissions</p>
+          <p style={{ color: 'var(--color-text)' }} className="text-2xl font-bold">{permissions.length}</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Categories</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Categories</p>
           <p className="text-2xl font-bold text-blue-600">{categories.length}</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Resources</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Resources</p>
           <p className="text-2xl font-bold text-green-600">
             {new Set(permissions.map((p: Permission) => p.resource)).size}
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Actions</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Actions</p>
           <p className="text-2xl font-bold text-purple-600">
             {new Set(permissions.map((p: Permission) => p.action)).size}
           </p>
@@ -112,7 +112,7 @@ export default function AdminPermissionsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
+      <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -123,7 +123,8 @@ export default function AdminPermissionsPage() {
               placeholder="Search permissions..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full px-3 py-2 border rounded-md"
             />
           </div>
           <div>
@@ -133,7 +134,8 @@ export default function AdminPermissionsPage() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full px-3 py-2 border rounded-md"
             >
               <option value="all">All Categories</option>
               {categories.map((cat) => (
@@ -152,8 +154,8 @@ export default function AdminPermissionsPage() {
       {/* Permissions by Category */}
       <div className="space-y-6">
         {Object.entries(groupedPermissions).map(([category, perms]) => (
-          <div key={category} className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-            <div className="p-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+          <div key={category} style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow overflow-hidden">
+            <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="p-4 border-b">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{category}</h2>
             </div>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">

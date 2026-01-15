@@ -5,8 +5,8 @@
 
 import { useTheme } from '@/theme';
 import { formatDate } from '@/utils/formatters';
-import { DocumentAnnotationsProps } from '../types/DocumentAnnotationsProps';
 import { useDocumentAnnotations } from '../_hooks/useDocumentAnnotations';
+import { DocumentAnnotationsProps } from '../types/DocumentAnnotationsProps';
 
 export function DocumentAnnotations({
   documentId,
@@ -16,7 +16,7 @@ export function DocumentAnnotations({
   currentPage = 1
 }: DocumentAnnotationsProps) {
   const { theme } = useTheme();
-  
+
   const {
     isAdding,
     setIsAdding,
@@ -33,7 +33,7 @@ export function DocumentAnnotations({
   });
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
           Annotations
@@ -58,7 +58,7 @@ export function DocumentAnnotations({
 
       {/* Add Annotation Form */}
       {isAdding && (
-        <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="mb-6 p-4 rounded-lg border">
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -83,7 +83,8 @@ export function DocumentAnnotations({
                   value={newAnnotation.page}
                   onChange={(e) => setNewAnnotation({ ...newAnnotation, page: parseInt(e.target.value) || 1 })}
                   min="1"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                  style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
 
@@ -117,7 +118,8 @@ export function DocumentAnnotations({
               </button>
               <button
                 onClick={() => setIsAdding(false)}
-                className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}
+                className="flex-1 px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
               >
                 Cancel
               </button>
@@ -140,7 +142,8 @@ export function DocumentAnnotations({
           filteredAnnotations.map((annotation) => (
             <div
               key={annotation.id}
-              className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg border-l-4"
+              style={{ backgroundColor: 'var(--color-surfaceHover)' }}
+              className="p-4 rounded-lg border-l-4"
               style={{ borderLeftColor: annotation.color || theme.text.muted }}
             >
               <div className="flex items-start justify-between mb-2">

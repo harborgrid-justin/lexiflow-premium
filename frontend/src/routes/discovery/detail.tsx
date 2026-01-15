@@ -114,7 +114,7 @@ export default function DiscoveryDetailRoute() {
         {item.title}
       </h1>
 
-      <div className="bg-white shadow overflow-hidden sm:rounded-lg dark:bg-gray-800">
+      <div style={{ backgroundColor: 'var(--color-surface)' }} className="shadow overflow-hidden sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
           <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
             Request Details
@@ -133,7 +133,7 @@ export default function DiscoveryDetailRoute() {
                 {(item as DiscoveryRequest & { requestType?: string }).requestType || item.type || 'N/A'}
               </dd>
             </div>
-            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 dark:bg-gray-800">
+            <div style={{ backgroundColor: 'var(--color-surface)' }} className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 Status
               </dt>

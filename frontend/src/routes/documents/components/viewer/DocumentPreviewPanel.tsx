@@ -25,8 +25,8 @@ import { queryKeys } from '@/utils/queryKeys';
 // Hooks & Context
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
+import { useTheme } from '@/theme';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
@@ -139,7 +139,7 @@ export function DocumentPreviewPanel({
             )}
 
             <div className="flex-1 flex flex-col min-w-0">
-                <div className="md:hidden flex justify-center pt-3 pb-1" onClick={onCloseMobile}><div className="w-12 h-1.5 bg-slate-300 rounded-full"></div></div>
+                <div className="md:hidden flex justify-center pt-3 pb-1" onClick={onCloseMobile}><div style={{ backgroundColor: 'var(--color-border)' }} className="w-12 h-1.5 rounded-full"></div></div>
 
                 <PreviewHeader document={document} onCloseMobile={onCloseMobile} />
 

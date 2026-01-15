@@ -129,7 +129,7 @@ export default function ExhibitDetailRoute() {
         Exhibit {item.exhibitNumber ? `#${item.exhibitNumber}` : ''}: {item.title}
       </h1>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+      <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Status</h3>

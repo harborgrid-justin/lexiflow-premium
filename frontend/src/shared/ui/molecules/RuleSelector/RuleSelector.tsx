@@ -95,7 +95,8 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
             <input
               id={inputId}
               aria-label="Search legal rules"
-              className={cn("flex-1 px-2 py-2 text-sm outline-none bg-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500", theme.text.primary)}
+              style={{ color: 'var(--color-text)' }}
+              className={cn("flex-1 px-2 py-2 text-sm outline-none bg-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500")}
               placeholder="Search rules (e.g. 'FRCP 12')..."
               value={searchTerm}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setSearchTerm(e.target.value); setIsOpen(true); }}

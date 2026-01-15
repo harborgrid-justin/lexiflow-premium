@@ -60,39 +60,39 @@ export default function AdminUsersPage() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 style={{ color: 'var(--color-text)' }} className="text-3xl font-bold">
           User Management
         </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
+        <p style={{ color: 'var(--color-textMuted)' }} className="mt-2">
           Manage user accounts, roles, and permissions for your organization.
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Total Users</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">{users.length}</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Total Users</p>
+          <p style={{ color: 'var(--color-text)' }} className="text-2xl font-bold">{users.length}</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Active</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Active</p>
           <p className="text-2xl font-bold text-green-600">{users.filter((u: User) => u.status === 'active').length}</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">MFA Enabled</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">MFA Enabled</p>
           <p className="text-2xl font-bold text-blue-600">{users.filter((u: User) => u.mfaEnabled).length}</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Pending</p>
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
+          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Pending</p>
           <p className="text-2xl font-bold text-yellow-600">{users.filter((u: User) => u.status === 'pending').length}</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
+      <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label style={{ color: 'var(--color-text)' }} className="block text-sm font-medium mb-1">
               Search
             </label>
             <input
@@ -100,7 +100,8 @@ export default function AdminUsersPage() {
               placeholder="Search users..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full px-3 py-2 border rounded-md"
             />
           </div>
           <div>
@@ -110,7 +111,8 @@ export default function AdminUsersPage() {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full px-3 py-2 border rounded-md"
             >
               <option value="all">All Roles</option>
               <option value="admin">Admin</option>
@@ -126,7 +128,8 @@ export default function AdminUsersPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full px-3 py-2 border rounded-md"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>

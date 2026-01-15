@@ -5,11 +5,11 @@
  * Provides loading states, error handling, and export capabilities
  */
 
-import React, { useCallback, useState } from 'react';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 import { Download, LucideIcon, Maximize2, RefreshCw } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -117,7 +117,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
                   disabled={isRefreshing || isLoading}
                   className={cn(
                     'p-2 rounded-lg transition-colors',
-                    'hover:bg-gray-100 dark:hover:bg-gray-800',
+                    'hover:bg-slate-100 dark:hover:bg-slate-800',
                     'disabled:opacity-50 disabled:cursor-not-allowed',
                     isRefreshing && 'animate-spin'
                   )}

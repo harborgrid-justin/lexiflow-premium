@@ -103,7 +103,7 @@ export default function CaseFilingsRoute() {
   }).length;
 
   return (
-    <div className="min-h-full bg-gray-50 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-full">
       {/* Case Header */}
       <CaseHeader case={caseData} showBreadcrumbs />
 
@@ -112,8 +112,8 @@ export default function CaseFilingsRoute() {
         {/* Page Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Court Filings</h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <h2 style={{ color: 'var(--color-text)' }} className="text-2xl font-bold">Court Filings</h2>
+            <p style={{ color: 'var(--color-textMuted)' }} className="mt-1 text-sm">
               {filings.length} filings • {upcomingDeadlines} upcoming deadlines
             </p>
           </div>
@@ -135,11 +135,11 @@ export default function CaseFilingsRoute() {
         {/* Stats Cards */}
         <div className="mb-6 grid gap-4 sm:grid-cols-4">
           {/* Total Filings */}
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{filings.length}</p>
+                <p style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Total</p>
+                <p style={{ color: 'var(--color-text)' }} className="mt-1 text-2xl font-semibold">{filings.length}</p>
               </div>
               <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/30">
                 <svg className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,11 +150,11 @@ export default function CaseFilingsRoute() {
           </div>
 
           {/* Filed */}
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Filed</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{filedCount}</p>
+                <p style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Filed</p>
+                <p style={{ color: 'var(--color-text)' }} className="mt-1 text-2xl font-semibold">{filedCount}</p>
               </div>
               <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/30">
                 <svg className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,11 +165,11 @@ export default function CaseFilingsRoute() {
           </div>
 
           {/* Pending */}
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Pending</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{pendingCount}</p>
+                <p style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Pending</p>
+                <p style={{ color: 'var(--color-text)' }} className="mt-1 text-2xl font-semibold">{pendingCount}</p>
               </div>
               <div className="rounded-full bg-yellow-100 p-3 dark:bg-yellow-900/30">
                 <svg className="h-6 w-6 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,11 +180,11 @@ export default function CaseFilingsRoute() {
           </div>
 
           {/* Upcoming Deadlines */}
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Deadlines (30d)</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{upcomingDeadlines}</p>
+                <p style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Deadlines (30d)</p>
+                <p style={{ color: 'var(--color-text)' }} className="mt-1 text-2xl font-semibold">{upcomingDeadlines}</p>
               </div>
               <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/30">
                 <svg className="h-6 w-6 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

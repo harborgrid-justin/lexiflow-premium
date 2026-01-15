@@ -4,10 +4,10 @@
  * @description Chain of custody tracking for evidence with handling logs and authentication records
  */
 
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -500,7 +500,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({
                             <ArrowRight className="h-5 w-5 text-blue-600" />
                           </div>
                           {index < array.length - 1 && (
-                            <div className="w-px h-full bg-gray-300 dark:bg-gray-600 mt-2" style={{ minHeight: '40px' }} />
+                            <div style={{ backgroundColor: 'var(--color-border)', minHeight: '40px' }} className="w-px h-full mt-2" />
                           )}
                         </div>
 

@@ -259,7 +259,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <div className="flex gap-2">
             <input
               type="text"
-              className="flex-1 p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="flex-1 p-2 rounded border"
               value={(formData.clientName as string) || ''}
               onChange={e => updateData({ clientName: e.target.value, conflictCheckStatus: 'pending' })}
             />
@@ -567,7 +568,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
   return (
     <div className="flex h-full">
       {/* Sidebar Stepper */}
-      <div className="w-64 border-r bg-gray-50 dark:bg-gray-900 p-6 flex flex-col gap-6">
+      <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="w-64 border-r p-6 flex flex-col gap-6">
         <div>
           <h2 className="font-bold text-xl mb-4">New Matter Intake</h2>
           <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">

@@ -224,7 +224,7 @@ export async function logout(): Promise<Result<void>> {
  * Get current authenticated user
  */
 export async function getCurrentUser(): Promise<Result<AuthResponse["user"]>> {
-  const result = await client.get<AuthResponse["user"]>("/auth/me");
+  const result = await client.get<AuthResponse["user"]>("/auth/profile");
 
   if (!result.ok) return result;
 
@@ -319,6 +319,88 @@ export async function confirmPasswordReset(
   return result;
 }
 
+/**
+ * Users sub-module (stub implementation)
+ */
+const users = {
+  async getAll() {
+    return await client.get<UserProfile[]>("/users");
+  },
+  async getById(id: string) {
+    return await client.get<UserProfile>(`/users/${id}`);
+  },
+  async update(id: string, data: Partial<UserProfile>) {
+    return await client.put<UserProfile>(`/users/${id}`, data);
+  },
+  async delete(id: string) {
+    return await client.delete<void>(`/users/${id}`);
+  },
+};
+
+/**
+ * Permissions sub-module (stub implementation)
+ */
+const permissions = {
+  async getRolePermissions(roleId: string) {
+    return await client.get<string[]>(`/roles/${roleId}/permissions`);
+  },
+  async updateRolePermissions(roleId: string, permissions: string[]) {
+    return await client.put<void>(`/roles/${roleId}/permissions`, { permissions });
+  },
+};
+
+/**
+ * API Keys sub-module (stub implementation)
+ */
+const apiKeys = {
+  async getAll() {
+    return await client.get<unknown[]>("/api-keys");
+  },
+  async create(data: unknown) {
+    return await client.post<unknown>("/api-keys", data);
+  },
+  async delete(id: string) {
+    return await client.delete<void>(`/api-keys/${id}`);
+  },
+};
+
+/**
+ * Ethical Walls sub-module (stub implementation)
+ */
+const ethicalWalls = {
+  async getAll() {
+    return await client.get<unknown[]>("/ethical-walls");
+  },
+  async create(data: unknown) {
+    return await client.post<unknown>("/ethical-walls", data);
+  },
+  async delete(id: string) {
+    return await client.delete<void>(`/ethical-walls/${id}`);
+  },
+};
+
+/**
+ * Token Blacklist sub-module (stub implementation)
+ */
+const tokenBlacklist = {
+  async add(token: string) {
+    return await client.post<void>("/auth/token-blacklist", { token });
+  },
+  async check(token: string) {
+    return await client.get<{ blacklisted: boolean }>(`/auth/token-blacklist/${token}`);
+  },
+};
+
+/**
+ * Auth namespace (for compatibility)
+ */
+const auth = {
+  login,
+  logout,
+  getCurrentUser,
+  refreshToken,
+};
+
 export const authApi = {
   login,
   register,
@@ -327,4 +409,11 @@ export const authApi = {
   refreshToken,
   requestPasswordReset,
   confirmPasswordReset,
+  // Sub-modules
+  users,
+  permissions,
+  apiKeys,
+  ethicalWalls,
+  tokenBlacklist,
+  auth,
 };

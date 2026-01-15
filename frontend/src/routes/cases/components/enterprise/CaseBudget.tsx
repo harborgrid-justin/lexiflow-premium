@@ -535,7 +535,7 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
         {/* Expenses Tab */}
         {activeView === 'expenses' && (
-          <div className="border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="border rounded-lg">
             {expenses.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <DollarSign className="h-12 w-12 text-gray-400 mb-4" />

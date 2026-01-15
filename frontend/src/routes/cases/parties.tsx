@@ -79,7 +79,7 @@ export default function CasePartiesRoute() {
   ).length;
 
   return (
-    <div className="min-h-full bg-gray-50 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-full">
       {/* Case Header */}
       <CaseHeader case={caseData} showBreadcrumbs />
 
@@ -88,8 +88,8 @@ export default function CasePartiesRoute() {
         {/* Page Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Parties & Counsel</h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <h2 style={{ color: 'var(--color-text)' }} className="text-2xl font-bold">Parties & Counsel</h2>
+            <p style={{ color: 'var(--color-textMuted)' }} className="mt-1 text-sm">
               {parties.length} parties involved in this case
             </p>
           </div>
@@ -111,11 +111,11 @@ export default function CasePartiesRoute() {
         {/* Stats Cards */}
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
           {/* Plaintiffs/Petitioners */}
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Plaintiffs</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{plaintiffCount}</p>
+                <p style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Plaintiffs</p>
+                <p style={{ color: 'var(--color-text)' }} className="mt-1 text-2xl font-semibold">{plaintiffCount}</p>
               </div>
               <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/30">
                 <svg className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -126,11 +126,11 @@ export default function CasePartiesRoute() {
           </div>
 
           {/* Defendants/Respondents */}
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Defendants</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{defendantCount}</p>
+                <p style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Defendants</p>
+                <p style={{ color: 'var(--color-text)' }} className="mt-1 text-2xl font-semibold">{defendantCount}</p>
               </div>
               <div className="rounded-full bg-red-100 p-3 dark:bg-red-900/30">
                 <svg className="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -141,11 +141,11 @@ export default function CasePartiesRoute() {
           </div>
 
           {/* Witnesses */}
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Witnesses</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{witnessCount}</p>
+                <p style={{ color: 'var(--color-textMuted)' }} className="text-sm font-medium">Witnesses</p>
+                <p style={{ color: 'var(--color-text)' }} className="mt-1 text-2xl font-semibold">{witnessCount}</p>
               </div>
               <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/30">
                 <svg className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -10,7 +10,7 @@
  */
 
 // Main SyncEngine API
-export { SyncEngine } from "./syncEngine";
+export { SyncEngine } from "./sync-engine.service";
 
 // Public Types
 export type { Mutation, CacheStats, SyncResult } from "./types/syncTypes";

@@ -28,16 +28,16 @@ export type {
 export { ComplianceError, OperationError } from "./types";
 
 // Export query keys
-export { BILLING_QUERY_KEYS } from "./query-keys.service";
+export { BILLING_QUERY_KEYS } from "./queryKeys";
 
 // Import base repository and operations
-import * as analyticsOps from "./analyticsOperations";
-import * as invoiceOps from "./invoiceOperations";
-import * as rateOps from "./rateOperations";
-import { BillingRepositoryBase } from "./repository";
-import * as timeEntryOps from "./timeEntryOperations";
-import * as trustOps from "./trustOperations";
-import * as utilityOps from "./utilityOperations";
+import * as analyticsOps from "./analytics-operations.service";
+import * as invoiceOps from "./invoice-operations.service";
+import * as rateOps from "./rate-operations.service";
+import { BillingRepositoryBase } from "./billing-repository.service";
+import * as timeEntryOps from "./time-entry-operations.service";
+import * as trustOps from "./trust-operations.service";
+import * as utilityOps from "./utility-operations.service";
 
 import type {
   Client,

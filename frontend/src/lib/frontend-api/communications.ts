@@ -345,6 +345,31 @@ export async function getAllCorrespondence(filters?: {
 }
 
 /**
+ * Communications sub-module (for descriptor compatibility)
+ */
+const communications = {
+  getAll: getAllMessages,
+  getById: getMessageById,
+  send: sendMessage,
+  delete: deleteMessage,
+};
+
+/**
+ * Messaging sub-module (stub implementation)
+ */
+const messaging = {
+  async getThreads() {
+    return await client.get<unknown[]>("/communications/messaging/threads");
+  },
+  async getThread(threadId: string) {
+    return await client.get<unknown>(`/communications/messaging/threads/${threadId}`);
+  },
+  async sendMessage(data: unknown) {
+    return await client.post<unknown>("/communications/messaging/send", data);
+  },
+};
+
+/**
  * Communications API module
  */
 export const communicationsApi = {
@@ -370,4 +395,7 @@ export const communicationsApi = {
       }
     );
   },
+  // Sub-modules for descriptor compatibility
+  communications,
+  messaging,
 } as const;

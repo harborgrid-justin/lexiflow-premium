@@ -116,6 +116,78 @@ export async function getSystemMetrics(): Promise<
   return client.get<Record<string, unknown>>("/platform/metrics");
 }
 
+/**
+ * Data Sources sub-module (stub implementation)
+ */
+const dataSources = {
+  async getAll() {
+    return await client.get<unknown[]>("/platform/data-sources");
+  },
+  async getById(id: string) {
+    return await client.get<unknown>(`/platform/data-sources/${id}`);
+  },
+  async create(data: unknown) {
+    return await client.post<unknown>("/platform/data-sources", data);
+  },
+  async update(id: string, data: unknown) {
+    return await client.put<unknown>(`/platform/data-sources/${id}`, data);
+  },
+  async delete(id: string) {
+    return await client.delete<void>(`/platform/data-sources/${id}`);
+  },
+};
+
+/**
+ * RLS Policies sub-module (stub implementation)
+ */
+const rlsPolicies = {
+  async getAll() {
+    return await client.get<unknown[]>("/platform/rls-policies");
+  },
+  async getById(id: string) {
+    return await client.get<unknown>(`/platform/rls-policies/${id}`);
+  },
+  async create(data: unknown) {
+    return await client.post<unknown>("/platform/rls-policies", data);
+  },
+  async update(id: string, data: unknown) {
+    return await client.put<unknown>(`/platform/rls-policies/${id}`, data);
+  },
+  async delete(id: string) {
+    return await client.delete<void>(`/platform/rls-policies/${id}`);
+  },
+};
+
+/**
+ * Schema Management sub-module (stub implementation)
+ */
+const schemaManagement = {
+  async getSchemas() {
+    return await client.get<unknown[]>("/platform/schemas");
+  },
+  async getSchema(schemaName: string) {
+    return await client.get<unknown>(`/platform/schemas/${schemaName}`);
+  },
+  async createSchema(data: unknown) {
+    return await client.post<unknown>("/platform/schemas", data);
+  },
+};
+
+/**
+ * Query Workbench sub-module (stub implementation)
+ */
+const queryWorkbench = {
+  async executeQuery(query: string) {
+    return await client.post<unknown>("/platform/query", { query });
+  },
+  async getSavedQueries() {
+    return await client.get<unknown[]>("/platform/queries");
+  },
+  async saveQuery(data: unknown) {
+    return await client.post<unknown>("/platform/queries", data);
+  },
+};
+
 export const dataPlatformApi = {
   getPlatformConfig,
   getPlatformHealth,
@@ -128,4 +200,9 @@ export const dataPlatformApi = {
   getIndexingProgress,
   triggerReindex,
   getSystemMetrics,
+  // Sub-modules for descriptor compatibility
+  dataSources,
+  rlsPolicies,
+  schemaManagement,
+  queryWorkbench,
 };

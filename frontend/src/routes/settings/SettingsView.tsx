@@ -51,12 +51,12 @@ export function SettingsView() {
       </div>
 
       <div className="flex-1 overflow-auto px-4 pb-4">
-        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 divide-y divide-slate-200 dark:divide-slate-700">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border divide-y">
           {currentSettings.map(setting => (
             <SettingRow key={setting.id} setting={setting} />
           ))}
           {currentSettings.length === 0 && (
-            <div className="p-8 text-center text-slate-600 dark:text-slate-400">
+            <div style={{ color: 'var(--color-textMuted)' }} className="p-8 text-center">
               No settings in this category
             </div>
           )}
@@ -101,13 +101,13 @@ type SystemSetting = {
 
 function SettingRow({ setting }: { setting: SystemSetting }) {
   return (
-    <div className="p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+    <div style={{ backgroundColor: 'transparent' }} className="p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="font-medium text-slate-900 dark:text-white mb-1">
+          <div style={{ color: 'var(--color-text)' }} className="font-medium mb-1">
             {setting.key}
           </div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">
+          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">
             {setting.description}
           </div>
         </div>
@@ -115,7 +115,8 @@ function SettingRow({ setting }: { setting: SystemSetting }) {
           <input
             type="text"
             value={setting.value}
-            className="px-3 py-1.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm"
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+            className="px-3 py-1.5 rounded border text-sm"
             readOnly
           />
         </div>

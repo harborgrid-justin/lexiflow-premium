@@ -315,7 +315,7 @@ export function BackupManager({ backups, schedules, stats }: BackupManagerProps)
       {/* Create Backup Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)' }} className="w-full max-w-md rounded-lg p-6">
             <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
               Create Backup
             </h3>

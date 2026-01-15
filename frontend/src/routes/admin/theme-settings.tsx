@@ -91,7 +91,7 @@ export default function ThemeSettingsRoute() {
       {/* Theme Options */}
       <div className="max-w-2xl space-y-6">
         {/* Color Mode Section */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
           <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
             Color Mode
           </h2>
@@ -139,7 +139,7 @@ export default function ThemeSettingsRoute() {
         </div>
 
         {/* Coming Soon Section */}
-        <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="rounded-lg border border-dashed p-6">
           <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
             Custom Branding
           </h2>

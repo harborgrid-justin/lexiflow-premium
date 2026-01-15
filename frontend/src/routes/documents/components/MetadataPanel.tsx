@@ -3,9 +3,9 @@
  * Display and edit document metadata, tags, and custom fields
  */
 
-import { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
 import { formatDate } from '@/utils/formatters';
+import { useState } from 'react';
 
 interface MetadataPanelProps {
   document: LegalDocument;
@@ -45,7 +45,7 @@ export function MetadataPanel({ document, editable = false, onUpdate }: Metadata
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
           Metadata
@@ -70,7 +70,8 @@ export function MetadataPanel({ document, editable = false, onUpdate }: Metadata
             <select
               value={editedStatus}
               onChange={(e) => setEditedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="Draft">Draft</option>
               <option value="Review">Review</option>
@@ -79,7 +80,7 @@ export function MetadataPanel({ document, editable = false, onUpdate }: Metadata
               <option value="Signed">Signed</option>
             </select>
           ) : (
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+            <span style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }} className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium">
               {document.status || 'Unknown'}
             </span>
           )}
@@ -141,11 +142,13 @@ export function MetadataPanel({ document, editable = false, onUpdate }: Metadata
                   onChange={(e) => setNewTag(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                   placeholder="Add tag..."
-                  className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                  style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+                  className="flex-1 px-3 py-1.5 text-sm border rounded-md focus:ring-blue-500 focus:border-blue-500"
                 />
                 <button
                   onClick={addTag}
-                  className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                  className="px-3 py-1.5 text-sm rounded-md hover:opacity-80"
                 >
                   Add
                 </button>
@@ -274,7 +277,8 @@ export function MetadataPanel({ document, editable = false, onUpdate }: Metadata
             </button>
             <button
               onClick={handleCancel}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+              style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}
+              className="flex-1 px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
             >
               Cancel
             </button>

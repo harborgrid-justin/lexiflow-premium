@@ -3,9 +3,9 @@
  * View and export individual reports
  */
 
+import { analyticsApi } from '@/lib/frontend-api';
 import { ChartCard } from '@/routes/analytics/components/enterprise';
 import { exportToCSV, exportToExcel } from '@/shared/components/enterprise/data/export';
-import { analyticsApi } from '@/lib/frontend-api';
 import { jsPDF } from 'jspdf';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';
@@ -151,7 +151,7 @@ export default function ReportViewerRoute() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen p-8">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -215,7 +215,7 @@ export default function ReportViewerRoute() {
       </div>
 
       {/* Report Metadata */}
-      <div className="mb-6 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="mb-6 rounded-lg border p-4">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Category</p>

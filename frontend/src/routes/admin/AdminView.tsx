@@ -41,8 +41,8 @@ export function AdminView() {
           </div>
         )}
         {activeTab === 'settings' && (
-          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">System Settings</h3>
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
+            <h3 style={{ color: 'var(--color-text)' }} className="text-lg font-semibold mb-4">System Settings</h3>
             <div className="space-y-4">
               <SettingRow label="Firm Name" value="LexiFlow Legal" />
               <SettingRow label="Time Zone" value="America/New_York" />
@@ -83,17 +83,17 @@ interface AdminUser {
 
 function UserCard({ user }: { user: AdminUser }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-semibold">
           {user.name.charAt(0)}
         </div>
         <div>
-          <div className="font-medium text-slate-900 dark:text-white">{user.name}</div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">{user.email}</div>
+          <div style={{ color: 'var(--color-text)' }} className="font-medium">{user.name}</div>
+          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">{user.email}</div>
         </div>
       </div>
-      <div className="text-xs text-slate-600 dark:text-slate-400">
+      <div style={{ color: 'var(--color-textMuted)' }} className="text-xs">
         Role: <span className="font-medium">{user.role}</span>
       </div>
     </div>
@@ -111,11 +111,11 @@ function SettingRow({ label, value }: { label: string; value: string }) {
 
 function AuditLogRow({ log }: { log: Record<string, unknown> }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="flex items-center justify-between">
         <div>
-          <div className="font-medium text-slate-900 dark:text-white">{log.action}</div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">
+          <div style={{ color: 'var(--color-text)' }} className="font-medium">{log.action}</div>
+          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">
             {log.user} • {new Date(log.timestamp).toLocaleString()}
           </div>
         </div>

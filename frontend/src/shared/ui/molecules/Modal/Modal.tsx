@@ -18,8 +18,8 @@ import { createPortal } from 'react-dom';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useScrollLock } from '@/hooks/ui';
+import { useTheme } from '@/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -157,13 +157,13 @@ export function Modal({
         </div>
 
         {/* Content */}
-        <div className={cn("flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent", theme.text.primary)}>
+        <div style={{ color: 'var(--color-text)' }} className={cn("flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent")}>
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className={cn("px-6 py-4 border-t flex justify-end gap-3 shrink-0 bg-slate-50/50 rounded-b-xl", theme.border.default)}>
+          <div style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }} className={cn("px-6 py-4 border-t flex justify-end gap-3 shrink-0 rounded-b-xl")}>
             {footer}
           </div>
         )}

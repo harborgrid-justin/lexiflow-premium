@@ -1,10 +1,10 @@
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
+import { useTheme } from '@/theme';
 import { AlertTriangle, ArrowRight, CheckCircle, Database, FileText, Scale } from 'lucide-react';
 
 // ✅ Migrated to backend API (2025-12-21)
@@ -62,7 +62,7 @@ export function DiscoveryDashboard({ onNavigate, caseId }: DiscoveryDashboardPro
                             <CheckCircle className="h-5 w-5 text-green-600" />
                         </div>
 
-                        <div className="flex items-center justify-between p-3 rounded border cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => onNavigate('requests')}>
+                        <div style={{ borderColor: 'var(--color-border)' }} className="flex items-center justify-between p-3 rounded border cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => onNavigate('requests')}>
                             <div className="flex items-center gap-3">
                                 <FileText className="h-5 w-5 text-blue-600" />
                                 <div>

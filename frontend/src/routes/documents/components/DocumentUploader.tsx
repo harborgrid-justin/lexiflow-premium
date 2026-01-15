@@ -3,8 +3,8 @@
  * Advanced file uploader with drag-and-drop, preview, and metadata
  */
 
-import { DocumentUploaderProps } from './types/DocumentUploaderProps';
 import { useDocumentUpload } from '../_hooks/useDocumentUpload';
+import { DocumentUploaderProps } from './types/DocumentUploaderProps';
 
 export function DocumentUploader({
   caseId,
@@ -42,11 +42,10 @@ export function DocumentUploader({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={triggerFileInput}
-        className={`relative border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-colors ${
-          isDragging
+        className={`relative border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-colors ${isDragging
             ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
             : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-        }`}
+          }`}
       >
         <input
           ref={fileInputRef}
@@ -189,7 +188,8 @@ export function DocumentUploader({
             />
             <button
               onClick={addTag}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+              className="px-4 py-2 rounded-md hover:opacity-80"
             >
               Add
             </button>

@@ -3,9 +3,9 @@
  * Table row display for documents in list view
  */
 
-import { Link } from 'react-router';
 import type { LegalDocument } from '@/types/documents';
 import { formatDate } from '@/utils/formatters';
+import { Link } from 'react-router';
 
 interface DocumentRowProps {
   document: LegalDocument;
@@ -22,18 +22,18 @@ export function DocumentRow({ document, onDelete, onDownload, selected, onSelect
       case 'Signed':
         return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
       case 'Draft':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+        return 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300';
       case 'Review':
         return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
       case 'Filed':
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
       default:
-        return 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400';
+        return 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400';
     }
   };
 
   return (
-    <tr className={`border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${selected ? 'bg-blue-50 dark:bg-blue-900/10' : ''}`}>
+    <tr className={`border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 ${selected ? 'bg-blue-50 dark:bg-blue-900/10' : ''}`}>
       {/* Checkbox */}
       {onSelect && (
         <td className="px-6 py-4">

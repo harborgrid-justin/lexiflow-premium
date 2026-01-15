@@ -5,8 +5,8 @@
  * Replaces repeated error UI patterns
  */
 
-import { Button } from '@/shared/ui/atoms/Button';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import React from 'react';
 
@@ -64,10 +64,10 @@ export const ErrorState = React.memo<ErrorStateProps>(({
         <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400" />
       </div>
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <h3 style={{ color: 'var(--color-text)' }} className="text-lg font-semibold">
           {title}
         </h3>
-        <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md">
+        <p style={{ color: 'var(--color-textMuted)' }} className="text-sm max-w-md">
           {message}
         </p>
       </div>

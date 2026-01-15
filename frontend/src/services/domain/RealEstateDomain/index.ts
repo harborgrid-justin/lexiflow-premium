@@ -38,18 +38,18 @@ export type {
 } from "./types";
 
 // Export query keys
-export { REAL_ESTATE_QUERY_KEYS } from "./query-keys.service";
+export { REAL_ESTATE_QUERY_KEYS } from "./queryKeys";
 
 // Import all operations
-import * as propertyOps from "./propertyOperations";
-import * as disposalOps from "./disposalOperations";
-import * as encroachmentOps from "./encroachmentOperations";
-import * as acquisitionOps from "./acquisitionOperations";
-import * as utilizationOps from "./utilizationOperations";
-import * as costShareOps from "./costShareOperations";
-import * as outgrantOps from "./outgrantOperations";
-import * as financialOps from "./otherFinancialOperations";
-import * as auditOps from "./auditOperations";
+import * as propertyOps from "./property-operations.service";
+import * as disposalOps from "./disposal-operations.service";
+import * as encroachmentOps from "./encroachment-operations.service";
+import * as acquisitionOps from "./acquisition-operations.service";
+import * as utilizationOps from "./utilization-operations.service";
+import * as costShareOps from "./cost-share-operations.service";
+import * as outgrantOps from "./outgrant-operations.service";
+import * as financialOps from "./other-financial-operations.service";
+import * as auditOps from "./audit-operations.service";
 
 /**
  * Real Estate Service

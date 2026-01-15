@@ -185,7 +185,8 @@ export const SystemHealthDisplay: React.FC<{
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={onClose}>
       <div
-        className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto mx-4"
+        style={{ backgroundColor: 'var(--color-surface)' }}
+        className="rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto mx-4"
         onClick={e => e.stopPropagation()}
       >
         <div className="p-6">

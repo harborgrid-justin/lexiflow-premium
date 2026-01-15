@@ -160,7 +160,7 @@ export function DataSourceSelector() {
 
       {/* Data Source Options */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-slate-700">
+        <label style={{ color: 'var(--color-text)' }} className="block text-sm font-medium">
           Data Source
         </label>
 
@@ -199,12 +199,12 @@ export function DataSourceSelector() {
                       </span>
                     )}
                     {isDisabled && (
-                      <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">
+                      <span style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)' }} className="text-xs font-medium px-2 py-0.5 rounded-full">
                         Unavailable
                       </span>
                     )}
                   </div>
-                  <p className={`text-sm mt-1 ${isSelected ? 'text-blue-700' : 'text-slate-600'}`}>
+                  <p className={`text-sm mt-1 ${isSelected ? 'text-blue-700' : ''}`} style={!isSelected ? { color: 'var(--color-textMuted)' } : {}}>
                     {option.description}
                   </p>
                 </div>
@@ -215,7 +215,7 @@ export function DataSourceSelector() {
       </div>
 
       {/* Help Text */}
-      <div className="text-sm text-slate-600 bg-slate-50 rounded-lg p-3">
+      <div style={{ color: 'var(--color-textMuted)', backgroundColor: 'var(--color-surfaceHover)' }} className="text-sm rounded-lg p-3">
         <p className="font-medium mb-1">💡 Data Source Information:</p>
         <ul className="space-y-1 text-xs">
           <li>• <strong>Local:</strong> All data stored in your browser (works offline)</li>

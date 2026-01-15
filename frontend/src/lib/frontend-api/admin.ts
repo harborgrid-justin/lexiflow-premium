@@ -223,10 +223,62 @@ export async function getAuditLogById(id: string): Promise<Result<AuditLog>> {
   return success((normalized[0] || { id }) as AuditLog);
 }
 
+/**
+ * Audit Logs sub-module (for descriptor compatibility)
+ */
+const auditLogs = {
+  getAll: getAuditLogs,
+  getById: getAuditLogById,
+};
+
+/**
+ * OCR sub-module (stub implementation)
+ */
+const ocr = {
+  async processDocument(documentId: string) {
+    return await client.post<unknown>(`/admin/ocr/${documentId}`);
+  },
+  async getStatus(jobId: string) {
+    return await client.get<unknown>(`/admin/ocr/status/${jobId}`);
+  },
+};
+
+/**
+ * Processing Jobs sub-module (stub implementation)
+ */
+const processingJobs = {
+  async getAll() {
+    return await client.get<unknown[]>("/admin/processing-jobs");
+  },
+  async getById(id: string) {
+    return await client.get<unknown>(`/admin/processing-jobs/${id}`);
+  },
+  async cancel(id: string) {
+    return await client.post<void>(`/admin/processing-jobs/${id}/cancel`);
+  },
+};
+
+/**
+ * Document Versions sub-module (stub implementation)
+ */
+const documentVersions = {
+  async getAll(documentId: string) {
+    return await client.get<unknown[]>(`/admin/documents/${documentId}/versions`);
+  },
+  async getById(documentId: string, versionId: string) {
+    return await client.get<unknown>(`/admin/documents/${documentId}/versions/${versionId}`);
+  },
+};
+
 export const adminApi = {
   getAuditLogs,
   getAuditLogById,
   getSystemMetrics,
   getSystemHealth,
   clearCache,
+  // Sub-modules for descriptor compatibility
+  auditLogs,
+  ocr,
+  processingJobs,
+  documentVersions,
 };

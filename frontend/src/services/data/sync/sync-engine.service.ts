@@ -23,7 +23,7 @@
 
 import { QueueManager } from "./queue/queueManager";
 import { CacheManager } from "./cache/cacheManager";
-import { BackendSyncService } from "./backendSync";
+import { BackendSyncService } from "./backend-sync.service";
 import type { Mutation, SyncResult } from "./types/syncTypes";
 
 /**

@@ -1,13 +1,13 @@
 /**
  * LoadingState.tsx
- * 
+ *
  * Reusable loading state component
  * Replaces repeated loading UI patterns
  */
 
-import React from 'react';
-import { Loader2 } from 'lucide-react';
 import { cn } from '@/shared/lib/cn';
+import { Loader2 } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // TYPES
@@ -38,7 +38,7 @@ const SIZE_CLASSES = {
 
 /**
  * LoadingState - Consistent loading UI component
- * 
+ *
  * @example
  * ```tsx
  * <LoadingState message="Loading data..." />
@@ -61,7 +61,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     >
       <Loader2 className={cn('animate-spin text-blue-600', SIZE_CLASSES[size])} />
       {message && (
-        <p className="text-sm text-slate-600 dark:text-slate-400">{message}</p>
+        <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">{message}</p>
       )}
     </div>
   );

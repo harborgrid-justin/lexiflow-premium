@@ -14,24 +14,24 @@
  * @module NotificationCenter
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { formatDistanceToNow } from 'date-fns';
 import {
+  AlertCircle,
+  AlertTriangle,
   Bell,
-  X,
+  Calendar,
   Check,
-  Trash2,
   CheckCheck,
+  DollarSign,
+  FileText,
+  Info,
   Mail,
   MailOpen,
-  FileText,
-  Calendar,
-  AlertTriangle,
   MessageCircle,
-  DollarSign,
-  AlertCircle,
-  Info,
+  Trash2,
+  X,
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Notification type definition
@@ -302,7 +302,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-[420px] bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="absolute right-0 mt-2 w-[420px] rounded-lg shadow-xl border z-50">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center gap-2">
@@ -324,26 +324,24 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
           </div>
 
           {/* Filter and Actions */}
-          <div className="flex items-center justify-between p-3 border-b border-gray-100 bg-gray-50">
+          <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="flex items-center justify-between p-3 border-b">
             <div className="flex gap-2">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                  filter === 'all'
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'all'
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
+                  }`}
                 type="button"
               >
                 All
               </button>
               <button
                 onClick={() => setFilter('unread')}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                  filter === 'unread'
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'unread'
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
+                  }`}
                 type="button"
               >
                 Unread
@@ -401,7 +399,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
           {/* Footer */}
           {filteredNotifications.length > 0 && (
-            <div className="p-3 border-t border-gray-200 bg-gray-50 text-center">
+            <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="p-3 border-t text-center">
               <button
                 className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
                 type="button"

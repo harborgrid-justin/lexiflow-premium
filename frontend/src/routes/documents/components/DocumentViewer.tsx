@@ -26,7 +26,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
   } = useDocumentViewer({ document, showAnnotations, onAddAnnotation });
 
   return (
-    <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="flex flex-col h-full">
       {showAnnotations && (
         <button
           onClick={handleAnnotationAdd}
@@ -36,7 +36,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
         </button>
       )}
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex items-center justify-between px-4 py-3 border-b">
         <div className="flex items-center gap-4">
           {/* Page Navigation */}
           <div className="flex items-center gap-2">
@@ -103,7 +103,8 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
       {/* Document Display */}
       <div className="flex-1 overflow-auto p-8">
         <div
-          className="mx-auto bg-white shadow-lg"
+          style={{ backgroundColor: 'var(--color-surface)' }}
+          className="mx-auto shadow-lg"
           style={{
             width: `${8.5 * zoom}px`,
             minHeight: `${11 * zoom}px`,
@@ -155,7 +156,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
       </div>
 
       {/* Page Indicator */}
-      <div className="px-4 py-2 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 text-center">
+      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="px-4 py-2 border-t text-center">
         <input
           type="range"
           min="1"

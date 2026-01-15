@@ -13,12 +13,12 @@
  */
 
 import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import type { WizardConfig } from '@/types/forms';
+import React from "react";
 import { FormField } from './FormField';
 import { FormSectionComponent } from './FormSection';
-import React from "react";
 
 // ============================================================================
 // TYPES
@@ -127,8 +127,8 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
                 index === currentStepIndex
                   ? 'bg-blue-600 scale-125'
                   : visitedSteps.has(index)
-                  ? 'bg-blue-400'
-                  : 'bg-gray-300',
+                    ? 'bg-blue-400'
+                    : 'bg-gray-300',
                 config.allowStepNavigation && 'cursor-pointer hover:scale-110'
               )}
               aria-label={`Go to step ${index + 1}: ${step.title}`}
@@ -167,8 +167,8 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
                     index === currentStepIndex
                       ? 'bg-blue-600 text-white'
                       : visitedSteps.has(index)
-                      ? 'bg-blue-100 text-blue-600'
-                      : 'bg-gray-200 text-gray-500'
+                        ? 'bg-blue-100 text-blue-600'
+                        : 'bg-gray-200 text-gray-500'
                   )}
                 >
                   {visitedSteps.has(index) && index !== currentStepIndex ? (
@@ -385,9 +385,9 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
 
       {/* Keyboard shortcuts hint */}
       <div className={cn('mt-4 text-center text-xs', theme.text.secondary)}>
-        <kbd className="px-2 py-1 rounded bg-gray-100">←</kbd> Previous •{' '}
-        <kbd className="px-2 py-1 rounded bg-gray-100">→</kbd> Next •{' '}
-        <kbd className="px-2 py-1 rounded bg-gray-100">Ctrl+Enter</kbd> Submit
+        <kbd style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="px-2 py-1 rounded">←</kbd> Previous •{' '}
+        <kbd style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="px-2 py-1 rounded">→</kbd> Next •{' '}
+        <kbd style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="px-2 py-1 rounded">Ctrl+Enter</kbd> Submit
       </div>
     </div>
   );

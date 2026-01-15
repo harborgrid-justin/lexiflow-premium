@@ -79,7 +79,7 @@ export default function Layout() {
 export function ErrorBoundary() {
   const error = useRouteError();
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="flex min-h-screen items-center justify-center p-4">
       <RouteErrorBoundary
         error={error}
         title="Application Error"

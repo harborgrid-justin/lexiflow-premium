@@ -149,13 +149,13 @@ export default function ReportsIndexRoute() {
   ];
 
   return (
-    <div className="flex h-full flex-col bg-gray-50 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="flex h-full flex-col">
       {/* Header */}
-      <div className="border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-800 dark:bg-gray-900">
+      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="border-b px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Reports</h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <h1 style={{ color: 'var(--color-text)' }} className="text-2xl font-bold">Reports</h1>
+            <p style={{ color: 'var(--color-textMuted)' }} className="mt-1 text-sm">
               Generate and schedule insights across your firm
             </p>
           </div>
@@ -193,7 +193,8 @@ export default function ReportsIndexRoute() {
               name="q"
               defaultValue={search}
               placeholder="Search reports..."
-              className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full rounded-lg border py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               onChange={(e) => {
                 const isFirstSearch = search === null;
                 submit(e.currentTarget.form, {
@@ -208,7 +209,7 @@ export default function ReportsIndexRoute() {
       {/* Report List */}
       <div className="flex-1 overflow-auto p-6">
         {reports.length === 0 ? (
-          <div className="flex h-64 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex h-64 flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 text-center">
             <FileText className="h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No reports found</h3>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -244,7 +245,7 @@ function ReportCard({ report }: { report: Report }) {
   const schedule = (report.metadata?.schedule as { frequency: string }) || null;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="group relative flex flex-col justify-between rounded-lg border p-6 shadow-sm transition-shadow hover:shadow-md">
       <div>
         <div className="flex items-start justify-between">
           <div className={`rounded-lg p-2 ${report.reportType === 'billing' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' :

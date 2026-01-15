@@ -66,9 +66,10 @@ export function PreferencePane({ profile }: PreferencePaneProps) {
                     </button>
                     <button
                         onClick={() => setThemeMode('dark')}
+                        style={mode === 'dark' ? { backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' } : {}}
                         className={cn(
                             "p-4 rounded-lg border-2 flex flex-col items-center gap-3 transition-all",
-                            mode === 'dark' ? "border-blue-600 bg-slate-800 text-white" : "border-slate-200 hover:border-blue-300"
+                            mode === 'dark' ? "border-blue-600" : "border-slate-200 hover:border-blue-300"
                         )}
                     >
                         <Moon className="h-8 w-8 text-purple-500" />
@@ -79,7 +80,7 @@ export function PreferencePane({ profile }: PreferencePaneProps) {
                             "p-4 rounded-lg border-2 flex flex-col items-center gap-3 transition-all border-slate-200 hover:border-blue-300 opacity-60"
                         )}
                     >
-                        <Monitor className="h-8 w-8 text-slate-500" />
+                        <Monitor style={{ color: 'var(--color-textMuted)' }} className="h-8 w-8" />
                         <span className="text-sm font-bold">System</span>
                     </button>
                 </div>
@@ -88,9 +89,10 @@ export function PreferencePane({ profile }: PreferencePaneProps) {
             <Card title="Regional Settings">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Language</label>
+                        <label style={{ color: 'var(--color-textMuted)' }} className="block text-xs font-bold uppercase mb-2">Language</label>
                         <select
-                            className="w-full p-2 border rounded bg-white text-sm"
+                            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+                            className="w-full p-2 border rounded text-sm"
                             value={locale}
                             onChange={(e) => updateLocale(e.target.value)}
                         >
@@ -100,9 +102,10 @@ export function PreferencePane({ profile }: PreferencePaneProps) {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Timezone</label>
+                        <label style={{ color: 'var(--color-textMuted)' }} className="block text-xs font-bold uppercase mb-2">Timezone</label>
                         <select
-                            className="w-full p-2 border rounded bg-white text-sm"
+                            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+                            className="w-full p-2 border rounded text-sm"
                             value={timezone}
                             onChange={(e) => updateTimezone(e.target.value)}
                         >
@@ -118,10 +121,10 @@ export function PreferencePane({ profile }: PreferencePaneProps) {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between p-2">
                         <div className="flex items-center gap-3">
-                            <MailIcon className="h-5 w-5 text-slate-500" />
+                            <MailIcon style={{ color: 'var(--color-textMuted)' }} className="h-5 w-5" />
                             <div>
                                 <p className="text-sm font-bold">Email Notifications</p>
-                                <p className="text-xs text-slate-500">Receive daily digests and critical alerts.</p>
+                                <p style={{ color: 'var(--color-textMuted)' }} className="text-xs">Receive daily digests and critical alerts.</p>
                             </div>
                         </div>
                         <input
@@ -133,10 +136,10 @@ export function PreferencePane({ profile }: PreferencePaneProps) {
                     </div>
                     <div className="flex items-center justify-between p-2">
                         <div className="flex items-center gap-3">
-                            <Bell className="h-5 w-5 text-slate-500" />
+                            <Bell style={{ color: 'var(--color-textMuted)' }} className="h-5 w-5" />
                             <div>
                                 <p className="text-sm font-bold">Push Notifications</p>
-                                <p className="text-xs text-slate-500">Real-time browser alerts.</p>
+                                <p style={{ color: 'var(--color-textMuted)' }} className="text-xs">Real-time browser alerts.</p>
                             </div>
                         </div>
                         <input

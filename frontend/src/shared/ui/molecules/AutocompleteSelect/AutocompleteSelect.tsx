@@ -278,13 +278,14 @@ const AutocompleteSelectInner = <
     const dropdownContent = (
       <div
         ref={dropdownRef}
-        className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg shadow-lg overflow-hidden"
+        style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+        className="absolute z-50 w-full mt-1 border rounded-lg shadow-lg overflow-hidden"
         style={{ maxHeight: maxDropdownHeight }}
       >
         {isLoading && (
           <div className="flex items-center justify-center py-8">
             <Loader className="w-5 h-5 animate-spin text-blue-600" />
-            <span className="ml-2 text-sm text-slate-600 dark:text-slate-400">Searching...</span>
+            <span style={{ color: 'var(--color-textMuted)' }} className="ml-2 text-sm">Searching...</span>
           </div>
         )}
 
@@ -332,7 +333,8 @@ const AutocompleteSelectInner = <
               <button
                 onClick={() => setShowCreateModal(true)}
                 onMouseEnter={() => setHighlightedIndex(-1)}
-                className="w-full px-4 py-2 text-left border-t border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+                style={{ borderColor: 'var(--color-border)' }}
+                className="w-full px-4 py-2 text-left border-t hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
               >
                 <div className="flex items-center text-sm font-medium text-blue-600 dark:text-blue-400">
                   <Plus className="w-4 h-4 mr-2" />
@@ -376,7 +378,7 @@ const AutocompleteSelectInner = <
   return (
     <div ref={containerRef} className={`relative ${className}`} data-testid={testId}>
       {label && (
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <label style={{ color: 'var(--color-text)' }} className="block text-sm font-medium mb-1">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>

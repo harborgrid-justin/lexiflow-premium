@@ -194,7 +194,7 @@ export function IntegrationsManager({ integrations }: IntegrationsManagerProps) 
       </div>
 
       {filteredIntegrations.length === 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-800">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-12 text-center">
           <p className="text-gray-500 dark:text-gray-400">
             No integrations found in this category.
           </p>

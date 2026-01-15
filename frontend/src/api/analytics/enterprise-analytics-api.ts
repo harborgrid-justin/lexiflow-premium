@@ -18,8 +18,8 @@ import type {
 export class EnterpriseAnalyticsApiService {
   private readonly baseUrl = "/analytics/enterprise";
 
-// ====================
-CASE ANALYTICS ====================
+  // ====================
+  // CASE ANALYTICS ====================
 
   async getCaseAnalytics(
     startDate: string,
@@ -50,8 +50,8 @@ CASE ANALYTICS ====================
     );
   }
 
-// ====================
-BILLING ANALYTICS ====================
+  // ====================
+  // BILLING ANALYTICS ====================
 
   async getBillingAnalytics(
     startDate: string,
@@ -109,8 +109,8 @@ BILLING ANALYTICS ====================
     );
   }
 
-// ====================
-PRODUCTIVITY ANALYTICS ====================
+  // ====================
+  // PRODUCTIVITY ANALYTICS ====================
 
   async getProductivityAnalytics(
     startDate: string,
@@ -154,8 +154,8 @@ PRODUCTIVITY ANALYTICS ====================
     );
   }
 
-// ====================
-CLIENT ANALYTICS ====================
+  // ====================
+  // CLIENT ANALYTICS ====================
 
   async getClientAnalytics(
     startDate: string,
@@ -194,8 +194,8 @@ CLIENT ANALYTICS ====================
     return apiClient.get(`${this.baseUrl}/clients/${clientId}/lifetime-value`);
   }
 
-// ====================
-REPORTS ====================
+  // ====================
+  // REPORTS ====================
 
   async getReports(filters?: {
     category?: string;
@@ -260,8 +260,8 @@ REPORTS ====================
     return apiClient.get(`${this.baseUrl}/reports/${id}/export/${format}`);
   }
 
-// ====================
-AUDIT LOGS ====================
+  // ====================
+  // AUDIT LOGS ====================
 
   async getAuditLogs(filters?: AuditLogFilters): Promise<AuditLog[]> {
     const params = new URLSearchParams();
@@ -303,8 +303,8 @@ AUDIT LOGS ====================
     return apiClient.get(`${this.baseUrl}/audit-logs/export?${queryString}`);
   }
 
-// ====================
-COMPLIANCE ====================
+  // ====================
+  // COMPLIANCE ====================
 
   async getComplianceReport(
     reportType: "sox" | "hipaa" | "gdpr" | "soc2",
@@ -325,8 +325,8 @@ COMPLIANCE ====================
     );
   }
 
-// ====================
-COMPARISONS ====================
+  // ====================
+  // COMPARISONS ====================
 
   async getYearOverYearComparison(
     metric: string,
@@ -358,8 +358,8 @@ COMPARISONS ====================
     );
   }
 
-// ====================
-DASHBOARDS ====================
+  // ====================
+  // DASHBOARDS ====================
 
   async getExecutiveDashboard(period?: string): Promise<unknown> {
     const url = period

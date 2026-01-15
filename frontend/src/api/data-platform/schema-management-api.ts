@@ -2,11 +2,11 @@
  * @module services/api/data-platform/schema-management-api
  * @description Schema management API service
  * Handles database schema inspection, migrations, and snapshots
- * 
+ *
  * @responsibility Manage database schema operations
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 /**
  * Schema table interface
@@ -55,17 +55,17 @@ export interface Snapshot {
  * Provides methods for schema inspection, migrations, and snapshots
  */
 export class SchemaManagementApiService {
-// ====================
-Schema Inspection ====================
-  
+  // ====================
+  // Schema Inspection ====================
+
   /**
    * Get all tables in the database
    */
   async getTables(): Promise<SchemaTable[]> {
     try {
-      return await apiClient.get<SchemaTable[]>('/schema/tables');
+      return await apiClient.get<SchemaTable[]>("/schema/tables");
     } catch (error) {
-      console.error('[SchemaManagementApi] Error fetching tables:', error);
+      console.error("[SchemaManagementApi] Error fetching tables:", error);
       return [];
     }
   }
@@ -75,24 +75,26 @@ Schema Inspection ====================
    */
   async getTableColumns(tableName: string): Promise<unknown[]> {
     try {
-      return await apiClient.get<unknown[]>(`/schema/tables/${tableName}/columns`);
+      return await apiClient.get<unknown[]>(
+        `/schema/tables/${tableName}/columns`
+      );
     } catch (error) {
-      console.error('[SchemaManagementApi] Error fetching columns:', error);
+      console.error("[SchemaManagementApi] Error fetching columns:", error);
       return [];
     }
   }
 
-// ====================
-Migrations ====================
-  
+  // ====================
+  // Migrations ====================
+
   /**
    * Get all migrations
    */
   async getMigrations(): Promise<Migration[]> {
     try {
-      return await apiClient.get<Migration[]>('/schema/migrations');
+      return await apiClient.get<Migration[]>("/schema/migrations");
     } catch (error) {
-      console.error('[SchemaManagementApi] Error fetching migrations:', error);
+      console.error("[SchemaManagementApi] Error fetching migrations:", error);
       return [];
     }
   }
@@ -100,40 +102,46 @@ Migrations ====================
   /**
    * Create a new migration
    */
-  async createMigration(data: { 
-    name: string; 
-    up: string; 
-    down: string; 
-    description?: string 
+  async createMigration(data: {
+    name: string;
+    up: string;
+    down: string;
+    description?: string;
   }): Promise<Migration> {
-    return await apiClient.post<Migration>('/schema/migrations', data);
+    return await apiClient.post<Migration>("/schema/migrations", data);
   }
 
   /**
    * Apply a migration
    */
   async applyMigration(id: string): Promise<Migration> {
-    return await apiClient.post<Migration>(`/schema/migrations/${id}/apply`, {});
+    return await apiClient.post<Migration>(
+      `/schema/migrations/${id}/apply`,
+      {}
+    );
   }
 
   /**
    * Revert a migration
    */
   async revertMigration(id: string): Promise<Migration> {
-    return await apiClient.post<Migration>(`/schema/migrations/${id}/revert`, {});
+    return await apiClient.post<Migration>(
+      `/schema/migrations/${id}/revert`,
+      {}
+    );
   }
 
-// ====================
-Snapshots ====================
-  
+  // ====================
+  // Snapshots ====================
+
   /**
    * Get all schema snapshots
    */
   async getSnapshots(): Promise<Snapshot[]> {
     try {
-      return await apiClient.get<Snapshot[]>('/schema/snapshots');
+      return await apiClient.get<Snapshot[]>("/schema/snapshots");
     } catch (error) {
-      console.error('[SchemaManagementApi] Error fetching snapshots:', error);
+      console.error("[SchemaManagementApi] Error fetching snapshots:", error);
       return [];
     }
   }
@@ -148,12 +156,12 @@ Snapshots ====================
   /**
    * Create a new snapshot
    */
-  async createSnapshot(data: { 
-    name: string; 
-    description?: string; 
-    tables?: string[] 
+  async createSnapshot(data: {
+    name: string;
+    description?: string;
+    tables?: string[];
   }): Promise<Snapshot> {
-    return await apiClient.post<Snapshot>('/schema/snapshots', data);
+    return await apiClient.post<Snapshot>("/schema/snapshots", data);
   }
 
   /**
@@ -163,9 +171,9 @@ Snapshots ====================
     await apiClient.delete(`/schema/snapshots/${id}`);
   }
 
-// ====================
-Table Operations ====================
-  
+  // ====================
+  // Table Operations ====================
+
   /**
    * Create a new table
    */
@@ -174,13 +182,15 @@ Table Operations ====================
     columns: Record<string, unknown>[];
     description?: string;
   }): Promise<{ success: boolean; table: string }> {
-    return await apiClient.post('/schema/tables', data);
+    return await apiClient.post("/schema/tables", data);
   }
 
   /**
    * Drop a table
    */
-  async dropTable(tableName: string): Promise<{ success: boolean; table: string }> {
+  async dropTable(
+    tableName: string
+  ): Promise<{ success: boolean; table: string }> {
     return await apiClient.delete(`/schema/tables/${tableName}`);
   }
 }

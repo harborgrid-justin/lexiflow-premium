@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { LitigationLoaderData } from './loader';
 
 type LitigationMatter = {
@@ -39,8 +38,13 @@ interface LitigationContextValue extends LitigationState {
 
 const LitigationContext = createContext<LitigationContextValue | undefined>(undefined);
 
-export function LitigationProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as LitigationLoaderData;
+export interface LitigationProviderProps {
+  children: React.ReactNode;
+  initialData: LitigationLoaderData;
+}
+
+export function LitigationProvider({ children, initialData }: LitigationProviderProps) {
+  const loaderData = initialData;
 
   const [stageFilter, setStageFilter] = useState<'all' | 'Discovery' | 'Pre-Trial' | 'Trial' | 'Appeal' | 'Closed'>('all');
   const [riskFilter, setRiskFilter] = useState<'all' | 'Low' | 'Medium' | 'High'>('all');

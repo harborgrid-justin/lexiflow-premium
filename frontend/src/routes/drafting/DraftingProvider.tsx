@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { DraftingLoaderData } from './loader';
 
 type DraftDocument = {
@@ -38,8 +37,13 @@ interface DraftingContextValue extends DraftingState {
 
 const DraftingContext = createContext<DraftingContextValue | undefined>(undefined);
 
-export function DraftingProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as DraftingLoaderData;
+export interface DraftingProviderProps {
+  children: React.ReactNode;
+  initialData: DraftingLoaderData;
+}
+
+export function DraftingProvider({ children, initialData }: DraftingProviderProps) {
+  const loaderData = initialData;
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'Draft' | 'Review' | 'Final'>('all');
   const [searchTerm, setSearchTerm] = useState('');

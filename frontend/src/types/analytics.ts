@@ -1,10 +1,10 @@
 // types/analytics.ts
 // Analytics and Integrations types
 
-import { BaseEntity, MetadataRecord } from './primitives';
+import { BaseEntity, MetadataRecord } from "./primitives";
 
 // ====================
-ANALYTICS ====================
+// ANALYTICS ====================
 
 export interface AnalyticsEvent extends BaseEntity {
   eventType: string;
@@ -26,7 +26,7 @@ export interface Dashboard extends BaseEntity {
 
 export interface DashboardWidget {
   id: string;
-  type: 'chart' | 'metric' | 'table' | 'list' | 'calendar' | 'timeline';
+  type: "chart" | "metric" | "table" | "list" | "calendar" | "timeline";
   title: string;
   config: MetadataRecord;
   dataSource?: {
@@ -100,7 +100,7 @@ export interface BillingMetrics {
 }
 
 // ====================
-INTEGRATIONS ====================
+// INTEGRATIONS ====================
 
 export interface Integration extends BaseEntity {
   name: string;
@@ -119,32 +119,32 @@ export interface Integration extends BaseEntity {
   metadata?: MetadataRecord;
 }
 
-export type IntegrationProvider = 
-  | 'pacer' 
-  | 'clio' 
-  | 'westlaw' 
-  | 'lexisnexis' 
-  | 'dropbox' 
-  | 'box' 
-  | 'onedrive' 
-  | 'google_drive'
-  | 'slack'
-  | 'microsoft_teams'
-  | 'quickbooks'
-  | 'xero'
-  | 'salesforce'
-  | 'hubspot'
-  | 'zoom'
-  | 'docusign'
-  | 'custom';
+export type IntegrationProvider =
+  | "pacer"
+  | "clio"
+  | "westlaw"
+  | "lexisnexis"
+  | "dropbox"
+  | "box"
+  | "onedrive"
+  | "google_drive"
+  | "slack"
+  | "microsoft_teams"
+  | "quickbooks"
+  | "xero"
+  | "salesforce"
+  | "hubspot"
+  | "zoom"
+  | "docusign"
+  | "custom";
 
-export type IntegrationStatus = 
-  | 'active' 
-  | 'inactive' 
-  | 'error' 
-  | 'disconnected' 
-  | 'pending_auth'
-  | 'expired';
+export type IntegrationStatus =
+  | "active"
+  | "inactive"
+  | "error"
+  | "disconnected"
+  | "pending_auth"
+  | "expired";
 
 export interface IntegrationCredentials {
   accessToken: string;
@@ -154,7 +154,7 @@ export interface IntegrationCredentials {
 
 export interface IntegrationSyncResult {
   integrationId: string;
-  status: 'success' | 'error' | 'partial';
+  status: "success" | "error" | "partial";
   itemsSynced: number;
   errors?: string[];
   syncedAt: string;

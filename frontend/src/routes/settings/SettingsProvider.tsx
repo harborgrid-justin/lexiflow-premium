@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { useLoaderData } from 'react-router';
 import type { SettingsLoaderData } from './loader';
 
 type SystemSetting = {
@@ -26,8 +25,13 @@ interface SettingsContextValue extends SettingsState {
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
 
-export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as SettingsLoaderData;
+export interface SettingsProviderProps {
+  children: React.ReactNode;
+  initialData: SettingsLoaderData;
+}
+
+export function SettingsProvider({ children, initialData }: SettingsProviderProps) {
+  const loaderData = initialData;
 
   const [activeTab, setActiveTab] = useState<'general' | 'security' | 'notifications' | 'integrations'>('general');
 

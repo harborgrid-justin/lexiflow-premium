@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { DAFLoaderData } from './loader';
 
 type AssemblyTemplate = {
@@ -30,8 +29,13 @@ interface DAFContextValue extends DAFState {
 
 const DAFContext = createContext<DAFContextValue | undefined>(undefined);
 
-export function DAFProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as DAFLoaderData;
+export interface DAFProviderProps {
+  children: React.ReactNode;
+  initialData: DAFLoaderData;
+}
+
+export function DAFProvider({ children, initialData }: DAFProviderProps) {
+  const loaderData = initialData;
 
   const [complexityFilter, setComplexityFilter] = useState<'all' | 'Simple' | 'Moderate' | 'Complex'>('all');
   const [searchTerm, setSearchTerm] = useState('');

@@ -16,11 +16,4 @@ export type {
   FlagsStateValue,
 } from "./types";
 
-// Provider and hooks
-export {
-  FlagsProvider,
-  useFlags,
-  useFlagsActions,
-  useFlagsState,
-} from "./context";
-export type { FlagsProviderProps } from "./context";
+// Provider and hooks moved to providers/application/flagsprovider

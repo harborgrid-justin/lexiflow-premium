@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { useAuth } from "@/hooks/useAuth";
-import { useEntitlements } from "@/lib/entitlements/context";
-import { useFlags } from "@/lib/flags/context";
+import { useEntitlements } from "@/providers/application/entitlementsprovider";
+import { useFlags } from "@/providers/application/flagsprovider";
 
 import { AdminPath } from "./paths/AdminPath";
 import { MemberPath } from "./paths/MemberPath";
@@ -151,35 +151,38 @@ const ROUTES = {
 export function App() {
   return (
     <BrowserRouter>
-      <RootProviders>
-          <Routes>
-            {/* Public route */}
-            <Route path={ROUTES.public.path} element={ROUTES.public.element} />
+      {/*
+        Legacy router entrypoint.
+        The canonical provider mounting for the React Router framework build is `src/root.tsx`.
+        If you use this component in isolation (e.g., tests/storybook), wrap it in `RootProviders` externally.
+      */}
+      <Routes>
+        {/* Public route */}
+        <Route path={ROUTES.public.path} element={ROUTES.public.element} />
 
-            {/* Group-gated member route */}
-            <Route
-              path={ROUTES.app.path}
-              element={<GuardedRoute policy={ROUTES.app.policy} element={ROUTES.app.element} />}
-            />
+        {/* Group-gated member route */}
+        <Route
+          path={ROUTES.app.path}
+          element={<GuardedRoute policy={ROUTES.app.policy} element={ROUTES.app.element} />}
+        />
 
-            {/* Group + flag + entitlement-gated admin route */}
-            <Route
-              path={ROUTES.admin.path}
-              element={<GuardedRoute policy={ROUTES.admin.policy} element={ROUTES.admin.element} />}
-            />
+        {/* Group + flag + entitlement-gated admin route */}
+        <Route
+          path={ROUTES.admin.path}
+          element={<GuardedRoute policy={ROUTES.admin.policy} element={ROUTES.admin.element} />}
+        />
 
-            {/* Flag-triggered “parallel” member path */}
-            <Route
-              path={ROUTES.newDashboard.path}
-              element={
-                <GuardedRoute policy={ROUTES.newDashboard.policy} element={ROUTES.newDashboard.element} />
-              }
-            />
+        {/* Flag-triggered “parallel” member path */}
+        <Route
+          path={ROUTES.newDashboard.path}
+          element={
+            <GuardedRoute policy={ROUTES.newDashboard.policy} element={ROUTES.newDashboard.element} />
+          }
+        />
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to={ROUTES.public.path} replace />} />
-          </Routes>
-      </RootProviders>
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to={ROUTES.public.path} replace />} />
+      </Routes>
     </BrowserRouter>
   );
 };

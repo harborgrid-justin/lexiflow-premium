@@ -19,7 +19,7 @@
  * ENTERPRISE PATTERN:
  * - Loader enforces authentication (server-aware)
  * - LayoutProvider manages sidebar/panel state (global)
- * - Providers in RootLayout > ApplicationLayer (DRY)
+ * - Providers mounted once in src/root.tsx via RootProviders
  * - Clean separation: layout structure vs content
  *
  * REACT 18 INTEGRATION:
@@ -34,8 +34,8 @@
 import { AppShell } from "@/components/layouts/AppShell";
 import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
-import { useLayout } from '@/providers/application/layoutprovider';
 import { useAppShellLogic } from "@/hooks/useAppShellLogic";
+import { useLayout } from '@/providers/application/layoutprovider';
 import { requireAuthLoader } from "@/utils/route-guards";
 import {
   Outlet,
@@ -63,7 +63,7 @@ export async function loader(args: LoaderFunctionArgs) {
 /**
  * App Shell Layout
  * Provides authenticated app structure with sidebar and top bar
- * Providers are now in RootLayout > ApplicationLayer
+ * Providers are mounted once in src/root.tsx via RootProviders
  */
 export default function AppShellLayout() {
   return <AppShellContent />;

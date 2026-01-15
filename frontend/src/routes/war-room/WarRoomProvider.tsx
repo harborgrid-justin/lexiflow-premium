@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import { useLoaderData } from 'react-router';
 import type { WarRoomLoaderData } from './loader';
 
 type WarRoomSession = {
@@ -35,8 +34,13 @@ interface WarRoomContextValue extends WarRoomState {
 
 const WarRoomContext = createContext<WarRoomContextValue | undefined>(undefined);
 
-export function WarRoomProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as WarRoomLoaderData;
+export interface WarRoomProviderProps {
+  children: React.ReactNode;
+  initialData: WarRoomLoaderData;
+}
+
+export function WarRoomProvider({ children, initialData }: WarRoomProviderProps) {
+  const loaderData = initialData;
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'Scheduled' | 'In Progress' | 'Completed'>('all');
 

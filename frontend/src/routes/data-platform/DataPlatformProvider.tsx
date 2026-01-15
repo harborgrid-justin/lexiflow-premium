@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import { useLoaderData } from 'react-router';
 import type { DataPlatformLoaderData } from './loader';
 
 type DataSource = {
@@ -33,8 +32,13 @@ interface DataPlatformContextValue extends DataPlatformState {
 
 const DataPlatformContext = createContext<DataPlatformContextValue | undefined>(undefined);
 
-export function DataPlatformProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as DataPlatformLoaderData;
+export interface DataPlatformProviderProps {
+  children: React.ReactNode;
+  initialData: DataPlatformLoaderData;
+}
+
+export function DataPlatformProvider({ children, initialData }: DataPlatformProviderProps) {
+  const loaderData = initialData;
 
   const [typeFilter, setTypeFilter] = useState<'all' | 'Database' | 'API' | 'File' | 'Stream'>('all');
 

@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { RealEstateLoaderData } from './loader';
 
 type RealEstateProperty = {
@@ -33,8 +32,13 @@ interface RealEstateContextValue extends RealEstateState {
 
 const RealEstateContext = createContext<RealEstateContextValue | undefined>(undefined);
 
-export function RealEstateProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as RealEstateLoaderData;
+export interface RealEstateProviderProps {
+  children: React.ReactNode;
+  initialData: RealEstateLoaderData;
+}
+
+export function RealEstateProvider({ children, initialData }: RealEstateProviderProps) {
+  const loaderData = initialData;
 
   const [typeFilter, setTypeFilter] = useState<'all' | 'Residential' | 'Commercial' | 'Industrial' | 'Land'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'Active' | 'Pending' | 'Closed' | 'Disputed'>('all');

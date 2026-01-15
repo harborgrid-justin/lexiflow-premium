@@ -2,12 +2,16 @@
  * Audit Domain - Page Component
  */
 
+import { useLoaderData } from 'react-router';
 import { AuditProvider } from './AuditProvider';
 import { AuditView } from './AuditView';
+import type { AuditLoaderData } from './loader';
 
 export function AuditPage() {
+  const initialData = useLoaderData() as AuditLoaderData;
+
   return (
-    <AuditProvider>
+    <AuditProvider initialData={initialData}>
       <AuditView />
     </AuditProvider>
   );

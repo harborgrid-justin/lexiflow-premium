@@ -1,6 +1,5 @@
 import type { BillingRate, Invoice, TimeEntry, Transaction } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useRevalidator } from 'react-router';
 
 /**
  * Billing Domain State
@@ -55,6 +54,7 @@ interface BillingProviderProps {
   initialTransactions: Transaction[];
   initialRates: BillingRate[];
   initialTimeEntries: TimeEntry[];
+  onRevalidate?: () => void;
 }
 
 /**
@@ -71,10 +71,10 @@ export function BillingProvider({
   initialInvoices,
   initialTransactions,
   initialRates,
-  initialTimeEntries
+  initialTimeEntries,
+  onRevalidate,
 }: BillingProviderProps) {
   const [isPending, startTransition] = useTransition();
-  const revalidator = useRevalidator();
 
   const [activeTab, setActiveTabState] = useState<BillingState['activeTab']>('invoices');
   const [filters, setFiltersState] = useState<BillingState['filters']>({});
@@ -128,8 +128,8 @@ export function BillingProvider({
   }, []);
 
   const revalidate = useCallback(() => {
-    revalidator.revalidate();
-  }, [revalidator]);
+    onRevalidate?.();
+  }, [onRevalidate]);
 
   // Context value with split for optimization
   const state: BillingState = useMemo(() => ({

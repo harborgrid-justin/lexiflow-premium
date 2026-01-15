@@ -3,7 +3,7 @@ import { DeterministicLoader } from "@/components/performance/DeterministicLoade
 import { OptimisticInput } from "@/components/performance/OptimisticInput";
 import { ZeroClsWrapper } from "@/components/performance/ZeroClsWrapper";
 import { useAuth } from "@/hooks/useAuth";
-import { useEntitlements } from "@/lib/entitlements/context";
+import { useEntitlements } from "@/providers/application/entitlementsprovider";
 import { useData } from "@/routes/dashboard";
 import React, { useEffect, useMemo, useState } from "react";
 

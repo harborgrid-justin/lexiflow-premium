@@ -2,11 +2,14 @@
  * @module services/api/data-platform/ai-ops-api
  * @description AI operations API service
  * Handles vector embeddings, AI model management, and similarity search
- * 
+ *
  * @responsibility Manage AI/ML operations and embeddings
  */
 
-import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
 
 /**
  * Vector embedding interface
@@ -43,15 +46,20 @@ export interface AIModel {
  * Provides methods for AI/ML operations
  */
 export class AiOpsApiService {
-// ====================
-Embeddings ====================
-  
+  // ====================
+  // Embeddings ====================
+
   /**
    * Get vector embeddings
    */
-  async getEmbeddings(filters?: Record<string, unknown>): Promise<PaginatedResponse<VectorEmbedding>> {
+  async getEmbeddings(
+    filters?: Record<string, unknown>
+  ): Promise<PaginatedResponse<VectorEmbedding>> {
     try {
-      return await apiClient.get<PaginatedResponse<VectorEmbedding>>('/ai-ops/embeddings', filters);
+      return await apiClient.get<PaginatedResponse<VectorEmbedding>>(
+        "/ai-ops/embeddings",
+        filters
+      );
     } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
@@ -60,30 +68,38 @@ Embeddings ====================
   /**
    * Store a new embedding
    */
-  async storeEmbedding(data: Partial<VectorEmbedding>): Promise<VectorEmbedding> {
-    return await apiClient.post<VectorEmbedding>('/ai-ops/embeddings', data);
+  async storeEmbedding(
+    data: Partial<VectorEmbedding>
+  ): Promise<VectorEmbedding> {
+    return await apiClient.post<VectorEmbedding>("/ai-ops/embeddings", data);
   }
 
   /**
    * Search for similar embeddings (vector similarity search)
    */
-  async searchSimilar(embedding: number[], limit = 10): Promise<{ results: unknown[] }> {
+  async searchSimilar(
+    embedding: number[],
+    limit = 10
+  ): Promise<{ results: unknown[] }> {
     try {
-      return await apiClient.post('/ai-ops/embeddings/search', { embedding, limit });
+      return await apiClient.post("/ai-ops/embeddings/search", {
+        embedding,
+        limit,
+      });
     } catch {
       return { results: [] };
     }
   }
 
-// ====================
-Models ====================
-  
+  // ====================
+  // Models ====================
+
   /**
    * Get all AI models
    */
   async getModels(): Promise<AIModel[]> {
     try {
-      return await apiClient.get<AIModel[]>('/ai-ops/models');
+      return await apiClient.get<AIModel[]>("/ai-ops/models");
     } catch {
       return [];
     }
@@ -93,7 +109,7 @@ Models ====================
    * Register a new AI model
    */
   async registerModel(data: Partial<AIModel>): Promise<AIModel> {
-    return await apiClient.post<AIModel>('/ai-ops/models', data);
+    return await apiClient.post<AIModel>("/ai-ops/models", data);
   }
 
   /**
@@ -110,9 +126,9 @@ Models ====================
     await apiClient.delete(`/ai-ops/models/${id}`);
   }
 
-// ====================
-Statistics ====================
-  
+  // ====================
+  // Statistics ====================
+
   /**
    * Get AI operations statistics
    */
@@ -123,9 +139,14 @@ Statistics ====================
     totalUsage: number;
   }> {
     try {
-      return await apiClient.get('/ai-ops/stats');
+      return await apiClient.get("/ai-ops/stats");
     } catch {
-      return { totalEmbeddings: 0, totalModels: 0, activeModels: 0, totalUsage: 0 };
+      return {
+        totalEmbeddings: 0,
+        totalModels: 0,
+        activeModels: 0,
+        totalUsage: 0,
+      };
     }
   }
 }

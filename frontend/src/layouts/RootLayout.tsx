@@ -37,9 +37,8 @@ import {
 // Import global styles
 import "@/index.css";
 
-// Import root providers
-import { ApplicationLayer } from "@/providers/application/ApplicationLayer";
-import { InfrastructureLayer } from "@/providers";
+// NOTE: This legacy layout is not the canonical provider mounting location.
+// In the React Router v7 framework build, global providers are mounted in `src/root.tsx`.
 
 // ============================================================================
 // ROOT LAYOUT COMPONENT
@@ -59,11 +58,7 @@ export function RootLayout() {
         <Links />
       </head>
       <body>
-        <InfrastructureLayer>
-          <ApplicationLayer>
-            <Outlet />
-          </ApplicationLayer>
-        </InfrastructureLayer>
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
       </body>

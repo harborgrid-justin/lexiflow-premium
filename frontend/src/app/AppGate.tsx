@@ -1,7 +1,7 @@
 // src/app/AppGate.tsx
 import { useAuth } from "@/hooks/useAuth";
-import { useEntitlements } from "@/lib/entitlements/context";
-import { useFlags } from "@/lib/flags/context";
+import { useEntitlements } from "@/providers/application/entitlementsprovider";
+import { useFlags } from "@/providers/application/flagsprovider";
 
 import { AdminPath } from "./paths/AdminPath";
 import { MemberPath } from "./paths/MemberPath";

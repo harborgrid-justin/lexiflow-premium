@@ -1,7 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import { useRevalidator } from 'react-router';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 interface DashboardMetrics {
   totalCases: number;
@@ -23,6 +22,7 @@ interface DashboardContextValue {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   currentUser: User | null;
+  refreshData: () => void;
 }
 
 const DashboardContext = createContext<DashboardContextValue | null>(null);
@@ -33,6 +33,7 @@ interface DashboardProviderProps {
   initialDocketEntries?: DocketEntry[];
   initialTimeEntries?: TimeEntry[];
   initialTasks?: Task[];
+  onRevalidate?: () => void;
 }
 
 /**
@@ -44,6 +45,7 @@ export function DashboardProvider({
   initialDocketEntries = [],
   initialTimeEntries = [],
   initialTasks = [],
+  onRevalidate,
 }: DashboardProviderProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const { user } = useAuth(); // Assuming useAuth returns { user }
@@ -104,6 +106,10 @@ export function DashboardProvider({
     };
   }, [initialCases, initialDocketEntries, initialTimeEntries, initialTasks]);
 
+  const refreshData = useCallback(() => {
+    onRevalidate?.();
+  }, [onRevalidate]);
+
   const value = useMemo<DashboardContextValue>(() => ({
     cases: initialCases || [],
     docketEntries: initialDocketEntries || [],
@@ -112,8 +118,9 @@ export function DashboardProvider({
     metrics,
     activeTab,
     setActiveTab,
-    currentUser: user as User | null
-  }), [initialCases, initialDocketEntries, initialTimeEntries, initialTasks, metrics, activeTab, user]);
+    currentUser: user as User | null,
+    refreshData,
+  }), [initialCases, initialDocketEntries, initialTimeEntries, initialTasks, metrics, activeTab, user, refreshData]);
 
   return (
     <DashboardContext.Provider value={value}>
@@ -135,17 +142,17 @@ export function useDashboard() {
  * @returns Dashboard actions object
  */
 export function useDashboardActions() {
-  const revalidator = useRevalidator();
+  const { refreshData } = useDashboard();
 
   return useMemo(() => ({
     refreshData: async () => {
-      revalidator.revalidate();
+      refreshData();
     },
     updateMetrics: () => {
       // Metrics are computed from data, so revalidating data updates metrics
-      revalidator.revalidate();
+      refreshData();
     },
-  }), [revalidator]);
+  }), [refreshData]);
 }
 /**
  * useDashboardState - State hook alias

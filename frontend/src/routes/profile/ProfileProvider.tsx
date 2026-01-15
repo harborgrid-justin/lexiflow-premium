@@ -4,7 +4,6 @@
 
 import type { ExtendedUserProfile } from '@/types/system';
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import { useLoaderData } from 'react-router';
 import type { ProfileLoaderData } from './loader';
 
 export type ProfileTab = 'overview' | 'settings' | 'security' | 'access';
@@ -17,8 +16,13 @@ interface ProfileContextValue {
 
 const ProfileContext = createContext<ProfileContextValue | undefined>(undefined);
 
-export function ProfileProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as ProfileLoaderData;
+export interface ProfileProviderProps {
+  children: React.ReactNode;
+  initialData: ProfileLoaderData;
+}
+
+export function ProfileProvider({ children, initialData }: ProfileProviderProps) {
+  const loaderData = initialData;
   const [activeTab, setActiveTab] = useState<ProfileTab>('overview');
 
   const contextValue = useMemo<ProfileContextValue>(() => ({

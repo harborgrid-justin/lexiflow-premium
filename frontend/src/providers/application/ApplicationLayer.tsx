@@ -106,10 +106,10 @@
  * @module providers/application
  */
 
-import { EntitlementsProvider } from "@/lib/entitlements/context";
-import { FlagsProvider, FlagsProviderProps } from "@/lib/flags/context";
 import { AuthProvider } from "@/providers/application/authprovider";
+import { EntitlementsProvider } from "@/providers/application/entitlementsprovider";
 import { ApplicationErrorProvider } from "@/providers/application/errorprovider";
+import { FlagsProvider, FlagsProviderProps } from "@/providers/application/flagsprovider";
 import { LayoutProvider } from "@/providers/application/layoutprovider";
 import { RoleProvider } from "@/providers/application/roleprovider";
 import { ServiceProvider } from "@/providers/application/serviceprovider";

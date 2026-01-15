@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { PracticeLoaderData } from './loader';
 
 type PracticeArea = {
@@ -27,8 +26,13 @@ interface PracticeContextValue extends PracticeState {
 
 const PracticeContext = createContext<PracticeContextValue | undefined>(undefined);
 
-export function PracticeProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as PracticeLoaderData;
+export interface PracticeProviderProps {
+  children: React.ReactNode;
+  initialData: PracticeLoaderData;
+}
+
+export function PracticeProvider({ children, initialData }: PracticeProviderProps) {
+  const loaderData = initialData;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isPending, startTransition] = useTransition();

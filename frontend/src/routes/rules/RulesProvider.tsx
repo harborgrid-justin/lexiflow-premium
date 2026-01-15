@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { RulesLoaderData } from './loader';
 
 type CourtRule = {
@@ -32,8 +31,13 @@ interface RulesContextValue extends RulesState {
 
 const RulesContext = createContext<RulesContextValue | undefined>(undefined);
 
-export function RulesProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as RulesLoaderData;
+export interface RulesProviderProps {
+  children: React.ReactNode;
+  initialData: RulesLoaderData;
+}
+
+export function RulesProvider({ children, initialData }: RulesProviderProps) {
+  const loaderData = initialData;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedJurisdiction, setSelectedJurisdiction] = useState<string | null>(null);

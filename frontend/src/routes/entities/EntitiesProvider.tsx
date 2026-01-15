@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { EntitiesLoaderData } from './loader';
 
 type Entity = {
@@ -30,8 +29,13 @@ interface EntitiesContextValue extends EntitiesState {
 
 const EntitiesContext = createContext<EntitiesContextValue | undefined>(undefined);
 
-export function EntitiesProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as EntitiesLoaderData;
+export interface EntitiesProviderProps {
+  children: React.ReactNode;
+  initialData: EntitiesLoaderData;
+}
+
+export function EntitiesProvider({ children, initialData }: EntitiesProviderProps) {
+  const loaderData = initialData;
 
   const [typeFilter, setTypeFilter] = useState<'all' | 'Person' | 'Organization' | 'Government' | 'Trust'>('all');
   const [searchTerm, setSearchTerm] = useState('');

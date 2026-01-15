@@ -22,7 +22,6 @@
 import type { Case, Invoice } from '@/types';
 import { CaseStatus } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useRevalidator } from 'react-router';
 
 /**
  * Context value shape (immutable, memoized)
@@ -76,6 +75,7 @@ interface CaseMetrics {
 interface CaseListProviderProps {
   initialCases: Case[];
   initialInvoices: Invoice[];
+  onRevalidate?: () => void;
   children: React.ReactNode;
 }
 
@@ -105,11 +105,9 @@ export function useCaseList(): CaseListContextValue {
 export function CaseListProvider({
   initialCases,
   initialInvoices,
+  onRevalidate,
   children
 }: CaseListProviderProps) {
-  // ROUTER INTEGRATION
-  const revalidator = useRevalidator();
-
   // LOCAL STATE (UI-specific)
   const [activeTab, _setActiveTab] = useState<string>('overview');
   const [filters, setFiltersState] = useState<CaseListFilters>({});
@@ -150,8 +148,8 @@ export function CaseListProvider({
    * Refresh data from server
    */
   const refreshData = useCallback(() => {
-    revalidator.revalidate();
-  }, [revalidator]);
+    onRevalidate?.();
+  }, [onRevalidate]);
 
   /**
    * DERIVED STATE: Compute metrics from cases and invoices

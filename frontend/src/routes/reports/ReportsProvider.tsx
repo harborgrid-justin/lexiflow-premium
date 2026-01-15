@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { ReportsLoaderData } from './loader';
 
 type Report = {
@@ -31,15 +30,22 @@ interface ReportsContextValue extends ReportsState {
 
 const ReportsContext = createContext<ReportsContextValue | undefined>(undefined);
 
-export function ReportsProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as ReportsLoaderData;
+export function ReportsProvider({
+  initialData,
+  children,
+}: {
+  initialData: ReportsLoaderData;
+  children: React.ReactNode;
+}) {
+  const [reports] = useState(() => initialData.reports);
+  const [recentReports] = useState(() => initialData.recentReports);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [isPending, startTransition] = useTransition();
 
   const filteredReports = useMemo(() => {
-    let result = loaderData.reports;
+    let result = reports;
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
@@ -54,7 +60,7 @@ export function ReportsProvider({ children }: { children: React.ReactNode }) {
     }
 
     return result;
-  }, [loaderData.reports, searchTerm, typeFilter]);
+  }, [reports, searchTerm, typeFilter]);
 
   const handleSetSearchTerm = useCallback((term: string) => {
     startTransition(() => {
@@ -64,13 +70,13 @@ export function ReportsProvider({ children }: { children: React.ReactNode }) {
 
   const contextValue = useMemo<ReportsContextValue>(() => ({
     reports: filteredReports,
-    recentReports: loaderData.recentReports,
+    recentReports,
     searchTerm,
     typeFilter,
     setSearchTerm: handleSetSearchTerm,
     setTypeFilter,
     isPending,
-  }), [filteredReports, loaderData.recentReports, searchTerm, typeFilter, handleSetSearchTerm, isPending]);
+  }), [filteredReports, recentReports, searchTerm, typeFilter, handleSetSearchTerm, isPending]);
 
   return (
     <ReportsContext.Provider value={contextValue}>

@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { AuditLoaderData } from './loader';
 
 type AuditLog = {
@@ -39,8 +38,13 @@ interface AuditContextValue extends AuditState {
 
 const AuditContext = createContext<AuditContextValue | undefined>(undefined);
 
-export function AuditProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as AuditLoaderData;
+export interface AuditProviderProps {
+  children: React.ReactNode;
+  initialData: AuditLoaderData;
+}
+
+export function AuditProvider({ children, initialData }: AuditProviderProps) {
+  const loaderData = initialData;
 
   const [severityFilter, setSeverityFilter] = useState<'all' | 'Info' | 'Warning' | 'Critical'>('all');
   const [searchTerm, setSearchTerm] = useState('');

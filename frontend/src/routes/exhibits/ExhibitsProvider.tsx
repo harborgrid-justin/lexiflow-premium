@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { ExhibitsLoaderData } from './loader';
 
 type Exhibit = {
@@ -40,8 +39,13 @@ interface ExhibitsContextValue extends ExhibitsState {
 
 const ExhibitsContext = createContext<ExhibitsContextValue | undefined>(undefined);
 
-export function ExhibitsProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as ExhibitsLoaderData;
+export interface ExhibitsProviderProps {
+  children: React.ReactNode;
+  initialData: ExhibitsLoaderData;
+}
+
+export function ExhibitsProvider({ children, initialData }: ExhibitsProviderProps) {
+  const loaderData = initialData;
 
   const [typeFilter, setTypeFilter] = useState<'all' | 'Document' | 'Photo' | 'Video' | 'Audio' | 'Physical'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'Pending' | 'Admitted' | 'Rejected'>('all');

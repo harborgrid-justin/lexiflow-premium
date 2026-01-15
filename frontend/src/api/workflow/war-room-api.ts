@@ -37,8 +37,8 @@ export interface UpdateStrategyDto {
 export class WarRoomApiService {
   private readonly baseUrl = "/war-room";
 
-// ===
-ADVISORS === (backend: GET/POST/DELETE /war-room/advisors)
+  // ===
+  // ADVISORS === (backend: GET/POST/DELETE /war-room/advisors)
   async getAdvisors(query?: Record<string, string>): Promise<Advisor[]> {
     const params = new URLSearchParams(query);
     const queryString = params.toString();
@@ -60,8 +60,8 @@ ADVISORS === (backend: GET/POST/DELETE /war-room/advisors)
     return apiClient.delete(`${this.baseUrl}/advisors/${id}`);
   }
 
-// ===
-EXPERTS === (backend: GET/POST/DELETE /war-room/experts)
+  // ===
+  // EXPERTS === (backend: GET/POST/DELETE /war-room/experts)
   async getExperts(query?: Record<string, string>): Promise<Expert[]> {
     const params = new URLSearchParams(query);
     const queryString = params.toString();
@@ -83,8 +83,8 @@ EXPERTS === (backend: GET/POST/DELETE /war-room/experts)
     return apiClient.delete(`${this.baseUrl}/experts/${id}`);
   }
 
-// ===
-WAR ROOM DATA === (backend: GET /war-room/:caseId)
+  // ===
+  // WAR ROOM DATA === (backend: GET /war-room/:caseId)
   async getWarRoomData(caseId: string): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/${caseId}`);
   }
@@ -94,8 +94,8 @@ WAR ROOM DATA === (backend: GET /war-room/:caseId)
     return this.getWarRoomData(caseId);
   }
 
-// ===
-STRATEGY === (backend: GET/PUT /war-room/:caseId/strategy)
+  // ===
+  // STRATEGY === (backend: GET/PUT /war-room/:caseId/strategy)
   async getStrategy(caseId: string): Promise<CaseStrategy> {
     return apiClient.get<CaseStrategy>(`${this.baseUrl}/${caseId}/strategy`);
   }
@@ -110,8 +110,8 @@ STRATEGY === (backend: GET/PUT /war-room/:caseId/strategy)
     );
   }
 
-// ===
-OPPOSITION === (Placeholder for future backend implementation)
+  // ===
+  // OPPOSITION === (Placeholder for future backend implementation)
   async getOpposition(_caseId: string): Promise<unknown[]> {
     // Return empty array to prevent crash until backend is implemented
     return [];

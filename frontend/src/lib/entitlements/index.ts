@@ -20,10 +20,4 @@ export type {
   Plan,
 } from "./types";
 
-// Provider and hooks
-export {
-  EntitlementsProvider,
-  useEntitlements,
-  useEntitlementsActions,
-  useEntitlementsState,
-} from "./context";
+// Provider and hooks moved to providers/application/entitlementsprovider

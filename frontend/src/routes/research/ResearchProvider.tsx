@@ -5,7 +5,6 @@
 
 import type { Citation, ResearchQuery } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { ResearchLoaderData } from './loader';
 
 interface ResearchMetrics {
@@ -31,8 +30,13 @@ interface ResearchContextValue extends ResearchState {
 
 const ResearchContext = createContext<ResearchContextValue | undefined>(undefined);
 
-export function ResearchProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as ResearchLoaderData;
+export interface ResearchProviderProps {
+  children: React.ReactNode;
+  initialData: ResearchLoaderData;
+}
+
+export function ResearchProvider({ children, initialData }: ResearchProviderProps) {
+  const loaderData = initialData;
 
   const [activeView, setActiveView] = useState<'search' | 'history' | 'citations'>('search');
   const [searchQuery, setSearchQuery] = useState('');

@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { PleadingsLoaderData } from './loader';
 
 type Pleading = {
@@ -37,8 +36,13 @@ interface PleadingsContextValue extends PleadingsState {
 
 const PleadingsContext = createContext<PleadingsContextValue | undefined>(undefined);
 
-export function PleadingsProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as PleadingsLoaderData;
+export interface PleadingsProviderProps {
+  children: React.ReactNode;
+  initialData: PleadingsLoaderData;
+}
+
+export function PleadingsProvider({ children, initialData }: PleadingsProviderProps) {
+  const loaderData = initialData;
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'Draft' | 'Filed' | 'Approved' | 'Rejected'>('all');
   const [searchTerm, setSearchTerm] = useState('');

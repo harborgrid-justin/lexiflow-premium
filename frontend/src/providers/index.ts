@@ -27,14 +27,58 @@
 export { RootProviders, type RootProvidersProps } from "./RootProviders";
 
 // ============================================================================
-// LAYER EXPORTS
+// LAYER EXPORTS (OUTER → INNER)
 // ============================================================================
 export { ApplicationLayer } from "./application/ApplicationLayer";
 export { InfrastructureLayer } from "./infrastructure/InfrastructureLayer";
 
 // ============================================================================
-// APPLICATION LAYER PROVIDERS (Nested Structure)
+// INFRASTRUCTURE LAYER PROVIDERS (LOAD ORDER)
 // ============================================================================
+export {
+  ConfigProvider,
+  useConfig,
+  useConfigActions,
+  useConfigState,
+} from "./infrastructure/configprovider";
+export { EnvProvider, useEnv } from "./infrastructure/envprovider";
+export { InfrastructureErrorProvider } from "./infrastructure/errorprovider";
+export { QueryClientProvider } from "./infrastructure/queryprovider";
+export {
+  SessionProvider,
+  useSession,
+  useSessionActions,
+} from "./infrastructure/sessionprovider";
+export { ThemeProvider } from "./infrastructure/themeprovider";
+export { ToastProvider } from "./infrastructure/toastprovider";
+export { useUtility, UtilityProvider } from "./infrastructure/utilityprovider";
+export {
+  useWebSocket,
+  useWebSocketActions,
+  useWebSocketState,
+  WebSocketProvider,
+} from "./infrastructure/websocketprovider";
+
+// ============================================================================
+// APPLICATION LAYER PROVIDERS (LOAD ORDER)
+// ============================================================================
+export type {
+  Role,
+  RoleActionsValue,
+  RoleStateValue,
+  SystemRole,
+} from "@/lib/role/types";
+export type {
+  ServiceActionsValue,
+  ServiceHealth,
+  ServiceStateValue,
+} from "@/lib/service";
+export type {
+  AppPreferences,
+  StateActionsValue,
+  StateValue,
+} from "@/lib/state";
+export type { UserActionsValue, UserProfile, UserStateValue } from "@/lib/user";
 export {
   AuthProvider,
   getAuditLogs,
@@ -47,32 +91,44 @@ export type {
   AuthStateValue,
   AuthUser,
 } from "./application/authprovider";
+export {
+  EntitlementsProvider,
+  useEntitlements,
+  useEntitlementsActions,
+  useEntitlementsState,
+} from "./application/entitlementsprovider";
+export type { EntitlementsProviderProps } from "./application/entitlementsprovider";
+export { ApplicationErrorProvider } from "./application/errorprovider";
+export {
+  FlagsProvider,
+  useFlags,
+  useFlagsActions,
+  useFlagsState,
+} from "./application/flagsprovider";
+export type { FlagsProviderProps } from "./application/flagsprovider";
 export { LayoutProvider } from "./application/layoutprovider";
-// Note: FlagsProvider and EntitlementsProvider from nested structures available via nested imports
-
-// ============================================================================
-// NEW APPLICATION PROVIDERS
-// ============================================================================
-export type {
-  AppPreferences,
-  StateActionsValue,
-  StateValue,
-} from "@/lib/state";
+export {
+  RoleProvider,
+  useRoleActions,
+  useRoleState,
+} from "./application/roleprovider";
+export {
+  ServiceProvider,
+  useService,
+  useServiceActions,
+  useServiceState,
+} from "./application/serviceprovider";
 export {
   StateProvider,
   useGlobalState,
   useGlobalStateActions,
 } from "./application/stateprovider";
-
-export type { UserActionsValue, UserProfile, UserStateValue } from "@/lib/user";
 export {
   useCurrentUser,
   UserProvider,
   useUserActions,
   useUserState,
 } from "./application/userprovider";
-
-export { ApplicationErrorProvider } from "./application/errorprovider";
 
 // ============================================================================
 // DEPRECATED DATA LAYER PROVIDERS - MOVED TO ARCHIVED
@@ -113,69 +169,25 @@ export { ApplicationErrorProvider } from "./application/errorprovider";
  */
 
 // ============================================================================
-// INFRASTRUCTURE LAYER PROVIDERS (Nested Structure)
+// INFRASTRUCTURE TYPES
 // ============================================================================
-export { EnvProvider, useEnv } from "./infrastructure/envprovider";
-export { QueryClientProvider } from "./infrastructure/queryprovider";
-
-// ============================================================================
-// NEW INFRASTRUCTURE PROVIDERS
-// ============================================================================
-export type {
-  Session,
-  SessionActionsValue,
-  SessionStateValue,
-} from "@/lib/session";
-export {
-  SessionProvider,
-  useSession,
-  useSessionActions,
-} from "./infrastructure/sessionprovider";
-
-export { InfrastructureErrorProvider } from "./infrastructure/errorprovider";
-
-export type { UtilityValue } from "@/lib/utility";
-export { useUtility, UtilityProvider } from "./infrastructure/utilityprovider";
-
 export type {
   AppConfig,
   ConfigActionsValue,
   ConfigStateValue,
 } from "@/lib/config";
-export {
-  ConfigProvider,
-  useConfig,
-  useConfigActions,
-  useConfigState,
-} from "./infrastructure/configprovider";
-
+export type {
+  Session,
+  SessionActionsValue,
+  SessionStateValue,
+} from "@/lib/session";
+export type { UtilityValue } from "@/lib/utility";
 export type {
   WebSocketActionsValue,
   WebSocketMessage,
   WebSocketStateValue,
   WebSocketStatus,
 } from "@/lib/websocket";
-export {
-  useWebSocket,
-  useWebSocketActions,
-  useWebSocketState,
-  WebSocketProvider,
-} from "./infrastructure/websocketprovider";
-
-// ============================================================================
-// NEW APPLICATION PROVIDERS - SERVICE ORCHESTRATION
-// ============================================================================
-export type {
-  ServiceActionsValue,
-  ServiceHealth,
-  ServiceStateValue,
-} from "@/lib/service";
-export {
-  ServiceProvider,
-  useService,
-  useServiceActions,
-  useServiceState,
-} from "./application/serviceprovider";
 
 // ============================================================================
 // THEME & TOAST EXPORTS (from lib and hooks for compatibility)

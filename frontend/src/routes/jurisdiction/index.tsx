@@ -7,11 +7,12 @@
  * @module routes/jurisdiction/index
  */
 
-import { jurisdictionApi } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
+import JurisdictionPage from './JurisdictionPage';
+import { jurisdictionLoader } from './loader';
 
 // ============================================================================
 // Meta Tags
@@ -20,7 +21,7 @@ import type { Route } from "./+types/index";
 export function meta({ data }: Route.MetaArgs) {
   return createListMeta({
     entityType: 'Jurisdictions',
-    count: data?.items?.length,
+    count: data?.jurisdictions?.length,
     description: 'Manage jurisdictional rules and court systems',
   });
 }
@@ -30,18 +31,8 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const type = url.searchParams.get("type"); // federal, state, local
-
-  try {
-    // Load all jurisdictions or filter by type using new enterprise API
-    const result = await jurisdictionApi.getAllJurisdictions({ type, page: 1, limit: 100 });
-    const items = result.ok ? result.data.data : [];
-    return { items, totalCount: result.ok ? result.data.total : 0 };
-  } catch (error) {
-    console.error("Failed to load jurisdictions", error);
-    return { items: [], totalCount: 0 };
-  }
+  void request;
+  return jurisdictionLoader();
 }
 
 // ============================================================================
@@ -79,10 +70,8 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-import { JurisdictionManager } from '@/routes/jurisdiction/components/JurisdictionManager';
-
 export default function JurisdictionIndexRoute() {
-  return <JurisdictionManager />;
+  return <JurisdictionPage />;
 }
 
 // ============================================================================

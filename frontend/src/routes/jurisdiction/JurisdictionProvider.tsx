@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { JurisdictionLoaderData } from './loader';
 
 type Jurisdiction = {
@@ -29,15 +28,20 @@ interface JurisdictionContextValue extends JurisdictionState {
 
 const JurisdictionContext = createContext<JurisdictionContextValue | undefined>(undefined);
 
-export function JurisdictionProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as JurisdictionLoaderData;
-
+export function JurisdictionProvider({
+  initialData,
+  children,
+}: {
+  initialData: JurisdictionLoaderData;
+  children: React.ReactNode;
+}) {
+  const [jurisdictions] = useState(() => initialData.jurisdictions);
   const [typeFilter, setTypeFilter] = useState<'all' | 'Federal' | 'State' | 'Local'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [isPending, startTransition] = useTransition();
 
   const filteredJurisdictions = useMemo(() => {
-    let result = loaderData.jurisdictions;
+    let result = jurisdictions;
 
     if (typeFilter !== 'all') {
       result = result.filter(j => j.type === typeFilter);
@@ -52,7 +56,7 @@ export function JurisdictionProvider({ children }: { children: React.ReactNode }
     }
 
     return result;
-  }, [loaderData.jurisdictions, typeFilter, searchTerm]);
+  }, [jurisdictions, typeFilter, searchTerm]);
 
   const handleSetSearchTerm = useCallback((term: string) => {
     startTransition(() => {

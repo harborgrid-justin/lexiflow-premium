@@ -3,27 +3,27 @@
  * Advanced analytics, metrics, and reporting interfaces for legal platform
  */
 
-import { BaseEntity } from './primitives';
+import { BaseEntity } from "./primitives";
 
 // ====================
-METRIC CARDS ====================
+// METRIC CARDS ====================
 
 export interface MetricCardData {
   label: string;
   value: number | string;
   unit?: string;
   trend?: {
-    direction: 'up' | 'down' | 'neutral';
+    direction: "up" | "down" | "neutral";
     value: number;
     period: string;
   };
   icon?: string;
-  color?: 'blue' | 'green' | 'red' | 'yellow' | 'purple' | 'gray';
-  format?: 'number' | 'currency' | 'percentage' | 'duration';
+  color?: "blue" | "green" | "red" | "yellow" | "purple" | "gray";
+  format?: "number" | "currency" | "percentage" | "duration";
 }
 
 // ====================
-CASE ANALYTICS ====================
+// CASE ANALYTICS ====================
 
 export interface CaseAnalytics {
   period: { start: string; end: string };
@@ -56,7 +56,7 @@ export interface CaseAnalytics {
     winRate: number;
   }>;
   outcomes: Array<{
-    outcome: 'won' | 'lost' | 'settled' | 'dismissed' | 'pending';
+    outcome: "won" | "lost" | "settled" | "dismissed" | "pending";
     count: number;
     percentage: number;
     avgValue: number;
@@ -70,7 +70,7 @@ export interface CaseAnalytics {
 }
 
 // ====================
-BILLING ANALYTICS ====================
+// BILLING ANALYTICS ====================
 
 export interface BillingAnalytics {
   period: { start: string; end: string };
@@ -117,7 +117,7 @@ export interface BillingAnalytics {
     avgRate: number;
   }>;
   aging: Array<{
-    range: '0-30' | '31-60' | '61-90' | '90+';
+    range: "0-30" | "31-60" | "61-90" | "90+";
     amount: number;
     count: number;
     percentage: number;
@@ -141,7 +141,7 @@ export interface BillingAnalytics {
 }
 
 // ====================
-PRODUCTIVITY ANALYTICS ====================
+// PRODUCTIVITY ANALYTICS ====================
 
 export interface ProductivityAnalytics {
   period: { start: string; end: string };
@@ -177,7 +177,7 @@ export interface ProductivityAnalytics {
     utilizationRate: number;
   }>;
   comparison: {
-    type: 'YoY' | 'MoM' | 'QoQ';
+    type: "YoY" | "MoM" | "QoQ";
     current: number;
     previous: number;
     change: number;
@@ -186,7 +186,7 @@ export interface ProductivityAnalytics {
 }
 
 // ====================
-CLIENT ANALYTICS ====================
+// CLIENT ANALYTICS ====================
 
 export interface ClientAnalytics {
   period: { start: string; end: string };
@@ -214,7 +214,7 @@ export interface ClientAnalytics {
     avgValue: number;
   }>;
   bySize: Array<{
-    size: 'small' | 'medium' | 'large' | 'enterprise';
+    size: "small" | "medium" | "large" | "enterprise";
     count: number;
     revenue: number;
   }>;
@@ -235,7 +235,7 @@ export interface ClientAnalytics {
 }
 
 // ====================
-REPORTS ====================
+// REPORTS ====================
 
 export interface Report extends BaseEntity {
   name: string;
@@ -248,31 +248,31 @@ export interface Report extends BaseEntity {
   recipients?: string[];
   lastRun?: string;
   nextRun?: string;
-  status: 'draft' | 'active' | 'paused' | 'archived';
+  status: "draft" | "active" | "paused" | "archived";
   template?: string;
 }
 
 export type ReportType =
-  | 'case-summary'
-  | 'billing-summary'
-  | 'productivity'
-  | 'client-profitability'
-  | 'ar-aging'
-  | 'wip-report'
-  | 'realization'
-  | 'custom';
+  | "case-summary"
+  | "billing-summary"
+  | "productivity"
+  | "client-profitability"
+  | "ar-aging"
+  | "wip-report"
+  | "realization"
+  | "custom";
 
 export type ReportCategory =
-  | 'financial'
-  | 'operational'
-  | 'compliance'
-  | 'performance'
-  | 'executive';
+  | "financial"
+  | "operational"
+  | "compliance"
+  | "performance"
+  | "executive";
 
-export type ReportFormat = 'pdf' | 'excel' | 'csv' | 'html';
+export type ReportFormat = "pdf" | "excel" | "csv" | "html";
 
 export interface ReportSchedule {
-  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'custom';
+  frequency: "daily" | "weekly" | "monthly" | "quarterly" | "custom";
   dayOfWeek?: number;
   dayOfMonth?: number;
   time?: string;
@@ -281,7 +281,7 @@ export interface ReportSchedule {
 
 export interface ReportParameters {
   dateRange: {
-    type: 'relative' | 'absolute';
+    type: "relative" | "absolute";
     start?: string;
     end?: string;
     period?: string;
@@ -296,7 +296,7 @@ export interface ReportParameters {
   groupBy?: string[];
   sortBy?: {
     field: string;
-    order: 'asc' | 'desc';
+    order: "asc" | "desc";
   }[];
   includeCharts?: boolean;
   includeSummary?: boolean;
@@ -311,14 +311,14 @@ export interface ReportData {
 }
 
 export interface ChartData {
-  type: 'bar' | 'line' | 'pie' | 'area' | 'scatter';
+  type: "bar" | "line" | "pie" | "area" | "scatter";
   title: string;
   data: unknown[];
   config?: Record<string, unknown>;
 }
 
 // ====================
-AUDIT LOGS ====================
+// AUDIT LOGS ====================
 
 export interface AuditLog extends BaseEntity {
   userId?: string;
@@ -333,37 +333,37 @@ export interface AuditLog extends BaseEntity {
   userAgent?: string;
   sessionId?: string;
   timestamp: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   category: AuditCategory;
   metadata?: Record<string, unknown>;
 }
 
 export type AuditAction =
-  | 'create'
-  | 'read'
-  | 'update'
-  | 'delete'
-  | 'login'
-  | 'logout'
-  | 'access_denied'
-  | 'export'
-  | 'import'
-  | 'share'
-  | 'download'
-  | 'upload'
-  | 'approve'
-  | 'reject'
-  | 'restore'
-  | 'archive';
+  | "create"
+  | "read"
+  | "update"
+  | "delete"
+  | "login"
+  | "logout"
+  | "access_denied"
+  | "export"
+  | "import"
+  | "share"
+  | "download"
+  | "upload"
+  | "approve"
+  | "reject"
+  | "restore"
+  | "archive";
 
 export type AuditCategory =
-  | 'authentication'
-  | 'authorization'
-  | 'data_access'
-  | 'data_modification'
-  | 'system_config'
-  | 'security'
-  | 'compliance';
+  | "authentication"
+  | "authorization"
+  | "data_access"
+  | "data_modification"
+  | "system_config"
+  | "security"
+  | "compliance";
 
 export interface AuditChange {
   field: string;
@@ -384,11 +384,11 @@ export interface AuditLogFilters {
 }
 
 // ====================
-DASHBOARD WIDGETS ====================
+// DASHBOARD WIDGETS ====================
 
 export interface AnalyticsDashboardWidget {
   id: string;
-  type: 'metric' | 'chart' | 'table' | 'list' | 'heatmap' | 'gauge';
+  type: "metric" | "chart" | "table" | "list" | "heatmap" | "gauge";
   title: string;
   subtitle?: string;
   dataSource: string;
@@ -398,9 +398,9 @@ export interface AnalyticsDashboardWidget {
 }
 
 export interface WidgetConfig {
-  chartType?: 'line' | 'bar' | 'pie' | 'area' | 'scatter';
+  chartType?: "line" | "bar" | "pie" | "area" | "scatter";
   metric?: string;
-  aggregation?: 'sum' | 'avg' | 'count' | 'min' | 'max';
+  aggregation?: "sum" | "avg" | "count" | "min" | "max";
   groupBy?: string;
   filters?: Record<string, unknown>;
   colors?: string[];
@@ -410,7 +410,7 @@ export interface WidgetConfig {
 }
 
 // ====================
-TIME SERIES ====================
+// TIME SERIES ====================
 
 export interface TimeSeriesData {
   timestamp: string;
@@ -424,5 +424,5 @@ export interface ComparisonData {
   previous: number;
   change: number;
   changePercent: number;
-  trend: 'up' | 'down' | 'neutral';
+  trend: "up" | "down" | "neutral";
 }

@@ -4,7 +4,6 @@
  */
 
 import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { CalendarLoaderData } from './loader';
 
 type CalendarEvent = {
@@ -41,8 +40,13 @@ interface CalendarContextValue extends CalendarState {
 
 const CalendarContext = createContext<CalendarContextValue | undefined>(undefined);
 
-export function CalendarProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as CalendarLoaderData;
+export interface CalendarProviderProps {
+  children: React.ReactNode;
+  initialData: CalendarLoaderData;
+}
+
+export function CalendarProvider({ children, initialData }: CalendarProviderProps) {
+  const loaderData = initialData;
 
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day' | 'list'>('month');
   const [selectedDate, setSelectedDate] = useState(new Date());

@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { ClausesLoaderData } from './loader';
 
 type Clause = {
@@ -32,8 +31,13 @@ interface ClausesContextValue extends ClausesState {
 
 const ClausesContext = createContext<ClausesContextValue | undefined>(undefined);
 
-export function ClausesProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as ClausesLoaderData;
+export interface ClausesProviderProps {
+  children: React.ReactNode;
+  initialData: ClausesLoaderData;
+}
+
+export function ClausesProvider({ children, initialData }: ClausesProviderProps) {
+  const loaderData = initialData;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

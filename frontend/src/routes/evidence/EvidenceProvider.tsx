@@ -4,7 +4,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { EvidenceLoaderData } from './loader';
 
 type EvidenceItem = {
@@ -43,8 +42,13 @@ interface EvidenceContextValue extends EvidenceState {
 
 const EvidenceContext = createContext<EvidenceContextValue | undefined>(undefined);
 
-export function EvidenceProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as EvidenceLoaderData;
+export interface EvidenceProviderProps {
+  children: React.ReactNode;
+  initialData: EvidenceLoaderData;
+}
+
+export function EvidenceProvider({ children, initialData }: EvidenceProviderProps) {
+  const loaderData = initialData;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Await, useLoaderData, useRevalidator } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { BillingProvider } from './BillingProvider';
 import { BillingView } from './BillingView';
@@ -15,6 +15,7 @@ import type { clientLoader } from './loader';
  */
 export function BillingPageContent() {
   const data = useLoaderData<typeof clientLoader>();
+  const revalidator = useRevalidator();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Billing" />}>
@@ -25,6 +26,7 @@ export function BillingPageContent() {
             initialTransactions={resolved.transactions}
             initialRates={resolved.rates}
             initialTimeEntries={resolved.timeEntries}
+            onRevalidate={revalidator.revalidate}
           >
             <BillingView />
           </BillingProvider>

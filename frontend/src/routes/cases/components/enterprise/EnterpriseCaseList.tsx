@@ -1,20 +1,25 @@
-/** * Enterprise Case List Component * * Advanced case management interface with: * - Multi-column filtering and saved filter views * - Bulk operations (status updates, assignments, exports) * - Advanced search across case fields * - Customizable column display * - Sorting and pagination * - Quick actions menu * * @module components/enterprise/CaseManagement/EnterpriseCaseList */ import { cn } from '@/lib/utils';
+/** * Enterprise Case List Component * * Advanced case management interface with: * - Multi-column filtering and saved filter views * - Bulk operations (status updates, assignments, exports) * - Advanced search across case fields * - Customizable column display * - Sorting and pagination * - Quick actions menu * * @module components/enterprise/CaseManagement/EnterpriseCaseList */
+
 import { Case, CaseStatus } from '@/types';
-import { Archive, Download, Edit, Filter, MoreVertical, Save, Search, Settings, Trash2, Upload, UserPlus
-} from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react'; // ============================================================================
+import React from 'react'; // ============================================================================
 // Types & Interfaces
 // ============================================================================
-export interface FilterCriteria { status?: CaseStatus[]; practiceArea?: string[]; assignedTo?: string[]; client?: string[]; dateRange?: { start: string; end: string }; budgetRange?: { min: number; max: number }; searchQuery?: string;
-} export interface SavedView { id: string; name: string; filters: FilterCriteria; columns: ColumnConfig[]; sortBy?: { field: string; direction: 'asc' | 'desc' }; isDefault?: boolean;
-} export interface ColumnConfig { id: string; label: string; visible: boolean; width?: number;
-} export interface BulkOperation { type: 'status' | 'assign' | 'archive' | 'delete' | 'export' | 'tag'; label: string; icon: React.ElementType; action: (caseIds: string[]) => void; requiresConfirmation?: boolean;
-} export interface EnterpriseCaseListProps { cases: Case[]; onCaseSelect?: (caseId: string) => void; onBulkOperation?: (operation: string, caseIds: string[]) => void; onFilterChange?: (filters: FilterCriteria) => void; savedViews?: SavedView[]; onSaveView?: (view: SavedView) => void; className?: string;
+export interface FilterCriteria {
+  status?: CaseStatus[]; practiceArea?: string[]; assignedTo?: string[]; client?: string[]; dateRange?: { start: string; end: string }; budgetRange?: { min: number; max: number }; searchQuery?: string;
+} export interface SavedView {
+  id: string; name: string; filters: FilterCriteria; columns: ColumnConfig[]; sortBy?: { field: string; direction: 'asc' | 'desc' }; isDefault?: boolean;
+} export interface ColumnConfig {
+  id: string; label: string; visible: boolean; width?: number;
+} export interface BulkOperation {
+  type: 'status' | 'assign' | 'archive' | 'delete' | 'export' | 'tag'; label: string; icon: React.ElementType; action: (caseIds: string[]) => void; requiresConfirmation?: boolean;
+} export interface EnterpriseCaseListProps {
+  cases: Case[]; onCaseSelect?: (caseId: string) => void; onBulkOperation?: (operation: string, caseIds: string[]) => void; onFilterChange?: (filters: FilterCriteria) => void; savedViews?: SavedView[]; onSaveView?: (view: SavedView) => void; className?: string;
 } // ============================================================================
 // Default Configurations
 // ============================================================================
-const DEFAULT_COLUMNS: ColumnConfig[] = [ { id: 'caseNumber', label: 'Case Number', visible: true, width: 150 }, { id: 'title', label: 'Title', visible: true, width: 300 }, { id: 'client', label: 'Client', visible: true, width: 200 }, { id: 'status', label: 'Status', visible: true, width: 120 }, { id: 'practiceArea', label: 'Practice Area', visible: true, width: 150 }, { id: 'leadAttorney', label: 'Lead Attorney', visible: false, width: 180 }, { id: 'filingDate', label: 'Filing Date', visible: true, width: 120 }, { id: 'trialDate', label: 'Trial Date', visible: false, width: 120 }, { id: 'budget', label: 'Budget', visible: true, width: 120 }, { id: 'actions', label: 'Actions', visible: true, width: 100 },
-]; const STATUS_COLORS: Record<CaseStatus, string> = { [CaseStatus.Open]: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 ', [CaseStatus.Active]: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400', [CaseStatus.PreFiling]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400', [CaseStatus.OnHold]: 'bg-[var(--color-surfaceRaised)] text-[var(--color-text)] /30 dark:text-[var(--color-textMuted)]', [CaseStatus.Closed]: 'bg-slate-100 text-[var(--color-text)] /30 ', [CaseStatus.Archived]: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400', [CaseStatus.Discovery]: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400', [CaseStatus.Trial]: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400', [CaseStatus.Settled]: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400', [CaseStatus.Appeal]: 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400', [CaseStatus.Transferred]: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400',
+const DEFAULT_COLUMNS: ColumnConfig[] = [{ id: 'caseNumber', label: 'Case Number', visible: true, width: 150 }, { id: 'title', label: 'Title', visible: true, width: 300 }, { id: 'client', label: 'Client', visible: true, width: 200 }, { id: 'status', label: 'Status', visible: true, width: 120 }, { id: 'practiceArea', label: 'Practice Area', visible: true, width: 150 }, { id: 'leadAttorney', label: 'Lead Attorney', visible: false, width: 180 }, { id: 'filingDate', label: 'Filing Date', visible: true, width: 120 }, { id: 'trialDate', label: 'Trial Date', visible: false, width: 120 }, { id: 'budget', label: 'Budget', visible: true, width: 120 }, { id: 'actions', label: 'Actions', visible: true, width: 100 },
+]; const STATUS_COLORS: Record<CaseStatus, string> = {
+  [CaseStatus.Open]: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 ', [CaseStatus.Active]: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400', [CaseStatus.PreFiling]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400', [CaseStatus.OnHold]: 'bg-[var(--color-surfaceRaised)] text-[var(--color-text)] /30 dark:text-[var(--color-textMuted)]', [CaseStatus.Closed]: 'bg-slate-100 text-[var(--color-text)] /30 ', [CaseStatus.Archived]: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400', [CaseStatus.Discovery]: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400', [CaseStatus.Trial]: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400', [CaseStatus.Settled]: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400', [CaseStatus.Appeal]: 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400', [CaseStatus.Transferred]: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400',
 }; // ============================================================================
 // Component
 // ============================================================================

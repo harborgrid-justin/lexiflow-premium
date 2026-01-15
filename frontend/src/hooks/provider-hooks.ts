@@ -33,7 +33,7 @@
  */
 
 // Import hooks for use in combination functions
-import { useEntitlementsState as useEntitlementsStateHook } from "@/lib/entitlements/context";
+import { useEntitlementsState as useEntitlementsStateHook } from "@/providers/application/entitlementsprovider";
 import { useRoleState as useRoleStateHook } from "@/providers/application/roleprovider";
 import {
   useUserActions as useUserActionsHook,
@@ -122,16 +122,16 @@ export {
  *   // Show admin controls
  * }
  */
-export {
-  useEntitlements,
-  useEntitlementsActions,
-  useEntitlementsState,
-} from "@/lib/entitlements/context";
 export type {
   Entitlements,
   EntitlementsActionsValue,
   EntitlementsStateValue,
 } from "@/lib/entitlements/types";
+export {
+  useEntitlements,
+  useEntitlementsActions,
+  useEntitlementsState,
+} from "@/providers/application/entitlementsprovider";
 
 /**
  * Role Hook (Hierarchical RBAC)
@@ -172,12 +172,15 @@ export {
  *   // Show AI features
  * }
  */
-export { useFlagsActions, useFlagsState } from "@/lib/flags/context";
 export type {
   Flags,
   FlagsActionsValue,
   FlagsStateValue,
 } from "@/lib/flags/types";
+export {
+  useFlagsActions,
+  useFlagsState,
+} from "@/providers/application/flagsprovider";
 
 /**
  * Layout Hook

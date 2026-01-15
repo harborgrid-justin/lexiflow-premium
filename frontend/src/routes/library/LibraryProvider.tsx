@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { LibraryLoaderData } from './loader';
 
 type LibraryItem = {
@@ -30,8 +29,13 @@ interface LibraryContextValue extends LibraryState {
 
 const LibraryContext = createContext<LibraryContextValue | undefined>(undefined);
 
-export function LibraryProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as LibraryLoaderData;
+export interface LibraryProviderProps {
+  children: React.ReactNode;
+  initialData: LibraryLoaderData;
+}
+
+export function LibraryProvider({ children, initialData }: LibraryProviderProps) {
+  const loaderData = initialData;
 
   const [typeFilter, setTypeFilter] = useState<'all' | 'Template' | 'Form' | 'Precedent' | 'Guide'>('all');
   const [searchTerm, setSearchTerm] = useState('');

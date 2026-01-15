@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { CitationsLoaderData } from './loader';
 
 type Citation = {
@@ -32,8 +31,13 @@ interface CitationsContextValue extends CitationsState {
 
 const CitationsContext = createContext<CitationsContextValue | undefined>(undefined);
 
-export function CitationsProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as CitationsLoaderData;
+export interface CitationsProviderProps {
+  children: React.ReactNode;
+  initialData: CitationsLoaderData;
+}
+
+export function CitationsProvider({ children, initialData }: CitationsProviderProps) {
+  const loaderData = initialData;
 
   const [relevanceFilter, setRelevanceFilter] = useState<'all' | 'High' | 'Medium' | 'Low'>('all');
   const [searchTerm, setSearchTerm] = useState('');

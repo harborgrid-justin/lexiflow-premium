@@ -2,11 +2,14 @@
  * @module services/api/data-platform/backups-api
  * @description Backup and restore API service
  * Handles backup snapshots and scheduled backups
- * 
+ *
  * @responsibility Manage database backups and restore operations
  */
 
-import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
 
 /**
  * Backup snapshot interface
@@ -44,15 +47,20 @@ export interface BackupSchedule {
  * Provides methods for backup and restore operations
  */
 export class BackupsApiService {
-// ====================
-Snapshots ====================
-  
+  // ====================
+  // Snapshots ====================
+
   /**
    * Get all backup snapshots
    */
-  async getSnapshots(filters?: Record<string, unknown>): Promise<PaginatedResponse<BackupSnapshot>> {
+  async getSnapshots(
+    filters?: Record<string, unknown>
+  ): Promise<PaginatedResponse<BackupSnapshot>> {
     try {
-      return await apiClient.get<PaginatedResponse<BackupSnapshot>>('/backups/snapshots', filters);
+      return await apiClient.get<PaginatedResponse<BackupSnapshot>>(
+        "/backups/snapshots",
+        filters
+      );
     } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
@@ -66,7 +74,7 @@ Snapshots ====================
     description?: string;
     type: string;
   }): Promise<BackupSnapshot> {
-    return await apiClient.post<BackupSnapshot>('/backups/snapshots', data);
+    return await apiClient.post<BackupSnapshot>("/backups/snapshots", data);
   }
 
   /**
@@ -79,19 +87,22 @@ Snapshots ====================
   /**
    * Restore from a backup snapshot
    */
-  async restore(id: string, target: string): Promise<{ jobId: string; status: string }> {
+  async restore(
+    id: string,
+    target: string
+  ): Promise<{ jobId: string; status: string }> {
     return await apiClient.post(`/backups/snapshots/${id}/restore`, { target });
   }
 
-// ====================
-Schedules ====================
-  
+  // ====================
+  // Schedules ====================
+
   /**
    * Get all backup schedules
    */
   async getSchedules(): Promise<BackupSchedule[]> {
     try {
-      return await apiClient.get<BackupSchedule[]>('/backups/schedules');
+      return await apiClient.get<BackupSchedule[]>("/backups/schedules");
     } catch {
       return [];
     }
@@ -101,14 +112,20 @@ Schedules ====================
    * Create a new backup schedule
    */
   async createSchedule(data: Partial<BackupSchedule>): Promise<BackupSchedule> {
-    return await apiClient.post<BackupSchedule>('/backups/schedules', data);
+    return await apiClient.post<BackupSchedule>("/backups/schedules", data);
   }
 
   /**
    * Update a backup schedule
    */
-  async updateSchedule(id: string, data: Partial<BackupSchedule>): Promise<BackupSchedule> {
-    return await apiClient.put<BackupSchedule>(`/backups/schedules/${id}`, data);
+  async updateSchedule(
+    id: string,
+    data: Partial<BackupSchedule>
+  ): Promise<BackupSchedule> {
+    return await apiClient.put<BackupSchedule>(
+      `/backups/schedules/${id}`,
+      data
+    );
   }
 
   /**
@@ -118,9 +135,9 @@ Schedules ====================
     await apiClient.delete(`/backups/schedules/${id}`);
   }
 
-// ====================
-Statistics ====================
-  
+  // ====================
+  // Statistics ====================
+
   /**
    * Get backup statistics
    */
@@ -130,7 +147,7 @@ Statistics ====================
     activeSchedules: number;
   }> {
     try {
-      return await apiClient.get('/backups/stats');
+      return await apiClient.get("/backups/stats");
     } catch {
       return { totalSnapshots: 0, totalSize: 0, activeSchedules: 0 };
     }

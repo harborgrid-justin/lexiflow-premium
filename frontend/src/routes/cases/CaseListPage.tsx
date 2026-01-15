@@ -14,7 +14,7 @@
  */
 
 import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Await, useLoaderData, useRevalidator } from 'react-router';
 import { RouteError, TableRouteSkeleton } from '../_shared/RouteSkeletons';
 import { CaseListProvider } from './CaseListProvider';
 import { CaseListView } from './CaseListView';
@@ -31,6 +31,7 @@ import { CaseListView } from './CaseListView';
  */
 export function CaseListPageContent() {
   const data = useLoaderData<typeof import('./loader').clientLoader>();
+  const revalidator = useRevalidator();
 
   return (
     <div className="min-h-full">
@@ -40,6 +41,7 @@ export function CaseListPageContent() {
             <CaseListProvider
               initialCases={resolved.cases}
               initialInvoices={resolved.invoices}
+              onRevalidate={revalidator.revalidate}
             >
               <CaseListView />
             </CaseListProvider>

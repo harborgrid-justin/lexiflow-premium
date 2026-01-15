@@ -1,0 +1,260 @@
+/**
+ * Case Billing - View
+ *
+ * Pure-ish presentation component:
+ * - Reads computed values from CaseBillingProvider
+ * - Handles UI events (navigation)
+ */
+
+import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
+import { useNavigate } from 'react-router';
+import { useCaseBilling } from './CaseBillingProvider';
+
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
+}
+
+function formatHours(hours: number): string {
+  return `${hours.toFixed(2)} hrs`;
+}
+
+export function CaseBillingView() {
+  const { caseData, timeEntries, invoices, expenses, totals, budget } = useCaseBilling();
+  const navigate = useNavigate();
+
+  return (
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-full">
+      <CaseHeader case={caseData} showBreadcrumbs />
+
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-[var(--color-text)] dark:text-white">Billing Summary</h2>
+            <p className="mt-1 text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">
+              Financial overview and billing details
+            </p>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate(`/cases/${caseData.id}/time-entry`)}
+              className="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Log Time</span>
+            </button>
+
+            <button
+              onClick={() => navigate(`/cases/${caseData.id}/create-invoice`)}
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--color-primaryDark)]"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Create Invoice</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)] p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Total Hours</p>
+                <p className="mt-2 text-3xl font-bold text-[var(--color-text)] dark:text-white">{totals.hours.toFixed(1)}</p>
+                <p className="mt-1 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{timeEntries.length} entries</p>
+              </div>
+              <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/30">
+                <svg className="h-8 w-8 text-[var(--color-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)] p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Total Billed</p>
+                <p className="mt-2 text-3xl font-bold text-[var(--color-text)] dark:text-white">{formatCurrency(totals.billed)}</p>
+                <p className="mt-1 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Time & fees</p>
+              </div>
+              <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/30">
+                <svg className="h-8 w-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)] p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Expenses</p>
+                <p className="mt-2 text-3xl font-bold text-[var(--color-text)] dark:text-white">{formatCurrency(totals.expenses)}</p>
+                <p className="mt-1 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{expenses.length} expenses</p>
+              </div>
+              <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/30">
+                <svg className="h-8 w-8 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)] p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Invoiced</p>
+                <p className="mt-2 text-3xl font-bold text-[var(--color-text)] dark:text-white">{formatCurrency(totals.invoiced)}</p>
+                <p className="mt-1 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{invoices.length} invoices</p>
+              </div>
+              <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/30">
+                <svg className="h-8 w-8 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {budget.showBudget && (
+          <div className="mb-6 rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-[var(--color-text)] dark:text-white">Budget Tracking</h3>
+              <span className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">
+                {budget.budgetUtilization.toFixed(1)}% utilized
+              </span>
+            </div>
+
+            <div className="mb-4 h-4 w-full overflow-hidden rounded-full bg-[var(--color-backgroundTertiary)]">
+              <div
+                className={`h-full transition-all ${budget.budgetUtilization >= 100
+                  ? 'bg-red-500'
+                  : budget.budgetUtilization >= 80
+                    ? 'bg-orange-500'
+                    : budget.budgetUtilization >= 60
+                      ? 'bg-yellow-500'
+                      : 'bg-green-500'
+                  }`}
+                style={{ width: `${Math.min(budget.budgetUtilization, 100)}%` }}
+              />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Budget</p>
+                <p className="mt-1 text-xl font-semibold text-[var(--color-text)] dark:text-white">{formatCurrency(budget.budgetAmount)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Spent</p>
+                <p className="mt-1 text-xl font-semibold text-[var(--color-text)] dark:text-white">{formatCurrency(totals.billed)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Remaining</p>
+                <p
+                  className={`mt-1 text-xl font-semibold ${budget.budgetRemaining < 0
+                    ? 'text-red-600 dark:text-red-400'
+                    : 'text-[var(--color-text)] dark:text-white'
+                    }`}
+                >
+                  {formatCurrency(budget.budgetRemaining)}
+                </p>
+              </div>
+            </div>
+
+            {budget.budgetUtilization >= 80 && (
+              <div className="mt-4 rounded-lg bg-orange-50 p-4 dark:bg-orange-900/20">
+                <div className="flex items-start gap-3">
+                  <svg className="h-5 w-5 flex-shrink-0 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <div>
+                    <p className="text-sm font-medium text-orange-800 dark:text-orange-300">Budget Alert</p>
+                    <p className="mt-1 text-sm text-orange-700 dark:text-orange-400">
+                      This case has exceeded {budget.budgetUtilization.toFixed(0)}% of its budget. Consider reviewing the budget or billing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)]">
+            <div className="border-b border-[var(--color-borderLight)] p-4">
+              <h3 className="text-lg font-semibold text-[var(--color-text)] dark:text-white">Recent Time Entries</h3>
+            </div>
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              {timeEntries.slice(0, 5).map((entry) => {
+                const entryHours = entry.hours ?? entry.duration ?? 0;
+                const entryAmount = entry.amount ?? entry.discountedTotal ?? entry.total ?? 0;
+                return (
+                  <div key={entry.id} className="p-4 hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700/50">
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-[var(--color-text)] dark:text-white">{entry.description || 'No description'}</p>
+                        <p className="mt-1 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">
+                          {entry.user || '—'} • {new Date(entry.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="ml-4 text-right">
+                        <p className="text-sm font-semibold text-[var(--color-text)] dark:text-white">{formatHours(entryHours)}</p>
+                        <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{formatCurrency(entryAmount)}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+              {timeEntries.length === 0 && (
+                <div className="p-8 text-center text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">
+                  No time entries yet
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-[var(--color-borderLight)] bg-[var(--color-surface)]">
+            <div className="border-b border-[var(--color-borderLight)] p-4">
+              <h3 className="text-lg font-semibold text-[var(--color-text)] dark:text-white">Recent Invoices</h3>
+            </div>
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              {invoices.slice(0, 5).map((invoice) => {
+                const number = invoice.number ?? invoice.invoiceNumber ?? invoice.id.slice(0, 8);
+                const date = invoice.date ?? invoice.invoiceDate;
+                const total = invoice.total ?? invoice.totalAmount ?? invoice.amount ?? 0;
+
+                return (
+                  <div key={invoice.id} className="p-4 hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700/50">
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-[var(--color-text)] dark:text-white">Invoice #{number}</p>
+                        <p className="mt-1 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">
+                          {date ? new Date(date).toLocaleDateString() : '—'} • {invoice.status}
+                        </p>
+                      </div>
+                      <div className="ml-4 text-right">
+                        <p className="text-sm font-semibold text-[var(--color-text)] dark:text-white">{formatCurrency(total)}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+              {invoices.length === 0 && (
+                <div className="p-8 text-center text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">
+                  No invoices yet
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

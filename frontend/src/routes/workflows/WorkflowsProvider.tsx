@@ -11,7 +11,6 @@
 
 import type { Task, WorkflowInstance, WorkflowTemplate } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { WorkflowsLoaderData } from './loader';
 
 /**
@@ -53,8 +52,16 @@ const WorkflowsContext = createContext<WorkflowsContextValue | undefined>(undefi
 /**
  * Provider Component
  */
-export function WorkflowsProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as WorkflowsLoaderData;
+export function WorkflowsProvider({
+  initialData,
+  children,
+}: {
+  initialData: WorkflowsLoaderData;
+  children: React.ReactNode;
+}) {
+  const [templates, setTemplates] = useState<WorkflowTemplate[]>(initialData.templates);
+  const [instances, setInstances] = useState<WorkflowInstance[]>(initialData.instances);
+  const [tasks, setTasks] = useState<Task[]>(initialData.tasks);
 
   // UI State
   const [activeTab, setActiveTab] = useState<'templates' | 'instances' | 'tasks'>('templates');
@@ -64,19 +71,19 @@ export function WorkflowsProvider({ children }: { children: React.ReactNode }) {
 
   // Computed Metrics (memoized for performance)
   const metrics = useMemo<WorkflowMetrics>(() => ({
-    totalTemplates: loaderData.templates.length,
-    activeInstances: loaderData.instances.filter(i => i.status === 'Running' || i.status === 'Paused').length,
-    completedInstances: loaderData.instances.filter(i => i.status === 'Completed').length,
-    pendingTasks: loaderData.tasks.filter(t => t.status === 'To Do' || t.status === 'In Progress').length,
-    overdueTasks: loaderData.tasks.filter(t => {
+    totalTemplates: templates.length,
+    activeInstances: instances.filter(i => i.status === 'Running' || i.status === 'Paused').length,
+    completedInstances: instances.filter(i => i.status === 'Completed').length,
+    pendingTasks: tasks.filter(t => t.status === 'To Do' || t.status === 'In Progress').length,
+    overdueTasks: tasks.filter(t => {
       if (!t.dueDate) return false;
       return new Date(t.dueDate) < new Date() && t.status !== 'Completed';
     }).length,
-  }), [loaderData.templates, loaderData.instances, loaderData.tasks]);
+  }), [templates, instances, tasks]);
 
   // Filtered Data
   const filteredTemplates = useMemo(() => {
-    let result = loaderData.templates;
+    let result = templates;
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
@@ -91,10 +98,10 @@ export function WorkflowsProvider({ children }: { children: React.ReactNode }) {
     }
 
     return result;
-  }, [loaderData.templates, searchTerm, statusFilter]);
+  }, [templates, searchTerm, statusFilter]);
 
   const filteredInstances = useMemo(() => {
-    let result = loaderData.instances;
+    let result = instances;
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
@@ -108,10 +115,10 @@ export function WorkflowsProvider({ children }: { children: React.ReactNode }) {
     }
 
     return result;
-  }, [loaderData.instances, searchTerm, statusFilter]);
+  }, [instances, searchTerm, statusFilter]);
 
   const filteredTasks = useMemo(() => {
-    let result = loaderData.tasks;
+    let result = tasks;
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
@@ -126,7 +133,7 @@ export function WorkflowsProvider({ children }: { children: React.ReactNode }) {
     }
 
     return result;
-  }, [loaderData.tasks, searchTerm, statusFilter]);
+  }, [tasks, searchTerm, statusFilter]);
 
   // Action Handlers with Transitions
   const handleSetSearchTerm = useCallback((term: string) => {

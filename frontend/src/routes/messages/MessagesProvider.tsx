@@ -3,7 +3,6 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import { useLoaderData } from 'react-router';
 import type { MessagesLoaderData } from './loader';
 
 type Message = {
@@ -33,8 +32,13 @@ interface MessagesContextValue extends MessagesState {
 
 const MessagesContext = createContext<MessagesContextValue | undefined>(undefined);
 
-export function MessagesProvider({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData() as MessagesLoaderData;
+export interface MessagesProviderProps {
+  children: React.ReactNode;
+  initialData: MessagesLoaderData;
+}
+
+export function MessagesProvider({ children, initialData }: MessagesProviderProps) {
+  const loaderData = initialData;
 
   const [filter, setFilter] = useState<'all' | 'unread' | 'starred'>('all');
   const [searchTerm, setSearchTerm] = useState('');

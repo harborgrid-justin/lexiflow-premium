@@ -1,57 +1,73 @@
 /**
- * ================================================================================
+ * ==============================================================================
  * FLAGS PROVIDER - APPLICATION LAYER
- * ================================================================================
+ * ==============================================================================
  *
  * ENTERPRISE REACT ARCHITECTURE STANDARD
- * React v18 + Feature Flags + Loader Integration
+ * React v18 + Loader Integration + Transitions
  *
  * RESPONSIBILITIES:
  * • Feature flag state management
- * • Flag evaluation and resolution
- * • Dynamic feature enablement
- * • A/B testing configuration
+ * • Server-authoritative flag resolution
  * • Loader-based initialization
- *
- * REACT 18 PATTERNS:
- * ✓ Memoized flag state
- * ✓ Split state/actions contexts
- * ✓ Server-authoritative flags
- * ✓ Loader hydration support
- * ✓ StrictMode compatible
- *
- * RULES:
- * • Depends ONLY on Infrastructure Layer
- * • Must NOT depend on Domain Layer
- * • Flags are server-authoritative
- * • No business logic
+ * • Stable state/actions contexts
  *
  * DATA FLOW:
- * SERVER (flags endpoint) → LOADER → FLAGS PROVIDER → CONSUMER COMPONENTS
+ * SERVER → LOADER → FLAGS PROVIDER → CONSUMERS
  *
  * @module providers/application/flagsprovider
  */
 
-import type { FlagsActionsValue, FlagsStateValue } from '@/lib/flags/types';
-import { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import { FEATURES_CONFIG } from '@/config/features/features.config';
+import { FlagsActionsContext, FlagsStateContext } from '@/lib/flags/contexts';
+import type {
+  Flags,
+  FlagsAction,
+  FlagsActionsValue,
+  FlagsState,
+  FlagsStateValue,
+} from '@/lib/flags/types';
+import { FeatureFlagsService } from '@/services/domain/feature-flags.service';
+import { ReactNode, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from 'react';
 
 // ============================================================================
-// TYPES
+// STATE SHAPE (DEFAULTS)
 // ============================================================================
 
-export type FeatureFlags = Record<string, boolean | string | number>;
+const DEFAULT_FLAGS: Flags = {
+  enableNewDashboard: true,
+  enableAdminTools: false,
+  ocr: FEATURES_CONFIG.documentComparison,
+  aiAssistant: FEATURES_CONFIG.aiAssistance,
+  realTimeSync: FEATURES_CONFIG.realtimeCollaboration,
+};
 
-interface ExtendedFlagsState extends FlagsStateValue {
-  // Extended state if needed
+const initialState: FlagsState = {
+  flags: DEFAULT_FLAGS,
+  isLoading: false,
+  error: null,
+};
+
+// ============================================================================
+// REDUCER
+// ============================================================================
+
+function flagsReducer(state: FlagsState, action: FlagsAction): FlagsState {
+  switch (action.type) {
+    case 'flags/fetchStart':
+      return { ...state, isLoading: true, error: null };
+    case 'flags/fetchSuccess':
+      return { ...state, flags: action.payload, isLoading: false, error: null };
+    case 'flags/fetchFailure':
+      return { ...state, isLoading: false, error: action.payload.error };
+    case 'flags/initialize':
+      return { ...state, flags: { ...DEFAULT_FLAGS, ...action.payload }, isLoading: false };
+    case 'flags/reset':
+      return initialState;
+    default:
+      return state;
+  }
 }
-
-interface ExtendedFlagsActions extends FlagsActionsValue {
-  isEnabled: (flag: string) => boolean;
-  getValue: <T = unknown>(flag: string, defaultValue?: T) => T;
-}
-
-// Re-export types from /lib for consumers
-export type { Flags } from '@/lib/flags/types';
 
 // ============================================================================
 // PROVIDER
@@ -59,68 +75,106 @@ export type { Flags } from '@/lib/flags/types';
 
 export interface FlagsProviderProps {
   children: ReactNode;
-  initial?: FeatureFlags;
+  initial?: Partial<Flags>;
 }
 
-export function FlagsProvider({ children, initial = {} }: FlagsProviderProps) {
-  const [flags, setFlags] = useState<FeatureFlags>(initial);
-  const [isLoading, setIsLoading] = useState(false);
+export function FlagsProvider({ children, initial }: FlagsProviderProps) {
+  const [state, dispatch] = useReducer(flagsReducer, initialState);
+  const [, startTransition] = useTransition();
 
-  // Stable flag evaluation
-  const isEnabled = useCallback(
-    (flag: string): boolean => {
-      return flags[flag] === true;
-    },
-    [flags]
-  );
+  useEffect(() => {
+    if (initial) {
+      startTransition(() => {
+        dispatch({ type: 'flags/initialize', payload: initial });
+      });
+      return;
+    }
 
-  const getValue = useCallback(
-    <T = unknown,>(flag: string, defaultValue?: T): T => {
-      const value = flags[flag];
-      return value !== undefined ? (value as T) : (defaultValue as T);
-    },
-    [flags]
-  );
+    const fetchFlags = async () => {
+      dispatch({ type: 'flags/fetchStart' });
+      try {
+        const flags = await FeatureFlagsService.fetchFlags();
+        startTransition(() => {
+          dispatch({ type: 'flags/fetchSuccess', payload: flags });
+        });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Failed to fetch flags';
+        dispatch({ type: 'flags/fetchFailure', payload: { error: message } });
+      }
+    };
+
+    fetchFlags();
+  }, [initial, startTransition]);
 
   const refresh = useCallback(async () => {
-    setIsLoading(true);
+    dispatch({ type: 'flags/fetchStart' });
     try {
-      // SERVER TRUTH: Fetch latest flags
-      const response = await fetch('/api/flags');
-      if (response.ok) {
-        const data = await response.json();
-        setFlags(data.flags);
-      }
-    } finally {
-      setIsLoading(false);
+      const flags = await FeatureFlagsService.fetchFlags();
+      startTransition(() => {
+        dispatch({ type: 'flags/fetchSuccess', payload: flags });
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to refresh flags';
+      dispatch({ type: 'flags/fetchFailure', payload: { error: message } });
     }
+  }, [startTransition]);
+
+  const reset = useCallback(() => {
+    dispatch({ type: 'flags/reset' });
   }, []);
 
-  // Memoized context value (stability requirement)
-  const value = useMemo(
+  const initialize = useCallback((flags: Partial<Flags>) => {
+    startTransition(() => {
+      dispatch({ type: 'flags/initialize', payload: flags });
+    });
+  }, [startTransition]);
+
+  const stateValue = useMemo<FlagsStateValue>(
     () => ({
-      flags,
-      isLoading,
-      isEnabled,
-      getValue,
-      refresh,
+      flags: state.flags,
+      isLoading: state.isLoading,
+      error: state.error,
     }),
-    [flags, isLoading, isEnabled, getValue, refresh]
+    [state.flags, state.isLoading, state.error]
   );
 
-  return <FlagsContext.Provider value={value}>{children}</FlagsContext.Provider>;
+  const actionsValue = useMemo<FlagsActionsValue>(
+    () => ({ refresh, reset, initialize }),
+    [refresh, reset, initialize]
+  );
+
+  return (
+    <FlagsStateContext.Provider value={stateValue}>
+      <FlagsActionsContext.Provider value={actionsValue}>
+        {children}
+      </FlagsActionsContext.Provider>
+    </FlagsStateContext.Provider>
+  );
 }
 
 // ============================================================================
-// HOOK
+// HOOKS
 // ============================================================================
 
-export function useFlags(): FlagsContextValue {
-  const context = useContext(FlagsContext);
-
+export function useFlagsState(): FlagsStateValue {
+  const context = useContext(FlagsStateContext);
   if (!context) {
-    throw new Error('useFlags must be used within FlagsProvider');
+    throw new Error('useFlagsState must be used within FlagsProvider');
   }
-
   return context;
+}
+
+export function useFlagsActions(): FlagsActionsValue {
+  const context = useContext(FlagsActionsContext);
+  if (!context) {
+    throw new Error('useFlagsActions must be used within FlagsProvider');
+  }
+  return context;
+}
+
+export function useFlags() {
+  return {
+    ...useFlagsState(),
+    ...useFlagsActions(),
+  };
 }

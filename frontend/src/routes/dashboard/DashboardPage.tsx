@@ -32,7 +32,7 @@
 import { PageFrame } from "@/layouts/PageFrame";
 import type { DocketEntry, TimeEntry } from "@/types";
 import { Suspense, startTransition } from "react";
-import { Await, useLoaderData, useNavigate, useNavigation } from "react-router";
+import { Await, useLoaderData, useNavigate, useNavigation, useRevalidator } from "react-router";
 import { DashboardProvider } from "./DashboardProvider";
 import { DashboardView } from "./DashboardView";
 import type { clientLoader } from "./loader";
@@ -52,6 +52,7 @@ export function DashboardPageContent() {
   const data = useLoaderData<typeof clientLoader>();
   const navigation = useNavigation();
   const navigate = useNavigate();
+  const revalidator = useRevalidator();
 
   // Observe router state for transitions
   const isNavigating = navigation.state !== "idle";
@@ -80,6 +81,7 @@ export function DashboardPageContent() {
       <DashboardProvider
         initialCases={data.cases}
         initialTasks={data.tasks}
+        onRevalidate={revalidator.revalidate}
       >
         <DashboardView />
 

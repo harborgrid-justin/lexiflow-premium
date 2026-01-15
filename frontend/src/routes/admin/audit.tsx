@@ -1,4 +1,6 @@
-/** * Audit Logs Route * * Enterprise-grade audit logging interface with: * - Activity timeline * - Filter by user, action, resource * - Export capabilities * - Security event highlighting * * @module routes/admin/audit */ import { AdminService } from '@/services/domain/admin.service';
+/** * Audit Logs Route * * Enterprise-grade audit logging interface with: * - Activity timeline * - Filter by user, action, resource * - Export capabilities * - Security event highlighting * * @module routes/admin/audit */
+
+import { AdminService } from '@/services/domain/admin.service';
 import type { AuditLogEntry } from '@/types';
 import { useId, useState } from 'react';
 import { Link } from 'react-router';
@@ -6,17 +8,23 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils'; // ============================================================================
 // Meta Tags
 // ============================================================================
-export function meta() { return createAdminMeta({ section: 'Audit Logs', description: 'View system activity and security logs', });
+export function meta() {
+  return createAdminMeta({ section: 'Audit Logs', description: 'View system activity and security logs', });
 } // ============================================================================
 // Loader
 // ============================================================================
-import type { LoaderFunctionArgs } from 'react-router'; export async function loader({ request }: LoaderFunctionArgs) { const url = new URL(request.url); const page = parseInt(url.searchParams.get('page') || '1'); try { const logs = await AdminService.getLogs(); return { logs, pagination: { page, totalPages: 10, totalItems: logs.length, }, filters: { actions: ['CREATE', 'READ', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT', 'EXPORT', 'PERMISSION_CHANGE'], resourceTypes: ['case', 'document', 'user', 'session', 'report', 'billing'], }, }; } catch (error) { console.error('Failed to load audit logs:', error); return { logs: [], pagination: { page: 1, totalPages: 1, totalItems: 0 }, filters: { actions: [], resourceTypes: [] } }; }
+import type { LoaderFunctionArgs } from 'react-router';
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url); const page = parseInt(url.searchParams.get('page') || '1'); try { const logs = await AdminService.getLogs(); return { logs, pagination: { page, totalPages: 10, totalItems: logs.length, }, filters: { actions: ['CREATE', 'READ', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT', 'EXPORT', 'PERMISSION_CHANGE'], resourceTypes: ['case', 'document', 'user', 'session', 'report', 'billing'], }, }; } catch (error) { console.error('Failed to load audit logs:', error); return { logs: [], pagination: { page: 1, totalPages: 1, totalItems: 0 }, filters: { actions: [], resourceTypes: [] } }; }
 } // ============================================================================
 // Action Helpers
 // ============================================================================
-function getActionColor(action: AuditLogEntry['action']): string { switch (action) { case 'CREATE': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'; case 'UPDATE': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 '; case 'DELETE': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'; case 'LOGIN': case 'LOGOUT': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'; case 'EXPORT': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'; case 'PERMISSION_CHANGE': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400'; default: return 'bg-[var(--color-surfaceRaised)] text-[var(--color-text)] '; }
-} function getSeverityIcon(severity: AuditLogEntry['severity'] = 'info'): React.ReactNode { switch (severity) { case 'critical': return ( <svg className="h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"> <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /> </svg> ); case 'warning': return ( <svg className="h-4 w-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"> <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /> </svg> ); default: return null; }
-} function formatTimestamp(timestamp: string): string { const date = new Date(timestamp); const now = new Date(); const diff = now.getTime() - date.getTime(); if (diff < 60000) return 'Just now'; if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`; if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`; return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', });
+function getActionColor(action: AuditLogEntry['action']): string {
+  switch (action) { case 'CREATE': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'; case 'UPDATE': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 '; case 'DELETE': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'; case 'LOGIN': case 'LOGOUT': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'; case 'EXPORT': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'; case 'PERMISSION_CHANGE': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400'; default: return 'bg-[var(--color-surfaceRaised)] text-[var(--color-text)] '; }
+} function getSeverityIcon(severity: AuditLogEntry['severity'] = 'info'): React.ReactNode {
+  switch (severity) { case 'critical': return (<svg className="h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"> <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /> </svg>); case 'warning': return (<svg className="h-4 w-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"> <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /> </svg>); default: return null; }
+} function formatTimestamp(timestamp: string): string {
+  const date = new Date(timestamp); const now = new Date(); const diff = now.getTime() - date.getTime(); if (diff < 60000) return 'Just now'; if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`; if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`; return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', });
 } // ============================================================================
 // Component
 // ============================================================================

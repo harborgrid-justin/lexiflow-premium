@@ -13,7 +13,7 @@
 // ============================================================================
 import { ArrowRight, Briefcase, ChevronRight } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';
-import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Cell, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -109,22 +109,25 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
                 <div ref={containerRef} className="h-full w-full min-h-[20rem] relative overflow-hidden">
                     {dimensions.width > 0 && dimensions.height > 0 && safeChartData.length > 0 ? (
                         <div style={{ width: '100%', height: '100%' }}>
-                            <ResponsiveContainer width="100%" height="100%" debounce={50} minWidth={0}>
-                                <BarChart data={safeChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
-                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} dy={10} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} />
-                                    <Tooltip
-                                        cursor={{ fill: theme.surface.highlight }}
-                                        contentStyle={chartTheme.tooltipStyle}
-                                    />
-                                    <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
-                                        {safeChartData.map((entry, index) => (
-                                            <Cell key={`analytics-cell-${entry.name || index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
+                            <BarChart
+                                width={dimensions.width}
+                                height={dimensions.height}
+                                data={safeChartData}
+                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} dy={10} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} />
+                                <Tooltip
+                                    cursor={{ fill: theme.surface.highlight }}
+                                    contentStyle={chartTheme.tooltipStyle}
+                                />
+                                <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
+                                    {safeChartData.map((entry, index) => (
+                                        <Cell key={`analytics-cell-${entry.name || index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
                         </div>
                     ) : (
                         <div className={cn("flex items-center justify-center h-full", theme.text.secondary)}>

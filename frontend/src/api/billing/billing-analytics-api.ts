@@ -54,7 +54,7 @@ export class BillingAnalyticsApiService {
       realization: unknown;
       operatingSummary: unknown;
       arAging: unknown;
-    }>(`${this.baseUrl}/metrics?start=${startDate}&end=${endDate}`);
+    }>(`${this.baseUrl}/metrics`);
     // Return a placeholder BillingAnalytics structure
     return {
       period: { start: startDate, end: endDate },

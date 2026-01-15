@@ -11,8 +11,8 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, Calculator, DollarSign, Users } from 'lucide-react';
-import { memo } from 'react';
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { memo, useEffect, useRef, useState } from 'react';
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,8 +21,8 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveCo
 import { useBillingOverviewData } from './hooks/useBillingOverviewData';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
+import { useTheme } from '@/theme';
 
 // Components
 import { Currency } from '@/shared/ui/atoms/Currency';
@@ -63,6 +63,41 @@ const BillingOverviewComponent = function BillingOverview({ onNavigate }: Billin
     overdueCount, // Using total overdue count for trend context
     isLoading
   } = state;
+
+  const [wipDims, setWipDims] = useState({ width: 0, height: 0 });
+  const wipRef = useRef<HTMLDivElement>(null);
+
+  const [realizationDims, setRealizationDims] = useState({ width: 0, height: 0 });
+  const realizationRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === wipRef.current && wipRef.current) {
+          const { clientWidth, clientHeight } = wipRef.current;
+          if (clientWidth > 0 && clientHeight > 0) setWipDims({ width: clientWidth, height: clientHeight });
+        }
+        if (entry.target === realizationRef.current && realizationRef.current) {
+          const { clientWidth, clientHeight } = realizationRef.current;
+          if (clientWidth > 0 && clientHeight > 0) setRealizationDims({ width: clientWidth, height: clientHeight });
+        }
+      });
+    });
+
+    // Initial measure
+    if (wipRef.current) {
+      const { clientWidth, clientHeight } = wipRef.current;
+      if (clientWidth > 0 && clientHeight > 0) setWipDims({ width: clientWidth, height: clientHeight });
+      observer.observe(wipRef.current);
+    }
+    if (realizationRef.current) {
+      const { clientWidth, clientHeight } = realizationRef.current;
+      if (clientWidth > 0 && clientHeight > 0) setRealizationDims({ width: clientWidth, height: clientHeight });
+      observer.observe(realizationRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isLoading]); // Re-run when loading finishes and DOM likely ready
 
   if (isLoading) {
     return (
@@ -113,35 +148,33 @@ const BillingOverviewComponent = function BillingOverview({ onNavigate }: Billin
       {/* Main Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="WIP vs Billed (Top Clients)" subtitle="Revenue potential by client">
-          <div className="h-72 min-h-[288px] relative overflow-hidden">
-            {wipData.length > 0 ? (
-              <ResponsiveContainer width="99%" height="100%" debounce={50}>
-                <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
-                  <XAxis
-                    dataKey="name"
-                    axisLine={false}
-                    tickLine={false}
-                    fontSize={12}
-                    tick={{ fill: chartTheme.text }}
-                    dy={10}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    fontSize={12}
-                    tick={{ fill: chartTheme.text }}
-                    tickFormatter={(val) => `$${val / 1000}k`}
-                  />
-                  <Tooltip
-                    cursor={{ fill: chartTheme.grid }}
-                    contentStyle={chartTheme.tooltipStyle}
-                  />
-                  <Legend iconType="circle" />
-                  <Bar dataKey="billed" stackId="a" fill={chartTheme.colors.secondary} name="Billed" radius={[0, 0, 4, 4]} isAnimationActive={true} />
-                  <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.primary} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} isAnimationActive={true} />
-                </BarChart>
-              </ResponsiveContainer>
+          <div className="h-72 min-h-[288px] relative overflow-hidden" ref={wipRef}>
+            {wipData.length > 0 && wipDims.width > 0 && wipDims.height > 0 ? (
+              <BarChart width={wipDims.width} height={wipDims.height} data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
+                <XAxis
+                  dataKey="name"
+                  axisLine={false}
+                  tickLine={false}
+                  fontSize={12}
+                  tick={{ fill: chartTheme.text }}
+                  dy={10}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  fontSize={12}
+                  tick={{ fill: chartTheme.text }}
+                  tickFormatter={(val) => `$${val / 1000}k`}
+                />
+                <Tooltip
+                  cursor={{ fill: chartTheme.grid }}
+                  contentStyle={chartTheme.tooltipStyle}
+                />
+                <Legend iconType="circle" />
+                <Bar dataKey="billed" stackId="a" fill={chartTheme.colors.secondary} name="Billed" radius={[0, 0, 4, 4]} isAnimationActive={true} />
+                <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.primary} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} isAnimationActive={true} />
+              </BarChart>
             ) : (
               <div className="h-full flex items-center justify-center text-slate-400">
                 <div className="text-center">
@@ -154,31 +187,29 @@ const BillingOverviewComponent = function BillingOverview({ onNavigate }: Billin
         </Card>
 
         <Card title="Realization Breakdown" subtitle="Collection efficiency analysis">
-          <div className="h-72 flex flex-col items-center justify-center relative min-h-[288px]">
-            {realizationData.length > 0 ? (
+          <div className="h-72 flex flex-col items-center justify-center relative min-h-[288px]" ref={realizationRef}>
+            {realizationData.length > 0 && realizationDims.width > 0 && realizationDims.height > 0 ? (
               <>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={realizationData}
-                      innerRadius={70}
-                      outerRadius={100}
-                      paddingAngle={5}
-                      dataKey="value"
-                      stroke="none"
-                      isAnimationActive={true}
-                    >
-                      {realizationData.map((entry, index: number) => {
-                        const name = entry?.name || '';
-                        return (
-                          <Cell key={`cell-${index}`} fill={name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
-                        );
-                      })}
-                    </Pie>
-                    <Tooltip contentStyle={chartTheme.tooltipStyle} />
-                    <Legend verticalAlign="bottom" height={36} iconType="circle" />
-                  </PieChart>
-                </ResponsiveContainer>
+                <PieChart width={realizationDims.width} height={realizationDims.height}>
+                  <Pie
+                    data={realizationData}
+                    innerRadius={70}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                    stroke="none"
+                    isAnimationActive={true}
+                  >
+                    {realizationData.map((entry, index: number) => {
+                      const name = entry?.name || '';
+                      return (
+                        <Cell key={`cell-${index}`} fill={name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
+                      );
+                    })}
+                  </Pie>
+                  <Tooltip contentStyle={chartTheme.tooltipStyle} />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                </PieChart>
                 {/* Center Text */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center -mt-4">
                   <p className={cn("text-3xl font-bold", theme.text.primary)}>{Math.round(realizationRate)}%</p>

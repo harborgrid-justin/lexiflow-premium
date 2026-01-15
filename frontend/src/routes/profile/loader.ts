@@ -13,7 +13,7 @@ export interface ProfileLoaderData {
 export async function profileLoader() {
   // Cast to ExtendedUserProfile assuming service returns compatible data
   const profile = (await DataService.profile
-    .getCurrent()
+    .getCurrentProfile()
     .catch(() => null)) as ExtendedUserProfile | null;
 
   return {

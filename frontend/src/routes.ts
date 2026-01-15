@@ -93,6 +93,7 @@ export default [
     route("pleadings", "routes/pleadings/index.tsx"),
     route("drafting", "routes/drafting/index.tsx"),
     route("litigation", "routes/litigation/index.tsx"),
+    route("litigation_builder", "routes/litigation/builder.tsx"),
 
     // Operations & Admin
     route("billing", "routes/billing/index.tsx"),

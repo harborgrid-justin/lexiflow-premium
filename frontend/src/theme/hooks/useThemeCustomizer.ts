@@ -1,6 +1,6 @@
 import { DataService } from "@/services/data/data-service.service";
+import { useTheme } from "@/theme";
 import { useCallback, useEffect, useState } from "react";
-import { useTheme } from "../ThemeContext";
 import { DesignTokens, ThemeDensity } from "../tokens";
 
 // ============================================================================
@@ -64,7 +64,8 @@ export const useThemeCustomizer = (): [
   ThemeCustomizerActions,
 ] => {
   // Rule 54: Fail fast is handled by useTheme throwing if context missing
-  const { tokens, density, mode, setTheme, setDensity } = useTheme();
+  const { tokens, density, mode, setTheme, setDensity, updateToken } =
+    useTheme();
 
   // Local state
   const [customTokens, setCustomTokens] = useState<DesignTokens>(tokens);
@@ -81,22 +82,36 @@ export const useThemeCustomizer = (): [
 
   // Rule 53: Stable callbacks
   const updateColor = useCallback(
-    (path: string[], color: string) => {
+    (path: string[], value: string) => {
+      // 1. Update local state for immediate UI feedback in inputs
       setCustomTokens(
         (prev) =>
           updateNested(
             prev as unknown as Record<string, unknown>,
             path,
-            color
+            value
           ) as unknown as DesignTokens
       );
+
+      // 2. Update global theme context for real-time preview
+      // Map path to updateToken arguments: (category, key, value, subKey)
+      // path[0] is category (e.g. 'colors')
+      // path[1] is key (e.g. 'primary' or 'charts')
+      // path[2] is subKey (e.g. 'blue')
+      if (path.length >= 2) {
+        const category = path[0] as keyof DesignTokens;
+        const key = path[1];
+        const subKey = path[2]; // Optional
+        updateToken(category, key, value, subKey);
+      }
+
       // Reset status on edit
       if (status !== "idle") {
         setStatus("idle");
         setMessage(null);
       }
     },
-    [status]
+    [status, updateToken]
   );
 
   const saveChanges = useCallback(async () => {

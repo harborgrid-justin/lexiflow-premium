@@ -20,8 +20,13 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   variant = 'compact',
   showPulse = true
 }) => {
+  const [mounted, setMounted] = React.useState(false);
   const { isAvailable, isHealthy, latency, lastChecked } = useBackendHealth();
   const { currentSource } = useDataSource();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getStatusColor = () => {
     if (currentSource === 'indexeddb') return 'text-slate-500 bg-slate-100';
@@ -43,6 +48,8 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
         : isHealthy
           ? `Backend online${latency ? ` (${latency}ms)` : ''}`
           : 'Backend degraded';
+
+    if (!mounted) return baseStatus;
 
     const lastCheckedDate = typeof lastChecked === 'string' ? new Date(lastChecked) : lastChecked;
     const timeSinceCheck = Math.floor((Date.now() - lastCheckedDate.getTime()) / 1000);

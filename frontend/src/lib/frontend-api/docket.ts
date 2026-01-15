@@ -23,7 +23,8 @@ import { ValidationError } from "./errors";
 import { failure, type Result, success } from "./types";
 
 export interface DocketFilters {
-  caseId: string;
+  caseId?: string;
+  search?: string;
   dateFrom?: string;
   dateTo?: string;
   type?: string;
@@ -95,4 +96,26 @@ export async function remove(id: string): Promise<Result<void>> {
   return client.delete<void>(`/docket/${id}`);
 }
 
-export const docketApi = { getAll, getById, create, update, remove };
+export async function getAllEntries(
+  filters: DocketFilters
+): Promise<Result<PaginatedResult<DocketEntry>>> {
+  const result = await client.get<PaginatedResult<unknown>>("/docket", {
+    params: filters,
+  });
+
+  if (!result.ok) return result;
+
+  return success({
+    ...result.data,
+    data: normalizeDocketEntries(result.data.data),
+  });
+}
+
+export const docketApi = {
+  getAll,
+  getAllEntries,
+  getById,
+  create,
+  update,
+  remove,
+};

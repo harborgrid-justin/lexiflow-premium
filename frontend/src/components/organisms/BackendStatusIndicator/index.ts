@@ -1,1 +1,1 @@
-export * from './BackendStatusIndicator';
+export { BackendStatusIndicator } from './BackendStatusIndicator';

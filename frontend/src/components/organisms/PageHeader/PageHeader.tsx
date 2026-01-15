@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/common/PageHeader
  * @category Common
  * @description Page header with title and actions.

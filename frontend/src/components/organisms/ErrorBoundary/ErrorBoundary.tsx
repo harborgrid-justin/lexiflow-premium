@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { RefreshCw, AlertTriangle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -63,7 +63,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div role="alert" className="p-4 m-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+        <div role="alert" className={cn('p-4 m-4 border rounded-lg', theme.status.error.background, 'border-red-200', theme.status.error.text)}>
           <div className="flex items-center gap-3">
             <AlertTriangle className="h-6 w-6" />
             <h3 className="font-bold">An error occurred in {this.props.scope || 'this component'}.</h3>
@@ -74,7 +74,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <div className="mt-4 flex gap-2">
             <button
               onClick={this.handleReset}
-              className="px-3 py-1 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700 flex items-center"
+              className={cn('px-3 py-1 text-white rounded text-sm font-medium flex items-center', theme.status.error.background, 'hover:opacity-90')}
             >
               <RefreshCw className="h-3 w-3 inline mr-1" />
               Try Again

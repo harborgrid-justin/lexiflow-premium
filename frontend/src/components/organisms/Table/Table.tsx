@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/common/Table
  * @category Common
  * @description Table components with responsive card layout.
@@ -27,7 +26,7 @@ import { cn } from '@/shared/lib/cn';
 // ============================================================================
 export const TableContainer = memo(function TableContainer({ children, className = '', responsive }: { children: React.ReactNode; className?: string; responsive?: 'card' }) {
   const { theme } = useTheme();
-
+  
   let finalChildren = children;
 
   if (responsive === 'card') {
@@ -37,32 +36,32 @@ export const TableContainer = memo(function TableContainer({ children, className
     const others = childrenArray.filter(c => React.isValidElement(c) && c.type !== TableHeader && c.type !== TableBody);
 
     if (header && body) {
-      const headerCells = React.Children.toArray((header as React.ReactElement<{ children: React.ReactNode }>).props.children);
-      const headerLabels = headerCells.map(th => {
-        const child = React.isValidElement(th) ? (th as React.ReactElement<{ children: React.ReactNode }>).props.children : null;
-        if (typeof child === 'string') return child;
-        if (React.isValidElement(child) && typeof (child as React.ReactElement<{ children: React.ReactNode }>).props.children === 'string') {
-          return (child as React.ReactElement<{ children: React.ReactNode }>).props.children;
-        }
-        return '';
-      });
+        const headerCells = React.Children.toArray((header as React.ReactElement<{ children: React.ReactNode }>).props.children);
+        const headerLabels = headerCells.map(th => {
+            const child = React.isValidElement(th) ? (th as React.ReactElement<{ children: React.ReactNode }>).props.children : null;
+            if (typeof child === 'string') return child;
+            if (React.isValidElement(child) && typeof (child as React.ReactElement<{ children: React.ReactNode }>).props.children === 'string') {
+                return (child as React.ReactElement<{ children: React.ReactNode }>).props.children;
+            }
+            return '';
+        });
 
-      const newBody = React.cloneElement(
-        body as React.ReactElement,
-        {},
-        React.Children.map((body as React.ReactElement<{ children: React.ReactNode }>).props.children, (row: React.ReactNode) => {
-          if (!React.isValidElement(row)) return row;
-          return React.cloneElement(
-            row as React.ReactElement,
+        const newBody = React.cloneElement(
+            body as React.ReactElement,
             {},
-            React.Children.map((row as React.ReactElement<{ children: React.ReactNode }>).props.children, (cell: React.ReactNode, cellIndex: number) => {
-              if (!React.isValidElement(cell)) return cell;
-              return React.cloneElement(cell as React.ReactElement, { ['data-label' as string]: headerLabels[cellIndex] || '' });
+            React.Children.map((body as React.ReactElement<{ children: React.ReactNode }>).props.children, (row: React.ReactNode) => {
+                if (!React.isValidElement(row)) return row;
+                return React.cloneElement(
+                    row as React.ReactElement,
+                    {},
+                    React.Children.map((row as React.ReactElement<{ children: React.ReactNode }>).props.children, (cell: React.ReactNode, cellIndex: number) => {
+                        if (!React.isValidElement(cell)) return cell;
+                        return React.cloneElement(cell as React.ReactElement, { ['data-label' as string]: headerLabels[cellIndex] || '' });
+                    })
+                );
             })
-          );
-        })
-      );
-      finalChildren = [header, newBody, ...others].filter(Boolean);
+        );
+        finalChildren = [header, newBody, ...others].filter(Boolean);
     }
   }
 

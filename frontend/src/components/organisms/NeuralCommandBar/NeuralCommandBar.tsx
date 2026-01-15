@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/layout/NeuralCommandBar
  * @category Layout
  * @description AI-powered command bar with intent detection and search.
@@ -12,16 +11,15 @@ import React from 'react';
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, Command, CornerDownLeft, Sparkles, X, Zap } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import type { IntentResult } from '@/services/features/research/geminiService';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { GeminiService, IntentResult } from '@/services/features/research/geminiService';
 import { HolographicRouting } from '@/services/infrastructure/holographic-routing.service';
-import { GlobalSearchResult, SearchService } from '@/services/search/search.service';
+import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
 import { useListNavigation } from '@/hooks/useListNavigation';
@@ -47,9 +45,9 @@ interface NeuralCommandBarProps {
 /**
  * NeuralCommandBar - React 18 optimized with useId and useMemo
  */
-export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(function NeuralCommandBar({
+export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
     globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
-}: NeuralCommandBarProps) {
+}) => {
     const { theme } = useTheme();
     const [showResults, setShowResults] = useState(false);
     const [isProcessingIntent, setIsProcessingIntent] = useState(false);
@@ -60,40 +58,27 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(function Neura
 
     useClickOutside(searchRef as React.RefObject<HTMLElement>, () => setShowResults(false));
 
-    // Effect discipline: Synchronize search results with debounced query (Principle #6)
-    // Strict Mode ready: Search is idempotent, cleanup prevents stale results (Principle #7)
     useEffect(() => {
-        let isMounted = true;
-
         const performSearch = async () => {
             if (debouncedSearch.length >= SEARCH_MIN_QUERY_LENGTH && !isProcessingIntent) {
                 const serviceResults = await SearchService.search(debouncedSearch);
-                // Only update if still mounted and query hasn't changed
-                if (isMounted) {
-                    setResults(serviceResults.slice(0, 10));
-                    setShowResults(true);
-                }
-            } else if (isMounted) {
+                setResults(serviceResults.slice(0, 10));
+                setShowResults(true);
+            } else {
                 setResults([]);
                 setShowResults(false);
             }
         };
-
         performSearch();
-
-        // Cleanup: Prevent stale results from updating state
-        return () => {
-            isMounted = false;
-        };
     }, [debouncedSearch, isProcessingIntent]);
 
-    const handleResultSelect = (result: GlobalSearchResult) => {
+    const handleResultSelect = useCallback((result: GlobalSearchResult) => {
         setGlobalSearch('');
         setShowResults(false);
         if (onSearchResultClick) onSearchResultClick(result);
-    };
+    }, [onSearchResultClick, setGlobalSearch]);
 
-    const handleNeuralSubmit = async () => {
+    const handleNeuralSubmit = useCallback(async () => {
         if (globalSearch.length > 10 || /open|go to|draft|create|show/.test(globalSearch.toLowerCase())) {
             setIsProcessingIntent(true);
             const intent = await GeminiService.predictIntent(globalSearch);
@@ -110,7 +95,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(function Neura
                 onNeuralCommand(intent);
             }
         }
-    };
+    }, [globalSearch, onNeuralCommand, setGlobalSearch]);
 
     // Keyboard Navigation Hook (using unified useListNavigation with simple mode)
     const { focusedIndex: activeIndex, setFocusedIndex: setActiveIndex, handleKeyDown } = useListNavigation({
@@ -179,7 +164,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(function Neura
                     {results.length > 0 ? (
                         <div className="py-1">
                             {/* Optional Quick Actions Header */}
-                            {results.length > 0 && results[0]?.score && results[0].score > 80 && (
+                            {results.length > 0 && results[0] && typeof results[0].score === 'number' && results[0].score > 80 && (
                                 <div className={cn("px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex justify-between", theme.text.tertiary)}>
                                     <span>Top Matches</span>
                                     <span className="flex items-center gap-1"><Zap className="h-2 w-2" /> Instant</span>
@@ -208,7 +193,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(function Neura
                                     </div>
 
                                     {activeIndex === index && (
-                                        <div className="hidden sm:flex items-center gap-2 text-[10px] text-blue-600 font-medium animate-in fade-in slide-in-from-left-1">
+                                        <div className={cn("hidden sm:flex items-center gap-2 text-[10px] font-medium animate-in fade-in slide-in-from-left-1", theme.colors.info)}>
                                             Open <CornerDownLeft className="h-3 w-3" />
                                         </div>
                                     )}

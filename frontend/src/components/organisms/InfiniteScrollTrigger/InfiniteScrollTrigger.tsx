@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/common/InfiniteScrollTrigger
  * @category Common
  * @description Infinite scroll trigger with intersection observer.
@@ -11,8 +10,7 @@ import React from 'react';
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useRef, useEffect } from 'react';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 
 // ============================================================================
@@ -38,16 +36,16 @@ interface InfiniteScrollTriggerProps {
 /**
  * InfiniteScrollTrigger - React 18 optimized with React.memo
  */
-export const InfiniteScrollTrigger = React.memo<InfiniteScrollTriggerProps>(({
-  onLoadMore,
-  hasMore,
+export const InfiniteScrollTrigger = React.memo<InfiniteScrollTriggerProps>(({ 
+  onLoadMore, 
+  hasMore, 
   isLoading,
-  className
+  className 
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const entry = useIntersectionObserver(ref as React.RefObject<Element>, {
-    threshold: 0.1,
-    rootMargin: '200px' // Pre-fetch before user hits absolute bottom
+  const entry = useIntersectionObserver(ref as React.RefObject<Element>, { 
+      threshold: 0.1,
+      rootMargin: '200px' // Pre-fetch before user hits absolute bottom
   });
   const { theme } = useTheme();
 
@@ -60,16 +58,16 @@ export const InfiniteScrollTrigger = React.memo<InfiniteScrollTriggerProps>(({
   if (!hasMore) return null;
 
   return (
-    <div
-      ref={ref}
-      className={cn("w-full py-4 flex justify-center items-center min-h-[50px]", className)}
+    <div 
+        ref={ref} 
+        className={cn("w-full py-4 flex justify-center items-center min-h-[50px]", className)}
     >
-      {isLoading && (
-        <div className={cn("flex items-center text-xs font-medium animate-pulse", theme.text.tertiary)}>
-          <Loader2 className="h-4 w-4 animate-spin mr-2" />
-          Loading more records...
-        </div>
-      )}
+        {isLoading && (
+            <div className={cn("flex items-center text-xs font-medium animate-pulse", theme.text.tertiary)}>
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                Loading more records...
+            </div>
+        )}
     </div>
   );
 });

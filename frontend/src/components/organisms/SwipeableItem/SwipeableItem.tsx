@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/common/SwipeableItem
  * @category Common
  * @description Swipeable list item with left/right actions.
@@ -11,8 +10,8 @@ import React from 'react';
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
+import React, { useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -60,7 +59,7 @@ export const SwipeableItem = React.memo<SwipeableItemProps>(({
 
   // Touch Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (disabled || e.touches.length === 0) return;
+    if (disabled) return;
     const touch = e.touches[0];
     if (!touch) return;
     startX.current = touch.clientX;
@@ -71,7 +70,7 @@ export const SwipeableItem = React.memo<SwipeableItemProps>(({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current || disabled || e.touches.length === 0) return;
+    if (!isDragging.current || disabled) return;
 
     // If we've already determined this is a scroll interaction, ignore swipe logic
     if (isScrolling.current) return;

@@ -3,4 +3,4 @@
  * @description Re-export Modal from ui/molecules for backward compatibility
  */
 
-export { Modal } from "@/shared/ui/molecules/Modal/Modal";
+export { Modal } from "./Modal";

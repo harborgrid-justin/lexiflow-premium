@@ -15,7 +15,7 @@
  * @module NotificationBadge
  */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Badge props
@@ -68,7 +68,7 @@ const SIZES = {
  * Color configurations
  */
 const VARIANTS = {
-  primary: 'bg-blue-600 text-white',
+  primary: cn(theme.colors.primary, 'text-white'),
   danger: 'bg-red-600 text-white',
   warning: 'bg-amber-500 text-white',
   success: 'bg-green-600 text-white',

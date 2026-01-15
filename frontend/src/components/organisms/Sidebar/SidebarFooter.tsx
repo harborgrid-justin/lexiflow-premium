@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/sidebar/SidebarFooter
  * @category Layout
  * @description Footer section of the sidebar with user menu and actions.
@@ -11,19 +10,28 @@ import React from 'react';
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { ChevronDown, LogOut, Settings } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
+import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusIndicator';
 
 // Components
-import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
-import { BackendStatusIndicator } from '@/shared/ui/organisms/BackendStatusIndicator/BackendStatusIndicator';
+// UserAvatar component not found - create a simple fallback
+const UserAvatar = ({ user, className }: { user?: { name?: string;[key: string]: unknown }; className?: string }) => {
+  const { theme } = useTheme();
+  return (
+    <div className={cn("rounded-full flex items-center justify-center text-xs w-8 h-8", className)} style={{ backgroundColor: theme.colors.primary, color: 'white' }}>
+      {user?.name?.[0] || 'U'}
+    </div>
+  );
+};
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';
@@ -79,7 +87,7 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
         onClick={() => onNavigate(PATHS.PROFILE)}
         className={styles.getUserButton(theme, activeView === PATHS.PROFILE)}
       >
-        <UserAvatar name={currentUser?.name || 'Guest'} size="sm" className={styles.userAvatarWrapper} indicatorStatus="online" />
+        <UserAvatar user={currentUser ? { name: currentUser.name || `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() } : undefined} className={styles.userAvatarWrapper} />
         <div className={styles.userInfoContainer}>
           <p className={styles.getUserName(theme)}>{currentUser?.name || 'Guest'}</p>
           <p className={styles.getUserRole(theme)}>{currentUser?.role || 'User'}</p>

@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/common/VirtualGrid
  * @category Common
  * @description Virtualized grid with responsive columns and scroll optimization.
@@ -166,11 +165,9 @@ export const VirtualGrid = React.memo(<T = Record<string, unknown>>(props: Virtu
             >
               {renderItem(data, index)}
             </div>
-          )
+          );
         })}
       </div>
     </div>
   );
 });
-
-VirtualGrid.displayName = 'VirtualGrid';

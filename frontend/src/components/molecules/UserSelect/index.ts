@@ -3,4 +3,4 @@
  * @description Re-export UserSelect from ui/molecules for backward compatibility
  */
 
-export { UserSelect } from "@/shared/ui/molecules/UserSelect/UserSelect";
+export { UserSelect } from "./UserSelect";

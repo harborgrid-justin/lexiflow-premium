@@ -14,25 +14,24 @@
  * @module NotificationCenter
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useTheme } from '@/theme';
+import { formatDistanceToNow } from 'date-fns';
 import {
+  AlertCircle,
+  AlertTriangle,
   Bell,
-  X,
+  Calendar,
   Check,
-  Trash2,
   CheckCheck,
+  DollarSign,
+  FileText,
+  Info,
   Mail,
   MailOpen,
-  FileText,
-  Calendar,
-  AlertTriangle,
   MessageCircle,
-  DollarSign,
-  AlertCircle,
-  Info,
+  Trash2,
+  X,
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Notification type definition
@@ -96,27 +95,27 @@ const getNotificationIcon = (type: Notification['type']): React.ReactNode => {
 /**
  * Get color for notification type
  */
-const getNotificationColor = (type: Notification['type'], theme: ReturnType<typeof useTheme>['theme']) => {
+const getNotificationColor = (type: Notification['type']): string => {
   switch (type) {
     case 'case_update':
-      return { color: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
+      return 'text-blue-600 bg-blue-50';
     case 'document':
-      return { color: theme.chart.colors.accent, backgroundColor: theme.chart.colors.accent + '20' };
+      return 'text-purple-600 bg-purple-50';
     case 'deadline':
-      return { color: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
+      return 'text-amber-600 bg-amber-50';
     case 'task':
-      return { color: theme.status.success.text, backgroundColor: theme.status.success.bg };
+      return 'text-green-600 bg-green-50';
     case 'message':
-      return { color: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
+      return 'text-blue-600 bg-blue-50';
     case 'invoice':
-      return { color: theme.status.success.text, backgroundColor: theme.status.success.bg };
+      return 'text-emerald-600 bg-emerald-50';
     case 'warning':
-      return { color: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
+      return 'text-amber-600 bg-amber-50';
     case 'error':
-      return { color: theme.status.error.text, backgroundColor: theme.status.error.bg };
+      return 'text-red-600 bg-red-50';
     case 'system':
     case 'info':
-      return { color: theme.text.muted, backgroundColor: theme.surface.muted };
+      return 'text-slate-600 bg-slate-50';
   }
 };
 
@@ -145,9 +144,7 @@ const NotificationItem: React.FC<{
   onMarkAsRead: (id: string) => void;
   onDelete: (id: string) => void;
   onClick?: (notification: Notification) => void;
-  theme: ReturnType<typeof useTheme>['theme'];
-  tokens: ReturnType<typeof useTheme>['tokens'];
-}> = ({ notification, onMarkAsRead, onDelete, onClick, theme, tokens }) => {
+}> = ({ notification, onMarkAsRead, onDelete, onClick }) => {
   const handleClick = (): void => {
     if (!notification.read) {
       onMarkAsRead(notification.id);
@@ -167,18 +164,12 @@ const NotificationItem: React.FC<{
 
   return (
     <div
-      style={{
-        position: 'relative',
-        padding: tokens.spacing.normal.lg,
-        borderBottom: `1px solid ${theme.border.light}`,
-        cursor: 'pointer',
-        backgroundColor: !notification.read ? theme.primary.DEFAULT + '10' : 'transparent',
-        transition: 'background-color 0.15s'
-      }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = !notification.read ? theme.primary.DEFAULT + '15' : theme.surface.hover}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = !notification.read ? theme.primary.DEFAULT + '10' : 'transparent'}
+      className={`
+        group relative p-4 border-b border-gray-100 cursor-pointer
+        transition-colors duration-150
+        ${!notification.read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-gray-50'}
+      `}
       onClick={handleClick}
-      className="group"
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -190,17 +181,12 @@ const NotificationItem: React.FC<{
     >
       {/* Unread indicator */}
       {!notification.read && (
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '0.25rem', backgroundColor: theme.primary.DEFAULT }} />
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600" />
       )}
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing.normal.md }}>
+      <div className="flex items-start gap-3">
         {/* Icon */}
-        <div style={{
-          flexShrink: 0,
-          padding: tokens.spacing.compact.sm,
-          borderRadius: tokens.borderRadius.lg,
-          ...getNotificationColor(notification.type, theme)
-        }}>
+        <div className={`flex-shrink-0 p-2 rounded-lg ${getNotificationColor(notification.type)}`}>
           {getNotificationIcon(notification.type)}
         </div>
 
@@ -268,7 +254,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   isLoading = false,
   className = '',
 }) => {
-  const { theme, tokens } = useTheme();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -302,7 +287,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       {/* Bell Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+        style={{ color: 'var(--color-text)' }}
+        className="relative p-2 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
         aria-label={`Notifications (${unreadCount} unread)`}
         aria-expanded={isOpen}
         type="button"
@@ -317,7 +303,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-[420px] bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="absolute right-0 mt-2 w-[420px] rounded-lg shadow-xl border z-50">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center gap-2">
@@ -339,13 +325,13 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
           </div>
 
           {/* Filter and Actions */}
-          <div className="flex items-center justify-between p-3 border-b border-gray-100 bg-gray-50">
+          <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="flex items-center justify-between p-3 border-b">
             <div className="flex gap-2">
               <button
                 onClick={() => setFilter('all')}
                 className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
                   }`}
                 type="button"
               >
@@ -354,8 +340,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               <button
                 onClick={() => setFilter('unread')}
                 className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'unread'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
                   }`}
                 type="button"
               >
@@ -383,7 +369,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               </div>
             ) : filteredNotifications.length === 0 ? (
               <div className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-3">
+                <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-3">
                   {filter === 'unread' ? (
                     <MailOpen size={28} strokeWidth={1.5} className="text-gray-400" />
                   ) : (
@@ -407,8 +393,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                   onMarkAsRead={onMarkAsRead}
                   onDelete={onDelete}
                   onClick={onNotificationClick}
-                  theme={theme}
-                  tokens={tokens}
                 />
               ))
             )}
@@ -416,7 +400,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
           {/* Footer */}
           {filteredNotifications.length > 0 && (
-            <div className="p-3 border-t border-gray-200 bg-gray-50 text-center">
+            <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="p-3 border-t text-center">
               <button
                 className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
                 type="button"

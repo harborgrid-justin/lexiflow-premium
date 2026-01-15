@@ -20,7 +20,7 @@ interface BackendHealthMonitorProps {
   onClose: () => void;
 }
 
-export function BackendHealthMonitor({ isOpen, onClose }: BackendHealthMonitorProps) {
+export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOpen, onClose }) => {
   const { theme } = useTheme();
   const [health, setHealth] = useState<SystemHealth | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,38 +47,36 @@ export function BackendHealthMonitor({ isOpen, onClose }: BackendHealthMonitorPr
     }
   }, [isOpen]);
 
-  const { theme } = useTheme();
-
   const getStatusIcon = (status: ServiceHealthStatus) => {
     switch (status) {
       case 'online':
-        return <CheckCircle style={{ height: '1.25rem', width: '1.25rem', color: theme.status.success.text }} />;
+        return <CheckCircle className="h-5 w-5 text-emerald-500" />;
       case 'degraded':
-        return <AlertTriangle style={{ height: '1.25rem', width: '1.25rem', color: theme.status.warning.text }} />;
+        return <AlertTriangle className="h-5 w-5 text-amber-500" />;
       case 'offline':
-        return <XCircle style={{ height: '1.25rem', width: '1.25rem', color: theme.status.error.text }} />;
+        return <XCircle className="h-5 w-5 text-rose-500" />;
       default:
-        return <AlertTriangle style={{ height: '1.25rem', width: '1.25rem', color: theme.text.muted }} />;
+        return <AlertTriangle className="h-5 w-5 text-gray-400" />;
     }
   };
 
   const getStatusColor = (status: ServiceHealthStatus) => {
     switch (status) {
       case 'online':
-        return theme.status.success;
+        return 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300';
       case 'degraded':
-        return theme.status.warning;
+        return 'bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-300';
       case 'offline':
-        return theme.status.error;
+        return 'bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-900/20 dark:border-rose-800 dark:text-rose-300';
       default:
-        return { bg: theme.surface.muted, text: theme.text.secondary, border: theme.border.default };
+        return 'bg-gray-50 border-gray-200 text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300';
     }
   };
 
   const getOverallStatusColor = (status: ServiceHealthStatus) => {
     switch (status) {
       case 'online':
-        return theme.status.success.text;
+        return 'text-emerald-600 dark:text-emerald-400';
       case 'degraded':
         return 'text-amber-600 dark:text-amber-400';
       case 'offline':
@@ -224,7 +222,7 @@ export function BackendHealthMonitor({ isOpen, onClose }: BackendHealthMonitorPr
                     </div>
 
                     {serviceHealth.error && (
-                      <div className="mt-3 p-2 rounded bg-white/50 dark:bg-black/20 text-xs font-mono">
+                      <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="mt-3 p-2 rounded text-xs font-mono">
                         {serviceHealth.error}
                       </div>
                     )}

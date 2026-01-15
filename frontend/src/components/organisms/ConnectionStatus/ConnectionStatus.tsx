@@ -1,58 +1,73 @@
+import { TIMEOUTS } from '@/config/ports.config';
 import { useDataSource } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { BackendHealthMonitor } from '@/shared/ui/organisms/BackendHealthMonitor/BackendHealthMonitor';
-import { SystemHealthDisplay } from '@/shared/ui/organisms/SystemHealthDisplay/SystemHealthDisplay';
-import { useTheme } from '@/theme';
 import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { BackendHealthMonitor } from '../BackendHealthMonitor/BackendHealthMonitor';
+import { SystemHealthDisplay } from '../SystemHealthDisplay/SystemHealthDisplay';
 
 interface ConnectionStatusProps {
   className?: string;
 }
 
-export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
-  const { theme, tokens } = useTheme();
-  // HYDRATION-SAFE: Track mounted state for browser-only APIs
-  const [isMounted, setIsMounted] = useState(false);
+export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = '' }) => {
+  const { theme } = useTheme();
   const [isOnline, setIsOnline] = useState(true);
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
   const [showHealthMonitor, setShowHealthMonitor] = useState(false);
   const [showCoverage, setShowCoverage] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const { currentSource, isBackendApiEnabled: useBackendApi } = useDataSource();
-
-  // Set mounted flag after hydration
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const { theme } = useTheme();
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let isActive = true;
+
+    // Exponential backoff: 5s, 10s, 20s, 40s, then 60s max
+    const getBackoffDelay = (count: number) => {
+      const baseDelay = TIMEOUTS.HEALTH_CHECK;
+      const maxDelay = 60000;
+      return Math.min(baseDelay * Math.pow(2, count), maxDelay);
+    };
+
     // Check backend connection if API mode is enabled
     const checkBackend = async () => {
-      if (!useBackendApi) {
+      if (!isActive || !useBackendApi) {
         setBackendStatus('disconnected');
         return;
       }
 
       try {
         await apiClient.healthCheck();
-        setBackendStatus('connected');
+        if (isActive) {
+          setBackendStatus('connected');
+          setRetryCount(0); // Reset on success
+          // Check again in 30 seconds when connected
+          timeoutId = setTimeout(checkBackend, 30000);
+        }
       } catch {
-        setBackendStatus('disconnected');
+        if (isActive) {
+          setBackendStatus('disconnected');
+          const newRetryCount = retryCount + 1;
+          setRetryCount(newRetryCount);
+          // Use exponential backoff when disconnected
+          const delay = getBackoffDelay(newRetryCount);
+          console.debug(`[ConnectionStatus] Backend offline, retrying in ${delay / 1000}s...`);
+          timeoutId = setTimeout(checkBackend, delay);
+        }
       }
     };
 
     checkBackend();
 
-    // Check periodically
-    const interval = setInterval(checkBackend, 30000); // Every 30 seconds
-
-    return () => clearInterval(interval);
-  }, [useBackendApi]);
+    return () => {
+      isActive = false;
+      clearTimeout(timeoutId);
+    };
+  }, [useBackendApi, retryCount]);
 
   useEffect(() => {
-    // HYDRATION-SAFE: Only attach browser listeners after mount
-    if (!isMounted || typeof window === 'undefined') return;
-
     // Listen to network status
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -64,13 +79,13 @@ export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [isMounted]);
+  }, []);
 
   const getStatusColor = () => {
-    if (!useBackendApi) return { color: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
-    if (backendStatus === 'connected' && isOnline) return { color: theme.status.success.text, backgroundColor: theme.status.success.bg };
-    if (backendStatus === 'checking') return { color: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
-    return { color: theme.status.error.text, backgroundColor: theme.status.error.bg };
+    if (!useBackendApi) return cn(theme.colors.info, 'dark:bg-blue-950/50');
+    if (backendStatus === 'connected' && isOnline) return 'text-emerald-600 bg-emerald-50';
+    if (backendStatus === 'checking') return 'text-amber-600 bg-amber-50';
+    return 'text-rose-600 bg-rose-50';
   };
 
   const getStatusText = () => {
@@ -91,57 +106,31 @@ export function ConnectionStatus({ className = '' }: ConnectionStatusProps) {
     return <AlertCircle className="w-4 h-4" />;
   };
 
-  const statusStyle = getStatusColor();
-
   return (
     <>
       <div className="flex items-center gap-2">
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing.compact.xs,
-            padding: `${tokens.spacing.compact.xs} ${tokens.spacing.normal.md}`,
-            borderRadius: tokens.borderRadius.full,
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.medium,
-            ...statusStyle
-          }}
-          className={className}
-        >
+        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${getStatusColor()} ${className}`}>
           {getIcon()}
           <span>{getStatusText()}</span>
         </div>
 
         <button
           onClick={() => setShowCoverage(true)}
-          style={{
-            padding: tokens.spacing.compact.xs,
-            borderRadius: tokens.borderRadius.full,
-            backgroundColor: theme.surface.elevated,
-            transition: 'background-color 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
+          style={{ backgroundColor: 'var(--color-surfaceHover)' }}
+          className={cn("p-1.5 rounded-full transition-colors", `hover:${theme.surface.hover}`)}
           title="View Service Coverage"
         >
-          <Info style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
+          <Info className={cn("w-4 h-4", theme.text.secondary)} />
         </button>
 
         {useBackendApi && (
           <button
             onClick={() => setShowHealthMonitor(true)}
-            style={{
-              padding: tokens.spacing.compact.xs,
-              borderRadius: tokens.borderRadius.full,
-              backgroundColor: theme.surface.elevated,
-              transition: 'background-color 0.2s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
+            style={{ backgroundColor: 'transparent' }}
+            className={cn("p-1.5 rounded-full transition-colors", `hover:${theme.surface.hover}`)}
             title="View Backend Health Monitor"
           >
-            <Activity style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
+            <Activity className={cn("w-4 h-4", theme.text.secondary)} />
           </button>
         )}
       </div>

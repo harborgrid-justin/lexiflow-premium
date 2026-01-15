@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useChartTheme } from './ChartHelpers';
 
-// Wrapper component for stories since useChartTheme is a hook
-const ChartHelpersDemo = () => {
+// This module exports hooks, not components. Story disabled.
+const DemoComponent = () => {
   const chartTheme = useChartTheme();
-  return <div><pre>{JSON.stringify(chartTheme, null, 2)}</pre></div>;
+  return <div>Chart theme loaded: {JSON.stringify(chartTheme, null, 2)}</div>;
 };
 
-const meta: Meta<typeof ChartHelpersDemo> = {
+const meta: Meta<typeof DemoComponent> = {
   title: 'Components/Organisms/ChartHelpers/ChartHelpers',
-  component: ChartHelpersDemo,
+  component: DemoComponent,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -17,7 +17,7 @@ const meta: Meta<typeof ChartHelpersDemo> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ChartHelpersDemo>;
+type Story = StoryObj<typeof DemoComponent>;
 
 export const Default: Story = {
   args: {},

@@ -19,6 +19,7 @@
 import React from 'react';
 import toast, { Toaster, Toast as ToastType } from 'react-hot-toast';
 import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from 'lucide-react';
+import { TIMEOUTS } from '@/config/ports.config';
 
 /**
  * Toast notification props
@@ -41,9 +42,9 @@ export interface ToastNotificationProps {
  */
 const TOAST_CONFIG = {
   duration: {
-    low: 3000,
-    normal: 4000,
-    high: 6000,
+    low: TIMEOUTS.NOTIFICATION_SUCCESS,
+    normal: TIMEOUTS.NOTIFICATION_DEFAULT,
+    high: TIMEOUTS.NOTIFICATION_ERROR,
     urgent: 0, // Persistent
   },
   position: 'top-right' as const,
@@ -64,7 +65,7 @@ const getIcon = (type: ToastNotificationProps['type']): React.ReactNode => {
     case 'warning':
       return <AlertTriangle {...iconProps} className="text-amber-600" />;
     case 'info':
-      return <Info {...iconProps} className="text-blue-600" />;
+      return <Info {...iconProps} className={cn(theme.colors.info, "dark:text-blue-400")} />;
   }
 };
 
@@ -80,7 +81,7 @@ const getColorClasses = (type: ToastNotificationProps['type']): string => {
     case 'warning':
       return 'border-amber-200 bg-amber-50';
     case 'info':
-      return 'border-blue-200 bg-blue-50';
+      return cn('border-blue-200 dark:border-blue-800', theme.surface.default, 'dark:bg-blue-950/20');
   }
 };
 
@@ -120,14 +121,14 @@ const CustomToast: React.FC<{
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="font-semibold text-gray-900 text-sm">{title}</div>
-        {message && <div className="mt-1 text-sm text-gray-700">{message}</div>}
+        <div className={cn("font-semibold text-sm", theme.text.primary)}>{title}</div>
+        {message && <div className={cn("mt-1 text-sm", theme.text.secondary)}>{message}</div>}
 
         {/* Action button */}
         {action && (
           <button
             onClick={handleAction}
-            className="mt-2 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:underline"
+            className={cn("mt-2 text-sm font-medium focus:outline-none focus:underline", theme.colors.info, `hover:${theme.colors.hoverPrimary}`)}
             type="button"
           >
             {action.label}
@@ -138,7 +139,7 @@ const CustomToast: React.FC<{
       {/* Dismiss button */}
       <button
         onClick={handleDismiss}
-        className="flex-shrink-0 text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600 transition-colors"
+        className={cn("flex-shrink-0 focus:outline-none transition-colors", theme.text.tertiary, `hover:${theme.text.secondary}`, `focus:${theme.text.secondary}`)}
         aria-label="Dismiss notification"
         type="button"
       >

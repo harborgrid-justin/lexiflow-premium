@@ -7,12 +7,10 @@
  * No direct theme usage - purely functional component.
  */
 
-import React from 'react';
-
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -31,7 +29,7 @@ interface GlobalHotkeysProps {
 /**
  * GlobalHotkeys - React 18 optimized with React.memo
  */
-export const GlobalHotkeys = React.memo<GlobalHotkeysProps>(function GlobalHotkeys({ onToggleCommand, onNavigate }) {
+export const GlobalHotkeys = React.memo<GlobalHotkeysProps>(({ onToggleCommand, onNavigate }) => {
   const notify = useNotify();
 
   useEffect(() => {
@@ -41,7 +39,7 @@ export const GlobalHotkeys = React.memo<GlobalHotkeysProps>(function GlobalHotke
         e.preventDefault();
         onToggleCommand();
       }
-
+      
       // CMD/CTRL + / : Show Shortcuts Help (Simulated)
       if ((e.metaKey || e.ctrlKey) && e.key === '/') {
         e.preventDefault();
@@ -50,7 +48,7 @@ export const GlobalHotkeys = React.memo<GlobalHotkeysProps>(function GlobalHotke
 
       // ALT + Navigation Shortcuts
       if (e.altKey) {
-        switch (e.key.toLowerCase()) {
+        switch(e.key.toLowerCase()) {
           case 'c':
             e.preventDefault();
             onNavigate('cases');
@@ -66,7 +64,7 @@ export const GlobalHotkeys = React.memo<GlobalHotkeysProps>(function GlobalHotke
             onNavigate('workflows');
             notify.info("Navigated to Workflows");
             break;
-          case 'r':
+           case 'r':
             e.preventDefault();
             onNavigate('research');
             notify.info("Navigated to Research");

@@ -1,26 +1,12 @@
 /**
- * Centralized Theme System
+ * @deprecated This module has been moved to @/theme
+ * Please update your imports:
  *
- * All theme-related functionality exported from this centralized location.
- * All theme imports should come from '@/theme'.
+ * Old: import { tokens } from '@/shared/theme';
+ * New: import { DEFAULT_LIGHT_TOKENS } from '@/theme';
  *
- * @module features/theme
+ * This re-export will be removed in a future version.
  */
 
-// Core theme types and tokens
-export * from "./ThemeContext.types";
-export * from "./tokens";
-
-// Theme context and provider
-export {
-  ThemeProvider,
-  useThemeContext as useTheme,
-  useThemeContext,
-} from "./ThemeContext";
-export type { ThemeObject } from "./ThemeContext";
-
-export { default as AdvancedThemeCustomizer } from "./components/AdvancedThemeCustomizer";
-export { default as ThemeCustomizer } from "./components/ThemeCustomizer";
-
-// Theme services (chart colors, utilities, etc.)
-export * from "./services";
+// Re-export from centralized location
+export * from "@/theme/tokens";

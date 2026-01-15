@@ -1,5 +1,4 @@
 /**
-import React from 'react';
  * @module components/sidebar/SidebarHeader
  * @category Layout
  * @description Header section of the sidebar displaying tenant branding.
@@ -11,14 +10,15 @@ import React from 'react';
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Scale, X } from 'lucide-react';
+import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks'; // CORRECT
-import { adminApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from '@/theme';
@@ -44,15 +44,12 @@ interface SidebarHeaderProps {
 /**
  * SidebarHeader - React 18 optimized with React.memo
  */
-export const SidebarHeader = React.memo<SidebarHeaderProps>(function SidebarHeader({ onClose }) {
+export const SidebarHeader = React.memo<SidebarHeaderProps>(({ onClose }) => {
   const { theme } = useTheme();
 
   const { data: tenantConfig } = useQuery<TenantConfig>(
     ['admin', 'tenant'],
-    async () => {
-      const result = await adminApi.getTenantConfig();
-      return result.ok ? result.data : { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' };
-    },
+    () => DataService.admin.getTenantConfig(),
     { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
   );
 

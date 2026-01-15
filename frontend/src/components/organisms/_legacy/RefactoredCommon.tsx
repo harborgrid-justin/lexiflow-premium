@@ -2,23 +2,23 @@
  * @module components/common/RefactoredCommon
  * @category Common Components - Layout Primitives
  * @description DEPRECATED - Use individual imports from components/common/layout/ instead
- * 
+ *
  * This file maintains backward compatibility by re-exporting all layout components.
  * New code should import directly from the layout/ subdirectory.
- * 
+ *
  * @deprecated Import from 'components/common/layout' instead
- * 
+ *
  * @example
  * // ❌ Old way (still works but deprecated)
  * import { CentredLoader, EmptyListState } from './components/common/RefactoredCommon';
- * 
+ *
  * // ✅ New way (preferred)
  * import { CentredLoader, EmptyListState } from './components/common/layout';
  */
 
-import React from 'react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import React from 'react';
 
 // Re-export StatusBadge for compatibility (commented out - component doesn't exist)
 // export { StatusBadge } from '@/shared/ui/atoms';
@@ -79,12 +79,13 @@ export const ActionRow: React.FC<{ children?: React.ReactNode; className?: strin
 };
 
 export const StatusBadge: React.FC<{ status: string; variant?: 'success' | 'warning' | 'error' | 'info' | 'default'; className?: string }> = ({ status, variant = 'default', className }) => {
+    const { theme } = useTheme();
     const variantClasses = {
-        success: 'bg-green-100 text-green-800',
-        warning: 'bg-yellow-100 text-yellow-800',
-        error: 'bg-red-100 text-red-800',
-        info: 'bg-blue-100 text-blue-800',
-        default: 'bg-gray-100 text-gray-800',
+        success: cn(theme.status.success.background, theme.status.success.text),
+        warning: cn(theme.status.warning.background, theme.status.warning.text),
+        error: cn(theme.status.error.background, theme.status.error.text),
+        info: cn(theme.colors.info, 'dark:bg-blue-900/20 dark:text-blue-400'),
+        default: cn(theme.surface.card, theme.text.secondary),
     };
     return <span className={cn("px-2 py-1 text-xs font-medium rounded-full", variantClasses[variant], className)}>{status}</span>;
 };
@@ -107,14 +108,14 @@ export const MetricTile: React.FC<{ label: string, value: string | number | Reac
     const { theme } = useTheme();
     return (
         <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col justify-between h-full", theme.surface.default, theme.border.default, className)}>
-             <div className="flex justify-between items-start">
-                 <div>
+            <div className="flex justify-between items-start">
+                <div>
                     <p className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>{label}</p>
                     <div className={cn("text-2xl font-bold", theme.text.primary)}>{value}</div>
-                 </div>
-                 {Icon && <Icon className={cn("h-5 w-5", theme.text.tertiary)} />}
-             </div>
-             {trend && <p className={cn("text-xs mt-2 font-medium", trendUp ? "text-green-600" : "text-red-600")}>{trend}</p>}
+                </div>
+                {Icon && <Icon className={cn("h-5 w-5", theme.text.tertiary)} />}
+            </div>
+            {trend && <p className={cn("text-xs mt-2 font-medium", trendUp ? "text-green-600" : "text-red-600")}>{trend}</p>}
         </div>
     );
 };

@@ -1,12 +1,14 @@
 import { Button } from '@/components/atoms/Button/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from "@/hooks/useTheme";
-import { Settings, Shield, Users } from 'lucide-react';
+import { useService } from '@/providers/application/serviceprovider';
+import { Activity, Settings, Shield, Users } from 'lucide-react';
 import { useAdmin } from './AdminProvider';
 
 export function AdminView() {
   const { users, auditLogs, activeTab, setActiveTab, isPending } = useAdmin();
   const { theme, tokens } = useTheme();
+  const { state: { services, pendingOperations }, actions: { checkHealth, syncData, retryFailedOperations, clearQueue } } = useService();
 
   return (
     <div className="h-full flex flex-col">
@@ -30,6 +32,10 @@ export function AdminView() {
           <TabButton active={activeTab === 'audit'} onClick={() => setActiveTab('audit')} disabled={isPending}>
             <Shield className="w-4 h-4" />
             Audit Log ({auditLogs.length})
+          </TabButton>
+          <TabButton active={activeTab === 'health'} onClick={() => setActiveTab('health')} disabled={isPending}>
+            <Activity className="w-4 h-4" />
+            System Health
           </TabButton>
         </nav>
       </div>
@@ -59,9 +65,64 @@ export function AdminView() {
             ))}
           </div>
         )}
+        {activeTab === 'health' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
+                <h3 className="text-lg font-semibold mb-2">Pending Operations</h3>
+                <div className="text-3xl font-bold">{pendingOperations}</div>
+                <div className="mt-4 flex gap-2">
+                  <Button variant="secondary" size="sm" onClick={() => retryFailedOperations()}>Retry Failed</Button>
+                  <Button variant="text" size="sm" onClick={() => clearQueue()}>Clear Completed</Button>
+                </div>
+              </div>
+              <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
+                <h3 className="text-lg font-semibold mb-2">Actions</h3>
+                <div className="flex flex-col gap-2">
+                  <Button variant="primary" size="sm" onClick={() => checkHealth()}>Check Health Now</Button>
+                  <Button variant="secondary" size="sm" onClick={() => syncData()}>Sync Data</Button>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
+              <h3 className="text-lg font-semibold mb-4">Service Status</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {services.map(service => (
+                  <div key={service.name} className="flex items-center justify-between p-3 rounded border" style={{ borderColor: 'var(--color-border-subtle)' }}>
+                    <div>
+                      <div className="font-medium capitalize">{service.name}</div>
+                      <div className="text-xs text-gray-500">Last checked: {new Date(service.lastCheck).toLocaleTimeString()}</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-block w-2 h-2 rounded-full ${paramsToStatusColor(service.status)}`} />
+                      <span className="text-sm capitalize">{service.status}</span>
+                      {service.responseTime > 0 && <span className="text-xs text-gray-400">({service.responseTime}ms)</span>}
+                    </div>
+                  </div>
+                ))}
+                {services.length === 0 && (
+                  <div className="col-span-full text-center py-8 text-gray-500">
+                    No health data available. Click "Check Health Now" to refresh.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
+}
+
+function paramsToStatusColor(status: string) {
+  switch (status) {
+    case 'healthy': return 'bg-green-500';
+    case 'degraded': return 'bg-yellow-500';
+    case 'down':
+    case 'unhealthy': return 'bg-red-500';
+    default: return 'bg-gray-400';
+  }
 }
 
 function TabButton({ active, onClick, disabled, children }: { active: boolean; onClick: () => void; disabled: boolean; children: React.ReactNode }) {

@@ -7,6 +7,20 @@
  * @module shared/hooks
  */
 
+// ============================================================================
+// PROVIDER HOOKS (Application & Infrastructure Layer)
+// ============================================================================
+
+/**
+ * Centralized provider hooks for routes
+ * Import from here rather than individual provider directories
+ */
+export * from "./provider-hooks";
+
+// ============================================================================
+// UI HOOKS (Generic React Patterns)
+// ============================================================================
+
 // State management
 export * from "./useArrayState";
 export * from "./useMemoized";

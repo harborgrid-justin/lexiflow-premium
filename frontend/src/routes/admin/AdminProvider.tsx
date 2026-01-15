@@ -4,8 +4,8 @@ interface AdminContextValue {
   users: unknown[];
   settings: unknown;
   auditLogs: unknown[];
-  activeTab: 'users' | 'settings' | 'audit';
-  setActiveTab: (tab: 'users' | 'settings' | 'audit') => void;
+  activeTab: 'users' | 'settings' | 'audit' | 'health';
+  setActiveTab: (tab: 'users' | 'settings' | 'audit' | 'health') => void;
   isPending: boolean;
 }
 
@@ -18,7 +18,7 @@ export function AdminProvider({ children, initialUsers, initialSettings, initial
   initialAuditLogs: unknown[];
 }) {
   const [isPending, startTransition] = useTransition();
-  const [activeTab, setActiveTabState] = useState<'users' | 'settings' | 'audit'>('users');
+  const [activeTab, setActiveTabState] = useState<'users' | 'settings' | 'audit' | 'health'>('users');
 
   const setActiveTab = useCallback((tab: typeof activeTab) => {
     startTransition(() => setActiveTabState(tab));

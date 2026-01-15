@@ -91,10 +91,9 @@ export const StatWidget: React.FC<StatWidgetProps> = ({
             {typeof value === 'number' ? value.toLocaleString() : value}
           </p>
           {change && (
-            <p className={cn(
-              'text-xs font-medium mt-2',
-              changePositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
-            )}>
+            <p className="text-xs font-medium mt-2" style={{
+              color: changePositive ? tokens.colors.success : tokens.colors.error
+            }}>
               {change}
             </p>
           )}

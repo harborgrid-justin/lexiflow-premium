@@ -3,10 +3,10 @@
  * Display invoice details with payment tracking and PDF preview
  */
 
+import type { Invoice } from '@/types/financial';
+import { CreditCard, Download, Send } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form } from 'react-router';
-import { Download, Send, CreditCard } from 'lucide-react';
-import type { Invoice } from '@/types/financial';
 import { InvoicePreview } from './InvoicePreview';
 
 interface InvoiceDetailProps {
@@ -28,9 +28,8 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
 
     return (
       <span
-        className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${
-          styles[status as keyof typeof styles] || styles.Draft
-        }`}
+        className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${styles[status as keyof typeof styles] || styles.Draft
+          }`}
       >
         {status}
       </span>
@@ -238,13 +237,15 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
               <button
                 type="button"
                 onClick={() => setShowPaymentForm(false)}
-                className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                style={{ backgroundColor: theme.surface.elevated, borderColor: theme.border.default, color: theme.text.primary }}
+                className="rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:opacity-90 transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+                style={{ backgroundColor: theme.status.success.bg, color: theme.text.inverse }}
+                className="rounded-md px-4 py-2 text-sm font-medium shadow-sm hover:opacity-90 transition-all"
               >
                 Record Payment
               </button>

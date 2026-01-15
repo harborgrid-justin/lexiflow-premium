@@ -4,6 +4,7 @@
  * Stores state in localStorage to persist across page reloads
  */
 
+import { useTheme } from '@/theme';
 import { Clock, Pause, Play, Square } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -28,6 +29,7 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
   caseId = '',
   description = '',
 }) => {
+  const { tokens } = useTheme();
   const [timerState, setTimerState] = useState<TimerState>(() => {
     // Load from localStorage on mount
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -138,15 +140,19 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
   );
 
   return (
-    <div className="rounded-lg border-2 border-blue-500 bg-blue-50 p-6 dark:border-blue-400 dark:bg-blue-900/20">
+    <div className="p-6" style={{
+      backgroundColor: tokens.colors.info + '10',
+      border: `2px solid ${tokens.colors.borderInfo}`,
+      borderRadius: tokens.borderRadius.lg
+    }}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Clock className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <Clock className="h-8 w-8" style={{ color: tokens.colors.info }} />
           <div>
-            <div className="text-3xl font-mono font-bold text-blue-900 dark:text-blue-100">
+            <div className="text-3xl font-mono font-bold" style={{ color: tokens.colors.text }}>
               {formattedTime}
             </div>
-            <div className="text-sm text-blue-700 dark:text-blue-300">
+            <div className="text-sm" style={{ color: tokens.colors.info }}>
               {elapsedHours} hours
             </div>
           </div>
@@ -157,7 +163,13 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
             <button
               type="button"
               onClick={startTimer}
-              className="flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2"
+              style={{
+                backgroundColor: tokens.colors.success,
+                color: tokens.colors.textInverse,
+                borderRadius: tokens.borderRadius.md,
+                boxShadow: tokens.shadows.sm
+              }}
             >
               <Play className="h-4 w-4" />
               Start
@@ -166,7 +178,13 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
             <button
               type="button"
               onClick={pauseTimer}
-              className="flex items-center gap-2 rounded-md bg-yellow-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2"
+              style={{
+                backgroundColor: tokens.colors.warning,
+                color: tokens.colors.textInverse,
+                borderRadius: tokens.borderRadius.md,
+                boxShadow: tokens.shadows.sm
+              }}
             >
               <Pause className="h-4 w-4" />
               Pause
@@ -177,7 +195,15 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
             type="button"
             onClick={stopTimer}
             disabled={timerState.elapsedSeconds === 0}
-            className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2"
+            style={{
+              backgroundColor: timerState.elapsedSeconds === 0 ? tokens.colors.disabled : tokens.colors.error,
+              color: tokens.colors.textInverse,
+              borderRadius: tokens.borderRadius.md,
+              boxShadow: tokens.shadows.sm,
+              opacity: timerState.elapsedSeconds === 0 ? 0.6 : 1,
+              cursor: timerState.elapsedSeconds === 0 ? 'not-allowed' : 'pointer'
+            }}
           >
             <Square className="h-4 w-4" />
             Stop & Apply
@@ -186,8 +212,11 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
       </div>
 
       {timerState.elapsedSeconds > 0 && (
-        <div className="mt-4 rounded-md bg-white/50 p-3 dark:bg-gray-800/50">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+        <div className="mt-4 p-3" style={{
+          backgroundColor: tokens.colors.surface + '80',
+          borderRadius: tokens.borderRadius.md
+        }}>
+          <p className="text-sm" style={{ color: tokens.colors.textMuted }}>
             <span className="font-medium">Note:</span> Timer will persist across page reloads. Click "Stop & Apply" to add time to entry.
           </p>
         </div>

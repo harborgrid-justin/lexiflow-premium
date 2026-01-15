@@ -172,11 +172,11 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
     return (
       <div className={cn('space-y-3', className)}>
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 animate-pulse">
-            <div className="w-12 h-12 rounded-lg bg-gray-200 dark:bg-gray-700" />
+          <div key={i} className="flex gap-3 p-3 rounded-lg border animate-pulse" style={{ borderColor: theme.border.default }}>
+            <div className="w-12 h-12 rounded-lg" style={{ backgroundColor: theme.surface.muted }} />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+              <div className="h-4 rounded w-3/4" style={{ backgroundColor: theme.surface.muted }} />
+              <div className="h-3 rounded w-1/2" style={{ backgroundColor: theme.surface.muted }} />
             </div>
           </div>
         ))}

@@ -22,6 +22,8 @@
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { Case } from '@/types';
+import { useTheme } from '@/theme';
 import {
   Activity,
   Archive,
@@ -39,8 +41,8 @@ import {
   TrendingUp,
   Users
 } from 'lucide-react';
-import { lazy, startTransition, useMemo } from 'react';
-import { useNavigation } from 'react-router';
+import { lazy, Suspense, startTransition, useMemo } from 'react';
+import { useNavigate, useNavigation } from 'react-router';
 import { useCaseList } from './CaseListProvider';
 
 // Lazy load tab contents for performance
@@ -118,14 +120,46 @@ const CASE_TABS = [
  * All events flow up via callbacks
  */
 export function CaseListView() {
+  const navigate = useNavigate();
+
   // CONTEXT CONSUMPTION (read-only)
   const {
     metrics,
+    filteredCases,
+    filters,
+    setFilters,
     activeTab,
     setActiveTab,
     handleParentTabChange,
     isPending,
   } = useCaseList();
+
+  // Adapter for CaseListActive props
+  const activeCaseProps = useMemo(() => ({
+    filteredCases,
+    statusFilter: (filters.status as string) || 'All',
+    setStatusFilter: (s: string) => setFilters({ status: s === 'All' ? undefined : s as any }),
+    typeFilter: filters.type || 'All',
+    setTypeFilter: (t: string) => setFilters({ type: t === 'All' ? undefined : t }),
+    searchTerm: filters.search || '',
+    setSearchTerm: (s: string) => setFilters({ search: s }),
+    dateFrom: filters.dateRange?.start?.toISOString() || '',
+    setDateFrom: (d: string) => setFilters({
+      dateRange: {
+        start: d ? new Date(d) : (filters.dateRange?.start || new Date(0)),
+        end: filters.dateRange?.end || new Date()
+      }
+    }),
+    dateTo: filters.dateRange?.end?.toISOString() || '',
+    setDateTo: (d: string) => setFilters({
+      dateRange: {
+        start: filters.dateRange?.start || new Date(0),
+        end: d ? new Date(d) : (filters.dateRange?.end || new Date())
+      }
+    }),
+    resetFilters: () => setFilters({ status: undefined, type: undefined, search: undefined, dateRange: undefined }),
+    onSelectCase: (c: Case) => navigate(`/cases/${c.id}`),
+  }), [filteredCases, filters, setFilters, navigate]);
 
   // THEME (presentation concern - currently unused)
   // const { theme, isPendingThemeChange } = useTheme();
@@ -268,7 +302,7 @@ export function CaseListView() {
       )}>
         <Suspense fallback={<AdaptiveLoader contentType="list" message="Loading tab content..." />}>
           {activeTab === 'overview' && <CaseOverviewDashboard />}
-          {activeTab === 'active' && <CaseListActive />}
+          {activeTab === 'active' && <CaseListActive {...activeCaseProps} />}
           {activeTab === 'intake' && <CaseListIntake />}
           {activeTab === 'import' && <CaseImporter />}
           {activeTab === 'operations' && <CaseOperationsCenter />}
@@ -305,22 +339,54 @@ interface MetricCardProps {
 }
 
 function MetricCard({ title, value, icon, trend = 'neutral' }: MetricCardProps) {
-  const trendColors = {
-    positive: 'text-green-600 dark:text-green-400',
-    negative: 'text-red-600 dark:text-red-400',
-    neutral: 'text-blue-600 dark:text-blue-400',
-    warning: 'text-amber-600 dark:text-amber-400',
-  };
+  const { tokens } = useTheme();
+
+  const trendColor = trend === 'positive' ? tokens.colors.success :
+    trend === 'negative' ? tokens.colors.error :
+    trend === 'warning' ? tokens.colors.warning :
+    tokens.colors.info;
 
   return (
-    <div className="rounded-lg border bg-card p-4 shadow-sm">
+    <div
+      style={{
+        backgroundColor: tokens.colors.surface,
+        border: `1px solid ${tokens.colors.border}`,
+        borderRadius: tokens.borderRadius.lg,
+        boxShadow: tokens.shadows.sm
+      }}
+      className="p-4"
+    >
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <div className={cn('rounded-full p-2 bg-secondary', trendColors[trend])}>
+        <p style={{ color: tokens.colors.textMuted }} className="text-sm font-medium">{title}</p>
+        <div
+          style={{
+            backgroundColor: tokens.colors.surfaceHover,
+            color: trendColor,
+            borderRadius: tokens.borderRadius.full
+          }}
+          className="p-2"
+        >
           {icon}
         </div>
       </div>
-      <p className="mt-2 text-3xl font-bold">{value}</p>
+      <p style={{ color: tokens.colors.text }} className="mt-2 text-3xl font-bold">{value}</p>
+    </div>
+  );
+}
+
+// Adaptive Loader placeholder
+function AdaptiveLoader({ contentType, message }: { contentType: string; message: string }) {
+  const { tokens } = useTheme();
+  return (
+    <div style={{ color: tokens.colors.textMuted }} className="text-center py-12">
+      <div
+        style={{
+          borderColor: `${tokens.colors.border} ${tokens.colors.border} ${tokens.colors.primary} ${tokens.colors.border}`,
+          borderRadius: '50%'
+        }}
+        className="h-8 w-8 animate-spin border-2 mx-auto mb-3"
+      />
+      <p>{message}</p>
     </div>
   );
 }

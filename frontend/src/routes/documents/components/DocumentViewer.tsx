@@ -4,6 +4,7 @@
  */
 
 import type { LegalDocument } from '@/types/documents';
+import { useTheme } from '@/theme';
 import { useDocumentViewer } from '../_hooks/useDocumentViewer';
 
 interface DocumentViewerProps {
@@ -13,6 +14,7 @@ interface DocumentViewerProps {
 }
 
 export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: DocumentViewerProps) {
+  const { tokens } = useTheme();
   const {
     currentPage,
     zoom,
@@ -26,36 +28,56 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
   } = useDocumentViewer({ document, showAnnotations, onAddAnnotation });
 
   return (
-    <div style={{ backgroundColor: 'var(--color-background)' }} className="flex flex-col h-full">
+    <div style={{ backgroundColor: tokens.colors.background }} className="flex flex-col h-full">
       {showAnnotations && (
         <button
           onClick={handleAnnotationAdd}
-          className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700"
+          style={{
+            backgroundColor: tokens.colors.primary,
+            color: '#ffffff',
+            borderRadius: tokens.borderRadius.lg,
+            boxShadow: tokens.shadows.lg
+          }}
+          className="fixed bottom-4 right-4 px-4 py-2 hover:opacity-90 transition-opacity"
         >
           Add Annotation
         </button>
       )}
       {/* Toolbar */}
-      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex items-center justify-between px-4 py-3 border-b">
+      <div
+        style={{
+          backgroundColor: tokens.colors.surface,
+          borderBottom: `1px solid ${tokens.colors.border}`
+        }}
+        className="flex items-center justify-between px-4 py-3"
+      >
         <div className="flex items-center gap-4">
           {/* Page Navigation */}
           <div className="flex items-center gap-2">
             <button
               onClick={prevPage}
               disabled={currentPage === 1}
-              className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:text-gray-100"
+              style={{
+                color: tokens.colors.textSecondary,
+                opacity: currentPage === 1 ? 0.5 : 1
+              }}
+              className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <span className="text-sm text-gray-700 dark:text-gray-300">
+            <span style={{ color: tokens.colors.text }} className="text-sm">
               Page {currentPage} / {totalPages}
             </span>
             <button
               onClick={nextPage}
               disabled={currentPage === totalPages}
-              className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:text-gray-100"
+              style={{
+                color: tokens.colors.textSecondary,
+                opacity: currentPage === totalPages ? 0.5 : 1
+              }}
+              className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -64,23 +86,34 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
           </div>
 
           {/* Zoom Controls */}
-          <div className="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-4">
+          <div
+            style={{ borderLeft: `1px solid ${tokens.colors.border}` }}
+            className="flex items-center gap-2 pl-4"
+          >
             <button
               onClick={zoomOut}
               disabled={zoom === 50}
-              className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:text-gray-100"
+              style={{
+                color: tokens.colors.textSecondary,
+                opacity: zoom === 50 ? 0.5 : 1
+              }}
+              className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
               </svg>
             </button>
-            <span className="text-sm text-gray-700 dark:text-gray-300 w-12 text-center">
+            <span style={{ color: tokens.colors.text }} className="text-sm w-12 text-center">
               {zoom}%
             </span>
             <button
               onClick={zoomIn}
               disabled={zoom === 200}
-              className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:text-gray-100"
+              style={{
+                color: tokens.colors.textSecondary,
+                opacity: zoom === 200 ? 0.5 : 1
+              }}
+              className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
@@ -91,10 +124,24 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <button className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+          <button
+            style={{
+              backgroundColor: tokens.colors.surfaceHover,
+              color: tokens.colors.text,
+              borderRadius: tokens.borderRadius.md
+            }}
+            className="px-3 py-1.5 text-sm font-medium hover:opacity-90"
+          >
             Print
           </button>
-          <button className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+          <button
+            style={{
+              backgroundColor: tokens.colors.surfaceHover,
+              color: tokens.colors.text,
+              borderRadius: tokens.borderRadius.md
+            }}
+            className="px-3 py-1.5 text-sm font-medium hover:opacity-90"
+          >
             Download
           </button>
         </div>
@@ -104,14 +151,21 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
       <div className="flex-1 overflow-auto p-8">
         <div
           style={{
-            backgroundColor: 'var(--color-surface)',
+            backgroundColor: tokens.colors.surface,
             width: `${8.5 * zoom}px`,
             minHeight: `${11 * zoom}px`,
+            boxShadow: tokens.shadows.lg
           }}
-          className="mx-auto shadow-lg"
+          className="mx-auto"
         >
           {/* PDF Preview Placeholder */}
-          <div className="p-8 space-y-4 text-gray-700" style={{ fontSize: `${zoom / 8}px` }}>
+          <div
+            style={{
+              color: tokens.colors.text,
+              fontSize: `${zoom / 8}px`
+            }}
+            className="p-8 space-y-4"
+          >
             <div className="text-center mb-8">
               <h1 className="text-2xl font-bold mb-2">{document.title}</h1>
               <p className="text-sm text-gray-500">Page {currentPage} of {totalPages}</p>

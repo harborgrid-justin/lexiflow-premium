@@ -82,15 +82,15 @@ return (
     {/* Strength Bar */}
     <div>
       <div className="flex justify-between items-center mb-1">
-        <span className="text-xs font-medium text-gray-600">Password Strength:</span>
-        <span className={`text-xs font-semibold ${textColorClasses[strength.color as keyof typeof textColorClasses]}`}>
+        <span className="text-xs font-medium" style={{ color: theme.text.secondary }}>Password Strength:</span>
+        <span className="text-xs font-semibold" style={{ color: colorStyles[strength.color as keyof typeof colorStyles].text }}>
           {strength.label}
         </span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2">
+      <div className="w-full rounded-full h-2" style={{ backgroundColor: theme.surface.muted }}>
         <div
-          className={`${colorClasses[strength.color as keyof typeof colorClasses]} h-2 rounded-full transition-all duration-300`}
-          style={{ width: `${strength.score}%` }}
+          className="h-2 rounded-full transition-all duration-300"
+          style={{ width: `${strength.score}%`, backgroundColor: colorStyles[strength.color as keyof typeof colorStyles].bg }}
         />
       </div>
     </div>
@@ -102,16 +102,16 @@ return (
           <div key={index} className="flex items-start gap-2">
             <div className="flex-shrink-0 mt-0.5">
               {req.met ? (
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-4 h-4" style={{ color: theme.status.success.text }} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               ) : (
-                <svg className="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-4 h-4" style={{ color: theme.text.muted }} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
               )}
             </div>
-            <span className={`text-xs ${req.met ? 'text-gray-700' : 'text-gray-500'}`}>
+            <span className="text-xs" style={{ color: req.met ? theme.text.primary : theme.text.secondary }}>
               {req.label}
             </span>
           </div>

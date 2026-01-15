@@ -71,11 +71,11 @@ export function AccountLockedMessage({
           <div style={{ backgroundColor: theme.status.error.bg, padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}` }}>
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8" style={{ color: theme.text.inverse }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="text-xl font-semibold" style={{ color: theme.text.inverse }}>
                 Account Locked
               </h2>
             </div>
@@ -97,10 +97,10 @@ export function AccountLockedMessage({
 
             {/* What to do */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-200 mb-2">
+              <h3 className="text-sm font-semibold mb-2" style={{ color: theme.text.primary }}>
                 What should I do?
               </h3>
-              <ul className="space-y-2 text-sm text-slate-300">
+              <ul className="space-y-2 text-sm" style={{ color: theme.text.secondary }}>
                 {reason === 'failed_attempts' && (
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -125,34 +125,35 @@ export function AccountLockedMessage({
             </div>
 
             {/* Contact Information */}
-            <div className="pt-4 border-t border-slate-700">
-              <h3 className="text-sm font-semibold text-slate-200 mb-3">
+            <div className="pt-4 border-t" style={{ borderColor: theme.border.default }}>
+              <h3 className="text-sm font-semibold mb-3" style={{ color: theme.text.primary }}>
                 Need Help?
               </h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-3 text-sm">
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" style={{ color: theme.text.muted }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  <a href={`mailto:${contactEmail}`} className="text-blue-400 hover:text-blue-300 transition-colors">
+                  <a href={`mailto:${contactEmail}`} style={{ color: theme.primary.DEFAULT }} className="hover:opacity-80 transition-all">
                     {contactEmail}
                   </a>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" style={{ color: theme.text.muted }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <span className="text-slate-300">{contactPhone}</span>
+                  <span style={{ color: theme.text.primary }}>{contactPhone}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="bg-slate-900 px-6 py-4 border-t border-slate-700">
+          <div style={{ backgroundColor: theme.surface.raised, borderColor: theme.border.default }} className="px-6 py-4 border-t">
             <a
               href="/login"
-              className="block w-full text-center px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+              style={{ backgroundColor: theme.surface.raised, color: theme.text.primary }}
+              className="block w-full text-center px-4 py-2 hover:opacity-90 rounded-lg transition-all"
             >
               Return to Login
             </a>

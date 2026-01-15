@@ -146,10 +146,10 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
       <div className={cn('space-y-4', className)}>
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex gap-3 animate-pulse">
-            <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700" />
+            <div className="w-10 h-10 rounded-full" style={{ backgroundColor: theme.surface.muted }} />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
-              <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
+              <div className="h-4 rounded w-3/4" style={{ backgroundColor: theme.surface.muted }} />
+              <div className="h-3 rounded w-1/2" style={{ backgroundColor: theme.surface.muted }} />
             </div>
           </div>
         ))}

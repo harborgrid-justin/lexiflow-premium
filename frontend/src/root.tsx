@@ -112,7 +112,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-gray-50 antialiased dark:bg-gray-900" suppressHydrationWarning>
+      <body className="min-h-screen antialiased" style={{ backgroundColor: 'var(--color-background)' }} suppressHydrationWarning>
         {/* Provider order matters: AppProviders composes all required providers */}
         <QueryClientProvider>
           <AuthProvider>
@@ -187,10 +187,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-gray-50 antialiased dark:bg-gray-900">
+      <body className="min-h-screen antialiased" style={{ backgroundColor: 'var(--color-background)' }}>
         <div className="flex min-h-screen items-center justify-center p-4">
           <div className="w-full max-w-md">
-            <div className="rounded-lg border border-red-200 bg-white p-6 shadow-lg dark:border-red-800 dark:bg-gray-800">
+            <div className="rounded-lg border p-6 shadow-lg" style={{ borderColor: 'var(--color-border-error)', backgroundColor: 'var(--color-surface-elevated)' }}>
               {/* Error Header */}
               <div className="mb-4 flex items-center gap-3">
                 {statusCode && (
@@ -216,21 +216,21 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
                     </svg>
                   </div>
                 )}
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
                   {title}
                 </h1>
               </div>
 
               {/* Error Message */}
-              <p className="mb-4 text-gray-600 dark:text-gray-400">{message}</p>
+              <p className="mb-4" style={{ color: 'var(--color-text-secondary)' }}>{message}</p>
 
               {/* Error Details (development only) */}
               {error instanceof Error && process.env.NODE_ENV === "development" && (
                 <details className="mb-4">
-                  <summary className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <summary className="cursor-pointer text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
                     Error Details
                   </summary>
-                  <pre className="mt-2 overflow-auto rounded bg-gray-100 p-3 text-xs text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                  <pre className="mt-2 overflow-auto rounded p-3 text-xs" style={{ backgroundColor: 'var(--color-surface-input)', color: 'var(--color-text-primary)' }}>
                     {error.message}
                     {"\n\n"}
                     {error.stack}
@@ -243,13 +243,15 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
                 <button
                   type="button"
                   onClick={() => window.location.reload()}
-                  className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  style={{ backgroundColor: 'var(--color-surface-elevated)', borderColor: 'var(--color-border-default)', color: 'var(--color-text-primary)' }}
+                  className="flex-1 rounded-md border px-4 py-2 hover:opacity-90 focus:outline-none focus:ring-2 transition-all"
                 >
                   Refresh Page
                 </button>
                 <Link
                   to="/"
-                  className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-center text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-text-inverse)' }}
+                  className="flex-1 rounded-md px-4 py-2 text-center hover:opacity-90 focus:outline-none focus:ring-2 transition-all"
                 >
                   Go to Dashboard
                 </Link>

@@ -69,60 +69,60 @@ const getUrgencyLabel = (date: Date | string): string => {
   return formatDistanceToNow(deadlineDate, { addSuffix: true });
 };
 
-const getPriorityConfig = (priority: Deadline['priority']) => {
+const getPriorityConfig = (priority: Deadline['priority'], tokens: any) => {
   switch (priority) {
     case 'critical':
       return {
-        color: 'text-red-600 dark:text-red-400',
-        bg: 'bg-red-100 dark:bg-red-900/30',
-        border: 'border-red-200 dark:border-red-800',
-        dot: 'bg-red-500',
+        color: tokens.colors.error,
+        bg: `${tokens.colors.error}15`,
+        border: tokens.colors.error,
+        dot: tokens.colors.error,
       };
     case 'high':
       return {
-        color: 'text-orange-600 dark:text-orange-400',
-        bg: 'bg-orange-100 dark:bg-orange-900/30',
-        border: 'border-orange-200 dark:border-orange-800',
-        dot: 'bg-orange-500',
+        color: tokens.colors.warning,
+        bg: `${tokens.colors.warning}15`,
+        border: tokens.colors.warning,
+        dot: tokens.colors.warning,
       };
     case 'medium':
       return {
-        color: 'text-yellow-600 dark:text-yellow-400',
-        bg: 'bg-yellow-100 dark:bg-yellow-900/30',
-        border: 'border-yellow-200 dark:border-yellow-800',
-        dot: 'bg-yellow-500',
+        color: '#d97706',
+        bg: '#d9770615',
+        border: '#d97706',
+        dot: '#d97706',
       };
     case 'low':
     default:
       return {
-        color: 'text-blue-600 dark:text-blue-400',
-        bg: 'bg-blue-100 dark:bg-blue-900/30',
-        border: 'border-blue-200 dark:border-blue-800',
-        dot: 'bg-blue-500',
+        color: tokens.colors.info,
+        bg: `${tokens.colors.info}15`,
+        border: tokens.colors.info,
+        dot: tokens.colors.info,
       };
   }
 };
 
-const getStatusConfig = (status: Deadline['status']) => {
+const getStatusConfig = (status: Deadline['status'], tokens: any) => {
   switch (status) {
     case 'completed':
       return {
         icon: CheckCircle2,
-        color: 'text-emerald-600 dark:text-emerald-400',
-        bg: 'bg-emerald-50 dark:bg-emerald-950/20',
+        color: tokens.colors.success,
+        bg: `${tokens.colors.success}10`,
       };
     case 'overdue':
       return {
         icon: AlertCircle,
-        color: 'text-red-600 dark:text-red-400',
-        bg: 'bg-red-50 dark:bg-red-950/20',
+        color: tokens.colors.error,
+        bg: `${tokens.colors.error}10`,
       };
     case 'pending':
     default:
       return {
         icon: Clock,
-        color: 'text-gray-600 dark:text-gray-400',
-        bg: 'bg-gray-50 dark:bg-gray-950/20',
+        color: tokens.colors.textMuted,
+        bg: tokens.colors.surfaceHover,
       };
   }
 };
@@ -140,7 +140,7 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   emptyMessage = 'No upcoming deadlines',
   className,
 }) => {
-  const { theme } = useTheme();
+  const { theme, tokens } = useTheme();
 
   // Filter and sort deadlines
   const filteredDeadlines = React.useMemo(() => {
@@ -172,11 +172,18 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
     return (
       <div className={cn('space-y-3', className)}>
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 animate-pulse">
-            <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="w-12 h-12 rounded-lg" />
+          <div
+            key={i}
+            style={{
+              border: `1px solid ${tokens.colors.border}`,
+              borderRadius: tokens.borderRadius.lg
+            }}
+            className="flex gap-3 p-3 animate-pulse"
+          >
+            <div style={{ backgroundColor: tokens.colors.surfaceHover, borderRadius: tokens.borderRadius.lg }} className="w-12 h-12" />
             <div className="flex-1 space-y-2">
-              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-4 rounded w-3/4" />
-              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-3 rounded w-1/2" />
+              <div style={{ backgroundColor: tokens.colors.surfaceHover, borderRadius: tokens.borderRadius.sm }} className="h-4 w-3/4" />
+              <div style={{ backgroundColor: tokens.colors.surfaceHover, borderRadius: tokens.borderRadius.sm }} className="h-3 w-1/2" />
             </div>
           </div>
         ))}
@@ -196,19 +203,23 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   return (
     <div className={cn('space-y-2', className)}>
       {filteredDeadlines.map((deadline) => {
-        const priorityConfig = getPriorityConfig(deadline.priority);
-        const statusConfig = getStatusConfig(deadline.computedStatus);
+        const priorityConfig = getPriorityConfig(deadline.priority, tokens);
+        const statusConfig = getStatusConfig(deadline.computedStatus, tokens);
         const StatusIcon = statusConfig.icon;
         const deadlineDate = typeof deadline.date === 'string' ? new Date(deadline.date) : deadline.date;
 
         return (
           <div
             key={deadline.id}
+            style={{
+              backgroundColor: tokens.colors.surface,
+              border: `1px solid ${priorityConfig.border}`,
+              borderRadius: tokens.borderRadius.lg,
+              boxShadow: tokens.shadows.sm,
+              opacity: deadline.computedStatus === 'completed' ? 0.6 : 1
+            }}
             className={cn(
-              'relative flex gap-3 p-3 rounded-lg border transition-all duration-200',
-              theme.surface.default,
-              priorityConfig.border,
-              deadline.computedStatus === 'completed' && 'opacity-60',
+              'relative flex gap-3 p-3 transition-all duration-200',
               onDeadlineClick && 'cursor-pointer hover:shadow-md hover:scale-[1.01]'
             )}
             onClick={() => onDeadlineClick?.(deadline)}
@@ -216,11 +227,17 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
             tabIndex={onDeadlineClick ? 0 : undefined}
           >
             {/* Date Badge */}
-            <div className={cn('flex-shrink-0 w-14 h-14 rounded-lg flex flex-col items-center justify-center', priorityConfig.bg)}>
-              <span className={cn('text-xs font-semibold uppercase', priorityConfig.color)}>
+            <div
+              style={{
+                backgroundColor: priorityConfig.bg,
+                borderRadius: tokens.borderRadius.lg
+              }}
+              className="flex-shrink-0 w-14 h-14 flex flex-col items-center justify-center"
+            >
+              <span style={{ color: priorityConfig.color }} className="text-xs font-semibold uppercase">
                 {format(deadlineDate, 'MMM')}
               </span>
-              <span className={cn('text-xl font-bold', priorityConfig.color)}>
+              <span style={{ color: priorityConfig.color }} className="text-xl font-bold">
                 {format(deadlineDate, 'd')}
               </span>
             </div>
@@ -230,23 +247,30 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
               <div className="flex items-start justify-between gap-2 mb-1">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h4 className={cn('text-sm font-semibold truncate', theme.text.primary)}>
+                    <h4 style={{ color: tokens.colors.text }} className="text-sm font-semibold truncate">
                       {deadline.title}
                     </h4>
-                    <div className={cn('w-2 h-2 rounded-full flex-shrink-0', priorityConfig.dot)} />
+                    <div style={{ backgroundColor: priorityConfig.dot }} className="w-2 h-2 rounded-full flex-shrink-0" />
                   </div>
                   {deadline.description && (
-                    <p className={cn('text-xs mb-1', theme.text.secondary)}>
+                    <p style={{ color: tokens.colors.textSecondary }} className="text-xs mb-1">
                       {deadline.description}
                     </p>
                   )}
                   {deadline.caseName && (
-                    <p className={cn('text-xs', theme.text.tertiary)}>
+                    <p style={{ color: tokens.colors.textMuted }} className="text-xs">
                       {deadline.caseName}
                     </p>
                   )}
                 </div>
-                <div className={cn('flex items-center gap-1 px-2 py-1 rounded text-xs font-medium whitespace-nowrap', statusConfig.bg, statusConfig.color)}>
+                <div
+                  style={{
+                    backgroundColor: statusConfig.bg,
+                    color: statusConfig.color,
+                    borderRadius: tokens.borderRadius.sm
+                  }}
+                  className="flex items-center gap-1 px-2 py-1 text-xs font-medium whitespace-nowrap"
+                >
                   <StatusIcon className="h-3 w-3" />
                   <span>{getUrgencyLabel(deadline.date)}</span>
                 </div>
@@ -255,19 +279,19 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
               {/* Footer */}
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className={cn('capitalize', theme.text.tertiary)}>
+                  <span style={{ color: tokens.colors.textMuted }} className="capitalize">
                     {deadline.type}
                   </span>
                   {deadline.assignee && (
                     <>
-                      <span className={theme.text.tertiary}>•</span>
-                      <span className={theme.text.secondary}>
+                      <span style={{ color: tokens.colors.textMuted }}>•</span>
+                      <span style={{ color: tokens.colors.textSecondary }}>
                         {deadline.assignee.name}
                       </span>
                     </>
                   )}
                 </div>
-                <Flag className={cn('h-3 w-3', priorityConfig.color)} />
+                <Flag style={{ color: priorityConfig.color }} className="h-3 w-3" />
               </div>
             </div>
           </div>

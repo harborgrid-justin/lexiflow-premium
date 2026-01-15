@@ -72,43 +72,58 @@ const calculateChange = (current: number, previous: number): { percentage: numbe
   return { percentage, trend };
 };
 
-const colorClasses = {
-  blue: {
-    bg: 'bg-blue-50 dark:bg-blue-950/20',
-    border: 'border-blue-200 dark:border-blue-800',
-    icon: 'text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30',
-    accent: 'text-blue-600 dark:text-blue-400',
-  },
-  green: {
-    bg: 'bg-emerald-50 dark:bg-emerald-950/20',
-    border: 'border-emerald-200 dark:border-emerald-800',
-    icon: 'text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/30',
-    accent: 'text-emerald-600 dark:text-emerald-400',
-  },
-  purple: {
-    bg: 'bg-purple-50 dark:bg-purple-950/20',
-    border: 'border-purple-200 dark:border-purple-800',
-    icon: 'text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/30',
-    accent: 'text-purple-600 dark:text-purple-400',
-  },
-  orange: {
-    bg: 'bg-orange-50 dark:bg-orange-950/20',
-    border: 'border-orange-200 dark:border-orange-800',
-    icon: 'text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30',
-    accent: 'text-orange-600 dark:text-orange-400',
-  },
-  red: {
-    bg: 'bg-red-50 dark:bg-red-950/20',
-    border: 'border-red-200 dark:border-red-800',
-    icon: 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30',
-    accent: 'text-red-600 dark:text-red-400',
-  },
-  gray: {
-    bg: 'bg-gray-50 dark:bg-gray-950/20',
-    border: 'border-gray-200 dark:border-gray-800',
-    icon: 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/30',
-    accent: 'text-gray-600 dark:text-gray-400',
-  },
+const getColorConfig = (color: KPICardProps['color'], tokens: any) => {
+  switch (color) {
+    case 'blue':
+      return {
+        bgColor: `${tokens.colors.info}10`,
+        borderColor: `${tokens.colors.info}40`,
+        iconBg: `${tokens.colors.info}20`,
+        iconColor: tokens.colors.info,
+        accentColor: tokens.colors.info,
+      };
+    case 'green':
+      return {
+        bgColor: `${tokens.colors.success}10`,
+        borderColor: `${tokens.colors.success}40`,
+        iconBg: `${tokens.colors.success}20`,
+        iconColor: tokens.colors.success,
+        accentColor: tokens.colors.success,
+      };
+    case 'purple':
+      return {
+        bgColor: '#9333ea10',
+        borderColor: '#9333ea40',
+        iconBg: '#9333ea20',
+        iconColor: '#9333ea',
+        accentColor: '#9333ea',
+      };
+    case 'orange':
+      return {
+        bgColor: '#f97316 10',
+        borderColor: '#f9731640',
+        iconBg: '#f9731620',
+        iconColor: '#f97316',
+        accentColor: '#f97316',
+      };
+    case 'red':
+      return {
+        bgColor: `${tokens.colors.error}10`,
+        borderColor: `${tokens.colors.error}40`,
+        iconBg: `${tokens.colors.error}20`,
+        iconColor: tokens.colors.error,
+        accentColor: tokens.colors.error,
+      };
+    case 'gray':
+    default:
+      return {
+        bgColor: tokens.colors.surfaceHover,
+        borderColor: tokens.colors.border,
+        iconBg: tokens.colors.surfaceHover,
+        iconColor: tokens.colors.textMuted,
+        accentColor: tokens.colors.textMuted,
+      };
+  }
 };
 
 // ============================================================================
@@ -131,7 +146,7 @@ export function KPICard({
   target,
   currency = '$',
 }: KPICardProps) {
-  const { theme } = useTheme();
+  const { theme, tokens } = useTheme();
   const [displayValue, setDisplayValue] = useState<number>(0);
 
   // Calculate change if previous value provided
@@ -175,21 +190,23 @@ export function KPICard({
   // Calculate progress to target if provided
   const progressPercent = target && typeof value === 'number' ? (value / target) * 100 : undefined;
 
-  const colors = colorClasses[color];
+  const colors = getColorConfig(color, tokens);
   const TrendIcon = change.trend === 'up' ? TrendingUp : change.trend === 'down' ? TrendingDown : Minus;
-  const trendColor = change.trend === 'up' ? 'text-emerald-600 dark:text-emerald-400' :
-    change.trend === 'down' ? 'text-red-600 dark:text-red-400' :
-      'text-gray-500 dark:text-gray-400';
+  const trendColor = change.trend === 'up' ? tokens.colors.success :
+    change.trend === 'down' ? tokens.colors.error :
+      tokens.colors.textMuted;
 
   return (
     <div
+      style={{
+        backgroundColor: tokens.colors.surface,
+        border: `1px solid ${colors.borderColor}`,
+        borderRadius: tokens.borderRadius.xl,
+        boxShadow: onClick ? tokens.shadows.md : tokens.shadows.sm
+      }}
       className={cn(
-        'relative overflow-hidden rounded-xl border p-6 transition-all duration-200',
-        theme.surface.default,
-        theme.border.default,
-        colors.border,
+        'relative overflow-hidden p-6 transition-all duration-200',
         onClick && 'cursor-pointer hover:shadow-lg hover:scale-[1.02]',
-        !onClick && 'hover:shadow-md',
         className
       )}
       onClick={onClick}
@@ -198,45 +215,64 @@ export function KPICard({
     >
       {/* Loading overlay */}
       {isLoading && (
-        <div style={{ backgroundColor: 'var(--color-surface)' }} className="absolute inset-0 backdrop-blur-sm flex items-center justify-center z-10 opacity-50">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+        <div
+          style={{ backgroundColor: tokens.colors.surface }}
+          className="absolute inset-0 backdrop-blur-sm flex items-center justify-center z-10 opacity-50"
+        >
+          <div
+            style={{
+              borderColor: `${tokens.colors.border} ${tokens.colors.border} ${tokens.colors.info} ${tokens.colors.border}`,
+              borderRadius: '50%'
+            }}
+            className="h-6 w-6 animate-spin border-2"
+          />
         </div>
       )}
 
       {/* Header with icon */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <p className={cn('text-xs font-semibold uppercase tracking-wider mb-1', theme.text.secondary)}>
+          <p
+            style={{ color: tokens.colors.textSecondary }}
+            className="text-xs font-semibold uppercase tracking-wider mb-1"
+          >
             {label}
           </p>
           {subtitle && (
-            <p className={cn('text-xs', theme.text.tertiary)}>
+            <p style={{ color: tokens.colors.textMuted }} className="text-xs">
               {subtitle}
             </p>
           )}
         </div>
         {Icon && (
-          <div className={cn('p-3 rounded-lg', colors.icon)}>
+          <div
+            style={{
+              backgroundColor: colors.iconBg,
+              color: colors.iconColor,
+              borderRadius: tokens.borderRadius.lg
+            }}
+            className="p-3"
+          >
             <Icon className="h-5 w-5" />
           </div>
         )}
       </div>
 
       {/* Value */}
-      <div className={cn('text-3xl font-bold mb-3', theme.text.primary)}>
+      <div style={{ color: tokens.colors.text }} className="text-3xl font-bold mb-3">
         {typeof value === 'number' ? formatValue(displayValue, format, currency) : value}
       </div>
 
       {/* Change indicator */}
       {(changePercentage !== undefined || previousValue !== undefined) && (
         <div className="flex items-center gap-2 mb-2">
-          <div className={cn('flex items-center gap-1 text-sm font-medium', trendColor)}>
+          <div style={{ color: trendColor }} className="flex items-center gap-1 text-sm font-medium">
             <TrendIcon className="h-4 w-4" />
             <span>
               {change.trend === 'neutral' ? '0.0' : Math.abs(change.percentage).toFixed(1)}%
             </span>
           </div>
-          <span className={cn('text-xs', theme.text.tertiary)}>
+          <span style={{ color: tokens.colors.textMuted }} className="text-xs">
             vs previous period
           </span>
         </div>
@@ -246,15 +282,25 @@ export function KPICard({
       {target && progressPercent !== undefined && (
         <div className="mt-3">
           <div className="flex items-center justify-between text-xs mb-1">
-            <span className={theme.text.tertiary}>Progress to goal</span>
-            <span className={cn('font-medium', theme.text.secondary)}>
+            <span style={{ color: tokens.colors.textMuted }}>Progress to goal</span>
+            <span style={{ color: tokens.colors.textSecondary }} className="font-medium">
               {progressPercent.toFixed(0)}%
             </span>
           </div>
-          <div style={{ backgroundColor: 'var(--color-border)' }} className="h-2 rounded-full overflow-hidden">
+          <div
+            style={{
+              backgroundColor: tokens.colors.border,
+              borderRadius: tokens.borderRadius.full
+            }}
+            className="h-2 overflow-hidden"
+          >
             <div
-              className={cn('h-full transition-all duration-500 rounded-full', colors.accent.replace('text-', 'bg-'))}
-              style={{ width: `${Math.min(progressPercent, 100)}%` }}
+              style={{
+                backgroundColor: colors.accentColor,
+                borderRadius: tokens.borderRadius.full,
+                width: `${Math.min(progressPercent, 100)}%`
+              }}
+              className="h-full transition-all duration-500"
             />
           </div>
         </div>

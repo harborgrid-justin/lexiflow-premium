@@ -77,10 +77,10 @@ export function SSOLoginOptions({ providers = DEFAULT_PROVIDERS, onProviderClick
     <div className="space-y-3">
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-600"></div>
+          <div className="w-full border-t" style={{ borderColor: theme.border.default }}></div>
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-slate-800 px-2 text-slate-400">Or continue with</span>
+          <span style={{ backgroundColor: theme.surface.elevated, color: theme.text.secondary, paddingLeft: tokens.spacing.compact.sm, paddingRight: tokens.spacing.compact.sm }}>Or continue with</span>
         </div>
       </div>
 
@@ -90,7 +90,8 @@ export function SSOLoginOptions({ providers = DEFAULT_PROVIDERS, onProviderClick
             key={provider.id}
             onClick={() => handleProviderClick(provider)}
             disabled={isLoading === provider.id}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-700/50 border border-slate-600 rounded-lg transition-colors group"
+            style={{ backgroundColor: theme.surface.raised, borderColor: theme.border.default, color: theme.text.primary }}
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 hover:opacity-90 disabled:opacity-50 border rounded-lg transition-all group"
           >
             {provider.logoUrl && (
               <img

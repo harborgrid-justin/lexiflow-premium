@@ -124,7 +124,6 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
         {useBackendApi && (
           <button
             onClick={() => setShowHealthMonitor(true)}
-            style={{ backgroundColor: 'var(--color-surface)' }}
             style={{ backgroundColor: 'transparent' }}
             className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             title="View Backend Health Monitor"

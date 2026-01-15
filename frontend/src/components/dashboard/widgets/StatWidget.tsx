@@ -5,10 +5,10 @@
  * Lightweight alternative to KPICard for simpler metrics
  */
 
-import React from 'react';
-import { LucideIcon } from 'lucide-react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { LucideIcon } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -47,29 +47,34 @@ export const StatWidget: React.FC<StatWidgetProps> = ({
   className,
   onClick,
 }) => {
-  const { theme: _theme } = useTheme();
+  const { theme, tokens } = useTheme();
 
-  const variantClasses = {
-    default: 'border-gray-200 dark:border-gray-700 bg-surface',
-    success: 'border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/20',
-    warning: 'border-orange-200 dark:border-orange-800 bg-orange-50/50 dark:bg-orange-950/20',
-    danger: 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20',
-    info: 'border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/20',
+  const variantStyles = {
+    default: { borderColor: theme.border.default, backgroundColor: theme.surface.default },
+    success: { borderColor: tokens.colors.emerald400, backgroundColor: tokens.colors.success + '20' },
+    warning: { borderColor: tokens.colors.amber400, backgroundColor: tokens.colors.warning + '20' },
+    danger: { borderColor: tokens.colors.rose400, backgroundColor: tokens.colors.error + '20' },
+    info: { borderColor: tokens.colors.blue400, backgroundColor: tokens.colors.info + '20' },
   };
 
   const iconColors = {
-    default: 'text-text-muted',
-    success: 'text-emerald-600 dark:text-emerald-400',
-    warning: 'text-orange-600 dark:text-orange-400',
-    danger: 'text-red-600 dark:text-red-400',
-    info: 'text-blue-600 dark:text-blue-400',
+    default: theme.text.secondary,
+    success: tokens.colors.emerald500,
+    warning: tokens.colors.amber400,
+    danger: tokens.colors.error,
+    info: tokens.colors.blue500,
   };
 
   return (
     <div
+      style={{
+        ...variantStyles[variant],
+        borderRadius: tokens.borderRadius.lg,
+        boxShadow: tokens.shadows.sm,
+        transition: tokens.transitions.smooth,
+      }}
       className={cn(
-        'relative rounded-lg border p-4 transition-all duration-200',
-        variantClasses[variant],
+        'relative border p-4 transition-all',
         onClick && 'cursor-pointer hover:shadow-md hover:scale-[1.02]',
         className
       )}

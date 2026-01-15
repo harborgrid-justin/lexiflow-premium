@@ -334,49 +334,6 @@ export interface DesignTokens {
     placeholder: string;
   };
 }
-      xs: string;
-      sm: string;
-      base: string;
-      lg: string;
-      xl: string;
-      "2xl": string;
-      "3xl": string;
-      "4xl": string;
-    };
-    fontWeight: {
-      normal: string;
-      medium: string;
-      semibold: string;
-      bold: string;
-    };
-    lineHeight: {
-      tight: string;
-      normal: string;
-      relaxed: string;
-    };
-  };
-  transitions: {
-    fast: string;
-    normal: string;
-    slow: string;
-  };
-  zIndex: {
-    base: string;
-    header: string;
-    sidebar: string;
-    modal: string;
-    overlay: string;
-  };
-  layout: {
-    sidebarWidth: number;
-    sidebarCollapsedWidth: number;
-    topBarHeight: number;
-    modalMaxWidth: number;
-    footerHeight: number;
-    tableRowHeight: number;
-    tableHeaderHeight: number;
-  };
-}
 
 export const DEFAULT_TOKENS: DesignTokens = {
   fontMode: "sans",

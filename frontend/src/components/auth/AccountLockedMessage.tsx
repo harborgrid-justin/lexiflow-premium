@@ -7,6 +7,8 @@
  * @module components/auth/AccountLockedMessage
  */
 
+import { useTheme } from '@/theme';
+
 interface AccountLockedMessageProps {
   reason?: 'failed_attempts' | 'admin_action' | 'security';
   unlockTime?: Date;
@@ -20,6 +22,8 @@ export function AccountLockedMessage({
   contactEmail = 'security@lexiflow.com',
   contactPhone = '1-800-LEXIFLOW',
 }: AccountLockedMessageProps) {
+  const { theme, tokens } = useTheme();
+
   const getReasonText = () => {
     switch (reason) {
       case 'failed_attempts':
@@ -53,18 +57,18 @@ export function AccountLockedMessage({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-      <div className="max-w-md w-full">
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)', padding: tokens.spacing.normal.md }}>
+      <div style={{ maxWidth: '28rem', width: '100%' }}>
         {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">LexiFlow</h1>
-          <p className="text-slate-400">Account Security</p>
+        <div style={{ textAlign: 'center', marginBottom: tokens.spacing.layout.lg }}>
+          <h1 style={{ fontSize: tokens.typography.fontSize['4xl'], fontWeight: tokens.typography.fontWeight.bold, color: theme.text.primary, marginBottom: tokens.spacing.compact.sm }}>LexiFlow</h1>
+          <p style={{ color: theme.text.secondary }}>Account Security</p>
         </div>
 
         {/* Main Card */}
-        <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-xl overflow-hidden">
+        <div style={{ backgroundColor: theme.surface.elevated, borderColor: theme.border.default, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.xxl, overflow: 'hidden', borderWidth: '1px' }}>
           {/* Header */}
-          <div className="bg-red-600 px-6 py-4">
+          <div style={{ backgroundColor: theme.status.error.bg, padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}` }}>
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

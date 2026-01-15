@@ -8,9 +8,11 @@
  */
 
 import { useAuthActions, useAuthState } from '@/contexts/auth/AuthProvider';
+import { useTheme } from '@/theme';
 import { useEffect, useState } from 'react';
 
 export function SessionTimeoutWarning() {
+  const { theme, tokens } = useTheme();
   const { session } = useAuthState();
   const { extendSession, logout } = useAuthActions();
   const [showWarning, setShowWarning] = useState(false);
@@ -63,10 +65,10 @@ export function SessionTimeoutWarning() {
   const seconds = remainingSeconds % 60;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" style={{ backgroundColor: tokens.semantic.overlay, zIndex: tokens.zIndex.modal }}>
+      <div className="max-w-md w-full mx-4 overflow-hidden" style={{ backgroundColor: theme.surface.default, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.xxl }}>
         {/* Header */}
-        <div className="bg-yellow-500 px-6 py-4">
+        <div style={{ backgroundColor: tokens.colors.warning, padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal.xl}` }}>
           <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,19 +85,23 @@ export function SessionTimeoutWarning() {
 
         {/* Content */}
         <div className="px-6 py-6">
-          <p className="text-gray-700 mb-4">
-            Your session will expire in <span className="font-bold text-yellow-600">{minutes}:{seconds.toString().padStart(2, '0')}</span> due to inactivity.
+          <p className="mb-4" style={{ color: tokens.colors.text }}>
+            Your session will expire in <span className="font-bold" style={{ color: tokens.colors.warning }}>{minutes}:{seconds.toString().padStart(2, '0')}</span> due to inactivity.
           </p>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-sm mb-6" style={{ color: tokens.colors.textMuted }}>
             Would you like to stay signed in? Click "Stay Signed In" to extend your session.
           </p>
 
           {/* Timer Progress */}
           <div className="mb-6">
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full h-2" style={{ backgroundColor: tokens.colors.border, borderRadius: tokens.borderRadius.full }}>
               <div
-                className="bg-yellow-500 h-2 rounded-full transition-all duration-1000"
-                style={{ width: `${(remainingSeconds / 300) * 100}%` }}
+                className="h-2 transition-all duration-1000"
+                style={{
+                  width: `${(remainingSeconds / 300) * 100}%`,
+                  backgroundColor: tokens.colors.warning,
+                  borderRadius: tokens.borderRadius.full
+                }}
               />
             </div>
           </div>
@@ -104,13 +110,28 @@ export function SessionTimeoutWarning() {
           <div className="flex gap-3">
             <button
               onClick={handleExtend}
-              className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              className="flex-1 px-4 py-2 font-medium transition-colors"
+              style={{
+                backgroundColor: tokens.colors.primary,
+                color: tokens.colors.textInverse,
+                borderRadius: tokens.borderRadius.lg
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = tokens.colors.hoverPrimary}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = tokens.colors.primary}
             >
               Stay Signed In
             </button>
             <button
               onClick={handleLogout}
-              className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
+              className="flex-1 px-4 py-2 font-medium transition-colors"
+              style={{
+                backgroundColor: tokens.colors.surface,
+                color: tokens.colors.text,
+                border: `1px solid ${tokens.colors.border}`,
+                borderRadius: tokens.borderRadius.lg
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = tokens.colors.surfaceHover}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = tokens.colors.surface}
             >
               Sign Out Now
             </button>
@@ -118,8 +139,11 @@ export function SessionTimeoutWarning() {
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 px-6 py-3 border-t border-gray-200">
-          <p className="text-xs text-gray-500">
+        <div className="px-6 py-3" style={{
+          backgroundColor: tokens.colors.backgroundSecondary,
+          borderTop: `1px solid ${tokens.colors.border}`
+        }}>
+          <p className="text-xs" style={{ color: tokens.colors.textMuted }}>
             For your security, sessions expire after 30 minutes of inactivity.
           </p>
         </div>

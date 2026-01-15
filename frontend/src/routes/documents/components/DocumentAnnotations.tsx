@@ -142,9 +142,11 @@ export function DocumentAnnotations({
           filteredAnnotations.map((annotation) => (
             <div
               key={annotation.id}
-              style={{ backgroundColor: 'var(--color-surfaceHover)' }}
+              style={{
+                backgroundColor: 'var(--color-surfaceHover)',
+                borderLeftColor: annotation.color || theme.text.muted
+              }}
               className="p-4 rounded-lg border-l-4"
-              style={{ borderLeftColor: annotation.color || theme.text.muted }}
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">

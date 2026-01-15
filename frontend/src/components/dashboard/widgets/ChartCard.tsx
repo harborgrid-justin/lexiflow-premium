@@ -77,12 +77,19 @@ export const ChartCard: React.FC<ChartCardProps> = ({
     }
   }, [onRefresh, isRefreshing]);
 
+  const { tokens } = useTheme();
+
   return (
     <div
+      style={{
+        backgroundColor: theme.surface.default,
+        borderColor: theme.border.default,
+        borderRadius: tokens.borderRadius.xl,
+        boxShadow: tokens.shadows.sm,
+        transition: tokens.transitions.smooth,
+      }}
       className={cn(
-        'rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-md',
-        theme.surface.default,
-        theme.border.default,
+        'border overflow-hidden hover:shadow-md',
         className
       )}
     >

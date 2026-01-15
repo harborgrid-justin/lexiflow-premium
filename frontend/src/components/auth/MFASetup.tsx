@@ -8,6 +8,7 @@
  */
 
 import { useAuthActions, useAuthState } from '@/contexts/auth/AuthProvider';
+import { useTheme } from '@/theme';
 import { useState } from 'react';
 
 interface MFASetupProps {
@@ -16,6 +17,7 @@ interface MFASetupProps {
 }
 
 export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
+  const { theme, tokens } = useTheme();
   const { enableMFA } = useAuthActions();
   const { user } = useAuthState();
   const [step, setStep] = useState<'initial' | 'scan' | 'verify' | 'complete'>('initial');
@@ -75,31 +77,39 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto p-6" style={{ backgroundColor: theme.surface.default, color: theme.text.primary }}>
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+      <div className="mb-8" style={{ borderBottom: `1px solid ${theme.border.default}`, paddingBottom: tokens.spacing.normal.md }}>
+        <h2 className="text-2xl font-semibold mb-2" style={{ color: tokens.colors.text }}>
           Multi-Factor Authentication
         </h2>
-        <p className="text-gray-600">
+        <p style={{ color: tokens.colors.textMuted }}>
           Add an extra layer of security to your account
         </p>
       </div>
 
       {/* Step 1: Initial */}
       {step === 'initial' && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="p-6" style={{
+          backgroundColor: tokens.colors.surface,
+          border: `1px solid ${tokens.colors.border}`,
+          borderRadius: tokens.borderRadius.lg
+        }}>
           <div className="mb-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium mb-2" style={{ color: tokens.colors.text }}>
               Enable Two-Factor Authentication
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="mb-4" style={{ color: tokens.colors.textMuted }}>
               Two-factor authentication adds an additional layer of security to your account by
               requiring more than just a password to sign in.
             </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-              <h4 className="font-medium text-blue-900 mb-2">What you'll need:</h4>
-              <ul className="list-disc list-inside text-blue-800 space-y-1 text-sm">
+            <div className="p-4 mb-4" style={{
+              backgroundColor: tokens.colors.info + '10',
+              border: `1px solid ${tokens.colors.borderInfo}`,
+              borderRadius: tokens.borderRadius.lg
+            }}>
+              <h4 className="font-medium mb-2" style={{ color: tokens.colors.info }}>What you'll need:</h4>
+              <ul className="list-disc list-inside space-y-1 text-sm" style={{ color: tokens.colors.info }}>
                 <li>An authenticator app (Google Authenticator, Authy, etc.)</li>
                 <li>Your mobile device</li>
                 <li>A secure place to store backup codes</li>
@@ -111,14 +121,26 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
             <button
               onClick={handleStartSetup}
               disabled={isLoading}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
+              className="px-6 py-2 font-medium transition-colors"
+              style={{
+                backgroundColor: isLoading ? tokens.colors.disabled : tokens.colors.primary,
+                color: tokens.colors.textInverse,
+                borderRadius: tokens.borderRadius.lg,
+                opacity: isLoading ? 0.6 : 1
+              }}
             >
               {isLoading ? 'Setting up...' : 'Enable MFA'}
             </button>
             {onCancel && (
               <button
                 onClick={onCancel}
-                className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
+                className="px-6 py-2 font-medium transition-colors"
+                style={{
+                  backgroundColor: tokens.colors.surface,
+                  color: tokens.colors.text,
+                  border: `1px solid ${tokens.colors.border}`,
+                  borderRadius: tokens.borderRadius.lg
+                }}
               >
                 Cancel
               </button>
@@ -126,7 +148,12 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
           </div>
 
           {error && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="mt-4 p-3 text-sm" style={{
+              backgroundColor: tokens.colors.error + '10',
+              border: `1px solid ${tokens.colors.borderError}`,
+              borderRadius: tokens.borderRadius.lg,
+              color: tokens.colors.error
+            }}>
               {error}
             </div>
           )}
@@ -135,15 +162,23 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
       {/* Step 2: Scan QR Code */}
       {step === 'scan' && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="p-6" style={{
+          backgroundColor: tokens.colors.surface,
+          border: `1px solid ${tokens.colors.border}`,
+          borderRadius: tokens.borderRadius.lg
+        }}>
           <div className="mb-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
+            <h3 className="text-lg font-medium mb-4" style={{ color: tokens.colors.text }}>
               Scan QR Code
             </h3>
 
             {/* QR Code */}
             <div className="flex justify-center mb-6">
-              <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
+              <div className="p-4" style={{
+                backgroundColor: tokens.colors.surface,
+                borderRadius: tokens.borderRadius.lg,
+                border: `2px solid ${tokens.colors.border}`
+              }}>
                 <img
                   src={qrCode}
                   alt="MFA QR Code"
@@ -153,17 +188,31 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
             </div>
 
             {/* Manual Entry */}
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-              <p className="text-sm text-gray-600 mb-2">
+            <div className="p-4 mb-6" style={{
+              backgroundColor: tokens.colors.backgroundSecondary,
+              border: `1px solid ${tokens.colors.border}`,
+              borderRadius: tokens.borderRadius.lg
+            }}>
+              <p className="text-sm mb-2" style={{ color: tokens.colors.textMuted }}>
                 Can't scan the code? Enter this key manually:
               </p>
               <div className="flex items-center gap-2">
-                <code className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded font-mono text-sm">
+                <code className="flex-1 px-3 py-2 font-mono text-sm" style={{
+                  backgroundColor: tokens.colors.surface,
+                  border: `1px solid ${tokens.colors.border}`,
+                  borderRadius: tokens.borderRadius.md,
+                  color: tokens.colors.text
+                }}>
                   {secret}
                 </code>
                 <button
                   onClick={() => navigator.clipboard.writeText(secret)}
-                  className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors"
+                  className="px-3 py-2 text-sm transition-colors"
+                  style={{
+                    backgroundColor: tokens.colors.primary,
+                    color: tokens.colors.textInverse,
+                    borderRadius: tokens.borderRadius.md
+                  }}
                 >
                   Copy
                 </button>
@@ -172,7 +221,7 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
             {/* Verification */}
             <div>
-              <label htmlFor="verification-code" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="verification-code" className="block text-sm font-medium mb-2" style={{ color: tokens.colors.text }}>
                 Enter verification code from your app
               </label>
               <input
@@ -182,7 +231,13 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
                 onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 placeholder="000000"
                 maxLength={6}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg font-mono text-lg text-center tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 font-mono text-lg text-center tracking-widest focus:outline-none focus:ring-2"
+                style={{
+                  border: `1px solid ${tokens.colors.border}`,
+                  borderRadius: tokens.borderRadius.lg,
+                  backgroundColor: tokens.colors.surface,
+                  color: tokens.colors.text
+                }}
               />
             </div>
           </div>
@@ -191,20 +246,37 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
             <button
               onClick={handleVerify}
               disabled={isLoading || verificationCode.length !== 6}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
+              className="px-6 py-2 font-medium transition-colors"
+              style={{
+                backgroundColor: (isLoading || verificationCode.length !== 6) ? tokens.colors.disabled : tokens.colors.primary,
+                color: tokens.colors.textInverse,
+                borderRadius: tokens.borderRadius.lg,
+                opacity: (isLoading || verificationCode.length !== 6) ? 0.6 : 1
+              }}
             >
               {isLoading ? 'Verifying...' : 'Verify & Continue'}
             </button>
             <button
               onClick={() => setStep('initial')}
-              className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
+              className="px-6 py-2 font-medium transition-colors"
+              style={{
+                backgroundColor: tokens.colors.surface,
+                color: tokens.colors.text,
+                border: `1px solid ${tokens.colors.border}`,
+                borderRadius: tokens.borderRadius.lg
+              }}
             >
               Back
             </button>
           </div>
 
           {error && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="mt-4 p-3 text-sm" style={{
+              backgroundColor: tokens.colors.error + '10',
+              border: `1px solid ${tokens.colors.borderError}`,
+              borderRadius: tokens.borderRadius.lg,
+              color: tokens.colors.error
+            }}>
               {error}
             </div>
           )}
@@ -213,28 +285,45 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
       {/* Step 3: Backup Codes */}
       {step === 'complete' && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="p-6" style={{
+          backgroundColor: tokens.colors.surface,
+          border: `1px solid ${tokens.colors.border}`,
+          borderRadius: tokens.borderRadius.lg
+        }}>
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: tokens.colors.success }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium" style={{ color: tokens.colors.text }}>
                 MFA Successfully Enabled!
               </h3>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <h4 className="font-medium text-yellow-900 mb-2">Save Your Backup Codes</h4>
-              <p className="text-yellow-800 text-sm mb-4">
+            <div className="p-4 mb-6" style={{
+              backgroundColor: tokens.colors.warning + '10',
+              border: `1px solid ${tokens.colors.borderWarning}`,
+              borderRadius: tokens.borderRadius.lg
+            }}>
+              <h4 className="font-medium mb-2" style={{ color: tokens.colors.warning }}>Save Your Backup Codes</h4>
+              <p className="text-sm mb-4" style={{ color: tokens.colors.warning }}>
                 Store these backup codes in a safe place. You can use them to access your account
                 if you lose your authenticator device.
               </p>
 
-              <div className="bg-white border border-yellow-300 rounded-lg p-4 mb-4">
+              <div className="p-4 mb-4" style={{
+                backgroundColor: tokens.colors.surface,
+                border: `1px solid ${tokens.colors.borderWarning}`,
+                borderRadius: tokens.borderRadius.lg
+              }}>
                 <div className="grid grid-cols-2 gap-2 font-mono text-sm">
                   {backupCodes.map((code, index) => (
-                    <div key={index} className="px-3 py-2 bg-gray-50 rounded border border-gray-200">
+                    <div key={index} className="px-3 py-2" style={{
+                      backgroundColor: tokens.colors.backgroundSecondary,
+                      borderRadius: tokens.borderRadius.md,
+                      border: `1px solid ${tokens.colors.border}`,
+                      color: tokens.colors.text
+                    }}>
                       {code}
                     </div>
                   ))}
@@ -243,7 +332,12 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
               <button
                 onClick={copyBackupCodes}
-                className="w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-colors"
+                className="w-full px-4 py-2 font-medium transition-colors"
+                style={{
+                  backgroundColor: tokens.colors.warning,
+                  color: tokens.colors.textInverse,
+                  borderRadius: tokens.borderRadius.lg
+                }}
               >
                 Copy All Backup Codes
               </button>
@@ -252,7 +346,12 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
           <button
             onClick={handleComplete}
-            className="w-full px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            className="w-full px-6 py-2 font-medium transition-colors"
+            style={{
+              backgroundColor: tokens.colors.primary,
+              color: tokens.colors.textInverse,
+              borderRadius: tokens.borderRadius.lg
+            }}
           >
             Done
           </button>

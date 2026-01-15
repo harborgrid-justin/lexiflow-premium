@@ -47,16 +47,16 @@ export interface ActivityFeedProps {
 // HELPERS
 // ============================================================================
 
-const activityConfig: Record<ActivityType, { icon: LucideIcon; color: string; bgColor: string }> = {
+const getActivityConfig = (tokens: any) => ({
   case_created: {
     icon: Briefcase,
-    color: 'text-blue-600 dark:text-blue-400',
-    bgColor: 'bg-blue-100 dark:bg-blue-900/30',
+    color: tokens.colors.blue500,
+    bgColor: tokens.colors.blue400 + '20',
   },
   case_updated: {
     icon: Briefcase,
-    color: 'text-indigo-600 dark:text-indigo-400',
-    bgColor: 'bg-indigo-100 dark:bg-indigo-900/30',
+    color: tokens.colors.indigo500,
+    bgColor: tokens.colors.indigo400 + '20',
   },
   case_closed: {
     icon: CheckCircle2,
@@ -136,6 +136,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   emptyMessage = 'No recent activity',
   className,
 }) => {
+  const { theme, tokens } = useTheme();
   const { theme: _theme } = useTheme();
 
   const displayActivities = activities.slice(0, maxItems);

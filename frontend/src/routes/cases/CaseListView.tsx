@@ -39,9 +39,17 @@ import {
   TrendingUp,
   Users
 } from 'lucide-react';
-import { startTransition, useMemo } from 'react';
+import { lazy, startTransition, useMemo } from 'react';
 import { useNavigation } from 'react-router';
 import { useCaseList } from './CaseListProvider';
+
+// Lazy load tab contents for performance
+const CaseOverviewDashboard = lazy(() => import('./components/overview').then(m => ({ default: m.CaseOverviewDashboard })));
+const CaseListActive = lazy(() => import('./components/list').then(m => ({ default: m.CaseListActive })));
+const CaseListIntake = lazy(() => import('./components/list').then(m => ({ default: m.CaseListIntake })));
+const CaseImporter = lazy(() => import('./components/import').then(m => ({ default: m.CaseImporter })));
+const CaseOperationsCenter = lazy(() => import('./components/operations').then(m => ({ default: m.CaseOperationsCenter })));
+// const MasterWorkflow = lazy(() => import('./components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow }))); // Placeholder
 
 /**
  * Tab configuration (presentation concern)
@@ -258,13 +266,29 @@ export function CaseListView() {
         'rounded-lg border bg-card text-card-foreground shadow-sm p-6',
         isPending && 'opacity-70 transition-opacity'
       )}>
-        {/* TODO: Lazy load tab content based on activeTab */}
-        <div className="text-center text-muted-foreground py-12">
-          <p>Content for "{activeTab}" tab</p>
-          <p className="text-sm mt-2">
-            Tab content will be lazy-loaded here
-          </p>
-        </div>
+        <Suspense fallback={<AdaptiveLoader contentType="list" message="Loading tab content..." />}>
+          {activeTab === 'overview' && <CaseOverviewDashboard />}
+          {activeTab === 'active' && <CaseListActive />}
+          {activeTab === 'intake' && <CaseListIntake />}
+          {activeTab === 'import' && <CaseImporter />}
+          {activeTab === 'operations' && <CaseOperationsCenter />}
+
+          {/* Fallback for unimplemented tabs */}
+          {![
+            'overview',
+            'active',
+            'intake',
+            'import',
+            'operations'
+          ].includes(activeTab) && (
+              <div className="text-center text-muted-foreground py-12">
+                <p>Content for "{activeTab}" tab</p>
+                <p className="text-sm mt-2">
+                  This module is currently under development.
+                </p>
+              </div>
+            )}
+        </Suspense>
       </div>
     </div>
   );

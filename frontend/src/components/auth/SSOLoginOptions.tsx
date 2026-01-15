@@ -8,6 +8,7 @@
 
 import { useAuthActions } from '@/contexts/auth/AuthProvider';
 import type { SSOProvider } from '@/contexts/auth/authTypes';
+import { useTheme } from '@/theme';
 import { useState } from 'react';
 
 interface SSOLoginOptionsProps {
@@ -45,6 +46,7 @@ const DEFAULT_PROVIDERS: SSOProvider[] = [
 
 export function SSOLoginOptions({ providers = DEFAULT_PROVIDERS, onProviderClick }: SSOLoginOptionsProps) {
   const { loginWithSSO } = useAuthActions();
+  const { theme, tokens } = useTheme();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   const handleProviderClick = async (provider: SSOProvider) => {

@@ -3,9 +3,10 @@
  * Display and filter invoices with status tracking
  */
 
-import React, { useState } from 'react';
+import { useTheme } from '@/theme';
 import type { Invoice } from '@/types/financial';
 import { FileText, Filter, Send } from 'lucide-react';
+import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 interface InvoiceListProps {
@@ -14,22 +15,31 @@ interface InvoiceListProps {
 }
 
 export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) => {
+  const { theme, tokens } = useTheme();
   const [showFilters, setShowFilters] = useState(false);
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      Draft: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      Sent: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      Paid: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      Overdue: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-      Cancelled: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      'Partially Paid': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+      Draft: { bg: theme.surface.muted, text: theme.text.secondary },
+      Sent: { bg: tokens.colors.blue400 + '20', text: tokens.colors.blue600 },
+      Paid: { bg: theme.status.success.bg, text: theme.status.success.text },
+      Overdue: { bg: theme.status.error.bg, text: theme.status.error.text },
+      Cancelled: { bg: theme.surface.muted, text: theme.text.secondary },
+      'Partially Paid': { bg: theme.status.warning.bg, text: theme.status.warning.text },
     };
 
+    const statusStyle = styles[status as keyof typeof styles] || styles.Draft;
     return (
       <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[status as keyof typeof styles] || styles.Draft
-          }`}
+        style={{
+          backgroundColor: statusStyle.bg,
+          color: statusStyle.text,
+          borderRadius: tokens.borderRadius.full,
+          padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
+          fontSize: tokens.typography.fontSize.xs,
+          fontWeight: tokens.typography.fontWeight.semibold,
+        }}
+        className="inline-flex"
       >
         {status}
       </span>

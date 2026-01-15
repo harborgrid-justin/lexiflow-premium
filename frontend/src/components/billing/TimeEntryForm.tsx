@@ -4,8 +4,9 @@
  * Includes LEDES code support and validation
  */
 
-import React, { useState } from 'react';
+import { useTheme } from '@/theme';
 import type { TimeEntry } from '@/types/financial';
+import React, { useState } from 'react';
 import { Form } from 'react-router';
 import { RunningTimer } from './RunningTimer';
 
@@ -20,6 +21,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
   onCancel,
   actionError,
 }) => {
+  const { theme, tokens } = useTheme();
   const [useTimer, setUseTimer] = useState(false);
   const [hours, setHours] = useState(entry?.duration || 0);
   const [selectedCase, setSelectedCase] = useState(entry?.caseId || '');
@@ -68,15 +70,15 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = ({
       <Form method="post" className="space-y-6">
         {/* Error Message */}
         {actionError && (
-          <div className="rounded-md bg-red-50 p-4 border border-red-200">
-            <p className="text-sm text-red-800">{actionError}</p>
+          <div style={{ backgroundColor: theme.status.error.bg, borderColor: theme.status.error.border, borderRadius: tokens.borderRadius.md, padding: tokens.spacing.normal.md, borderWidth: '1px' }}>
+            <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.status.error.text }}>{actionError}</p>
           </div>
         )}
 
         {/* Timer Toggle */}
-        <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center justify-between" style={{ borderRadius: tokens.borderRadius.lg, borderWidth: '1px', borderColor: theme.border.default, backgroundColor: theme.surface.raised, padding: tokens.spacing.normal.md }}>
           <div>
-            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+            <h3 style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.text.primary }}>
               Use Timer
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">

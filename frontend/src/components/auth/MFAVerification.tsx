@@ -7,6 +7,7 @@
  */
 
 import { useAuthActions } from '@/contexts/auth/AuthProvider';
+import { useTheme } from '@/theme';
 import React, { useState } from 'react';
 
 interface MFAVerificationProps {
@@ -16,6 +17,7 @@ interface MFAVerificationProps {
 
 export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
   const { verifyMFA } = useAuthActions();
+  const { theme, tokens } = useTheme();
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,16 +50,16 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="w-full max-w-md">
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
+      <div style={{ width: '100%', maxWidth: '28rem' }}>
         {/* Logo/Branding */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">LexiFlow</h1>
-          <p className="text-slate-400">Two-Factor Authentication</p>
+        <div style={{ textAlign: 'center', marginBottom: tokens.spacing.layout.lg }}>
+          <h1 style={{ fontSize: tokens.typography.fontSize['4xl'], fontWeight: tokens.typography.fontWeight.bold, color: theme.text.primary, marginBottom: tokens.spacing.compact.sm }}>LexiFlow</h1>
+          <p style={{ color: theme.text.secondary }}>Two-Factor Authentication</p>
         </div>
 
         {/* MFA Card */}
-        <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-xl p-8">
+        <div style={{ backgroundColor: theme.surface.elevated, borderColor: theme.border.default, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.xxl, padding: tokens.spacing.layout.xl, borderWidth: '1px' }}>
           <div className="mb-6">
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">

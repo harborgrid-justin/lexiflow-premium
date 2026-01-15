@@ -5,11 +5,11 @@
  * Displays court dates, filing deadlines, and important milestones
  */
 
-import React from 'react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { format, formatDistanceToNow, isPast, isThisWeek, isToday, isTomorrow } from 'date-fns';
 import { AlertCircle, Calendar, CheckCircle2, Clock, Flag } from 'lucide-react';
+import React from 'react';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -69,14 +69,14 @@ const getUrgencyLabel = (date: Date | string): string => {
   return formatDistanceToNow(deadlineDate, { addSuffix: true });
 };
 
-const getPriorityConfig = (priority: Deadline['priority']) => {
+const getPriorityConfig = (priority: Deadline['priority'], tokens: any) => {
   switch (priority) {
     case 'critical':
       return {
-        color: 'text-red-600 dark:text-red-400',
-        bg: 'bg-red-100 dark:bg-red-900/30',
-        border: 'border-red-200 dark:border-red-800',
-        dot: 'bg-red-500',
+        color: tokens.colors.error,
+        bg: tokens.colors.error + '20',
+        border: tokens.colors.rose400,
+        dot: tokens.colors.error,
       };
     case 'high':
       return {

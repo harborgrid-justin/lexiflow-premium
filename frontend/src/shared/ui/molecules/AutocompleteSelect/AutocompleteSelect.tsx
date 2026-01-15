@@ -278,9 +278,12 @@ const AutocompleteSelectInner = <
     const dropdownContent = (
       <div
         ref={dropdownRef}
-        style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+        style={{
+          backgroundColor: 'var(--color-surface)',
+          borderColor: 'var(--color-border)',
+          maxHeight: maxDropdownHeight
+        }}
         className="absolute z-50 w-full mt-1 border rounded-lg shadow-lg overflow-hidden"
-        style={{ maxHeight: maxDropdownHeight }}
       >
         {isLoading && (
           <div className="flex items-center justify-center py-8">
@@ -333,7 +336,6 @@ const AutocompleteSelectInner = <
               <button
                 onClick={() => setShowCreateModal(true)}
                 onMouseEnter={() => setHighlightedIndex(-1)}
-                style={{ borderColor: 'var(--color-border)' }}
                 style={{ borderColor: 'var(--color-border)' }}
                 className="w-full px-4 py-2 text-left border-t hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
               >

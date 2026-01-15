@@ -1,4 +1,5 @@
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { HTMLAttributes } from 'react';
 
 /**
@@ -29,16 +30,18 @@ export function Skeleton({
   style,
   ...props
 }: SkeletonProps) {
+  const { theme } = useTheme();
   const styles = {
     width,
     height,
+    backgroundColor: theme.surface.muted,
     ...style
   };
 
   return (
     <div
       className={cn(
-        "animate-pulse bg-gray-200 dark:bg-gray-700/50",
+        "animate-pulse",
         variant === 'circle' && "rounded-full",
         variant === 'rect' && "rounded-md",
         variant === 'text' && "rounded h-4 w-full",

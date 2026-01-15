@@ -1,10 +1,12 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { useTheme } from '@/theme';
 import { Settings, Shield, Users } from 'lucide-react';
 import { useAdmin } from './AdminProvider';
 
 export function AdminView() {
   const { users, auditLogs, activeTab, setActiveTab, isPending } = useAdmin();
+  const { theme, tokens } = useTheme();
 
   return (
     <div className="h-full flex flex-col">
@@ -63,12 +65,20 @@ export function AdminView() {
 }
 
 function TabButton({ active, onClick, disabled, children }: { active: boolean; onClick: () => void; disabled: boolean; children: React.ReactNode }) {
+  const { theme, tokens } = useTheme();
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${active ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-600 dark:text-slate-400'
-        }`}
+      style={{
+        padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+        fontSize: tokens.typography.fontSize.sm,
+        fontWeight: tokens.typography.fontWeight.medium,
+        borderBottom: active ? `2px solid ${tokens.colors.blue500}` : '2px solid transparent',
+        color: active ? tokens.colors.blue500 : theme.text.secondary,
+        transition: tokens.transitions.smooth,
+      }}
+      className="flex items-center gap-2"
     >
       {children}
     </button>

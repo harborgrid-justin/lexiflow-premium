@@ -1,7 +1,6 @@
-import { useTheme } from '@/theme';
-import React from 'react';
 import { apiClient, type ServiceHealthStatus, type SystemHealth } from '@/services/infrastructure/apiClient';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -14,7 +13,7 @@ import {
   XCircle,
   Zap
 } from 'lucide-react';
-import { useEffect, useId, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 
 interface BackendHealthMonitorProps {
   isOpen: boolean;
@@ -64,20 +63,20 @@ export function BackendHealthMonitor({ isOpen, onClose }: BackendHealthMonitorPr
   const getStatusColor = (status: ServiceHealthStatus) => {
     switch (status) {
       case 'online':
-        return 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300';
+        return theme.status.success;
       case 'degraded':
-        return 'bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-300';
+        return theme.status.warning;
       case 'offline':
-        return 'bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-900/20 dark:border-rose-800 dark:text-rose-300';
+        return theme.status.error;
       default:
-        return 'bg-gray-50 border-gray-200 text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300';
+        return { bg: theme.surface.muted, text: theme.text.secondary, border: theme.border.default };
     }
   };
 
   const getOverallStatusColor = (status: ServiceHealthStatus) => {
     switch (status) {
       case 'online':
-        return 'text-emerald-600 dark:text-emerald-400';
+        return theme.status.success.text;
       case 'degraded':
         return 'text-amber-600 dark:text-amber-400';
       case 'offline':

@@ -5,6 +5,7 @@
  */
 
 import { authApi } from '@/lib/frontend-api';
+import { useTheme } from '@/theme';
 import type { User } from '@/types';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
@@ -23,6 +24,7 @@ export async function loader(_args: Route.LoaderArgs) {
 
 export default function AdminUsersPage() {
   const { users } = useLoaderData() as Route.ComponentProps['loaderData'];
+  const { theme, tokens } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -38,45 +40,45 @@ export default function AdminUsersPage() {
   });
 
   const getStatusBadge = (status: string) => {
-    const colors: Record<string, string> = {
-      active: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-      inactive: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-      pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+    const styles: Record<string, { bg: string; text: string }> = {
+      active: { bg: theme.status.success.bg, text: theme.status.success.text },
+      inactive: { bg: theme.surface.muted, text: theme.text.secondary },
+      pending: { bg: theme.status.warning.bg, text: theme.status.warning.text },
     };
-    return colors[status] || colors.inactive;
+    return styles[status] || styles.inactive;
   };
 
   const getRoleBadge = (role: string) => {
-    const colors: Record<string, string> = {
-      admin: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-      attorney: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-      paralegal: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
-      client: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+    const styles: Record<string, { bg: string; text: string }> = {
+      admin: { bg: tokens.colors.purple400 + '20', text: tokens.colors.purple600 },
+      attorney: { bg: tokens.colors.blue400 + '20', text: tokens.colors.blue600 },
+      paralegal: { bg: tokens.colors.cyan400 + '20', text: tokens.colors.cyan600 },
+      client: { bg: tokens.colors.orange400 + '20', text: tokens.colors.orange600 },
     };
-    return colors[role] || 'bg-gray-100 text-gray-800';
+    return styles[role] || { bg: theme.surface.muted, text: theme.text.secondary };
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 style={{ color: 'var(--color-text)' }} className="text-3xl font-bold">
+        <h1 style={{ color: theme.text.primary, fontSize: tokens.typography.fontSize['3xl'], fontWeight: tokens.typography.fontWeight.bold }}>
           User Management
         </h1>
-        <p style={{ color: 'var(--color-textMuted)' }} className="mt-2">
+        <p style={{ color: theme.text.secondary, marginTop: tokens.spacing.compact.sm }}>
           Manage user accounts, roles, and permissions for your organization.
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
-          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Total Users</p>
-          <p style={{ color: 'var(--color-text)' }} className="text-2xl font-bold">{users.length}</p>
+        <div style={{ backgroundColor: theme.surface.default, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.sm, padding: tokens.spacing.normal.md }}>
+          <p style={{ color: theme.text.secondary, fontSize: tokens.typography.fontSize.sm }}>Total Users</p>
+          <p style={{ color: theme.text.primary, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold }}>{users.length}</p>
         </div>
-        <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
-          <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">Active</p>
-          <p className="text-2xl font-bold text-green-600">{users.filter((u: User) => u.status === 'active').length}</p>
+        <div style={{ backgroundColor: theme.surface.default, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.sm, padding: tokens.spacing.normal.md }}>
+          <p style={{ color: theme.text.secondary, fontSize: tokens.typography.fontSize.sm }}>Active</p>
+          <p style={{ color: theme.status.success.text, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold }}>{users.filter((u: User) => u.status === 'active').length}</p>
         </div>
         <div style={{ backgroundColor: 'var(--color-surface)' }} className="rounded-lg shadow p-4">
           <p style={{ color: 'var(--color-textMuted)' }} className="text-sm">MFA Enabled</p>

@@ -103,12 +103,12 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
       {/* Document Display */}
       <div className="flex-1 overflow-auto p-8">
         <div
-          style={{ backgroundColor: 'var(--color-surface)' }}
-          className="mx-auto shadow-lg"
           style={{
+            backgroundColor: 'var(--color-surface)',
             width: `${8.5 * zoom}px`,
             minHeight: `${11 * zoom}px`,
           }}
+          className="mx-auto shadow-lg"
         >
           {/* PDF Preview Placeholder */}
           <div className="p-8 space-y-4 text-gray-700" style={{ fontSize: `${zoom / 8}px` }}>

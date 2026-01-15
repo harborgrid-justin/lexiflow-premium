@@ -52,6 +52,7 @@ interface CaseListContextValue {
  */
 interface CaseListFilters {
   status?: CaseStatus;
+  type?: string;
   search?: string;
   dateRange?: {
     start: Date;
@@ -190,6 +191,10 @@ export function CaseListProvider({
 
     if (filters.status) {
       result = result.filter(c => c.status === filters.status);
+    }
+
+    if (filters.type && filters.type !== 'All') {
+      result = result.filter(c => c.type === filters.type);
     }
 
     if (filters.search) {

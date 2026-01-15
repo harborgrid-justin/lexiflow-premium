@@ -3,9 +3,9 @@
  * Display and filter expenses with receipt viewing
  */
 
-import React, { useState } from 'react';
 import type { FirmExpense } from '@/types/financial';
 import { DollarSign, FileText, Filter, Receipt } from 'lucide-react';
+import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 interface ExpenseListProps {
@@ -77,13 +77,25 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label style={{ display: 'block', fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.text.primary }}>
                 Category
               </label>
               <select
                 name="category"
                 defaultValue={(filters?.category as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                style={{
+                  marginTop: tokens.spacing.compact.xs,
+                  width: '100%',
+                  borderRadius: tokens.borderRadius.md,
+                  borderWidth: '1px',
+                  borderColor: theme.border.input,
+                  backgroundColor: theme.surface.default,
+                  padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.sm}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.primary,
+                  boxShadow: tokens.shadows.sm,
+                }}
+                className="focus:border-blue-500 focus:outline-none focus:ring-blue-500"
               >
                 <option value="">All Categories</option>
                 <option value="Filing Fees">Filing Fees</option>
@@ -93,13 +105,25 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label style={{ display: 'block', fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.text.primary }}>
                 Status
               </label>
               <select
                 name="status"
                 defaultValue={(filters?.status as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                style={{
+                  marginTop: tokens.spacing.compact.xs,
+                  width: '100%',
+                  borderRadius: tokens.borderRadius.md,
+                  borderWidth: '1px',
+                  borderColor: theme.border.input,
+                  backgroundColor: theme.surface.default,
+                  padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.sm}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: theme.text.primary,
+                  boxShadow: tokens.shadows.sm,
+                }}
+                className="focus:border-blue-500 focus:outline-none focus:ring-blue-500"
               >
                 <option value="">All Statuses</option>
                 <option value="Draft">Draft</option>
@@ -112,7 +136,17 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
             <div className="flex items-end">
               <button
                 type="submit"
-                className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                style={{
+                  width: '100%',
+                  borderRadius: tokens.borderRadius.md,
+                  backgroundColor: theme.button.primary.bg,
+                  padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: theme.button.primary.text,
+                  boxShadow: tokens.shadows.sm,
+                }}
+                className="hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 Apply Filters
               </button>
@@ -122,20 +156,20 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
       )}
 
       {/* Expenses Table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
+      <div style={{ overflow: 'hidden', borderRadius: tokens.borderRadius.lg, borderWidth: '1px', borderColor: theme.border.default, backgroundColor: theme.surface.default, boxShadow: tokens.shadows.sm }}>
+        <table style={{ minWidth: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
+          <thead style={{ backgroundColor: theme.surface.muted }}>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{ padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.lg}`, textAlign: 'left', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, textTransform: 'uppercase', letterSpacing: '0.05em', color: theme.text.secondary }}>
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{ padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.lg}`, textAlign: 'left', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, textTransform: 'uppercase', letterSpacing: '0.05em', color: theme.text.secondary }}>
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{ padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.lg}`, textAlign: 'left', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, textTransform: 'uppercase', letterSpacing: '0.05em', color: theme.text.secondary }}>
                 Description
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th style={{ padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.lg}`, textAlign: 'left', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, textTransform: 'uppercase', letterSpacing: '0.05em', color: theme.text.secondary }}>
                 Vendor
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">

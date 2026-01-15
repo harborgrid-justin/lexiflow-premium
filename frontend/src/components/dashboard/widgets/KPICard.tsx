@@ -72,12 +72,13 @@ const calculateChange = (current: number, previous: number): { percentage: numbe
   return { percentage, trend };
 };
 
-const colorClasses = {
+const getColorStyles = (tokens: any) => ({
   blue: {
-    bg: 'bg-blue-50 dark:bg-blue-950/20',
-    border: 'border-blue-200 dark:border-blue-800',
-    icon: 'text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30',
-    accent: 'text-blue-600 dark:text-blue-400',
+    bg: tokens.colors.blue400 + '15',
+    border: tokens.colors.blue400,
+    icon: tokens.colors.blue500,
+    iconBg: tokens.colors.blue400 + '20',
+    accent: tokens.colors.blue500,
   },
   green: {
     bg: 'bg-emerald-50 dark:bg-emerald-950/20',

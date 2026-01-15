@@ -154,18 +154,18 @@ export default function ClientAnalyticsRoute() {
   ];
 
   return (
-    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen p-8">
+    <div style={{ backgroundColor: theme.background, minHeight: '100vh', padding: tokens.spacing.layout.lg }}>
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/analytics" style={{ backgroundColor: 'transparent' }} className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
-            <ArrowLeft className="h-5 w-5" />
+          <Link to="/analytics" style={{ backgroundColor: 'transparent', borderRadius: tokens.borderRadius.lg, padding: tokens.spacing.compact.sm }} className="hover:bg-opacity-10">
+            <ArrowLeft className="h-5 w-5" style={{ color: theme.text.primary }} />
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 style={{ fontSize: tokens.typography.fontSize['3xl'], fontWeight: tokens.typography.fontWeight.bold, color: theme.text.primary }}>
               Client Analytics
             </h1>
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            <p style={{ marginTop: tokens.spacing.compact.xs, fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary }}>
               Client profitability, engagement, and retention
             </p>
           </div>
@@ -173,7 +173,7 @@ export default function ClientAnalyticsRoute() {
 
         <div className="flex items-center gap-3">
           <DateRangeSelector value={dateRange} onChange={setDateRange} />
-          <button style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }} className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700">
+          <button style={{ backgroundColor: theme.surface.default, color: theme.text.primary, borderColor: theme.border.default, borderRadius: tokens.borderRadius.lg, borderWidth: '1px', padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium }} className="inline-flex items-center gap-2">
             <Download className="h-4 w-4" />
             Export
           </button>

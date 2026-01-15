@@ -1,0 +1,93 @@
+{
+  "agentId": "typescript-orchestrator-theme",
+  "taskId": "TH3M3R",
+  "relatedAgentFiles": [
+    ".temp/architecture-notes-A7K3M9.md",
+    ".temp/plan-TH3M3R.md",
+    ".temp/checklist-TH3M3R.md"
+  ],
+  "description": "Replace hardcoded theme values with theme provider tokens and wire up button actions across 60 frontend components",
+  "startedAt": "2026-01-15T00:00:00Z",
+  "workstreams": [
+    {
+      "id": "phase-1-auth-dashboard",
+      "description": "Auth & Dashboard Core (10 components)",
+      "status": "pending",
+      "assignedAgent": "typescript-orchestrator-theme",
+      "dependencies": [],
+      "artifacts": [],
+      "crossAgentReferences": [],
+      "notes": "SessionTimeoutWarning, MFASetup, StatWidget, DeadlinesList, KPICard, ExpenseList, RunningTimer, CaseListView, DocumentViewer, DocumentAnnotations"
+    },
+    {
+      "id": "phase-2-shared-utilities",
+      "description": "Shared Components & Utilities (10 components)",
+      "status": "pending",
+      "assignedAgent": "typescript-orchestrator-theme",
+      "dependencies": ["phase-1-auth-dashboard"],
+      "artifacts": [],
+      "crossAgentReferences": [],
+      "notes": "AutocompleteSelect, ConnectionStatus, ThemePreview, AdvancedThemeCustomizer, DocketList, ClientPortalModal, ClientAnalytics, SatisfactionCard, RiskCard, NotificationSystem"
+    },
+    {
+      "id": "phase-3-case-management",
+      "description": "Case Management Suite (10 components)",
+      "status": "pending",
+      "assignedAgent": "typescript-orchestrator-theme",
+      "dependencies": ["phase-2-shared-utilities"],
+      "artifacts": [],
+      "crossAgentReferences": [],
+      "notes": "DeleteConfirmModal, EnhancedCaseTimeline, CaseCard, documents.tsx, FilingsTable, PartiesTable, TaskCreationModal, CaseFilters, CaseTimeline, CaseQuickActions"
+    },
+    {
+      "id": "phase-4-billing-compliance",
+      "description": "Billing & Compliance (10 components)",
+      "status": "pending",
+      "assignedAgent": "typescript-orchestrator-theme",
+      "dependencies": ["phase-3-case-management"],
+      "artifacts": [],
+      "crossAgentReferences": [],
+      "notes": "billing.tsx, CaseHeader, CompliancePolicies, CalendarView, BillingErrorBoundary, LEDESBilling, PleadingDesigner, DocumentCanvas, AIDraftingAssistant, CorrespondenceDetail"
+    },
+    {
+      "id": "phase-5-correspondence-forms",
+      "description": "Correspondence & Forms (10 components)",
+      "status": "pending",
+      "assignedAgent": "typescript-orchestrator-theme",
+      "dependencies": ["phase-4-billing-compliance"],
+      "artifacts": [],
+      "crossAgentReferences": [],
+      "notes": "ComposeCorrespondence, ComposeMessageModal, CorrespondenceView, DynamicFormBuilder, BackendHealthMonitor, DeadlineList (calendar), DataSourceSelector, NotificationCenter, SystemHealthDisplay, reports/index.tsx"
+    },
+    {
+      "id": "phase-6-analytics-litigation",
+      "description": "Analytics & Litigation (10 components)",
+      "status": "pending",
+      "assignedAgent": "typescript-orchestrator-theme",
+      "dependencies": ["phase-5-correspondence-forms"],
+      "artifacts": [],
+      "crossAgentReferences": [],
+      "notes": "FilterPanel, CaseAnalytics, DateRangeSelector, BillingAnalytics, MetricCard, StrategyBuilder, LitigationView, LitigationProperties, PlaybookLibrary, DeadlineList (duplicate check)"
+    }
+  ],
+  "decisions": [
+    {
+      "timestamp": "2026-01-15T00:00:00Z",
+      "decision": "Batch processing approach - 6 phases of 10 components each",
+      "rationale": "60 components is large scope. Systematic batching ensures quality and allows for pattern refinement between phases",
+      "referencedAgentWork": null
+    },
+    {
+      "timestamp": "2026-01-15T00:00:00Z",
+      "decision": "Use BillingSummaryCard.tsx as reference pattern",
+      "rationale": "User provided this as updated reference. Maintains consistency with recent work",
+      "referencedAgentWork": "frontend/src/components/billing/BillingSummaryCard.tsx"
+    },
+    {
+      "timestamp": "2026-01-15T00:00:00Z",
+      "decision": "Wire buttons to real API endpoints from frontend-api layer",
+      "rationale": "API layer already exists with proper error handling. Connect UI to existing infrastructure",
+      "referencedAgentWork": "frontend/src/lib/frontend-api/"
+    }
+  ]
+}

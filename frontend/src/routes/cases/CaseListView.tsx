@@ -22,8 +22,8 @@
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
-import { Case } from '@/types';
 import { useTheme } from '@/theme';
+import { Case } from '@/types';
 import {
   Activity,
   Archive,
@@ -41,7 +41,7 @@ import {
   TrendingUp,
   Users
 } from 'lucide-react';
-import { lazy, Suspense, startTransition, useMemo } from 'react';
+import { lazy, startTransition, Suspense, useMemo } from 'react';
 import { useNavigate, useNavigation } from 'react-router';
 import { useCaseList } from './CaseListProvider';
 
@@ -51,7 +51,29 @@ const CaseListActive = lazy(() => import('./components/list').then(m => ({ defau
 const CaseListIntake = lazy(() => import('./components/list').then(m => ({ default: m.CaseListIntake })));
 const CaseImporter = lazy(() => import('./components/import').then(m => ({ default: m.CaseImporter })));
 const CaseOperationsCenter = lazy(() => import('./components/operations').then(m => ({ default: m.CaseOperationsCenter })));
-// const MasterWorkflow = lazy(() => import('./components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow }))); // Placeholder
+
+// WORKFLOW COMPONENT IMPORTS
+const MasterWorkflow = lazy(() => import('./components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
+const CaseListDocket = lazy(() => import('./components/list').then(m => ({ default: m.CaseListDocket })));
+const CaseListTasks = lazy(() => import('./components/list').then(m => ({ default: m.CaseListTasks })));
+const CaseListConflicts = lazy(() => import('./components/list').then(m => ({ default: m.CaseListConflicts })));
+
+// PLANNING COMPONENT IMPORTS
+const CaseCalendar = lazy(() => import('./components/calendar/CaseCalendar').then(m => ({ default: m.CaseCalendar })));
+const CaseFinancialsCenter = lazy(() => import('./components/financials/CaseFinancialsCenter').then(m => ({ default: m.CaseFinancialsCenter })));
+const CaseInsightsDashboard = lazy(() => import('./components/insights/CaseInsightsDashboard').then(m => ({ default: m.CaseInsightsDashboard })));
+
+// RESOURCES COMPONENT IMPORTS
+const CaseListResources = lazy(() => import('./components/list').then(m => ({ default: m.CaseListResources })));
+const CaseListExperts = lazy(() => import('./components/list').then(m => ({ default: m.CaseListExperts })));
+const CaseListReporters = lazy(() => import('./components/list').then(m => ({ default: m.CaseListReporters })));
+const CaseListTrust = lazy(() => import('./components/list').then(m => ({ default: m.CaseListTrust })));
+
+// ADMIN COMPONENT IMPORTS
+const CaseListClosing = lazy(() => import('./components/list').then(m => ({ default: m.CaseListClosing })));
+const CaseListArchived = lazy(() => import('./components/list').then(m => ({ default: m.CaseListArchived })));
+const CaseListMisc = lazy(() => import('./components/list').then(m => ({ default: m.CaseListMisc })));
+const CaseAnalyticsDashboard = lazy(() => import('./components/analytics/CaseAnalyticsDashboard').then(m => ({ default: m.CaseAnalyticsDashboard })));
 
 /**
  * Tab configuration (presentation concern)
@@ -160,6 +182,8 @@ export function CaseListView() {
     resetFilters: () => setFilters({ status: undefined, type: undefined, search: undefined, dateRange: undefined }),
     onSelectCase: (c: Case) => navigate(`/cases/${c.id}`),
   }), [filteredCases, filters, setFilters, navigate]);
+
+  const handleSelectCaseId = (id: string) => navigate(`/cases/${id}`);
 
   // THEME (presentation concern - currently unused)
   // const { theme, isPendingThemeChange } = useTheme();
@@ -307,13 +331,51 @@ export function CaseListView() {
           {activeTab === 'import' && <CaseImporter />}
           {activeTab === 'operations' && <CaseOperationsCenter />}
 
+          {/* WORKFLOW TABS */}
+          {activeTab === 'workflows' && <MasterWorkflow onSelectCase={handleSelectCaseId} />}
+          {activeTab === 'docket' && <CaseListDocket onSelectCase={activeCaseProps.onSelectCase} />}
+          {activeTab === 'tasks' && <CaseListTasks onSelectCase={activeCaseProps.onSelectCase} />}
+          {activeTab === 'conflicts' && <CaseListConflicts onSelectCase={activeCaseProps.onSelectCase} />}
+
+          {/* PLANNING TABS */}
+          {activeTab === 'calendar' && <CaseCalendar />}
+          {activeTab === 'financials' && <CaseFinancialsCenter />}
+          {activeTab === 'insights' && <CaseInsightsDashboard />}
+
+          {/* RESOURCES TABS */}
+          {activeTab === 'resources' && <CaseListResources />}
+          {activeTab === 'experts' && <CaseListExperts />}
+          {activeTab === 'reporters' && <CaseListReporters />}
+          {activeTab === 'trust' && <CaseListTrust />}
+
+          {/* ADMIN TABS */}
+          {activeTab === 'closing' && <CaseListClosing />}
+          {activeTab === 'archived' && <CaseListArchived onSelectCase={activeCaseProps.onSelectCase} />}
+          {activeTab === 'misc' && <CaseListMisc />}
+          {activeTab === 'analytics' && <CaseAnalyticsDashboard />}
+
           {/* Fallback for unimplemented tabs */}
           {![
             'overview',
             'active',
             'intake',
             'import',
-            'operations'
+            'operations',
+            'workflows',
+            'docket',
+            'tasks',
+            'conflicts',
+            'calendar',
+            'financials',
+            'insights',
+            'resources',
+            'experts',
+            'reporters',
+            'trust',
+            'closing',
+            'archived',
+            'misc',
+            'analytics'
           ].includes(activeTab) && (
               <div className="text-center text-muted-foreground py-12">
                 <p>Content for "{activeTab}" tab</p>
@@ -343,8 +405,8 @@ function MetricCard({ title, value, icon, trend = 'neutral' }: MetricCardProps) 
 
   const trendColor = trend === 'positive' ? tokens.colors.success :
     trend === 'negative' ? tokens.colors.error :
-    trend === 'warning' ? tokens.colors.warning :
-    tokens.colors.info;
+      trend === 'warning' ? tokens.colors.warning :
+        tokens.colors.info;
 
   return (
     <div

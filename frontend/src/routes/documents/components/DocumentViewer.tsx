@@ -168,12 +168,12 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
           >
             <div className="text-center mb-8">
               <h1 className="text-2xl font-bold mb-2">{document.title}</h1>
-              <p className="text-sm text-gray-500">Page {currentPage} of {totalPages}</p>
+              <p style={{ color: tokens.colors.textMuted }} className="text-sm">Page {currentPage} of {totalPages}</p>
             </div>
 
             {/* Bates Number Display */}
             {document.customFields?.batesNumber && (
-              <div className="text-right text-xs text-gray-500 font-mono mb-4">
+              <div style={{ color: tokens.colors.textMuted }} className="text-right text-xs font-mono mb-4">
                 {String(document.customFields.batesNumber)}
               </div>
             )}
@@ -185,7 +185,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
               ) : document.content ? (
                 <p className="whitespace-pre-wrap">{document.content}</p>
               ) : (
-                <div className="text-center py-12 text-gray-400">
+                <div style={{ color: tokens.colors.textMuted }} className="text-center py-12">
                   <svg className="mx-auto h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -197,9 +197,12 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
 
             {/* OCR Text Display */}
             {document.ocrProcessed && document.fullTextContent && (
-              <div className="mt-8 pt-4 border-t border-gray-200">
-                <p className="text-xs text-gray-500 mb-2">OCR Extracted Text:</p>
-                <p className="text-sm text-gray-600 whitespace-pre-wrap">
+              <div
+                style={{ borderTop: `1px solid ${tokens.colors.border}` }}
+                className="mt-8 pt-4"
+              >
+                <p style={{ color: tokens.colors.textMuted }} className="text-xs mb-2">OCR Extracted Text:</p>
+                <p style={{ color: tokens.colors.textSecondary }} className="text-sm whitespace-pre-wrap">
                   {document.fullTextContent.slice(0, 500)}
                   {document.fullTextContent.length > 500 && '...'}
                 </p>
@@ -210,7 +213,13 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
       </div>
 
       {/* Page Indicator */}
-      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="px-4 py-2 border-t text-center">
+      <div
+        style={{
+          backgroundColor: tokens.colors.surface,
+          borderTop: `1px solid ${tokens.colors.border}`
+        }}
+        className="px-4 py-2 text-center"
+      >
         <input
           type="range"
           min="1"

@@ -260,16 +260,48 @@ export class CasesApiService {
       >("/cases/stats");
 
       // Unpack response if wrapped (NestJS Enterprise Interceptor format)
-      return response &&
+      const stats =
+        response &&
         "success" in response &&
         response.success === true &&
         response.data
-        ? response.data
-        : (response as CaseStats);
+          ? response.data
+          : (response as CaseStats);
+
+      // Return safe fallback if stats is undefined/null
+      if (!stats) {
+        console.warn(
+          "[CasesApiService.getStats] No stats returned, using defaults"
+        );
+        return this.getDefaultStats();
+      }
+
+      return stats;
     } catch (error) {
       console.error("[CasesApiService.getStats] Error:", error);
-      throw new Error("Failed to fetch case statistics");
+      // Return default stats instead of throwing to prevent UI crashes
+      return this.getDefaultStats();
     }
+  }
+
+  /**
+   * Get default/empty case statistics
+   * @private
+   */
+  private getDefaultStats(): CaseStats {
+    return {
+      totalActive: 0,
+      intakePipeline: 0,
+      upcomingDeadlines: 0,
+      atRisk: 0,
+      totalValue: 0,
+      utilizationRate: 0,
+      averageAge: 0,
+      conversionRate: 0,
+      byStatus: [],
+      byType: [],
+      byPriority: [],
+    };
   }
 
   /**

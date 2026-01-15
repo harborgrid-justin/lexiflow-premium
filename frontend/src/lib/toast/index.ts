@@ -1,8 +1,13 @@
 /**
- * Toast Module - Barrel Export
+ * Toast Module - Public API
+ *
+ * @module lib/toast
  */
 
-export * from "./context";
+// Contexts
+export { ToastActionsContext, ToastStateContext } from "./contexts";
+
+// Types
 export type {
   Toast,
   ToastActionsValue,
@@ -10,4 +15,4 @@ export type {
   ToastProviderProps,
   ToastStateValue,
   ToastType,
-} from "./context";
+} from "./types";

@@ -7,7 +7,6 @@
 
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
-import type { ThemeContextValue } from "@/lib/theme/ThemeContext.types";
 import { AnimatePresence, motion } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';
 import React from 'react';

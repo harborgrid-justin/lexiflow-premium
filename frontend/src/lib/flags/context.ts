@@ -3,14 +3,13 @@
 // ================================================================================
 //
 // CANONICAL STRUCTURE:
-// ├── Types
+// ├── Contexts (imported from contexts.ts)
+// ├── Types (imported from types.ts)
 // ├── State Shape
-// ├── Actions (Action Types)
 // ├── Reducer
 // ├── Selectors
-// ├── Context
 // ├── Provider
-// └── Public Hook
+// └── Public Hooks
 //
 // POSITION IN ARCHITECTURE:
 //   Frontend API (truth) → Loader/Actions (orchestration) → Context (state) → Views
@@ -29,32 +28,15 @@
 
 import { FEATURES_CONFIG } from "@/config/features/features.config";
 import { FeatureFlagsService } from "@/services/domain/feature-flags.service";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from "react";
-
-// ================================================================================
-// Types
-// ================================================================================
-
-export interface Flags {
-  enableNewDashboard: boolean;
-  enableAdminTools: boolean;
-  ocr: boolean;
-  aiAssistant: boolean;
-  realTimeSync: boolean;
-}
-
-interface FlagsState {
-  flags: Flags;
-  isLoading: boolean;
-  error: string | null;
-}
-
-type FlagsAction =
-  | { type: "flags/fetchStart" }
-  | { type: "flags/fetchSuccess"; payload: Flags }
-  | { type: "flags/fetchFailure"; payload: { error: string } }
-  | { type: "flags/initialize"; payload: Partial<Flags> }
-  | { type: "flags/reset" };
+import React, { useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from "react";
+import { FlagsStateContext, FlagsActionsContext } from "./contexts";
+import type {
+  Flags,
+  FlagsState,
+  FlagsAction,
+  FlagsStateValue,
+  FlagsActionsValue,
+} from "./types";
 
 // ================================================================================
 // State Shape

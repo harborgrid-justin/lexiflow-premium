@@ -6,9 +6,9 @@
  * @module components/auth/SSOLoginOptions
  */
 
-import { useAuthActions } from '@/providers/application/AuthProvider';
-import type { SSOProvider } from '@/contexts/auth/authTypes';
 import { useTheme } from "@/hooks/useTheme";
+import type { SSOProvider } from '@/lib/auth/types';
+import { useAuthActions } from '@/providers/application/AuthProvider';
 import { useState } from 'react';
 
 interface SSOLoginOptionsProps {

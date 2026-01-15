@@ -1,4 +1,4 @@
-import type { ThemeObject } from "@/contexts/ThemeContext";
+import type { ThemeObject } from '@/lib/theme/types';
 
 type Theme = ThemeObject;
 

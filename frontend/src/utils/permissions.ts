@@ -5,32 +5,38 @@
  * Provides enterprise-grade access control functions
  */
 
-import type { AuthUser } from '@/contexts/auth/authTypes';
+import type { AuthUser } from "@/lib/auth/types";
 
 /**
  * Permission resource types
  */
 export type PermissionResource =
-  | 'cases'
-  | 'documents'
-  | 'billing'
-  | 'users'
-  | 'organizations'
-  | 'settings'
-  | 'reports'
-  | 'analytics'
-  | 'discovery'
-  | 'pleadings'
-  | 'calendar'
-  | 'trust_accounts'
-  | 'compliance'
-  | 'audit_logs'
-  | '*'; // Wildcard for all resources
+  | "cases"
+  | "documents"
+  | "billing"
+  | "users"
+  | "organizations"
+  | "settings"
+  | "reports"
+  | "analytics"
+  | "discovery"
+  | "pleadings"
+  | "calendar"
+  | "trust_accounts"
+  | "compliance"
+  | "audit_logs"
+  | "*"; // Wildcard for all resources
 
 /**
  * Permission actions
  */
-export type PermissionAction = 'create' | 'read' | 'update' | 'delete' | 'execute' | '*';
+export type PermissionAction =
+  | "create"
+  | "read"
+  | "update"
+  | "delete"
+  | "execute"
+  | "*";
 
 /**
  * Permission string format: resource:action
@@ -46,16 +52,16 @@ export type Permission = `${PermissionResource}:${PermissionAction}`;
  * User roles in the system
  */
 export const USER_ROLES = {
-  ADMIN: 'Administrator',
-  SENIOR_PARTNER: 'Senior Partner',
-  PARTNER: 'Partner',
-  ASSOCIATE: 'Associate',
-  PARALEGAL: 'Paralegal',
-  CLIENT: 'Client User',
-  GUEST: 'Guest',
+  ADMIN: "Administrator",
+  SENIOR_PARTNER: "Senior Partner",
+  PARTNER: "Partner",
+  ASSOCIATE: "Associate",
+  PARALEGAL: "Paralegal",
+  CLIENT: "Client User",
+  GUEST: "Guest",
 } as const;
 
-export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
+export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 /**
  * Role hierarchy (higher number = more permissions)
@@ -74,49 +80,49 @@ const ROLE_HIERARCHY: Record<string, number> = {
  * Default permissions by role
  */
 const DEFAULT_ROLE_PERMISSIONS: Record<string, Permission[]> = {
-  [USER_ROLES.ADMIN]: ['*:*'],
+  [USER_ROLES.ADMIN]: ["*:*"],
   [USER_ROLES.SENIOR_PARTNER]: [
-    'cases:*',
-    'documents:*',
-    'billing:*',
-    'users:read',
-    'reports:*',
-    'analytics:*',
-    'discovery:*',
-    'pleadings:*',
-    'calendar:*',
-    'trust_accounts:*',
-    'compliance:*',
+    "cases:*",
+    "documents:*",
+    "billing:*",
+    "users:read",
+    "reports:*",
+    "analytics:*",
+    "discovery:*",
+    "pleadings:*",
+    "calendar:*",
+    "trust_accounts:*",
+    "compliance:*",
   ],
   [USER_ROLES.PARTNER]: [
-    'cases:*',
-    'documents:*',
-    'billing:read',
-    'reports:read',
-    'analytics:read',
-    'discovery:*',
-    'pleadings:*',
-    'calendar:*',
+    "cases:*",
+    "documents:*",
+    "billing:read",
+    "reports:read",
+    "analytics:read",
+    "discovery:*",
+    "pleadings:*",
+    "calendar:*",
   ],
   [USER_ROLES.ASSOCIATE]: [
-    'cases:read',
-    'cases:update',
-    'documents:*',
-    'billing:read',
-    'discovery:read',
-    'pleadings:read',
-    'calendar:*',
+    "cases:read",
+    "cases:update",
+    "documents:*",
+    "billing:read",
+    "discovery:read",
+    "pleadings:read",
+    "calendar:*",
   ],
   [USER_ROLES.PARALEGAL]: [
-    'cases:read',
-    'documents:read',
-    'documents:create',
-    'discovery:read',
-    'pleadings:read',
-    'calendar:read',
+    "cases:read",
+    "documents:read",
+    "documents:create",
+    "discovery:read",
+    "pleadings:read",
+    "calendar:read",
   ],
-  [USER_ROLES.CLIENT]: ['cases:read', 'documents:read', 'billing:read'],
-  [USER_ROLES.GUEST]: ['cases:read', 'documents:read'],
+  [USER_ROLES.CLIENT]: ["cases:read", "documents:read", "billing:read"],
+  [USER_ROLES.GUEST]: ["cases:read", "documents:read"],
 };
 
 /**
@@ -126,8 +132,8 @@ function parsePermission(permission: string): {
   resource: string;
   action: string;
 } {
-  const [resource, action] = permission.split(':');
-  return { resource: resource || '*', action: action || '*' };
+  const [resource, action] = permission.split(":");
+  return { resource: resource || "*", action: action || "*" };
 }
 
 /**
@@ -141,18 +147,18 @@ function matchesPermission(
   const reqPerm = parsePermission(requiredPermission);
 
   // Wildcard resource matches everything
-  if (userPerm.resource === '*') return true;
+  if (userPerm.resource === "*") return true;
 
   // Exact resource match or wildcard
-  if (userPerm.resource !== reqPerm.resource && reqPerm.resource !== '*') {
+  if (userPerm.resource !== reqPerm.resource && reqPerm.resource !== "*") {
     return false;
   }
 
   // Wildcard action matches everything
-  if (userPerm.action === '*') return true;
+  if (userPerm.action === "*") return true;
 
   // Exact action match
-  return userPerm.action === reqPerm.action || reqPerm.action === '*';
+  return userPerm.action === reqPerm.action || reqPerm.action === "*";
 }
 
 /**
@@ -165,10 +171,12 @@ export function hasPermission(
   if (!user) return false;
 
   // Admin wildcard
-  if (user.permissions?.includes('*:*')) return true;
+  if (user.permissions?.includes("*:*")) return true;
 
   // Check explicit permissions
-  const hasExplicit = user.permissions?.some((p) => matchesPermission(p, permission));
+  const hasExplicit = user.permissions?.some((p) =>
+    matchesPermission(p, permission)
+  );
   if (hasExplicit) return true;
 
   // Check role-based permissions
@@ -272,14 +280,16 @@ export function getUserPermissions(user: AuthUser | null): Permission[] {
   const rolePermissions = DEFAULT_ROLE_PERMISSIONS[user.role] || [];
 
   // Combine and deduplicate
-  return Array.from(new Set([...explicitPermissions, ...rolePermissions])) as Permission[];
+  return Array.from(
+    new Set([...explicitPermissions, ...rolePermissions])
+  ) as Permission[];
 }
 
 /**
  * Check if user is an admin
  */
 export function isAdmin(user: AuthUser | null): boolean {
-  return hasRole(user, USER_ROLES.ADMIN) || hasPermission(user, '*:*');
+  return hasRole(user, USER_ROLES.ADMIN) || hasPermission(user, "*:*");
 }
 
 /**
@@ -288,8 +298,8 @@ export function isAdmin(user: AuthUser | null): boolean {
 export function canManageUsers(user: AuthUser | null): boolean {
   return (
     isAdmin(user) ||
-    hasPermission(user, 'users:*') ||
-    hasAllPermissions(user, ['users:create', 'users:update', 'users:delete'])
+    hasPermission(user, "users:*") ||
+    hasAllPermissions(user, ["users:create", "users:update", "users:delete"])
   );
 }
 
@@ -299,7 +309,7 @@ export function canManageUsers(user: AuthUser | null): boolean {
 export function canManageBilling(user: AuthUser | null): boolean {
   return (
     isAdmin(user) ||
-    hasPermission(user, 'billing:*') ||
+    hasPermission(user, "billing:*") ||
     hasRoleLevel(user, USER_ROLES.SENIOR_PARTNER)
   );
 }
@@ -310,7 +320,7 @@ export function canManageBilling(user: AuthUser | null): boolean {
 export function canViewAnalytics(user: AuthUser | null): boolean {
   return (
     isAdmin(user) ||
-    hasPermission(user, 'analytics:read') ||
+    hasPermission(user, "analytics:read") ||
     hasRoleLevel(user, USER_ROLES.PARTNER)
   );
 }
@@ -321,7 +331,7 @@ export function canViewAnalytics(user: AuthUser | null): boolean {
 export function canManageOrganization(user: AuthUser | null): boolean {
   return (
     isAdmin(user) ||
-    hasPermission(user, 'organizations:*') ||
-    hasPermission(user, 'settings:*')
+    hasPermission(user, "organizations:*") ||
+    hasPermission(user, "settings:*")
   );
 }

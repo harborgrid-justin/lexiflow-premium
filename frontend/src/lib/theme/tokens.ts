@@ -5,7 +5,7 @@
  * Used by ThemeProvider to generate the active ThemeObject.
  */
 
-import { ThemeObject } from "./ThemeContext.types";
+import { ThemeObject } from "./types";
 
 export type ThemeMode = "light" | "dark" | "system";
 export type ThemeDensity = "compact" | "comfortable" | "spacious";

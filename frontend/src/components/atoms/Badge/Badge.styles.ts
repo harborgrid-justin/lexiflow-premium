@@ -1,5 +1,4 @@
 import { cn } from "@/lib/cn";
-import type { ThemeContextValue } from "@/lib/theme/ThemeContext.types";
 
 export const baseBadgeStyles =
   "inline-flex items-center justify-center rounded-full font-bold border ring-1 ring-inset ring-black/5 uppercase tracking-wide whitespace-nowrap";

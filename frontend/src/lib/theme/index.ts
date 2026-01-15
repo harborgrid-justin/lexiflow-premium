@@ -11,42 +11,50 @@
 // Core Exports
 // ============================================================================
 
-// Tokens and types
+// Context
+export { ThemeContext } from "./contexts";
+
+// Types
+export type {
+  ThemeActionsValue,
+  ThemeContextType,
+  ThemeObject,
+  ThemeProviderProps,
+  ThemeStateValue,
+} from "./types";
+
+// Tokens and configuration
 export * from "./tokens";
 export type { DesignTokens, FontMode, ThemeDensity, ThemeMode } from "./tokens";
 
 // Services
 export { ChartColorService } from "./services/chartColorService";
 
-// Types
-export type { ThemeObject } from "./ThemeContext.types";
-
 // ============================================================================
-// Re-exports for Convenience
+// Provider and Hooks
 // ============================================================================
 
-// Context (use via @/providers/infrastructure/ThemeProvider or @/lib/theme)
+// Context and Provider (from infrastructure)
 export {
-  ThemeContext,
+  ThemeContext as ThemeContextLegacy,
+  ThemeProvider,
   createTheme,
 } from "@/providers/infrastructure/ThemeProvider";
-export type { ThemeContextType } from "@/providers/infrastructure/ThemeProvider";
+export type { ThemeContextType as ThemeContextTypeLegacy } from "@/providers/infrastructure/ThemeProvider";
 
-// Hook (use via @/hooks/useTheme or @/lib/theme)
+// Hooks
 export { useTheme, useThemeContext } from "@/hooks/useTheme";
-
-// Provider (use via @/providers/infrastructure/ThemeProvider or @/lib/theme)
-export { ThemeProvider } from "@/providers/infrastructure/ThemeProvider";
-
-// Components (use via @/components/theme or @/lib/theme)
-export { AdvancedThemeCustomizer } from "@/components/theme/AdvancedThemeCustomizer";
-export { ThemeCustomizer } from "@/components/theme/ThemeCustomizer";
-export { default as ThemePreview } from "@/components/theme/ThemePreview";
-
-// Hooks (use via @/hooks or @/lib/theme)
 export { useThemeCustomizer } from "@/hooks/useThemeCustomizer";
 export type {
   ThemeCustomizerActions,
   ThemeCustomizerState,
   ThemeCustomizerStatus,
 } from "@/hooks/useThemeCustomizer";
+
+// ============================================================================
+// Components
+// ============================================================================
+
+export { AdvancedThemeCustomizer } from "@/components/theme/AdvancedThemeCustomizer";
+export { ThemeCustomizer } from "@/components/theme/ThemeCustomizer";
+export { default as ThemePreview } from "@/components/theme/ThemePreview";

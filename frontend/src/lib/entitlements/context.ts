@@ -3,14 +3,13 @@
 // ================================================================================
 //
 // CANONICAL STRUCTURE:
-// ├── Types
+// ├── Contexts (imported from contexts.ts)
+// ├── Types (imported from types.ts)
 // ├── State Shape
-// ├── Actions (Action Types)
 // ├── Reducer
 // ├── Selectors
-// ├── Context
 // ├── Provider
-// └── Public Hook
+// └── Public Hooks
 //
 // POSITION IN ARCHITECTURE:
 //   Frontend API (truth) → Loader/Actions (orchestration) → Context (state) → Views
@@ -29,32 +28,15 @@
 
 import { EntitlementsService } from "@/services/domain/entitlements.service";
 import type { User } from "@/types";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from "react";
-
-// ================================================================================
-// Types
-// ================================================================================
-
-export type Plan = "free" | "pro" | "enterprise";
-
-export interface Entitlements {
-  plan: Plan;
-  canUseAdminTools: boolean;
-  maxCases: number;
-  storageLimitGB: number;
-}
-
-interface EntitlementsState {
-  entitlements: Entitlements;
-  isLoading: boolean;
-  error: string | null;
-}
-
-type EntitlementsAction =
-  | { type: "entitlements/fetchStart" }
-  | { type: "entitlements/fetchSuccess"; payload: Entitlements }
-  | { type: "entitlements/fetchFailure"; payload: { error: string } }
-  | { type: "entitlements/reset" };
+import React, { useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from "react";
+import { EntitlementsStateContext, EntitlementsActionsContext } from "./contexts";
+import type {
+  Entitlements,
+  EntitlementsState,
+  EntitlementsAction,
+  EntitlementsStateValue,
+  EntitlementsActionsValue,
+} from "./types";
 
 // ================================================================================
 // State Shape

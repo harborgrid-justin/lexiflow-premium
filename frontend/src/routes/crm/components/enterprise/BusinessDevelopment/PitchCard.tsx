@@ -3,7 +3,7 @@
  * @description Individual pitch card component
  */
 
-import type { ThemeObject } from '@/contexts/ThemeContext';
+import type { ThemeObject } from '@/lib/theme/types';
 import { cn } from '@/lib/cn';
 import { Calendar } from 'lucide-react';
 import type { Pitch } from './types';

@@ -4,7 +4,7 @@
  * @description Style definitions for CommandPalette component.
  */
 
-import type { ThemeObject } from "@/contexts/ThemeContext";
+import type { ThemeObject } from '@/lib/theme/types';
 import { cn } from "@/lib/cn";
 
 type Theme = ThemeObject;

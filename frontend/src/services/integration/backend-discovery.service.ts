@@ -75,7 +75,7 @@ class BackendDiscoveryService {
    */
   private async checkBackend(): Promise<void> {
     const startTime = Date.now();
-    const endpoint = this.getHealthEndpoint();
+    // const endpoint = this.getHealthEndpoint(); // Unused
     // Reduce console noise - only log on state changes
     const wasHealthy = this.status.healthy;
 

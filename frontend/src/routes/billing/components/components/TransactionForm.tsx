@@ -4,6 +4,6 @@ export interface TransactionData {
   description: string;
 }
 
-export function TransactionForm({ onSubmit, onCancel }: { onSubmit: (data: TransactionData) => void; onCancel: () => void }) {
+export function TransactionForm({ onSubmit: _onSubmit, onCancel: _onCancel }: { onSubmit: (data: TransactionData) => void; onCancel: () => void }) {
   return null;
 }

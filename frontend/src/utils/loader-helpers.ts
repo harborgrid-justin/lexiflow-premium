@@ -1,6 +1,6 @@
 /**
  * Loader Helper Utilities
- * 
+ *
  * Provides reusable utilities for React Router loaders
  * to handle authentication errors consistently
  */
@@ -9,12 +9,12 @@ import type { LoaderFunctionArgs } from "react-router";
 
 /**
  * Handle authentication errors in loaders
- * 
+ *
  * This function provides consistent handling of authentication errors
  * for both SSR and client-side contexts:
  * - During SSR: Throws a 302 redirect response to login
  * - On client: Re-throws the error to trigger response-handler redirect
- * 
+ *
  * @param error - The caught error
  * @param args - LoaderFunctionArgs containing the request
  * @throws Response with redirect or re-throws the error
@@ -53,11 +53,11 @@ export function handleLoaderAuthError(
 
 /**
  * Wrap a loader function with authentication error handling
- * 
+ *
  * @param loaderFn - The loader function to wrap
  * @param fallbackData - Optional fallback data to return on non-auth errors
  * @returns Wrapped loader function
- * 
+ *
  * @example
  * export const clientLoader = withAuthErrorHandler(
  *   async (args) => {
@@ -80,7 +80,7 @@ export function withAuthErrorHandler<T>(
         handleLoaderAuthError(error, args);
       } catch (authError) {
         // If it was an auth error, it will be re-thrown or redirected
-        throw authError;
+        throw authError; // eslint-disable-line no-useless-catch
       }
 
       // If we get here, it's a non-auth error

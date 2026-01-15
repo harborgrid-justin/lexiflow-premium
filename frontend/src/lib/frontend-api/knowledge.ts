@@ -24,24 +24,27 @@ export interface KnowledgeItem {
 
 export const knowledgeApi = {
   getResearchHistory: async (
-    params?: any
+    params?: unknown
   ): Promise<Result<PaginatedResult<ResearchItem>>> => {
-    return client.get<PaginatedResult<ResearchItem>>(
-      "/research/history",
-      params
-    );
+    return client.get<PaginatedResult<ResearchItem>>("/research/history", {
+      params: params as Record<string, unknown>,
+    });
   },
   getResearchById: async (id: string): Promise<Result<ResearchItem>> => {
     return client.get<ResearchItem>(`/research/${id}`);
   },
   getAllCitations: async (
-    params?: any
+    params?: unknown
   ): Promise<Result<PaginatedResult<Citation>>> => {
-    return client.get<PaginatedResult<Citation>>("/citations", params);
+    return client.get<PaginatedResult<Citation>>("/citations", {
+      params: params as Record<string, unknown>,
+    });
   },
   getAllKnowledge: async (
-    params?: any
+    params?: unknown
   ): Promise<Result<PaginatedResult<KnowledgeItem>>> => {
-    return client.get<PaginatedResult<KnowledgeItem>>("/knowledge", params);
+    return client.get<PaginatedResult<KnowledgeItem>>("/knowledge", {
+      params: params as Record<string, unknown>,
+    });
   },
 };

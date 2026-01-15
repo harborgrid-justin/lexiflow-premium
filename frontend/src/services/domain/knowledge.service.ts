@@ -121,7 +121,7 @@ export class KnowledgeRepository {
   getWikiArticles = async (query?: string): Promise<WikiArticle[]> => {
     try {
       return await apiClient.get<WikiArticle[]>("/knowledge/wiki", {
-        params: { q: query }
+        params: { q: query },
       });
     } catch (error) {
       console.warn("Failed to fetch wiki articles", error);
@@ -444,3 +444,5 @@ export class KnowledgeRepository {
     }
   }
 }
+
+export const KnowledgeService = new KnowledgeRepository();

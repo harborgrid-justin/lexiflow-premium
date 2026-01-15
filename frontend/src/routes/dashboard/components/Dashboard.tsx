@@ -45,10 +45,10 @@ interface DashboardProps {
   /** Current user information. */
   currentUser: User;
   /** Optional initial data */
-  initialCases?: any[];
-  initialDocketEntries?: any[];
-  initialTimeEntries?: any[];
-  initialTasks?: any[];
+  initialCases?: unknown[];
+  initialDocketEntries?: unknown[];
+  initialTimeEntries?: unknown[];
+  initialTasks?: unknown[];
 }
 
 // ============================================================================
@@ -56,9 +56,9 @@ interface DashboardProps {
 // ============================================================================
 
 export const Dashboard: React.FC<DashboardProps> = ({
-  onSelectCase,
+  onSelectCase: _onSelectCase,
   initialTab,
-  currentUser,
+  currentUser: _currentUser,
   initialCases,
   initialDocketEntries,
   initialTimeEntries,

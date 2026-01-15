@@ -116,6 +116,16 @@ export async function createInvoice(
   return success(normalizeInvoice(result.data));
 }
 
+/**
+ * Time Entries sub-module (for descriptor compatibility)
+ */
+const timeEntries = {
+  getAll: getAllTimeEntries,
+  getById: getTimeEntryById,
+  create: createTimeEntry,
+  update: updateTimeEntry,
+};
+
 export const billingApi = {
   getAllTimeEntries,
   getTimeEntryById,
@@ -124,4 +134,8 @@ export const billingApi = {
   getAllInvoices,
   getInvoiceById,
   createInvoice,
+  // Sub-modules for descriptor compatibility
+  timeEntries,
+  // Convenience alias
+  getAll: getAllTimeEntries,
 };

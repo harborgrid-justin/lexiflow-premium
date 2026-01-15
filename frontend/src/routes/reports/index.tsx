@@ -256,7 +256,7 @@ function ReportCard({ report }: { report: Report }) {
             <FileText className="h-6 w-6" />
           </div>
           <div className="relative">
-            <button className="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
+            <button style={{ color: 'var(--color-textMuted)', backgroundColor: 'transparent' }} className="rounded-full p-1 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
               <MoreVertical className="h-5 w-5" />
             </button>
             {/* Dropdown menu would go here */}
@@ -274,7 +274,7 @@ function ReportCard({ report }: { report: Report }) {
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+          <span style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }} className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium">
             {report.reportType.replace('_', ' ')}
           </span>
           {schedule && (
@@ -309,7 +309,8 @@ function ReportCard({ report }: { report: Report }) {
           </button>
           <Link
             to={`${report.id}/edit`}
-            className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
+            style={{ color: 'var(--color-textMuted)', backgroundColor: 'transparent' }}
+            className="rounded p-1.5 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
             title="Edit"
           >
             <Edit className="h-4 w-4" />

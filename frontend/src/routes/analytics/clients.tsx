@@ -154,11 +154,11 @@ export default function ClientAnalyticsRoute() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen p-8">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/analytics" className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <Link to="/analytics" style={{ backgroundColor: 'transparent' }} className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
@@ -173,7 +173,7 @@ export default function ClientAnalyticsRoute() {
 
         <div className="flex items-center gap-3">
           <DateRangeSelector value={dateRange} onChange={setDateRange} />
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+          <button style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }} className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700">
             <Download className="h-4 w-4" />
             Export
           </button>

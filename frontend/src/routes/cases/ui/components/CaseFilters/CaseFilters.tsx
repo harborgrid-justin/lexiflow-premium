@@ -111,6 +111,7 @@ export function CaseFilters({
           )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
+            style={{ backgroundColor: 'transparent' }}
             className="rounded-lg p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <svg

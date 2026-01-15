@@ -152,7 +152,7 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
                   {stats.backend}/{stats.total} ({categoryPercent}%)
                 </span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="w-full rounded-full h-2">
                 <div
                   className={`h-2 rounded-full transition-all ${categoryPercent === 100 ? 'bg-emerald-500' : 'bg-amber-500'
                     }`}
@@ -227,7 +227,8 @@ export const SystemHealthDisplay: React.FC<{
                   {services.map(service => (
                     <div
                       key={service.name}
-                      className="flex items-center gap-2 text-xs py-1 px-2 rounded bg-gray-50 dark:bg-slate-700"
+                      style={{ backgroundColor: 'var(--color-surfaceHover)' }}
+                      className="flex items-center gap-2 text-xs py-1 px-2 rounded"
                     >
                       {service.hasBackend ? (
                         <CheckCircle className="w-3 h-3 text-emerald-500 flex-shrink-0" />

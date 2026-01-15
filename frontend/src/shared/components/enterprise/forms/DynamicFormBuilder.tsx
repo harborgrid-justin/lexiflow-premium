@@ -13,16 +13,16 @@
  * - Accessibility features
  */
 
-import React, { useCallback, useMemo } from 'react';
-import { useEnhancedFormValidation } from '@/hooks/useEnhancedFormValidation';
 import { useEnhancedAutoSave } from '@/hooks/useEnhancedAutoSave';
-import { useTheme } from '@/theme';
+import { useEnhancedFormValidation } from '@/hooks/useEnhancedFormValidation';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import type {
   FieldSchema,
-  FormSection,
   FormConfig,
+  FormSection,
 } from '@/types/forms';
+import React, { useCallback, useMemo } from 'react';
 
 // Import field components (to be created)
 import { FormField } from './FormField';
@@ -295,47 +295,47 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
       {/* Auto-save indicator */}
       {(config.enableAutoSave || schema.autoSave?.enabled) &&
         schema.autoSave?.showIndicator && (
-        <div className="mb-4">
-          <div
-            className={cn(
-              'flex items-center gap-2 px-3 py-2 rounded text-sm',
-              autoSave.isSaving && 'bg-blue-50 text-blue-700',
-              autoSave.status === 'saved' && 'bg-green-50 text-green-700',
-              autoSave.status === 'error' && 'bg-red-50 text-red-700'
-            )}
-          >
-            {autoSave.isSaving && (
-              <>
-                <span className="animate-spin">⟳</span>
-                <span>Saving...</span>
-              </>
-            )}
-            {autoSave.status === 'saved' && (
-              <>
-                <span>✓</span>
-                <span>
-                  Saved{' '}
-                  {autoSave.lastSaved &&
-                    `at ${autoSave.lastSaved.toLocaleTimeString()}`}
-                </span>
-              </>
-            )}
-            {autoSave.status === 'error' && (
-              <>
-                <span>✕</span>
-                <span>Save failed: {autoSave.error}</span>
-              </>
-            )}
+          <div className="mb-4">
+            <div
+              className={cn(
+                'flex items-center gap-2 px-3 py-2 rounded text-sm',
+                autoSave.isSaving && 'bg-blue-50 text-blue-700',
+                autoSave.status === 'saved' && 'bg-green-50 text-green-700',
+                autoSave.status === 'error' && 'bg-red-50 text-red-700'
+              )}
+            >
+              {autoSave.isSaving && (
+                <>
+                  <span className="animate-spin">⟳</span>
+                  <span>Saving...</span>
+                </>
+              )}
+              {autoSave.status === 'saved' && (
+                <>
+                  <span>✓</span>
+                  <span>
+                    Saved{' '}
+                    {autoSave.lastSaved &&
+                      `at ${autoSave.lastSaved.toLocaleTimeString()}`}
+                  </span>
+                </>
+              )}
+              {autoSave.status === 'error' && (
+                <>
+                  <span>✕</span>
+                  <span>Save failed: {autoSave.error}</span>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Loading overlay */}
         {isLoading && (
           <div className="relative">
-            <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-10 flex items-center justify-center">
+            <div style={{ backgroundColor: 'var(--color-surface)', opacity: 0.5 }} className="absolute inset-0 backdrop-blur-sm z-10 flex items-center justify-center">
               <div className="text-center">
                 <div className="animate-spin text-4xl mb-2">⟳</div>
                 <p className={theme.text.secondary}>Loading...</p>

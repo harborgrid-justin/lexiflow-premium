@@ -76,8 +76,8 @@ export class BillingErrorBoundary extends Component<Props, State> {
   override render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4">
-          <div className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8">
+        <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-screen flex items-center justify-center p-4">
+          <div style={{ backgroundColor: 'var(--color-surface)' }} className="max-w-2xl w-full rounded-lg shadow-lg p-8">
             <div className="flex items-start gap-4 mb-6">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
@@ -175,7 +175,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
                 <summary className="cursor-pointer text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
                   Stack Trace (Development Only)
                 </summary>
-                <pre className="mt-2 p-4 bg-slate-100 dark:bg-slate-900 rounded text-xs overflow-auto max-h-64 text-slate-800 dark:text-slate-300">
+                <pre style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }} className="mt-2 p-4 rounded text-xs overflow-auto max-h-64">
                   {this.state.errorInfo.componentStack}
                 </pre>
               </details>

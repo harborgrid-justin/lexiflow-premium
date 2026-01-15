@@ -1,13 +1,13 @@
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { DataService } from '@/services/data/data-service.service';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
+import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { useTheme } from '@/theme';
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
-import { cn } from '@/shared/lib/cn';
 import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';
 import { useState } from 'react';
 
@@ -237,7 +237,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
                                 </div>
                             </div>
 
-                            <div className="space-y-3 p-4 rounded-lg bg-slate-50 border border-slate-100">
+                            <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="space-y-3 p-4 rounded-lg border">
                                 <div className="flex justify-between text-sm">
                                     <span className={theme.text.secondary}>From:</span>
                                     <span className={cn("font-medium", theme.text.primary)}>{item.sender}</span>
@@ -260,7 +260,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
                             </div>
 
                             {item.hasAttachment && (
-                                <div className="p-3 border rounded-lg flex items-center justify-between hover:bg-slate-50 cursor-pointer">
+                                <div style={{ borderColor: 'var(--color-border)', backgroundColor: 'transparent' }} className="p-3 border rounded-lg flex items-center justify-between hover:bg-slate-50 cursor-pointer">
                                     <div className="flex items-center gap-2">
                                         <FileText className="h-4 w-4 text-blue-600" />
                                         <span className="text-sm font-medium">Attachment.pdf</span>
@@ -286,7 +286,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
 
                             <div className="space-y-4">
                                 {/* Update Status Section */}
-                                <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
+                                <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="p-4 rounded-lg border space-y-3">
                                     <h4 className={cn("text-xs font-bold uppercase text-slate-500")}>Update Status</h4>
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>

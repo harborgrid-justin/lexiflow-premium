@@ -28,10 +28,10 @@ export const RiskMeter: React.FC<RiskMeterProps> = ({ value, label, type = 'stre
           <span className="font-bold text-slate-900">{value}%</span>
         </div>
       )}
-      <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-        <div 
-          className={`${getColor(value)} h-full rounded-full transition-all duration-500`} 
-          style={{ width: `${Math.max(0, Math.min(100, value))}%` }} 
+      <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="w-full rounded-full h-2 overflow-hidden">
+        <div
+          className={`${getColor(value)} h-full rounded-full transition-all duration-500`}
+          style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
         />
       </div>
     </div>

@@ -392,4 +392,6 @@ export const workflowApi = {
   // Sub-modules for descriptor compatibility
   risks,
   warRoom,
+  // Convenience alias
+  getAll: getAllTasks,
 } as const;

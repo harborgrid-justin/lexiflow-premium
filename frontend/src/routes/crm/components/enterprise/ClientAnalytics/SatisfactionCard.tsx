@@ -3,8 +3,8 @@
  * @description Client satisfaction metrics card component
  */
 
-import type { ThemeObject } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import type { ThemeObject } from '@/theme';
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -89,7 +89,7 @@ export function SatisfactionCard({ client, theme, chartColors, chartTheme }: Sat
                   {metric.value}/10
                 </span>
               </div>
-              <div className="h-2 rounded bg-gray-200 dark:bg-gray-700">
+              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-2 rounded">
                 <div
                   className={cn('h-full rounded transition-all', metric.color)}
                   style={{ width: `${metric.value * 10}%` }}

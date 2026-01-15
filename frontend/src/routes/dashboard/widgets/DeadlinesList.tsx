@@ -5,11 +5,11 @@
  * Displays court dates, filing deadlines, and important milestones
  */
 
-import React from 'react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { format, formatDistanceToNow, isPast, isThisWeek, isToday, isTomorrow } from 'date-fns';
 import { AlertCircle, Calendar, CheckCircle2, Clock, Flag } from 'lucide-react';
+import React from 'react';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -173,10 +173,10 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
       <div className={cn('space-y-3', className)}>
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 animate-pulse">
-            <div className="w-12 h-12 rounded-lg bg-gray-200 dark:bg-gray-700" />
+            <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="w-12 h-12 rounded-lg" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-4 rounded w-3/4" />
+              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-3 rounded w-1/2" />
             </div>
           </div>
         ))}

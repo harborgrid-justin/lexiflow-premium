@@ -119,7 +119,7 @@ function LetterRow({ letter }: { letter: CorrespondenceLetter }) {
 
 function TemplateCard({ template }: { template: CorrespondenceTemplate }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-500 transition-colors cursor-pointer">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4 hover:border-blue-500 transition-colors cursor-pointer">
       <Layout className="w-8 h-8 text-emerald-600 mb-2" />
       <div className="font-medium text-slate-900 dark:text-white mb-1">{template.name}</div>
       <div className="text-sm text-slate-600 dark:text-slate-400">{template.category}</div>

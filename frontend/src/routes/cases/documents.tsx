@@ -82,7 +82,7 @@ export default function CaseDocumentsRoute() {
   const documentTypes = Array.from(new Set(documents.map((doc: LegalDocument) => doc.type).filter(Boolean)));
 
   return (
-    <div className="min-h-full bg-gray-50 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-full">
       {/* Case Header */}
       <CaseHeader case={caseData} showBreadcrumbs />
 
@@ -120,7 +120,8 @@ export default function CaseDocumentsRoute() {
               placeholder="Search documents..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="w-full rounded-lg border px-4 py-2 pl-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <svg className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -155,7 +156,7 @@ export default function CaseDocumentsRoute() {
 
         {/* Documents Grid */}
         {filteredDocuments.length === 0 ? (
-          <div className="rounded-lg border border-gray-200 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-12 text-center">
             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
@@ -169,7 +170,8 @@ export default function CaseDocumentsRoute() {
             {filteredDocuments.map((doc: LegalDocument) => (
               <div
                 key={doc.id}
-                className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+                className="group cursor-pointer overflow-hidden rounded-lg border shadow-sm transition-all hover:shadow-md"
                 onClick={() => navigate(`/documents/${doc.id}`)}
               >
                 <div className="p-4">
@@ -187,7 +189,7 @@ export default function CaseDocumentsRoute() {
 
                   {/* Document Type */}
                   {doc.type && (
-                    <span className="inline-flex rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+                    <span style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textMuted)' }} className="inline-flex rounded px-2 py-0.5 text-xs">
                       {doc.type}
                     </span>
                   )}

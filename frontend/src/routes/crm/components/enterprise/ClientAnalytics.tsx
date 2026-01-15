@@ -5,13 +5,13 @@
  * lifetime value calculation, risk assessment, and satisfaction tracking.
  */
 
-import { ChartColorService, useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { crmApi } from '@/lib/frontend-api';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { ChartColorService, useTheme } from '@/theme';
 import { getChartTheme } from '@/utils/chartConfig';
 import {
   Activity,
@@ -545,7 +545,7 @@ export const ClientAnalytics: React.FC = () => {
                       {factor.replace(/([A-Z])/g, ' $1').trim().replace('Risk', '')}
                     </p>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 rounded bg-gray-200 dark:bg-gray-700">
+                      <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="flex-1 h-2 rounded">
                         <div
                           className={cn(
                             "h-full rounded transition-all",

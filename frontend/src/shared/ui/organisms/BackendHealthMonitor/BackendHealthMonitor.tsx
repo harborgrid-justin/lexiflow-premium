@@ -1,12 +1,19 @@
-import React, { useState, useEffect, useId } from 'react';
-import { 
-  Activity, CheckCircle, AlertTriangle, XCircle, RefreshCw, X, 
-  TrendingUp, Clock, Zap
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/theme';
+import { apiClient, type ServiceHealthStatus, type SystemHealth } from '@/services/infrastructure/apiClient';
 import { cn } from '@/shared/lib/cn';
-import { apiClient, type SystemHealth, type ServiceHealthStatus } from '@/services/infrastructure/apiClient';
+import { useTheme } from '@/theme';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  RefreshCw,
+  TrendingUp,
+  X,
+  XCircle,
+  Zap
+} from 'lucide-react';
+import React, { useEffect, useId, useState } from 'react';
 
 interface BackendHealthMonitorProps {
   isOpen: boolean;
@@ -215,7 +222,7 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
                     </div>
 
                     {serviceHealth.error && (
-                      <div className="mt-3 p-2 rounded bg-white/50 dark:bg-black/20 text-xs font-mono">
+                      <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="mt-3 p-2 rounded text-xs font-mono">
                         {serviceHealth.error}
                       </div>
                     )}

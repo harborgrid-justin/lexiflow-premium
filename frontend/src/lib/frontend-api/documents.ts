@@ -323,4 +323,6 @@ export const documentsApi = {
   searchDocuments,
   getDocumentDownloadUrl,
   getDocumentsByCase,
+  // Convenience alias
+  getAll: getAllDocuments,
 } as const;

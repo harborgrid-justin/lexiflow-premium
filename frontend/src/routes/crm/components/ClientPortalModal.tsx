@@ -32,9 +32,9 @@ export function ClientPortalModal({ client, onClose }: ClientPortalModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-slate-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="fixed inset-0 z-50 flex flex-col">
       {/* Dark Header for Portal Context */}
-      <div className="bg-slate-950 p-4 flex justify-between items-center border-b border-slate-800 shadow-md">
+      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="p-4 flex justify-between items-center border-b shadow-md">
         <div className="flex items-center text-white space-x-3">
           <div className="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
             <Lock className="h-5 w-5 text-emerald-400" />
@@ -44,15 +44,15 @@ export function ClientPortalModal({ client, onClose }: ClientPortalModalProps) {
             <p className="text-xs text-slate-400">Viewing as: {client.name}</p>
           </div>
         </div>
-        <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-full">
+        <button onClick={onClose} style={{ color: 'var(--color-textMuted)' }} className="transition-colors p-2 hover:bg-opacity-10 rounded-full">
           <X className="h-6 w-6" />
         </button>
       </div>
 
-      <div className="flex-1 bg-slate-50 p-6 md:p-10 overflow-y-auto">
+      <div style={{ backgroundColor: 'var(--color-background)' }} className="flex-1 p-6 md:p-10 overflow-y-auto">
         <div className="max-w-5xl mx-auto space-y-8">
           {/* Welcome Banner */}
-          <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm flex justify-between items-center">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-xl p-6 border shadow-sm flex justify-between items-center">
             <div>
               <h3 className="text-xl font-bold text-slate-900">Welcome, {client.name}</h3>
               <p className="text-slate-500 text-sm mt-1">You have 2 new documents and 1 unread message.</p>

@@ -72,6 +72,57 @@ interface HttpResponse<T> {
   headers: Headers;
 }
 
+import {
+  clearAuthTokens,
+  getAuthToken,
+  getRefreshToken,
+} from "@/services/infrastructure/api-client/auth-manager";
+import { refreshAccessToken } from "@/services/infrastructure/api-client/token-refresh";
+
+// Shared refresh state to prevent multiple concurrent refresh calls
+let isRefreshing = false;
+
+/**
+ * Ensure token is valid before request
+ * Proactively refreshes if token is expiring soon or tries to refresh on 401
+ */
+async function ensureValidToken(): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  if (isRefreshing) {
+    while (isRefreshing) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    return;
+  }
+}
+
+/**
+ * Handle token refresh logic
+ */
+async function handleTokenRefresh(): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+
+  if (isRefreshing) {
+    await ensureValidToken();
+    return !!getAuthToken();
+  }
+
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return false;
+
+  isRefreshing = true;
+  try {
+    const success = await refreshAccessToken(refreshToken);
+    return success;
+  } catch (error) {
+    console.error("[ApiClient] Token refresh failed:", error);
+    return false;
+  } finally {
+    isRefreshing = false;
+  }
+}
+
 /**
  * Create configured HTTP client
  */
@@ -150,7 +201,7 @@ export function createClient(config: ClientConfig = {}) {
     options: RequestOptions & { body?: unknown } = {}
   ): Promise<Result<T>> {
     const url = buildUrl(path, options.params);
-    const headers = getHeaders(options.headers);
+    // Headers are now built inside the loop to get fresh token
 
     // Create abort controller for timeout
     const controller = new AbortController();
@@ -169,14 +220,33 @@ export function createClient(config: ClientConfig = {}) {
     // Retry loop
     for (let attempt = 0; attempt < retryAttempts; attempt++) {
       try {
+        // Ensure valid token before request
+        await ensureValidToken();
+        const headersWithToken = getHeaders(options.headers);
+
         const response = await fetch(url, {
           method,
-          headers,
+          headers: headersWithToken,
           body: options.body ? JSON.stringify(options.body) : undefined,
           signal: controller.signal,
         });
 
         clearTimeout(timeoutId);
+
+        // Handle 401 Unauthorized - attempt token refresh
+        if (response.status === 401 && attempt < retryAttempts - 1) {
+          console.warn(
+            "[ApiClient] 401 Unauthorized, attempting token refresh"
+          );
+          const refreshed = await handleTokenRefresh();
+          if (refreshed) {
+            console.log("[ApiClient] Token refreshed, retrying request");
+            continue; // Retry with new token
+          } else {
+            // Refresh failed, clear tokens
+            clearAuthTokens();
+          }
+        }
 
         // Parse response
         const result = await parseResponse<T>(response);
@@ -317,10 +387,8 @@ export function createClient(config: ClientConfig = {}) {
   };
 }
 
-/**
- * Get auth token from storage
- * PURE FUNCTION - no side effects
- */
+// Remove duplicate local getAuthToken since we import it
+/*
 function getAuthToken(): string | null {
   if (typeof window === "undefined") {
     return null;
@@ -332,6 +400,7 @@ function getAuthToken(): string | null {
     return null;
   }
 }
+*/
 
 /**
  * Sleep helper for retry backoff

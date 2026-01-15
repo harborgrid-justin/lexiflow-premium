@@ -212,7 +212,7 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
   return (
     <div className="space-y-6">
       {/* Action Bar */}
-      <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+      <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex items-center justify-between rounded-lg border p-4">
         <div className="flex items-center gap-3">
           <FileText className="h-5 w-5 text-gray-600 dark:text-gray-400" />
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">

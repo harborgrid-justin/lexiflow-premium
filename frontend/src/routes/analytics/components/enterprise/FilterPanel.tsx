@@ -3,8 +3,8 @@
  * Advanced filtering panel for analytics dashboards
  */
 
+import { ChevronDown, Filter, X } from 'lucide-react';
 import { useState } from 'react';
-import { Filter, X, ChevronDown } from 'lucide-react';
 
 export interface FilterOption {
   value: string;
@@ -64,15 +64,15 @@ export function FilterPanel({
       <div key={filter.id} className="border-b border-gray-200 last:border-0 dark:border-gray-700">
         <button
           onClick={() => toggleGroup(filter.id)}
+          style={{ backgroundColor: 'transparent' }}
           className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700"
         >
           <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
             {filter.label}
           </span>
           <ChevronDown
-            className={`h-4 w-4 text-gray-500 transition-transform ${
-              isExpanded ? 'rotate-180' : ''
-            }`}
+            className={`h-4 w-4 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''
+              }`}
           />
         </button>
 

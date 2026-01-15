@@ -7,8 +7,8 @@
  * @module components/features/cases/PartiesTable
  */
 
-import type { Party } from '@/types';
 import { cn } from '@/shared/lib/utils';
+import type { Party } from '@/types';
 import { useState } from 'react';
 
 export interface PartiesTableProps {
@@ -124,7 +124,7 @@ export function PartiesTable({
     <div className={cn('overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700', className)}>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-800">
+          <thead style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
             <tr>
               <th
                 scope="col"
@@ -181,7 +181,7 @@ export function PartiesTable({
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+          <tbody style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="divide-y">
             {sortedParties.map((party) => {
               const typeBadge = getPartyTypeBadge(party.type);
 

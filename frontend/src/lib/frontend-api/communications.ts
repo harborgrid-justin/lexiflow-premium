@@ -395,6 +395,32 @@ export const communicationsApi = {
       }
     );
   },
+  updateNotification: async (
+    id: string,
+    updates: Partial<NotificationDTO>
+  ): Promise<Result<NotificationDTO>> => {
+    return client.put<NotificationDTO>(
+      `/communications/notifications/${id}`,
+      updates
+    );
+  },
+  deleteNotification: async (id: string): Promise<Result<void>> => {
+    return client.delete<void>(`/communications/notifications/${id}`);
+  },
+  markAllNotificationsAsRead: async (): Promise<Result<void>> => {
+    return client.post<void>("/communications/notifications/mark-all-read");
+  },
+  getNotificationPreferences: async (): Promise<Result<unknown>> => {
+    return client.get<unknown>("/communications/notifications/preferences");
+  },
+  updateNotificationPreferences: async (
+    preferences: unknown
+  ): Promise<Result<unknown>> => {
+    return client.put<unknown>(
+      "/communications/notifications/preferences",
+      preferences
+    );
+  },
   // Sub-modules for descriptor compatibility
   communications,
   messaging,

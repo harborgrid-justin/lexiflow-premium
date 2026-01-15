@@ -114,7 +114,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
 
         <button
           onClick={() => setShowCoverage(true)}
-          className="p-1.5 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+          style={{ backgroundColor: 'var(--color-surfaceHover)' }}
+          className="p-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
           title="View Service Coverage"
         >
           <Info className="w-4 h-4 text-gray-600 dark:text-gray-400" />
@@ -124,6 +125,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
           <button
             onClick={() => setShowHealthMonitor(true)}
             style={{ backgroundColor: 'var(--color-surface)' }}
+            style={{ backgroundColor: 'transparent' }}
             className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             title="View Backend Health Monitor"
           >

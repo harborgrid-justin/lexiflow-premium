@@ -55,7 +55,8 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
                 min="0" max="100"
                 value={Number(selectedNode!.config.probability) || 50}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, probability: parseInt(e.target.value) } })}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                style={{ backgroundColor: 'var(--color-border)' }}
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-blue-600"
               />
               <span className="font-mono text-sm font-bold w-12 text-right">{Number(selectedNode!.config.probability) || 50}%</span>
             </div>

@@ -334,6 +334,7 @@ const AutocompleteSelectInner = <
                 onClick={() => setShowCreateModal(true)}
                 onMouseEnter={() => setHighlightedIndex(-1)}
                 style={{ borderColor: 'var(--color-border)' }}
+                style={{ borderColor: 'var(--color-border)' }}
                 className="w-full px-4 py-2 text-left border-t hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
               >
                 <div className="flex items-center text-sm font-medium text-blue-600 dark:text-blue-400">

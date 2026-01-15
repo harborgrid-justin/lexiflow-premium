@@ -115,7 +115,7 @@ export function ComposeCorrespondence({ data }: ComposeCorrespondenceProps) {
             </div>
 
             {/* Attachments */}
-            <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+            <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="rounded-lg border border-dashed p-6">
               <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 Attachments
               </h2>

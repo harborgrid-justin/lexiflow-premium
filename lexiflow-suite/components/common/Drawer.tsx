@@ -1,6 +1,6 @@
 
-import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
+import React, { useEffect } from 'react';
 
 interface DrawerProps {
   isOpen: boolean;
@@ -22,16 +22,17 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, title, children
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity" 
+      <div
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+        className="fixed inset-0 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
-      
+
       {/* Panel */}
       <div className={`relative w-full ${width} bg-white shadow-2xl h-full flex flex-col animate-in slide-in-from-right duration-300`}>
-        <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="flex items-center justify-between p-4 border-b">
           <h3 className="font-bold text-lg text-slate-900">{title}</h3>
-          <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors">
+          <button onClick={onClose} style={{ color: 'var(--color-textMuted)' }} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>

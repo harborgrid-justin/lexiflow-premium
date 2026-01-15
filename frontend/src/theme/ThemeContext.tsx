@@ -306,12 +306,12 @@ const DEFAULT_CONTEXT: ThemeContextType = Object.freeze({
   features: FEATURES_CONFIG,
   theme: createTheme(DEFAULT_TOKENS),
   isPendingThemeChange: false,
-  setDensity: () => { throw new Error('ThemeProvider not mounted'); },
-  toggleDark: () => { throw new Error('ThemeProvider not mounted'); },
-  setTheme: () => { throw new Error('ThemeProvider not mounted'); },
-  toggleTheme: () => { throw new Error('ThemeProvider not mounted'); },
-  updateToken: () => { throw new Error('ThemeProvider not mounted'); },
-  resetTokens: () => { throw new Error('ThemeProvider not mounted'); },
+  setDensity: () => { console.error('ThemeContext: setDensity called on DEFAULT_CONTEXT'); throw new Error('ThemeProvider not mounted - Default Context Accessed'); },
+  toggleDark: () => { throw new Error('ThemeProvider not mounted - Default Context Accessed'); },
+  setTheme: () => { throw new Error('ThemeProvider not mounted - Default Context Accessed'); },
+  toggleTheme: () => { throw new Error('ThemeProvider not mounted - Default Context Accessed'); },
+  updateToken: () => { throw new Error('ThemeProvider not mounted - Default Context Accessed'); },
+  resetTokens: () => { throw new Error('ThemeProvider not mounted - Default Context Accessed'); },
 });
 
 

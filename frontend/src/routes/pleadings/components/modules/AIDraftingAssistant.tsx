@@ -1,8 +1,8 @@
+import { GeminiService } from '@/services/features/research/geminiService';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
 import { useTheme } from '@/theme';
-import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/shared/lib/cn';
 import { RetryError, retryWithBackoff } from '@/utils/retryWithBackoff';
 import { AlertCircle, FileText, RefreshCw, Sparkles, Wand2, WifiOff } from 'lucide-react';
 import { useState } from 'react';
@@ -159,7 +159,7 @@ export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInse
                         <div className="flex items-center justify-between mb-2">
                             <span className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Result</span>
                             <div className="flex gap-2">
-                                <button onClick={handleDraft} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500" title="Regenerate">
+                                <button onClick={handleDraft} style={{ color: 'var(--color-textMuted)', backgroundColor: 'transparent' }} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded" title="Regenerate">
                                     <RefreshCw className="h-3 w-3" />
                                 </button>
                             </div>

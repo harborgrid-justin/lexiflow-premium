@@ -3,8 +3,8 @@
  * @description Client risk assessment card component
  */
 
-import type { ThemeObject } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import type { ThemeObject } from '@/theme';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
 import type { ClientRiskAssessment } from './types';
 import {
@@ -49,7 +49,7 @@ export function RiskCard({ client, theme }: RiskCardProps) {
               {formatFactorName(factor)}
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex-1 h-2 rounded bg-gray-200 dark:bg-gray-700">
+              <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="flex-1 h-2 rounded">
                 <div
                   className={cn('h-full rounded transition-all', getRiskBarColor(score))}
                   style={{ width: `${score}%` }}

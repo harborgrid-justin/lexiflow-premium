@@ -5,8 +5,8 @@
  * Provides smooth loading animations for various dashboard components
  */
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 interface SkeletonProps {
   className?: string;
@@ -179,7 +179,8 @@ export const ActivityFeedSkeleton: React.FC<{
         {Array.from({ length: items }).map((_, index) => (
           <div
             key={`activity-${index}`}
-            className="p-4 rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+            style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+            className="p-4 rounded-lg border"
           >
             <div className="flex items-start gap-3">
               <Skeleton variant="rounded" width={40} height={40} />
@@ -217,7 +218,7 @@ export const TableSkeleton: React.FC<{
       )}
     >
       {showHeader && (
-        <div className="border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="border-b">
           <div className="grid gap-4 p-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {/* IDENTITY-STABLE KEYS */}
             {Array.from({ length: columns }).map((_, index) => (

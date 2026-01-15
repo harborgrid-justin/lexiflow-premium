@@ -35,9 +35,9 @@ import { createPortal } from 'react-dom';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+import { cn } from '@/shared/lib/cn';
 import { } from '@/shared/ui/atoms//';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -165,7 +165,9 @@ const ToastNotification: React.FC<{
 
       <button
         onClick={() => onDismiss(notification.id)}
-        className="flex-shrink-0 p-1 rounded hover:bg-white/50 dark:hover:bg-slate-800/50 transition-colors"
+        style={{ backgroundColor: 'transparent' }}
+        style={{ backgroundColor: 'transparent' }}
+        className="flex-shrink-0 p-1 rounded hover:opacity-70 transition-colors"
       >
         <X className="h-4 w-4" />
       </button>

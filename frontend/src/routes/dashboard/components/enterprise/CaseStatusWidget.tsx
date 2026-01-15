@@ -4,8 +4,8 @@
  * @description Case status distribution visualization widget
  */
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
@@ -215,7 +215,7 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
                       {item.count}
                     </span>
                   </div>
-                  <div className="relative h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div style={{ backgroundColor: 'var(--color-border)' }} className="relative h-2 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${item.percentage}%` }}

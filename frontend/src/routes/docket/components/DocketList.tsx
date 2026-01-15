@@ -42,13 +42,15 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
               name="search"
               placeholder="Search docket entries..."
               defaultValue={searchParams.get("search") || ""}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="block w-full rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
           </div>
           <select
             name="type"
             defaultValue={searchParams.get("type") || ""}
-            className="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+            className="rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           >
             <option value="">All Types</option>
             <option value="Motion">Motion</option>
@@ -57,14 +59,16 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
           </select>
           <button
             type="submit"
-            className="rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}
+            className="rounded-md px-4 py-2 text-sm font-medium hover:opacity-80"
           >
             Filter
           </button>
           {searchParams.toString() && (
             <Link
               to="."
-              className="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
+              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+              className="rounded-md px-4 py-2 text-sm font-medium border hover:opacity-90"
             >
               Clear
             </Link>
@@ -74,7 +78,7 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
 
       {/* Content */}
       {entries.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
+        <div style={{ backgroundColor: 'var(--color-surfaceHover)', borderColor: 'var(--color-border)' }} className="rounded-lg border border-dashed p-12 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
             fill="none"
@@ -96,10 +100,10 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
           </p>
         </div>
       ) : (
-        <div className="flex flex-col rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex flex-col rounded-lg border shadow">
           <div className="max-h-[600px] overflow-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-900/50 sticky top-0 z-10">
+              <thead style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="sticky top-0 z-10">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Date</th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Description</th>
@@ -107,7 +111,7 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
                   <th scope="col" className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+              <tbody style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="divide-y">
                 {Array.isArray(entries) && entries.length > 0 ? (
                   entries.map((entry) => (
                     <tr key={entry.id}>
@@ -158,7 +162,7 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 dark:border-gray-700 dark:bg-gray-800 shrink-0 z-10">
+            <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex items-center justify-between border-t px-4 py-3 sm:px-6 shrink-0 z-10">
               <div className="flex flex-1 justify-between sm:hidden">
                 <Link
                   to={`?page=${Math.max(1, page - 1)}${searchParams.toString().replace(/&?page=\d+/, '')}`}
@@ -211,13 +215,13 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setIsCreateModalOpen(false)}></div>
+            <div style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} className="fixed inset-0 transition-opacity" onClick={() => setIsCreateModalOpen(false)}></div>
 
-            <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg dark:bg-gray-800">
+            <div style={{ backgroundColor: 'var(--color-surface)' }} className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
               <Form method="post" onSubmit={() => setIsCreateModalOpen(false)}>
                 <input type="hidden" name="intent" value="file-motion" />
 
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 dark:bg-gray-800">
+                <div style={{ backgroundColor: 'var(--color-surface)' }} className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                       <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100 mb-4">
@@ -281,7 +285,8 @@ export function DocketList({ entries, totalCount, page, totalPages }: DocketLoad
                   <button
                     type="button"
                     onClick={() => setIsCreateModalOpen(false)}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto dark:bg-gray-700 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-600"
+                    style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+                    className="mt-3 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset hover:opacity-90 sm:mt-0 sm:w-auto"
                   >
                     Cancel
                   </button>

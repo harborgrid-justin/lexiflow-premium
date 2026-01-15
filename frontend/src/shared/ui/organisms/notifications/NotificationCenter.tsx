@@ -287,7 +287,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       {/* Bell Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+        style={{ color: 'var(--color-text)' }}
+        className="relative p-2 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
         aria-label={`Notifications (${unreadCount} unread)`}
         aria-expanded={isOpen}
         type="button"
@@ -329,8 +330,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               <button
                 onClick={() => setFilter('all')}
                 className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
                   }`}
                 type="button"
               >
@@ -339,8 +340,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               <button
                 onClick={() => setFilter('unread')}
                 className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${filter === 'unread'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
                   }`}
                 type="button"
               >
@@ -368,7 +369,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               </div>
             ) : filteredNotifications.length === 0 ? (
               <div className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-3">
+                <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-3">
                   {filter === 'unread' ? (
                     <MailOpen size={28} strokeWidth={1.5} className="text-gray-400" />
                   ) : (

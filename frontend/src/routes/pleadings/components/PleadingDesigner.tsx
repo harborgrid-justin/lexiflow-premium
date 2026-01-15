@@ -1,19 +1,19 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/theme';
 import { DataService } from '@/services/data/data-service.service';
-import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { useTheme } from '@/theme';
+import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
 import { Suspense, lazy, useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useHistory } from '@/hooks/useHistory';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useNotify } from '@/hooks/useNotify';
 import { VersionConflictError } from '@/services/data/repositories/PleadingRepository';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { queryKeys } from '@/utils/queryKeys';
 import { PleadingDesignerProps, ViewMode } from './types';
 
@@ -106,7 +106,7 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   if (!formattingRules) return <LazyLoader message="Loading formatting rules..." />;
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-slate-100 dark:bg-slate-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="flex flex-col h-full overflow-hidden">
       {/* Top Toolbar */}
       <div className={cn("h-16 border-b flex justify-between items-center px-4 shrink-0 z-20", theme.surface.default, theme.border.default)}>
         <div className="flex items-center gap-2">

@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
 import { Briefcase, Calendar, CheckSquare, Link } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -163,7 +163,8 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Priority</label>
             <select
-              className="w-full px-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+              className="w-full px-3 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
               value={task.priority}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({ ...task, priority: e.target.value as TaskPriorityBackend })}
               aria-label="Priority"
@@ -178,7 +179,8 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
             <div className="relative">
               <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <select
-                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
+                style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
                 value={task.projectId}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({ ...task, projectId: (e.target.value || undefined) as ProjectId | undefined })}
                 aria-label="Link to Project"

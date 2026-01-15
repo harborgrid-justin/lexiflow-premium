@@ -127,7 +127,7 @@ export function CaseCard({
               {caseData.caseNumber || 'No Number'}
             </span>
             {caseData.isArchived && (
-              <span className="rounded bg-gray-200 px-1.5 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+              <span style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textMuted)' }} className="rounded px-1.5 py-0.5 text-xs">
                 Archived
               </span>
             )}
@@ -246,7 +246,8 @@ export function CaseCard({
               e.stopPropagation();
               // Handle quick actions
             }}
-            className="rounded-full bg-white p-1.5 shadow-sm hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600"
+            style={{ backgroundColor: 'var(--color-surface)' }}
+            className="rounded-full p-1.5 shadow-sm hover:bg-gray-100 dark:hover:bg-gray-600"
             aria-label="Quick actions"
           >
             <svg className="h-4 w-4 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -22,7 +22,7 @@ export const CompliancePolicies = memo(() => {
         openWindow(
             winId,
             `Policy: ${policy.title}`,
-            <div className="h-full bg-white">
+            <div style={{ backgroundColor: 'var(--color-surface)' }} className="h-full">
                 <DocumentPreviewPanel
                     document={{
                         id: policy.id as DocumentId,

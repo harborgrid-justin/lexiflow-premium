@@ -1,6 +1,6 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { MoreVertical, Edit2, Trash2, Eye, Copy } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ActionItem {
   label: string;
@@ -23,7 +23,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
         setIsOpen(false);
       }
     };
-    
+
     // Guideline 12: Keyboard navigation (Escape to close)
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -35,7 +35,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleKeyDown);
     }
-    
+
     // Guideline 4: Cleanup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -45,9 +45,10 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
-      <button 
+      <button
         onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
-        className="p-1 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+        style={{ color: 'var(--color-textMuted)' }}
+        className="p-1 rounded-full hover:bg-slate-100 hover:text-slate-600 transition-colors"
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
@@ -55,10 +56,11 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
       </button>
 
       {isOpen && (
-        <div 
-            className="absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100"
-            role="menu"
-            aria-orientation="vertical"
+        <div
+          style={{ backgroundColor: 'var(--color-surface)' }}
+          className="absolute right-0 mt-2 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100"
+          role="menu"
+          aria-orientation="vertical"
         >
           <div className="py-1">
             {actions.map((action, index) => {

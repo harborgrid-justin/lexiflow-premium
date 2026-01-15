@@ -22,8 +22,8 @@ import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
+import { useTheme } from '@/theme';
 import { useLitigationActions } from '../contexts/LitigationContext';
 
 // Components
@@ -31,8 +31,8 @@ import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
-import { Playbook } from '@/types/playbook';
 import { cn } from '@/shared/lib/cn';
+import { Playbook } from '@/types/playbook';
 import { extractCategories, filterPlaybooks, getDifficultyBorderColor, getDifficultyColor } from './utils';
 
 // ============================================================================
@@ -164,7 +164,7 @@ export const PlaybookLibrary: React.FC = () => {
             </div>
 
             {/* Content Grid */}
-            <div className="flex-1 overflow-hidden p-4 bg-slate-50 dark:bg-black/20">
+            <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="flex-1 overflow-hidden p-4">
                 {isLoading ? (
                     <div className={cn("flex items-center justify-center h-full", theme.text.secondary)}>
                         <div className="text-center">

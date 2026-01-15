@@ -7,11 +7,11 @@
  * @module components/features/cases/CaseHeader
  */
 
-import type { Case } from '@/types';
 import { cn } from '@/shared/lib/utils';
+import type { Case } from '@/types';
 import { Link } from 'react-router';
-import { CaseStatusBadge } from '../CaseStatusBadge';
 import { CaseQuickActions } from '../CaseQuickActions';
+import { CaseStatusBadge } from '../CaseStatusBadge';
 
 export interface CaseHeaderProps {
   /** The case data to display */
@@ -90,7 +90,7 @@ export function CaseHeader({
               </span>
               <CaseStatusBadge status={caseData.status} showIcon />
               {caseData.isArchived && (
-                <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                <span style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }} className="rounded-full px-3 py-1 text-xs font-medium">
                   📦 Archived
                 </span>
               )}
@@ -206,15 +206,15 @@ export function CaseHeader({
 
           {/* Budget Alert */}
           {caseData.budgetAlertThreshold && caseData.billingValue &&
-           caseData.budget &&
-           (caseData.billingValue / caseData.budget.amount) > (caseData.budgetAlertThreshold / 100) && (
-            <div className="flex items-center gap-2 rounded-md bg-yellow-50 px-3 py-2 text-sm text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="font-medium">Budget Alert: {caseData.budgetAlertThreshold}% threshold reached</span>
-            </div>
-          )}
+            caseData.budget &&
+            (caseData.billingValue / caseData.budget.amount) > (caseData.budgetAlertThreshold / 100) && (
+              <div className="flex items-center gap-2 rounded-md bg-yellow-50 px-3 py-2 text-sm text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-medium">Budget Alert: {caseData.budgetAlertThreshold}% threshold reached</span>
+              </div>
+            )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 
+import { Box, Calendar, FileText, Film, Image as ImageIcon, Loader2, Music, Shield, TrendingUp } from 'lucide-react';
 import React from 'react';
-import { Loader2, FileText, Image as ImageIcon, Film, Music, Box, Shield, Activity, DollarSign, Calendar, TrendingUp } from 'lucide-react';
 
 // 0. Skeleton Primitive (Principle 1 & 4)
 // Uses CSS variables for animation to avoid main-thread blocking (Principle 11)
@@ -61,7 +61,7 @@ export const LoadingSpinner: React.FC<{ text?: string; className?: string }> = (
 export const TagList: React.FC<{ tags: string[]; limit?: number }> = ({ tags, limit = 3 }) => (
   <div className="flex flex-wrap gap-1">
     {tags.slice(0, limit).map(t => (
-      <span key={t} className="px-1.5 py-0.5 bg-slate-100 text-slate-600 border border-slate-200 rounded text-[10px] font-semibold uppercase tracking-tighter whitespace-nowrap">
+      <span key={t} style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textMuted)', borderColor: 'var(--color-border)' }} className="px-1.5 py-0.5 border rounded text-[10px] font-semibold uppercase tracking-tighter whitespace-nowrap">
         {t}
       </span>
     ))}
@@ -109,43 +109,43 @@ export const PriorityBadge: React.FC<{ priority: string }> = ({ priority }) => {
 
 // 10. Metric Card (Dashboard Atom)
 // Updated to support Loading State (Principle 4)
-export const MetricCard: React.FC<{ 
-  label: string; 
-  value: string | number; 
-  icon?: React.ElementType; 
+export const MetricCard: React.FC<{
+  label: string;
+  value: string | number;
+  icon?: React.ElementType;
   trend?: string;
   trendUp?: boolean;
-  className?: string; 
+  className?: string;
   isLoading?: boolean;
 }> = ({ label, value, icon: Icon, trend, trendUp, className = "", isLoading = false }) => (
   <div className={`bg-white p-5 rounded-xl shadow-sm border border-slate-200 group hover:shadow-md transition-all ${className}`}>
     <div className="flex justify-between items-start">
       <div className="flex-1 min-w-0">
         <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.25em] truncate">{label}</p>
-        
+
         {isLoading ? (
-            <Skeleton className="h-8 w-24 mt-1" />
+          <Skeleton className="h-8 w-24 mt-1" />
         ) : (
-            <p className="text-3xl font-bold text-slate-900 mt-1 tracking-tight tabular-nums leading-none">{value}</p>
+          <p className="text-3xl font-bold text-slate-900 mt-1 tracking-tight tabular-nums leading-none">{value}</p>
         )}
       </div>
       {Icon && (
         <div className="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all shadow-inner border border-transparent group-hover:border-blue-100 shrink-0">
-            <Icon className="h-5 w-5"/>
+          <Icon className="h-5 w-5" />
         </div>
       )}
     </div>
     <div className="mt-4 h-4">
-        {isLoading ? (
-            <Skeleton className="h-3 w-16" />
-        ) : (
-            trend && (
-                <div className={`text-[10px] font-semibold uppercase tracking-widest flex items-center ${trendUp ? 'text-emerald-600' : 'text-red-600'}`}>
-                    <TrendingUp className={`h-3.5 w-3.5 mr-1.5 shrink-0 ${!trendUp && 'rotate-180'}`}/>
-                    {trend}
-                </div>
-            )
-        )}
+      {isLoading ? (
+        <Skeleton className="h-3 w-16" />
+      ) : (
+        trend && (
+          <div className={`text-[10px] font-semibold uppercase tracking-widest flex items-center ${trendUp ? 'text-emerald-600' : 'text-red-600'}`}>
+            <TrendingUp className={`h-3.5 w-3.5 mr-1.5 shrink-0 ${!trendUp && 'rotate-180'}`} />
+            {trend}
+          </div>
+        )
+      )}
     </div>
   </div>
 );

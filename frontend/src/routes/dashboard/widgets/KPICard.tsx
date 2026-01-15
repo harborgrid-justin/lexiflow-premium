@@ -5,11 +5,10 @@
  * Designed for executive dashboards with professional styling and animations
  */
 
-import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -199,7 +198,7 @@ export function KPICard({
     >
       {/* Loading overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-10">
+        <div style={{ backgroundColor: 'var(--color-surface)' }} className="absolute inset-0 backdrop-blur-sm flex items-center justify-center z-10 opacity-50">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
         </div>
       )}
@@ -252,7 +251,7 @@ export function KPICard({
               {progressPercent.toFixed(0)}%
             </span>
           </div>
-          <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div style={{ backgroundColor: 'var(--color-border)' }} className="h-2 rounded-full overflow-hidden">
             <div
               className={cn('h-full transition-all duration-500 rounded-full', colors.accent.replace('text-', 'bg-'))}
               style={{ width: `${Math.min(progressPercent, 100)}%` }}

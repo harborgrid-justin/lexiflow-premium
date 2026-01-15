@@ -4,8 +4,8 @@
  * @description Team productivity metrics and performance widget
  */
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Award, BarChart3, Clock, Target, TrendingUp, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -311,7 +311,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
                       </div>
                     </div>
                   </div>
-                  <div className="relative h-1.5 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div style={{ backgroundColor: 'var(--color-border)' }} className="relative h-1.5 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${member.efficiency}%` }}

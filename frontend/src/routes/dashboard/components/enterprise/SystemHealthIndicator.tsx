@@ -4,8 +4,8 @@
  * @description System health status indicator with real-time monitoring
  */
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -167,6 +167,7 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
+            style={{ backgroundColor: 'transparent' }}
             className="p-1 hover:bg-white/50 dark:hover:bg-black/20 rounded transition-colors"
             aria-label="Refresh status"
           >

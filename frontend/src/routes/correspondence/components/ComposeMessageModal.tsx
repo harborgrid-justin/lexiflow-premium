@@ -1,7 +1,3 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { useTheme } from '@/theme';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -9,9 +5,13 @@ import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
+import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { useTheme } from '@/theme';
 import { CommunicationItem, CommunicationType, UserId } from '@/types';
 import { CommunicationStatus } from '@/types/enums';
-import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Paperclip, Send, Wand2, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -275,6 +275,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
                                     <button
                                         onClick={() => handleRemoveAttachment(att.id)}
                                         title="Remove attachment"
+                                        style={{ backgroundColor: 'transparent' }}
                                         className="p-1 hover:bg-slate-100 rounded"
                                     >
                                         <X className="h-3 w-3 text-slate-400" />
@@ -295,7 +296,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
                                 className="hidden"
                                 accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
                             />
-                            <span className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md hover:bg-slate-100 transition-colors">
+                            <span style={{ backgroundColor: 'transparent' }} className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md hover:bg-slate-100 transition-colors">
                                 <Paperclip className="h-4 w-4" />
                                 Attach File
                             </span>

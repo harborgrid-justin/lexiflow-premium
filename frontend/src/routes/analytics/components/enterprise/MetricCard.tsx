@@ -3,8 +3,8 @@
  * Displays a single metric with optional trend indicator
  */
 
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import type { MetricCardData } from '@/types/analytics-enterprise';
+import { Minus, TrendingDown, TrendingUp } from 'lucide-react';
 
 export interface MetricCardProps {
   data: MetricCardData;
@@ -69,9 +69,9 @@ export function MetricCard({ data, className = '', loading = false }: MetricCard
     return (
       <div className={`rounded-lg border bg-white p-6 dark:bg-gray-800 ${className}`}>
         <div className="animate-pulse space-y-3">
-          <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700" />
-          <div className="h-8 w-32 rounded bg-gray-200 dark:bg-gray-700" />
-          <div className="h-3 w-20 rounded bg-gray-200 dark:bg-gray-700" />
+          <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-4 w-24 rounded" />
+          <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-8 w-32 rounded" />
+          <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="h-3 w-20 rounded" />
         </div>
       </div>
     );
@@ -102,14 +102,13 @@ export function MetricCard({ data, className = '', loading = false }: MetricCard
           )}
         </div>
         {data.icon && (
-          <div className={`rounded-lg p-3 ${
-            data.color === 'blue' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' :
-            data.color === 'green' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' :
-            data.color === 'red' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' :
-            data.color === 'yellow' ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400' :
-            data.color === 'purple' ? 'bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400' :
-            'bg-gray-50 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
-          }`}>
+          <div className={`rounded-lg p-3 ${data.color === 'blue' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' :
+              data.color === 'green' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' :
+                data.color === 'red' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' :
+                  data.color === 'yellow' ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400' :
+                    data.color === 'purple' ? 'bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400' :
+                      'bg-gray-50 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+            }`}>
             <span className="text-2xl">{data.icon}</span>
           </div>
         )}

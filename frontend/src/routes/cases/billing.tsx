@@ -121,7 +121,7 @@ export default function CaseBillingRoute() {
   const budgetRemaining = budgetAmount - totals.billed;
 
   return (
-    <div className="min-h-full bg-gray-50 dark:bg-gray-900">
+    <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-full">
       {/* Case Header */}
       <CaseHeader case={caseData} showBreadcrumbs />
 

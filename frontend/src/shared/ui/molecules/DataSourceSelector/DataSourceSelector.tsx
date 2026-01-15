@@ -134,6 +134,7 @@ export function DataSourceSelector() {
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
+            style={{ backgroundColor: 'transparent' }}
             className="p-1 hover:bg-white/50 rounded transition-colors"
             title="Refresh backend status now"
           >

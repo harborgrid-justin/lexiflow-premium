@@ -21,18 +21,17 @@ interface KanbanColumnProps {
 }
 
 export const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, count, children, onDrop, isDragOver, action }) => (
-  <div 
-    className={`flex flex-col w-80 rounded-lg h-full border-2 transition-colors duration-200 bg-slate-50/50 ${
-      isDragOver ? 'bg-blue-50 border-blue-300' : 'border-transparent'
-    }`}
+  <div
+    className={`flex flex-col w-80 rounded-lg h-full border-2 transition-colors duration-200 bg-slate-50/50 ${isDragOver ? 'bg-blue-50 border-blue-300' : 'border-transparent'
+      }`}
     onDragOver={(e) => { e.preventDefault(); }}
     onDrop={onDrop}
   >
-    <div className="flex justify-between items-center p-3 mb-2 bg-slate-100/50 rounded-t-lg">
+    <div style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="flex justify-between items-center p-3 mb-2 rounded-t-lg">
       <div className="flex items-center gap-2">
         <span className="font-bold text-slate-700 text-sm">{title}</span>
         {count !== undefined && (
-          <span className="bg-white px-2 py-0.5 rounded-full text-xs font-bold text-slate-500 border border-slate-200">
+          <span style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)', borderColor: 'var(--color-border)' }} className="px-2 py-0.5 rounded-full text-xs font-bold border">
             {count}
           </span>
         )}
@@ -54,13 +53,12 @@ interface KanbanCardProps {
 }
 
 export const KanbanCard: React.FC<KanbanCardProps> = ({ children, onDragStart, isDragging, className = '', onClick }) => (
-  <div 
+  <div
     draggable={!!onDragStart}
     onDragStart={onDragStart}
     onClick={onClick}
-    className={`bg-white p-3 rounded-lg shadow-sm border border-slate-200 cursor-pointer transition-all duration-200 group hover:shadow-md hover:border-blue-300 ${
-      isDragging ? 'opacity-50 ring-2 ring-blue-400 rotate-2 scale-95' : ''
-    } ${className}`}
+    className={`bg-white p-3 rounded-lg shadow-sm border border-slate-200 cursor-pointer transition-all duration-200 group hover:shadow-md hover:border-blue-300 ${isDragging ? 'opacity-50 ring-2 ring-blue-400 rotate-2 scale-95' : ''
+      } ${className}`}
   >
     {children}
   </div>

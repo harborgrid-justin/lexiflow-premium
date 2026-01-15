@@ -116,9 +116,9 @@ export function CalendarView() {
           />
         </div>
 
-        <div className="flex-1 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm relative">
+        <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="flex-1 overflow-hidden rounded-lg border shadow-sm relative">
           {isPending && (
-            <div className="absolute inset-0 z-10 bg-white/50 dark:bg-black/50 flex items-center justify-center">
+            <div style={{ backgroundColor: 'var(--color-surface)', opacity: 0.5 }} className="absolute inset-0 z-10 flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
             </div>
           )}
@@ -167,7 +167,7 @@ export function CalendarView() {
 
 function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
       <div className="flex items-center gap-3">
         {icon}
         <div>
@@ -182,7 +182,7 @@ function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: stri
 // Renamed locally to avoid conflict if we decide to re-export or just clarity
 function EventParamsCard({ event }: { event: any }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:shadow-md transition-shadow">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">
         <div className="flex-1">
           <div className="font-medium text-slate-900 dark:text-white">{event.title}</div>

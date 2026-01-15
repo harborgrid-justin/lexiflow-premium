@@ -5,9 +5,9 @@
  * Displays comprehensive performance metrics with benchmarks and trends
  */
 
+import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import type { BaseDashboardProps, PerformanceMetric } from '@/types/dashboard';
-import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -220,7 +220,7 @@ export const PerformanceMetricsGrid: React.FC<PerformanceMetricsGridProps> = ({
           {/* Progress Bar */}
           {showTargets && metric.target && (
             <div className="mb-2">
-              <div className="relative h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+              <div style={{ backgroundColor: 'var(--color-border)' }} className="relative h-2 rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progressWidth}%` }}

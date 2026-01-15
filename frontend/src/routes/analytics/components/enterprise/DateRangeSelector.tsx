@@ -3,9 +3,9 @@
  * Allows users to select date ranges for analytics
  */
 
-import { useState } from 'react';
+import { endOfMonth, format, startOfMonth, startOfYear, subDays, subMonths } from 'date-fns';
 import { Calendar } from 'lucide-react';
-import { format, subDays, startOfMonth, endOfMonth, subMonths, startOfYear } from 'date-fns';
+import { useState } from 'react';
 
 export interface DateRange {
   start: Date;
@@ -111,7 +111,8 @@ export function DateRangeSelector({
     <div className={`relative ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+        style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+        className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700"
       >
         <Calendar className="h-4 w-4" />
         <span>{value.label}</span>
@@ -126,7 +127,7 @@ export function DateRangeSelector({
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 z-20 mt-2 w-96 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="absolute right-0 z-20 mt-2 w-96 rounded-lg border shadow-lg">
             {/* Presets */}
             <div className="border-b border-gray-200 p-4 dark:border-gray-700">
               <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -137,7 +138,8 @@ export function DateRangeSelector({
                   <button
                     key={preset.value}
                     onClick={() => handlePresetClick(preset)}
-                    className="rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                    style={{ backgroundColor: 'transparent', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+                    className="rounded-md border px-3 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
                     {preset.label}
                   </button>

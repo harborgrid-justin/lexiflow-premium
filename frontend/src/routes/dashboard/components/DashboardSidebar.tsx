@@ -122,7 +122,7 @@ export function DashboardSidebar({ alerts }: DashboardSidebarProps) {
             {/* Billing Cycle Overlay Card */}
             <div className={cn("rounded-xl p-6 shadow-xl border", theme.surface.overlay, theme.text.inverse)}>
                 <div className="flex items-center mb-6">
-                    <div className="p-2.5 bg-white/10 rounded-lg mr-4 border border-white/10">
+                    <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', borderColor: 'rgba(255, 255, 255, 0.1)' }} className="p-2.5 rounded-lg mr-4 border">
                         <FileText className="h-5 w-5 text-blue-300" />
                     </div>
                     <div>

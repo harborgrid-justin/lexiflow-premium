@@ -173,7 +173,7 @@ export function CaseTimeline({
       {/* Filters (if enabled) */}
       {showFilters && (
         <div className="flex flex-wrap gap-2">
-          <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+          <button style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }} className="rounded-lg border px-3 py-1.5 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700">
             All Events
           </button>
           <button className="rounded-lg border border-transparent bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
@@ -191,7 +191,7 @@ export function CaseTimeline({
       {/* Timeline */}
       <div className="relative">
         {/* Vertical line */}
-        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700" />
+        <div style={{ backgroundColor: 'var(--color-border)' }} className="absolute left-4 top-0 bottom-0 w-0.5" />
 
         {/* Events */}
         <div className="space-y-6">

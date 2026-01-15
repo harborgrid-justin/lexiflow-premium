@@ -5,9 +5,9 @@
  * Displays recent activities, events, and notifications in real-time
  */
 
+import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import type { Activity as ActivityType, ActivityType as ActivityTypeEnum, BaseDashboardProps } from '@/types/dashboard';
-import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -160,7 +160,7 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
       case 'medium':
         return <div className="w-2 h-2 rounded-full bg-blue-500" />;
       case 'low':
-        return <div className="w-2 h-2 rounded-full bg-gray-400" />;
+        return <div style={{ backgroundColor: 'var(--color-textMuted)' }} className="w-2 h-2 rounded-full" />;
       default:
         return null;
     }

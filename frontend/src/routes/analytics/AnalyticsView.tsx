@@ -52,7 +52,7 @@ export function AnalyticsView() {
 
 function Section({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
       <div className="flex items-center gap-2 mb-4">
         {icon}
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>

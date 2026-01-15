@@ -270,12 +270,20 @@ const documentVersions = {
   },
 };
 
+/**
+ * Get tenant configuration
+ */
+export async function getTenantConfig(): Promise<Result<unknown>> {
+  return await client.get<unknown>("/admin/tenant/config");
+}
+
 export const adminApi = {
   getAuditLogs,
   getAuditLogById,
   getSystemMetrics,
   getSystemHealth,
   clearCache,
+  getTenantConfig,
   // Sub-modules for descriptor compatibility
   auditLogs,
   ocr,

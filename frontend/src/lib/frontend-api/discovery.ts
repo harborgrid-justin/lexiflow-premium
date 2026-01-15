@@ -338,4 +338,6 @@ export const discoveryApi = {
   exportEvidence,
   // Sub-modules for descriptor compatibility
   productions,
+  // Convenience alias
+  getAll: getAllEvidence,
 } as const;

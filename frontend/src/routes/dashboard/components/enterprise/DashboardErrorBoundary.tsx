@@ -5,9 +5,9 @@
  * Provides graceful error handling with recovery options
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, RefreshCw, Home, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertTriangle, ChevronDown, ChevronUp, Home, RefreshCw } from 'lucide-react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -128,7 +128,7 @@ export class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
                     : 'The dashboard encountered an unexpected error.'}
                 </p>
 
-                <div className="bg-white dark:bg-slate-900 rounded-lg p-4 mb-4 border border-rose-200 dark:border-rose-800">
+                <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg p-4 mb-4 border">
                   <p className="text-sm font-mono text-rose-800 dark:text-rose-200">
                     {error.message || 'An unknown error occurred'}
                   </p>
@@ -158,7 +158,8 @@ export class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="mt-3 bg-white dark:bg-slate-900 rounded-lg p-4 border border-rose-200 dark:border-rose-800 overflow-auto max-h-64"
+                        style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+                        className="mt-3 rounded-lg p-4 border overflow-auto max-h-64"
                       >
                         <p className="text-xs font-mono text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                           {errorInfo.componentStack}
@@ -179,7 +180,8 @@ export class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
                   {!isolate && (
                     <button
                       onClick={() => window.location.href = '/'}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 rounded-lg font-medium transition-colors"
+                      style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+                      className="inline-flex items-center gap-2 px-4 py-2 hover:bg-gray-50 dark:hover:bg-slate-700 text-rose-700 dark:text-rose-300 border rounded-lg font-medium transition-colors"
                     >
                       <Home className="h-4 w-4" />
                       Go Home

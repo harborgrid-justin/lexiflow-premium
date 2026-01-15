@@ -26,7 +26,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';

@@ -4,7 +4,7 @@
  * @description Enterprise mega menu for complex hierarchical navigation with categories and quick actions.
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/lib/cn';
 import { ChevronDown, LucideIcon } from 'lucide-react';

@@ -4,7 +4,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { AlertCircle } from 'lucide-react';
 interface FormInputProps {
   label: string;

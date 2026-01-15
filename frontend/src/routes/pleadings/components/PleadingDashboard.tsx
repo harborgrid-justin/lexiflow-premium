@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/atoms/Button/Button';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { useModalState } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';

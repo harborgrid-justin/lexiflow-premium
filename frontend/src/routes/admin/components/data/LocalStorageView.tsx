@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { HardDrive, Trash2 } from 'lucide-react';
 import { useEffect } from 'react';

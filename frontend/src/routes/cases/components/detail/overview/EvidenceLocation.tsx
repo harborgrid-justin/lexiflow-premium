@@ -15,7 +15,7 @@ import { Card } from '@/components/molecules/Card/Card';
 import { Button } from '@/components/atoms/Button/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

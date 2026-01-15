@@ -14,7 +14,7 @@
  */
 
 import masterConfig from '@/config/master.config';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';

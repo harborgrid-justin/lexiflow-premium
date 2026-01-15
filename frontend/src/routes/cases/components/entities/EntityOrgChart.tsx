@@ -22,7 +22,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';

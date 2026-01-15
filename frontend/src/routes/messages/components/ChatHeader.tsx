@@ -17,7 +17,7 @@ import { AlertTriangle, ArrowLeft, Info, Lock, Phone, Video } from 'lucide-react
 // ============================================================================
 // Hooks & Context
 import { Conversation } from '@/hooks/useSecureMessenger';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';

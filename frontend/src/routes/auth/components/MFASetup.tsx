@@ -7,7 +7,7 @@
  * @module components/auth/MFASetup
  */
 
-import { useAuthState } from '@/contexts/auth/AuthProvider';
+import { useAuthState } from '@/providers/application/AuthProvider';
 import { useMFAFlow } from './hooks/useMFAFlow';
 import { formatBackupCodes } from './utils/authFormatters';
 

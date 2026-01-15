@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { AlertTriangle, ArrowRight, Database, FileText, Layers } from 'lucide-react';
 import React from 'react';
 

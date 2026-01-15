@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Activity, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { useDataSource } from '@/providers';
 

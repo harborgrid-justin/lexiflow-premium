@@ -18,9 +18,10 @@
  * @module providers/application
  */
 
-import { AuthProvider } from "@/contexts/auth/AuthContext";
-import { EntitlementsProvider } from "@/contexts/entitlements/EntitlementsContext";
-import { FlagsProvider, FlagsProviderProps } from "@/contexts/flags/FlagsContext";
+import { AuthProvider } from "@/providers/application/AuthProvider";
+import { EntitlementsProvider } from "@/lib/entitlements/context";
+import { FlagsProvider } from "@/lib/flags/context";
+import { FlagsProviderProps } from "@/unknown_fix_me/FlagsProviderProps";
 import { ReactNode } from "react";
 
 export interface ApplicationLayerProps {

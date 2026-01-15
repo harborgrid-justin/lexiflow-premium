@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { queryClient, useMutation } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';

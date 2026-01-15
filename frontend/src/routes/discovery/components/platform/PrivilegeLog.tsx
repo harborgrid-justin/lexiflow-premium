@@ -25,7 +25,7 @@ import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';

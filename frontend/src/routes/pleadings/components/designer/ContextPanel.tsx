@@ -1,6 +1,6 @@
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';

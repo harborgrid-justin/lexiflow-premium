@@ -4,7 +4,7 @@
  * Provides visual feedback during data loading with context-specific variants
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // ============================================================================

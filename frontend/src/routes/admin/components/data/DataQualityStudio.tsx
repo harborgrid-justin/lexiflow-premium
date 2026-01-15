@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { Modal } from '@/components/molecules/Modal';
 import { Tabs } from '@/components/molecules/Tabs';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 import { QUALITY_TABS } from '@/config/quality.config';
 import { useDataQualityStudio } from '../../_hooks/useDataQualityStudio';

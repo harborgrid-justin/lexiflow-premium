@@ -28,7 +28,7 @@ import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';

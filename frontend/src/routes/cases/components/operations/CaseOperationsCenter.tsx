@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import type { User } from '@/types';
 import { Calendar, Kanban, List, Loader2, Plus, Search
 } from 'lucide-react';

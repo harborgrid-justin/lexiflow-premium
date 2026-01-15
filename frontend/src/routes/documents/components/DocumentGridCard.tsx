@@ -1,6 +1,6 @@
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
 interface DocumentGridCardProps {

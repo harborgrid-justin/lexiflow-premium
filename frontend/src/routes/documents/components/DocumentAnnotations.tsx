@@ -3,7 +3,7 @@
  * Manage annotations, notes, and comments on documents
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { formatDate } from '@/utils/formatters';
 import { useDocumentAnnotations } from '../_hooks/useDocumentAnnotations';
 import { DocumentAnnotationsProps } from '../types/DocumentAnnotationsProps';

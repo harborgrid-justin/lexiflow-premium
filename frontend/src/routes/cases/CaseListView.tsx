@@ -22,7 +22,7 @@
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Case } from '@/types';
 import {
   Activity,

@@ -6,7 +6,7 @@
 
 import { Production as APIProduction } from '@/lib/frontend-api';
 import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';

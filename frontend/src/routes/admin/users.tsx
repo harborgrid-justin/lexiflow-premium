@@ -5,7 +5,7 @@
  */
 
 import { authApi } from '@/lib/frontend-api';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import type { User } from '@/types';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';

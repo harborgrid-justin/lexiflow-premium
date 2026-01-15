@@ -18,7 +18,7 @@
 import React, { Suspense, ReactNode, useState, useEffect, useCallback } from 'react';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/atoms/Button/Button';

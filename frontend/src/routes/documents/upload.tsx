@@ -6,7 +6,7 @@
  * @module routes/documents/upload
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 import { useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

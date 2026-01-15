@@ -1,5 +1,5 @@
 import { BackupSnapshot } from '@/lib/frontend-api';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { StatusBadge } from '@/components/atoms/StatusBadge';

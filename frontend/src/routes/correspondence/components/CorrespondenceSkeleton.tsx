@@ -4,7 +4,7 @@
  * @description Loading skeleton components for correspondence lists
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 /**
  * Skeleton for communication log items

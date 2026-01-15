@@ -10,7 +10,7 @@ import {
 } from '@/lib/frontend-api';
 import { useToast } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 

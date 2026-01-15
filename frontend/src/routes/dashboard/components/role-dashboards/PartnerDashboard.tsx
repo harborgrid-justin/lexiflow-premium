@@ -5,7 +5,7 @@
  */
 
 import { type PartnerDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { ChartCard, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/lib/cn';

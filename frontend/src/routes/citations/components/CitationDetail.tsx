@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { Button } from '@/components/atoms/Button/Button';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

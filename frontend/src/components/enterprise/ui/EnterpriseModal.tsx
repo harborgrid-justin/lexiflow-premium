@@ -33,7 +33,7 @@ import { createPortal } from 'react-dom';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // ============================================================================

@@ -1,4 +1,4 @@
-/** * @module components/common/DocketSkeleton * @category Loading States * @description Skeleton screens for docket table and calendar loading states */ import { useTheme } from '@/contexts/ThemeContext';
+/** * @module components/common/DocketSkeleton * @category Loading States * @description Skeleton screens for docket table and calendar loading states */ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 // ============================================================================
 // DOCKET TABLE SKELETON

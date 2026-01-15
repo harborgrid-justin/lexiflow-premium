@@ -20,7 +20,7 @@ import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToast } from '@/providers';
 import { getTodayString } from '@/lib/dateUtils';

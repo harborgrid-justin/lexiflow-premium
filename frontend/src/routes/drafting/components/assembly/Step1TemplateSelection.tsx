@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { Loader2 } from 'lucide-react';
 import { useDocumentTemplates } from './hooks/useDocumentTemplates';

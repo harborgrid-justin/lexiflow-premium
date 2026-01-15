@@ -12,7 +12,7 @@
 
 import { cn } from '@/lib/cn';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 
 interface ManagerLayoutProps {

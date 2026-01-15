@@ -27,7 +27,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 // Hooks & Context
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';

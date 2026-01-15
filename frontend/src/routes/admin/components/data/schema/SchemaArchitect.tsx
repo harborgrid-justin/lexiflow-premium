@@ -7,7 +7,7 @@ import { Input } from '@/components/atoms/Input';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { Modal } from '@/components/molecules/Modal';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useEffect, useMemo, useState } from 'react';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaCodeEditor } from './SchemaCodeEditor';

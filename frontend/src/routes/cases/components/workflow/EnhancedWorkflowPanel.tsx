@@ -13,7 +13,7 @@
 
 import { cn } from '@/lib/cn';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useState } from 'react';
 import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { AuditTrailViewer } from './AuditTrailViewer';

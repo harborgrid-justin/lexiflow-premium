@@ -22,7 +22,7 @@ import { useBillingOverviewData } from './hooks/useBillingOverviewData';
 
 // Hooks & Context
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Currency } from '@/components/atoms/Currency';

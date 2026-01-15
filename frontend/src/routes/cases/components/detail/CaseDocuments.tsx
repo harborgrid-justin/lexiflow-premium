@@ -25,7 +25,7 @@ import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
 import { useCaseDocuments } from '@/routes/cases/_hooks/useCaseDocuments';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

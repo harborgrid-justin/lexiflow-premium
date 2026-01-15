@@ -2,7 +2,7 @@ import { cn } from '@/lib/cn';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Card } from '@/components/molecules/Card';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Wand2 } from 'lucide-react';
 
 export function DefinitionCard({

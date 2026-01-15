@@ -1,5 +1,5 @@
 import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { cn } from '@/lib/cn';
 import { Briefcase, ExternalLink } from 'lucide-react';

@@ -15,7 +15,7 @@ import { Modal } from '@/components/molecules/Modal';
  * - G33: Explicit loading states
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 import { Header } from '../Header/Header';
 import './page.css';

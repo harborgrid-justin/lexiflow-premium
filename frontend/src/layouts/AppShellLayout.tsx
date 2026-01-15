@@ -28,10 +28,10 @@
 import { AppShell } from "@/components/layouts/AppShell";
 import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
-import { AuthProvider } from "@/contexts/auth/AuthProvider";
-import { EntitlementsProvider } from "@/contexts/entitlements/EntitlementsContext";
-import { FlagsProvider } from "@/contexts/flags/FlagsContext";
-import { QueryClientProvider } from "@/contexts/query/QueryClientProvider";
+import { AuthProvider } from '@/providers/application/AuthProvider';
+import { EntitlementsProvider } from "@/lib/entitlements/context";
+import { FlagsProvider } from "@/lib/flags/context";
+import { QueryClientProvider } from "@/unknown_fix_me/QueryClientProvider";
 import { useAppShellLogic } from "@/hooks/useAppShellLogic";
 import { requireAuthLoader } from "@/utils/route-guards";
 import {

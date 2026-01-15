@@ -14,7 +14,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // ============================================================================

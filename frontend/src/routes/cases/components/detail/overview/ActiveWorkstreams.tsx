@@ -11,7 +11,7 @@
 import { Briefcase } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

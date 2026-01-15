@@ -1,7 +1,7 @@
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
 import { cn } from '@/lib/cn';

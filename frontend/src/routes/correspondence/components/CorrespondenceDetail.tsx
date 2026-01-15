@@ -5,7 +5,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
 import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';

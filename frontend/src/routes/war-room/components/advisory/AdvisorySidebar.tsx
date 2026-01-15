@@ -16,7 +16,7 @@ import { Users, Briefcase, Stethoscope, Microscope, BrainCircuit, Gavel } from '
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

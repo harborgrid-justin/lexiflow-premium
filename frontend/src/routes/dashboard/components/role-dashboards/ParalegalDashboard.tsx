@@ -5,7 +5,7 @@
  */
 
 import { dashboardMetricsService } from '@/lib/frontend-api';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { ActivityFeed, KPICard, StatWidget } from '../../widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/lib/cn';

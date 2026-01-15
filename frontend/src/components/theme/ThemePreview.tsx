@@ -4,7 +4,7 @@
  * Demonstrates all theme properties in real-time as they are updated.
  * Shows colors, typography, spacing, shadows, and effects.
  */
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import React from 'react';
 
 export const ThemePreview: React.FC = () => {

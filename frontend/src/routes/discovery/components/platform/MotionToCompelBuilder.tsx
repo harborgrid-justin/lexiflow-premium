@@ -14,7 +14,7 @@ import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } fr
  * - G28: Pure function of props and context
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { GeminiService } from '@/services/features/research/geminiService';

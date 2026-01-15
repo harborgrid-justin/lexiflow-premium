@@ -1,7 +1,8 @@
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { Card } from '@/components/molecules/Card/Card';
-import { ChartColorService, useTheme } from '@/contexts/ThemeContext';
+import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { useTheme } from "@/hooks/useTheme";
 import { FinancialPerformanceData } from '@/types';
 import React from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';

@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { GeneratedDocument } from '@api/domains/drafting';
 import { formatDistanceToNow } from 'date-fns';
 import { Clock, FileText } from 'lucide-react';

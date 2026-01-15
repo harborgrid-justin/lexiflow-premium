@@ -3,7 +3,7 @@ import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 import { Badge } from '@/components/atoms/Badge';
 import { Star, DollarSign, Scale} from 'lucide-react';
 import { LegalEntity } from '@/types';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import React from "react";
 

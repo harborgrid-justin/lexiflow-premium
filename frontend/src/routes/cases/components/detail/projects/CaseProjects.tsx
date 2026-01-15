@@ -19,7 +19,7 @@ import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';

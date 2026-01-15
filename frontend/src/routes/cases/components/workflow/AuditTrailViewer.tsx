@@ -1,7 +1,7 @@
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { AuditLogEntry } from '@/types';
 import { AlertCircle, Check, History, Loader2, RefreshCw, User } from 'lucide-react';
 import React from 'react';

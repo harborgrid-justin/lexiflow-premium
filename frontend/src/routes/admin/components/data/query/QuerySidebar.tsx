@@ -1,5 +1,5 @@
 import { Database, Clock, Star, Table } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import React from "react";
 

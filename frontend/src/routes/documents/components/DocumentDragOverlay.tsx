@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { UploadCloud } from 'lucide-react';
 
 interface DocumentDragOverlayProps {

@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Briefcase, CheckCircle, Lock, Plus, Users } from 'lucide-react';
 import { memo } from 'react';
 import { useComplianceWalls } from './hooks/useComplianceWalls';

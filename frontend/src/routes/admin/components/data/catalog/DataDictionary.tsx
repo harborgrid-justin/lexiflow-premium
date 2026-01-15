@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';

@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { AuditLogEntry } from '@/types';
 import { AlertOctagon, Link, Loader2, User } from 'lucide-react';
 import { useEffect, useState } from 'react';

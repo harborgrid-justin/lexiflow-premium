@@ -35,7 +35,7 @@ import { Modal } from '@/components/molecules/Modal';
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
 import { DataService } from '@/services/data/data-service.service';

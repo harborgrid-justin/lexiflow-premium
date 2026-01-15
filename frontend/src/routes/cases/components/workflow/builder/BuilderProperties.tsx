@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Move, Settings, Trash2, X } from 'lucide-react';
 import React from 'react';
 import { WorkflowNode, getNodeIcon } from './types';

@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { Command, Search, X } from 'lucide-react';
 import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';

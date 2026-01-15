@@ -17,7 +17,7 @@ import { useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';

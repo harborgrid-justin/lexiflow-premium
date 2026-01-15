@@ -6,7 +6,7 @@ import { DocumentService } from '@/services/features/documents/documents';
 import { BlobManager } from '@/services/infrastructure/blob-manager.service';
 import { cn } from '@/lib/cn';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { LegalDocument } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Eraser, Loader2 } from 'lucide-react';

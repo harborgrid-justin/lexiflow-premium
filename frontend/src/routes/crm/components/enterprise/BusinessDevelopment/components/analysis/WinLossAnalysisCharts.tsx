@@ -4,7 +4,8 @@
  * @description Conversion trend and source distribution charts
  */
 
-import { ChartColorService, useTheme } from '@/contexts/ThemeContext';
+import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { useTheme } from "@/hooks/useTheme";
 import { Card } from '@/components/molecules/Card/Card';
 import type { ConversionTrend, LeadsBySource } from '@/types/crm';
 import { getChartTheme } from '@/utils/chartConfig';

@@ -13,7 +13,7 @@
 import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Case, WorkflowTask } from '@/types';
 import { CheckCircle, ChevronRight, Clock, GitBranch, Search, Settings, Users } from 'lucide-react';
 import { getCaseProgress, getNextTask } from './utils';

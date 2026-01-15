@@ -11,7 +11,7 @@
  * @module components/guards/ProtectedRoute
  */
 
-import { useAuthState } from '@/contexts/auth/AuthProvider';
+import { useAuthState } from '@/providers/application/AuthProvider';
 import type { UserRole } from '@/utils/route-guards';
 import { useEffect, type ReactNode } from 'react';
 import { useNavigate } from 'react-router';

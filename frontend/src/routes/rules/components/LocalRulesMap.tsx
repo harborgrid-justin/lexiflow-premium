@@ -3,7 +3,7 @@ import { JurisdictionGeoMap } from '@/routes/jurisdiction/components/Jurisdictio
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Book, Loader2, MapPin } from 'lucide-react';
 import { useMemo } from 'react';
 import { CourtLevel, groupJurisdictionsByState, Jurisdiction, StateGroup } from './localRulesMap.utils';

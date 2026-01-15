@@ -14,7 +14,7 @@ import { AlertCircle, ChevronDown, ChevronRight, GripVertical, Plus } from 'luci
 import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

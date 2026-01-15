@@ -3,7 +3,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card';
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DataProfile } from '@/types';
 import { AlertTriangle, AlignLeft, Calendar, CheckCircle2, Hash, Loader2 } from 'lucide-react';
 import React from 'react';

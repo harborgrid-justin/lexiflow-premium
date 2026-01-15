@@ -12,7 +12,7 @@
  * - Loading states
  */
 
-import { useAuthActions, useAuthState } from '@/contexts/auth/AuthProvider';
+import { useAuthActions, useAuthState } from '@/providers/application/AuthProvider';
 import {
   loginSchema,
   mfaCodeSchema,

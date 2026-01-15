@@ -3,7 +3,7 @@
  * @category Common Components - UI Primitives
  * @description Formatted currency display using standardized Formatters
  */
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { currencyStyles } from './Currency.styles';

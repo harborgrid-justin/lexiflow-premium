@@ -3,7 +3,7 @@
  * Review and summary step before form submission
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { AlertCircle } from 'lucide-react';
 interface FormState {

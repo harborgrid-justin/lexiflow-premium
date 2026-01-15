@@ -2,7 +2,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 interface ColumnData {
     name?: string;
     type?: string;

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import type { StoreRecord } from './types';
 
 // interface IndexedDBDataTableProps {

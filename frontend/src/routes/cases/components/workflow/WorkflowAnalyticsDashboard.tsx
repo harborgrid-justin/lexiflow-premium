@@ -22,7 +22,7 @@ import { getChartTheme } from '@/utils/chartConfig';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';

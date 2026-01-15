@@ -27,7 +27,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DollarSign, FileText, Link2, Save, Scale, Trash2, Users } from 'lucide-react';
 
 // Types

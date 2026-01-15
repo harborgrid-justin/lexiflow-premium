@@ -1,5 +1,5 @@
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/cn';

@@ -1,6 +1,6 @@
 import { Button } from '@/components/atoms/Button/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Briefcase, UserPlus, Users } from 'lucide-react';
 import { useCRM } from './CRMProvider';
 

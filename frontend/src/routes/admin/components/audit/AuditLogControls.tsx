@@ -1,7 +1,7 @@
 import { IntegrityReport } from '@/services/infrastructure/chainService';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Download, GitCommit, LayoutList, Loader2, RefreshCw, Shield, ShieldCheck, Skull } from 'lucide-react';
 interface AuditLogControlsProps {
     viewMode: 'table' | 'visual';

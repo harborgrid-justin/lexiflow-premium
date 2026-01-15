@@ -19,7 +19,7 @@ import { communicationsApi } from '@/lib/frontend-api';
 // Hooks & Context
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToast } from '@/providers';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Badge } from '@/components/atoms/Badge';

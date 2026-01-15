@@ -20,7 +20,7 @@ import { queryClient } from '@/hooks/useQueryHooks';
 import { ModuleRegistry } from '@/services/infrastructure/module-registry.service';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useHoverIntent } from '@/hooks/useHoverIntent';
 
 // Utils & Constants

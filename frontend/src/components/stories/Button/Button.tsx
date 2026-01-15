@@ -1,5 +1,5 @@
 import './button.css';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 export interface ButtonProps {
   /** Is this the principal call to action on the page? */

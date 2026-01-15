@@ -1,4 +1,4 @@
-import { useAuthActions } from '@/contexts/auth/AuthProvider';
+import { useAuthActions } from '@/providers/application/AuthProvider';
 import { useState } from 'react';
 import { cleanVerificationCode } from '../utils/authFormatters';
 

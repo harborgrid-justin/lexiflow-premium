@@ -5,7 +5,7 @@
  * Ideal for long-form content with persistent navigation.
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import React from "react";
 

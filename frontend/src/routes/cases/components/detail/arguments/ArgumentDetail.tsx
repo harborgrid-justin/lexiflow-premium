@@ -20,7 +20,7 @@ import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { ArgumentCoreInfo } from './ArgumentCoreInfo';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';

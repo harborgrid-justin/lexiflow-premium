@@ -34,7 +34,7 @@ import { IntentResult } from '@/services/features/research/geminiService';
 import { GlobalSearchResult } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useInterval } from '@/hooks/useInterval';
 

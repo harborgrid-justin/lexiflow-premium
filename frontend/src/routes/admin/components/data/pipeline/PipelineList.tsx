@@ -1,5 +1,5 @@
 import { Pipeline } from '@/lib/frontend-api';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { Activity, ChevronRight, Clock, GitMerge, XCircle } from 'lucide-react';
 

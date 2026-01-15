@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Activity } from '@/types/dashboard';
 import { formatDistanceToNow } from 'date-fns';
 import {

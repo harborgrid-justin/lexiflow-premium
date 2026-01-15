@@ -26,7 +26,7 @@ import { useModalState } from '@/hooks/core';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';

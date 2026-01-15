@@ -1,6 +1,6 @@
 import { Button } from '../Button/Button';
 import './header.css';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 type User = {
   name: string;

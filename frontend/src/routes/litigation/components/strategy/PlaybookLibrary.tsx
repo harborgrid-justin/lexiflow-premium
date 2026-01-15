@@ -23,7 +23,7 @@ import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useWindow } from '@/providers';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useLitigationActions } from '../contexts/LitigationContext';
 
 // Components

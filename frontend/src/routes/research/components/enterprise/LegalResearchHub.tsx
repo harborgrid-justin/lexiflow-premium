@@ -33,7 +33,7 @@ import { useCallback, useEffect, useState } from 'react';
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';

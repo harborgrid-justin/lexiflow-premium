@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { useRevalidator } from 'react-router';

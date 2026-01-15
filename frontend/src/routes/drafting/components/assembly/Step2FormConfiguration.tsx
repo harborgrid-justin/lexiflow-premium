@@ -6,7 +6,7 @@
 
 import { cn } from '@/lib/cn';
 import { getTodayString } from '@/lib/dateUtils';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { Calendar, FileText, Sparkles, User } from 'lucide-react';
 interface Step2FormConfigurationProps {
   template: string;

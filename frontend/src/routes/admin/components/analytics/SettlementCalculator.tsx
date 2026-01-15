@@ -27,7 +27,7 @@ import { Card } from '@/components/molecules/Card/Card';
 // Hooks & Context
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 import type { ThemeStateValue } from '@/contexts/ThemeContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Services
 import { cn } from '@/lib/cn';

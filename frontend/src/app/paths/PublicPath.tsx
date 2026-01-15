@@ -1,6 +1,6 @@
 // src/app/paths/PublicPath.tsx
 import { OptimisticInput } from "@/components/performance/OptimisticInput";
-import { useAuth } from "@/contexts/auth/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useData } from "@/routes/dashboard";
 import React, { useState } from "react";
 

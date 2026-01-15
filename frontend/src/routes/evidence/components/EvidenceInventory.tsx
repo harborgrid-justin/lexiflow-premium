@@ -29,7 +29,7 @@ import { EvidenceFilters } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { AdmissibilityStatusEnum } from '@/types/enums';
 import { cn } from '@/lib/cn';
 

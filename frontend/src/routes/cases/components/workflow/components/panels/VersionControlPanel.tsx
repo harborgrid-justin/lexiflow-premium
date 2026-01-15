@@ -5,7 +5,7 @@
 
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { GitCompare } from 'lucide-react';
 import type { WorkflowVersion } from '@/types/workflow-advanced-types';

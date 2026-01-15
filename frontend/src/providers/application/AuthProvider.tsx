@@ -54,11 +54,11 @@
 
 import { AuthApiService } from '@/api/auth/auth-api';
 import { AUTH_REFRESH_TOKEN_STORAGE_KEY, AUTH_TOKEN_STORAGE_KEY } from '@/config/security/security.config';
+import { AuthActionsContext, AuthStateContext } from '@/lib/auth/contexts';
+import type { AuthActionsValue, AuthEvent, AuthLoginResult, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from '@/lib/auth/types';
 import { clearAuthTokens, setAuthTokens } from '@/services/infrastructure/api-client/auth-manager';
 import type { User } from '@/types';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { AuthActionsContext, AuthStateContext } from './authContexts';
-import type { AuthActionsValue, AuthEvent, AuthLoginResult, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from './authTypes';
 
 interface LoginUserResponse extends User {
   permissions?: string[];
@@ -707,4 +707,4 @@ export function useAuth() {
 // Type re-exports
 // ============================================================================
 
-export type { AuthActionsValue, AuthStateValue, AuthUser } from './authTypes';
+export type { AuthActionsValue, AuthStateValue, AuthUser } from '@/lib/auth/types';

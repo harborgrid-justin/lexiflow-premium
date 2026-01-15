@@ -2,8 +2,8 @@
 import { DeterministicLoader } from "@/components/performance/DeterministicLoader";
 import { OptimisticInput } from "@/components/performance/OptimisticInput";
 import { ZeroClsWrapper } from "@/components/performance/ZeroClsWrapper";
-import { useAuth } from "@/contexts/auth/AuthContext";
-import { useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useEntitlements } from "@/lib/entitlements/context";
 import { useData } from "@/routes/dashboard";
 import React, { useEffect, useMemo, useState } from "react";
 

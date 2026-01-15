@@ -1,5 +1,5 @@
 import { DiffViewer } from '@/routes/discovery/components/DiffViewer/DiffViewer';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { Clause, ClauseVersion } from '@/types';
 import { ArrowLeftRight, History, X } from 'lucide-react';

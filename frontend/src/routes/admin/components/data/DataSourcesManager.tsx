@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Cloud, Database, HardDrive } from 'lucide-react';

@@ -3,7 +3,7 @@ import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigatio
 import { cn } from '@/lib/cn';
 import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/lib/frontend-api';
 import { useToast } from '@/providers';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { ApprovalQueue } from './ApprovalQueue';

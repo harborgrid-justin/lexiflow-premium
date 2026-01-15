@@ -24,7 +24,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import {useTheme} from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import {cn} from '@/lib/cn';
 import type {ColumnDefinition} from './DataGridColumn';
 import {fuzzySearch, type FuzzySearchOptions} from './FuzzySearch';

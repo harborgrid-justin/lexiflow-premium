@@ -7,9 +7,9 @@
  * @module providers/authHooks
  */
 
+import { AuthActionsContext, AuthStateContext } from "@/lib/auth/contexts";
+import type { AuthActionsValue, AuthStateValue } from "@/lib/auth/types";
 import { useContext } from "react";
-import { AuthActionsContext, AuthStateContext } from "./authContexts";
-import type { AuthActionsValue, AuthStateValue } from "./authTypes";
 
 /**
  * Access authentication state

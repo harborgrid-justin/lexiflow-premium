@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { BookOpen, Filter, Loader2, Search, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';

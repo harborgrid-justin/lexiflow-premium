@@ -2,9 +2,9 @@
 import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { useAuth } from "@/contexts/auth/AuthContext";
-import { useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
-import { useFlags } from "@/contexts/flags/FlagsContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useEntitlements } from "@/lib/entitlements/context";
+import { useFlags } from "@/lib/flags/context";
 import { DataProvider } from "@/routes/dashboard";
 
 import { AdminPath } from "./paths/AdminPath";

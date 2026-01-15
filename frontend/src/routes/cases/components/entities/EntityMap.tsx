@@ -14,7 +14,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { JurisdictionGeoMap } from '@/routes/jurisdiction/components/JurisdictionGeoMap';

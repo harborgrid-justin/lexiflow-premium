@@ -28,7 +28,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { CaseStatus, type Case, type Invoice } from '@/types';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
 import React, { Suspense, useMemo, useTransition } from 'react';

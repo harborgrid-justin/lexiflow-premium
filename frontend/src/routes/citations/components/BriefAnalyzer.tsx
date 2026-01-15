@@ -30,7 +30,7 @@ import { Card } from '@/components/molecules/Card/Card';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';

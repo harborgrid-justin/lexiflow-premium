@@ -5,7 +5,7 @@ import { Card } from '@/components/molecules/Card/Card';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 import { useQuery } from '@/hooks/useQueryHooks';

@@ -1,6 +1,6 @@
 import { Button } from '@/components/atoms/Button/Button';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
 import { AlertCircle, RefreshCw, Sparkles, Wand2 } from 'lucide-react';

@@ -16,7 +16,7 @@ import { Button } from '@/components/atoms/Button';
 import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 

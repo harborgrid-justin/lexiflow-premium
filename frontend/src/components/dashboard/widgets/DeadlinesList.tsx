@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { format, formatDistanceToNow, isPast, isThisWeek, isToday, isTomorrow } from 'date-fns';
 import { AlertCircle, Calendar, CheckCircle2, Clock, Flag } from 'lucide-react';
 import React from 'react';

@@ -18,7 +18,8 @@ import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { ChartColorService, useTheme } from '@/contexts/ThemeContext';
+import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';

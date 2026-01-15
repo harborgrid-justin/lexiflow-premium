@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';

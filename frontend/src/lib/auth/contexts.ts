@@ -8,7 +8,7 @@
  */
 
 import { createContext } from "react";
-import type { AuthActionsValue, AuthStateValue } from "./authTypes";
+import type { AuthActionsValue, AuthStateValue } from "./types";
 
 /**
  * Split contexts for performance optimization (BP3)

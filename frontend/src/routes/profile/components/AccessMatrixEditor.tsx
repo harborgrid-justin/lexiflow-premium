@@ -31,7 +31,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useAccessMatrix } from '../_hooks/useAccessMatrix';
 
 // Utils & Constants

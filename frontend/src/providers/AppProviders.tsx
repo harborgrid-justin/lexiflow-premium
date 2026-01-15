@@ -13,7 +13,7 @@
  * Use <AppProviders> in the root App component.
  */
 
-import { FlagsProviderProps } from "@/contexts/flags/FlagsContext";
+import { FlagsProviderProps } from "@/unknown_fix_me/FlagsProviderProps";
 import { ReactNode } from "react";
 import { ApplicationLayer } from "./application/ApplicationLayer";
 import { InfrastructureLayer } from "./infrastructure/InfrastructureLayer";

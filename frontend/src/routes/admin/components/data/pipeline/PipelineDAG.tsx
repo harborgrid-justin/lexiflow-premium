@@ -1,7 +1,7 @@
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { queryKeys } from '@/utils/queryKeys';
 import { Box, Database, Layers, Loader2, Server, Settings } from 'lucide-react';
 import React from 'react';

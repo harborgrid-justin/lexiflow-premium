@@ -3,7 +3,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Currency } from '@/components/atoms/Currency';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useClients } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';

@@ -17,7 +17,7 @@
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import React from 'react';
 
 // Re-export StatusBadge for compatibility (commented out - component doesn't exist)

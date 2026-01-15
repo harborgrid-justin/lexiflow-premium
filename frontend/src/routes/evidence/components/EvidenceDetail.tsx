@@ -18,7 +18,7 @@ import { EvidenceOverview } from './EvidenceOverview';
 import { EvidenceStructure } from './EvidenceStructure';
 
 // Context & Utils
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/lib/cn';

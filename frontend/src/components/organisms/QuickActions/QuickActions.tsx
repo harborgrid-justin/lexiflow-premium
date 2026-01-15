@@ -24,7 +24,7 @@ import { PlusCircle, X } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useClickOutside } from '@/hooks/useClickOutside';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

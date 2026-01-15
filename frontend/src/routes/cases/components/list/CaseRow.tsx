@@ -23,7 +23,7 @@ import { Currency } from '@/components/atoms/Currency/Currency';
 import { StatusBadge } from '@/components/atoms/StatusBadge/StatusBadge';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils
 import { cn } from '@/lib/cn';

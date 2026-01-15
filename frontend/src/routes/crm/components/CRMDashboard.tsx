@@ -23,7 +23,7 @@ import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { ClientStatus } from '@/types/financial';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';
@@ -31,7 +31,7 @@ import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
-import { ChartColorService } from '@/contexts/ThemeContext';
+import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
 import { getChartTheme } from '@/utils/chartConfig';
 
 // Types

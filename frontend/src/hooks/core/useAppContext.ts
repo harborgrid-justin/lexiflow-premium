@@ -38,7 +38,7 @@ import { apiClient } from "@/services/infrastructure/api-client.service";
 import type { UserId, UserRole } from "@/types";
 
 // Hooks & Context
-import { useAuthState } from "@/contexts/auth/AuthProvider";
+import { useAuthState } from '@/providers/application/AuthProvider';
 import { useToast } from "@/providers";
 import { useUsers } from "./useDomainData";
 import { useSessionStorage } from "./useSessionStorage";

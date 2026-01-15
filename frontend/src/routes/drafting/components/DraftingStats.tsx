@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DraftingStats as StatsType } from '@api/domains/drafting';
 import { CheckSquare, FileCode, FileText } from 'lucide-react';
 import * as styles from './DraftingDashboard.styles';

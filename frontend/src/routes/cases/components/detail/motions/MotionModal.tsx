@@ -19,7 +19,7 @@ import { Button } from '@/components/atoms/Button';
 import { RuleSelector } from '@/components/molecules/RuleSelector/RuleSelector';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

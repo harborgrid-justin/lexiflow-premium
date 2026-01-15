@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Ruler } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { FormattingRule, PleadingSection } from '@/types';
 

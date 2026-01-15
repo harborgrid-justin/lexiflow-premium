@@ -6,8 +6,8 @@
  * @module components/auth/MFAVerification
  */
 
-import { useAuthActions } from '@/contexts/auth/AuthProvider';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useAuthActions } from '@/providers/application/AuthProvider';
+import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/core';
 import { IntegrationOrchestrator } from '@/services/integration/IntegrationOrchestrator';
 import { Button } from '@/components/atoms/Button';

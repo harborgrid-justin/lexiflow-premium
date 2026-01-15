@@ -9,7 +9,7 @@
 import { DataService } from '@/services/data/data-service.service';
 import type { Advisor, Case, Expert, WarRoom } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/detail";

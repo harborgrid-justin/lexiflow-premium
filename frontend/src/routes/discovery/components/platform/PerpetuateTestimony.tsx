@@ -1,7 +1,7 @@
 import { Card } from '@/components/molecules/Card/Card';
 import { Button } from '@/components/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';

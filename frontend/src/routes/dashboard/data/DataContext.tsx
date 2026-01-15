@@ -1,8 +1,8 @@
 // src/contexts/data/DataContext.tsx
 import { adminApi } from "@/api/domains/admin.api";
 import { litigationApi } from "@/api/domains/litigation.api";
-import { useAuth } from "@/contexts/AuthContext";
-import { useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useEntitlements } from "@/lib/entitlements/context";
 import { freezeInDev } from "@/lib/immutability";
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from "react";
 

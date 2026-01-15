@@ -3,7 +3,7 @@ import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/lib/cn';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, Download, MapPin

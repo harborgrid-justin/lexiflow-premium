@@ -6,7 +6,7 @@
  * @module components/auth/MFAVerification
  */
 
-import { useAuthActions } from '@/contexts/auth/AuthProvider';
+import { useAuthActions } from '@/providers/application/AuthProvider';
 import { useState } from 'react';
 
 interface MFAVerificationProps {

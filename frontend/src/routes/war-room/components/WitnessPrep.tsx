@@ -20,7 +20,7 @@ import { useEffect, useMemo, useState } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';

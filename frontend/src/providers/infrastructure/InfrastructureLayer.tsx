@@ -18,12 +18,10 @@
  * @module providers/infrastructure
  */
 
-import { ThemeProvider } from './ThemeProvider';
-// TODO: ToastProvider needs to be implemented in infrastructure layer
-// import { ToastProvider as ToastProviderBase } from './ToastProvider';
 import React from "react";
 import { EnvProvider } from './EnvProvider';
 import { LayoutProvider } from './LayoutProvider';
+import { ThemeProvider } from './ThemeProvider';
 
 // Type assertion for ToastProvider to ensure ReactNode return
 // const ToastProvider = ToastProviderBase as unknown as React.FC<{
@@ -40,10 +38,12 @@ export function InfrastructureLayer({ children }: InfrastructureLayerProps) {
   return (
     <EnvProvider>
       <ThemeProvider>
-        <LayoutProvider>
-          {/* TODO: Add ToastProvider when implemented */}
-          {children}
-        </LayoutProvider>
+        <ToastProvider>
+          <LayoutProvider>
+            {children}
+            <ToastContainer />
+          </LayoutProvider>
+        </ToastProvider>
       </ThemeProvider>
     </EnvProvider>
   );

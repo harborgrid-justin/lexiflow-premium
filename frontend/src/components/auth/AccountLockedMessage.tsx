@@ -7,7 +7,7 @@
  * @module components/auth/AccountLockedMessage
  */
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 interface AccountLockedMessageProps {
   reason?: 'failed_attempts' | 'admin_action' | 'security';

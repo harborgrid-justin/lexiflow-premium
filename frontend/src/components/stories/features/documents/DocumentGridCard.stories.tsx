@@ -7,7 +7,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentGridCard } from '../../../../features/operations/documents/DocumentGridCard';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ThemeProvider } from "@/providers/infrastructure/ThemeProvider";
 import { LegalDocument } from '@/types';
 
 const meta: Meta<typeof DocumentGridCard> = {

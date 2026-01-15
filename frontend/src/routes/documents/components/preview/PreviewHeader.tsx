@@ -1,5 +1,5 @@
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
 import { CheckCircle2, ChevronDown, Lock } from 'lucide-react';

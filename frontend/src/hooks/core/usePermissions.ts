@@ -30,7 +30,7 @@
  * - Composable: Can be used with other hooks
  */
 
-import { useAuthState } from '@/contexts/auth/AuthProvider';
+import { useAuthState } from '@/providers/application/AuthProvider';
 import {
   hasPermission,
   hasAnyPermission,

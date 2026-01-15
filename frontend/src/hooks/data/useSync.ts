@@ -17,7 +17,8 @@
  * ```
  */
 
-import { SyncContext, SyncContextType } from "@/contexts/sync/SyncContext";
+import { SyncContext } from "@/unknown_fix_me/SyncContext";
+import { SyncContextType } from "@/unknown_fix_me/SyncContextType";
 import { useContext } from "react";
 
 /**

@@ -20,7 +20,7 @@ import { Search } from 'lucide-react';
 import { Input, InputProps } from '@/components/atoms/Input';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

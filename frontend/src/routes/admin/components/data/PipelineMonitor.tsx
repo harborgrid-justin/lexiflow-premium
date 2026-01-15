@@ -8,7 +8,7 @@ import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 import { PipelineDAG } from './pipeline/PipelineDAG';
 import { PipelineList } from './pipeline/PipelineList';

@@ -1,4 +1,5 @@
-import { ChartColorService, ThemeMode } from "@/contexts/ThemeContext";
+import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { ThemeMode } from "@/lib/theme/tokens";
 import { Clause } from "@/types";
 
 export const getRiskData = (clauses: Clause[], mode: ThemeMode = "light") => {

@@ -4,7 +4,7 @@ import { BackupSnapshot } from '@/lib/frontend-api';
 import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { AlertCircle, Play, RefreshCw, Server, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import { BackupMetrics } from './backup/BackupMetrics';

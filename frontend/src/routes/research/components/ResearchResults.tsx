@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { TypewriterText } from '@/components/atoms/TypewriterText';
 import { Card } from '@/components/molecules/Card/Card';

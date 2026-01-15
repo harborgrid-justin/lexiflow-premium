@@ -11,7 +11,7 @@
  * @module utils/route-guards
  */
 
-import type { AuthUser } from "@/contexts/auth/AuthProvider";
+import type { AuthUser } from '@/providers/application/AuthProvider';
 
 // ============================================================================
 // Constants

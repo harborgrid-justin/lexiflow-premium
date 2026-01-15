@@ -26,7 +26,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';

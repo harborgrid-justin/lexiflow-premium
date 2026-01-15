@@ -7,8 +7,8 @@
  * @module components/auth/MFASetup
  */
 
-import { useAuthActions, useAuthState } from '@/contexts/auth/AuthProvider';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useAuthActions, useAuthState } from '@/providers/application/AuthProvider';
+import { useTheme } from "@/hooks/useTheme";
 import { useState } from 'react';
 
 interface MFASetupProps {

@@ -1,4 +1,4 @@
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme } from "@/hooks/useTheme";
 import { DesignTokens, ThemeDensity } from "@/lib/theme/tokens";
 import { DataService } from "@/services/data/data-service.service";
 import { useCallback, useEffect, useState } from "react";

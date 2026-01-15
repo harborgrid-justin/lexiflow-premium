@@ -15,7 +15,7 @@
  * @module providers/LayoutProvider
  */
 
-import { LayoutProvider as LayoutContextProvider } from '@/contexts/LayoutContext';
+import { LayoutProvider as LayoutContextProvider } from "@/unknown_fix_me/LayoutProvider";
 import { ReactNode } from 'react';
 
 export interface LayoutProviderProps {

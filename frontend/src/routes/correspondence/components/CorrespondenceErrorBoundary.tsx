@@ -6,7 +6,7 @@
 
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 

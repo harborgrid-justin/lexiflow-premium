@@ -1,4 +1,4 @@
-import { useAuthState } from "@/contexts/auth/AuthProvider";
+import { useAuthState } from '@/providers/application/AuthProvider';
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAutoTimeCapture } from "@/hooks/useAutoTimeCapture";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";

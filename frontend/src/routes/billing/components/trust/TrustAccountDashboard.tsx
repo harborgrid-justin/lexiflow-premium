@@ -21,7 +21,7 @@ import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import type { TrustAccount } from '@/types/trust-accounts';
 import { TrustAccountStatus } from '@/types/trust-accounts';
 import { Formatters } from '@/utils/formatters';

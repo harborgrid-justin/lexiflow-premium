@@ -17,7 +17,7 @@ import { ClauseList as ClausePanel } from '@/routes/clauses/components/ClauseLis
 import { AdvancedEditor } from '@/routes/documents/components/AdvancedEditor';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';

@@ -3,7 +3,7 @@ import { Button } from '@/components/atoms/Button';
 import { Modal } from '@/components/molecules/Modal';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { DiscoveryRequest } from '@/types';

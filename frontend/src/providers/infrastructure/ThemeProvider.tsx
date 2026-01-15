@@ -315,7 +315,7 @@ const DEFAULT_CONTEXT: ThemeContextType = Object.freeze({
 });
 
 
-const ThemeContext = createContext<ThemeContextType>(DEFAULT_CONTEXT);
+export const ThemeContext = createContext<ThemeContextType>(DEFAULT_CONTEXT);
 
 // Guideline 34 & 38: Hook returns stable, concurrent-safe values
 export const useThemeContext = (): ThemeContextType => {

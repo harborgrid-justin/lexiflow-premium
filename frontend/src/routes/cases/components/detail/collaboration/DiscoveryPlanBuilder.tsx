@@ -18,7 +18,7 @@ import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils

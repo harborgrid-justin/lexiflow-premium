@@ -20,7 +20,7 @@ import { Button } from '@/components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';

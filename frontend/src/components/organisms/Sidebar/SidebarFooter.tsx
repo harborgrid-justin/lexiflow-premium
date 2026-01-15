@@ -19,7 +19,7 @@ import React from 'react';
 // Hooks & Context
 import { useWindow } from '@/providers';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusIndicator';
 
 // Components

@@ -14,7 +14,7 @@ import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils
 import { cn } from '@/lib/cn';

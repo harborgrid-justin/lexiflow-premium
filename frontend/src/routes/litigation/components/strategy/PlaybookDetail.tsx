@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 import { useWindow } from '@/providers';
 import { cn } from '@/lib/cn';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 import { ResearchTool } from '@/routes/research/components/ResearchTool';
 import { WarRoom } from '@/routes/war-room/components/WarRoom';

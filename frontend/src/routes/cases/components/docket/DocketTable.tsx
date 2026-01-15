@@ -24,7 +24,7 @@ import { DocketRow } from './DocketRow';
 
 // Internal Dependencies - Hooks & Context
 import { useListNavigation } from '@/hooks/useListNavigation';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

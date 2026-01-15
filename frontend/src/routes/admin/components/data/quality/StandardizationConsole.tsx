@@ -3,7 +3,7 @@ import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/hooks/useTheme";
 import { CleansingRule } from '@/types';
 import { Calendar, CheckCircle, Loader2, Phone, Play, Plus, Type, Wand2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

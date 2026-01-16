@@ -1,6 +1,6 @@
 import { useNotify } from "@/hooks/useNotify";
 import { useMutation, useQuery, queryClient } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/data-service.service";
+import { billingApi } from "@/lib/frontend-api";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useCallback } from "react";
 
@@ -69,11 +69,17 @@ export const useFeeAgreements = (): [
     error,
     refetch,
   } = useQuery<FeeAgreement[]>(queryKey, () =>
-    DataService.feeAgreements.getAll()
+    billingApi
+      .getFeeAgreements()
+      .then((result) => (result.ok ? result.data : []))
   );
 
   const { mutateAsync: createAgreement, isLoading: isCreating } = useMutation(
-    (data: Partial<FeeAgreement>) => DataService.feeAgreements.create(data),
+    async (data: Partial<FeeAgreement>) => {
+      const result = await billingApi.createFeeAgreement(data);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
     {
       onSuccess: () => {
         notify.success("Fee agreement created");
@@ -85,8 +91,11 @@ export const useFeeAgreements = (): [
   );
 
   const { mutateAsync: updateAgreement, isLoading: isUpdating } = useMutation(
-    ({ id, data }: { id: string; data: Partial<FeeAgreement> }) =>
-      DataService.feeAgreements.update(id, data),
+    async ({ id, data }: { id: string; data: Partial<FeeAgreement> }) => {
+      const result = await billingApi.updateFeeAgreement(id, data);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
     {
       onSuccess: () => {
         notify.success("Fee agreement updated");
@@ -98,7 +107,11 @@ export const useFeeAgreements = (): [
   );
 
   const { mutateAsync: deleteAgreement, isLoading: isDeleting } = useMutation(
-    (id: string) => DataService.feeAgreements.delete(id),
+    async (id: string) => {
+      const result = await billingApi.deleteFeeAgreement(id);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
     {
       onSuccess: () => {
         notify.success("Fee agreement deleted");

@@ -329,6 +329,12 @@ const users = {
   async getById(id: string) {
     return await client.get<UserProfile>(`/users/${id}`);
   },
+  async getPreferences(id: string) {
+    return await client.get<unknown>(`/users/${id}/preferences`);
+  },
+  async updatePreferences(id: string, data: Record<string, unknown>) {
+    return await client.put<unknown>(`/users/${id}/preferences`, data);
+  },
   async update(id: string, data: Partial<UserProfile>) {
     return await client.put<UserProfile>(`/users/${id}`, data);
   },
@@ -345,7 +351,9 @@ const permissions = {
     return await client.get<string[]>(`/roles/${roleId}/permissions`);
   },
   async updateRolePermissions(roleId: string, permissions: string[]) {
-    return await client.put<void>(`/roles/${roleId}/permissions`, { permissions });
+    return await client.put<void>(`/roles/${roleId}/permissions`, {
+      permissions,
+    });
   },
 };
 
@@ -387,7 +395,9 @@ const tokenBlacklist = {
     return await client.post<void>("/auth/token-blacklist", { token });
   },
   async check(token: string) {
-    return await client.get<{ blacklisted: boolean }>(`/auth/token-blacklist/${token}`);
+    return await client.get<{ blacklisted: boolean }>(
+      `/auth/token-blacklist/${token}`
+    );
   },
 };
 

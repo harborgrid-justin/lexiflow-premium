@@ -21,7 +21,12 @@
  * @module routes/dashboard/loader
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import {
+  billingApi,
+  casesApi,
+  docketApi,
+  workflowApi,
+} from "@/lib/frontend-api";
 import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
 import { handleLoaderAuthError } from "@/utils/loader-helpers";
 import { defer } from "@remix-run/router";
@@ -53,34 +58,16 @@ export async function clientLoader(args: LoaderFunctionArgs) {
   try {
     // Critical data (MUST be available before render)
     const criticalData = Promise.all([
-      DataService.cases.getAll(),
-      DataService.tasks?.getAll?.() || Promise.resolve([]),
+      casesApi.getAll({ page: 1, limit: 1000 }),
+      workflowApi.getAllTasks({ page: 1, limit: 200 }),
     ]);
 
     // Deferred data (streams after initial render)
-    const docketEntriesPromise = DataService.docket.getAll().then((result) => {
-      const entries = Array.isArray(result?.data)
-        ? result.data
-        : Array.isArray(result)
-          ? result
-          : [];
-
-      // Filter for recent (last 30 days)
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-      return entries
-        .filter(
-          (entry) =>
-            entry?.filingDate && new Date(entry.filingDate) >= thirtyDaysAgo
-        )
-        .slice(0, 10);
-    });
-
-    const timeEntriesPromise = DataService.timeEntries
-      .getAll()
+    const docketEntriesPromise = docketApi
+      .getAll({ page: 1, limit: 200 })
       .then((result) => {
-        const entries = Array.isArray(result) ? result : [];
+        const entries =
+          result.ok && Array.isArray(result.data.data) ? result.data.data : [];
 
         // Filter for recent (last 30 days)
         const thirtyDaysAgo = new Date();
@@ -88,17 +75,30 @@ export async function clientLoader(args: LoaderFunctionArgs) {
 
         return entries
           .filter(
-            (entry) => entry?.date && new Date(entry.date) >= thirtyDaysAgo
+            (entry) =>
+              entry?.filingDate && new Date(entry.filingDate) >= thirtyDaysAgo
           )
           .slice(0, 10);
       });
 
+    const timeEntriesPromise = billingApi.getAllTimeEntries().then((result) => {
+      const entries =
+        result.ok && Array.isArray(result.data) ? result.data : [];
+
+      // Filter for recent (last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      return entries
+        .filter((entry) => entry?.date && new Date(entry.date) >= thirtyDaysAgo)
+        .slice(0, 10);
+    });
+
     // Await critical data
     const [casesResult, tasksResult] = await criticalData;
 
-    // Extract arrays with defensive checks
-    const cases = Array.isArray(casesResult) ? casesResult : [];
-    const tasks = Array.isArray(tasksResult) ? tasksResult : [];
+    const cases = casesResult.ok ? casesResult.data.data : [];
+    const tasks = tasksResult.ok ? tasksResult.data.data : [];
 
     // Return deferred loader data
     // Critical data is available immediately

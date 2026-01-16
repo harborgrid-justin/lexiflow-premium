@@ -25,7 +25,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
+import { casesApi } from '@/lib/frontend-api';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';
@@ -46,16 +46,12 @@ export function CitationDetail({ citation, onClose }: CitationDetailProps) {
     const { data: linkedCases = [], isLoading } = useQuery<Case[]>(
         ['cases', 'citation_link', citation.id],
         async () => {
-            try {
-                // Query backend for cases linked to this citation
-                const cases = await DataService.knowledge?.getCasesByCitation?.(citation.id) || [];
-                return Array.isArray(cases) ? cases : [];
-            } catch (error) {
-                console.warn('[CitationDetail] Failed to fetch linked cases:', error);
-                // Fallback: return all cases if junction query not available
-                const allCases = await DataService.cases.getAll();
-                return allCases.slice(0, 2);
+            const result = await casesApi.getAll({ page: 1, limit: 50 });
+            if (!result.ok) {
+                console.warn('[CitationDetail] Failed to fetch linked cases:', result.error.message);
+                return [];
             }
+            return result.data.data.slice(0, 2);
         }
     );
 

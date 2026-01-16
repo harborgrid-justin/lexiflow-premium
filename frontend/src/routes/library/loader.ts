@@ -3,7 +3,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { knowledgeApi } from "@/lib/frontend-api";
 
 type LibraryItem = {
   id: string;
@@ -20,7 +20,17 @@ export interface LibraryLoaderData {
 }
 
 export async function libraryLoader() {
-  const items = await DataService.library.getAll().catch(() => []);
+  const result = await knowledgeApi.getAllKnowledge({ page: 1, limit: 200 });
+  const items = result.ok
+    ? result.data.data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        type: "Guide",
+        category: "General",
+        description: item.content,
+        useCount: 0,
+      }))
+    : [];
 
   return {
     items: items || [],

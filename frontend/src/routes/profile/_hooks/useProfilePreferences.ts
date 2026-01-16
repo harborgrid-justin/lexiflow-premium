@@ -1,5 +1,5 @@
 import { useTheme } from "@/hooks/useTheme";
-import { DataService } from "@/services/data/data-service.service";
+import { authApi } from "@/lib/frontend-api";
 import { ExtendedUserProfile } from "@/types";
 import { useCallback, useState } from "react";
 
@@ -42,19 +42,21 @@ export const useProfilePreferences = (profile: ExtendedUserProfile) => {
     pushNotifications: profile.preferences.notifications.push,
   });
 
-  const savePreference = useCallback(async (key: string, value: unknown) => {
-    setStatus("saving");
-    try {
-      // Simulating API call structure
-      await DataService.profile.updatePreferences({
-        [key]: value,
-      });
-      setStatus("success");
-    } catch (error) {
-      console.error(error);
-      setStatus("error");
-    }
-  }, []);
+  const savePreference = useCallback(
+    async (key: string, value: unknown) => {
+      setStatus("saving");
+      try {
+        await authApi.users.updatePreferences(profile.id, {
+          [key]: value,
+        });
+        setStatus("success");
+      } catch (error) {
+        console.error(error);
+        setStatus("error");
+      }
+    },
+    [profile.id]
+  );
 
   const updateLocale = useCallback(
     (locale: string) => {

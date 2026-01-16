@@ -60,6 +60,35 @@ export interface Correspondence {
 }
 
 /**
+ * Correspondence creation input (aligned with backend DTO)
+ */
+export interface CreateCorrespondenceInput {
+  type: string;
+  subject: string;
+  body: string;
+  senderId: string;
+  recipient: string;
+  recipientEmail?: string;
+  recipientAddress?: string;
+  caseId?: string;
+  attachmentIds?: string[];
+  ccRecipients?: string[];
+  bccRecipients?: string[];
+  status?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface UpdateCorrespondenceInput {
+  subject?: string;
+  body?: string;
+  recipient?: string;
+  recipientEmail?: string;
+  recipientAddress?: string;
+  status?: string;
+  metadata?: Record<string, unknown>;
+}
+
+/**
  * Client query filters
  */
 export interface ClientFilters {
@@ -345,6 +374,70 @@ export async function getAllCorrespondence(filters?: {
 }
 
 /**
+ * Create correspondence
+ */
+export async function createCorrespondence(
+  input: CreateCorrespondenceInput
+): Promise<Result<Correspondence>> {
+  if (!input || typeof input !== "object") {
+    return failure(new ValidationError("Correspondence input is required"));
+  }
+
+  if (!input.subject || typeof input.subject !== "string") {
+    return failure(new ValidationError("Subject is required"));
+  }
+
+  if (!input.body || typeof input.body !== "string") {
+    return failure(new ValidationError("Body is required"));
+  }
+
+  if (!input.recipient || typeof input.recipient !== "string") {
+    return failure(new ValidationError("Recipient is required"));
+  }
+
+  if (!input.senderId || typeof input.senderId !== "string") {
+    return failure(new ValidationError("Sender ID is required"));
+  }
+
+  const result = await client.post<Correspondence>("/correspondence", input);
+  return result.ok ? success(result.data) : result;
+}
+
+/**
+ * Update correspondence
+ */
+export async function updateCorrespondence(
+  id: string,
+  input: UpdateCorrespondenceInput
+): Promise<Result<Correspondence>> {
+  if (!id || typeof id !== "string" || id.trim() === "") {
+    return failure(new ValidationError("Valid correspondence ID is required"));
+  }
+
+  if (!input || typeof input !== "object" || Object.keys(input).length === 0) {
+    return failure(new ValidationError("At least one field must be updated"));
+  }
+
+  const result = await client.put<Correspondence>(
+    `/correspondence/${id}`,
+    input
+  );
+
+  return result.ok ? success(result.data) : result;
+}
+
+/**
+ * Delete correspondence
+ */
+export async function deleteCorrespondence(id: string): Promise<Result<void>> {
+  if (!id || typeof id !== "string" || id.trim() === "") {
+    return failure(new ValidationError("Valid correspondence ID is required"));
+  }
+
+  return client.delete<void>(`/correspondence/${id}`);
+}
+
+/**
  * Communications sub-module (for descriptor compatibility)
  */
 const communications = {
@@ -362,7 +455,9 @@ const messaging = {
     return await client.get<unknown[]>("/communications/messaging/threads");
   },
   async getThread(threadId: string) {
-    return await client.get<unknown>(`/communications/messaging/threads/${threadId}`);
+    return await client.get<unknown>(
+      `/communications/messaging/threads/${threadId}`
+    );
   },
   async sendMessage(data: unknown) {
     return await client.post<unknown>("/communications/messaging/send", data);
@@ -378,6 +473,9 @@ export const communicationsApi = {
   createClient,
   updateClient,
   deleteClient,
+  createCorrespondence,
+  updateCorrespondence,
+  deleteCorrespondence,
   getAllMessages,
   getMessageById,
   sendMessage,

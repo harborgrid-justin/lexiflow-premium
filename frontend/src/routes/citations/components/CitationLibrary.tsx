@@ -32,7 +32,7 @@ import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useWindow } from '@/providers';
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
+import { knowledgeApi } from '@/lib/frontend-api';
 import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
@@ -50,7 +50,10 @@ export function CitationLibrary({ onSelect }: CitationLibraryProps) {
 
     const { data: citations, isLoading } = useQuery<Citation[]>(
         ['citations', 'all'],
-        DataService.citations.getAll
+        async () => {
+            const result = await knowledgeApi.getAllCitations({ page: 1, limit: 500 });
+            return result.ok ? result.data.data : [];
+        }
     );
 
     // Memoize the citations array with a stable default to prevent infinite loops

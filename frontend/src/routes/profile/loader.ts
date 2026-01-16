@@ -8,7 +8,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { authApi } from "@/lib/frontend-api";
 import type { ExtendedUserProfile } from "@/types/system";
 
 export interface ProfileLoaderData {
@@ -16,10 +16,10 @@ export interface ProfileLoaderData {
 }
 
 export async function profileLoader() {
-  // Cast to ExtendedUserProfile assuming service returns compatible data
-  const profile = (await DataService.profile
-    .getCurrentProfile()
-    .catch(() => null)) as ExtendedUserProfile | null;
+  const result = await authApi.getCurrentUser();
+  const profile = (
+    result.ok ? result.data : null
+  ) as ExtendedUserProfile | null;
 
   return {
     profile,

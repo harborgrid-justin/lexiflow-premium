@@ -3,7 +3,7 @@ import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { DataService } from '@/services/data/data-service.service';
+import { billingApi } from '@/lib/frontend-api';
 import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
@@ -34,7 +34,10 @@ const RateTableManagementComponent = function RateTableManagement() {
   // Fetch rate tables from backend API
   const { data: rateTables = [], refetch } = useQuery<RateTable[]>(
     queryKeys.billing.rateTables?.() || ['billing', 'rateTables'],
-    () => DataService.rateTables.getAll()
+    async () => {
+      const result = await billingApi.getRateTables();
+      return result.ok ? result.data : [];
+    }
   );
   const createModal = useModalState();
   const editModal = useModalState();
@@ -57,7 +60,10 @@ const RateTableManagementComponent = function RateTableManagement() {
         effectiveDate: formData.effectiveDate || new Date().toISOString().split('T')[0],
         rates: formData.rates || [],
       };
-      await DataService.rateTables.add(newTable);
+      const result = await billingApi.createRateTable(newTable);
+      if (!result.ok) {
+        throw new Error(result.error.message);
+      }
       await refetch();
       createModal.close();
       setFormData({ rates: [] });
@@ -70,7 +76,10 @@ const RateTableManagementComponent = function RateTableManagement() {
   const handleEdit = async () => {
     if (!tableSelection.selected) return;
     try {
-      await DataService.rateTables.update(tableSelection.selected.id, formData);
+      const result = await billingApi.updateRateTable(tableSelection.selected.id, formData);
+      if (!result.ok) {
+        throw new Error(result.error.message);
+      }
       await refetch();
       editModal.close();
       tableSelection.deselect();
@@ -85,7 +94,10 @@ const RateTableManagementComponent = function RateTableManagement() {
   const handleDelete = async () => {
     if (!tableSelection.selected) return;
     try {
-      await DataService.rateTables.delete(tableSelection.selected.id);
+      const result = await billingApi.deleteRateTable(tableSelection.selected.id);
+      if (!result.ok) {
+        throw new Error(result.error.message);
+      }
       await refetch();
       deleteModal.close();
       tableSelection.deselect();

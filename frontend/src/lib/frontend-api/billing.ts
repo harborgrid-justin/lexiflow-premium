@@ -22,6 +22,7 @@ import {
 import { client } from "./client";
 import { ValidationError } from "./errors";
 import { failure, type Result, success } from "./types";
+import type { BillingRate, FeeAgreement, RateTable } from "@/types";
 
 export interface TimeEntryFilters {
   caseId?: string;
@@ -116,6 +117,130 @@ export async function createInvoice(
   return success(normalizeInvoice(result.data));
 }
 
+export async function updateInvoice(
+  id: string,
+  input: Record<string, unknown>
+): Promise<Result<unknown>> {
+  if (!id) return failure(new ValidationError("Invoice ID is required"));
+
+  const result = await client.put<unknown>(`/invoices/${id}`, input);
+  if (!result.ok) return result;
+  return success(normalizeInvoice(result.data));
+}
+
+export async function deleteInvoice(id: string): Promise<Result<void>> {
+  if (!id) return failure(new ValidationError("Invoice ID is required"));
+  return client.delete<void>(`/invoices/${id}`);
+}
+
+// Transactions
+export async function getAllTransactions(filters?: {
+  caseId?: string;
+  status?: string;
+  type?: string;
+}): Promise<Result<unknown[]>> {
+  const params = filters || {};
+  const result = await client.get<unknown>("/billing/transactions", { params });
+  if (!result.ok) return result;
+
+  const items = Array.isArray(result.data) ? result.data : [];
+  return success(items);
+}
+
+export async function createTransaction(
+  input: Record<string, unknown>
+): Promise<Result<unknown>> {
+  const result = await client.post<unknown>("/billing/transactions", input);
+  if (!result.ok) return result;
+  return success(result.data);
+}
+
+// Billing Rates
+export async function getBillingRates(): Promise<Result<BillingRate[]>> {
+  const result = await client.get<unknown>("/billing/rates");
+  if (!result.ok) return result;
+  return success(
+    Array.isArray(result.data) ? (result.data as BillingRate[]) : []
+  );
+}
+
+// Rate Tables
+export async function getRateTables(): Promise<Result<RateTable[]>> {
+  const result = await client.get<unknown>("/billing/rates");
+  if (!result.ok) return result;
+  return success(
+    Array.isArray(result.data) ? (result.data as RateTable[]) : []
+  );
+}
+
+export async function createRateTable(
+  input: Partial<RateTable>
+): Promise<Result<RateTable>> {
+  const result = await client.post<RateTable>("/billing/rates", input);
+  if (!result.ok) return result;
+  return success(result.data);
+}
+
+export async function updateRateTable(
+  id: string,
+  input: Partial<RateTable>
+): Promise<Result<RateTable>> {
+  if (!id) return failure(new ValidationError("Rate table ID is required"));
+  const result = await client.put<RateTable>(`/billing/rates/${id}`, input);
+  if (!result.ok) return result;
+  return success(result.data);
+}
+
+export async function deleteRateTable(id: string): Promise<Result<void>> {
+  if (!id) return failure(new ValidationError("Rate table ID is required"));
+  return client.delete<void>(`/billing/rates/${id}`);
+}
+
+// Fee Agreements
+export async function getFeeAgreements(filters?: {
+  clientId?: string;
+  caseId?: string;
+  status?: string;
+}): Promise<Result<FeeAgreement[]>> {
+  const params = filters || {};
+  const result = await client.get<unknown>("/billing/fee-agreements", {
+    params,
+  });
+  if (!result.ok) return result;
+  return success(
+    Array.isArray(result.data) ? (result.data as FeeAgreement[]) : []
+  );
+}
+
+export async function createFeeAgreement(
+  input: Partial<FeeAgreement>
+): Promise<Result<FeeAgreement>> {
+  const result = await client.post<FeeAgreement>(
+    "/billing/fee-agreements",
+    input
+  );
+  if (!result.ok) return result;
+  return success(result.data);
+}
+
+export async function updateFeeAgreement(
+  id: string,
+  input: Partial<FeeAgreement>
+): Promise<Result<FeeAgreement>> {
+  if (!id) return failure(new ValidationError("Fee agreement ID is required"));
+  const result = await client.put<FeeAgreement>(
+    `/billing/fee-agreements/${id}`,
+    input
+  );
+  if (!result.ok) return result;
+  return success(result.data);
+}
+
+export async function deleteFeeAgreement(id: string): Promise<Result<void>> {
+  if (!id) return failure(new ValidationError("Fee agreement ID is required"));
+  return client.delete<void>(`/billing/fee-agreements/${id}`);
+}
+
 // Enterprise / Dashboard
 export async function getOverviewStats(): Promise<Result<unknown>> {
   const result = await client.get<unknown>("/billing/analytics/overview");
@@ -155,6 +280,19 @@ export const billingApi = {
   getAllInvoices,
   getInvoiceById,
   createInvoice,
+  updateInvoice,
+  deleteInvoice,
+  getAllTransactions,
+  createTransaction,
+  getBillingRates,
+  getRateTables,
+  createRateTable,
+  updateRateTable,
+  deleteRateTable,
+  getFeeAgreements,
+  createFeeAgreement,
+  updateFeeAgreement,
+  deleteFeeAgreement,
   getOverviewStats,
   getCollections,
   generateARReport,

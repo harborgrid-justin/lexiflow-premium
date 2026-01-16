@@ -1,11 +1,11 @@
+import { Button } from '@/components/atoms/Button/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { DataService } from '@/services/data/data-service.service';
-import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { communicationsApi, discoveryApi, docketApi, documentsApi, serviceJobsApi, workflowApi } from '@/lib/frontend-api';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
 import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';
@@ -40,9 +40,21 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
 
     // Optimistic mutation for archiving with exponential backoff retry
     const { mutate: archiveItem, isLoading: isArchiving } = useMutation(
-        async (id: string) => {
-            const correspondence = DataService.correspondence as unknown as { archive: (id: string) => Promise<void> };
-            return correspondence.archive(id);
+        async () => {
+            if (correspondenceItem.type === 'service') {
+                const result = await serviceJobsApi.updateServiceJob(correspondenceItem.item.id, {
+                    status: ServiceStatus.RETURNED
+                });
+                if (!result.ok) {
+                    throw new Error(result.error.message);
+                }
+                return;
+            }
+
+            const result = await communicationsApi.deleteCorrespondence(correspondenceItem.item.id);
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
         },
         {
             onMutate: (_id: string) => {
@@ -66,8 +78,10 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     // Optimistic mutation for service job updates
     const { mutate: updateServiceJob, isLoading: isUpdating } = useMutation(
         async (updates: Partial<ServiceJob> & { id: string }) => {
-            const correspondence = DataService.correspondence as unknown as { updateServiceJob: (id: string, updates: Partial<ServiceJob>) => Promise<void> };
-            await correspondence.updateServiceJob(updates.id, updates);
+            const result = await serviceJobsApi.updateServiceJob(updates.id, updates);
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
         },
         {
             onMutate: (_updates: Partial<ServiceJob> & { id: string }) => {
@@ -85,8 +99,31 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     );
 
     const handleCreateTask = async (task: WorkflowTask) => {
-        const tasks = DataService.tasks as unknown as { add: (task: WorkflowTask) => Promise<void> };
-        await tasks.add(task);
+        const priorityMap: Record<string, "low" | "medium" | "high" | "critical"> = {
+            Low: "low",
+            Medium: "medium",
+            High: "high",
+            Critical: "critical",
+        };
+
+        const result = await workflowApi.createTask({
+            title: task.title,
+            description: task.description,
+            caseId: task.caseId,
+            dueDate: task.dueDate,
+            priority: priorityMap[task.priority] ?? undefined,
+            assignedTo: task.assignedTo || task.assigneeId || task.assignee,
+            metadata: {
+                relatedModule: task.relatedModule,
+                relatedItemId: task.relatedItemId,
+                relatedItemTitle: task.relatedItemTitle,
+            },
+        });
+
+        if (!result.ok) {
+            notify.error('Failed to create follow-up task.');
+            throw new Error(result.error.message);
+        }
         notify.success('Follow-up task created.');
     };
 
@@ -110,8 +147,21 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const documents = DataService.documents as unknown as { add: (doc: LegalDocument) => Promise<void> };
-            await documents.add(doc);
+            const result = await documentsApi.createDocument({
+                caseId: doc.caseId,
+                title: doc.title,
+                description: doc.content,
+                type: doc.type,
+                tags: doc.tags,
+                metadata: {
+                    sourceModule: doc.sourceModule,
+                    status: doc.status,
+                },
+            });
+
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
             notify.success('Correspondence saved to Case Documents.');
         } catch (e) {
             notify.error('Failed to save document.');
@@ -139,8 +189,10 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const docket = DataService.docket as unknown as { add: (entry: DocketEntry) => Promise<void> };
-            await docket.add(entry);
+            const result = await docketApi.create(entry);
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
             notify.success('Service Proof linked to Docket.');
         } catch (e) {
             notify.error('Failed to create docket entry.');
@@ -181,8 +233,23 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const evidence = DataService.evidence as unknown as { add: (proof: EvidenceItem) => Promise<void> };
-            await evidence.add(proof);
+            const result = await discoveryApi.createEvidence({
+                caseId: proof.caseId,
+                title: proof.title,
+                description: proof.description,
+                type: proof.type,
+                custodian: proof.custodian,
+                location: proof.location,
+                chainOfCustody: proof.chainOfCustody,
+                tags: proof.tags,
+                metadata: {
+                    admissibility: proof.admissibility,
+                },
+            });
+
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
             notify.success('Return Receipt added to Evidence Vault.');
         } catch (e) {
             notify.error('Failed to upload proof.');

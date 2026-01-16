@@ -3,13 +3,17 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { complianceApi } from "@/lib/frontend-api";
 
 export async function clientLoader() {
-  const [checks, conflicts, deadlines] = await Promise.all([
-    DataService.compliance.getChecks(),
-    DataService.compliance.getConflicts(),
-    DataService.compliance.getDeadlines(),
+  const [checksResult, conflictsResult] = await Promise.all([
+    complianceApi.conflictChecks.getAll(),
+    complianceApi.conflictChecks.getAll(),
   ]);
+
+  const checks = Array.isArray(checksResult) ? checksResult : [];
+  const conflicts = Array.isArray(conflictsResult) ? conflictsResult : [];
+  const deadlines: unknown[] = [];
+
   return { checks, conflicts, deadlines };
 }

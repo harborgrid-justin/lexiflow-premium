@@ -33,6 +33,14 @@ export const knowledgeApi = {
   getResearchById: async (id: string): Promise<Result<ResearchItem>> => {
     return client.get<ResearchItem>(`/research/${id}`);
   },
+  createResearch: async (
+    payload: Partial<ResearchItem> & Record<string, unknown>
+  ): Promise<Result<ResearchItem>> => {
+    return client.post<ResearchItem>("/research", payload);
+  },
+  deleteResearch: async (id: string): Promise<Result<void>> => {
+    return client.delete<void>(`/research/${id}`);
+  },
   getAllCitations: async (
     params?: unknown
   ): Promise<Result<PaginatedResult<Citation>>> => {
@@ -60,5 +68,8 @@ export const knowledgeApi = {
     return client.get<PaginatedResult<KnowledgeItem>>("/knowledge", {
       params: params as Record<string, unknown>,
     });
+  },
+  deleteKnowledge: async (id: string): Promise<Result<void>> => {
+    return client.delete<void>(`/knowledge/${id}`);
   },
 };

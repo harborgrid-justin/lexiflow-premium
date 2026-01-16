@@ -12,9 +12,8 @@
  * @module routes/research/index
  */
 
-import { knowledgeApi } from '@/lib/frontend-api';
+import { intelligenceApi, knowledgeApi } from '@/lib/frontend-api';
 import { ResearchTool } from '@/routes/research/components/ResearchTool';
-import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -67,8 +66,11 @@ export async function action({ request }: Route.ActionArgs) {
       case "search": {
         const query = formData.get("q");
         if (typeof query === 'string' && query) {
-          const results = await DataService.research.searchCases(query);
-          return { success: true, results };
+          const result = await intelligenceApi.getLegalResearch(query);
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
+          return { success: true, results: result.data };
         }
         return { success: false, error: "Query required" };
       }
@@ -76,13 +78,19 @@ export async function action({ request }: Route.ActionArgs) {
         const data = Object.fromEntries(formData);
         // Remove intent from data
         delete data.intent;
-        await DataService.research.add(data);
+        const result = await knowledgeApi.createResearch(data);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
         return { success: true, message: "Research saved" };
       }
       case "delete": {
         const id = formData.get("id");
         if (typeof id === 'string') {
-          await DataService.research.delete(id);
+          const result = await knowledgeApi.deleteResearch(id);
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
           return { success: true, message: "Research deleted" };
         }
         return { success: false, error: "ID required" };

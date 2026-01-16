@@ -1,15 +1,15 @@
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Input } from '@/components/atoms/Input/Input';
-import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { casesApi } from '@/lib/frontend-api';
+import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
 import { CommunicationItem, CommunicationType, UserId } from '@/types';
 import { CommunicationStatus } from '@/types/enums';
 import { queryKeys } from '@/utils/queryKeys';
@@ -41,7 +41,10 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
     // Load cases from IndexedDB via useQuery for accurate, cached data
     const { data: cases = [] } = useQuery(
         queryKeys.cases.all(),
-        () => DataService.cases.getAll()
+        async () => {
+            const result = await casesApi.getAll({ page: 1, limit: 1000 });
+            return result.ok ? result.data.data : [];
+        }
     );
     const [body, setBody] = useState('');
     const [attachments, setAttachments] = useState<Array<{ id: string; name: string; size: number }>>([]);

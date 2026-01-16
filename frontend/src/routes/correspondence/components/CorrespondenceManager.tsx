@@ -10,23 +10,23 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useEffect, useState } from 'react';
 import { Filter, Mail, MapPin, Plus } from 'lucide-react';
+import React, { Suspense, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { communicationsApi, serviceJobsApi } from '@/lib/frontend-api';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from "@/hooks/useTheme";
+import { useToggle } from '@/hooks/useToggle';
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
@@ -43,7 +43,7 @@ import { ServiceTracker } from './ServiceTracker';
 import { cn } from '@/lib/cn';
 
 // Types
-import { CommunicationItem, ServiceJob } from '@/types';
+import { CaseId, CommunicationItem, ServiceJob, UserId } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -70,16 +70,59 @@ function CorrespondenceManagerInternal({ initialTab }: CorrespondenceManagerProp
     // Enterprise Data Access with query key factory
     const { data: communications = [], isLoading: isLoadingComms } = useQuery<CommunicationItem[]>(
         correspondenceQueryKeys.correspondence.lists(),
-        () => DataService.correspondence.getCommunications()
+        async () => {
+            const result = await communicationsApi.getAllCorrespondence({ page: 1, limit: 200 });
+            const items = result.ok ? result.data.data : [];
+            return items.map((item) => ({
+                id: item.id,
+                caseId: item.caseId as CaseId,
+                userId: (item.metadata?.userId as UserId) ?? ('system' as UserId),
+                subject: item.subject,
+                date: item.date || item.createdAt || new Date().toISOString(),
+                type: item.correspondenceType,
+                direction: item.status === 'received' ? 'Inbound' : 'Outbound',
+                sender: item.sender || 'Unknown',
+                recipient: item.recipients?.[0] || 'Unknown',
+                preview: item.notes || '',
+                hasAttachment: false,
+                status: item.status,
+                isPrivileged: false,
+                createdAt: item.createdAt || new Date().toISOString(),
+                updatedAt: item.updatedAt || new Date().toISOString(),
+            }));
+        }
     );
 
     const { data: serviceJobs = [], isLoading: isLoadingJobs } = useQuery<ServiceJob[]>(
         correspondenceQueryKeys.serviceJobs.lists(),
-        () => DataService.correspondence.getServiceJobs()
+        async () => {
+            const result = await serviceJobsApi.getServiceJobs({ page: 1, limit: 200 });
+            return result.ok ? result.data.data : [];
+        }
     );
 
     const { mutate: sendCommunication } = useMutation(
-        DataService.correspondence.addCommunication,
+        async (item: CommunicationItem) => {
+            const result = await communicationsApi.createCorrespondence({
+                type: item.type,
+                subject: item.subject,
+                body: item.preview || item.subject,
+                senderId: item.userId,
+                recipient: item.recipient,
+                caseId: item.caseId,
+                status: item.status,
+                metadata: {
+                    direction: item.direction,
+                    hasAttachment: item.hasAttachment,
+                },
+            });
+
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
+
+            return result.data;
+        },
         {
             invalidateKeys: [correspondenceQueryKeys.correspondence.lists()],
             onSuccess: () => {
@@ -90,7 +133,13 @@ function CorrespondenceManagerInternal({ initialTab }: CorrespondenceManagerProp
     );
 
     const { mutate: createServiceJob } = useMutation(
-        DataService.correspondence.addServiceJob,
+        async (job: ServiceJob) => {
+            const result = await serviceJobsApi.createServiceJob(job);
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
+            return result.data;
+        },
         {
             invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()],
             onSuccess: () => serviceJobModal.close()

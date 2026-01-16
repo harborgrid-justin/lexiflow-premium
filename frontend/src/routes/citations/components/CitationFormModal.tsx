@@ -7,7 +7,7 @@ import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
 // import { Badge } from '@/components/atoms/Badge';
 import { useNotify } from '@/hooks/useNotify';
-import { DataService } from '@/services/data/data-service.service';
+import { knowledgeApi } from '@/lib/frontend-api';
 import { Citation } from '@/types';
 
 interface CitationFormModalProps {
@@ -25,14 +25,18 @@ export function CitationFormModal({ isOpen, onClose, caseId }: CitationFormModal
 
   const { mutate: createCitation, isLoading } = useMutation(
     async () => {
-      return DataService.citations.create({
-        citationText,
+      return knowledgeApi.createCitation({
+        citation: citationText,
+        court: 'Unknown',
+        year: new Date().getFullYear(),
         title,
-        citationType: type,
         caseId,
-        notes,
         status: 'Draft',
-        relevance: 'Medium',
+        metadata: {
+          type,
+          notes,
+          relevance: 'Medium',
+        },
       } as Omit<Citation, 'id' | 'createdAt' | 'updatedAt'>);
     },
     {

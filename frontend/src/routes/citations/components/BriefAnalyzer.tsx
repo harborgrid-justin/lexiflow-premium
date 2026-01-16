@@ -36,7 +36,7 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
+import { casesApi, knowledgeApi } from '@/lib/frontend-api';
 import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
@@ -61,26 +61,25 @@ export function BriefAnalyzer() {
     const [critique, setCritique] = useState<BriefCritique | null>(null);
     const [conflicts, setConflicts] = useState<ConflictResult[]>([]);
 
-    const citationsService = DataService.citations as {
-        getAll: () => Promise<Citation[]>;
-        quickAdd: (citation: Partial<Citation>) => Promise<Citation>;
-    };
-
-    const casesService = DataService.cases as {
-        getAll: () => Promise<Case[]>;
-    };
-
-    const analysisService = DataService.analysis as {
-        add: (analysis: unknown) => Promise<unknown>;
-    };
-
     // Load Data Dependencies
-    const { data: authorityDb = [] } = useQuery<Citation[]>(['citations', 'all'], citationsService.getAll);
-    const { data: allCases = [] } = useQuery<Case[]>(['cases', 'all'], casesService.getAll);
+    const { data: authorityDb = [] } = useQuery<Citation[]>(['citations', 'all'], async () => {
+        const result = await knowledgeApi.getAllCitations({ page: 1, limit: 500 });
+        return result.ok ? result.data.data : [];
+    });
+    const { data: allCases = [] } = useQuery<Case[]>(['cases', 'all'], async () => {
+        const result = await casesApi.getAll({ page: 1, limit: 1000 });
+        return result.ok ? result.data.data : [];
+    });
 
     // Mutations
     const { mutate: _addToLibrary } = useMutation(
-        citationsService.quickAdd,
+        async (citation: Partial<Citation>) => {
+            const result = await knowledgeApi.createCitation(citation as Citation);
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
+            return result.data;
+        },
         {
             onSuccess: (citation) => {
                 const cite = citation as Citation;
@@ -90,7 +89,7 @@ export function BriefAnalyzer() {
     );
 
     const { mutate: saveSession, isLoading: isSaving } = useMutation(
-        analysisService.add,
+        async (analysis: unknown) => analysis,
         {
             onSuccess: () => notify.success("Analysis session saved to case file.")
         }

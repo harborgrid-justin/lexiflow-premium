@@ -17,7 +17,7 @@ import { Download, FileText } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { knowledgeApi } from '@/lib/frontend-api';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -41,7 +41,27 @@ export function PrecedentsView() {
 
   const { data: precedents = [] } = useQuery<Precedent[]>(
     ['precedents', 'all'],
-    DataService.knowledge.getPrecedents
+    async () => {
+      const result = await knowledgeApi.getAllKnowledge({
+        category: 'precedents',
+        page: 1,
+        limit: 100,
+      });
+
+      if (!result.ok) return [];
+
+      return result.data.data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        type: 'Precedent',
+        description: item.content,
+        tag: 'info',
+        docId: item.id as Precedent['docId'],
+        createdAt: '',
+        updatedAt: '',
+        userId: '' as Precedent['userId'],
+      }));
+    }
   );
 
   return (

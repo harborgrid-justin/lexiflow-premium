@@ -18,7 +18,7 @@ import { Bar, BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Toolti
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { knowledgeApi } from '@/lib/frontend-api';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -52,7 +52,30 @@ export function KnowledgeAnalytics() {
     // Enterprise Data Access
     const { data: analytics = { usage: [], topics: [] } } = useQuery<KnowledgeAnalyticsData>(
         ['qa', 'analytics'],
-        () => DataService.knowledge.getAnalytics(mode)
+        async () => {
+            const result = await knowledgeApi.getAllKnowledge({ page: 1, limit: 200 });
+            if (!result.ok) return { usage: [], topics: [] };
+
+            const items = result.data.data;
+            const usage = items.slice(0, 7).map((item, index) => ({
+                name: item.title.slice(0, 12) || `Item ${index + 1}`,
+                views: Math.max(1, (item.content || '').length),
+            }));
+
+            const topicCounts = items.reduce<Record<string, number>>((acc, item) => {
+                const key = (item.title.split(' ')[0] || 'General').toLowerCase();
+                acc[key] = (acc[key] || 0) + 1;
+                return acc;
+            }, {});
+
+            const topics = Object.entries(topicCounts).slice(0, 5).map(([name, value], idx) => ({
+                name,
+                value,
+                color: idx % 2 === 0 ? chartTheme.colors.primary : chartTheme.colors.secondary,
+            }));
+
+            return { usage, topics };
+        }
     );
 
     return (

@@ -11,7 +11,6 @@
  */
 
 import { knowledgeApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -96,7 +95,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
       case "delete": {
         const id = formData.get("id") as string;
-        if (id) await DataService.knowledge.delete(id);
+        if (!id) return { success: false, error: "ID required" };
+
+        const result = await knowledgeApi.deleteKnowledge(id);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
+
         return { success: true };
       }
 

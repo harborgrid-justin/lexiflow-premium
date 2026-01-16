@@ -2,13 +2,13 @@ import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { casesApi, documentsApi } from '@/lib/frontend-api';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
 import { CaseId, ServiceJob, UserId } from '@/types';
-import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { useState } from 'react';
 
@@ -32,13 +32,24 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
     // Load cases from IndexedDB via useQuery for accurate, cached data
     const { data: cases = [] } = useQuery(
         queryKeys.cases.all(),
-        () => DataService.cases.getAll()
+        async () => {
+            const result = await casesApi.getAll({ page: 1, limit: 1000 });
+            return result.ok ? result.data.data : [];
+        }
     );
 
     // Load documents for selected case
     const { data: docs = [] } = useQuery(
         queryKeys.documents.byCaseId(formData.caseId || ''),
-        () => DataService.documents.getByCaseId(formData.caseId!),
+        async () => {
+            if (!formData.caseId) return [];
+            const result = await documentsApi.getAllDocuments({
+                caseId: formData.caseId,
+                page: 1,
+                limit: 200,
+            });
+            return result.ok ? result.data.data : [];
+        },
         { enabled: !!formData.caseId }
     );
 

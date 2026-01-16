@@ -25,7 +25,7 @@
  */
 
 import { useQuery } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/data-service.service";
+import { workflowApi } from "@/lib/frontend-api";
 import { Task } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useCallback, useEffect, useState } from "react";
@@ -89,8 +89,15 @@ export function useSLAMonitoring(
 
   const [slas, setSLAs] = useState<SLAItem[]>([]);
 
-  const { data: tasks = [], isLoading } = useQuery(queryKeys.tasks.all(), () =>
-    DataService.tasks.getAll()
+  const { data: tasks = [], isLoading } = useQuery(
+    queryKeys.tasks.all(),
+    async () => {
+      const result = await workflowApi.getAllTasks({
+        page: 1,
+        limit: maxItems * 2,
+      });
+      return result.ok ? result.data.data : [];
+    }
   );
 
   // Calculate SLA status and progress

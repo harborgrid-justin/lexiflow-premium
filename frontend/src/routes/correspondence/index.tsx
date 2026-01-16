@@ -74,17 +74,52 @@ export async function action({ request }: Route.ActionArgs) {
       case "create":
         // Creation is typically handled via modal/form submission to API directly
         // but if using form action:
-        // const data = Object.fromEntries(formData);
-        // await DataService.communications.correspondence.create(data);
-        return { success: true, message: "Correspondence created" };
+        {
+          const data = Object.fromEntries(formData);
+          delete data.intent;
+
+          const result = await communicationsApi.createCorrespondence({
+            type: (data.type as string) || "letter",
+            subject: (data.subject as string) || "",
+            body: (data.body as string) || "",
+            senderId: (data.senderId as string) || "system",
+            recipient: (data.recipient as string) || "Unknown",
+            recipientEmail: data.recipientEmail as string,
+            recipientAddress: data.recipientAddress as string,
+            caseId: data.caseId as string,
+            status: (data.status as string) || "draft",
+            metadata: data.metadata as Record<string, unknown> | undefined,
+          });
+
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
+
+          return { success: true, message: "Correspondence created" };
+        }
       case "delete": {
         const id = formData.get("id") as string;
-        if (id) await DataService.communications.correspondence.delete(id);
+        if (!id) return { success: false, error: "ID required" };
+
+        const result = await communicationsApi.deleteCorrespondence(id);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
+
         return { success: true, message: "Correspondence deleted" };
       }
       case "archive": {
         const archiveId = formData.get("id") as string;
-        if (archiveId) await DataService.communications.correspondence.update(archiveId, { status: 'filed' });
+        if (!archiveId) return { success: false, error: "ID required" };
+
+        const result = await communicationsApi.updateCorrespondence(archiveId, {
+          status: 'filed',
+        });
+
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
+
         return { success: true, message: "Correspondence archived" };
       }
       default:

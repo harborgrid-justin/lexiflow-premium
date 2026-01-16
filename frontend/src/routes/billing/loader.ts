@@ -3,7 +3,7 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { billingApi } from "@/lib/frontend-api";
 import type { BillingRate, Invoice, TimeEntry, Transaction } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
 
@@ -20,18 +20,23 @@ export interface BillingLoaderData {
  */
 export async function clientLoader() {
   // Parallel data fetching for optimal performance
-  const [invoices, transactions, rates, timeEntries] = await Promise.all([
-    DataService.invoices.getAll(),
-    DataService.transactions.getAll(),
-    DataService.billing.getRates(),
-    DataService.timeEntries.getAll(),
-  ]);
+  const [invoicesResult, transactionsResult, ratesResult, timeEntriesResult] =
+    await Promise.all([
+      billingApi.getAllInvoices(),
+      billingApi.getAllTransactions(),
+      billingApi.getBillingRates(),
+      billingApi.getAllTimeEntries(),
+    ]);
 
   return {
-    invoices,
-    transactions,
-    rates,
-    timeEntries,
+    invoices: invoicesResult.ok ? (invoicesResult.data as Invoice[]) : [],
+    transactions: transactionsResult.ok
+      ? (transactionsResult.data as Transaction[])
+      : [],
+    rates: ratesResult.ok ? ratesResult.data : [],
+    timeEntries: timeEntriesResult.ok
+      ? (timeEntriesResult.data as TimeEntry[])
+      : [],
   };
 }
 
@@ -46,33 +51,48 @@ export async function action({ request }: ActionFunctionArgs) {
   switch (intent) {
     case "create-invoice": {
       const invoiceData = JSON.parse(formData.get("data") as string);
-      const invoice = await DataService.invoices.add(invoiceData);
-      return { success: true, invoice };
+      const result = await billingApi.createInvoice(invoiceData);
+      if (!result.ok) {
+        return { success: false, error: result.error.message };
+      }
+      return { success: true, invoice: result.data };
     }
 
     case "update-invoice": {
       const id = formData.get("id") as string;
       const updates = JSON.parse(formData.get("data") as string);
-      const invoice = await DataService.invoices.update(id, updates);
-      return { success: true, invoice };
+      const result = await billingApi.updateInvoice(id, updates);
+      if (!result.ok) {
+        return { success: false, error: result.error.message };
+      }
+      return { success: true, invoice: result.data };
     }
 
     case "delete-invoice": {
       const id = formData.get("id") as string;
-      await DataService.invoices.delete(id);
+      const result = await billingApi.deleteInvoice(id);
+      if (!result.ok) {
+        return { success: false, error: result.error.message };
+      }
       return { success: true };
     }
 
     case "create-transaction": {
       const transactionData = JSON.parse(formData.get("data") as string);
-      const transaction = await DataService.transactions.add(transactionData);
-      return { success: true, transaction };
+      const result = await billingApi.createTransaction(transactionData);
+      if (!result.ok) {
+        return { success: false, error: result.error.message };
+      }
+      return { success: true, transaction: result.data };
     }
 
     case "log-time": {
       const timeData = JSON.parse(formData.get("data") as string);
-      const entry = await DataService.timeEntries.add(timeData);
-      return { success: true, entry };
+      const result = await billingApi.createTimeEntry(timeData);
+      if (!result.ok) {
+        return { success: false, error: result.error.message };
+      }
+      return { success: true, entry: result.data };
     }
 
     default:

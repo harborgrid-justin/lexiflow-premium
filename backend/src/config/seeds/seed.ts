@@ -2,6 +2,7 @@ import AppDataSource from "@config/data-source";
 import { seedCasePhases } from "./case-phases.seed";
 import { seedCases } from "./cases.seed";
 import { seedClients } from "./clients.seed";
+import { seedClauses } from "./clauses.seed";
 import { seedConnectors } from "./connectors.seed";
 import { seedDocketEntries } from "./docket-entries.seed";
 import { seedDocuments } from "./documents.seed";

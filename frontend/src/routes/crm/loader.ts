@@ -3,13 +3,19 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { crmApi } from "@/lib/frontend-api";
 import type { LoaderFunctionArgs } from "react-router";
 export async function clientLoader(_args: LoaderFunctionArgs) {
-  const [clients, contacts, opportunities] = await Promise.all([
-    DataService.crm.getClients(),
-    DataService.crm.getContacts(),
-    DataService.crm.getOpportunities(),
-  ]);
-  return { clients, contacts, opportunities };
+  const [leadsResult, relationshipsResult, opportunitiesResult] =
+    await Promise.all([
+      crmApi.getLeads(),
+      crmApi.getRelationships(),
+      crmApi.getOpportunities(),
+    ]);
+
+  return {
+    clients: leadsResult.ok ? leadsResult.data : [],
+    contacts: relationshipsResult.ok ? relationshipsResult.data : [],
+    opportunities: opportunitiesResult.ok ? opportunitiesResult.data : [],
+  };
 }

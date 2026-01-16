@@ -133,12 +133,14 @@ export { billingApi } from "./billing";
 export { casesApi } from "./cases";
 export { communicationsApi } from "./communications";
 export { complianceApi } from "./compliance";
+export { crmApi } from "./crm";
 export { discoveryApi } from "./discovery";
 export { docketApi } from "./docket";
 export { documentsApi } from "./documents";
 export { hrApi } from "./hr";
 export { integrationsApi } from "./integrations";
 export { intelligenceApi } from "./intelligence";
+export { serviceJobsApi } from "./service-jobs";
 export { trialApi } from "./trial";
 export { workflowApi } from "./workflow";
 

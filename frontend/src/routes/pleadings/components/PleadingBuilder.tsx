@@ -17,8 +17,7 @@ import React, { Suspense, lazy, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API with queryKeys (2025-12-21)
 
@@ -29,9 +28,9 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Modal } from '@/components/molecules/Modal/Modal';
 

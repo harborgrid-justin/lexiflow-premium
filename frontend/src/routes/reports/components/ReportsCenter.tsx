@@ -14,8 +14,8 @@ import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { Plus } from 'lucide-react';
 import { ReportFilters } from './ReportFilters';
-import { ReportGrid } from './ReportGrid';
 import { ReportStats } from './ReportStats';
+import { ReportTable } from './ReportTable';
 import type { Report } from './types';
 
 // ============================================================================
@@ -81,7 +81,7 @@ export function ReportsCenter({
         onTypeFilterChange={onTypeFilterChange}
       />
 
-      <ReportGrid reports={reports} isPending={isPending} />
+      <ReportTable reports={reports} isPending={isPending} />
     </div>
   );
 }

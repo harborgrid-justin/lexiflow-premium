@@ -1,8 +1,17 @@
-// components/rules/index.ts
+/**
+ * Components Barrel Export
+ * 
+ * This directory contains PRESENTATION COMPONENTS ONLY.
+ * 
+ * Architectural Rules:
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ * - NO data fetching (use ../hooks/ or route loader)
+ * - NO business logic (belongs in services)
+ * - NO routing logic (handled by route.tsx)
+ * 
+ * All exports from this file should be pure UI components.
+ */
 
-export { LocalRulesMap } from './LocalRulesMap';
-export { RuleBookViewer } from './RuleBookViewer';
-export { RulesDashboard } from './RulesDashboard';
-export { default as RulesPlatform } from './RulesPlatform';
-export { RulesPlatformContent } from './RulesPlatformContent';
-export { StandingOrders } from './StandingOrders';
+// Export all presentation components here
+export * from './index';

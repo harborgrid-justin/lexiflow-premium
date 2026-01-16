@@ -1,10 +1,17 @@
-// components/war-room/index.ts
+/**
+ * Components Barrel Export
+ * 
+ * This directory contains PRESENTATION COMPONENTS ONLY.
+ * 
+ * Architectural Rules:
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ * - NO data fetching (use ../hooks/ or route loader)
+ * - NO business logic (belongs in services)
+ * - NO routing logic (handled by route.tsx)
+ * 
+ * All exports from this file should be pure UI components.
+ */
 
-export { AdvisoryBoard } from './AdvisoryBoard';
-export { CommandCenter } from './CommandCenter';
-export { EvidenceWall } from './EvidenceWall';
-export { OppositionManager } from './OppositionManager';
-export { TrialBinder } from './TrialBinder';
-export { default as WarRoom } from './WarRoom';
-export { WarRoomSidebar } from './WarRoomSidebar';
-export { WitnessPrep } from './WitnessPrep';
+// Export all presentation components here
+export * from './index';

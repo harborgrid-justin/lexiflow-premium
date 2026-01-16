@@ -21,7 +21,7 @@ import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/data-service.service';
+import { usePersonalWorkspace } from '../hooks/useDashboard';
 
 // Hooks & Context
 import { useBackendHealth } from '@/hooks/useBackendHealth';

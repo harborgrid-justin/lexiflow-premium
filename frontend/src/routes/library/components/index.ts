@@ -1,8 +1,12 @@
-// components/knowledge/index.ts
+/**
+ * Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ */
 
-export * from './KnowledgeAnalytics';
-export * from './KnowledgeBase';
-export * from './KnowledgeContent';
-export * from './PrecedentsView';
-export * from './QAView';
-export * from './WikiView';
+// Components exported here should be pure presentation
+export {};

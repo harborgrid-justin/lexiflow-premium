@@ -12,29 +12,28 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
 import { Filter, Layout, UserPlus } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSelection } from '@/hooks/useSelectionState';
+import { useTheme } from "@/hooks/useTheme";
 import { useToggle } from '@/hooks/useToggle';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Modal } from '@/components/molecules/Modal/Modal';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
 import { Advisor, AdvisorList } from './advisory/AdvisorList';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';

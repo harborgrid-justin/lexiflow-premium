@@ -65,18 +65,18 @@ export const DashboardService = {
   // Dashboard specific methods
   getWidgets: async (dashboardId: string): Promise<DashboardWidget[]> => {
     const dashboard = await apiClient.get<{ widgets?: DashboardWidget[] }>(
-      `/dashboards/${dashboardId}`
+      `/dashboards/${dashboardId}`,
     );
     return dashboard?.widgets || [];
   },
 
   addWidget: async (
     dashboardId: string,
-    widget: Partial<DashboardWidget>
+    widget: Partial<DashboardWidget>,
   ): Promise<DashboardWidget> => {
     return apiClient.post<DashboardWidget>(
       `/dashboards/${dashboardId}/widgets`,
-      widget
+      widget,
     );
   },
 
@@ -87,7 +87,7 @@ export const DashboardService = {
 
   updateLayout: async (
     dashboardId: string,
-    layout: unknown
+    layout: unknown,
   ): Promise<unknown> => {
     return apiClient.patch(`/dashboards/${dashboardId}/layout`, { layout });
   },
@@ -98,41 +98,53 @@ export const DashboardService = {
       const startOfMonth = new Date(
         now.getFullYear(),
         now.getMonth(),
-        1
+        1,
       ).toISOString();
       const endOfMonth = new Date(
         now.getFullYear(),
         now.getMonth() + 1,
-        0
+        0,
       ).toISOString();
 
       const [stats, tasks, invoices, auditLogs] = await Promise.all([
-        api.cases.getStats(),
-        api.tasks.getAll({ status: "Pending" as TaskStatusBackend }),
-        api.invoices.getAll({
-          startDate: startOfMonth,
-          endDate: endOfMonth,
-        }),
-        apiClient.get<{ total: number }>("/audit/logs/count?period=recent"),
+        api.cases.getStats().catch(() => ({
+          totalActive: 0,
+          upcomingDeadlines: 0,
+          utilizationRate: 0,
+        })),
+        api.tasks
+          .getAll({ status: "Pending" as TaskStatusBackend })
+          .catch(() => []),
+        api.invoices
+          .getAll({
+            startDate: startOfMonth,
+            endDate: endOfMonth,
+          })
+          .catch(() => []),
+        apiClient
+          .get<{ total: number }>("/audit/logs/count?period=recent")
+          .catch(() => ({ total: 0 })),
       ]);
 
-      const revenue = invoices.reduce(
-        (sum: number, inv: Invoice) => sum + (inv.totalAmount || 0),
-        0
-      );
+      const revenue = Array.isArray(invoices)
+        ? invoices.reduce(
+            (sum: number, inv: Invoice) => sum + (inv.totalAmount || 0),
+            0,
+          )
+        : 0;
 
       return {
-        activeCases: stats.totalActive,
-        upcomingDeadlines: stats.upcomingDeadlines,
-        recentActivity: auditLogs.total,
-        pendingTasks: tasks.length,
-        utilizationRate: stats.utilizationRate,
+        activeCases: stats?.totalActive || 0,
+        upcomingDeadlines: stats?.upcomingDeadlines || 0,
+        recentActivity: auditLogs?.total || 0,
+        pendingTasks: Array.isArray(tasks) ? tasks.length : 0,
+        utilizationRate: stats?.utilizationRate || 0,
         revenueThisMonth: revenue,
       };
     } catch (error) {
       console.error(
         "[DashboardService.getMetrics] Error fetching metrics:",
-        error
+        error,
       );
       return {
         activeCases: 0,
@@ -146,27 +158,40 @@ export const DashboardService = {
   },
 
   getStats: async () => {
-    const [stats, motions, timeEntries] = await Promise.all([
-      api.cases.getStats(),
-      api.motions.getAll(),
-      api.timeEntries.getAll({ billable: true }),
-    ]);
+    try {
+      const [stats, motions, timeEntries] = await Promise.all([
+        api.cases.getStats().catch(() => ({
+          totalActive: 0,
+          atRisk: 0,
+        })),
+        api.motions.getAll().catch(() => []),
+        api.timeEntries.getAll({ billable: true }).catch(() => []),
+      ]);
 
-    const pendingMotions = motions.filter(
-      (m) => !["Decided", "Withdrawn"].includes(m.status)
-    ).length;
+      const pendingMotions = Array.isArray(motions)
+        ? motions.filter((m) => !["Decided", "Withdrawn"].includes(m.status))
+            .length
+        : 0;
 
-    const billableHours = timeEntries.reduce(
-      (sum, entry) => sum + (entry.duration || 0),
-      0
-    );
+      const billableHours = Array.isArray(timeEntries)
+        ? timeEntries.reduce((sum, entry) => sum + (entry.duration || 0), 0)
+        : 0;
 
-    return {
-      activeCases: stats.totalActive,
-      pendingMotions,
-      billableHours,
-      highRisks: stats.atRisk,
-    };
+      return {
+        activeCases: stats?.totalActive || 0,
+        pendingMotions,
+        billableHours,
+        highRisks: stats?.atRisk || 0,
+      };
+    } catch (error) {
+      console.error("[DashboardService.getStats] Error:", error);
+      return {
+        activeCases: 0,
+        pendingMotions: 0,
+        billableHours: 0,
+        highRisks: 0,
+      };
+    }
   },
 
   getChartData: async () => {

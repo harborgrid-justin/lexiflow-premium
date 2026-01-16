@@ -7,7 +7,6 @@
  */
 
 import { trialApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
 import type { TrialExhibit } from '@/types';
 import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

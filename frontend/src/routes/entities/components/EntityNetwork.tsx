@@ -24,16 +24,15 @@ import React, { useMemo } from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { NexusGraph } from '@/routes/visual/components/NexusGraph';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/components/molecules/Card/Card';
+import { NexusGraph } from '@/routes/visual/components/NexusGraph';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

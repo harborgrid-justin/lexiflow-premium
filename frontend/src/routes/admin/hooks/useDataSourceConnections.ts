@@ -3,21 +3,26 @@
  * Provides CRUD operations and query state for data source connections.
  */
 
-import { useQuery, useMutation, queryClient } from "@/hooks/backend";
-import { DataService } from "@/services/data/data-service.service";
 import { DataSource } from "@/api/data-platform/data-sources-api";
+import { useNotify } from "@/hooks/useNotify";
+import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
+import { DataService } from "@/services/data/data-service.service";
 import type {
-  DataSourceConnection,
   // ConnectionTestResult,
   ConnectionStatus,
+  DataSourceConnection,
 } from "../types";
 
 const toDataSourceConnection = (ds: DataSource): DataSourceConnection => ({
   id: ds.id,
   name: ds.name,
-  type: (ds.metadata as Record<string, unknown>)?.providerName as string || ds.type,
+  type:
+    ((ds.metadata as Record<string, unknown>)?.providerName as string) ||
+    ds.type,
   region:
-    (ds.metadata as Record<string, unknown>)?.region as string || (ds.config as Record<string, unknown>)?.region as string || "us-east-1",
+    ((ds.metadata as Record<string, unknown>)?.region as string) ||
+    ((ds.config as Record<string, unknown>)?.region as string) ||
+    "us-east-1",
   status: (ds.status as ConnectionStatus) || "disconnected",
   lastSync: ds.config?.lastSync || null,
   host: ds.config?.url,
@@ -25,6 +30,8 @@ const toDataSourceConnection = (ds: DataSource): DataSourceConnection => ({
 });
 
 export function useDataSourceConnections() {
+  const notify = useNotify();
+
   const {
     data: connections = [],
     isLoading,
@@ -32,10 +39,17 @@ export function useDataSourceConnections() {
   } = useQuery<DataSourceConnection[]>(
     ["admin", "sources", "connections"],
     async () => {
-      const data = await DataService.dataSources.getAll(); // Corrected method
+      const data = await DataService.dataSources.getAll();
       return data.map(toDataSourceConnection);
     },
-    { staleTime: 0, refetchOnWindowFocus: false }
+    {
+      staleTime: 0,
+      refetchOnWindowFocus: false,
+      onError: (error) => {
+        console.error("Failed to fetch data sources:", error);
+        notify.error("Failed to load data sources");
+      },
+    },
   );
 
   const addConnectionMutation = useMutation(
@@ -69,10 +83,10 @@ export function useDataSourceConnections() {
           (old: DataSourceConnection[] | undefined) => [
             ...(old || []),
             newConnection,
-          ]
+          ],
         );
       },
-    }
+    },
   );
 
   const syncMutation = useMutation(
@@ -88,8 +102,8 @@ export function useDataSourceConnections() {
           ["admin", "sources", "connections"],
           (old) =>
             old?.map((c) =>
-              c.id === id ? { ...c, status: "syncing" as const } : c
-            ) || []
+              c.id === id ? { ...c, status: "syncing" as const } : c,
+            ) || [],
         );
         return { previous };
       },
@@ -101,12 +115,12 @@ export function useDataSourceConnections() {
               old?.map((c) =>
                 c.id === id
                   ? { ...c, status: "active" as const, lastSync: "Just now" }
-                  : c
-              ) || []
+                  : c,
+              ) || [],
           );
         }, 2000);
       },
-    }
+    },
   );
 
   const deleteMutation = useMutation(
@@ -115,10 +129,10 @@ export function useDataSourceConnections() {
       onSuccess: (_result, id: string) => {
         queryClient.setQueryData<DataSourceConnection[]>(
           ["admin", "sources", "connections"],
-          (old) => old?.filter((c) => c.id !== id) || []
+          (old) => old?.filter((c) => c.id !== id) || [],
         );
       },
-    }
+    },
   );
 
   const testMutation = useMutation(
@@ -131,10 +145,10 @@ export function useDataSourceConnections() {
       onError: (error: unknown) => {
         alert(
           "Connection test error: " +
-            (error instanceof Error ? error.message : String(error))
+            (error instanceof Error ? error.message : String(error)),
         );
       },
-    }
+    },
   );
 
   return {

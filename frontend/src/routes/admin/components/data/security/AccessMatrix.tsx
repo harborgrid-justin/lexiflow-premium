@@ -1,12 +1,11 @@
-import React from 'react';
-import { useTheme } from "@/hooks/useTheme";
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
-import { DataService } from '@/services/data/data-service.service';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { RLSPermissionLevel as PermissionLevel, RolePermission } from '@/types/data-quality';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Info, Lock, Shield, XCircle } from 'lucide-react';
+import React from 'react';
 
 /**
  * AccessMatrix - React 18 optimized with React.memo

@@ -12,30 +12,29 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
 import { Filter, Layout, Plus } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from "@/hooks/useTheme";
+import { useToggle } from '@/hooks/useToggle';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { Button } from '@/components/atoms/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { ErrorState } from '@/components/molecules/ErrorState';
 import { Modal } from '@/components/molecules/Modal';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { OppositionDetail } from './opposition/OppositionDetail';
 import { OppositionEntity, OppositionList } from './opposition/OppositionList';
 import { OppositionSidebar } from './opposition/OppositionSidebar';

@@ -30,7 +30,7 @@ import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Components - Layouts
-import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
+import { TabbedPageLayout } from '@/layouts';
 
 // Feature Components
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';

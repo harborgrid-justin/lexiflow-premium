@@ -1,9 +1,12 @@
-// components/pleading/index.ts
+/**
+ * Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ */
 
-export { PleadingAnalytics } from './PleadingAnalytics';
-export { default as PleadingBuilder } from './PleadingBuilder';
-export { PleadingDashboard } from './PleadingDashboard';
-export { default as PleadingDesigner } from './PleadingDesigner';
-export { PleadingDrafts } from './PleadingDrafts';
-export { PleadingFilingQueue } from './PleadingFilingQueue';
-export { PleadingTemplates } from './PleadingTemplates';
+// Components exported here should be pure presentation
+export {};

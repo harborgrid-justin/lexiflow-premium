@@ -24,18 +24,17 @@ import { useState } from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
 import { Card } from '@/components/molecules/Card/Card';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

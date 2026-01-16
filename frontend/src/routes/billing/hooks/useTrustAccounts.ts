@@ -14,6 +14,7 @@
 
 export * from "./useTrustAccounts/index";
 import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
+import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import type {
   CreateTrustAccountDto,
   DepositDto,
@@ -26,7 +27,6 @@ import type {
 } from "@/types";
 import { PaymentMethod, TrustAccountStatus } from "@/types";
 import { useCallback, useMemo, useState } from "react";
-import { queryClient, useMutation, useQuery } from "./useQueryHooks";
 
 /**
  * Query key factory pattern for cache management
@@ -85,7 +85,7 @@ interface UseTrustAccountsResult {
  * @returns Typed result with accounts and computed values
  */
 export function useTrustAccounts(
-  filters?: TrustAccountFilters
+  filters?: TrustAccountFilters,
 ): UseTrustAccountsResult {
   // Primary data fetching with React Query
   const {
@@ -101,7 +101,7 @@ export function useTrustAccounts(
       staleTime: 30000, // 30 seconds - balance data should be relatively fresh
       cacheTime: 300000, // 5 minutes
       refetchOnWindowFocus: true, // Refetch when user returns to app (compliance data must be current)
-    }
+    },
   );
 
   // Wrapped refetch with proper typing
@@ -129,7 +129,7 @@ export function useTrustAccounts(
   const totalBalance = useMemo(() => {
     return accounts.reduce(
       (sum: number, account: TrustAccount) => sum + account.balance,
-      0
+      0,
     );
   }, [accounts]);
 
@@ -139,7 +139,7 @@ export function useTrustAccounts(
 
   const activeAccounts = useMemo(() => {
     return accounts.filter(
-      (acc: TrustAccount) => acc.status === TrustAccountStatus.ACTIVE
+      (acc: TrustAccount) => acc.status === TrustAccountStatus.ACTIVE,
     );
   }, [accounts]);
 
@@ -188,7 +188,7 @@ export function useTrustAccounts(
         const dueDate = new Date(account.nextReconciliationDue);
         const now = new Date();
         const daysOverdue = Math.floor(
-          (now.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)
+          (now.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24),
         );
 
         if (daysOverdue > 0) {
@@ -259,7 +259,7 @@ interface UseTrustAccountDetailResult {
 }
 
 export function useTrustAccountDetail(
-  accountId: string
+  accountId: string,
 ): UseTrustAccountDetailResult {
   // Account details query
   const {
@@ -274,7 +274,7 @@ export function useTrustAccountDetail(
     {
       enabled: !!accountId,
       staleTime: 30000,
-    }
+    },
   );
 
   // Transactions query
@@ -290,7 +290,7 @@ export function useTrustAccountDetail(
     {
       enabled: !!accountId,
       staleTime: 30000,
-    }
+    },
   );
 
   const isLoading = accountLoading || transactionsLoading;
@@ -320,20 +320,20 @@ export function useTrustAccountDetail(
   const totalWithdrawals = useMemo(() => {
     return transactions
       .filter(
-        (tx: TrustTransactionEntity) => tx.transactionType === "withdrawal"
+        (tx: TrustTransactionEntity) => tx.transactionType === "withdrawal",
       )
       .reduce((sum: number, tx: TrustTransactionEntity) => sum + tx.amount, 0);
   }, [transactions]);
 
   const pendingTransactions = useMemo(() => {
     return transactions.filter(
-      (tx: TrustTransactionEntity) => tx.status === "pending"
+      (tx: TrustTransactionEntity) => tx.status === "pending",
     );
   }, [transactions]);
 
   const lastReconciliationDate = useMemo(() => {
     const reconciledTransactions = transactions.filter(
-      (tx: TrustTransactionEntity) => tx.reconciled
+      (tx: TrustTransactionEntity) => tx.reconciled,
     );
     if (reconciledTransactions.length === 0) return null;
 
@@ -344,7 +344,7 @@ export function useTrustAccountDetail(
           ? tx.reconciledDate
           : latest;
       },
-      null as string | null
+      null as string | null,
     );
   }, [transactions]);
 
@@ -390,7 +390,7 @@ export function useCreateTrustAccount(): UseCreateTrustAccountResult {
           message: err.message || "Failed to create trust account",
         });
       },
-    }
+    },
   );
 
   return {
@@ -403,7 +403,7 @@ export function useCreateTrustAccount(): UseCreateTrustAccountResult {
 interface UseDepositFundsResult {
   deposit: (
     accountId: string,
-    data: DepositDto
+    data: DepositDto,
   ) => Promise<TrustTransactionEntity>;
   isDepositing: boolean;
   error: TrustAccountError | null;
@@ -421,7 +421,7 @@ export function useDepositFunds(): UseDepositFundsResult {
     {
       onSuccess: (
         _: TrustTransactionEntity,
-        variables: { accountId: string; data: DepositDto }
+        variables: { accountId: string; data: DepositDto },
       ) => {
         // Invalidate account detail and transactions
         queryClient.invalidate(trustKeys.detail(variables.accountId));
@@ -435,14 +435,14 @@ export function useDepositFunds(): UseDepositFundsResult {
           message: err.message || "Failed to deposit funds",
         });
       },
-    }
+    },
   );
 
   const deposit = useCallback(
     async (accountId: string, data: DepositDto) => {
       return mutation.mutateAsync({ accountId, data });
     },
-    [mutation]
+    [mutation],
   );
 
   return {
@@ -455,7 +455,7 @@ export function useDepositFunds(): UseDepositFundsResult {
 interface UseWithdrawFundsResult {
   withdraw: (
     accountId: string,
-    data: WithdrawalDto
+    data: WithdrawalDto,
   ) => Promise<TrustTransactionEntity>;
   isWithdrawing: boolean;
   error: TrustAccountError | null;
@@ -473,7 +473,7 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
     {
       onSuccess: (
         _: TrustTransactionEntity,
-        variables: { accountId: string; data: WithdrawalDto }
+        variables: { accountId: string; data: WithdrawalDto },
       ) => {
         queryClient.invalidate(trustKeys.detail(variables.accountId));
         queryClient.invalidate(trustKeys.transactions(variables.accountId));
@@ -486,14 +486,14 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
           message: err.message || "Failed to withdraw funds",
         });
       },
-    }
+    },
   );
 
   const withdraw = useCallback(
     async (accountId: string, data: WithdrawalDto) => {
       return mutation.mutateAsync({ accountId, data });
     },
-    [mutation]
+    [mutation],
   );
 
   return {
@@ -506,7 +506,7 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
 interface UseReconcileAccountResult {
   reconcile: (
     accountId: string,
-    data: ThreeWayReconciliationDto
+    data: ThreeWayReconciliationDto,
   ) => Promise<void>;
   isReconciling: boolean;
   error: TrustAccountError | null;
@@ -529,7 +529,7 @@ export function useReconcileAccount(): UseReconcileAccountResult {
     {
       onSuccess: (
         _: void,
-        variables: { accountId: string; data: ThreeWayReconciliationDto }
+        variables: { accountId: string; data: ThreeWayReconciliationDto },
       ) => {
         queryClient.invalidate(trustKeys.detail(variables.accountId));
         queryClient.invalidate(trustKeys.transactions(variables.accountId));
@@ -542,14 +542,14 @@ export function useReconcileAccount(): UseReconcileAccountResult {
           message: err.message || "Reconciliation failed",
         });
       },
-    }
+    },
   );
 
   const reconcile = useCallback(
     async (accountId: string, data: ThreeWayReconciliationDto) => {
       return mutation.mutateAsync({ accountId, data });
     },
-    [mutation]
+    [mutation],
   );
 
   return {
@@ -583,7 +583,7 @@ export function useTrustAccountValidation() {
   const validatePaymentMethod = useCallback(
     (
       paymentMethod: PaymentMethod,
-      isWithdrawal: boolean
+      isWithdrawal: boolean,
     ): TrustAccountValidationResult => {
       if (!isWithdrawal) {
         return { valid: true, errors: [] };
@@ -602,7 +602,7 @@ export function useTrustAccountValidation() {
 
       return { valid: true, errors: [] };
     },
-    []
+    [],
   );
 
   /**
@@ -616,7 +616,7 @@ export function useTrustAccountValidation() {
         (1000 * 60 * 60);
       return hoursDifference <= 48;
     },
-    []
+    [],
   );
 
   /**
@@ -626,7 +626,7 @@ export function useTrustAccountValidation() {
   const validateZeroBalance = useCallback(
     (
       currentBalance: number,
-      withdrawalAmount: number
+      withdrawalAmount: number,
     ): TrustAccountValidationResult => {
       const newBalance = currentBalance - withdrawalAmount;
 
@@ -642,7 +642,7 @@ export function useTrustAccountValidation() {
 
       return { valid: true, errors: [] };
     },
-    []
+    [],
   );
 
   return {

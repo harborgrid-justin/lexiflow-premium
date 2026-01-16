@@ -17,10 +17,6 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
@@ -28,7 +24,11 @@ import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLo
 import { Card } from '@/components/molecules/Card/Card';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { Clause } from '@/types';
 
 // ============================================================================
@@ -51,14 +51,21 @@ const ClauseLibrary = function ClauseLibrary({ onSelectClause }: ClauseLibraryPr
     // Fetch real clauses from DataService
     const { data: clauses = [], isLoading, error, refetch } = useQuery(QUERY_KEYS.CLAUSES.ALL, async () => {
         const result = await DataService.clauses.getAll();
-        if (!result.ok) throw result.error; // Adapt Result<T> to useQuery expectations
 
-        // Ensure we return an array - handle potential data structure issues
-        const data = result.data;
-        if (Array.isArray(data)) {
-            return data as Clause[];
+        // The API service already handles response normalization and returns Clause[]
+        if (Array.isArray(result)) {
+            return result as Clause[];
         }
-        console.warn('[ClauseLibrary] DataService.clauses.getAll() returned non-array:', data);
+
+        // Handle wrapped response format {success: true, data: Clause[], meta: {...}}
+        if (result && typeof result === 'object' && 'data' in result) {
+            const data = (result as { data: unknown }).data;
+            if (Array.isArray(data)) {
+                return data as Clause[];
+            }
+        }
+
+        console.warn('[ClauseLibrary] DataService.clauses.getAll() returned unexpected format:', result);
         return [] as Clause[];
     });
 

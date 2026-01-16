@@ -13,6 +13,7 @@
  * - Pure and deterministic
  */
 
+import { BackupsApiService } from "@/api/admin/backups-api";
 import {
   normalizeAuditLogs,
   normalizeSystemMetrics,
@@ -84,7 +85,7 @@ export interface AuditLog {
  * Get paginated audit logs with filters
  */
 export async function getAuditLogs(
-  filters?: AuditLogFilters
+  filters?: AuditLogFilters,
 ): Promise<Result<PaginatedResult<AuditLog>>> {
   // Validation
   if (filters?.page !== undefined && filters.page < 1) {
@@ -183,11 +184,11 @@ export async function getSystemHealth(): Promise<Result<SystemHealthResult>> {
  * Clear cache by type
  */
 export async function clearCache(
-  cacheType?: string
+  cacheType?: string,
 ): Promise<Result<{ cleared: number }>> {
   if (cacheType && typeof cacheType === "string" && cacheType.length === 0) {
     return failure(
-      new ValidationError("Cache type cannot be empty if provided")
+      new ValidationError("Cache type cannot be empty if provided"),
     );
   }
 
@@ -265,12 +266,12 @@ const processingJobs = {
 const documentVersions = {
   async getAll(documentId: string) {
     return await client.get<unknown[]>(
-      `/admin/documents/${documentId}/versions`
+      `/admin/documents/${documentId}/versions`,
     );
   },
   async getById(documentId: string, versionId: string) {
     return await client.get<unknown>(
-      `/admin/documents/${documentId}/versions/${versionId}`
+      `/admin/documents/${documentId}/versions/${versionId}`,
     );
   },
 };
@@ -281,6 +282,11 @@ const documentVersions = {
 export async function getTenantConfig(): Promise<Result<unknown>> {
   return await client.get<unknown>("/admin/tenant/config");
 }
+
+/**
+ * Backups API instance
+ */
+const backups = new BackupsApiService();
 
 export const adminApi = {
   getAuditLogs,
@@ -294,4 +300,5 @@ export const adminApi = {
   ocr,
   processingJobs,
   documentVersions,
+  backups,
 };

@@ -9,7 +9,6 @@
 
 import { adminApi } from '@/lib/frontend-api';
 import { SystemSettings, type SystemFeatures, type SystemSettingsData } from '@/routes/admin/components/SystemSettings';
-import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';

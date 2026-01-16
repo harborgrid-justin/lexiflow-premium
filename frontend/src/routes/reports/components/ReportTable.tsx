@@ -1,5 +1,5 @@
 /**
- * Report Grid Component
+ * Report Table Component
  *
  * ENTERPRISE ARCHITECTURE:
  * - Pure presentation component
@@ -7,18 +7,18 @@
  * - No direct data fetching
  * - Emits events upward
  *
- * @module routes/reports/components/ReportGrid
+ * @module routes/reports/components/ReportTable
  */
 
-import { ReportCard } from './ReportCard';
+import { ReportRow } from './ReportRow';
 import type { Report } from './types';
 
-interface ReportGridProps {
+interface ReportTableProps {
   reports: Report[];
   isPending?: boolean;
 }
 
-export function ReportGrid({ reports, isPending = false }: ReportGridProps) {
+export function ReportTable({ reports, isPending = false }: ReportTableProps) {
   if (isPending) {
     return (
       <div className="flex-1 overflow-auto px-4 pb-4">
@@ -33,7 +33,7 @@ export function ReportGrid({ reports, isPending = false }: ReportGridProps) {
     <div className="flex-1 overflow-auto px-4 pb-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {reports.map(report => (
-          <ReportCard key={report.id} report={report} />
+          <ReportRow key={report.id} report={report} />
         ))}
         {reports.length === 0 && (
           <div className="col-span-full text-center py-12 text-slate-600 dark:text-slate-400">

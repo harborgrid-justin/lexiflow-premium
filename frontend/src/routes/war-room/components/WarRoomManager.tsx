@@ -5,15 +5,14 @@
  * Shows available cases ready for War Room strategic planning.
  */
 
-import React, { useState, useMemo } from 'react';
-import { Target, Search, AlertCircle, Briefcase, Clock, Shield } from 'lucide-react';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Case } from '@/types';
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { Case } from '@/types';
+import { AlertCircle, Briefcase, Clock, Search, Shield, Target } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 interface WarRoomManagerProps {
   onSelectCase: (caseId: string) => void;

@@ -1,5 +1,5 @@
 /**
- * Report Card Component
+ * Report Row Component
  *
  * ENTERPRISE ARCHITECTURE:
  * - Pure presentation component
@@ -7,17 +7,17 @@
  * - No direct data fetching
  * - Emits events upward
  *
- * @module routes/reports/components/ReportCard
+ * @module routes/reports/components/ReportRow
  */
 
 import { Calendar } from 'lucide-react';
 import type { Report } from './types';
 
-interface ReportCardProps {
+interface ReportRowProps {
   report: Report;
 }
 
-export function ReportCard({ report }: ReportCardProps) {
+export function ReportRow({ report }: ReportRowProps) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
       <div className="flex items-start justify-between mb-3">

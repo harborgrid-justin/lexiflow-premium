@@ -15,7 +15,6 @@ import { BarChart3, Building2, TrendingUp, Users } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { api } from '@/api';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/useQueryHooks';

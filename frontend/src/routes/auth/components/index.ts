@@ -1,12 +1,12 @@
 /**
- * Authentication Components
+ * Components Barrel Export
  *
- * Export all authentication-related UI components
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
  */
 
-export { MFASetup } from './MFASetup';
-export { MFAVerification } from './MFAVerification';
-export { SessionTimeoutWarning } from './SessionTimeoutWarning';
-export { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
-export { SSOLoginOptions } from './SSOLoginOptions';
-export { AccountLockedMessage } from './AccountLockedMessage';
+// Components exported here should be pure presentation
+export {};

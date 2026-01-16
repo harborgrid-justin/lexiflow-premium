@@ -1,13 +1,17 @@
-// components/research/index.ts
+/**
+ * Components Barrel Export
+ * 
+ * This directory contains PRESENTATION COMPONENTS ONLY.
+ * 
+ * Architectural Rules:
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ * - NO data fetching (use ../hooks/ or route loader)
+ * - NO business logic (belongs in services)
+ * - NO routing logic (handled by route.tsx)
+ * 
+ * All exports from this file should be pure UI components.
+ */
 
-export * from './ActiveResearch';
-export * from './JurisdictionSettings';
-export * from './ResearchHistory';
-export * from './ResearchInput';
-export * from './ResearchResultCard';
-export * from './ResearchResults';
-export * from './ResearchSidebar';
-export * from './ResearchTool';
-export * from './ResearchToolContent';
-export * from './SavedAuthorities';
-export * from './ShepardizingTool';
+// Export all presentation components here
+export * from './index';

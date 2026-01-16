@@ -17,8 +17,7 @@ import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'reac
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/data-service.service';
-import { useEntities } from '../EntitiesContext';
+import { useEntities } from '../hooks/useEntities';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context

@@ -36,7 +36,6 @@ import {
 
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from "@/services/data/data-service.service";
 
 // Hooks & Context
 import { useTheme } from "@/providers";
@@ -46,8 +45,8 @@ import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 import { WAR_ROOM_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/lib/cn';
 
 // Types
 import type { Case, WarRoomData } from "@/types";

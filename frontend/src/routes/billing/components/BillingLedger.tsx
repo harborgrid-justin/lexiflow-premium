@@ -5,8 +5,8 @@ import { OperatingLedger, TrustLedger } from '@/routes/practice/components/finan
 import { Plus } from 'lucide-react';
 import { memo, useCallback, useState } from 'react';
 import { useLedgerTransactions } from '../hooks/useLedgerTransactions';
-import { LedgerTabs } from './components/LedgerTabs';
-import { TransactionData, TransactionForm } from './components/TransactionForm';
+import { LedgerTabs } from './LedgerTabs';
+import { TransactionData, TransactionForm } from './TransactionForm';
 
 function BillingLedgerComponent() {
   const { openWindow } = useWindow();

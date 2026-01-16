@@ -1,10 +1,12 @@
-// components/jurisdiction/index.ts
+/**
+ * Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ */
 
-export * from './JurisdictionArbitration';
-export * from './JurisdictionFederal';
-export * from './JurisdictionGeoMap';
-export * from './JurisdictionInternational';
-export * from './JurisdictionLocalRules';
-export * from './JurisdictionManager';
-export * from './JurisdictionRegulatory';
-export * from './JurisdictionState';
+// Components exported here should be pure presentation
+export {};

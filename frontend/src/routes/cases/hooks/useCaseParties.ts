@@ -1,5 +1,6 @@
 import { useModalState } from "@/hooks/core";
-import { useQuery } from "@/hooks/useQueryHooks";
+import { useNotify } from "@/hooks/useNotify";
+import { useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import { CaseId, Organization, Party, PartyId } from "@/types";
 import { Scheduler } from "@/utils/scheduler";
@@ -9,8 +10,9 @@ export type GroupByOption = "none" | "role" | "group";
 
 export function useCaseParties(
   parties: Party[] = [],
-  onUpdate: (parties: Party[]) => void
+  onUpdate: (parties: Party[]) => void,
 ) {
+  const notify = useNotify();
   const partyModal = useModalState();
   const deleteModal = useModalState();
   const [currentParty, setCurrentParty] = useState<Partial<Party>>({});
@@ -20,7 +22,26 @@ export function useCaseParties(
 
   const { data: orgs = [] } = useQuery<Organization[]>(
     ["organizations", "all"],
-    () => DataService.organization.getOrgs()
+    () => DataService.organization.getOrgs(),
+  );
+
+  // Use useMutation for party operations
+  const { mutate: deletePartyMutation } = useMutation(
+    async (partyId: string) => {
+      const newParties = parties.filter((p) => p.id !== partyId);
+      onUpdate(newParties);
+    },
+    {
+      onSuccess: () => {
+        notify.success("Party deleted successfully");
+        deleteModal.close();
+        setDeletePartyId(null);
+      },
+      onError: (error) => {
+        notify.error("Failed to delete party");
+        console.error("Delete party error:", error);
+      },
+    },
   );
 
   useEffect(() => {
@@ -61,7 +82,7 @@ export function useCaseParties(
     if (currentParty.id) {
       // Edit
       newParties = newParties.map((p) =>
-        p.id === currentParty.id ? ({ ...p, ...currentParty } as Party) : p
+        p.id === currentParty.id ? ({ ...p, ...currentParty } as Party) : p,
       );
     } else {
       // Add
@@ -94,22 +115,21 @@ export function useCaseParties(
       setDeletePartyId(id);
       deleteModal.open();
     },
-    [deleteModal]
+    [deleteModal],
   );
 
   const confirmDelete = useCallback(() => {
     if (deletePartyId) {
-      onUpdate(parties.filter((p) => p.id !== deletePartyId));
-      setDeletePartyId(null);
+      deletePartyMutation(deletePartyId);
     }
-  }, [deletePartyId, onUpdate, parties]);
+  }, [deletePartyId, deletePartyMutation]);
 
   const openEdit = useCallback(
     (party: Party) => {
       setCurrentParty(party);
       partyModal.open();
     },
-    [partyModal]
+    [partyModal],
   );
 
   const openNew = useCallback(() => {

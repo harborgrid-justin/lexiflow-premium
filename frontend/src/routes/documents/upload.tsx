@@ -7,7 +7,6 @@
  */
 
 import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
 import { useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';

@@ -18,19 +18,18 @@ import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, Res
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
+import { usePleadingData } from '../hooks/usePleadingData';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Types
-import { Pleading } from '@/types';
 
 // ============================================================================
 // COMPONENT
@@ -38,11 +37,7 @@ import { Pleading } from '@/types';
 
 export const PleadingAnalytics: React.FC = () => {
     const { theme } = useTheme();
-
-    const { data: pleadings = [] } = useQuery<Pleading[]>(
-        ['pleadings', 'all'],
-        () => DataService.pleadings.getAll()
-    );
+    const { pleadings, isLoading } = usePleadingData();
 
     // Fetch clause usage data
     const { data: clauseDataFromApi = [] } = useQuery<Array<{ name?: string; title?: string; count?: number }>>(

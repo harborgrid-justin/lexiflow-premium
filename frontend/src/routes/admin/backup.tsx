@@ -9,13 +9,24 @@
 
 import { adminApi } from '@/lib/frontend-api';
 import { BackupManager, type Backup, type BackupSchedule, type BackupStats } from '@/routes/admin/components/BackupManager';
-import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
 
 // Alias for compatibility
-const BackupService = DataService.backup;
+const BackupService = adminApi.backups;
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
 
 // ============================================================================
 // Types
@@ -54,20 +65,22 @@ export function meta() {
 // ============================================================================
 
 export async function loader(): Promise<LoaderData> {
-  const [snapshotsResult, schedulesResult] = await Promise.all([
-    adminApi.getBackupSnapshots({ page: 1, limit: 100 }),
-    adminApi.getBackupSchedules({ page: 1, limit: 100 }),
+  const [snapshots, schedulesData] = await Promise.all([
+    BackupService.getAll(),
+    BackupService.getSchedules(),
   ]);
 
-  const snapshots = snapshotsResult.ok ? snapshotsResult.data.data : [];
-  const schedulesData = schedulesResult.ok ? schedulesResult.data.data : [];
-
-  // Map snapshots to UI Backup type
-  const backups: Backup[] = snapshots.map(s => ({
-    ...s,
+  // Map API Backup to BackupSnapshot + UI fields
+  const backups: Backup[] = snapshots.map((s) => ({
+    id: s.id,
+    name: s.name,
+    type: s.type as Backup['type'],
+    created: s.startedAt, // Map startedAt to created for BackupSnapshot compatibility
+    size: s.size ? (typeof s.size === 'number' ? formatBytes(s.size) : String(s.size)) : '0 Bytes',
+    status: s.status === 'completed' ? 'Completed' : s.status === 'in_progress' ? 'Running' : 'Failed',
     retentionDays: 30, // Default or fetch from policy
-    storageLocation: 'local', // Default
-    createdAt: s.created || s.createdAt,
+    storageLocation: 'local' as const, // Default
+    createdAt: s.startedAt, // Also provide createdAt for UI convenience
   }));
 
   const schedules: BackupSchedule[] = (schedulesData as ApiBackupSchedule[]).map((s) => ({
@@ -117,7 +130,7 @@ export async function action({ request }: ActionFunctionArgs) {
     case "create-backup": {
       const type = formData.get("type") as 'full' | 'incremental';
       try {
-        await BackupService.createSnapshot(type === 'full' ? 'Full' : 'Incremental');
+        await BackupService.create({ name: `${type}-backup-${Date.now()}`, type });
         return { success: true, message: `Creating ${type} backup...` };
       } catch {
         return { success: false, error: "Failed to create backup" };
@@ -127,7 +140,7 @@ export async function action({ request }: ActionFunctionArgs) {
     case "restore": {
       const backupId = formData.get("backupId") as string;
       try {
-        await BackupService.restoreSnapshot(backupId);
+        await BackupService.restore(backupId);
         return { success: true, message: `Restoring from backup ${backupId}...` };
       } catch {
         return { success: false, error: "Failed to restore backup" };
@@ -137,7 +150,7 @@ export async function action({ request }: ActionFunctionArgs) {
     case "delete-backup": {
       const backupId = formData.get("backupId") as string;
       try {
-        await BackupService.deleteSnapshot(backupId);
+        await BackupService.delete(backupId);
         return { success: true, message: `Backup ${backupId} deleted` };
       } catch {
         return { success: false, error: "Failed to delete backup" };

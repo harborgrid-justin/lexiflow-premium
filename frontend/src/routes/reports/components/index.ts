@@ -14,11 +14,11 @@
 // VIEW COMPONENTS
 // ============================================================================
 
-export { ReportCard } from "./ReportCard";
 export { ReportFilters } from "./ReportFilters";
-export { ReportGrid } from "./ReportGrid";
+export { ReportRow } from "./ReportRow";
 export { ReportsCenter } from "./ReportsCenter";
 export { ReportStats } from "./ReportStats";
+export { ReportTable, ReportTable } from "./ReportTable";
 
 // ============================================================================
 // TYPES

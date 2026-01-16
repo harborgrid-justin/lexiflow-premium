@@ -22,7 +22,7 @@ import { Suspense, lazy } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useResearchTool } from './hooks/useResearchTool';
+import { useResearchTool } from '../hooks/useResearchTool';
 
 // Hooks & Context
 import { useThemeContext } from "@/hooks/useTheme";

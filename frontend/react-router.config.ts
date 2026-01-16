@@ -11,7 +11,7 @@ import type { Config } from "@react-router/dev/config";
 
 export default {
   // Enable type generation for routes
-  ssr: true,
+  ssr: false, // Enable SSR - required for loaders and actions
 
   // App directory containing routes
   appDirectory: "src",
@@ -19,12 +19,6 @@ export default {
   // Server build directory for SSR
   serverBuildFile: "index.js",
 
-  // Configure pre-rendering for static pages
-  async prerender() {
-    return [
-      "/",
-      "/dashboard",
-      // Add more static routes here that can be pre-rendered at build time
-    ];
-  },
+  // Note: Pre-rendering is not compatible with dynamic loaders/actions
+  // If you need static generation, use SSG on a per-route basis
 } satisfies Config;

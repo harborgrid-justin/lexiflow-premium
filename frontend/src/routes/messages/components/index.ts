@@ -1,13 +1,12 @@
-// components/messenger/index.ts
+/**
+ * Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ */
 
-export { ChatHeader } from './ChatHeader';
-export { ChatInput } from './ChatInput';
-export { ConversationRow } from './ConversationRow';
-export { MessageList } from './MessageList';
-export { MessengerArchived } from './MessengerArchived';
-export { MessengerChatList } from './MessengerChatList';
-export { MessengerChatWindow } from './MessengerChatWindow';
-export { MessengerContacts } from './MessengerContacts';
-export { MessengerFiles } from './MessengerFiles';
-export { MessengerInbox } from './MessengerInbox';
-export { default as SecureMessenger } from './SecureMessenger';
+// Components exported here should be pure presentation
+export {};

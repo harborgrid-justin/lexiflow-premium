@@ -22,8 +22,8 @@ import { Clock, FileText, Loader2, Paperclip, Send, Sparkles, X } from 'lucide-r
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { Attachment } from '@/hooks/useSecureMessenger';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
@@ -46,7 +46,7 @@ interface ChatInputProps {
   isAiThinking?: boolean;
 }
 
-import { useChatInput } from './hooks/useChatInput';
+import { useChatInput } from '../hooks/useChatInput';
 
 export const ChatInput = ({
   inputText, setInputText, pendingAttachments, setPendingAttachments,

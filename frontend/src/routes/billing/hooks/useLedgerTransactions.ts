@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
-import { DataService } from "@/services/data/data-service.service";
 import { useNotify } from "@/hooks/useNotify";
+import { useMutation } from "@/hooks/useQueryHooks";
 import { useWindow } from "@/providers";
+import { DataService } from "@/services/data/data-service.service";
+import { useCallback } from "react";
 import { TransactionData } from "../components/TransactionForm";
 
 export type LedgerTransactionStatus =
@@ -17,7 +18,7 @@ export interface LedgerTransactionState {
 export interface LedgerTransactionActions {
   addTransaction: (
     data: TransactionData,
-    windowId?: string
+    windowId?: string,
   ) => Promise<boolean>;
 }
 
@@ -25,32 +26,42 @@ export function useLedgerTransactions(): [
   LedgerTransactionState,
   LedgerTransactionActions,
 ] {
-  const { success: notifySuccess, error: notifyError } = useNotify();
+  const notify = useNotify();
   const { closeWindow } = useWindow();
-  const [status, setStatus] = useState<LedgerTransactionStatus>("idle");
+
+  const { mutate: addTransactionMutation, isLoading } = useMutation(
+    async (data: TransactionData) => {
+      return await DataService.transactions.add(data);
+    },
+    {
+      onSuccess: (_, variables) => {
+        notify.success(
+          `Transaction logged successfully${variables.receiptFile ? " with receipt" : ""}`,
+        );
+      },
+      onError: (error) => {
+        notify.error("Failed to log transaction");
+        console.error("Transaction error:", error);
+      },
+    },
+  );
 
   const addTransaction = useCallback(
     async (data: TransactionData, windowId?: string) => {
-      setStatus("submitting");
       try {
-        await DataService.transactions.add(data);
-        notifySuccess(
-          `Transaction logged successfully${data.receiptFile ? " with receipt" : ""}`
-        );
+        await addTransactionMutation(data);
         if (windowId) {
           closeWindow(windowId);
         }
-        setStatus("success");
         return true;
       } catch (err) {
-        notifyError("Failed to log transaction");
-        console.error("Transaction error:", err);
-        setStatus("error");
         return false;
       }
     },
-    [notifySuccess, notifyError, closeWindow]
+    [addTransactionMutation, closeWindow],
   );
+
+  const status: LedgerTransactionStatus = isLoading ? "submitting" : "idle";
 
   return [{ status }, { addTransaction }];
 }

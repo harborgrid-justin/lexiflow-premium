@@ -19,6 +19,8 @@
  * ```
  */
 
+import { useNotify } from "@/hooks/useNotify";
+import { queryClient, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import {
   Case,
@@ -34,8 +36,6 @@ import {
 } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useEffect, useMemo, useState } from "react";
-import { useNotify } from "./useNotify";
-import { queryClient, useQuery } from "./useQueryHooks";
 
 // ============================================================================
 // TYPES

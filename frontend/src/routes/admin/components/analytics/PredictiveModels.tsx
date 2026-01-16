@@ -15,7 +15,6 @@ import { AlertCircle, BrainCircuit, Target, TrendingUp } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { api } from '@/api';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";

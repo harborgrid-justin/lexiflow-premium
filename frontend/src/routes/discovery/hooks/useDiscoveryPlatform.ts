@@ -30,13 +30,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/query-keys.service";
-import { queryClient, useMutation, useQuery } from "./useQueryHooks";
 
 // Hooks & Context
 import { useNotify } from "@/hooks/useNotify";
-import { useSessionStorage } from "./useSessionStorage";
+import { useSessionStorage } from "@/hooks/useSessionStorage";
 
 // Utils & Constants
 import {

@@ -1,25 +1,28 @@
-import { queryClient, useMutation, useQuery } from "@/hooks/backend";
+import { useNotify } from "@/hooks/useNotify";
+import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/query-keys.service";
 // ✅ Migrated to backend API (2025-12-21)
 import { Category } from "./EntitySidebar";
 
 export const useAdminData = (activeCategory: Category) => {
+  const notify = useNotify();
+
   // Independent Queries
   const usersQuery = useQuery(queryKeys.users.all(), () =>
-    DataService.users.getAll()
+    DataService.users.getAll(),
   );
   const casesQuery = useQuery(queryKeys.cases.all(), () =>
-    DataService.cases.getAll()
+    DataService.cases.getAll(),
   );
   const clientsQuery = useQuery(queryKeys.clients.all(), () =>
-    DataService.clients.getAll()
+    DataService.clients.getAll(),
   );
   const clausesQuery = useQuery(queryKeys.clauses.all(), () =>
-    DataService.clauses.getAll()
+    DataService.clauses.getAll(),
   );
   const docsQuery = useQuery(queryKeys.documents.all(), () =>
-    DataService.documents.getAll()
+    DataService.documents.getAll(),
   );
 
   const dataMap: Record<Category, unknown[]> = {
@@ -40,21 +43,21 @@ export const useAdminData = (activeCategory: Category) => {
             ? await DataService.users.add(payload.item)
             : await DataService.users.update(
                 (payload.item as { id: string }).id,
-                payload.item
+                payload.item,
               );
         case "cases":
           return payload.isNew
             ? await DataService.cases.add(payload.item)
             : await DataService.cases.update(
                 (payload.item as { id: string }).id,
-                payload.item
+                payload.item,
               );
         case "clients":
           return payload.isNew
             ? await DataService.communications.addContact(payload.item)
             : await DataService.communications.updateContact(
                 (payload.item as Record<string, unknown>).id as string,
-                payload.item
+                payload.item,
               );
         case "clauses":
           return payload.isNew
@@ -69,14 +72,14 @@ export const useAdminData = (activeCategory: Category) => {
                 }
               ).update(
                 (payload.item as Record<string, unknown>).id as string,
-                payload.item
+                payload.item,
               );
         case "documents":
           return payload.isNew
             ? await DataService.documents.add(payload.item)
             : await DataService.documents.update(
                 (payload.item as Record<string, unknown>).id as string,
-                payload.item
+                payload.item,
               );
         default:
           return payload.item;
@@ -106,12 +109,12 @@ export const useAdminData = (activeCategory: Category) => {
           newData = currentData.map((i: unknown) =>
             (i as { id: string }).id === (savedItem as { id: string }).id
               ? savedItem
-              : i
+              : i,
           );
         }
         queryClient.setQueryData(key, newData);
       },
-    }
+    },
   );
 
   const { mutate: deleteItem } = useMutation(
@@ -136,10 +139,10 @@ export const useAdminData = (activeCategory: Category) => {
           queryClient.getQueryState<unknown[]>(key)?.data || [];
         queryClient.setQueryData(
           key,
-          currentData.filter((i: unknown) => (i as { id: string }).id !== id)
+          currentData.filter((i: unknown) => (i as { id: string }).id !== id),
         );
       },
-    }
+    },
   );
 
   return {

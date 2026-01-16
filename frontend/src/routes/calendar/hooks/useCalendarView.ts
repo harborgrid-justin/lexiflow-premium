@@ -22,16 +22,18 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/data-service.service';
+import { useQuery } from "@/hooks/useQueryHooks";
+import { DataService } from "@/services/data/data-service.service";
+import { queryKeys } from "@/utils/queryKeys";
 
 // Types
-import { CalendarEventItem } from '@/types';
+import { CalendarEventItem } from "@/types";
 
 // ============================================================================
 // TYPES
@@ -72,43 +74,51 @@ export interface UseCalendarViewReturn {
  */
 export function useCalendarView(): UseCalendarViewReturn {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [events, setEvents] = useState<CalendarEventItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-      const loadEvents = async () => {
-          setIsLoading(true);
-          try {
-            const data = await DataService.calendar.getEvents();
-            setEvents(Array.isArray(data) ? data : []);
-          } catch (error) {
-            console.error('Failed to load calendar events:', error);
-            setEvents([]);
-          }
-          setIsLoading(false);
-      };
-      loadEvents();
-  }, []);
+  // Use standardized useQuery pattern for data fetching
+  const { data: events = [], isLoading } = useQuery(
+    queryKeys.calendar.events(),
+    async () => {
+      const data = await DataService.calendar.getEvents();
+      return Array.isArray(data) ? data : [];
+    },
+  );
 
-  const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
-  const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
+  const daysInMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0,
+  ).getDate();
+  const firstDay = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    1,
+  ).getDay();
 
-  const getEventsForDay = useCallback((day: number) => {
-    const dateStr = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    // Ensure events is always an array before filtering
-    const eventsArray = Array.isArray(events) ? events : [];
-    return eventsArray.filter(e => e.date === dateStr);
-  }, [currentMonth, events]);
+  const getEventsForDay = useCallback(
+    (day: number) => {
+      const dateStr = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      // Ensure events is always an array before filtering
+      const eventsArray = Array.isArray(events) ? events : [];
+      return eventsArray.filter((e) => e.date === dateStr);
+    },
+    [currentMonth, events],
+  );
 
   const changeMonth = useCallback((offset: number) => {
-    setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + offset, 1));
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + offset, 1),
+    );
   }, []);
 
   const goToToday = useCallback(() => {
     setCurrentMonth(new Date());
   }, []);
 
-  const monthLabel = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+  const monthLabel = currentMonth.toLocaleString("default", {
+    month: "long",
+    year: "numeric",
+  });
 
   return {
     currentMonth,
@@ -119,6 +129,6 @@ export function useCalendarView(): UseCalendarViewReturn {
     changeMonth,
     goToToday,
     monthLabel,
-    isLoading
+    isLoading,
   };
 }

@@ -7,7 +7,6 @@
  */
 
 import { documentsApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';

@@ -3,3 +3,4 @@
  * @deprecated Import from "./useStrategyCanvas" folder
  */
 export * from "./useStrategyCanvas";
+export * from "./useWarRoomData";

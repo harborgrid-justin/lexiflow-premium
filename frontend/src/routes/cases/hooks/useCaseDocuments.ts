@@ -1,66 +1,87 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers';
-import { queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { queryKeys } from '@/utils/queryKeys';
-import { WorkflowTask, LegalDocument } from '@/types';
-import { useFetcher } from 'react-router';
+import { useNotify } from "@/hooks/useNotify";
+import { queryClient, useMutation } from "@/hooks/useQueryHooks";
+import { useWindow } from "@/providers";
+import { DataService } from "@/services/data/data-service.service";
+import { LegalDocument, WorkflowTask } from "@/types";
+import { queryKeys } from "@/utils/queryKeys";
+import { useCallback, useRef, useState } from "react";
 
 export function useCaseDocuments(
-  documents: LegalDocument[], 
-  onDocumentCreated?: (doc: LegalDocument) => void
+  documents: LegalDocument[],
+  onDocumentCreated?: (doc: LegalDocument) => void,
 ) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const notify = useNotify();
   const { openWindow, closeWindow } = useWindow();
-  const fetcher = useFetcher<{ success: boolean; message?: string; error?: string; document?: LegalDocument }>();
 
   const [taskModalDoc, setTaskModalDoc] = useState<LegalDocument | null>(null);
-  const isUploading = fetcher.state !== "idle";
   const [logAsEvidence, setLogAsEvidence] = useState(false);
 
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data) {
-      if (fetcher.data.success) {
-        notify.success(fetcher.data.message || "Document uploaded successfully");
-        if (logAsEvidence) {
+  // Use standardized useMutation for document upload
+  const { mutate: uploadDocument, isLoading: isUploading } = useMutation(
+    async (formData: FormData) => {
+      const file = formData.get("file") as File;
+      const title = formData.get("title") as string;
+      const logEvidence = formData.get("logAsEvidence") === "true";
+
+      // Upload document through DataService
+      const result = await DataService.documents.add({
+        title,
+        file,
+        category: "Case Document",
+        tags: logEvidence ? ["evidence"] : [],
+      });
+
+      return { document: result, logEvidence };
+    },
+    {
+      onSuccess: ({ document, logEvidence }) => {
+        notify.success("Document uploaded successfully");
+        if (logEvidence) {
           notify.success("Document logged to Evidence Vault.");
         }
-        if (fileInputRef.current) fileInputRef.current.value = '';
+        if (fileInputRef.current) fileInputRef.current.value = "";
         setLogAsEvidence(false);
-        if (onDocumentCreated && fetcher.data.document) {
-          onDocumentCreated(fetcher.data.document);
+        if (onDocumentCreated && document) {
+          onDocumentCreated(document as LegalDocument);
         }
-      } else {
-        notify.error(fetcher.data.error || "Failed to upload document");
+        queryClient.invalidate(queryKeys.documents.all());
+      },
+      onError: (error) => {
+        notify.error("Failed to upload document");
+        console.error("Document upload error:", error);
+      },
+    },
+  );
+
+  const handleTaskSaved = useCallback(
+    (task: WorkflowTask) => {
+      DataService.tasks.add(task);
+      queryClient.invalidate(queryKeys.tasks.all());
+      queryClient.invalidate(queryKeys.dashboard.stats());
+      notify.success(`Task "${task.title}" created.`);
+    },
+    [notify],
+  );
+
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+        const file = files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("title", file.name);
+        formData.append("logAsEvidence", String(logAsEvidence));
+
+        uploadDocument(formData);
       }
-    }
-  }, [fetcher.state, fetcher.data, notify, logAsEvidence, onDocumentCreated]);
-
-  const handleTaskSaved = useCallback((task: WorkflowTask) => {
-    DataService.tasks.add(task);
-    queryClient.invalidate(queryKeys.tasks.all());
-    queryClient.invalidate(queryKeys.dashboard.stats());
-    notify.success(`Task "${task.title}" created.`);
-  }, [notify]);
-
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const files = e.target.files;
-      if (!files || files.length === 0) return;
-      const file = files[0];
-      if (!file) return;
-      
-      const formData = new FormData();
-      formData.append("intent", "add-document");
-      formData.append("file", file);
-      formData.append("title", file.name);
-      formData.append("logAsEvidence", String(logAsEvidence));
-
-      fetcher.submit(formData, { method: "post", encType: "multipart/form-data" });
-    }
-  }, [fetcher, logAsEvidence]);
+    },
+    [uploadDocument, logAsEvidence],
+  );
 
   const handleCloseTaskModal = useCallback(() => setTaskModalDoc(null), []);
 
@@ -75,6 +96,6 @@ export function useCaseDocuments(
     handleFileSelect,
     handleCloseTaskModal,
     openWindow,
-    closeWindow
+    closeWindow,
   };
 }

@@ -74,10 +74,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { DataService } from "@/services/data/data-service.service";
 
 // Configuration
-import { TIME_TRACKER_DEFAULT_RATE, TIME_TRACKER_MIN_BILLABLE_SECONDS, TIME_TRACKER_INTERVAL_MS as TIMER_INTERVAL_MS } from "@/config/features/hooks.config";
+import {
+  TIME_TRACKER_DEFAULT_RATE,
+  TIME_TRACKER_MIN_BILLABLE_SECONDS,
+  TIME_TRACKER_INTERVAL_MS as TIMER_INTERVAL_MS,
+} from "@/config/features/hooks.config";
 
 // Hooks
-import { useNotify } from "./useNotify";
+import { useNotify } from "@/hooks/useNotify";
 
 // Types
 import { CaseId, TimeEntry, UserId, UUID } from "@/types";
@@ -142,7 +146,7 @@ export interface UseTimeTrackerReturn {
  * @returns Time tracker interface
  */
 export function useTimeTracker(
-  options: UseTimeTrackerOptions = {}
+  options: UseTimeTrackerOptions = {},
 ): UseTimeTrackerReturn {
   // ============================================================================
   // CONFIGURATION & DEPENDENCIES
@@ -216,22 +220,22 @@ export function useTimeTracker(
   useEffect(() => {
     if (!validateRate(rate)) {
       notify.warning(
-        `Invalid rate: ${rate}. Using default rate: ${TIME_TRACKER_DEFAULT_RATE}`
+        `Invalid rate: ${rate}. Using default rate: ${TIME_TRACKER_DEFAULT_RATE}`,
       );
     }
     if (!validateCaseId(caseId)) {
       notify.warning(
-        "Invalid case ID. Time entries may not be properly attributed."
+        "Invalid case ID. Time entries may not be properly attributed.",
       );
     }
     if (!validateUserId(userId)) {
       notify.warning(
-        "Invalid user ID. Time entries may not be properly attributed."
+        "Invalid user ID. Time entries may not be properly attributed.",
       );
     }
 
     console.log(
-      `[useTimeTracker] Initialized with caseId: ${caseId}, userId: ${userId}, rate: ${rate}`
+      `[useTimeTracker] Initialized with caseId: ${caseId}, userId: ${userId}, rate: ${rate}`,
     );
   }, [
     caseId,
@@ -288,7 +292,7 @@ export function useTimeTracker(
       if (isNaN(totalSeconds) || totalSeconds < 0) {
         console.error(
           "[useTimeTracker.formatTime] Invalid totalSeconds:",
-          totalSeconds
+          totalSeconds,
         );
         return "00:00:00";
       }
@@ -310,7 +314,7 @@ export function useTimeTracker(
    */
   const formattedTime = useMemo(
     () => formatTime(seconds),
-    [seconds, formatTime]
+    [seconds, formatTime],
   );
 
   /**
@@ -380,10 +384,10 @@ export function useTimeTracker(
         setSeconds(0);
         setIsActive(false);
         notify.info(
-          `Time entry ignored (less than ${TIME_TRACKER_MIN_BILLABLE_SECONDS / 60} minute).`
+          `Time entry ignored (less than ${TIME_TRACKER_MIN_BILLABLE_SECONDS / 60} minute).`,
         );
         console.log(
-          `[useTimeTracker] Entry ignored: ${seconds}s < ${TIME_TRACKER_MIN_BILLABLE_SECONDS}s`
+          `[useTimeTracker] Entry ignored: ${seconds}s < ${TIME_TRACKER_MIN_BILLABLE_SECONDS}s`,
         );
         return;
       }
@@ -399,7 +403,7 @@ export function useTimeTracker(
         !validateRate(rate)
       ) {
         notify.error(
-          "Invalid configuration. Please check case ID, user ID, and rate."
+          "Invalid configuration. Please check case ID, user ID, and rate.",
         );
         return;
       }
@@ -431,7 +435,7 @@ export function useTimeTracker(
       notify.success(`Logged ${durationMinutes} minutes to Billing.`);
 
       console.log(
-        `[useTimeTracker] Time entry created successfully: ${entry.id}`
+        `[useTimeTracker] Time entry created successfully: ${entry.id}`,
       );
     } catch (error) {
       console.error("[useTimeTracker.stop] Error creating time entry:", error);

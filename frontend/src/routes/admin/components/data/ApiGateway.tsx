@@ -10,12 +10,11 @@ import { useState } from 'react';
 
 import { ChevronRight, Loader2, Server } from 'lucide-react';
 
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/data-service.service';
-import { ApiMethod, ApiServiceSpec } from '@/types';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { encodeHtmlEntities } from '@/lib/sanitize';
+import { ApiMethod, ApiServiceSpec } from '@/types';
 
 // Internal CodeBlock component for syntax highlighting
 function CodeBlock({ code }: { code: string }): React.JSX.Element {

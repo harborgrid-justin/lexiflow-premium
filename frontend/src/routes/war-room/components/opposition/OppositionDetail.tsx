@@ -11,14 +11,13 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Activity, FileText, Gavel, Loader2, Scale, X } from 'lucide-react';
+import React from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";

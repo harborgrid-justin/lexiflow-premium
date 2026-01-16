@@ -44,7 +44,7 @@ import { DataService } from "@/services/data/data-service.service";
 import { Scheduler } from "@/utils/scheduler";
 
 // Types
-import { Contact } from '@/lib/frontend-api';
+import { Contact } from "@/lib/frontend-api";
 import { Attachment, Conversation, Message } from "@/types";
 
 // Re-export types for consumers
@@ -113,7 +113,7 @@ export interface UseSecureMessengerReturn {
  */
 export function useSecureMessenger(): UseSecureMessengerReturn {
   const [view, setView] = useState<"chats" | "contacts" | "files" | "archived">(
-    "chats"
+    "chats",
   );
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [contactsList, setContactsList] = useState<Contact[]>([]);
@@ -122,7 +122,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
   const [searchTerm, setSearchTerm] = useState("");
   const [inputText, setInputText] = useState("");
   const [pendingAttachments, setPendingAttachments] = useState<Attachment[]>(
-    []
+    [],
   );
   const [isPrivilegedMode, setIsPrivilegedMode] = useState(false);
 
@@ -161,7 +161,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
         });
       });
       const filtered = files.filter((f) =>
-        f.name.toLowerCase().includes(searchTerm.toLowerCase())
+        f.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setAllFiles(filtered);
     });
@@ -186,7 +186,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
       (c) =>
         c.name.toLowerCase().includes(term) ||
         c.role.toLowerCase().includes(term) ||
-        c.messages.some((m) => m.text.toLowerCase().includes(term))
+        c.messages.some((m) => m.text.toLowerCase().includes(term)),
     );
   }, [sortedConversations, searchTerm]);
 
@@ -196,7 +196,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
     return safeContactsList.filter(
       (c) =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (c.role || "").toLowerCase().includes(searchTerm.toLowerCase())
+        (c.role || "").toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [contactsList, searchTerm]);
 
@@ -210,8 +210,8 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
     if (activeConvId) {
       setConversations((prev) =>
         prev.map((c) =>
-          c.id === activeConvId ? { ...c, draft: inputText } : c
-        )
+          c.id === activeConvId ? { ...c, draft: inputText } : c,
+        ),
       );
     }
 
@@ -222,7 +222,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
     setActiveConvId(id);
 
     setConversations((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, unread: 0 } : c))
+      prev.map((c) => (c.id === id ? { ...c, unread: 0 } : c)),
     );
   };
 
@@ -252,7 +252,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
           };
         }
         return c;
-      })
+      }),
     );
 
     // Persist
@@ -272,11 +272,11 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
                 messages: c.messages.map((m) =>
                   m.id === newMessage.id
                     ? { ...m, status: "delivered" as const }
-                    : m
+                    : m,
                 ),
               }
-            : c
-        )
+            : c,
+        ),
       );
     }, 1000);
   };

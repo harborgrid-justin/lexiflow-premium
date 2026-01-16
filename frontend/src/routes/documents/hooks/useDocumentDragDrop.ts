@@ -28,17 +28,15 @@ import React, { useRef, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
-import { DocumentsApiService } from "@/api/admin/documents-api";
+import { useMutation } from "@/hooks/useQueryHooks";
+import { DataService } from "@/services/data/data-service.service";
 import { queryClient } from "@/services/infrastructure/query-client.service";
 import { queryKeys } from "@/utils/query-keys.service";
 
-const documentsApi = new DocumentsApiService();
-
 // Hooks & Context
-import { useNotify } from "./useNotify";
+import { useNotify } from "@/hooks/useNotify";
 
 // Types
-import { CaseId } from "@/types";
 
 // ========================================
 // TYPES
@@ -74,12 +72,41 @@ export interface UseDocumentDragDropReturn {
  * @returns Drag-drop event handlers
  */
 export function useDocumentDragDrop(
-  currentFolder: string
+  currentFolder: string,
 ): UseDocumentDragDropReturn {
   const [isDragging, setIsDragging] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const dragCounter = useRef(0);
   const notify = useNotify();
+
+  // Use standardized useMutation for document upload
+  const { mutate: uploadFiles, isLoading: isUploading } = useMutation(
+    async (files: File[]) => {
+      const results = await Promise.all(
+        files.map((file) =>
+          DataService.documents.add({
+            title: file.name,
+            file,
+            category: currentFolder || "General",
+          }),
+        ),
+      );
+      return results;
+    },
+    {
+      onSuccess: (results) => {
+        notify.success(`${results.length} file(s) uploaded successfully`);
+        queryClient.invalidate(queryKeys.documents.all());
+      },
+      onError: (error) => {
+        notify.error("Failed to upload files");
+        console.error("File upload error:", error);
+      },
+    },
+  );
+
+  const setIsUploading = (uploading: boolean) => {
+    // Provided for backward compatibility
+  };
 
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
@@ -103,27 +130,8 @@ export function useDocumentDragDrop(
     dragCounter.current = 0;
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setIsUploading(true);
-      try {
-        for (let i = 0; i < e.dataTransfer.files.length; i++) {
-          const file = e.dataTransfer.files[i];
-          if (file) {
-            await documentsApi.upload(file, {
-              caseId: "General" as CaseId,
-              type: file.type.split('/')[1]?.toUpperCase() || 'FILE',
-              title: file.name,
-              status: 'Draft',
-              tags: [currentFolder === "root" ? "General" : currentFolder]
-            });
-          }
-        }
-        queryClient.invalidate(queryKeys.documents.all());
-        notify.success(`Uploaded ${e.dataTransfer.files.length} documents.`);
-      } catch {
-        notify.error("Failed to upload dropped files.");
-      } finally {
-        setIsUploading(false);
-      }
+      const filesArray = Array.from(e.dataTransfer.files);
+      uploadFiles(filesArray);
     }
   };
 

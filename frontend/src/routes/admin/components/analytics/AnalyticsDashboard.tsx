@@ -26,7 +26,6 @@ import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Services
-import { api } from '@/api';
 
 // Utils & Config
 import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';

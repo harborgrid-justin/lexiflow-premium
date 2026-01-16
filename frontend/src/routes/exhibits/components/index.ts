@@ -1,6 +1,12 @@
-// components/exhibits/index.ts
+/**
+ * Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ */
 
-export { default as ExhibitManager } from './ExhibitManager';
-export { ExhibitStats } from './ExhibitStats';
-export { ExhibitTable } from './ExhibitTable';
-export { StickerDesigner } from './StickerDesigner';
+// Components exported here should be pure presentation
+export {};

@@ -27,7 +27,6 @@ import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { useCaseAnalytics, type DateRange } from '../../hooks/useCaseAnalytics';
 import {
   ArrowDown,
   ArrowUp,
@@ -40,6 +39,7 @@ import {
   Users
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useCaseAnalytics, type DateRange } from '../../hooks/useCaseAnalytics';
 
 export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {
   // Guideline 34: Side-effect free context read
@@ -54,105 +54,93 @@ export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }
     practiceAreaFilter
   );
 
-  const totalHours = timeEntries.reduce((sum, t) => sum + (t.duration || 0), 0);
-  const capacity = 180 * (timeEntries?.length || 1); // Assuming 180h/month per person
-  const utilization = capacity > 0 ? (totalHours / capacity) * 100 : 0;
+  return (
+    <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>
+      <div className={cn('border-b px-6 py-4', isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+        <div className="flex items-center justify-end gap-3">
+          <select
+            value={dateRange}
+            onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
+            className={cn(
+              'px-4 py-2 rounded-lg border text-sm',
+              isDark
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          >
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+            <option value="90d">Last 90 Days</option>
+            <option value="ytd">Year to Date</option>
+            <option value="all">All Time</option>
+          </select>
+          <Button variant="outline" size="sm">
+            <Download className="w-4 h-4 mr-2" />
+            Export Report
+          </Button>
+        </div>
+      </div>
 
-  return {
-    totalMatters: filteredMatters.length,
-    revenue: totalRevenue,
-    avgResolution,
-    utilization,
-  };
-}, [matters, timeEntries, invoices, dateRange, practiceAreaFilter]);
+      <div className="flex-1 overflow-auto p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <AnalyticsCard
+            icon={Briefcase}
+            title="Total Matters"
+            value={metrics.totalMatters.toString()}
+            change={`${dateRange} period`}
+            isDark={isDark}
+          />
+          <AnalyticsCard
+            icon={DollarSign}
+            title="Revenue"
+            value={`$${(metrics.revenue / 1000000).toFixed(1)}M`}
+            change="From invoices"
+            isDark={isDark}
+          />
+          <AnalyticsCard
+            icon={Clock}
+            title="Avg Resolution Time"
+            value={`${metrics.avgResolution} days`}
+            change="Closed matters"
+            isDark={isDark}
+          />
+          <AnalyticsCard
+            icon={Users}
+            title="Team Utilization"
+            value={`${Math.round(metrics.utilization)}%`}
+            change="Based on time entries"
+            isDark={isDark}
+          />
+        </div>
 
-return (
-  <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>
-    <div className={cn('border-b px-6 py-4', isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
-      <div className="flex items-center justify-end gap-3">
-        <select
-          value={dateRange}
-          onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
-          className={cn(
-            'px-4 py-2 rounded-lg border text-sm',
-            isDark
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        >
-          <option value="7d">Last 7 Days</option>
-          <option value="30d">Last 30 Days</option>
-          <option value="90d">Last 90 Days</option>
-          <option value="ytd">Year to Date</option>
-          <option value="all">All Time</option>
-        </select>
-        <Button variant="outline" size="sm">
-          <Download className="w-4 h-4 mr-2" />
-          Export Report
-        </Button>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="p-6">
+            <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
+              Revenue Trend
+            </h3>
+            <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
+              <LineChart className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
+              <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
+                Chart will be rendered here
+              </span>
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
+              Practice Area Distribution
+            </h3>
+            <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
+              <PieChart className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
+              <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
+                Chart will be rendered here
+              </span>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
-
-    <div className="flex-1 overflow-auto p-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <AnalyticsCard
-          icon={Briefcase}
-          title="Total Matters"
-          value={metrics.totalMatters.toString()}
-          change={`${dateRange} period`}
-          isDark={isDark}
-        />
-        <AnalyticsCard
-          icon={DollarSign}
-          title="Revenue"
-          value={`$${(metrics.revenue / 1000000).toFixed(1)}M`}
-          change="From invoices"
-          isDark={isDark}
-        />
-        <AnalyticsCard
-          icon={Clock}
-          title="Avg Resolution Time"
-          value={`${metrics.avgResolution} days`}
-          change="Closed matters"
-          isDark={isDark}
-        />
-        <AnalyticsCard
-          icon={Users}
-          title="Team Utilization"
-          value={`${Math.round(metrics.utilization)}%`}
-          change="Based on time entries"
-          isDark={isDark}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
-          <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
-            Revenue Trend
-          </h3>
-          <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
-            <LineChart className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
-            <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
-              Chart will be rendered here
-            </span>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
-            Practice Area Distribution
-          </h3>
-          <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
-            <PieChart className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
-            <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
-              Chart will be rendered here
-            </span>
-          </div>
-        </Card>
-      </div>
-    </div>
-  </div>
-);
+  );
 };
 
 const AnalyticsCard: React.FC<{

@@ -28,9 +28,9 @@ import React, { useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/atoms/Button';
 import { ErrorState } from '@/components/molecules/ErrorState';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { ExhibitStats } from './ExhibitStats';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
@@ -42,7 +42,6 @@ import { cn } from '@/lib/cn';
 
 // Data & Types
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 import { CaseId, TrialExhibit } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 import { getTodayString } from '@/lib/dateUtils';

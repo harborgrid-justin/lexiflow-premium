@@ -1,6 +1,10 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { StorageUtils } from '@/utils/storage';
 import React, { createContext, useCallback, useContext, useMemo, useSyncExternalStore, useTransition } from 'react';
-
 /**
  * CaseContext - React v18 Concurrent-Safe Implementation
  *

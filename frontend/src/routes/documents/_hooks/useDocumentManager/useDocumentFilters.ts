@@ -3,9 +3,9 @@
  * @module hooks/useDocumentManager/useDocumentFilters
  */
 
+import { useWorkerSearch } from "@/hooks/useWorkerSearch";
 import type { LegalDocument } from "@/types";
 import { useMemo } from "react";
-import { useWorkerSearch } from "../useWorkerSearch";
 import { SEARCH_FIELDS } from "./constants";
 import {
   applyContextFilters,

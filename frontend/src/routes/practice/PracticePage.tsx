@@ -2,7 +2,9 @@
  * Practice Domain - Page Component
  */
 
-import { useLoaderData } from 'react-router';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import type { PracticeLoaderData } from './loader';
 import { PracticeProvider } from './PracticeProvider';
 import { PracticeView } from './PracticeView';
@@ -11,9 +13,15 @@ export function PracticePage() {
   const initialData = useLoaderData() as PracticeLoaderData;
 
   return (
-    <PracticeProvider initialData={initialData}>
-      <PracticeView />
-    </PracticeProvider>
+    <Suspense fallback={<RouteSkeleton title="Loading Practice" />}>
+      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Practice" />}>
+        {(resolved) => (
+          <PracticeProvider initialData={resolved}>
+            <PracticeView />
+          </PracticeProvider>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 

@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Real Estate Route Index
  *
  * Enterprise React Architecture - Property Portfolio Management

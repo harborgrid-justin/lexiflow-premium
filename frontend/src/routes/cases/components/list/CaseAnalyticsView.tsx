@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/matters/MatterAnalyticsView
  * @category Matter Management
  * @description Analytics and reporting view for matters

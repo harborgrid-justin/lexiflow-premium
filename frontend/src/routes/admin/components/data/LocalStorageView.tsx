@@ -1,15 +1,19 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Local Storage View Component
  *
  * Displays and manages browser localStorage items.
  * Provides functionality to view, delete individual items, or clear all storage.
  */
 
-import React, { useEffect } from 'react';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { HardDrive, Trash2 } from 'lucide-react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { DataSourceSelector } from './DataSourceSelector';
 import { useLocalStorageFiles } from './hooks';
 

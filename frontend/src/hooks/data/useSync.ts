@@ -17,8 +17,7 @@
  * ```
  */
 
-import { SyncContext } from "@/unknown_fix_me/SyncContext";
-import { SyncContextType } from "@/unknown_fix_me/SyncContextType";
+import { SyncContext, SyncContextType } from "@/routes/_shared";
 import { useContext } from "react";
 
 /**

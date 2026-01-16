@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/calendar/CalendarView
  * @category Calendar
  * @description Full calendar view with event management and scheduling.
@@ -20,8 +25,8 @@ import { lazy, Suspense } from 'react';
 import { useCalendarView } from './hooks/useCalendarView';
 
 // Components
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Utils & Config
@@ -110,7 +115,7 @@ export const CalendarView: React.FC = () => {
       </TabbedPageLayout>
 
       {showNewEventModal && (
-        <NewEventModal 
+        <NewEventModal
           isOpen={showNewEventModal}
           onClose={handleCloseModal}
         />

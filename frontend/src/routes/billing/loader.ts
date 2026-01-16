@@ -1,3 +1,8 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { DataService } from "@/services/data/data-service.service";
 import type { BillingRate, Invoice, TimeEntry, Transaction } from "@/types";
 import type { ActionFunctionArgs } from "react-router";

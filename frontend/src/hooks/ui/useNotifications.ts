@@ -41,21 +41,34 @@
  * @module useNotifications
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNotificationWebSocket, WebSocketNotification } from './useNotificationWebSocket';
-import { NotificationsApiService } from '@/lib/frontend-api';
-import { showToast } from '@/components/organisms/notifications/Toast';
+import { showToast } from "@/components/organisms/notifications/Toast";
+import {
+  useNotificationWebSocket,
+  WebSocketNotification,
+} from "@/hooks/data/useNotificationWebSocket";
+import { NotificationsApiService } from "@/lib/frontend-api";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 /**
  * Notification type (matches backend)
  */
 export interface Notification {
   id: string;
-  type: 'case_update' | 'document' | 'deadline' | 'task' | 'message' | 'invoice' | 'system' | 'info' | 'warning' | 'error';
+  type:
+    | "case_update"
+    | "document"
+    | "deadline"
+    | "task"
+    | "message"
+    | "invoice"
+    | "system"
+    | "info"
+    | "warning"
+    | "error";
   title: string;
   message: string;
   read: boolean;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: "low" | "medium" | "high" | "urgent";
   timestamp: number;
   actionUrl?: string;
   actionLabel?: string;
@@ -108,7 +121,7 @@ export interface UseNotificationsReturn {
   error: Error | null;
 
   /** WebSocket connection state */
-  connectionState: 'disconnected' | 'connecting' | 'connected' | 'error';
+  connectionState: "disconnected" | "connecting" | "connected" | "error";
 
   /** Is connected to WebSocket */
   isConnected: boolean;
@@ -137,14 +150,16 @@ const notificationsApi = new NotificationsApiService();
 /**
  * Convert WebSocket notification to local format
  */
-const convertWebSocketNotification = (wsNotif: WebSocketNotification): Notification => {
+const convertWebSocketNotification = (
+  wsNotif: WebSocketNotification
+): Notification => {
   return {
     id: wsNotif.id,
-    type: wsNotif.type as Notification['type'],
+    type: wsNotif.type as Notification["type"],
     title: wsNotif.title,
     message: wsNotif.message,
     read: false,
-    priority: wsNotif.priority as Notification['priority'],
+    priority: wsNotif.priority as Notification["priority"],
     timestamp: new Date(wsNotif.createdAt).getTime(),
     actionUrl: wsNotif.actionUrl,
     metadata: wsNotif.metadata,
@@ -155,7 +170,7 @@ const convertWebSocketNotification = (wsNotif: WebSocketNotification): Notificat
  * useNotifications Hook
  */
 export const useNotifications = (
-  options: UseNotificationsOptions = {},
+  options: UseNotificationsOptions = {}
 ): UseNotificationsReturn => {
   const {
     token,
@@ -177,7 +192,7 @@ export const useNotifications = (
         console.log(`[useNotifications] ${message}`, ...args);
       }
     },
-    [debug],
+    [debug]
   );
 
   /**
@@ -187,17 +202,17 @@ export const useNotifications = (
     try {
       setIsLoading(true);
       setError(null);
-      log('Fetching notifications...');
+      log("Fetching notifications...");
 
       const apiNotifications = await notificationsApi.getAll();
 
-      const mappedNotifications: Notification[] = apiNotifications.map(n => ({
+      const mappedNotifications: Notification[] = apiNotifications.map((n) => ({
         id: n.id,
-        type: n.type as Notification['type'],
+        type: n.type as Notification["type"],
         title: n.title,
         message: n.message,
         read: n.read,
-        priority: (n.priority || 'medium') as Notification['priority'],
+        priority: (n.priority || "medium") as Notification["priority"],
         timestamp: new Date(n.createdAt).getTime(),
         actionUrl: n.actionUrl,
         actionLabel: n.actionLabel,
@@ -205,11 +220,12 @@ export const useNotifications = (
       }));
 
       setNotifications(mappedNotifications);
-      log('Fetched notifications', mappedNotifications.length);
+      log("Fetched notifications", mappedNotifications.length);
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to fetch notifications');
+      const error =
+        err instanceof Error ? err : new Error("Failed to fetch notifications");
       setError(error);
-      log('Fetch error', error.message);
+      log("Fetch error", error.message);
     } finally {
       setIsLoading(false);
     }
@@ -221,22 +237,22 @@ export const useNotifications = (
   const markAsRead = useCallback(
     async (id: string): Promise<void> => {
       try {
-        log('Marking as read', id);
+        log("Marking as read", id);
 
         // Optimistic update
-        setNotifications(prev =>
-          prev.map(n => (n.id === id ? { ...n, read: true } : n)),
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, read: true } : n))
         );
 
         // API call
         await notificationsApi.markAsRead(id);
       } catch (err) {
-        log('Mark as read error', err);
+        log("Mark as read error", err);
         // Revert on error
         await fetchNotifications();
       }
     },
-    [log, fetchNotifications],
+    [log, fetchNotifications]
   );
 
   /**
@@ -244,15 +260,15 @@ export const useNotifications = (
    */
   const markAllAsRead = useCallback(async (): Promise<void> => {
     try {
-      log('Marking all as read');
+      log("Marking all as read");
 
       // Optimistic update
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
 
       // API call
       await notificationsApi.markAllAsRead();
     } catch (err) {
-      log('Mark all as read error', err);
+      log("Mark all as read error", err);
       // Revert on error
       await fetchNotifications();
     }
@@ -264,20 +280,20 @@ export const useNotifications = (
   const deleteNotification = useCallback(
     async (id: string): Promise<void> => {
       try {
-        log('Deleting notification', id);
+        log("Deleting notification", id);
 
         // Optimistic update
-        setNotifications(prev => prev.filter(n => n.id !== id));
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
 
         // API call
         await notificationsApi.delete(id);
       } catch (err) {
-        log('Delete error', err);
+        log("Delete error", err);
         // Revert on error
         await fetchNotifications();
       }
     },
-    [log, fetchNotifications],
+    [log, fetchNotifications]
   );
 
   /**
@@ -285,27 +301,33 @@ export const useNotifications = (
    */
   const handleNewNotification = useCallback(
     (wsNotif: WebSocketNotification): void => {
-      log('New notification received', wsNotif);
+      log("New notification received", wsNotif);
 
       const notification = convertWebSocketNotification(wsNotif);
 
       // Add to local state
-      setNotifications(prev => [notification, ...prev]);
+      setNotifications((prev) => [notification, ...prev]);
 
       // Show toast notification
       if (enableToasts) {
-        const toastType = notification.priority === 'urgent' ? 'error'
-          : notification.priority === 'high' ? 'warning'
-          : 'info';
+        const toastType =
+          notification.priority === "urgent"
+            ? "error"
+            : notification.priority === "high"
+              ? "warning"
+              : "info";
 
         showToast({
           type: toastType,
           title: notification.title,
           message: notification.message,
-          priority: notification.priority === 'medium' ? 'normal' : notification.priority,
+          priority:
+            notification.priority === "medium"
+              ? "normal"
+              : notification.priority,
           action: notification.actionUrl
             ? {
-                label: notification.actionLabel || 'View',
+                label: notification.actionLabel || "View",
                 onClick: () => {
                   window.location.href = notification.actionUrl!;
                 },
@@ -315,15 +337,19 @@ export const useNotifications = (
       }
 
       // Show desktop notification
-      if (enableDesktop && 'Notification' in window && Notification.permission === 'granted') {
+      if (
+        enableDesktop &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
         new Notification(notification.title, {
           body: notification.message,
-          icon: '/favicon.ico',
+          icon: "/favicon.ico",
           tag: notification.id,
         });
       }
     },
-    [enableToasts, enableDesktop, log],
+    [enableToasts, enableDesktop, log]
   );
 
   /**
@@ -331,20 +357,22 @@ export const useNotifications = (
    */
   const handleNotificationRead = useCallback(
     (data: { notificationId: string }): void => {
-      log('Notification read', data.notificationId);
-      setNotifications(prev =>
-        prev.map(n => (n.id === data.notificationId ? { ...n, read: true } : n)),
+      log("Notification read", data.notificationId);
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n.id === data.notificationId ? { ...n, read: true } : n
+        )
       );
     },
-    [log],
+    [log]
   );
 
   /**
    * Handle all notifications read via WebSocket
    */
   const handleAllNotificationsRead = useCallback((): void => {
-    log('All notifications read');
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    log("All notifications read");
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   }, [log]);
 
   /**
@@ -352,10 +380,12 @@ export const useNotifications = (
    */
   const handleNotificationDeleted = useCallback(
     (data: { notificationId: string }): void => {
-      log('Notification deleted', data.notificationId);
-      setNotifications(prev => prev.filter(n => n.id !== data.notificationId));
+      log("Notification deleted", data.notificationId);
+      setNotifications((prev) =>
+        prev.filter((n) => n.id !== data.notificationId)
+      );
     },
-    [log],
+    [log]
   );
 
   /**
@@ -377,7 +407,7 @@ export const useNotifications = (
     onAllNotificationsRead: handleAllNotificationsRead,
     onNotificationDeleted: handleNotificationDeleted,
     onError: (err) => {
-      log('WebSocket error', err.message);
+      log("WebSocket error", err.message);
     },
   });
 
@@ -385,7 +415,7 @@ export const useNotifications = (
    * Calculate unread count from local state
    */
   const localUnreadCount = useMemo(() => {
-    return notifications.filter(n => !n.read).length;
+    return notifications.filter((n) => !n.read).length;
   }, [notifications]);
 
   /**
@@ -397,7 +427,7 @@ export const useNotifications = (
    * Get unread notifications
    */
   const unreadNotifications = useMemo(() => {
-    return notifications.filter(n => !n.read);
+    return notifications.filter((n) => !n.read);
   }, [notifications]);
 
   /**
@@ -410,7 +440,7 @@ export const useNotifications = (
       }
       await markAsRead(id);
     },
-    [isConnected, wsMarkAsRead, markAsRead],
+    [isConnected, wsMarkAsRead, markAsRead]
   );
 
   /**
@@ -428,13 +458,13 @@ export const useNotifications = (
    */
   const enhancedDelete = useCallback(
     async (id: string): Promise<void> => {
-      const notification = notifications.find(n => n.id === id);
+      const notification = notifications.find((n) => n.id === id);
       if (isConnected && notification) {
         wsDeleteNotification(id, !notification.read);
       }
       await deleteNotification(id);
     },
-    [isConnected, notifications, wsDeleteNotification, deleteNotification],
+    [isConnected, notifications, wsDeleteNotification, deleteNotification]
   );
 
   /**
@@ -445,7 +475,7 @@ export const useNotifications = (
     if (autoFetch && token) {
       fetchNotifications();
     } else if (autoFetch && !token) {
-      log('Skipping notifications fetch - no auth token provided');
+      log("Skipping notifications fetch - no auth token provided");
     }
   }, [autoFetch, token, fetchNotifications, log]);
 

@@ -1,3 +1,8 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { Suspense } from 'react';
 import { Await, useLoaderData, useRevalidator } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';

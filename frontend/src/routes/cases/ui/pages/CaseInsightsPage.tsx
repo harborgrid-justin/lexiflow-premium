@@ -1,11 +1,16 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/pages/CaseInsightsPage
  * @category Pages
  * @description Strategic case insights page - AI-powered case analysis and recommendations
  */
 
-import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
 import React from 'react';
 
 interface CaseInsightsPageProps {

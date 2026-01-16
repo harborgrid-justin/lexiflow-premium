@@ -4,14 +4,14 @@
  */
 
 import { DocumentsApiService } from "@/api/admin/documents-api";
+import { queryClient } from "@/hooks/useQueryHooks";
 import type { CaseId } from "@/types";
-
-const documentsApi = new DocumentsApiService();
 import { queryKeys } from "@/utils/query-keys.service";
 import React, { useCallback, useRef, useState } from "react";
 import type { UseNotifyReturn } from "../useNotify";
-import { queryClient } from "../useQueryHooks";
 import { validateFile } from "./utils";
+
+const documentsApi = new DocumentsApiService();
 
 interface UseDragDropHandlersParams {
   enableDragDrop: boolean;
@@ -104,10 +104,10 @@ export function useDragDropHandlers({
           try {
             await documentsApi.upload(file, {
               caseId: "General" as CaseId,
-              type: file.type.split('/')[1]?.toUpperCase() || 'FILE',
+              type: file.type.split("/")[1]?.toUpperCase() || "FILE",
               title: file.name,
-              status: 'Draft',
-              tags: [currentFolder === "root" ? "General" : currentFolder]
+              status: "Draft",
+              tags: [currentFolder === "root" ? "General" : currentFolder],
             });
             successCount++;
           } catch (error) {

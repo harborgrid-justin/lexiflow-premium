@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Admin Panel Route
  *
  * Administrative dashboard with:
@@ -10,8 +15,8 @@
  * @module routes/admin/index
  */
 
-import { api } from '@/lib/frontend-api';
 import type { SystemMetrics } from '@/lib/frontend-api';
+import { api } from '@/lib/frontend-api';
 import { requireAdmin } from '@/utils/route-guards';
 import {
   Activity, AlertTriangle, Database, HardDrive, Server, Shield, Users

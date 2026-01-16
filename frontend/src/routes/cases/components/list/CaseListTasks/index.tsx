@@ -1,12 +1,17 @@
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { TaskRow } from './TaskRow';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { TaskHeader } from './TaskHeader';
-import { useCaseListTasks } from './useCaseListTasks';
+import { TaskRow } from './TaskRow';
 import type { CaseListTasksProps } from './types';
+import { useCaseListTasks } from './useCaseListTasks';
 
 export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) => {
   const { theme } = useTheme();

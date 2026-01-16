@@ -1,10 +1,15 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/enterprise/CRM/ClientAnalytics/ClientAnalyticsView
  * @description Main view component (~90 LOC target) - Pure JSX presentation layer
  */
 
-import { cn } from '@/lib/cn';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { cn } from '@/lib/cn';
 import { AlertTriangle, Award, DollarSign, Star, TrendingUp } from 'lucide-react';
 import { LTVTab } from './LTVTab';
 import { ProfitabilityTab } from './ProfitabilityTab';

@@ -44,3 +44,18 @@ export * from "./useFormId";
 
 // Keyboard
 export * from "./useKeyboardNav";
+
+// ============================================================================
+// DOMAIN HOOKS (Operations)
+// ============================================================================
+export {
+  useSLAMonitoring,
+  type SLAItem,
+  type UseSLAMonitoringReturn,
+} from "./useSLAMonitoring";
+
+export {
+  useScheduleController,
+  type DragMode,
+  type UseGanttDragReturn,
+} from "./useScheduleController";

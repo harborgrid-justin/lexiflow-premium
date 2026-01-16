@@ -1,4 +1,5 @@
-import { adminApi, api, discoveryApi, workflowApi } from '@/lib/frontend-api';
+import { adminApi, discoveryApi, workflowApi } from "@/lib/frontend-api";
+import { api } from "@/services/api";
 import { AssetService } from "@/services/domain/asset.service";
 import { OperationsService } from "@/services/domain/operations.service";
 

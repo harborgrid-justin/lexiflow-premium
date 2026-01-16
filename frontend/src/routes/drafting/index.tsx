@@ -1,3 +1,8 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
 import DraftingDashboard from './components/DraftingDashboard';

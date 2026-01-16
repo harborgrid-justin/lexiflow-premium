@@ -1,4 +1,5 @@
-import { adminApi, analyticsApi, api, complianceApi } from "@/lib/frontend-api";
+import { adminApi, analyticsApi, complianceApi } from "@/lib/frontend-api";
+import { api } from "@/services/api";
 import { AdminService } from "@/services/domain/admin.service";
 import { DataCatalogService } from "@/services/domain/data-catalog.service";
 import { getDataQualityService } from "../factories/repository-factories.service";

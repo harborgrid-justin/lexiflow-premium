@@ -1,0 +1,476 @@
+*** Begin Patch
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/components/list/CaseListView.tsx
+-/** * @module components/matters/MatterListView * @category Matter Management * @description Filterable matter list view with search and statistics * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling */
+-
+-/* eslint-disable @typescript-eslint/no-unused-vars */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/** * @module components/matters/MatterListView * @category Matter Management * @description Filterable matter list view with search and statistics * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling */
++
++/* eslint-disable @typescript-eslint/no-unused-vars */
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/components/workflow/builder/SimulationView.tsx
+-import { Terminal, PlayCircle } from 'lucide-react';
+-import { Button } from '@/components/atoms/Button';
+-
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { Terminal, PlayCircle } from 'lucide-react';
++import { Button } from '@/components/atoms/Button';
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/index.tsx
+-/**
+- * Cases Index Route (List View)
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Cases Index Route (List View)
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/loader.ts
+-/**
+- * Case Routes - Shared Loaders and Actions
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Case Routes - Shared Loaders and Actions
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseAnalyticsPage.tsx
+-/**
+- * @module components/pages/CaseAnalyticsPage
+- * @category Pages
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/pages/CaseAnalyticsPage
++ * @category Pages
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseDetailPage.tsx
+-/**
+- * CaseDetail.tsx
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * CaseDetail.tsx
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseFinancialsPage.tsx
+-/**
+- * @module components/pages/CaseFinancialsPage
+- * @category Pages
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/pages/CaseFinancialsPage
++ * @category Pages
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseInsightsPage.tsx
+-/**
+- * @module components/pages/CaseInsightsPage
+- * @category Pages
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/pages/CaseInsightsPage
++ * @category Pages
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseIntakePage.tsx
+-/**
+- * @module components/pages/CaseIntakePage
+- * @category Pages
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/pages/CaseIntakePage
++ * @category Pages
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseListPage.tsx
+-/**
+- * @module components/pages/CaseListPage
+- * @category Pages
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/pages/CaseListPage
++ * @category Pages
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseOperationsPage.tsx
+-/**
+- * @module components/pages/CaseOperationsPage
+- * @category Pages
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/pages/CaseOperationsPage
++ * @category Pages
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/cases/ui/pages/CaseOverviewPage.tsx
+-/**
+- * @module components/pages/CaseOverviewPage
+- * @category Pages
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/pages/CaseOverviewPage
++ * @category Pages
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/citations/CitationsPage.tsx
+-/**
+- * Citations Domain - Page Component
+- */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Citations Domain - Page Component
++ */
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/citations/CitationsProvider.tsx
+-/**
+- * Citations Domain - State Provider
+- */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Citations Domain - State Provider
++ */
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/citations/CitationsView.tsx
+-/**
+- * Citations Domain - View Component
+- */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Citations Domain - View Component
++ */
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/citations/index.tsx
+-/**
+- * Citations Index Route
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Citations Index Route
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/citations/loader.ts
+-/**
+- * Citations Domain - Data Loader
+- * Enterprise React Architecture Pattern
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Citations Domain - Data Loader
++ * Enterprise React Architecture Pattern
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/clauses/ClausesPage.tsx
+-/**
+- * Clauses Domain - Page Component
+- */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Clauses Domain - Page Component
++ */
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/clauses/ClausesProvider.tsx
+-/**
+- * Clauses Domain - State Provider
+- */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Clauses Domain - State Provider
++ */
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/clauses/ClausesView.tsx
+-/**
+- * Clauses Domain - View Component
+- */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Clauses Domain - View Component
++ */
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/clauses/index.tsx
+-/**
+- * Clause Library Index Route
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Clause Library Index Route
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/clauses/loader.ts
+-/**
+- * Clauses Domain - Data Loader
+- * Enterprise React Architecture Pattern
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Clauses Domain - Data Loader
++ * Enterprise React Architecture Pattern
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/compliance/CompliancePage.tsx
+-import { Suspense } from 'react';
+-import { Await, useLoaderData } from 'react-router';
+-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { Suspense } from 'react';
++import { Await, useLoaderData } from 'react-router';
++import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/compliance/ComplianceProvider.tsx
+-import React, { createContext, useContext, useMemo } from 'react';
+-
+-
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import React, { createContext, useContext, useMemo } from 'react';
++
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/compliance/ComplianceView.tsx
+-import { PageHeader } from '@/components/organisms/PageHeader';
+-import { AlertCircle, Calendar, Shield } from 'lucide-react';
+-import { useCompliance } from './ComplianceProvider';
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { PageHeader } from '@/components/organisms/PageHeader';
++import { AlertCircle, Calendar, Shield } from 'lucide-react';
++import { useCompliance } from './ComplianceProvider';
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/compliance/index.tsx
+-/**
+- * Compliance Route
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Compliance Route
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/compliance/loader.ts
+-import { DataService } from "@/services/data/data-service.service";
+-
+-export async function clientLoader() {
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { DataService } from "@/services/data/data-service.service";
++
++export async function clientLoader() {
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/correspondence/CorrespondencePage.tsx
+-import { Suspense } from 'react';
+-import { Await, useLoaderData } from 'react-router';
+-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { Suspense } from 'react';
++import { Await, useLoaderData } from 'react-router';
++import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/correspondence/CorrespondenceProvider.tsx
+-import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
+-
+-
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
++
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/correspondence/CorrespondenceView.tsx
+-import { Button } from '@/components/atoms/Button/Button';
+-import { PageHeader } from '@/components/organisms/PageHeader';
+-import { FileText, Layout, Mail } from 'lucide-react';
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { Button } from '@/components/atoms/Button/Button';
++import { PageHeader } from '@/components/organisms/PageHeader';
++import { FileText, Layout, Mail } from 'lucide-react';
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/correspondence/index.tsx
+-/**
+- * Correspondence Index Route
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Correspondence Index Route
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/correspondence/loader.ts
+-import { DataService } from "@/services/data/data-service.service";
+-import type { LoaderFunctionArgs } from "react-router";
+-
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { DataService } from "@/services/data/data-service.service";
++import type { LoaderFunctionArgs } from "react-router";
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/crm/CRMPage.tsx
+-import { Suspense } from 'react';
+-import { Await, useLoaderData } from 'react-router';
+-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { Suspense } from 'react';
++import { Await, useLoaderData } from 'react-router';
++import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/crm/CRMProvider.tsx
+-import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
+-
+-
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
++
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/crm/CRMView.tsx
+-import { Button } from '@/components/atoms/Button/Button';
+-import { PageHeader } from '@/components/organisms/PageHeader';
+-import { useTheme } from "@/hooks/useTheme";
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { Button } from '@/components/atoms/Button/Button';
++import { PageHeader } from '@/components/organisms/PageHeader';
++import { useTheme } from "@/hooks/useTheme";
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/crm/components/enterprise/BusinessDevelopment/BusinessDevelopmentView.tsx
+-/**
+- * @module components/enterprise/CRM/BusinessDevelopment/BusinessDevelopmentView
+- * @description Main view component (90 LOC target) - Pure JSX presentation layer
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/enterprise/CRM/BusinessDevelopment/BusinessDevelopmentView
++ * @description Main view component (90 LOC target) - Pure JSX presentation layer
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/crm/components/enterprise/ClientAnalytics/ClientAnalyticsView.tsx
+-/**
+- * @module components/enterprise/CRM/ClientAnalytics/ClientAnalyticsView
+- * @description Main view component (~90 LOC target) - Pure JSX presentation layer
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * @module components/enterprise/CRM/ClientAnalytics/ClientAnalyticsView
++ * @description Main view component (~90 LOC target) - Pure JSX presentation layer
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/crm/index.tsx
+-/**
+- * Client CRM Route
+- *
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * Client CRM Route
++ *
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/crm/loader.ts
+-import { DataService } from "@/services/data/data-service.service";
+-import type { LoaderFunctionArgs } from "react-router";
+-
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++import { DataService } from "@/services/data/data-service.service";
++import type { LoaderFunctionArgs } from "react-router";
+*** Update File: /workspaces/lexiflow-premium/frontend/src/routes/daf/DAFPage.tsx
+-/**
+- * DAF (Document Assembly Framework) Domain - Page Component
+- */
++/**
++ * ENTERPRISE REACT ARCHITECTURE STANDARD
++ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
++ */
++
++/**
++ * DAF (Document Assembly Framework) Domain - Page Component
++ */
+*** End Patch

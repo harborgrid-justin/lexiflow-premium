@@ -10,11 +10,11 @@
  * - Optional periodic memory stats logging
  */
 
+import { DATA_SERVICE_MEMORY_REFRESH_INTERVAL_MS } from "@/config/features/hooks.config";
 import {
   cleanupDataService,
   logDataServiceMemory,
 } from "@/services/data/data-service.service";
-import { DATA_SERVICE_MEMORY_REFRESH_INTERVAL_MS } from "@/config/features/hooks.config";
 import { useEffect } from "react";
 
 interface UseDataServiceCleanupOptions {
@@ -83,7 +83,9 @@ export function useDataServiceCleanup(
  * }
  * ```
  */
-export function useDataServiceMemoryStats(refreshInterval: number = DATA_SERVICE_MEMORY_REFRESH_INTERVAL_MS) {
+export function useDataServiceMemoryStats(
+  refreshInterval: number = DATA_SERVICE_MEMORY_REFRESH_INTERVAL_MS
+) {
   const [stats, setStats] = React.useState(() => ({
     repositoryCount: 0,
     totalListeners: 0,
@@ -99,7 +101,7 @@ export function useDataServiceMemoryStats(refreshInterval: number = DATA_SERVICE
     let intervalId: NodeJS.Timeout | undefined;
 
     // Dynamically import to avoid circular dependency
-    import("../services/data/dataService").then(
+    import("@/services/data/dataService").then(
       ({ getDataServiceMemoryStats }) => {
         const updateStats = () => {
           const memStats = getDataServiceMemoryStats() as {

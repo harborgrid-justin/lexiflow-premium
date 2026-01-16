@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Case Routes - Shared Loaders and Actions
  *
  * ENTERPRISE ARCHITECTURE PATTERN:

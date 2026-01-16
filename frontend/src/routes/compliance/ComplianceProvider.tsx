@@ -1,6 +1,9 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import React, { createContext, useContext, useMemo } from 'react';
-
-
 export interface ComplianceCheck {
   id: string;
   clientName: string;

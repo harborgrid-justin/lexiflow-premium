@@ -1,10 +1,15 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/enterprise/CRM/BusinessDevelopment/BusinessDevelopmentView
  * @description Main view component (90 LOC target) - Pure JSX presentation layer
  */
 
-import { cn } from '@/lib/cn';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { cn } from '@/lib/cn';
 import { Award, DollarSign, Target, Users } from 'lucide-react';
 import { AnalysisTab } from './AnalysisTab';
 import { TABS } from './constants';

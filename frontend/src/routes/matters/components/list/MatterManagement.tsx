@@ -5,12 +5,12 @@
  * @status PRODUCTION READY
  */
 
-import { litigationApi } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/backend';
-import { cn } from '@/lib/cn';
+import { litigationApi } from '@/api/domains/litigation.api';
 import { Card } from '@/components/molecules/Card/Card';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { Matter } from '@/types';
 import { format } from 'date-fns';
 import { Briefcase, Calendar, LayoutGrid, List, MoreVertical, Plus, Search } from 'lucide-react';

@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Entity Director Index Route
  *
  * Manage legal entities including corporations, LLCs,
@@ -7,9 +12,9 @@
  * @module routes/entities/index
  */
 
+import { communicationsApi } from '@/lib/frontend-api';
 import { EntityDirector } from '@/routes/cases/components/entities/EntityDirector';
 import { DataService } from '@/services/data/data-service.service';
-import { communicationsApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";

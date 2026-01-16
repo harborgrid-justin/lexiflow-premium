@@ -1,11 +1,16 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/pages/CaseAnalyticsPage
  * @category Pages
  * @description Case analytics and reporting page - data-driven case insights
  */
 
-import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
 import React from 'react';
 
 interface CaseAnalyticsPageProps {

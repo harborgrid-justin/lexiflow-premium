@@ -119,10 +119,13 @@ export * from "@/lib/normalization";
 // Re-export backend mode detection from config
 export { isBackendApiEnabled } from "@/config/network/api.config";
 
+export { AuthApiService } from "@/api/auth/auth-api";
+
 // Note: dataPlatformApi not re-exported here to avoid circular dependencies.
 // Import directly from '@/lib/frontend-api/data-platform' if needed.
 
 // Domain API modules - export only the API objects to avoid name conflicts
+export type { ApiNotification } from "@/api/communications/notifications-api";
 export { adminApi } from "./admin";
 export { analyticsApi } from "./analytics";
 export { authApi } from "./auth";
@@ -138,7 +141,6 @@ export { integrationsApi } from "./integrations";
 export { intelligenceApi } from "./intelligence";
 export { trialApi } from "./trial";
 export { workflowApi } from "./workflow";
-export type { ApiNotification } from "@/api/communications/notifications-api";
 
 // Export types from domain modules
 export type { DashboardMetrics } from "./analytics";

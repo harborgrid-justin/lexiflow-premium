@@ -1,11 +1,16 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/pages/CaseIntakePage
  * @category Pages
  * @description New case intake and onboarding page - form-based case creation
  */
 
-import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
 import { CenteredLayout } from '@/layouts/CenteredLayout/CenteredLayout';
+import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
 import React from 'react';
 
 interface CaseIntakePageProps {

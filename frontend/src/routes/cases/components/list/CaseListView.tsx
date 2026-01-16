@@ -1,3 +1,8 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 /** * @module components/matters/MatterListView * @category Matter Management * @description Filterable matter list view with search and statistics * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */

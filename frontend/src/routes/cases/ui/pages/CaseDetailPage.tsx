@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * CaseDetail.tsx
  *
  * Main case detail view component - lazy-loaded for code splitting.
@@ -52,14 +57,14 @@ import { CaseProjects } from '@/routes/cases/components/detail/projects/CaseProj
 // ============================================================================
 // INTERNAL DEPENDENCIES - HOOKS & CONTEXT
 // ============================================================================
-import { useTheme } from "@/hooks/useTheme";
 import { useCaseDetail } from '@/hooks/useCaseDetail';
+import { useTheme } from "@/hooks/useTheme";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - SERVICES & UTILS
 // ============================================================================
-import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
 import { cn } from '@/lib/cn';
+import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
 
 // ============================================================================
 // TYPES & INTERFACES

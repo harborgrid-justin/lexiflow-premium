@@ -1,8 +1,15 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Jurisdiction Domain - Page Component
  */
 
-import { useLoaderData } from 'react-router';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { JurisdictionProvider } from './JurisdictionProvider';
 import { JurisdictionView } from './JurisdictionView';
 import type { JurisdictionLoaderData } from './loader';
@@ -10,9 +17,15 @@ import type { JurisdictionLoaderData } from './loader';
 export function JurisdictionPage() {
   const initialData = useLoaderData() as JurisdictionLoaderData;
   return (
-    <JurisdictionProvider initialData={initialData}>
-      <JurisdictionView />
-    </JurisdictionProvider>
+    <Suspense fallback={<RouteSkeleton title="Loading Jurisdiction" />}>
+      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Jurisdiction" />}>
+        {(resolved) => (
+          <JurisdictionProvider initialData={resolved}>
+            <JurisdictionView />
+          </JurisdictionProvider>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 

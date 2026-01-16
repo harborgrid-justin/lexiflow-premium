@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Legal Research Index Route
  *
  * Comprehensive legal research tools including case law search,
@@ -8,8 +13,8 @@
  */
 
 import { knowledgeApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
 import { ResearchTool } from '@/routes/research/components/ResearchTool';
+import { DataService } from '@/services/data/data-service.service';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";

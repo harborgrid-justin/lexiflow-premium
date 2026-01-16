@@ -35,7 +35,7 @@ import { useEffect, useState } from "react";
 import { DataService } from "@/services/data/data-service.service";
 
 // Hooks & Context
-import { useSync } from "./useSync";
+import { useSync } from "@/hooks/useSync";
 
 // Types
 import {

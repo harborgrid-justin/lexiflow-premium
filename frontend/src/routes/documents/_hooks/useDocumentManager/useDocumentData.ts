@@ -4,10 +4,10 @@
  */
 
 import { DocumentsApiService } from "@/api/admin/documents-api";
+import { useQuery } from "@/hooks/useQueryHooks";
 import type { LegalDocument } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useMemo } from "react";
-import { useQuery } from "../useQueryHooks";
 
 const documentsApi = new DocumentsApiService();
 

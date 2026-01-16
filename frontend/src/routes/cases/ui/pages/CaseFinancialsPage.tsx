@@ -1,11 +1,16 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * @module components/pages/CaseFinancialsPage
  * @category Pages
  * @description Case financial management page - budgets, billing, and cost tracking
  */
 
-import { CaseFinancialsCenter } from '@/routes/cases/components/financials/CaseFinancialsCenter';
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+import { CaseFinancialsCenter } from '@/routes/cases/components/financials/CaseFinancialsCenter';
 import React from 'react';
 
 interface CaseFinancialsPageProps {

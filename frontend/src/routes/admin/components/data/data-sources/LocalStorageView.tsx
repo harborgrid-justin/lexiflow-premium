@@ -1,3 +1,8 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { HardDrive, Trash2 } from 'lucide-react';

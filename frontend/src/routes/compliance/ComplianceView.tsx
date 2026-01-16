@@ -1,3 +1,8 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { AlertCircle, Calendar, Shield } from 'lucide-react';
 import { useCompliance } from './ComplianceProvider';

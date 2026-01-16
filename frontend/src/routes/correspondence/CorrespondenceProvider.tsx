@@ -1,6 +1,9 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-
-
 export interface CorrespondenceEmail {
   id: string;
   read: boolean;

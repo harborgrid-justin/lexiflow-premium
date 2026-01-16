@@ -1,10 +1,15 @@
-import { useTheme } from "@/hooks/useTheme";
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+import { Button } from '@/components/atoms/Button';
 import { useMutation } from '@/hooks/backend';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useState } from 'react';
 import { DefinitionCard } from './DefinitionCard';

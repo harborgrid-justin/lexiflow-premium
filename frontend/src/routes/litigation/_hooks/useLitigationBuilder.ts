@@ -32,15 +32,15 @@ import { useCallback, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import * as DateCalculationService from "@/services/infrastructure/dateCalculationService";
 import { GraphValidationService } from "@/services/search/graph-validation.service";
 import { queryKeys } from "@/utils/query-keys.service";
-import { useMutation, useQuery } from "./useQueryHooks";
 
 // Hooks & Context
-import { useAutoSave } from "./useAutoSave";
-import { useNotify } from "./useNotify";
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { useNotify } from "@/hooks/useNotify";
 
 // Utils & Constants
 import {
@@ -169,7 +169,7 @@ export function useLitigationBuilder({
     }) => {
       // Use WorkflowRepository directly as this method isn't in the API service yet
       const WorkflowRepository =
-        await import("../services/data/repositories/WorkflowRepository").then(
+        await import("@/services/data/repositories/WorkflowRepository").then(
           (m) => m.WorkflowRepository
         );
       return WorkflowRepository.deployStrategyToCase(payload.caseId, {

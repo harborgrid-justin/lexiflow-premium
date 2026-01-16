@@ -1,6 +1,10 @@
+/**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
 import { DataService } from "@/services/data/data-service.service";
 import type { LoaderFunctionArgs } from "react-router";
-
 // LoaderFunctionArgs provides type safety even if we don't use all properties
 export async function clientLoader(_args: LoaderFunctionArgs) {
   const [emails, letters, templates] = await Promise.all([

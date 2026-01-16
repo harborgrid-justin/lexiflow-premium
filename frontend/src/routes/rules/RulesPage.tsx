@@ -1,8 +1,15 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Rules Domain - Page Component
  */
 
-import { useLoaderData } from 'react-router';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import type { RulesLoaderData } from './loader';
 import { RulesProvider } from './RulesProvider';
 import { RulesView } from './RulesView';
@@ -11,9 +18,15 @@ export function RulesPage() {
   const initialData = useLoaderData() as RulesLoaderData;
 
   return (
-    <RulesProvider initialData={initialData}>
-      <RulesView />
-    </RulesProvider>
+    <Suspense fallback={<RouteSkeleton title="Loading Rules" />}>
+      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Rules" />}>
+        {(resolved) => (
+          <RulesProvider initialData={resolved}>
+            <RulesView />
+          </RulesProvider>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 

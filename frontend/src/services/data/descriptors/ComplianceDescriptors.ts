@@ -1,4 +1,5 @@
-import { adminApi, api, authApi, complianceApi } from '@/lib/frontend-api';
+import { adminApi, authApi, complianceApi } from "@/lib/frontend-api";
+import { api } from "@/services/api";
 import { ComplianceService } from "@/services/domain/compliance.service";
 import { SecurityService } from "@/services/domain/security.service";
 

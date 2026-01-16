@@ -4,10 +4,10 @@
  */
 
 import { DocumentsApiService } from "@/api/admin/documents-api";
+import { queryClient, useMutation } from "@/hooks/useQueryHooks";
 import type { LegalDocument } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 import { useCallback } from "react";
-import { queryClient, useMutation } from "../useQueryHooks";
 
 const documentsApi = new DocumentsApiService();
 

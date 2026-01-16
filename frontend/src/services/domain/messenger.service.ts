@@ -22,7 +22,7 @@
  */
 
 import type { Conversation, Message } from "@/api/communications/messaging-api";
-import { api } from "@/lib/frontend-api";
+import { api } from "@/services/api";
 
 export const MessengerService = {
   getAll: async () => {

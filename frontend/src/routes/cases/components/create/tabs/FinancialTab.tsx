@@ -2,6 +2,7 @@
  * Financial information tab component
  */
 
+import React from 'react';
 import { FormField } from '../components/FormField';
 import { FormSelect } from '../components/FormSelect';
 import { FormTextarea } from '../components/FormTextarea';

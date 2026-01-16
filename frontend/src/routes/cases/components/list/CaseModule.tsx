@@ -1,3 +1,4 @@
+import React from 'react';
 import { CaseManagement } from './CaseManagement';
 
 /**

@@ -3,6 +3,7 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
+import React from 'react';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useTheme } from "@/hooks/useTheme";

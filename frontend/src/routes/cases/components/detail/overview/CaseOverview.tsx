@@ -15,6 +15,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { Users } from 'lucide-react';
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';

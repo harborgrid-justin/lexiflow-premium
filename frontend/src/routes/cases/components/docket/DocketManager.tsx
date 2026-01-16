@@ -22,7 +22,7 @@ import {
   RefreshCw,
   Settings
 } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

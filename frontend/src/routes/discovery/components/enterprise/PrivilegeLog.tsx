@@ -4,6 +4,7 @@
  * @description Privilege log management with batch tagging and export to court format
  */
 
+import React from 'react';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';

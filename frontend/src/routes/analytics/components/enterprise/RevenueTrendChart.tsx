@@ -15,7 +15,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   AreaChart,
   Area,

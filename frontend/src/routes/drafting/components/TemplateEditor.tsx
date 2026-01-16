@@ -12,7 +12,7 @@ import {
   UpdateTemplateDto
 } from '@api/domains/drafting';
 import { Code, Eye, FileText, Save, X } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface TemplateEditorProps {
   template?: DraftingTemplate;

@@ -15,6 +15,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { Clock, Download, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components

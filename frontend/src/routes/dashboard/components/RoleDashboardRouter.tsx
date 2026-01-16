@@ -5,6 +5,7 @@
  * Provides role-specific dashboards for different user types
  */
 
+import React from 'react';
 import { User } from '@/types';
 import {
   AttorneyDashboard,

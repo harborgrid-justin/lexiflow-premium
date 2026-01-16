@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PleadingDocument, PleadingSection } from '@/types';
 import { useTheme } from "@/hooks/useTheme";
 

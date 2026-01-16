@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Building2, User, Gavel, Briefcase, Loader2 } from 'lucide-react';
 
 // ============================================================================

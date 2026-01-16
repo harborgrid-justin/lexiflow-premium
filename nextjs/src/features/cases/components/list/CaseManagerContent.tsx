@@ -44,7 +44,7 @@ interface CaseManagerContentProps {
 export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTab }) => {
   // Fetch cases for list views that need them
   const { data: cases = [] } = useQuery<Case[]>(['cases', 'all'], () => api.cases.getAll());
-  
+
   // Filter state for CaseListActive
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
@@ -65,7 +65,7 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
       case 'overview':
         return <CaseOverviewDashboard />;
       case 'active':
-        return <CaseListActive 
+        return <CaseListActive
           filteredCases={cases}
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}

@@ -4,7 +4,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { BookOpen, ChevronRight, FileText, Loader2, Plus, Scale, Search, Users } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useDebounce } from '@/hooks/useDebounce';

@@ -8,7 +8,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { LegalEntity } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Briefcase, Building, GraduationCap, Linkedin, Mail, Network } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface AlumniDirectoryProps {
   entities: LegalEntity[];

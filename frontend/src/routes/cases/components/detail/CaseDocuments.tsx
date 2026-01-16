@@ -17,7 +17,7 @@
 
 // External Dependencies
 import { Loader2, Plus, ShieldCheck, Wand2 } from 'lucide-react';
-import { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';

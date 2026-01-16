@@ -5,197 +5,175 @@
 
 import { Button } from '@/components/atoms/Button/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { useTheme } from "@/hooks/useTheme";
 import { useService } from '@/providers/application/serviceprovider';
-import { Activity, Settings, Shield, Users } from 'lucide-react';
-import { useAdmin } from './AdminProvider';
+import { Activity, ArrowRight, Server, Settings, Shield, Users } from 'lucide-react';
+import { Link } from 'react-router';
+import { useAdmin } from './AdminContext';
 
 export function AdminView() {
-  const { users, auditLogs, activeTab, setActiveTab, isPending } = useAdmin();
+  const { metrics, auditLogs } = useAdmin();
   const { state: { services, pendingOperations }, actions: { checkHealth, syncData, retryFailedOperations, clearQueue } } = useService();
 
   return (
-    <div className="h-full flex flex-col">
-      <PageHeader title="Administration" subtitle="System settings and user management">
-        <Button variant="primary" size="md">
-          <Users className="w-4 h-4" />
-          Add User
-        </Button>
-      </PageHeader>
+    <div className="h-full flex flex-col space-y-6">
+      <PageHeader title="Administration" subtitle="System Overview & Configuration" />
 
-      <div className="border-b border-slate-200 dark:border-slate-700 mb-4">
-        <nav className="flex space-x-4">
-          <TabButton active={activeTab === 'users'} onClick={() => setActiveTab('users')} disabled={isPending}>
-            <Users className="w-4 h-4" />
-            Users ({users.length})
-          </TabButton>
-          <TabButton active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} disabled={isPending}>
-            <Settings className="w-4 h-4" />
-            Settings
-          </TabButton>
-          <TabButton active={activeTab === 'audit'} onClick={() => setActiveTab('audit')} disabled={isPending}>
-            <Shield className="w-4 h-4" />
-            Audit Log ({auditLogs.length})
-          </TabButton>
-          <TabButton active={activeTab === 'health'} onClick={() => setActiveTab('health')} disabled={isPending}>
-            <Activity className="w-4 h-4" />
-            System Health
-          </TabButton>
-        </nav>
+      {/* Quick Stats / Health */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <StatCard
+          label="System Status"
+          value={services.every(s => s.status === 'healthy') ? 'Healthy' : 'Issues Detected'}
+          icon={<Activity className="w-4 h-4" />}
+          status={services.every(s => s.status === 'healthy') ? 'success' : 'warning'}
+        />
+        <StatCard
+          label="Active Users"
+          value={metrics.application.activeUsers.toString()}
+          icon={<Users className="w-4 h-4" />}
+        />
+        <StatCard
+          label="Pending Ops"
+          value={pendingOperations.toString()}
+          icon={<Server className="w-4 h-4" />}
+        />
+        <StatCard
+          label="Uptime"
+          value={`${Math.floor(metrics.system.uptime / 3600)}h`}
+          icon={<Activity className="w-4 h-4" />}
+        />
       </div>
 
-      <div className="flex-1 overflow-auto">
-        {activeTab === 'users' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {users.map(user => (
-              <UserCard key={user.id} user={user} />
-            ))}
-          </div>
-        )}
-        {activeTab === 'settings' && (
-          <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
-            <h3 style={{ color: 'var(--color-text)' }} className="text-lg font-semibold mb-4">System Settings</h3>
-            <div className="space-y-4">
-              <SettingRow label="Firm Name" value="LexiFlow Legal" />
-              <SettingRow label="Time Zone" value="America/New_York" />
-              <SettingRow label="Billing Currency" value="USD" />
+      {/* Main Content Area */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
+
+        {/* Left Column: Navigation & Actions */}
+        <div className="space-y-6">
+          {/* Quick Links */}
+          <div className="border rounded-lg p-6 bg-[var(--color-surface)] border-[var(--color-border)]">
+            <h3 className="text-lg font-semibold mb-4 text-[var(--color-text)]">Management</h3>
+            <div className="space-y-2">
+              <NavLink to="users" icon={<Users className="w-4 h-4" />} label="User Management" />
+              <NavLink to="settings" icon={<Settings className="w-4 h-4" />} label="System Settings" />
+              <NavLink to="audit" icon={<Shield className="w-4 h-4" />} label="Security Audit Log" />
             </div>
           </div>
-        )}
-        {activeTab === 'audit' && (
-          <div className="space-y-2">
-            {auditLogs.map(log => (
-              <AuditLogRow key={log.id} log={log} />
-            ))}
-          </div>
-        )}
-        {activeTab === 'health' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
-                <h3 className="text-lg font-semibold mb-2">Pending Operations</h3>
-                <div className="text-3xl font-bold">{pendingOperations}</div>
-                <div className="mt-4 flex gap-2">
-                  <Button variant="secondary" size="sm" onClick={() => retryFailedOperations()}>Retry Failed</Button>
-                  <Button variant="text" size="sm" onClick={() => clearQueue()}>Clear Completed</Button>
+
+          {/* System Actions */}
+          <div className="border rounded-lg p-6 bg-[var(--color-surface)] border-[var(--color-border)]">
+            <h3 className="text-lg font-semibold mb-4 text-[var(--color-text)]">System Actions</h3>
+            <div className="flex flex-col gap-2">
+              <Button variant="secondary" size="sm" onClick={() => checkHealth()}>Check Health Now</Button>
+              <Button variant="secondary" size="sm" onClick={() => syncData()}>Sync Data</Button>
+              {pendingOperations > 0 && (
+                <div className="mt-2 pt-2 border-t border-[var(--color-border)]">
+                  <Button variant="ghost" size="sm" onClick={() => retryFailedOperations()}>Retry Failed</Button>
                 </div>
-              </div>
-              <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
-                <h3 className="text-lg font-semibold mb-2">Actions</h3>
-                <div className="flex flex-col gap-2">
-                  <Button variant="primary" size="sm" onClick={() => checkHealth()}>Check Health Now</Button>
-                  <Button variant="secondary" size="sm" onClick={() => syncData()}>Sync Data</Button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Dashboard Widgets */}
+        <div className="col-span-1 lg:col-span-2 space-y-6">
+
+          {/* Recent Audit */}
+          <div className="border rounded-lg p-6 bg-[var(--color-surface)] border-[var(--color-border)]">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-[var(--color-text)]">Recent Activity</h3>
+              <Link to="audit" className="text-sm text-blue-500 hover:underline flex items-center gap-1">
+                View All <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+            <div className="space-y-2">
+              {auditLogs.length === 0 ? (
+                <div className="text-gray-500 text-sm italic">No recent activity.</div>
+              ) : (
+                auditLogs.map(log => (
+                  <AuditLogRow key={log.id} log={log} />
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Service Status List */}
+          <div className="border rounded-lg p-6 bg-[var(--color-surface)] border-[var(--color-border)]">
+            <h3 className="text-lg font-semibold mb-4 text-[var(--color-text)]">Service Health</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {services.map(service => (
+                <div key={service.name} className="flex items-center justify-between p-3 rounded border border-[var(--color-border-subtle)]">
+                  <div>
+                    <div className="font-medium capitalize text-[var(--color-text)]">{service.name}</div>
+                    <div className="text-xs text-gray-500">Last checked: {new Date(service.lastCheck).toLocaleTimeString()}</div>
+                  </div>
+                  <ServiceStatusBadge status={service.status} />
                 </div>
-              </div>
-            </div>
-
-            <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-6">
-              <h3 className="text-lg font-semibold mb-4">Service Status</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {services.map(service => (
-                  <div key={service.name} className="flex items-center justify-between p-3 rounded border" style={{ borderColor: 'var(--color-border-subtle)' }}>
-                    <div>
-                      <div className="font-medium capitalize">{service.name}</div>
-                      <div className="text-xs text-gray-500">Last checked: {new Date(service.lastCheck).toLocaleTimeString()}</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`inline-block w-2 h-2 rounded-full ${paramsToStatusColor(service.status)}`} />
-                      <span className="text-sm capitalize">{service.status}</span>
-                      {service.responseTime > 0 && <span className="text-xs text-gray-400">({service.responseTime}ms)</span>}
-                    </div>
-                  </div>
-                ))}
-                {services.length === 0 && (
-                  <div className="col-span-full text-center py-8 text-gray-500">
-                    No health data available. Click "Check Health Now" to refresh.
-                  </div>
-                )}
-              </div>
+              ))}
+              {services.length === 0 && (
+                <div className="text-gray-500 text-sm">Service status unknown.</div>
+              )}
             </div>
           </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
-function paramsToStatusColor(status: string) {
-  switch (status) {
-    case 'healthy': return 'bg-green-500';
-    case 'degraded': return 'bg-yellow-500';
-    case 'down':
-    case 'unhealthy': return 'bg-red-500';
-    default: return 'bg-gray-400';
-  }
-}
-
-function TabButton({ active, onClick, disabled, children }: { active: boolean; onClick: () => void; disabled: boolean; children: React.ReactNode }) {
-  const { theme, tokens } = useTheme();
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      style={{
-        padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
-        fontSize: tokens.typography.fontSize.sm,
-        fontWeight: tokens.typography.fontWeight.medium,
-        borderBottom: active ? `2px solid ${tokens.colors.blue500}` : '2px solid transparent',
-        color: active ? tokens.colors.blue500 : theme.text.secondary,
-        transition: tokens.transitions.smooth,
-      }}
-      className="flex items-center gap-2"
-    >
-      {children}
-    </button>
-  );
-}
-
-interface AdminUser {
-  name: string;
-  email: string;
-  role: string;
-}
-
-function UserCard({ user }: { user: AdminUser }) {
-  return (
-    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
-      <div className="flex items-center gap-3 mb-3">
-        <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-semibold">
-          {user.name.charAt(0)}
-        </div>
-        <div>
-          <div style={{ color: 'var(--color-text)' }} className="font-medium">{user.name}</div>
-          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">{user.email}</div>
         </div>
       </div>
-      <div style={{ color: 'var(--color-textMuted)' }} className="text-xs">
-        Role: <span className="font-medium">{user.role}</span>
-      </div>
     </div>
   );
 }
 
-function SettingRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between py-2 border-b border-slate-200 dark:border-slate-700">
-      <span className="text-slate-700 dark:text-slate-300">{label}</span>
-      <span className="font-medium text-slate-900 dark:text-white">{value}</span>
-    </div>
-  );
-}
+// --- Helpers ---
 
-function AuditLogRow({ log }: { log: Record<string, unknown> }) {
+function NavLink({ to, icon, label }: { to: string, icon: React.ReactNode, label: string }) {
   return (
-    <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <div style={{ color: 'var(--color-text)' }} className="font-medium">{log.action}</div>
-          <div style={{ color: 'var(--color-textMuted)' }} className="text-sm">
-            {log.user} • {new Date(log.timestamp).toLocaleString()}
-          </div>
+    <Link to={to} className="flex items-center justify-between p-3 rounded-md hover:bg-[var(--color-surface-hover)] border border-transparent hover:border-[var(--color-border)] transition-all group">
+      <div className="flex items-center gap-3">
+        <div className="text-[var(--color-text-secondary)] group-hover:text-[var(--color-primary)]">
+          {icon}
         </div>
-        <Shield className="w-5 h-5 text-blue-600" />
+        <span className="text-[var(--color-text)] font-medium">{label}</span>
+      </div>
+      <ArrowRight className="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)]" />
+    </Link>
+  )
+}
+
+function StatCard({ label, value, icon, status }: { label: string, value: string, icon: React.ReactNode, status?: 'success' | 'warning' | 'error' }) {
+  return (
+    <div className="p-4 rounded-lg border bg-[var(--color-surface)] border-[var(--color-border)] flex flex-col justify-between">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm text-[var(--color-text-secondary)]">{label}</span>
+        <span className="text-[var(--color-text-muted)] opacity-70">{icon}</span>
+      </div>
+      <div className={`text-2xl font-bold ${status === 'success' ? 'text-green-500' : status === 'warning' ? 'text-amber-500' : status === 'error' ? 'text-red-500' : 'text-[var(--color-text)]'}`}>
+        {value}
       </div>
     </div>
+  )
+}
+
+function AuditLogRow({ log }: { log: any }) {
+  return (
+    <div className="flex items-center justify-between p-3 border-b border-[var(--color-border-subtle)] last:border-0 hover:bg-[var(--color-surface-hover)] transition-colors">
+      <div>
+        <div className="font-medium text-[var(--color-text)]">{log.action}</div>
+        <div className="text-xs text-[var(--color-text-muted)]">
+          {log.userName || log.user || 'System'} • {new Date(log.timestamp).toLocaleString()}
+        </div>
+      </div>
+      <Shield className="w-4 h-4 text-[var(--color-text-muted)]" />
+    </div>
+  );
+}
+
+function ServiceStatusBadge({ status }: { status: string }) {
+  const colors: Record<string, string> = {
+    healthy: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    degraded: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+    down: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+    unknown: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
+  };
+  return (
+    <span className={`px-2 py-1 rounded-full text-xs font-semibold uppercase ${colors[status] || colors.unknown}`}>
+      {status}
+    </span>
   );
 }

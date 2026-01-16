@@ -16,7 +16,7 @@
 
 // External Dependencies
 import { Filter, Plus, Target } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';

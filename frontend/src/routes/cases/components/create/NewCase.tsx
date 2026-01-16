@@ -23,6 +23,7 @@
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';

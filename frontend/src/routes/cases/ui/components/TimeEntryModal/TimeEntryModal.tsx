@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, DollarSign, Wand2 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

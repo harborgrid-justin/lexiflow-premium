@@ -7,7 +7,7 @@
  * @module routes/litigation/builder
  */
 
-import { DataService } from '@/services/data/data-service.service';
+import { casesApi } from '@/lib/frontend-api';
 import type { Case } from '@/types';
 import { MatterType } from '@/types/enums';
 import { useLoaderData } from 'react-router';
@@ -58,7 +58,10 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   // Fetch cases for selection
   let cases: Case[] = [];
   try {
-    cases = await DataService.cases.getAll();
+    const casesResult = await casesApi.getAll();
+    if (casesResult.ok) {
+      cases = casesResult.data.data as Case[];
+    }
   } catch (error) {
     console.error('Failed to load cases for strategy builder:', error);
     // Continue with empty cases array rather than crashing the page
@@ -102,23 +105,8 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
     name: type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   }));
 
-  // Fetch existing strategies from cases that have them
+  // Existing strategy persistence is not available in backend API yet
   const existingStrategies: LoaderData['existingStrategies'] = [];
-  for (const c of cases) {
-    try {
-      const warRoomService = await DataService.warRoom.get();
-      const strategy = await warRoomService.getStrategy(c.id);
-      if (strategy && strategy.name) {
-        existingStrategies.push({
-          id: strategy.id || c.id,
-          name: strategy.name,
-          caseId: c.id
-        });
-      }
-    } catch {
-      // Case may not have a strategy - continue
-    }
-  }
 
   return {
     templates,
@@ -148,22 +136,14 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
           return { success: false, error: "Strategy name is required" };
         }
 
-        if (caseId) {
-          // Update strategy for the case
-          await DataService.warRoom.updateStrategy(caseId, {
-            name,
-            templateId,
-            objectives,
-            status: 'Draft'
-          });
-          return {
-            success: true,
-            message: "Strategy saved successfully",
-            strategyId: caseId, // Strategy ID is effectively Case ID in this model
-          };
+        if (!caseId) {
+          return { success: false, error: "Case selection required" };
         }
 
-        return { success: false, error: "Case selection required" };
+        return {
+          success: false,
+          error: "Strategy persistence is not available yet",
+        };
       }
 
       case "generate": {

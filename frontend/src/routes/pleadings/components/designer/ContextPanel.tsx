@@ -5,7 +5,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { ArrowRight, FileText, Fingerprint, Link, Loader2, Scale, Search } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { CaseId } from '@/types';
 

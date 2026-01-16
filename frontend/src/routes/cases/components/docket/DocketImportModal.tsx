@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { ArrowRight, FileCode, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';

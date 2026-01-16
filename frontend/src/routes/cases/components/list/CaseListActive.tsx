@@ -11,6 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Currency } from '@/components/atoms/Currency/Currency';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";

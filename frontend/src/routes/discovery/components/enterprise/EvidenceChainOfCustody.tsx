@@ -4,6 +4,7 @@
  * @description Chain of custody tracking for evidence with handling logs and authentication records
  */
 
+import React from 'react';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';

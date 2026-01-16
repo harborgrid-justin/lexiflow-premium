@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User } from 'lucide-react';
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';

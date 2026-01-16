@@ -5,6 +5,7 @@
  * collection tracking, processing status, and review metrics
  */
 
+import React from 'react';
 import { analyticsApi } from '@/lib/frontend-api';
 import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
 import { DataService } from '@/services/data/data-service.service';

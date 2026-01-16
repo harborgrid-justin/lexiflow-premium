@@ -4,6 +4,7 @@
  * @description Paralegal-specific dashboard focused on task queue, document review, and support metrics
  */
 
+import React from 'react';
 import { dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from "@/hooks/useTheme";
 import { ActivityFeed, KPICard, StatWidget } from '../../widgets';

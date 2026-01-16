@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { CheckCircle, Loader2, Mail, Phone, Plus, Users, Video } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';

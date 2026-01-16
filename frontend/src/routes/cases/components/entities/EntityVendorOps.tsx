@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
 
 // ============================================================================

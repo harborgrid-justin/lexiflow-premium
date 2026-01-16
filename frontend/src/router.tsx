@@ -89,13 +89,13 @@ const routes: RouteObject[] = [
           },
           {
             path: "dashboard",
-            lazy: () => import("./routes/dashboard/index"),
+            lazy: () => import("./routes/dashboard/index.tsx"),
           },
 
           // Case Management
           {
             path: "cases",
-            lazy: () => import("./routes/cases/index"),
+            lazy: () => import("./routes/cases/index.tsx"),
           },
           {
             path: "cases/create",

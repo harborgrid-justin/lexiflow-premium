@@ -2,6 +2,7 @@
  * Intake tab component with basic matter information
  */
 
+import React from 'react';
 import { FormField } from '../components/FormField';
 import { FormSelect } from '../components/FormSelect';
 import { FormTextarea } from '../components/FormTextarea';

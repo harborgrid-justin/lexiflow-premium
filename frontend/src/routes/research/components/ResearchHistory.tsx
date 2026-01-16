@@ -44,7 +44,7 @@ export function ResearchHistory() {
                   <Clock className="h-3 w-3 mr-1" /> {item.timestamp}
                 </div>
               </TableCell>
-              <TableCell>{item.sources.length}</TableCell>
+              <TableCell>{item.sources?.length ?? 0}</TableCell>
               <TableCell className="text-right">
                 <Button size="sm" variant="ghost" className="text-blue-600" icon={ExternalLink}>View Results</Button>
               </TableCell>

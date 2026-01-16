@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Ruler } from 'lucide-react';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';

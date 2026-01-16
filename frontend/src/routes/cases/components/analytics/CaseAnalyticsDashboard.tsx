@@ -41,7 +41,7 @@ import {
   PieChart,
   Users
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {
   // Guideline 34: Side-effect free context read

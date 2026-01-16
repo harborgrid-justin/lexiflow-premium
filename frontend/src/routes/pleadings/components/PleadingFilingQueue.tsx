@@ -10,6 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 import { AlertTriangle, CheckCircle, Clock, Send, XCircle } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES

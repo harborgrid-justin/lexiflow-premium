@@ -1,3 +1,4 @@
+import React from 'react';
 import { BookOpen, Search, Plus, ExternalLink } from 'lucide-react';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';

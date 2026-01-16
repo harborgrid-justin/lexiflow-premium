@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { X } from 'lucide-react';
 
 // Internal Dependencies - Components

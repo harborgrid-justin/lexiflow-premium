@@ -7,7 +7,7 @@
  */
 
 import { AlertCircle, Sparkles, Wand2 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { useNotify } from '@/hooks/useNotify';
 import { GeminiService } from '@/services/features/research/geminiService';

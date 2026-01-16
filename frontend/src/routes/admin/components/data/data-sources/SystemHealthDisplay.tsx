@@ -3,7 +3,7 @@ import { cn } from '@/lib/cn';
 import { useDataSource } from '@/routes/dashboard';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Activity, AlertTriangle, CheckCircle, X } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const BACKEND_SERVICES = [
   'cases', 'docket', 'documents', 'evidence', 'billing', 'users',

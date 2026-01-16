@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";

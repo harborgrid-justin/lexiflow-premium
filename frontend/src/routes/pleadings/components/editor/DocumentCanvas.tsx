@@ -1,3 +1,4 @@
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { CaseId, PleadingSection } from '@/types';
 import { GripVertical, Trash2 } from 'lucide-react';

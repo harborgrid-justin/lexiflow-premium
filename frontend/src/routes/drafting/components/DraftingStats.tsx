@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTheme } from "@/hooks/useTheme";
 import { DraftingStats as StatsType } from '@api/domains/drafting';
 import { CheckSquare, FileCode, FileText } from 'lucide-react';

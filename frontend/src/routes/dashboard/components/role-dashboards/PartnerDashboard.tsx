@@ -4,6 +4,7 @@
  * @description Partner-specific dashboard focused on revenue, client acquisition, and case outcomes
  */
 
+import React from 'react';
 import { type PartnerDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from "@/hooks/useTheme";
 import { ChartCard, KPICard, StatWidget } from '../../widgets';

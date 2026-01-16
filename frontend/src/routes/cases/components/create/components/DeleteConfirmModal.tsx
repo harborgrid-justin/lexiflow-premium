@@ -2,6 +2,7 @@
  * Delete confirmation modal component
  */
 
+import React from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Trash2 } from 'lucide-react';
 

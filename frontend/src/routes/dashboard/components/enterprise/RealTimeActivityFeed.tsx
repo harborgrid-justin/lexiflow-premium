@@ -5,6 +5,7 @@
  * Displays recent activities, events, and notifications in real-time
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
 import type { Activity as ActivityType, ActivityType as ActivityTypeEnum, BaseDashboardProps } from '@/types/dashboard';

@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, Plus, Users } from 'lucide-react';
-import { lazy, Suspense, useCallback, useMemo } from 'react';
+import React, { lazy, Suspense, useCallback, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';

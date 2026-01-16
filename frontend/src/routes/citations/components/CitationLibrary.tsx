@@ -141,8 +141,6 @@ export function CitationLibrary({ onSelect }: CitationLibraryProps) {
             </div>
         </>
     );
-    console.log('content data:', content);
-
     return (
         <div className="flex flex-col h-full">
             <div className={cn("p-4 border-b shrink-0 flex items-center gap-4", theme.border.default)}>

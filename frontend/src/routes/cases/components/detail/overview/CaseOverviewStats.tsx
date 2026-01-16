@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { CheckCircle, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from 'lucide-react';
 // Internal Dependencies - Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';

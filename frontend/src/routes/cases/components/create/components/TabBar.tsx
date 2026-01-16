@@ -2,6 +2,7 @@
  * Tab navigation component
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { LucideIcon } from 'lucide-react';
 

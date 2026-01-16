@@ -10,6 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 import { CheckCircle, FileText, PieChart as PieIcon, XCircle } from 'lucide-react';
 import {
   Bar,

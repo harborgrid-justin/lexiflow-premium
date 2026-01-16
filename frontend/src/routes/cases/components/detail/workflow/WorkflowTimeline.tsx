@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, ArrowRight } from 'lucide-react';
 
 // Internal Dependencies - Components

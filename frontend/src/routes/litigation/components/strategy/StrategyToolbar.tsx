@@ -7,7 +7,7 @@
  */
 
 import { Download, Menu, ZoomIn, ZoomOut } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";

@@ -1,3 +1,4 @@
+import React from 'react';
 import { ChartColorService } from "@/lib/theme/chartColorService";
 import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';

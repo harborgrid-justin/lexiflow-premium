@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

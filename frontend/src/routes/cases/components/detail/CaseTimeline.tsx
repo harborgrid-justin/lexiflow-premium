@@ -8,6 +8,7 @@
  * @category Case Management - Timeline & Events
  */
 
+import React from 'react';
 import { BookOpen, Filter, List } from 'lucide-react';
 
 import { useCaseTimeline } from '@/routes/cases/_hooks/useCaseTimeline';

@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
 import { AnimatePresence, motion } from 'framer-motion';
 import { Award, BarChart3, Clock, Target, TrendingUp, Users } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Bar,
   BarChart,

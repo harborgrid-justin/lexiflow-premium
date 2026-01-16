@@ -47,7 +47,7 @@ interface CaseListContextValue {
   // Actions
   setActiveTab: (tab: string) => void;
   setFilters: (filters: Partial<CaseListFilters>) => void;
-  handleParentTabChange: (parentId: string) => void;
+  handleParentTabChange: (parentId: string, defaultSubTabId?: string) => void;
   refreshData: () => void;
 }
 
@@ -141,11 +141,10 @@ export function CaseListProvider({
   /**
    * Handle parent tab change (navigate to first sub-tab)
    */
-  const handleParentTabChange = useCallback((parentId: string) => {
-    // This would map to actual tab structure
-    // For now, simplified implementation
+  const handleParentTabChange = useCallback((parentId: string, defaultSubTabId?: string) => {
+    const targetTab = defaultSubTabId || parentId;
     startTransition(() => {
-      _setActiveTab(parentId);
+      _setActiveTab(targetTab);
     });
   }, []);
 

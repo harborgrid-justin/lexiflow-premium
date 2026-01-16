@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components

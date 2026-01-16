@@ -5,6 +5,7 @@
  * Suggests applicable exceptions under FRE 803/804.
  */
 
+import React from 'react';
 import { AlertTriangle, CheckCircle, FileText, Wand2 } from 'lucide-react';
 // Common Components
 import { Button } from '@/components/atoms/Button';

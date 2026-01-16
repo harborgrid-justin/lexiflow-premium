@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { Calendar, FileText, Gavel, GitBranch, MessageSquare, Users } from 'lucide-react';
 // Internal Dependencies - Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';

@@ -2,6 +2,7 @@
  * Global error display component
  */
 
+import React from 'react';
 import { AlertCircle } from 'lucide-react';
 
 export interface GlobalErrorsProps {

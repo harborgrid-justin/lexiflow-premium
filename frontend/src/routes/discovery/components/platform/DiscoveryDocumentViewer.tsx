@@ -7,7 +7,7 @@ import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { LegalDocument } from '@/types/documents';
 import { ArrowLeft, Download, FileText, Printer, Tag, ZoomIn, ZoomOut } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { DiscoveryDocumentViewerProps } from './types';
 import { CodingPanel } from './viewer/CodingPanel';
 

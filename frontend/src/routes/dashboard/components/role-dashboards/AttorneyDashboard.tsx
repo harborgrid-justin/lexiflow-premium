@@ -4,6 +4,7 @@
  * @description Attorney-specific dashboard focused on billable hours, case deadlines, and workload
  */
 
+import React from 'react';
 import { type AttorneyDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from "@/hooks/useTheme";
 import { ChartCard, DeadlinesList, KPICard, StatWidget } from '../../widgets';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { IntegrityReport } from '@/services/infrastructure/chainService';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';

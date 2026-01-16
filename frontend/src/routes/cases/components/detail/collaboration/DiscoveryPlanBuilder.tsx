@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FileText, CheckCircle, AlertCircle, Edit2, Save, Download, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components

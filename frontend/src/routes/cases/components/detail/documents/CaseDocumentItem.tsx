@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { CheckSquare, FileText, Loader2, Wand2 } from 'lucide-react';
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';

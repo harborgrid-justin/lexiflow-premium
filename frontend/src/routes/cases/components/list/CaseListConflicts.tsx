@@ -18,7 +18,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, Loader2, Search, ShieldAlert } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

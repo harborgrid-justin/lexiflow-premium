@@ -5,6 +5,7 @@
  * Shows individual chunks/pages with their hashes and content previews.
  */
 
+import React from 'react';
 import { FileText, Link, Split } from 'lucide-react';
 // Common Components
 import { Button } from '@/components/atoms/Button/Button';

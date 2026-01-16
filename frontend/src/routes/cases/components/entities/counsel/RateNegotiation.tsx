@@ -1,3 +1,4 @@
+import React from 'react';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";

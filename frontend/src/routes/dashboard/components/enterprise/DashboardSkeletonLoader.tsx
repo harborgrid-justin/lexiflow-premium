@@ -5,6 +5,7 @@
  * Provides smooth loading animations for various dashboard components
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
 import { motion } from 'framer-motion';

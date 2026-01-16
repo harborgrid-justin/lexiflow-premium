@@ -8,6 +8,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { Briefcase } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context

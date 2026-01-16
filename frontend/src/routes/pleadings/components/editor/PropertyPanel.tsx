@@ -1,3 +1,4 @@
+import React from 'react';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from "@/hooks/useTheme";
 import { PleadingSection } from '@/types';

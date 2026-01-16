@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { useState } from 'react'; // Types
+import React, { useState } from 'react';
 interface LEDESFormat {
   id: string; version: '1998B' | '2000'; name: string; description: string;
 } interface UTBMSCode {

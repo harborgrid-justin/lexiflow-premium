@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { CheckCircle, Clock, FileText, TrendingUp } from 'lucide-react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================

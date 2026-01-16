@@ -2,6 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import React from 'react';
 import { Card } from '@/components/molecules/Card/Card';
 import { cn } from '@/lib/cn';
 import { CaseStatus } from '@/types';

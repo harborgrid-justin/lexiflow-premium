@@ -19,7 +19,7 @@
 // ============================================================================
 import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

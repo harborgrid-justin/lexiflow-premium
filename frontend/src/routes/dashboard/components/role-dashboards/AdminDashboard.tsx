@@ -4,6 +4,7 @@
  * @description Admin-specific dashboard focused on firm-wide metrics, user activity, and system health
  */
 
+import React from 'react';
 import { type AdminDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
 import { useTheme } from "@/hooks/useTheme";
 import { ChartCard, KPICard, StatWidget } from '../../widgets';

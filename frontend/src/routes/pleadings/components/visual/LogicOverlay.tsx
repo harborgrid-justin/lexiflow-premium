@@ -2,7 +2,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { PleadingDocument } from '@/types';
 import { cn } from '@/lib/cn';
 import { AlertCircle, ArrowRight, CheckCircle, GitBranch } from 'lucide-react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 interface LogicOverlayProps {
   document: PleadingDocument;

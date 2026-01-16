@@ -8,7 +8,7 @@
  */
 
 import { Loader2, Rocket, Save } from 'lucide-react';
-import { Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 
 // Internal Components
 import { TabbedPageLayout } from '@/components/layouts';

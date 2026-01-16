@@ -18,18 +18,18 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Calendar, DollarSign, Plus } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Modal } from '@/components/molecules/Modal';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/useModalState';
@@ -38,10 +38,10 @@ import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 
-export const CaseListIntake: React.FC = () => {
+export function CaseListIntake() {
   // Guideline 34: Side-effect free context read
   const { theme } = useTheme();
   const { success, error: notifyError } = useNotify();
@@ -269,4 +269,4 @@ export const CaseListIntake: React.FC = () => {
       </Modal>
     </div>
   );
-};
+}

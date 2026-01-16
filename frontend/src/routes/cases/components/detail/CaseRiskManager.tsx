@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { AlertTriangle, Loader2, Plus, ShieldAlert, TrendingUp } from 'lucide-react';
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';

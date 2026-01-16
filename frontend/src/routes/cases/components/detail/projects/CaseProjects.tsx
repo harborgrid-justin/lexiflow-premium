@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { Briefcase, Plus } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';

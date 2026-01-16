@@ -8,7 +8,7 @@
  */
 
 // External Dependencies
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { ProjectCard } from './ProjectCard';

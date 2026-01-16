@@ -4,6 +4,7 @@
  * @description Trial exhibit organization with exhibit lists and presentation mode
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";

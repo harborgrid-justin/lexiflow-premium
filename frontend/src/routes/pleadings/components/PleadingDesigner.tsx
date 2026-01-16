@@ -5,7 +5,7 @@ import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
 import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
-import { Suspense, lazy, useCallback, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useHistory } from '@/hooks/useHistory';

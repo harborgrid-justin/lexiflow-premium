@@ -4,6 +4,7 @@
  * Provides shimmer effects for better perceived performance
  */
 
+import React from 'react';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 // Base skeleton component with shimmer animation

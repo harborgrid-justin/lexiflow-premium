@@ -5,7 +5,7 @@
  * Features AI-powered analysis and blockchain verification display.
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { User, Activity, Link, Sparkles } from 'lucide-react';
 
 // Common Components

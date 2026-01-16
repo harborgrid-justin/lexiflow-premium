@@ -10,6 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React from 'react';
 import { AlertTriangle, Loader2, MapPin, ShieldAlert } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES

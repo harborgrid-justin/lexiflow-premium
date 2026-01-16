@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Plus } from 'lucide-react';
-import { Suspense, lazy, useState } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

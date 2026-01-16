@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Building2, Globe, ShieldAlert, Users } from 'lucide-react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================

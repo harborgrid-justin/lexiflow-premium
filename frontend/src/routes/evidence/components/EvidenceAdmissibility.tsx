@@ -6,7 +6,7 @@
  */
 
 import { CheckCircle, Plus, Scale, ShieldAlert } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Common Components
 import { Badge } from '@/components/atoms/Badge/Badge';

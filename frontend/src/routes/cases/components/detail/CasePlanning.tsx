@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { Layers, Plus, TrendingUp } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';

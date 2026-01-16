@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { TimelineEvent } from '@/types';

@@ -17,7 +17,7 @@ import type { AuthUser } from "@/lib/auth/types";
 // Constants
 // ============================================================================
 
-const AUTH_STORAGE_KEY = "lexiflow_auth_token";
+const AUTH_STORAGE_KEY = "lexiflow-auth-token";
 const AUTH_USER_KEY = "lexiflow_auth_user";
 
 // ============================================================================

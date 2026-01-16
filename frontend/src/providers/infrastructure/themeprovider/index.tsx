@@ -33,7 +33,7 @@ import { UI_CONFIG } from '@/config/features/ui.config';
 import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from '@/lib/theme/tokens';
 import { ThemeObject } from '@/lib/theme/types';
 import { ProfileDomain } from '@/services/domain/profile.service';
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
 
 export type { ThemeObject } from '@/lib/theme/types';
 

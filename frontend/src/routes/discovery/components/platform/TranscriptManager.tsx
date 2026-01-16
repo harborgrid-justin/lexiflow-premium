@@ -16,7 +16,7 @@ import { DataService } from '@/services/data/data-service.service';
 import { Transcript } from '@/types';
 import { cn } from '@/lib/cn';
 import { CheckCircle, Clock, FileText, Search, Upload } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { Input } from '@/components/atoms/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';

@@ -84,6 +84,18 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         // tsconfigPaths handles @/*, but we keep the root @ for safety
         "@": path.resolve(__dirname, "./src"),
       },
+      dedupe: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "scheduler",
+        "react-router",
+        "react-router-dom",
+        "@remix-run/react",
+        "@react-router/dev",
+        "@react-router/node",
+      ],
     },
 
     // 6. Production Build (Rolldown & Oxc Optimized)
@@ -125,7 +137,14 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 
     // 7. Dependency Optimization
     optimizeDeps: {
-      include: ["react", "react-dom", "lucide-react"],
+      include: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "lucide-react",
+        "recharts",
+      ],
       // If aliases still fail pre-bundling, you can force exclude them here:
       // exclude: ['@providers']
     },

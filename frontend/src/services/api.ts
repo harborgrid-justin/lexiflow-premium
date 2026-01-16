@@ -22,44 +22,12 @@
  * ```
  */
 
-import {
-  adminApi,
-  analyticsApi,
-  authApi,
-  billingApi,
-  casesApi,
-  communicationsApi,
-  complianceApi,
-  discoveryApi,
-  docketApi,
-  documentsApi,
-  hrApi,
-  integrationsApi,
-  intelligenceApi,
-  trialApi,
-  workflowApi,
-} from "@/lib/frontend-api";
+import { api as domainApi } from "@/api";
 
 /**
  * Consolidated API object containing all domain APIs
  */
-export const api = {
-  admin: adminApi,
-  analytics: analyticsApi,
-  auth: authApi,
-  billing: billingApi,
-  cases: casesApi,
-  communications: communicationsApi,
-  compliance: complianceApi,
-  discovery: discoveryApi,
-  docket: docketApi,
-  documents: documentsApi,
-  hr: hrApi,
-  integrations: integrationsApi,
-  intelligence: intelligenceApi,
-  trial: trialApi,
-  workflow: workflowApi,
-};
+export const api = domainApi;
 
-// Re-export everything from frontend-api for convenience
-export * from "@/lib/frontend-api";
+// Re-export domain APIs for convenience
+export * from "@/api";

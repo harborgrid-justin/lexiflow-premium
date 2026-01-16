@@ -7,7 +7,7 @@
  * Uses useTheme hook to apply semantic colors.
  */
 
-import { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 // Internal Components
 import { BuilderCanvas, BuilderToolbar } from '@/routes/cases/components/workflow/builder';

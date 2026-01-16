@@ -1,3 +1,4 @@
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { ArrowRight, Database, LayoutTemplate, MousePointer2, Save, Square, Type } from 'lucide-react';
 interface BuilderToolbarProps {

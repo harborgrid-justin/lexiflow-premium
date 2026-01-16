@@ -2,6 +2,7 @@
  * Reusable select field with label and error display
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 
 export interface FormSelectOption {

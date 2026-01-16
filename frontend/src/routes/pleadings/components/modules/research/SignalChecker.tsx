@@ -1,3 +1,4 @@
+import React from 'react';
 import { CheckCircle, AlertTriangle, XCircle, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/cn';
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card } from '@/components/molecules/Card/Card';
 import { Button } from '@/components/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';

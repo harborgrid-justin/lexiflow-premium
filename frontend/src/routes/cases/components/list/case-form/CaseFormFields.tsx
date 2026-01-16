@@ -15,6 +15,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
+import React from 'react';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 

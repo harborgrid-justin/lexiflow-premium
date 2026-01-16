@@ -28,8 +28,8 @@ import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { getTodayString } from '@/lib/dateUtils';
 
@@ -60,10 +60,12 @@ export function AssetManager() {
     const [assetToDelete, setAssetToDelete] = useState<string | null>(null);
     const [newAsset, setNewAsset] = useState<Partial<FirmAsset>>({});
 
+    const assetsQueryKey = useMemo(() => ['assets', 'all'] as const, []);
+
     // Enterprise Data Access
     const { data: rawAssets = [], refetch } = useQuery<FirmAsset[]>(
-        ['assets', 'all'],
-        DataService.assets.getAll
+        assetsQueryKey,
+        () => DataService.assets.getAll()
     );
 
     // Memoize assets to prevent re-creating array on every render

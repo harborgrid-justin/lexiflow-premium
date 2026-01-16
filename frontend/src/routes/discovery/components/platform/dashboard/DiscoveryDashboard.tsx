@@ -24,15 +24,15 @@ export function DiscoveryDashboard({ onNavigate, caseId }: DiscoveryDashboardPro
     // Parallel Queries for Dashboard Stats
     const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
         caseId ? ['requests', 'case', caseId] : ['requests', 'all'],
-        () => DataService.discovery.getRequests(caseId)
+        () => DataService.discoveryRequests.getAll(caseId ? { caseId } : undefined)
     );
     const { data: holds = [] } = useQuery<LegalHold[]>(
         caseId ? ['legal-holds', 'case', caseId] : ['legal-holds', 'all'],
-        () => DataService.discovery.getLegalHolds(caseId)
+        () => DataService.legalHolds.getAll(caseId ? { caseId } : undefined)
     );
     const { data: privilegeLog = [] } = useQuery<PrivilegeLogEntry[]>(
         caseId ? ['privilege-log', 'case', caseId] : ['privilege-log', 'all'],
-        () => DataService.discovery.getPrivilegeLog(caseId)
+        () => DataService.privilegeLog.getAll(caseId ? { caseId } : undefined)
     );
 
     const stats = {

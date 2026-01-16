@@ -6,7 +6,7 @@
  * @module components/litigation/Minimap
  */
 
-import { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';

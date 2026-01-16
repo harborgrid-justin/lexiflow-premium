@@ -12,7 +12,7 @@ import {
   GenerateDocumentDto,
 } from '@api/domains/drafting';
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface DocumentGeneratorProps {
   templateId?: string;

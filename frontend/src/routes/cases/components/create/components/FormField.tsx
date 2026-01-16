@@ -2,6 +2,7 @@
  * Reusable form field with label, input, and error display
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 
 export interface FormFieldProps {

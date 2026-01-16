@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { Briefcase, Calendar, CheckCircle, ExternalLink, FileText, Hash, Users } from 'lucide-react';
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button/Button';

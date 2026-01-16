@@ -7,6 +7,7 @@
  * @module components/litigation/LitigationProperties
  */
 
+import React from 'react';
 import { BookOpen, Settings, X } from 'lucide-react';
 // Internal Components
 import { Button } from '@/components/atoms/Button';

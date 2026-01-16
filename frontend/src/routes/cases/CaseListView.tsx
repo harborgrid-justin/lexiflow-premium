@@ -280,7 +280,7 @@ export function CaseListView() {
           return (
             <button
               key={parent.id}
-              onClick={() => handleParentTabChange(parent.id)}
+              onClick={() => handleParentTabChange(parent.id, parent.subTabs?.[0]?.id)}
               className={cn(
                 'flex items-center gap-2 px-4 py-2 rounded-md transition-colors',
                 'text-sm font-medium',

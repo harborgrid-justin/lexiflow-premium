@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { AlertTriangle, Cpu, Wand2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
 import { ClauseList as ClausePanel } from '@/routes/clauses/components/ClauseList';

@@ -15,7 +15,7 @@
  * NO THEME USAGE: Pure routing logic
  */
 
-import { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { DiscoveryRequest } from '@/types';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';

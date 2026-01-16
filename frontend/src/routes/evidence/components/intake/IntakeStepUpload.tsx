@@ -5,6 +5,7 @@
  * Handles file selection, drag-and-drop, and displays processing status.
  */
 
+import React from 'react';
 import { CheckCircle, Link, Loader2, ShieldCheck, UploadCloud } from 'lucide-react';
 // Common Components
 import { Button } from '@/components/atoms/Button/Button';

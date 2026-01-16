@@ -65,9 +65,11 @@ export async function loader(args: LoaderFunctionArgs) {
  * Provides authenticated app structure with sidebar and top bar
  * Providers are mounted once in src/root.tsx via RootProviders
  */
-export default function AppShellLayout() {
+export function AppShellLayout() {
   return <AppShellContent />;
 }
+
+export default AppShellLayout;
 
 /**
  * App Shell Content

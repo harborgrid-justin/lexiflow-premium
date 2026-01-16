@@ -3,6 +3,7 @@
  * @description Loading skeleton components for Evidence Vault
  */
 
+import React from 'react';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 

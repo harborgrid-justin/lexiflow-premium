@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTheme } from "@/hooks/useTheme";
 import { GeneratedDocument } from '@api/domains/drafting';
 import { formatDistanceToNow } from 'date-fns';

@@ -5,6 +5,7 @@
  * Orchestrates sub-views (Overview, Admissibility, Chain of Custody, Forensics) via tabs.
  */
 
+import React from 'react';
 import { ArrowLeft, ExternalLink, FileSearch, Lock, Stamp } from 'lucide-react';
 // Common Components
 import { Button } from '@/components/atoms/Button/Button';

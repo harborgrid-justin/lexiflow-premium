@@ -5,6 +5,7 @@
  * Displays case updates, document uploads, tasks completed, and system events
  */
 
+import React from 'react';
 import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
 import { Activity, ActivityType } from '@/types/dashboard';

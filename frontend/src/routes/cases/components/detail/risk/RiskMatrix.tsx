@@ -15,6 +15,7 @@
 
 // External Dependencies
 // Internal Dependencies - Hooks & Context
+import React from 'react';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils

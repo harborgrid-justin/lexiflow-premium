@@ -9,6 +9,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { AlertCircle, ChevronDown, ChevronRight, GripVertical, Plus } from 'lucide-react';
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';

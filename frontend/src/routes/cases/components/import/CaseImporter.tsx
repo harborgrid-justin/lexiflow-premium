@@ -25,7 +25,7 @@ import { CaseStatus, MatterType } from '@/types/enums';
 import { MetadataRecord, UserId } from '@/types/primitives';
 import { parseCaseXml, type XMLParsedCaseData } from '@/utils/caseXmlParser';
 import { AlertCircle, CheckCircle, Edit2, FileText, Loader, Plus, Settings, Sparkles, Upload, Users, X } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface ParsedCaseData {
   title?: string;

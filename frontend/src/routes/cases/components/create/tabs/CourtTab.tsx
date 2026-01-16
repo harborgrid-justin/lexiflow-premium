@@ -2,6 +2,7 @@
  * Court information tab component
  */
 
+import React from 'react';
 import { FormField } from '../components/FormField';
 import { FormSelect } from '../components/FormSelect';
 import { FormData } from '../types/newCaseTypes';

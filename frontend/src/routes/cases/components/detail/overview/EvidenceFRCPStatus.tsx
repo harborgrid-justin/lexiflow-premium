@@ -8,6 +8,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { CheckCircle } from 'lucide-react';
 
 // Internal Dependencies - Components

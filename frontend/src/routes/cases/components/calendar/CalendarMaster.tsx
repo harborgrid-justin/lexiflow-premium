@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Briefcase, CheckSquare, Shield, AlertCircle } from 'lucide-react';
 
 // ============================================================================

@@ -8,6 +8,7 @@
  */
 
 // External Dependencies
+import React from 'react';
 import { MapPin } from 'lucide-react';
 
 // Internal Dependencies - Components

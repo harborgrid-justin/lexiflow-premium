@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';

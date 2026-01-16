@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 import { useToast } from '@/providers';
 import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@api/domains/drafting';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ApprovalQueue } from './ApprovalQueue';
 import { DocumentGenerator } from './DocumentGenerator';
 import { DraftingStats } from './DraftingStats';

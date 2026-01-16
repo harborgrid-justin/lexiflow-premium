@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowRight, FileCheck, Loader2, Wand2 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

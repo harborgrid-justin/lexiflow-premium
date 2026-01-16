@@ -10,6 +10,7 @@
 
 // External Dependencies
 // Internal Dependencies - Components
+import React from 'react';
 import { DiscoveryPlatform } from '@/routes/discovery/components/platform/DiscoveryPlatform';
 
 interface CaseDiscoveryProps {

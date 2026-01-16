@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle, Bold, CheckCircle2, Clock, Code, Download, Edit3, Eye, GitBranch, Italic, Link2, List, MessageSquare, Plus, Quote, Redo, Save, Sparkles, Undo, User, Users,
 } from 'lucide-react';
-import { useCallback, useState } from 'react'; // ============================================================================
+import React, { useCallback, useState } from 'react';
 // Types & Interfaces
 // ============================================================================
 export interface MemoSection {

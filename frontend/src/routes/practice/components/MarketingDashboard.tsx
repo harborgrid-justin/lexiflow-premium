@@ -28,8 +28,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
-import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
 import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';

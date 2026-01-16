@@ -1,4 +1,4 @@
-import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 import { ThemeMode } from "@/lib/theme/tokens";
 import { Clause } from "@/types";
 

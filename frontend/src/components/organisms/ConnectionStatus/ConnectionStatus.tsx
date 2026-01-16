@@ -1,4 +1,5 @@
 import { TIMEOUTS } from '@/config/ports.config';
+import { useTheme } from '@/hooks/useTheme';
 import { useDataSource } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
@@ -11,7 +12,6 @@ interface ConnectionStatusProps {
 }
 
 export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = '' }) => {
-  const { theme } = useTheme();
   const [isOnline, setIsOnline] = useState(true);
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
   const [showHealthMonitor, setShowHealthMonitor] = useState(false);

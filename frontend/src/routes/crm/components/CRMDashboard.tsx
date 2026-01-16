@@ -31,7 +31,7 @@ import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
-import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 import { getChartTheme } from '@/utils/chartConfig';
 
 // Types

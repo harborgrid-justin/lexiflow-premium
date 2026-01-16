@@ -1,7 +1,7 @@
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { Card } from '@/components/molecules/Card/Card';
-import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 import { useTheme } from "@/hooks/useTheme";
 import { FinancialPerformanceData } from '@/types';
 import React from "react";

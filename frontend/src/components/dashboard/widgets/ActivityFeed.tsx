@@ -1,12 +1,12 @@
 /**
  * @module components/dashboard/widgets/ActivityFeed
  * @category Dashboard Widgets
- * @description Recent activity feed with timeline view
- * Displays case updates, document uploads, tasks completed, and system events
+ * @description Recent activity feed with timeline view.
+ * Displays case updates, document uploads, tasks completed, and system events.
  */
 
 import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
 import { Activity } from '@/types/dashboard';
 import { formatDistanceToNow } from 'date-fns';
 import {
@@ -18,12 +18,9 @@ import {
   FileText,
   MessageSquare,
   Upload,
-  UserPlus
+  UserPlus,
 } from 'lucide-react';
 import React from 'react';
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
 
 export interface ActivityFeedProps {
   /** Activity items */
@@ -42,27 +39,24 @@ export interface ActivityFeedProps {
   className?: string;
 }
 
-// ============================================================================
-// HELPERS
-// ============================================================================
+type ActivityIcon = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
-import type { DesignTokens } from '@/theme/tokens';
+type ActivityConfig = {
+  icon: ActivityIcon;
+  color: string;
+  bgColor: string;
+};
 
-interface ThemeType {
-  [key: string]: unknown;
-}
-
-const getActivityConfig = (tokens: DesignTokens, theme: ThemeType) => ({
+const ACTIVITY_CONFIG: Record<Activity['type'], ActivityConfig> = {
   case_created: {
     icon: Briefcase,
-    color: tokens.colors.blue500,
-    bgColor: tokens.colors.blue400 + '20',
-    type ThemeShape = Record<string, unknown> & {
-      colors?: Record<string, unknown>;
-      text?: Record<string, unknown>;
-    };
-    color: tokens.colors.indigo500,
-    bgColor: tokens.colors.indigo400 + '20',
+    color: 'text-blue-600 dark:text-blue-400',
+    bgColor: 'bg-blue-100 dark:bg-blue-900/30',
+  },
+  case_updated: {
+    icon: FileText,
+    color: 'text-sky-600 dark:text-sky-400',
+    bgColor: 'bg-sky-100 dark:bg-sky-900/30',
   },
   case_closed: {
     icon: CheckCircle2,
@@ -91,20 +85,20 @@ const getActivityConfig = (tokens: DesignTokens, theme: ThemeType) => ({
   },
   team_member_added: {
     icon: UserPlus,
-    color: theme.colors.info,
-    bgColor: cn('bg-blue-100 dark:bg-blue-900/30'),
+    color: 'text-sky-600 dark:text-sky-300',
+    bgColor: 'bg-sky-100 dark:bg-sky-900/30',
   },
   comment_added: {
     icon: MessageSquare,
-    color: theme.text.secondary,
+    color: 'text-text-muted',
     bgColor: 'bg-gray-100 dark:bg-gray-900/30',
   },
   status_changed: {
     icon: AlertTriangle,
-    color: 'text-yellow-600 dark:text-yellow-400',
-    bgColor: 'bg-yellow-100 dark:bg-yellow-900/30',
+    color: 'text-amber-600 dark:text-amber-400',
+    bgColor: 'bg-amber-100 dark:bg-amber-900/30',
   },
-});
+};
 
 const formatTimestamp = (timestamp: Date | string): string => {
   try {
@@ -129,10 +123,6 @@ const getPriorityColor = (priority?: Activity['priority']): string => {
   }
 };
 
-// ============================================================================
-// COMPONENT
-// ============================================================================
-
 export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   activities,
   isLoading = false,
@@ -142,95 +132,98 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   emptyMessage = 'No recent activity',
   className,
 }) => {
-  const { theme, tokens } = useTheme();
-  const activityConfig = React.useMemo(() => getActivityConfig(tokens, theme), [tokens, theme]);
+  const { theme } = useTheme();
+  const activityConfig = React.useMemo(() => ACTIVITY_CONFIG, []);
 
   const displayActivities = activities.slice(0, maxItems);
 
   if (isLoading) {
     return (
       <div className={cn('space-y-4', className)}>
-        {Array.from({ length: 5 }).map((_, i) => (
-    const {tokens, theme} = useTheme();
-        const themeShape = theme as ThemeShape;
-        <div className="w-10 h-10 rounded-full" style={{ backgroundColor: theme.surface.muted }} />
-        <div className="flex-1 space-y-2">
-      () => getActivityConfig(tokens, themeShape),
-          [tokens, themeShape]
-        </div>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div
+            key={`activity-skeleton-${index}`}
+            className="flex items-center gap-3 rounded-lg border px-3 py-4 animate-pulse"
+            style={{
+              backgroundColor: theme.surface.default,
+              borderColor: theme.colors.border,
+            }}
+          >
+            <div
+              className="w-10 h-10 rounded-full"
+              style={{ backgroundColor: theme.surface.subtle }}
+            />
+            <div className="flex-1 space-y-2">
+              <div className="h-3 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-2 w-1/2 rounded bg-gray-200 dark:bg-gray-700/80" />
+            </div>
+          </div>
+        ))}
       </div>
-    ))
-  }
-      </div >
     );
   }
 
-if (displayActivities.length === 0) {
+  if (displayActivities.length === 0) {
+    return (
+      <div className={cn('text-center py-12', className)}>
+        <FileText className={cn('h-12 w-12 mx-auto mb-3 text-text-muted')} />
+        <p className={cn('text-sm text-text-muted')}>{emptyMessage}</p>
+      </div>
+    );
+  }
+
   return (
-    <div className={cn('text-center py-12', className)}>
-      <FileText className={cn('h-12 w-12 mx-auto mb-3 text-text-muted')} />
-      <p className={cn('text-sm text-text-muted')}>{emptyMessage}</p>
+    <div className={cn('space-y-1', className)}>
+      {displayActivities.map((activity, index) => {
+        const config = activityConfig[activity.type] || activityConfig.status_changed;
+        const Icon = activity.icon || config.icon;
+
+        return (
+          <div
+            key={activity.id}
+            className={cn(
+              'relative flex gap-3 p-3 rounded-lg border-l-4 transition-all duration-200 bg-surface',
+              getPriorityColor(activity.priority),
+              onActivityClick && 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50',
+              index < displayActivities.length - 1 && 'border-b border-gray-100 dark:border-gray-800'
+            )}
+            onClick={() => onActivityClick?.(activity)}
+            role={onActivityClick ? 'button' : undefined}
+            tabIndex={onActivityClick ? 0 : undefined}
+          >
+            <div
+              className={cn(
+                'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center',
+                config.bgColor
+              )}
+            >
+              {showAvatars && activity.user?.avatar ? (
+                <img
+                  src={activity.user.avatar}
+                  alt={activity.user.name}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <Icon className={cn('h-5 w-5', config.color)} />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2 mb-1">
+                <p className={cn('text-sm font-medium text-text')}>{activity.title}</p>
+                <time className={cn('text-xs whitespace-nowrap text-text-muted')}>
+                  {formatTimestamp(activity.timestamp)}
+                </time>
+              </div>
+              <p className={cn('text-sm mb-1 text-text-muted')}>{activity.description}</p>
+              {activity.user && (
+                <p className={cn('text-xs text-text-muted')}>by {activity.user.name}</p>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
-}
-
-return (
-  <div className={cn('space-y-1', className)}>
-    {displayActivities.map((activity, index) => {
-      const config = activityConfig[activity.type] || activityConfig.status_changed;
-      const Icon = activity.icon || config.icon;
-
-      return (
-        <div
-          key={activity.id}
-          className={cn(
-            'relative flex gap-3 p-3 rounded-lg border-l-4 transition-all duration-200',
-            'bg-surface', // Fixed: Use Tailwind class "bg-surface" (white/slate-800)
-            getPriorityColor(activity.priority),
-            onActivityClick && 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50',
-            index < displayActivities.length - 1 && 'border-b border-gray-100 dark:border-gray-800'
-          )}
-          onClick={() => onActivityClick?.(activity)}
-          role={onActivityClick ? 'button' : undefined}
-          tabIndex={onActivityClick ? 0 : undefined}
-        >
-          {/* Icon or Avatar */}
-          <div className={cn('flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center', config.bgColor)}>
-            {showAvatars && activity.user?.avatar ? (
-              <img
-                src={activity.user.avatar}
-                alt={activity.user.name}
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            ) : (
-              <Icon className={cn('h-5 w-5', config.color)} />
-            )}
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 mb-1">
-              <p className={cn('text-sm font-medium text-text')}>
-                {activity.title}
-              </p>
-              <time className={cn('text-xs whitespace-nowrap text-text-muted')}>
-                {formatTimestamp(activity.timestamp)}
-              </time>
-            </div>
-            <p className={cn('text-sm mb-1 text-text-muted')}>
-              {activity.description}
-            </p>
-            {activity.user && (
-              <p className={cn('text-xs text-text-muted')}>
-                by {activity.user.name}
-              </p>
-            )}
-          </div>
-        </div>
-      );
-    })}
-  </div>
-);
 };
 
 ActivityFeed.displayName = 'ActivityFeed';

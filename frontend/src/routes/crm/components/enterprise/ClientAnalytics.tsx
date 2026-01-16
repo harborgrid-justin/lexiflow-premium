@@ -11,7 +11,7 @@ import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 import { useTheme } from "@/hooks/useTheme";
 import { getChartTheme } from '@/utils/chartConfig';
 import {

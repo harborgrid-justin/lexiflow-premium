@@ -20,15 +20,15 @@ import { Bar, BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Toolti
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { ChartColorService } from "@/unknown_fix_me/ChartColorService";
 import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
 // ✅ Migrated to backend API (2025-12-21)
 

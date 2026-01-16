@@ -8,7 +8,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { adminApi } from "@/lib/frontend-api";
 
 type AuditLog = {
   id: string;
@@ -27,8 +27,8 @@ export interface AuditLoaderData {
 }
 
 export async function auditLoader() {
-  const logsPromise = DataService.audit.getAll().catch(() => []);
-  const logs = await logsPromise;
+  const result = await adminApi.getAuditLogs({ page: 1, limit: 200 });
+  const logs = result.ok ? result.data.data : [];
 
   return {
     logs: logs || [],

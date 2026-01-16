@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Activity, AlertTriangle, CheckCircle, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { useDataSource } from '@/providers';
+import { useDataSource } from '@/routes/dashboard';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Activity, AlertTriangle, CheckCircle, X } from 'lucide-react';
+import { useState } from 'react';
 
 const BACKEND_SERVICES = [
   'cases', 'docket', 'documents', 'evidence', 'billing', 'users',

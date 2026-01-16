@@ -1,9 +1,9 @@
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
-import { cn } from '@/lib/cn';
-import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/lib/frontend-api';
-import { useToast } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useToast } from '@/providers';
+import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@api/domains/drafting';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { ApprovalQueue } from './ApprovalQueue';

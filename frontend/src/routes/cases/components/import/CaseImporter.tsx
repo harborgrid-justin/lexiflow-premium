@@ -12,15 +12,15 @@
  * - Validation against CreateCaseDto requirements
  */
 
-import { api } from '@/lib/frontend-api';
-import { PartyTypeBackend } from '@/lib/frontend-api';
+import { api } from '@/api';
+import { Button } from '@/components/atoms/Button';
 import { AI_CONFIG } from '@/config/features/ai.config';
 import { TIMEOUTS } from '@/config/ports.config';
-import { useTheme } from "@/hooks/useTheme";
 import { queryClient } from '@/hooks/useQueryHooks';
-import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
+import { PartyTypeBackend } from '@/lib/frontend-api';
+import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';
 import { CaseStatus, MatterType } from '@/types/enums';
 import { MetadataRecord, UserId } from '@/types/primitives';
 import { parseCaseXml, type XMLParsedCaseData } from '@/utils/caseXmlParser';

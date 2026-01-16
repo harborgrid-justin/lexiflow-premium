@@ -6,8 +6,8 @@
  */
 
 import { useTheme } from "@/hooks/useTheme";
-import { useDataSource } from '@/providers';
 import { cn } from '@/lib/cn';
+import { useDataSource } from '@/routes/dashboard';
 import { Cloud, Database, Power, RefreshCw, Server } from 'lucide-react';
 import { useState } from 'react';
 

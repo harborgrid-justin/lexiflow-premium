@@ -22,15 +22,14 @@ import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
-import { useAutoSave } from "@/hooks/core";
+import { useAutoSave, useNotify } from "@/hooks/core";
 import { useKeyboardShortcuts } from "@/hooks/ui";
-import { useNotify } from "@/hooks/core";
 import { useTheme } from "@/providers";
 
 // Services & Utils
-import { GeminiService } from "@/services";
-import { validateDiscoveryRequestSafe } from '@/services/validation/discoverySchemas';
 import { cn } from '@/lib/cn';
+import { GeminiService } from "@/services/features/research/geminiService";
+import { validateDiscoveryRequestSafe } from '@/services/validation/discoverySchemas';
 
 // ============================================================================
 // TYPES & INTERFACES

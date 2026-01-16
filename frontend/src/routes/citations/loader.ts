@@ -8,7 +8,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { knowledgeApi } from "@/lib/frontend-api";
 
 type Citation = {
   id: string;
@@ -27,7 +27,8 @@ export interface CitationsLoaderData {
 }
 
 export async function citationsLoader() {
-  const citations = await DataService.citations.getAll().catch(() => []);
+  const result = await knowledgeApi.getAllCitations({ page: 1, limit: 200 });
+  const citations = result.ok ? result.data.data : [];
 
   return {
     citations: citations || [],

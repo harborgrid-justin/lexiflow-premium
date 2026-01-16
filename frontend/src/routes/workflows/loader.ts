@@ -11,7 +11,8 @@
 import { DataService } from "@/services/data/data-service.service";
 import type { Task, WorkflowInstance, WorkflowTemplate } from "@/types";
 import { requireAuthentication } from "@/utils/route-guards";
-import { defer, type LoaderFunctionArgs } from "react-router";
+import { defer } from "@remix-run/router";
+import { type LoaderFunctionArgs } from "react-router";
 
 export interface WorkflowsLoaderData {
   templates: WorkflowTemplate[];

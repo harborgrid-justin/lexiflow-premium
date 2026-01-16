@@ -17,8 +17,8 @@ import { Suspense, useState, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
@@ -26,7 +26,7 @@ import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Services
-import { api } from '@/lib/frontend-api';
+import { api } from '@/api';
 
 // Utils & Config
 import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';

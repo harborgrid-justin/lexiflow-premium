@@ -24,7 +24,8 @@
 import { DataService } from "@/services/data/data-service.service";
 import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
 import { handleLoaderAuthError } from "@/utils/loader-helpers";
-import { defer, type LoaderFunctionArgs } from "react-router";
+import { defer } from "@remix-run/router";
+import { type LoaderFunctionArgs } from "react-router";
 
 export interface DashboardLoaderData {
   // Critical data (awaited before render)

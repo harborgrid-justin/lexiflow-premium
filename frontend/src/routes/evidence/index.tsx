@@ -12,8 +12,7 @@
  * @module routes/evidence/index
  */
 
-import { evidenceApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
+import { discoveryApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -41,8 +40,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 
     // Fetch evidence using new enterprise API with pagination
     const result = caseId
-      ? await evidenceApi.getEvidenceByCase(caseId)
-      : await evidenceApi.getAllEvidence({ page: 1, limit: 100 });
+      ? await discoveryApi.getEvidenceByCase(caseId)
+      : await discoveryApi.getAllEvidence({ page: 1, limit: 100 });
 
     if (!result.ok) {
       return { items: [], totalCount: 0 };
@@ -83,7 +82,7 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
       try {
-        await DataService.evidence.add({
+        const result = await discoveryApi.createEvidence({
           title,
           description: description || undefined,
           caseId,
@@ -91,12 +90,16 @@ export async function action({ request }: Route.ActionArgs) {
           status: "Pending Review",
           location: "Evidence Locker",
           custodian: "Evidence Clerk",
-          collectedDate: new Date().toISOString(),
-          chainOfCustody: [],
           tags: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          metadata: {
+            collectedDate: new Date().toISOString(),
+          },
         });
+
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
+
         return { success: true, message: "Evidence uploaded successfully" };
       } catch (error) {
         console.error("Failed to upload evidence:", error);
@@ -111,7 +114,12 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
       try {
-        await DataService.evidence.delete(id);
+        const result = await discoveryApi.removeEvidence(id);
+
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
+
         return { success: true, message: "Evidence deleted successfully" };
       } catch (error) {
         console.error("Failed to delete evidence:", error);
@@ -128,10 +136,13 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
       try {
-        const evidence = await DataService.evidence.getById(id);
-        if (!evidence) {
-          return { success: false, error: "Evidence not found" };
+        const evidenceResult = await discoveryApi.getEvidenceById(id);
+
+        if (!evidenceResult.ok) {
+          return { success: false, error: evidenceResult.error.message };
         }
+
+        const evidence = evidenceResult.data;
 
         const transferRecord = {
           from: evidence.custodian,
@@ -140,11 +151,22 @@ export async function action({ request }: Route.ActionArgs) {
           reason: reason || "Custody transfer",
         };
 
-        await DataService.evidence.update(id, {
+        const updateResult = await discoveryApi.updateEvidence(id, {
           custodian: newCustodian,
-          chainOfCustody: [...(evidence.chainOfCustody || []), transferRecord],
-          updatedAt: new Date().toISOString(),
         });
+
+        if (!updateResult.ok) {
+          return { success: false, error: updateResult.error.message };
+        }
+
+        const chainResult = await discoveryApi.updateChainOfCustody(
+          id,
+          transferRecord
+        );
+
+        if (!chainResult.ok) {
+          return { success: false, error: chainResult.error.message };
+        }
 
         return { success: true, message: "Custody transferred successfully" };
       } catch (error) {

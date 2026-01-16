@@ -14,7 +14,6 @@
 
 import { knowledgeApi } from '@/lib/frontend-api';
 import { CitationManager } from '@/routes/citations/components/CitationManager';
-import { DataService } from '@/services/data/data-service.service';
 import type { ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -74,7 +73,7 @@ export async function action({ request }: ActionFunctionArgs) {
       }
 
       try {
-        await DataService.citations.add({
+        const result = await knowledgeApi.createCitation({
           citation,
           court,
           year,
@@ -84,6 +83,11 @@ export async function action({ request }: ActionFunctionArgs) {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
+
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
+
         return { success: true, message: "Citation created successfully" };
       } catch (error) {
         console.error("Failed to create citation:", error);
@@ -93,7 +97,10 @@ export async function action({ request }: ActionFunctionArgs) {
     case "delete": {
       const id = formData.get("id") as string;
       if (id) {
-        await DataService.citations.delete(id);
+        const result = await knowledgeApi.deleteCitation(id);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
         return { success: true, message: "Citation deleted" };
       }
       return { success: false, error: "Missing citation ID" };
@@ -111,10 +118,14 @@ export async function action({ request }: ActionFunctionArgs) {
         const isValidFormat = bluebookPattern.test(citation);
 
         if (id && isValidFormat) {
-          await DataService.citations.update(id, {
+          const result = await knowledgeApi.updateCitation(id, {
             status: "Valid",
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           });
+
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
         }
 
         return {

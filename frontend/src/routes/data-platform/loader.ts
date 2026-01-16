@@ -8,7 +8,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { dataPlatformApi } from "@/lib/frontend-api/data-platform";
 
 type DataSource = {
   id: string;
@@ -24,9 +24,9 @@ export interface DataPlatformLoaderData {
 }
 
 export async function dataPlatformLoader() {
-  const sources = await DataService.dataPlatform.getAll().catch(() => []);
+  const result = await dataPlatformApi.dataSources.getAll();
 
   return {
-    sources: sources || [],
+    sources: result.ok ? (result.data as DataSource[]) : [],
   };
 }

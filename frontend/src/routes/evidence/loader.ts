@@ -8,7 +8,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { discoveryApi } from "@/lib/frontend-api";
 
 type EvidenceItem = {
   id: string;
@@ -28,9 +28,9 @@ export interface EvidenceLoaderData {
 }
 
 export async function evidenceLoader() {
-  const evidence = await DataService.evidence.getAll().catch(() => []);
+  const result = await discoveryApi.getAllEvidence({ page: 1, limit: 200 });
 
   return {
-    evidence: evidence || [],
+    evidence: result.ok ? result.data.data : [],
   };
 }

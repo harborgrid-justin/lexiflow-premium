@@ -1,7 +1,7 @@
-import { DataService } from "@/services/data/data-service.service";
+import { docketApi } from "@/lib/frontend-api";
 import type { LoaderFunctionArgs } from "react-router";
 
 export async function clientLoader(_args: LoaderFunctionArgs) {
-  const docketEntries = await DataService.docket.getAll();
-  return { docketEntries };
+  const result = await docketApi.getAll();
+  return { docketEntries: result.ok ? result.data : [] };
 }

@@ -13,7 +13,6 @@
  */
 
 import { casesApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -46,7 +45,7 @@ export function meta({ data }: { data: { items: unknown[] } }) {
 export async function clientLoader({ request: _ }: LoaderFunctionArgs) {
   try {
     // Fetch all cases using new enterprise API
-    const result = await casesApi.getAllCases({ page: 1, limit: 1000 });
+    const result = await casesApi.getAll({ page: 1, limit: 1000 });
     const cases = result.ok ? result.data.data : [];
     // Filter for cases that might be relevant for war room (e.g. Trial, Litigation)
     const warRoomCases = cases.filter((c: { status: string }) => c.status === 'Active' || c.status === 'Trial');
@@ -74,13 +73,16 @@ export async function action({ request }: ActionFunctionArgs) {
         // Create a new case with Trial status
         const title = formData.get("title") as string;
         if (title) {
-          await DataService.cases.add({
+          const result = await casesApi.create({
             title,
             status: 'Trial',
             description: 'Created from War Room',
             client: 'Unknown', // Should be provided
             practiceArea: 'Litigation'
           });
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
           return { success: true, message: "War room case created" };
         }
         return { success: false, error: "Title required" };
@@ -88,7 +90,10 @@ export async function action({ request }: ActionFunctionArgs) {
       case "delete": {
         const id = formData.get("id") as string;
         if (id) {
-          await DataService.cases.delete(id);
+          const result = await casesApi.remove(id);
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
           return { success: true, message: "War room case deleted" };
         }
         return { success: false, error: "ID required" };
@@ -96,7 +101,10 @@ export async function action({ request }: ActionFunctionArgs) {
       case "archive": {
         const id = formData.get("id") as string;
         if (id) {
-          await DataService.cases.update(id, { status: 'Closed' });
+          const result = await casesApi.update(id, { status: 'Closed' });
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
           return { success: true, message: "War room archived" };
         }
         return { success: false, error: "ID required" };

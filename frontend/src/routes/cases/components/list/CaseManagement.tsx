@@ -18,17 +18,17 @@
  * - Backend API integration via DataService
  */
 
+import { api } from '@/api';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 import { PATHS } from '@/config/paths.config';
 import { MatterView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { api } from '@/lib/frontend-api';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { CaseStatus, type Case, type Invoice } from '@/types';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
 import React, { Suspense, useMemo, useTransition } from 'react';

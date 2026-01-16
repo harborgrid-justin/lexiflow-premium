@@ -23,12 +23,12 @@
  * - Custom report generation
  */
 
-import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@/lib/frontend-api';
-import { cn } from '@/lib/cn';
+import { api } from '@/api';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { CaseStatus } from '@/types';
 import {
   ArrowDown,

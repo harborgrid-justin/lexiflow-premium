@@ -41,12 +41,12 @@
  * @module useNotifications
  */
 
+import { NotificationsApiService } from "@/api/communications";
 import { showToast } from "@/components/organisms/notifications/Toast";
 import {
   useNotificationWebSocket,
   WebSocketNotification,
 } from "@/hooks/data/useNotificationWebSocket";
-import { NotificationsApiService } from "@/lib/frontend-api";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 /**

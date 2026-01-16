@@ -4,13 +4,13 @@
  * @description Modal for creating new calendar events with validation.
  */
 
-import { useState } from 'react';
-import { Modal } from '@/components/molecules/Modal/Modal';
 import { Button } from '@/components/atoms/Button/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { queryClient } from '@/hooks';
-import { Calendar, Clock, MapPin, FileText, Tag } from 'lucide-react';
 import type { CalendarEventType } from '@/types';
+import { Calendar, Clock, FileText, MapPin, Tag } from 'lucide-react';
+import { useState } from 'react';
 
 interface NewEventModalProps {
   isOpen: boolean;
@@ -38,7 +38,7 @@ const EVENT_TYPES: { value: CalendarEventType; label: string }[] = [
 export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [formData, setFormData] = useState<EventFormData>({
     title: '',
     eventType: 'Meeting' as CalendarEventType,
@@ -56,7 +56,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim()) {
       setError('Event title is required');
       return;
@@ -78,7 +78,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose })
 
       // Invalidate calendar queries to refresh the data
       await queryClient.invalidate(['calendar']);
-      
+
       onClose();
     } catch (err) {
       console.error('[NewEventModal] Failed to create event:', err);

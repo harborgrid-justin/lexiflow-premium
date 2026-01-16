@@ -40,6 +40,20 @@ export const knowledgeApi = {
       params: params as Record<string, unknown>,
     });
   },
+  createCitation: async (
+    payload: Partial<Citation> & Record<string, unknown>
+  ): Promise<Result<Citation>> => {
+    return client.post<Citation>("/citations", payload);
+  },
+  updateCitation: async (
+    id: string,
+    payload: Partial<Citation> & Record<string, unknown>
+  ): Promise<Result<Citation>> => {
+    return client.patch<Citation>(`/citations/${id}`, payload);
+  },
+  deleteCitation: async (id: string): Promise<Result<void>> => {
+    return client.delete<void>(`/citations/${id}`);
+  },
   getAllKnowledge: async (
     params?: unknown
   ): Promise<Result<PaginatedResult<KnowledgeItem>>> => {

@@ -34,7 +34,7 @@
 import { OperationError } from "@/services/core/errors";
 
 // API & Query Keys
-import { api } from '@/lib/frontend-api';
+import { api } from "@/api";
 import { queryClient } from "@/services/infrastructure/query-client.service";
 import { queryKeys } from "@/utils/query-keys.service";
 

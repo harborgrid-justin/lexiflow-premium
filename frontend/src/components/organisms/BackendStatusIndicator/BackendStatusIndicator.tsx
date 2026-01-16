@@ -5,7 +5,7 @@
  */
 
 import { useBackendHealth } from '@/hooks/useBackendHealth';
-import { useDataSource } from '@/providers';
+import { useDataSource } from '@/routes/dashboard';
 import { Database, HardDrive, Server } from 'lucide-react';
 import React from 'react';
 

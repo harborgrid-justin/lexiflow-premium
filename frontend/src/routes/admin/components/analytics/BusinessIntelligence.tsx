@@ -15,12 +15,12 @@ import { BarChart3, Building2, TrendingUp, Users } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { api } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/lib/cn';
+import { api } from '@/api';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

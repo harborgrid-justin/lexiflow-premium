@@ -15,8 +15,7 @@
  * @module routes/crm/index
  */
 
-import { crmApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
+import { communicationsApi } from '@/lib/frontend-api';
 import { ClientStatus } from '@/types';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -42,7 +41,7 @@ export function meta({ data }: Route.MetaArgs) {
 export async function loader() {
   try {
     // Fetch all clients using new enterprise API with pagination
-    const result = await crmApi.getAllClients({ page: 1, limit: 1000 });
+    const result = await communicationsApi.getAllClients({ page: 1, limit: 1000 });
     const clients = result.ok ? result.data.data : [];
     return {
       clients,
@@ -72,12 +71,21 @@ export async function action({ request }: Route.ActionArgs) {
     switch (intent) {
       case "add-client": {
         const name = formData.get("name") as string;
-        if (name) {
-          await DataService.clients.add({
-            name,
-            status: ClientStatus.PROSPECTIVE,
-          });
+        const email = formData.get("email") as string;
+        if (!name || !email) {
+          return { success: false, error: "Name and email are required" };
         }
+
+        const result = await communicationsApi.createClient({
+          name,
+          email,
+          metadata: { status: ClientStatus.PROSPECTIVE },
+        });
+
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
+
         return { success: true, message: "Client added" };
       }
 
@@ -96,14 +104,22 @@ export async function action({ request }: Route.ActionArgs) {
         if (phone) updates.phone = phone;
         if (address) updates.address = address;
 
-        await DataService.clients.update(id, updates);
+        const result = await communicationsApi.updateClient(id, updates);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
         return { success: true, message: "Contact updated" };
       }
 
       case "archive": {
         const id = formData.get("id") as string;
         if (id) {
-          await DataService.clients.update(id, { status: ClientStatus.INACTIVE });
+          const result = await communicationsApi.updateClient(id, {
+            metadata: { status: ClientStatus.INACTIVE },
+          });
+          if (!result.ok) {
+            return { success: false, error: result.error.message };
+          }
         }
         return { success: true, message: "Client archived" };
       }

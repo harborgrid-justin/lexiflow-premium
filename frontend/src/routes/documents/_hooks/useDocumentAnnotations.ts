@@ -1,5 +1,5 @@
+import { DocumentsApiService } from "@/api/admin/documents-api";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
-import { DocumentsApiService } from "@/lib/frontend-api";
 import { queryKeys } from "@/utils/queryKeys";
 import { useState } from "react";
 import { Annotation } from "../types/DocumentAnnotationsProps";

@@ -122,7 +122,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Backend API Integration
-import { api } from '@/lib/frontend-api';
+import { api } from "@/api";
 import { delay } from "@/utils/async";
 
 // Type Definitions

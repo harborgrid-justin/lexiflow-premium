@@ -8,7 +8,7 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { litigationApi } from "@/lib/frontend-api/litigation";
 
 type LitigationMatter = {
   id: string;
@@ -25,7 +25,8 @@ export interface LitigationLoaderData {
 }
 
 export async function litigationLoader() {
-  const matters = await DataService.litigation.getAll().catch(() => []);
+  const result = await litigationApi.getAll();
+  const matters = result.ok ? (result.data as LitigationMatter[]) : [];
 
   return {
     matters: matters || [],

@@ -11,7 +11,6 @@
  */
 
 import { docketApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/data/data-service.service';
 import type { CaseId } from '@/types';
 import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -89,17 +88,20 @@ export async function action({ request }: ActionFunctionArgs) {
           return { success: false, error: "Missing required fields (Title, Case ID)" };
         }
 
-        await DataService.docket.add({
+        const result = await docketApi.create({
           caseId: caseId as CaseId,
           title,
           description,
           dateFiled: new Date().toISOString(),
           entryDate: new Date().toISOString(),
           type: 'Motion',
-          // Default values for required fields
           sequenceNumber: 0,
           docketNumber: 'PENDING'
         });
+
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
 
         return { success: true, message: "Motion filed successfully" };
       }
@@ -108,7 +110,10 @@ export async function action({ request }: ActionFunctionArgs) {
         const id = formData.get("id") as string;
         if (!id) return { success: false, error: "Missing ID" };
 
-        await DataService.docket.delete(id);
+        const result = await docketApi.remove(id);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
         return { success: true, message: "Entry deleted" };
       }
 

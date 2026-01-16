@@ -22,7 +22,7 @@
  * @module routes/cases/loader
  */
 
-import { DataService } from "@/services/data/data-service.service";
+import { billingApi, casesApi } from "@/lib/frontend-api";
 import type { Case } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";
@@ -41,11 +41,17 @@ import { redirect } from "react-router";
  */
 export async function clientLoader() {
   // Parallel data fetching
-  const casesPromise = DataService.cases.getAll();
-  const invoicesPromise = DataService.invoices.getAll();
+  const casesPromise = casesApi.getAll({ page: 1, limit: 1000 });
+  const invoicesPromise = billingApi.getAllInvoices({});
 
   // Wait for both promises (TODO: Use defer when React Router supports it)
-  const [cases, invoices] = await Promise.all([casesPromise, invoicesPromise]);
+  const [casesResult, invoicesResult] = await Promise.all([
+    casesPromise,
+    invoicesPromise,
+  ]);
+
+  const cases = casesResult.ok ? casesResult.data.data : [];
+  const invoices = invoicesResult.ok ? invoicesResult.data : [];
 
   return { cases, invoices };
 }
@@ -107,14 +113,18 @@ export async function action({ request }: ActionFunctionArgs) {
       }
 
       try {
-        const newCase = await DataService.cases.add({
+        const result = await casesApi.create({
           title: title.trim(),
           caseNumber: caseNumber.trim(),
           status: "Active",
-        } as Case);
+        });
+
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
 
         // Redirect to new case detail
-        return redirect(`/cases/${newCase.id}`);
+        return redirect(`/cases/${result.data.id}`);
       } catch (error) {
         return {
           success: false,
@@ -132,7 +142,10 @@ export async function action({ request }: ActionFunctionArgs) {
       }
 
       try {
-        await DataService.cases.delete(caseId);
+        const result = await casesApi.remove(caseId);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
         return { success: true };
       } catch (error) {
         return {
@@ -154,7 +167,10 @@ export async function action({ request }: ActionFunctionArgs) {
       }
 
       try {
-        await DataService.cases.update(caseId, updates as Partial<Case>);
+        const result = await casesApi.update(caseId, updates as Partial<Case>);
+        if (!result.ok) {
+          return { success: false, error: result.error.message };
+        }
         return { success: true };
       } catch (error) {
         return {

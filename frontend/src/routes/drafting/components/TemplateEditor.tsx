@@ -1,6 +1,6 @@
-import { api } from '@/lib/frontend-api';
-import { useToast } from '@/providers';
+import { api } from '@/api';
 import { useTheme } from "@/hooks/useTheme";
+import { useToast } from '@/providers';
 import {
   ClauseReference,
   CreateTemplateDto,

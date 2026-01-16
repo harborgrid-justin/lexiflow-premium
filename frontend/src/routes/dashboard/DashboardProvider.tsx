@@ -1,31 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-
-interface DashboardMetrics {
-  totalCases: number;
-  activeCases: number;
-  upcomingDeadlines: number;
-  pendingTasks: number;
-  todayDocketEntries: number;
-  weekHours: number;
-  casesByStatus: Record<string, number>;
-  casesByType: Record<string, number>;
-}
-
-interface DashboardContextValue {
-  cases: Case[];
-  docketEntries: DocketEntry[];
-  timeEntries: TimeEntry[];
-  tasks: Task[];
-  metrics: DashboardMetrics;
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-  currentUser: User | null;
-  refreshData: () => void;
-}
-
-const DashboardContext = createContext<DashboardContextValue | null>(null);
+import React, { useCallback, useMemo, useState } from 'react';
+import { DashboardContext, DashboardContextValue, DashboardMetrics } from './DashboardContext';
 
 interface DashboardProviderProps {
   children: React.ReactNode;
@@ -127,37 +103,4 @@ export function DashboardProvider({
       {children}
     </DashboardContext.Provider>
   );
-}
-
-export function useDashboard() {
-  const context = useContext(DashboardContext);
-  if (!context) {
-    throw new Error('useDashboard must be used within DashboardProvider');
-  }
-  return context;
-}
-
-/**
- * useDashboardActions - Actions hook stub
- * @returns Dashboard actions object
- */
-export function useDashboardActions() {
-  const { refreshData } = useDashboard();
-
-  return useMemo(() => ({
-    refreshData: async () => {
-      refreshData();
-    },
-    updateMetrics: () => {
-      // Metrics are computed from data, so revalidating data updates metrics
-      refreshData();
-    },
-  }), [refreshData]);
-}
-/**
- * useDashboardState - State hook alias
- * @returns Dashboard state from context
- */
-export function useDashboardState() {
-  return useDashboard();
 }

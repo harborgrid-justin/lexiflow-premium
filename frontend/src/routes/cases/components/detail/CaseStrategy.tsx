@@ -22,7 +22,7 @@ import { StrategySection } from './strategy/StrategySection';
 // Internal Dependencies - Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { useCaseStrategy } from '@/routes/cases/_hooks/useCaseStrategy';
+import { useCaseStrategy } from '@/routes/cases/hooks/useCaseStrategy';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils

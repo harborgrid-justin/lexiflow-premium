@@ -283,8 +283,12 @@ type RouteFiles = {
     id: "routes/home";
     page: "/";
   };
-  "routes/dashboard/index.tsx": {
-    id: "routes/dashboard/index";
+  "routes/dashboard/DashboardLayout.tsx": {
+    id: "routes/dashboard/DashboardLayout";
+    page: "/dashboard";
+  };
+  "routes/dashboard/DashboardView.tsx": {
+    id: "routes/dashboard/DashboardView";
     page: "/dashboard";
   };
   "routes/cases/index.tsx": {
@@ -455,8 +459,12 @@ type RouteFiles = {
     id: "routes/entities/index";
     page: "/entities";
   };
-  "routes/data-platform/index.tsx": {
-    id: "routes/data-platform/index";
+  "routes/data-platform/DataPlatformLayout.tsx": {
+    id: "routes/data-platform/DataPlatformLayout";
+    page: "/data_platform";
+  };
+  "routes/data-platform/DataPlatformView.tsx": {
+    id: "routes/data-platform/DataPlatformView";
     page: "/data_platform";
   };
   "routes/analytics/index.tsx": {
@@ -499,8 +507,12 @@ type RouteFiles = {
     id: "routes/settings/theme";
     page: "/settings/theme";
   };
-  "routes/admin/index.tsx": {
-    id: "routes/admin/index";
+  "routes/admin/AdminLayout.tsx": {
+    id: "routes/admin/AdminLayout";
+    page: "/admin" | "/admin/settings" | "/admin/theme-settings" | "/admin/users" | "/admin/roles" | "/admin/permissions" | "/admin/integrations" | "/admin/backup";
+  };
+  "routes/admin/AdminDashboardView.tsx": {
+    id: "routes/admin/AdminDashboardView";
     page: "/admin";
   };
   "routes/admin/settings.tsx": {
@@ -549,7 +561,8 @@ type RouteModules = {
   "routes/auth/reset-password": typeof import("./src/routes/auth/reset-password.tsx");
   "routes/layout": typeof import("./src/routes/layout.tsx");
   "routes/home": typeof import("./src/routes/home.tsx");
-  "routes/dashboard/index": typeof import("./src/routes/dashboard/index.tsx");
+  "routes/dashboard/DashboardLayout": typeof import("./src/routes/dashboard/DashboardLayout.tsx");
+  "routes/dashboard/DashboardView": typeof import("./src/routes/dashboard/DashboardView.tsx");
   "routes/cases/index": typeof import("./src/routes/cases/index.tsx");
   "routes/cases/create": typeof import("./src/routes/cases/create.tsx");
   "routes/cases/case-detail": typeof import("./src/routes/cases/case-detail.tsx");
@@ -592,7 +605,8 @@ type RouteModules = {
   "routes/practice/index": typeof import("./src/routes/practice/index.tsx");
   "routes/daf/index": typeof import("./src/routes/daf/index.tsx");
   "routes/entities/index": typeof import("./src/routes/entities/index.tsx");
-  "routes/data-platform/index": typeof import("./src/routes/data-platform/index.tsx");
+  "routes/data-platform/DataPlatformLayout": typeof import("./src/routes/data-platform/DataPlatformLayout.tsx");
+  "routes/data-platform/DataPlatformView": typeof import("./src/routes/data-platform/DataPlatformView.tsx");
   "routes/analytics/index": typeof import("./src/routes/analytics/index.tsx");
   "routes/library/index": typeof import("./src/routes/library/index.tsx");
   "routes/clauses/index": typeof import("./src/routes/clauses/index.tsx");
@@ -603,7 +617,8 @@ type RouteModules = {
   "routes/profile/index": typeof import("./src/routes/profile/index.tsx");
   "routes/settings/index": typeof import("./src/routes/settings/index.tsx");
   "routes/settings/theme": typeof import("./src/routes/settings/theme.tsx");
-  "routes/admin/index": typeof import("./src/routes/admin/index.tsx");
+  "routes/admin/AdminLayout": typeof import("./src/routes/admin/AdminLayout.tsx");
+  "routes/admin/AdminDashboardView": typeof import("./src/routes/admin/AdminDashboardView.tsx");
   "routes/admin/settings": typeof import("./src/routes/admin/settings.tsx");
   "routes/admin/theme-settings": typeof import("./src/routes/admin/theme-settings.tsx");
   "routes/admin/users": typeof import("./src/routes/admin/users.tsx");

@@ -11,7 +11,7 @@
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { EvidenceProvider } from './EvidenceProvider';
+import { EvidenceProvider } from './EvidenceContext';
 import { EvidenceView } from './EvidenceView';
 import type { EvidenceLoaderData } from './loader';
 

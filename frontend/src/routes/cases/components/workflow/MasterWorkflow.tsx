@@ -29,9 +29,9 @@ import { WorkflowLibrary } from './WorkflowLibrary';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
-import { useMasterWorkflow } from '../../_hooks/useMasterWorkflow';
+import { cn } from '@/lib/cn';
+import { useMasterWorkflow } from '../../hooks/useMasterWorkflow';
 
 interface MasterWorkflowProps {
   onSelectCase: (caseId: string) => void;

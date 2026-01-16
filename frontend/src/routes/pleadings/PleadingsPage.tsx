@@ -1,12 +1,18 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Pleadings Domain - Page Component
+ * Enterprise React Architecture Pattern
  */
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import type { PleadingsLoaderData } from './loader';
-import { PleadingsProvider } from './PleadingsProvider';
+import { PleadingsProvider } from './PleadingsContext';
 import { PleadingsView } from './PleadingsView';
 
 export function PleadingsPage() {

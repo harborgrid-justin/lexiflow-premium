@@ -7,35 +7,9 @@
  * Data Platform Domain - State Provider
  */
 
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { DataPlatformLoaderData } from './loader';
-
-type DataSource = {
-  id: string;
-  name: string;
-  type: 'Database' | 'API' | 'File' | 'Stream';
-  status: 'Connected' | 'Disconnected' | 'Error';
-  recordCount: number;
-  lastSync: string;
-};
-
-interface DataPlatformState {
-  sources: DataSource[];
-  typeFilter: 'all' | 'Database' | 'API' | 'File' | 'Stream';
-}
-
-interface DataPlatformMetrics {
-  totalSources: number;
-  connectedCount: number;
-  totalRecords: number;
-}
-
-interface DataPlatformContextValue extends DataPlatformState {
-  setTypeFilter: (filter: 'all' | 'Database' | 'API' | 'File' | 'Stream') => void;
-  metrics: DataPlatformMetrics;
-}
-
-const DataPlatformContext = createContext<DataPlatformContextValue | undefined>(undefined);
+import { DataPlatformContext, DataPlatformContextValue, DataPlatformMetrics } from './DataPlatformContext';
 
 export interface DataPlatformProviderProps {
   children: React.ReactNode;
@@ -70,12 +44,4 @@ export function DataPlatformProvider({ children, initialData }: DataPlatformProv
       {children}
     </DataPlatformContext.Provider>
   );
-}
-
-export function useDataPlatform(): DataPlatformContextValue {
-  const context = useContext(DataPlatformContext);
-  if (!context) {
-    throw new Error('useDataPlatform must be used within DataPlatformProvider');
-  }
-  return context;
 }

@@ -1,12 +1,18 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Pleadings Domain - View Component
+ * Enterprise React Architecture Pattern
  */
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { FileCheck, FilePenLine, FileText, Plus } from 'lucide-react';
 import React, { useId } from 'react';
-import { usePleadings } from './PleadingsProvider';
+import { usePleadings } from './hooks/usePleadings';
 
 export function PleadingsView() {
   const { pleadings, statusFilter, setStatusFilter, searchTerm, setSearchTerm, metrics, isPending } = usePleadings();

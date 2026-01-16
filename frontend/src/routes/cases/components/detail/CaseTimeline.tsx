@@ -11,7 +11,7 @@
 import React from 'react';
 import { BookOpen, Filter, List } from 'lucide-react';
 
-import { useCaseTimeline } from '@/routes/cases/_hooks/useCaseTimeline';
+import { useCaseTimeline } from '@/routes/cases/hooks/useCaseTimeline';
 import { cn } from '@/lib/cn';
 import { TimelineItem } from '@/components/molecules/TimelineItem/TimelineItem';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';

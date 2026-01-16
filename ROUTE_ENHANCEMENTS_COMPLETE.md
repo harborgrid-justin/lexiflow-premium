@@ -1,5 +1,34 @@
 # Route Enhancements Complete - Analytics, Prefetching & Animations
 
+## 4. Cases Route Architecture Cleanup (2026-01-16)
+
+### Review & Refactoring
+
+✅ **Architecture Standardization**
+
+- Applied Enterprise Architecture (Layout/View/Provider) to `cases` route.
+- Defined clear Separation of Concerns:
+  - `CaseListLayout`: Data orchestration & Provider injection.
+  - `CaseListView`: Pure presentation & Interaction.
+  - `CaseDetailLayout`: Data orchestration for details.
+  - `CaseDetailShell`: Navigation shell for details.
+  - `CaseDetailContent`: Tab switching logic.
+
+✅ **Legacy Code Removal**
+
+- Created `_deprecated` folder in `routes/cases/`.
+- Deprecated 17+ obsolete files including:
+  - `CaseDetailView.tsx` (Monolith)
+  - `CaseListPage.tsx` (Old implementation)
+  - `CasesProvider.tsx` & `CaseProvider.tsx` (Redundant)
+  - `analytics.tsx`, `billing.tsx`, etc. (Old route wrappers)
+- Deprecated legacy hook `useCaseList.ts` (replaced by `useCases` adapter).
+- Deprecated legacy components `CaseList.tsx`, `CaseContent.tsx`, `CaseManagement.tsx`.
+
+✅ **Component Updates**
+
+- Refactored `CaseListView.tsx` to correctly consume `CaseListContext` via `useCases()` hook instead of fetching local state.
+
 ## Overview
 
 Comprehensive implementation of advanced routing features including analytics tracking, intelligent prefetching, and smooth transition animations.

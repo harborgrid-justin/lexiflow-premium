@@ -11,7 +11,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Currency } from '@/components/atoms/Currency/Currency';
@@ -22,13 +21,14 @@ import { FilterPanel } from '@/components/organisms/FilterPanel';
 import { SwipeableItem } from '@/components/organisms/SwipeableItem';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Filter } from 'lucide-react';
+import React from 'react';
 import { ActiveCaseTable } from './ActiveCaseTable';
 
 import { CASE_STATUS_VARIANTS, CASE_TYPES } from '@/config/cases.config';
 import { UseCaseListReturn } from '@/hooks/useCaseList';
 import { cn } from '@/lib/cn';
 import { Case, CaseStatus } from '@/types';
-import { useCaseListActive } from '../../_hooks/useCaseListActive';
+import { useCaseListActive } from '../../hooks/useCaseListActive';
 
 type CaseListActiveProps = Omit<UseCaseListReturn, 'isModalOpen' | 'setIsModalOpen' | 'isLoading' | 'isError'> & {
   onSelectCase: (c: Case) => void;

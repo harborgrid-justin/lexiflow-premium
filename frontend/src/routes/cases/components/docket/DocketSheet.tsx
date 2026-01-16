@@ -30,7 +30,7 @@ import { DocketToolbar } from './DocketToolbar';
 // Internal Dependencies - Hooks & Context
 import { useThemeContext } from "@/hooks/useTheme";
 import { useWindow } from '@/providers';
-import { useDocketSheet } from '@/routes/cases/_hooks/useDocketSheet';
+import { useDocketSheet } from '@/routes/cases/hooks/useDocketSheet';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';

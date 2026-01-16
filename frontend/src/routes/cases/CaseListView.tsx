@@ -48,7 +48,6 @@ import {
 } from 'lucide-react';
 import { lazy, startTransition, Suspense, useMemo } from 'react';
 import { useNavigate, useNavigation } from 'react-router';
-import { useCaseList } from './CaseListProvider';
 
 // Lazy load tab contents for performance
 const CaseOverviewDashboard = lazy(() => import('./components/overview').then(m => ({ default: m.CaseOverviewDashboard })));
@@ -146,7 +145,7 @@ const CASE_TABS = [
  * All data comes from context
  * All events flow up via callbacks
  */
-export function CaseListView() {
+export default function CaseListView() {
   const navigate = useNavigate();
 
   // CONTEXT CONSUMPTION (read-only)
@@ -159,7 +158,7 @@ export function CaseListView() {
     setActiveTab,
     handleParentTabChange,
     isPending,
-  } = useCaseList();
+  } = useCases();
 
   // Adapter for CaseListActive props
   const activeCaseProps = useMemo(() => ({

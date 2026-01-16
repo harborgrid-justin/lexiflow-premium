@@ -26,53 +26,13 @@
 
 import type { Case, Invoice } from '@/types';
 import { CaseStatus } from '@/types';
-import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-
-/**
- * Context value shape (immutable, memoized)
- */
-interface CaseListContextValue {
-  // State
-  readonly cases: readonly Case[];
-  readonly invoices: readonly Invoice[];
-  readonly activeTab: string;
-  readonly filters: CaseListFilters;
-  readonly isPending: boolean;
-
-  // Derived state
-  readonly metrics: CaseMetrics;
-  readonly filteredCases: readonly Case[];
-  readonly activeParentTab: string;
-
-  // Actions
-  setActiveTab: (tab: string) => void;
-  setFilters: (filters: Partial<CaseListFilters>) => void;
-  handleParentTabChange: (parentId: string, defaultSubTabId?: string) => void;
-  refreshData: () => void;
-}
-
-/**
- * Filter configuration
- */
-interface CaseListFilters {
-  status?: CaseStatus;
-  type?: string;
-  search?: string;
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
-}
-
-/**
- * Metrics shape
- */
-interface CaseMetrics {
-  activeCases: number;
-  intakePipeline: number;
-  upcomingDeadlines: number;
-  totalRevenue: number;
-}
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
+import {
+  CaseListContext,
+  CaseListContextValue,
+  CaseListFilters,
+  CaseMetrics
+} from './CaseListContext';
 
 /**
  * Provider props
@@ -85,19 +45,7 @@ interface CaseListProviderProps {
 }
 
 // Context creation (split for optimization)
-const CaseListContext = createContext<CaseListContextValue | null>(null);
-
-/**
- * Custom hook for consuming context
- * Throws if used outside provider (fail-fast)
- */
-export function useCaseList(): CaseListContextValue {
-  const context = useContext(CaseListContext);
-  if (!context) {
-    throw new Error('useCaseList must be used within CaseListProvider');
-  }
-  return context;
-}
+// CaseListContext is imported from CaseListContext.tsx
 
 /**
  * Provider component - domain logic layer

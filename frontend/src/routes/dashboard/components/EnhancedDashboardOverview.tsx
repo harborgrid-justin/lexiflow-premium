@@ -31,7 +31,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useDashboardOverview } from '../_hooks/useDashboardOverview';
+import { useDashboardOverview } from '../hooks/useDashboardOverview';
 
 // Components
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';

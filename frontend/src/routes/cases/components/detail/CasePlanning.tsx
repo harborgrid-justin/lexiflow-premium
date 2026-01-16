@@ -21,7 +21,7 @@ import { ScheduleTimeline } from './planning/ScheduleTimeline';
 // Internal Dependencies - Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { useCasePlanning } from '@/routes/cases/_hooks/useCasePlanning';
+import { useCasePlanning } from '@/routes/cases/hooks/useCasePlanning';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils

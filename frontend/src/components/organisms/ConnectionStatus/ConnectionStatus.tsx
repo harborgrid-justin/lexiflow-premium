@@ -1,7 +1,7 @@
 import { TIMEOUTS } from '@/config/ports.config';
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
-import { useDataSource } from '@/routes/dashboard';
+import { useDataSource } from '@/routes/dashboard/data/DataSourceHooks';
 import { apiClient } from '@/services/infrastructure/api-client.service';
 import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

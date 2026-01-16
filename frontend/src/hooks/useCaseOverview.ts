@@ -1,4 +1,4 @@
 export {
   useCaseOverview,
   type UseCaseOverviewReturn,
-} from "../routes/cases/_hooks/useCaseOverview";
+} from "../routes/cases/hooks/useCaseOverview";

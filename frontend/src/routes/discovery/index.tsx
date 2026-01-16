@@ -12,47 +12,47 @@
  * @module routes/discovery/index
  */
 
-import { DataService } from '@/services/data/data-service.service';
-import { DiscoveryType } from '@/types/enums';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
-import { DiscoveryPlatform } from './components/platform/DiscoveryPlatform';
+import { createMeta } from '../_shared/meta-utils';
+
+// Export loader from dedicated file
+export { clientLoader } from './loader';
+
+// Import View component
+import { DiscoveryView } from './DiscoveryView';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
-  return createListMeta({
-    entityType: 'Discovery',
-    count: data?.items?.length,
+export function meta() {
+  return createMeta({
+    title: 'Discovery',
     description: 'Manage legal discovery processes and requests',
   });
 }
 
 // ============================================================================
-// Client Loader
+// Component
 // ============================================================================
 
-/**
- * Fetches discovery processes on the client side only
- * Runs in the browser where localStorage auth tokens are available
- *
- * Note: Using clientLoader instead of loader because authentication tokens
- * are stored in localStorage which is not available during SSR
- */
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
-  const caseId = url.searchParams.get("caseId") || undefined;
+export default function DiscoveryRoute() {
+  return <DiscoveryView />;
+}
 
-  try {
-    const items = await DataService.evidence.getAll(caseId);
-    return { items, totalCount: items.length };
-  } catch (error) {
-    console.error("Failed to load discovery data", error);
-    return { items: [], totalCount: 0 };
-  }
+// ============================================================================
+// Error Boundary
+// ============================================================================
+
+export { RouteErrorBoundary as ErrorBoundary };
+
+try {
+  const items = await DataService.evidence.getAll(caseId);
+  return { items, totalCount: items.length };
+} catch (error) {
+  console.error("Failed to load discovery data", error);
+  return { items: [], totalCount: 0 };
+}
 }
 
 // Ensure client loader runs on hydration

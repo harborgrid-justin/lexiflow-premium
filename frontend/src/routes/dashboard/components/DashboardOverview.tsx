@@ -21,7 +21,7 @@ import {
   useDashboardCharts,
   useDashboardStats,
   useDashboardTasks
-} from '../_hooks/useDashboardData';
+} from '../hooks/useDashboardData';
 
 // Components
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';

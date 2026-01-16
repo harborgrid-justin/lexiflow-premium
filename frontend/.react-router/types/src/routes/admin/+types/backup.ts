@@ -16,6 +16,9 @@ type Matches = [{
   id: "routes/layout";
   module: typeof import("../../layout.js");
 }, {
+  id: "routes/admin/AdminLayout";
+  module: typeof import("../AdminLayout.js");
+}, {
   id: "routes/admin/backup";
   module: typeof import("../backup.js");
 }];

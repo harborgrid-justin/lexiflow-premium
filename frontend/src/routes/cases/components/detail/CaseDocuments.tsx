@@ -24,7 +24,7 @@ import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModa
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
-import { useCaseDocuments } from '@/routes/cases/_hooks/useCaseDocuments';
+import { useCaseDocuments } from '@/routes/cases/hooks/useCaseDocuments';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils

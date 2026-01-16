@@ -40,20 +40,31 @@ export default [
   layout("routes/layout.tsx", [
     // Home/Dashboard routes
     index("routes/home.tsx"),
-    route("dashboard", "routes/dashboard/index.tsx"),
+    route("dashboard", "routes/dashboard/DashboardLayout.tsx", [
+      index("routes/dashboard/DashboardView.tsx"),
+    ]),
 
     // Case Management - Primary Module
-    route("cases", "routes/cases/index.tsx"),
-    route("cases/create", "routes/cases/create.tsx"),
-    route("cases/:caseId", "routes/cases/case-detail.tsx"),
+    route("cases", "routes/cases/CaseListLayout.tsx", [
+      index("routes/cases/CaseListView.tsx"),
+    ]),
 
-    // Case Sub-modules (nested under case detail)
+    route("cases/create", "routes/cases/create.tsx"),
+
+    route("cases/:caseId", "routes/cases/CaseDetailLayout.tsx", [
+      index("routes/cases/CaseDetailContent.tsx"),
+      route(":tab", "routes/cases/CaseDetailContent.tsx"),
+    ]),
+
+    /*
+    // Case Sub-modules (nested under case detail) -- DEPRECATED (Moved to Dynamic Tab Routing)
     route("cases/:caseId/overview", "routes/cases/overview.tsx"),
     route("cases/:caseId/calendar", "routes/cases/calendar.tsx"),
     route("cases/:caseId/analytics", "routes/cases/analytics.tsx"),
     route("cases/:caseId/operations", "routes/cases/operations.tsx"),
     route("cases/:caseId/insights", "routes/cases/insights.tsx"),
     route("cases/:caseId/financials", "routes/cases/financials.tsx"),
+    */
 
     // Docket & Filings
     route("docket", "routes/docket/index.tsx"),
@@ -105,7 +116,9 @@ export default [
     route("practice", "routes/practice/index.tsx"),
     route("daf", "routes/daf/index.tsx"),
     route("entities", "routes/entities/index.tsx"),
-    route("data_platform", "routes/data-platform/index.tsx"),
+    route("data_platform", "routes/data-platform/DataPlatformLayout.tsx", [
+      index("routes/data-platform/DataPlatformView.tsx"),
+    ]),
     route("analytics", "routes/analytics/index.tsx"),
 
     // Knowledge Base
@@ -124,14 +137,16 @@ export default [
     route("settings/theme", "routes/settings/theme.tsx"),
 
     // Admin Routes (Admin Only)
-    route("admin", "routes/admin/index.tsx"),
-    route("admin/settings", "routes/admin/settings.tsx"),
-    route("admin/theme-settings", "routes/admin/theme-settings.tsx"),
-    route("admin/users", "routes/admin/users.tsx"),
-    route("admin/roles", "routes/admin/roles.tsx"),
-    route("admin/permissions", "routes/admin/permissions.tsx"),
-    route("admin/integrations", "routes/admin/integrations.tsx"),
-    route("admin/backup", "routes/admin/backup.tsx"),
+    route("admin", "routes/admin/AdminLayout.tsx", [
+      index("routes/admin/AdminDashboardView.tsx"),
+      route("settings", "routes/admin/settings.tsx"),
+      route("theme-settings", "routes/admin/theme-settings.tsx"),
+      route("users", "routes/admin/users.tsx"),
+      route("roles", "routes/admin/roles.tsx"),
+      route("permissions", "routes/admin/permissions.tsx"),
+      route("integrations", "routes/admin/integrations.tsx"),
+      route("backup", "routes/admin/backup.tsx"),
+    ]),
 
     // Audit Logs (Admin/Auditor)
     route("audit", "routes/audit/index.tsx"),

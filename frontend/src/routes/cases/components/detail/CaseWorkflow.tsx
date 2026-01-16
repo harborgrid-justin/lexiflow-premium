@@ -18,7 +18,7 @@ import { WorkflowAutomations } from './workflow/WorkflowAutomations';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
 
 // Internal Dependencies - Hooks & Context
-import { useCaseWorkflow } from '@/routes/cases/_hooks/useCaseWorkflow';
+import { useCaseWorkflow } from '@/routes/cases/hooks/useCaseWorkflow';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils

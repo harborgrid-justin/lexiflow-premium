@@ -19,37 +19,9 @@
  * @module routes/dashboard/index
  */
 
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
-import { DashboardPageContent } from './DashboardPage';
-import { clientLoader, loader } from './loader';
+import { dashboardRoute } from './route';
 
-/**
- * Export Loaders
- * - clientLoader: Client-side data fetching
- * - loader: Server-side data fetching (SSR)
- */
-export { clientLoader, loader };
-
-/**
- * Export Default Component
- * Must be default export for React Router lazy loading
- */
-export default DashboardPageContent;
-
-/**
- * Export Error Boundary
- * Catches errors within this route
- */
-export { RouteErrorBoundary as ErrorBoundary };
-
-/**
- * Export Meta Function
- * Provides page metadata (title, description, etc.)
- */
-export function meta() {
-  return createMeta({
-    title: 'Command Center',
-    description: 'Overview of cases, tasks, and deadlines',
-  });
-}
+export { dashboardRoute as default };
+export { loader } from './loader';
+export { ErrorBoundary } from './errors';
+export { meta } from './route';

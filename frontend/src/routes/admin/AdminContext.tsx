@@ -3,7 +3,7 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useMemo } from 'react';
 
 interface SystemMetrics {
   timestamp: string;
@@ -44,6 +44,8 @@ interface AdminContextValue {
 
 const AdminContext = createContext<AdminContextValue | null>(null);
 
+export { AdminContext };
+
 export function AdminProvider({
   children,
   metrics,
@@ -62,10 +64,4 @@ export function AdminProvider({
   }), [metrics, auditLogs, user]);
 
   return <AdminContext.Provider value={value}>{children}</AdminContext.Provider>;
-}
-
-export function useAdmin() {
-  const context = useContext(AdminContext);
-  if (!context) throw new Error('useAdmin must be used within AdminProvider');
-  return context;
 }

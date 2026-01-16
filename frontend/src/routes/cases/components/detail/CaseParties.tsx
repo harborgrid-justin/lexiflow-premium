@@ -20,7 +20,7 @@ import { Modal } from '@/components/molecules/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
-import { GroupByOption, useCaseParties } from '@/routes/cases/_hooks/useCaseParties';
+import { GroupByOption, useCaseParties } from '@/routes/cases/hooks/useCaseParties';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils

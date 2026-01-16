@@ -11,9 +11,9 @@ import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { CheckCircle, Database, Plus, XCircle } from 'lucide-react';
 import React from 'react';
-import { useDataPlatform } from './DataPlatformProvider';
+import { useDataPlatform } from './hooks/useDataPlatform';
 
-export function DataPlatformView() {
+export default function DataPlatformView() {
   const { sources, typeFilter, setTypeFilter, metrics } = useDataPlatform();
 
   return (

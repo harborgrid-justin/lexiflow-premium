@@ -25,7 +25,7 @@ import { Card } from '@/components/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
-import { useCaseFinancials } from '@/routes/cases/_hooks/useCaseFinancials';
+import { useCaseFinancials } from '@/routes/cases/hooks/useCaseFinancials';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils

@@ -2,7 +2,7 @@ import { TabbedPageLayout } from '@/components/layouts';
 import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Suspense, useMemo } from 'react';
-import { useDashboard } from './DashboardProvider';
+import { useDashboard } from './hooks/useDashboard';
 
 // Components
 import { DashboardAnalytics } from './components/DashboardAnalytics';
@@ -12,7 +12,7 @@ import { PersonalWorkspace } from './components/PersonalWorkspace';
 /**
  * DashboardView - Main Presentation Layout
  */
-export function DashboardView() {
+export default function DashboardView() {
   const { activeTab, setActiveTab, currentUser, tasks, metrics } = useDashboard();
 
   const chartData = useMemo(() =>

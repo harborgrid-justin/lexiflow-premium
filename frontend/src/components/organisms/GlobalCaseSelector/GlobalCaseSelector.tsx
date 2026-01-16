@@ -1,6 +1,6 @@
-import { useCaseContext } from '@/routes/cases';
-import { DataService } from '@/services/data/data-service.service';
 import { AutocompleteSelect } from '@/components/molecules/AutocompleteSelect/AutocompleteSelect';
+import { useCaseContext } from '@/routes/cases/context-exports';
+import { DataService } from '@/services/data/data-service.service';
 import { Case } from '@/types/case';
 import { Briefcase } from 'lucide-react';
 import { useCallback } from 'react';

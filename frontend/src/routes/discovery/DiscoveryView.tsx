@@ -7,7 +7,7 @@ import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import type { DiscoveryRequest } from '@/types';
 import { CheckCircle, FileText, Tag } from 'lucide-react';
-import { useDiscovery } from './DiscoveryProvider';
+import { useDiscovery } from './hooks/useDiscovery';
 
 type Evidence = {
   id: string;

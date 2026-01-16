@@ -10,7 +10,7 @@
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { LitigationProvider } from './LitigationProvider';
+import { LitigationProvider } from './LitigationContext';
 import { LitigationView } from './LitigationView';
 import type { LitigationLoaderData } from './loader';
 

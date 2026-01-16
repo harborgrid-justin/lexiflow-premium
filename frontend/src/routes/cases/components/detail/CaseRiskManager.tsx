@@ -22,7 +22,7 @@ import { useWindow } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { useCaseRisks } from '@/routes/cases/_hooks/useCaseRisks';
+import { useCaseRisks } from '@/routes/cases/hooks/useCaseRisks';
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces

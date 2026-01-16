@@ -3,4 +3,4 @@ export {
   useCaseList,
   type CaseFilters,
   type UseCaseListReturn,
-} from "../routes/cases/_hooks/useCaseList";
+} from "../routes/cases/hooks/useCaseList";

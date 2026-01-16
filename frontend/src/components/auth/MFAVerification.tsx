@@ -44,9 +44,13 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
 
       if (success) {
         // Publish enterprise event
+        const payload: SystemEventPayloads[SystemEventType.MFA_VERIFICATION_SUCCESS] = {
+          method: useBackupCode ? 'backup_code' : 'authenticator',
+        };
+
         IntegrationOrchestrator.publish(
-          'MFA_VERIFICATION_SUCCESS' as unknown as keyof typeof SystemEventType,
-          { method: useBackupCode ? 'backup_code' : 'authenticator' } as unknown as SystemEventPayloads[keyof SystemEventPayloads]
+          SystemEventType.MFA_VERIFICATION_SUCCESS,
+          payload
         );
 
         notify.success('Two-factor authentication successful');
@@ -61,9 +65,14 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
       notify.error(`MFA verification failed: ${errorMessage}`);
 
       // Publish enterprise event for failed verification
+      const payload: SystemEventPayloads[SystemEventType.MFA_VERIFICATION_FAILED] = {
+        error: errorMessage,
+        method: useBackupCode ? 'backup_code' : 'authenticator',
+      };
+
       IntegrationOrchestrator.publish(
-        'MFA_VERIFICATION_FAILED' as unknown as keyof typeof SystemEventType,
-        { error: errorMessage, method: useBackupCode ? 'backup_code' : 'authenticator' } as unknown as SystemEventPayloads[keyof SystemEventPayloads]
+        SystemEventType.MFA_VERIFICATION_FAILED,
+        payload
       );
     } finally {
       setIsLoading(false);

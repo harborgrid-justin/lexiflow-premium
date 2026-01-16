@@ -5,54 +5,119 @@
  * @status PRODUCTION READY
  */
 
-import { useCallback, useState } from "react";
-import type { ZodSchema } from "zod";
+import type { WizardConfig, WizardStep } from "@/types/forms";
+import { useCallback, useMemo, useState } from "react";
+export type { WizardStep } from "@/types/forms";
 
-export interface WizardStep<T = unknown> {
-  id: string;
-  title: string;
-  description?: string;
-  validationSchema?: ZodSchema<T>;
-  isOptional?: boolean;
-}
+type WizardHookOptions<T extends Record<string, unknown>> = {
+  config: WizardConfig<T>;
+  initialData: Partial<T>;
+  validateStep?: (
+    stepIndex: number,
+    data: Partial<T>
+  ) => Promise<boolean> | boolean;
+};
 
 export const useEnhancedWizard = <T extends Record<string, unknown>>(
-  steps: WizardStep<T>[],
-  initialData: Partial<T> = {}
+  stepsOrOptions: WizardStep<T>[] | WizardHookOptions<T>,
+  legacyInitialData: Partial<T> = {}
 ) => {
+  const isArrayInput = Array.isArray(stepsOrOptions);
+
+  const steps = isArrayInput
+    ? (stepsOrOptions as WizardStep<T>[])
+    : (stepsOrOptions as WizardHookOptions<T>).config.steps;
+
+  const initialData = isArrayInput
+    ? legacyInitialData
+    : (stepsOrOptions as WizardHookOptions<T>).initialData;
+
+  const validateStep = isArrayInput
+    ? undefined
+    : (stepsOrOptions as WizardHookOptions<T>).validateStep;
+
+  const allowStepNavigation = isArrayInput
+    ? true
+    : Boolean(
+        (stepsOrOptions as WizardHookOptions<T>).config.allowStepNavigation
+      );
+
+  const onSubmit = isArrayInput
+    ? undefined
+    : (stepsOrOptions as WizardHookOptions<T>).config.onSubmit;
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [formData, setFormData] = useState<Partial<T>>(initialData);
-  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+  const [visitedSteps, setVisitedSteps] = useState<Set<number>>(new Set());
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isValidating, setIsValidating] = useState(false);
 
-  const currentStep = steps[currentStepIndex];
+  const visibleSteps = useMemo(() => steps, [steps]);
+
+  const currentStep = visibleSteps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
-  const isLastStep = currentStepIndex === steps.length - 1;
-  const progress = ((currentStepIndex + 1) / steps.length) * 100;
+  const isLastStep = currentStepIndex === visibleSteps.length - 1;
+  const progress =
+    visibleSteps.length === 0
+      ? 0
+      : ((currentStepIndex + 1) / visibleSteps.length) * 100;
 
   const updateData = useCallback((data: Partial<T>) => {
     setFormData((prev) => ({ ...prev, ...data }));
   }, []);
 
-  const next = useCallback(async () => {
-    if (!currentStep) return;
-
-    if (currentStep.validationSchema) {
-      const result = currentStep.validationSchema.safeParse(formData);
-      if (!result.success) {
-        throw new Error("Validation Failed");
+  const runValidation = useCallback(async () => {
+    setIsValidating(true);
+    try {
+      if (validateStep) {
+        const result = await validateStep(currentStepIndex, formData);
+        if (!result) {
+          return false;
+        }
       }
-    }
 
-    setCompletedSteps((prev) => new Set(prev).add(currentStep.id));
+      if (currentStep?.validationSchema) {
+        const result = currentStep.validationSchema.safeParse(formData);
+        if (!result.success) {
+          setErrors((prev) => ({
+            ...prev,
+            [currentStep.id]: "Step validation failed",
+          }));
+          return false;
+        }
+
+        setErrors((prev) => {
+          const next = { ...prev };
+          delete next[currentStep.id];
+          return next;
+        });
+      }
+
+      return true;
+    } finally {
+      setIsValidating(false);
+    }
+  }, [validateStep, currentStepIndex, formData, currentStep]);
+
+  const goNext = useCallback(async () => {
+    const valid = await runValidation();
+    if (!valid) return false;
+
+    setVisitedSteps((prev) => new Set(prev).add(currentStepIndex));
 
     if (!isLastStep) {
       setCurrentStepIndex((prev) => prev + 1);
-    } else {
-      // Final submission logic can be handled by caller
+      return true;
     }
-  }, [currentStep, formData, isLastStep]);
 
-  const back = useCallback(() => {
+    if (onSubmit) {
+      await onSubmit(formData as T);
+    }
+
+    return true;
+  }, [runValidation, isLastStep, onSubmit, formData, currentStepIndex]);
+
+  const goBack = useCallback(() => {
     if (!isFirstStep) {
       setCurrentStepIndex((prev) => prev - 1);
     }
@@ -60,31 +125,52 @@ export const useEnhancedWizard = <T extends Record<string, unknown>>(
 
   const goToStep = useCallback(
     (index: number) => {
-      const prevStep = index > 0 ? steps[index - 1] : undefined;
-      const prevId = prevStep?.id || "";
+      if (!allowStepNavigation && index > currentStepIndex) {
+        return;
+      }
+
       if (
         index <= currentStepIndex ||
-        (index > 0 &&
-          prevStep &&
-          prevId && // Ensure ID exists
-          completedSteps.has(prevId))
+        visitedSteps.has(index) ||
+        allowStepNavigation
       ) {
         setCurrentStepIndex(index);
       }
     },
-    [currentStepIndex, completedSteps, steps]
+    [allowStepNavigation, currentStepIndex, visitedSteps]
   );
+
+  const submit = useCallback(async () => {
+    const valid = await runValidation();
+    if (!valid) return false;
+
+    if (onSubmit) {
+      await onSubmit(formData as T);
+    }
+
+    return true;
+  }, [runValidation, onSubmit, formData]);
 
   return {
     currentStep,
     currentStepIndex,
-    isFirstStep,
-    isLastStep,
-    progress,
+    visibleSteps,
+    data: formData,
     formData,
     updateData,
-    next,
-    back,
+    goNext,
+    next: goNext,
+    goBack,
+    back: goBack,
     goToStep,
+    isFirst: isFirstStep,
+    isFirstStep,
+    isLast: isLastStep,
+    isLastStep,
+    isValidating,
+    progress,
+    visitedSteps,
+    submit,
+    errors,
   };
 };

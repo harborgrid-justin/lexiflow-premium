@@ -259,7 +259,7 @@ export const DraftingDashboard = lazyWithPreload(
 
 export const ThemeCustomizer = lazyWithPreload(
   () =>
-    import("../../theme/components/ThemeCustomizer") as Promise<{
+    import("../../components/theme/ThemeCustomizer") as Promise<{
       default: React.ComponentType<unknown>;
     }>
 );

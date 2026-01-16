@@ -5,8 +5,9 @@
  * Displays court dates, filing deadlines, and important milestones
  */
 
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import type { DesignTokens } from '@/theme/tokens';
 import { format, formatDistanceToNow, isPast, isThisWeek, isToday, isTomorrow } from 'date-fns';
 import { AlertCircle, Calendar, CheckCircle2, Clock, Flag } from 'lucide-react';
 import React from 'react';
@@ -68,8 +69,7 @@ const getUrgencyLabel = (date: Date | string): string => {
 
   return formatDistanceToNow(deadlineDate, { addSuffix: true });
 };
-
-const getPriorityConfig = (priority: Deadline['priority'], tokens: { colors: Record<string, string> }) => {
+const getPriorityConfig = (priority: Deadline['priority'], tokens: DesignTokens) => {
   switch (priority) {
     case 'critical':
       return {
@@ -140,7 +140,7 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   emptyMessage = 'No upcoming deadlines',
   className,
 }) => {
-  const { theme } = useTheme();
+  const { theme, tokens } = useTheme();
 
   // Filter and sort deadlines
   const filteredDeadlines = React.useMemo(() => {
@@ -196,7 +196,7 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   return (
     <div className={cn('space-y-2', className)}>
       {filteredDeadlines.map((deadline) => {
-        const priorityConfig = getPriorityConfig(deadline.priority);
+        const priorityConfig = getPriorityConfig(deadline.priority, tokens);
         const statusConfig = getStatusConfig(deadline.computedStatus);
         const StatusIcon = statusConfig.icon;
         const deadlineDate = typeof deadline.date === 'string' ? new Date(deadline.date) : deadline.date;

@@ -32,7 +32,7 @@ import { FEATURES_CONFIG } from '@/config/features/features.config';
 import { UI_CONFIG } from '@/config/features/ui.config';
 import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from '@/lib/theme/tokens';
 import { ThemeObject } from '@/lib/theme/types';
-import { DataService } from '@/services/data/data-service.service';
+import { ProfileDomain } from '@/services/domain/profile.service';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
 
 export type { ThemeObject } from '@/lib/theme/types';
@@ -202,7 +202,7 @@ export interface ThemeContextType {
 // Backward compatibility alias
 export type ThemeContextValue = ThemeContextType;
 
-const createTheme = (tokens: DesignTokens): ThemeObject => ({
+export const createTheme = (tokens: DesignTokens): ThemeObject => ({
   background: tokens.colors.background,
   surface: {
     default: tokens.colors.surface,
@@ -368,6 +368,29 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const isDark = isDarkString === 'true';
 
+  const resolvedTokens = useMemo(() => {
+    const base = getTokens(tokens?.mode || 'light', tokens?.density || 'normal', tokens?.fontMode || 'sans');
+    if (!tokens || typeof tokens !== 'object' || !('colors' in tokens)) {
+      return base;
+    }
+
+    return {
+      ...base,
+      ...tokens,
+      colors: { ...base.colors, ...tokens.colors },
+      spacing: { ...base.spacing, ...tokens.spacing },
+      typography: { ...base.typography, ...tokens.typography },
+      shadows: { ...base.shadows, ...tokens.shadows },
+      borderRadius: { ...base.borderRadius, ...tokens.borderRadius },
+      transitions: { ...base.transitions, ...tokens.transitions },
+      zIndex: { ...base.zIndex, ...tokens.zIndex },
+      layout: { ...base.layout, ...tokens.layout },
+      animations: { ...base.animations, ...tokens.animations },
+      effects: { ...base.effects, ...tokens.effects },
+      semantic: { ...base.semantic, ...tokens.semantic },
+    };
+  }, [tokens]);
+
   // Guideline 25 & 26: Non-urgent update using transition
   const setDensity = useCallback((d: ThemeDensity) => {
     startTransition(() => {
@@ -410,7 +433,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
       try {
         // Attempt to get profile (will throw/fail if not logged in)
-        const profile = await DataService.profile.getCurrentProfile();
+        const profile = await ProfileDomain.getCurrentProfile();
         if (!mounted) return;
 
         const { preferences } = profile;
@@ -543,10 +566,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Guideline 7 & 10: Explicit memoization with stable references
   const value = useMemo(() => {
     // Guideline 28: Compute theme as pure function of tokens/isDark
-    const theme: ThemeObject = createTheme(tokens);
+    const theme: ThemeObject = createTheme(resolvedTokens);
 
     const contextValue: ThemeContextType = {
-      tokens,
+      tokens: resolvedTokens,
       density,
       setDensity,
       isDark,
@@ -567,14 +590,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       return Object.freeze(contextValue);
     }
     return contextValue;
-  }, [tokens, density, setDensity, isDark, toggleDark, setTheme, toggleTheme, updateToken, resetTokens, isPending]);
+  }, [resolvedTokens, density, setDensity, isDark, toggleDark, setTheme, toggleTheme, updateToken, resetTokens, isPending]);
 
   // Guideline 21 & 24: DOM effects must be idempotent and concurrent-safe
   // Guideline 27: No time-based assumptions
   useEffect(() => {
     const root = document.documentElement;
-    const currentSpacing = tokens.spacing[density];
-    const { colors, shadows, borderRadius, typography, transitions, zIndex, fontMode, layout, animations, effects, semantic } = tokens;
+    const currentSpacing = resolvedTokens.spacing[density] || resolvedTokens.spacing.normal;
+    const { colors, shadows, borderRadius, typography, transitions, zIndex, fontMode, layout, animations, effects, semantic } = resolvedTokens;
 
     // Guideline 24: Cleanup for StrictMode - remove previous values
     const cleanupCallbacks: Array<() => void> = [];
@@ -713,16 +736,16 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return () => {
       cleanupCallbacks.forEach(cleanup => cleanup());
     };
-  }, [tokens, density]);
+  }, [resolvedTokens, density]);
 
   return (
     <ThemeContext.Provider value={value}>
       <div
         className={`${isDark ? 'dark' : ''} min-h-screen transition-colors duration-300 text-[var(--size-sm)]`}
         style={{
-          fontFamily: tokens.fontMode === 'sans' ? tokens.typography.fontSans : tokens.typography.fontSerif,
-          backgroundColor: isDark ? '#0f172a' : tokens.colors.background,
-          color: tokens.colors.text
+          fontFamily: resolvedTokens.fontMode === 'sans' ? resolvedTokens.typography.fontSans : resolvedTokens.typography.fontSerif,
+          backgroundColor: isDark ? '#0f172a' : resolvedTokens.colors.background,
+          color: resolvedTokens.colors.text
         }}
       >
         {children}

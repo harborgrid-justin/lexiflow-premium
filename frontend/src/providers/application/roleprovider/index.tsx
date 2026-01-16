@@ -93,6 +93,20 @@ const DEFAULT_HIERARCHY: Record<SystemRole, number> = {
   Guest: 10,
 };
 
+const ROLE_API_ENABLED = import.meta.env?.VITE_ROLES_API_ENABLED === 'true';
+
+const DEFAULT_AVAILABLE_ROLES: Role[] = Object.entries(DEFAULT_HIERARCHY).map(
+  ([name, hierarchy]) => ({
+    id: `role-${name.toLowerCase().replace(/\s+/g, '-')}`,
+    name: name as SystemRole,
+    displayName: name,
+    description: `${name} role`,
+    permissions: [],
+    hierarchy,
+    isSystem: true,
+  })
+);
+
 // ============================================================================
 // Helper Functions
 // ============================================================================
@@ -258,14 +272,14 @@ export function RoleProvider({
       setError(null);
 
       try {
-        await apiClient.post(`/api/users/${targetUserId}/roles`, {
+        await apiClient.post(`/users/${targetUserId}/roles`, {
           role,
         });
 
         // Refresh roles if this is for the current user
         if (targetUserId === userIdRef.current) {
           const response = await apiClient.get<{ roles: Role[] }>(
-            `/api/users/${targetUserId}/roles`
+            `/users/${targetUserId}/roles`
           );
 
           startTransition(() => {
@@ -298,12 +312,12 @@ export function RoleProvider({
       setError(null);
 
       try {
-        await apiClient.delete(`/api/users/${targetUserId}/roles/${role}`);
+        await apiClient.delete(`/users/${targetUserId}/roles/${role}`);
 
         // Refresh roles if this is for the current user
         if (targetUserId === userIdRef.current) {
           const response = await apiClient.get<{ roles: Role[] }>(
-            `/api/users/${targetUserId}/roles`
+            `/users/${targetUserId}/roles`
           );
 
           startTransition(() => {
@@ -342,13 +356,13 @@ export function RoleProvider({
     try {
       // Fetch current user's roles
       const rolesResponse = await apiClient.get<{ roles: Role[] }>(
-        `/api/users/${userIdRef.current}/roles`
+        `/users/${userIdRef.current}/roles`
       );
 
-      // Fetch all available roles
-      const availableResponse = await apiClient.get<{ roles: Role[] }>(
-        '/api/roles'
-      );
+      // Fetch all available roles (optional if API not enabled)
+      const availableResponse = ROLE_API_ENABLED
+        ? await apiClient.get<{ roles: Role[] }>('/roles')
+        : { roles: DEFAULT_AVAILABLE_ROLES };
 
       startTransition(() => {
         setCurrentRoles(rolesResponse.roles);
@@ -378,7 +392,9 @@ export function RoleProvider({
 
     const loadAvailableRoles = async () => {
       try {
-        const response = await apiClient.get<{ roles: Role[] }>('/api/roles');
+        const response = ROLE_API_ENABLED
+          ? await apiClient.get<{ roles: Role[] }>('/roles')
+          : { roles: DEFAULT_AVAILABLE_ROLES };
 
         if (mounted) {
           startTransition(() => {
@@ -386,7 +402,9 @@ export function RoleProvider({
           });
         }
       } catch (err) {
-        console.error('[RoleProvider] Failed to load available roles:', err);
+        if (mounted) {
+          setAvailableRoles(DEFAULT_AVAILABLE_ROLES);
+        }
       }
     };
 

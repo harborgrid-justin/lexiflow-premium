@@ -18,6 +18,7 @@
  */
 
 import { BrowserClipboardService } from "./clipboard/ClipboardService";
+import { BrowserNotificationService } from "./notification/NotificationService";
 import { ServiceRegistry, registerService } from "./core/ServiceRegistry";
 import { WebCryptoService } from "./crypto/CryptoService";
 import { EnvironmentFeatureFlagService } from "./featureFlags/feature-flag.service";
@@ -202,15 +203,15 @@ export function getServiceUptime(serviceName: string): number | null {
   return health?.uptime ?? null;
 }
 
-// ============================================================================
+// =============================================================================
 // DEVELOPMENT HELPERS
-// ============================================================================
+// =============================================================================
 
 /**
  * Development mode: Expose registry globally
  * Access via window.__LEXIFLOW_SERVICES__ in dev tools
  */
-if (import.meta.env.DEV) {
+if (import.meta.env.DEV && typeof window !== "undefined") {
   (
     window as Window & { __LEXIFLOW_SERVICES__?: unknown }
   ).__LEXIFLOW_SERVICES__ = {

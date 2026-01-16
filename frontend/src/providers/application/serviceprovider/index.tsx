@@ -48,7 +48,9 @@ const syncApi = new SyncApiService();
 
 export function ServiceProvider({ children, healthCheckInterval = 60000 }: ServiceProviderProps) {
   const [services, setServices] = useState<ServiceHealth[]>([]);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(
+    typeof navigator !== "undefined" ? navigator.onLine : true
+  );
   const [lastSync, setLastSync] = useState<string | null>(null);
   const [pendingOperations, setPendingOperations] = useState(0);
 

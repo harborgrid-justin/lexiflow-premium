@@ -34,22 +34,54 @@ export const ProfileDomain = {
       if (!userResult.ok) {
         throw new Error("Failed to get current user");
       }
-      const user = userResult.data;
+      const user = userResult.data as {
+        id?: string;
+        userId?: string;
+        email?: string;
+        role?: string;
+      } | null;
 
-      let permissions: GranularPermission[] = [];
-      try {
-        permissions = await apiClient.get<GranularPermission[]>(
-          `/users/${user.id}/permissions`
-        );
-      } catch (e) {
-        console.warn("Failed to fetch permissions", e);
-      }
+      const tokenUserId = () => {
+        if (typeof window === "undefined") return undefined;
+        try {
+          const token = localStorage.getItem("lexiflow-auth-token");
+          if (!token) return undefined;
+          const parts = token.split(".");
+          if (parts.length !== 3) return undefined;
+          const decoded = JSON.parse(atob(parts[1] || "")) as { sub?: string };
+          return decoded.sub;
+        } catch {
+          return undefined;
+        }
+      };
+
+      const storedUserId = () => {
+        if (typeof window === "undefined") return undefined;
+        try {
+          const stored = localStorage.getItem("lexiflow_auth_user");
+          if (!stored) return undefined;
+          const parsed = JSON.parse(stored) as { id?: string };
+          return parsed.id;
+        } catch {
+          return undefined;
+        }
+      };
+
+      const userId =
+        user?.id || user?.userId || storedUserId() || tokenUserId();
+
+      const permissions = Array.isArray(
+        (user as { permissions?: unknown })?.permissions
+      )
+        ? (user as { permissions: GranularPermission[] }).permissions
+        : [];
 
       return {
-        ...user,
-        id: user.id as UserId,
-        preferences: (user as unknown as ExtendedUserProfile).preferences || {},
-        security: (user as unknown as ExtendedUserProfile).security || {},
+        ...(user || {}),
+        id: userId as UserId,
+        preferences:
+          (user as unknown as ExtendedUserProfile)?.preferences || {},
+        security: (user as unknown as ExtendedUserProfile)?.security || {},
         accessMatrix: permissions,
       } as ExtendedUserProfile;
     } catch (error) {

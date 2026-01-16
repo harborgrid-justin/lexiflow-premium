@@ -29,7 +29,7 @@ export interface PermissionGroup {
 }
 
 export class RolesService {
-  private readonly baseUrl = "/api/roles";
+  private readonly baseUrl = "/roles";
 
   async getRoles(): Promise<Role[]> {
     return apiClient.get<Role[]>(this.baseUrl);

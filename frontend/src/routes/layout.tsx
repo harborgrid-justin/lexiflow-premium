@@ -5,8 +5,8 @@
  *
  * ENTERPRISE PATTERN:
  * This file now delegates to layouts/AppShellLayout.tsx
- * Domain contexts (CaseProvider, DataSourceProvider, WindowProvider) have been
- * moved to their respective route components per enterprise architecture.
+ * Domain contexts (CaseProvider, DataSourceProvider, WindowProvider) wrap the
+ * layout to support shell components (sidebar/header) that rely on them.
  *
  * MIGRATION COMPLETE:
  * - ThemeProvider → RootProviders (in root.tsx)
@@ -21,6 +21,9 @@ import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
 import { useAppShellLogic } from "@/hooks/useAppShellLogic";
 import { RouteErrorBoundary } from "@/routes/_shared/RouteErrorBoundary";
+import { WindowProvider } from "@/routes/_shared";
+import { CaseProvider } from "@/routes/cases";
+import { DataSourceProvider } from "@/routes/dashboard";
 import { requireAuthLoader } from "@/utils/route-guards";
 import { Outlet, useRouteError } from "react-router";
 
@@ -40,43 +43,49 @@ export default function Layout() {
   const { state, handlers } = useAppShellLogic();
 
   return (
-    <AppShell
-      // Active State
-      activeView={state.activeView}
-      selectedCaseId={state.selectedCaseId}
+    <WindowProvider>
+      <CaseProvider>
+        <DataSourceProvider>
+          <AppShell
+            // Active State
+            activeView={state.activeView}
+            selectedCaseId={state.selectedCaseId}
 
-      // Data & UI State
-      isFetching={state.isQueryFetching}
-      breadcrumbs={state.breadcrumbs}
-      timeTracker={state.timeTracker}
+            // Data & UI State
+            isFetching={state.isQueryFetching}
+            breadcrumbs={state.breadcrumbs}
+            timeTracker={state.timeTracker}
 
-      // Action Handlers
-      onNavigate={handlers.handleNavigate}
+            // Action Handlers
+            onNavigate={handlers.handleNavigate}
 
-      // Composed Slots
-      sidebar={
-        <AppSidebar
-          isOpen={state.isSidebarOpen}
-          onToggle={handlers.handleToggleSidebar}
-          activeItem={state.activeView}
-          userName={state.currentUser?.name}
-          userEmail={state.currentUser?.email}
-          userRole={state.currentUser?.role}
-          onNavigate={handlers.handleNavigate}
-        />
-      }
-      headerContent={
-        <TopBar
-          onSearch={handlers.handleGlobalSearch}
-          onNeuralCommand={handlers.handleNeuralCommand}
-          onResultClick={handlers.handleSearchResultClick}
-          onToggleSidebar={handlers.handleToggleSidebar}
-        />
-      }
-    >
-      {/* Child Routes (with their own domain contexts) */}
-      <Outlet />
-    </AppShell>
+            // Composed Slots
+            sidebar={
+              <AppSidebar
+                isOpen={state.isSidebarOpen}
+                onToggle={handlers.handleToggleSidebar}
+                activeItem={state.activeView}
+                userName={state.currentUser?.name}
+                userEmail={state.currentUser?.email}
+                userRole={state.currentUser?.role}
+                onNavigate={handlers.handleNavigate}
+              />
+            }
+            headerContent={
+              <TopBar
+                onSearch={handlers.handleGlobalSearch}
+                onNeuralCommand={handlers.handleNeuralCommand}
+                onResultClick={handlers.handleSearchResultClick}
+                onToggleSidebar={handlers.handleToggleSidebar}
+              />
+            }
+          >
+            {/* Child Routes (with their own domain contexts) */}
+            <Outlet />
+          </AppShell>
+        </DataSourceProvider>
+      </CaseProvider>
+    </WindowProvider>
   );
 }
 

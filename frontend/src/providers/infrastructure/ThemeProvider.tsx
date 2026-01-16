@@ -1,4 +1,5 @@
 export {
   ThemeContext, ThemeProvider, useThemeContext,
-  type ThemeContextType
+  type ThemeContextType,
+  createTheme
 } from "./themeprovider";

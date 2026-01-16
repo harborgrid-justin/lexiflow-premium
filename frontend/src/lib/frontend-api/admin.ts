@@ -159,22 +159,23 @@ export async function getSystemMetrics(): Promise<Result<SystemMetricsResult>> {
  * Get system health status
  */
 export async function getSystemHealth(): Promise<Result<SystemHealthResult>> {
-  const result = await client.get<unknown>("/admin/health");
+  const result = await client.get<unknown>("/health");
 
   if (!result.ok) {
     return result;
   }
 
   const data = result.data as Record<string, unknown>;
+  const components = (data.components || {}) as Record<string, unknown>;
+  const dbComponent = (components.database || {}) as Record<string, unknown>;
+
   return success({
-    status: (data.status as string) === "healthy" ? "healthy" : "degraded",
-    uptime: typeof data.uptime === "number" ? data.uptime : 0,
-    database:
-      (data.database as string) === "connected" ? "connected" : "disconnected",
-    cache:
-      (data.cache as string) === "connected" ? "connected" : "disconnected",
-    externalServices: (data.externalServices as Record<string, boolean>) || {},
-    lastChecked: data.lastChecked as string,
+    status: (data.status as string) === "ok" ? "healthy" : "degraded",
+    uptime: typeof data.uptimeSeconds === "number" ? data.uptimeSeconds : 0,
+    database: dbComponent.connected ? "connected" : "disconnected",
+    cache: "disconnected",
+    externalServices: {},
+    lastChecked: (data.timestamp as string) || new Date().toISOString(),
   });
 }
 
@@ -263,10 +264,14 @@ const processingJobs = {
  */
 const documentVersions = {
   async getAll(documentId: string) {
-    return await client.get<unknown[]>(`/admin/documents/${documentId}/versions`);
+    return await client.get<unknown[]>(
+      `/admin/documents/${documentId}/versions`
+    );
   },
   async getById(documentId: string, versionId: string) {
-    return await client.get<unknown>(`/admin/documents/${documentId}/versions/${versionId}`);
+    return await client.get<unknown>(
+      `/admin/documents/${documentId}/versions/${versionId}`
+    );
   },
 };
 

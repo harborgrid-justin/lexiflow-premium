@@ -5,6 +5,7 @@
  */
 
 import { cn } from '@/lib/cn';
+import { useTheme } from '@/hooks/useTheme';
 import { User } from 'lucide-react';
 import React from 'react';
 
@@ -59,6 +60,8 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   showStatus = false,
   isOnline = false,
 }) => {
+  const { theme } = useTheme();
+
   const getInitials = () => {
     if (!user?.name) return 'U';
     const parts = user.name.trim().split(' ');
@@ -70,17 +73,17 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
 
   const getAvatarColor = () => {
     // Generate a consistent color based on user name
-    if (!user?.name) return theme.colors.primary;
     const colors = [
-      'bg-blue-500',
-      'bg-purple-500',
-      'bg-green-500',
-      'bg-orange-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-teal-500',
-      'bg-cyan-500',
+      theme.primary.main,
+      theme.chart.colors.purple,
+      theme.chart.colors.success,
+      theme.chart.colors.warning,
+      theme.chart.colors.info,
+      theme.chart.colors.primary,
+      theme.chart.colors.secondary,
+      theme.chart.colors.neutral,
     ];
+    if (!user?.name) return colors[0];
     const charCode = user.name.charCodeAt(0);
     return colors[charCode % colors.length];
   };
@@ -101,8 +104,9 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
           className={cn(
             'rounded-full text-white flex items-center justify-center font-semibold',
             SIZE_MAP[size],
-            getAvatarColor()
+            'bg-transparent'
           )}
+          style={{ backgroundColor: getAvatarColor() }}
         >
           {user?.name ? (
             getInitials()
@@ -116,9 +120,9 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
         <div
           className={cn(
             'absolute bottom-0 right-0 rounded-full border-2 border-white dark:border-gray-800',
-            STATUS_SIZE_MAP[size],
-            isOnline ? theme.status.success.background : theme.surface.default
+            STATUS_SIZE_MAP[size]
           )}
+          style={{ backgroundColor: isOnline ? theme.status.success.bg : theme.surface.default }}
           title={isOnline ? 'Online' : 'Offline'}
         />
       )}

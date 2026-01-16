@@ -108,6 +108,32 @@ export class UsersService implements OnModuleInit {
 
       if (existingAdmin) {
         this.logger.debug(`Default admin already exists: ${config.user.email}`);
+        let shouldSave = false;
+
+        if (existingAdmin.role !== UserRole.SUPER_ADMIN) {
+          existingAdmin.role = UserRole.SUPER_ADMIN;
+          shouldSave = true;
+        }
+
+        const allowPasswordReset =
+          process.env.NODE_ENV !== "production" &&
+          process.env.DEFAULT_ADMIN_RESET_PASSWORD !== "false";
+
+        if (allowPasswordReset && config.user.password) {
+          existingAdmin.passwordHash = await bcrypt.hash(
+            config.user.password,
+            MasterConfig.BCRYPT_ROUNDS
+          );
+          existingAdmin.emailVerified = true;
+          shouldSave = true;
+          this.logger.warn(
+            "Default admin password reset from config (non-production only)"
+          );
+        }
+
+        if (shouldSave) {
+          await this.userRepository.save(existingAdmin);
+        }
         // Ensure profile exists if profile creation is enabled
         if (config.profile.enabled) {
           await this.ensureAdminProfile(existingAdmin.id);

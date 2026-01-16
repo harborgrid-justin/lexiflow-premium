@@ -1,7 +1,8 @@
 import { TIMEOUTS } from '@/config/ports.config';
 import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
 import { useDataSource } from '@/routes/dashboard';
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from '@/services/infrastructure/api-client.service';
 import { Activity, AlertCircle, Cloud, Database, Info, WifiOff } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { BackendHealthMonitor } from '../BackendHealthMonitor/BackendHealthMonitor';

@@ -1,11 +1,17 @@
-// components/citation/index.ts
+/**
+ * Admin Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ *
+ * @module routes/citations/components
+ */
 
-// Extracted modules
-export * from './types';
-export * from './utils';
+// Note: Admin components organized by subdomain
+// Import from feature folders as needed (data/, users/, analytics/, etc.)
+// to maintain code-splitting benefits
 
-// Components
-export * from './BriefAnalyzer';
-export * from './CitationDetail';
-export * from './CitationLibrary';
-export * from './CitationManager';
+export {};

@@ -3,20 +3,32 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
+/**
+ * Compliance Page Component
+ *
+ * Handles Suspense/Await wiring for compliance route
+ * Receives loader data and passes to Provider → View
+ *
+ * @module routes/compliance/CompliancePage
+ */
+
 import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Await } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { ComplianceProvider } from './ComplianceProvider';
 import { ComplianceView } from './ComplianceView';
-import type { clientLoader } from './loader';
+import type { ComplianceLoaderData } from './loader';
 
-export function CompliancePageContent() {
-  const data = useLoaderData<typeof clientLoader>();
+interface CompliancePageProps {
+  loaderData: ComplianceLoaderData;
+}
+
+export function CompliancePage({ loaderData }: CompliancePageProps) {
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Compliance" />}>
-      <Await resolve={data} errorElement={<RouteError title="Failed to load compliance" />}>
+      <Await resolve={loaderData} errorElement={<RouteError title="Failed to load Compliance" />}>
         {(resolved) => (
-          <ComplianceProvider initialChecks={resolved.checks} initialConflicts={resolved.conflicts} initialDeadlines={resolved.deadlines}>
+          <ComplianceProvider initialData={resolved}>
             <ComplianceView />
           </ComplianceProvider>
         )}

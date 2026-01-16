@@ -1,4 +1,4 @@
-import { LoadingState } from '@/components/common/LoadingState';
+import { LoadingState } from '@/components/molecules/LoadingState/LoadingState';
 import { Case, LegalDocument, Party } from '@/types';
 import { Suspense, useCallback } from 'react';
 import { Await, useLoaderData, useNavigate, useParams } from 'react-router';
@@ -40,10 +40,40 @@ export default function CaseDetailLayout() {
                 resolvedParties
               );
 
+              // Navigation handler for tabs
+              const handleTabChange = useCallback((newTab: string) => {
+                // Map complex IDs to simple routes
+                const routeMap: Record<string, string> = {
+                  'Overview': 'overview',
+                  'Parties': 'parties',
+                  'Timeline': 'timeline',
+                  'Strategy': 'strategy',
+                  'Planning': 'calendar', // Use calendar route for Planning
+                  'Projects': 'projects',
+                  'Workflow': 'workflow',
+                  'Collaboration': 'collaboration',
+                  'Motions': 'motions',
+                  'Discovery': 'discovery',
+                  'Evidence': 'evidence',
+                  'Exhibits': 'exhibits',
+                  'Documents': 'documents',
+                  'Drafting': 'drafting',
+                  'Contract Review': 'review',
+                  'Billing': 'financials', // Use financials route for Billing
+                  'Research': 'research',
+                  'Risk': 'risk',
+                  'Arguments': 'arguments'
+                };
+
+                const path = routeMap[newTab] || newTab.toLowerCase().replace(/\s+/g, '-');
+                navigate(path);
+              }, [navigate]);
+
               return (
                 <CaseDetailProvider value={{
                   ...detail,
-                  caseData
+                  caseData,
+                  setActiveTab: handleTabChange
                 }}>
                   <CaseDetailShell />
                 </CaseDetailProvider>

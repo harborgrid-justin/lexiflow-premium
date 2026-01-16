@@ -3,7 +3,7 @@
 import {
   FINANCIAL_REPORT_TAB_LABELS, FINANCIAL_REPORT_TABS, REPORT_PERIODS, ReportPeriod
 } from '@/config/billing.config';
-import { useFinancialHelpers, useFinancialReports } from '@/routes/billing/_hooks/useFinancialReports';
+import { useFinancialHelpers, useFinancialReports } from '@/routes/billing/hooks/useFinancialReports';
 import {
   Activity, BarChart3, DollarSign, Download, Filter, PieChart, TrendingDown, TrendingUp
 } from 'lucide-react';

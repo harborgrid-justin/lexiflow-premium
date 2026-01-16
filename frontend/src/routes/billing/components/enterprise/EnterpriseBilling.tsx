@@ -3,8 +3,6 @@
  * Main enterprise billing dashboard with AR aging, collection tracking, and write-off management
  */
 
-import { useQuery } from '@/hooks/useQueryHooks';
-import { billingApi } from '@/lib/frontend-api';
 import {
   AlertTriangle,
   CheckCircle,
@@ -16,17 +14,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-
-interface BillingSummaryMetrics {
-  totalOutstanding: number;
-  totalReceivables: number;
-  collectedThisMonth: number;
-  collectionRate: number;
-  writeOffsThisMonth: number;
-  averageDaysToPayment: number;
-  overdueAmount: number;
-  overdueCount: number;
-}
+import { useEnterpriseBilling } from '../../hooks/useEnterpriseBilling';
 
 interface ARAgingBucket {
   label: string;
@@ -34,18 +22,6 @@ interface ARAgingBucket {
   amount: number;
   count: number;
   percentage: number;
-}
-
-interface CollectionItem {
-  id: string;
-  clientName: string;
-  invoiceNumber: string;
-  amount: number;
-  daysOverdue: number;
-  lastContactDate?: string;
-  assignedTo?: string;
-  priority: 'high' | 'medium' | 'low';
-  status: 'pending' | 'in_progress' | 'contacted' | 'payment_plan';
 }
 
 interface WriteOffRequest {
@@ -65,59 +41,16 @@ export interface EnterpriseBillingProps {
   onExportData?: (format: 'csv' | 'pdf' | 'excel') => void;
 }
 
-export function EnterpriseBilling({ onExportData }: EnterpriseBillingProps) {
+export function EnterpriseBilling({ firmId, onExportData }: EnterpriseBillingProps) {
   const [selectedTab, setSelectedTab] = useState<
     'overview' | 'aging' | 'collections' | 'writeoffs'
   >('overview');
   const [showFilters, setShowFilters] = useState(false);
 
-  const { data: billingData } = useQuery(['billing', 'analytics'], async () => {
-    const result = await billingApi.getOverviewStats();
-    return result.ok ? result.data : null;
-  });
-
-  const metrics: BillingSummaryMetrics = useMemo(() => {
-    if (!billingData) {
-      return {
-        totalOutstanding: 0,
-        totalReceivables: 0,
-        collectedThisMonth: 0,
-        collectionRate: 0,
-        writeOffsThisMonth: 0,
-        averageDaysToPayment: 0,
-        overdueAmount: 0,
-        overdueCount: 0,
-      };
-    }
-
-    const data = billingData as unknown as {
-      outstandingAR?: number;
-      collectedRevenue?: number;
-      writeOffs?: number;
-      realization?: { rate?: number };
-    };
-
-    return {
-      totalOutstanding: data.outstandingAR || 0,
-      totalReceivables: data.outstandingAR || 0,
-      collectedThisMonth: data.collectedRevenue || 0,
-      collectionRate: data.realization?.rate || 0,
-      writeOffsThisMonth: data.writeOffs || 0,
-      averageDaysToPayment: 0,
-      overdueAmount: 0,
-      overdueCount: 0,
-    };
-  }, [billingData]);
+  // Extract data fetching to custom hook (enterprise architecture compliance)
+  const { metrics, collectionItems, isLoading } = useEnterpriseBilling(firmId);
 
   const agingBuckets: ARAgingBucket[] = useMemo(() => [], []);
-
-  const { data: collectionItems = [] } = useQuery<CollectionItem[]>(
-    ['billing', 'collections'],
-    async () => {
-      const result = await billingApi.getCollections();
-      return result.ok ? result.data : [];
-    }
-  );
 
   const { data: writeOffRequests = [] } = useQuery<WriteOffRequest[]>(
     ['billing', 'writeoffs'],
@@ -277,8 +210,8 @@ export function EnterpriseBilling({ onExportData }: EnterpriseBillingProps) {
               type="button"
               onClick={() => setSelectedTab(tab)}
               className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
-                  ? 'border-blue-500 text-[var(--color-primary)]'
-                  : 'border-transparent text-[var(--color-textMuted)] hover:border-[var(--color-border)] hover:text-[var(--color-text)] dark:text-[var(--color-textMuted)] dark:hover:text-gray-300'
+                ? 'border-blue-500 text-[var(--color-primary)]'
+                : 'border-transparent text-[var(--color-textMuted)] hover:border-[var(--color-border)] hover:text-[var(--color-text)] dark:text-[var(--color-textMuted)] dark:hover:text-gray-300'
                 }`}
             >
               {tab === 'writeoffs'

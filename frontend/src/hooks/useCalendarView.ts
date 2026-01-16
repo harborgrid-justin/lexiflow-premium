@@ -1,1 +1,1 @@
-export { useCalendarView } from "@/routes/calendar/_hooks/useCalendarView";
+export { useCalendarView } from "@/routes/calendar/hooks/useCalendarView";

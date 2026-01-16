@@ -18,7 +18,7 @@ import { memo } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
-import { useComplianceConflicts } from './hooks/useComplianceConflicts';
+import { useComplianceConflicts } from '../hooks/useComplianceConflicts';
 
 // Components
 import { Badge } from '@/components/atoms/Badge/Badge';

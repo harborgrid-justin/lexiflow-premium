@@ -3,8 +3,30 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { AnalyticsDashboard } from '@/routes/admin/components/analytics/AnalyticsDashboard';
+/**
+ * Analytics Index Route
+ *
+ * Enterprise React Architecture - Business Intelligence
+ * Exports loader and default component for React Router v7
+ *
+ * @module routes/analytics/index
+ */
+
+import { useLoaderData } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+
+// Import standard components
+import { AnalyticsPage } from './AnalyticsPage';
+import type { clientLoader } from './loader';
+
+// Export loader (renamed to loader for standard router usage)
+export { clientLoader as loader } from './loader';
+
+// ============================================================================
+// Meta Tags
+// ============================================================================
+
 export function meta() {
   return createListMeta({
     entityType: 'Analytics',
@@ -12,6 +34,18 @@ export function meta() {
   });
 }
 
+// ============================================================================
+// Component
+// ============================================================================
+
 export default function AnalyticsIndexRoute() {
-  return <AnalyticsDashboard />;
+  const loaderData = useLoaderData() as ReturnType<typeof clientLoader>;
+
+  return <AnalyticsPage loaderData={loaderData} />;
 }
+
+// ============================================================================
+// Error Boundary
+// ============================================================================
+
+export { RouteErrorBoundary as ErrorBoundary };

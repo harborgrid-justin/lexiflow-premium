@@ -1,33 +1,24 @@
-/**
- * ENTERPRISE REACT ARCHITECTURE STANDARD
- * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
- */
-
-/**
- * Entities Domain - Data Loader
- * Enterprise React Architecture Pattern
- */
-
 import { DataService } from "@/services/data/data-service.service";
-
-type Entity = {
-  id: string;
-  name: string;
-  type: "Person" | "Organization" | "Government" | "Trust";
-  jurisdiction: string;
-  identificationNumber: string;
-  relatedCases: number;
-  status: "Active" | "Inactive";
-};
+import { LegalEntity } from "@/types";
 
 export interface EntitiesLoaderData {
-  entities: Entity[];
+  entities: LegalEntity[];
 }
 
-export async function entitiesLoader() {
-  const entities = await DataService.entities.getAll().catch(() => []);
-
-  return {
-    entities: entities || [],
-  };
+export async function clientLoader(): Promise<EntitiesLoaderData> {
+  try {
+    const entities = await DataService.entities.getAll();
+    // Default to empty array if null
+    return {
+      entities: entities || [],
+    };
+  } catch (error) {
+    console.error("Failed to load entities", error);
+    return {
+      entities: [],
+    };
+  }
 }
+
+// Support hydration
+(clientLoader as any).hydrate = true;

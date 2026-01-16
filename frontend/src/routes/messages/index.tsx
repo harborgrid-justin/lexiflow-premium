@@ -12,14 +12,16 @@
  * @module routes/messages/index
  */
 
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
-// Export loader from dedicated file
-export { messagesLoader as loader } from './loader';
-
 // Import Page component
 import { MessagesPage } from './MessagesPage';
+import type { MessagesLoaderData } from './loader';
+
+// Export loader from dedicated file
+export { messagesLoader as loader } from './loader';
 
 // ============================================================================
 // Meta Tags
@@ -36,8 +38,10 @@ export function meta() {
 // Component
 // ============================================================================
 
-export default function MessagesRoute() {
-  return <MessagesPage />;
+export default function MessagesIndexRoute() {
+  const loaderData = useLoaderData() as MessagesLoaderData;
+
+  return <MessagesPage loaderData={loaderData} />;
 }
 
 // ============================================================================

@@ -21,7 +21,6 @@ import { adminApi } from '@/lib/frontend-api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
-import { DafDashboard } from './components/DafDashboard';
 
 // ============================================================================
 // Meta Tags
@@ -110,8 +109,10 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
+import { DafPage } from './DafPage';
+
 export default function DAFIndexRoute({ loaderData }: Route.ComponentProps) {
-  return <DafDashboard stats={loaderData.stats} />;
+  return <DafPage loaderData={loaderData} />;
 }
 
 // ============================================================================

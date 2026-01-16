@@ -11,8 +11,12 @@
  * @module routes/cases/index
  */
 
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+
+import { CasesPage } from './CasesPage';
+import type { CaseListLoaderData } from './loader';
 
 // Export loader from dedicated file
 export { clientLoader } from './loader';
@@ -25,9 +29,6 @@ export {
   useCaseState,
   type CaseContextValue
 } from './CaseProvider';
-
-// Import View component
-import CaseListView from './CaseListView';
 
 // ============================================================================
 // Meta Tags
@@ -45,7 +46,9 @@ export function meta() {
 // ============================================================================
 
 export default function CasesRoute() {
-  return <CaseListView />;
+  const loaderData = useLoaderData() as CaseListLoaderData;
+
+  return <CasesPage loaderData={loaderData} />;
 }
 
 // ============================================================================

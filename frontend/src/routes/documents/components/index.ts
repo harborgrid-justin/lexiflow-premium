@@ -1,20 +1,17 @@
-// components/documents/index.ts
+/**
+ * Admin Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ *
+ * @module routes/documents/components
+ */
 
-export * from "./AdvancedEditor";
-export * from "./DocumentAnnotations";
-export * from "./DocumentAssembly";
-export * from "./DocumentDragOverlay";
-export * from "./DocumentExplorer";
-export * from "./DocumentFilters";
-export * from "./DocumentGridCard";
-export * from "./DocumentManager";
-export * from "./DocumentManagerContent";
-export * from "./DocumentTemplates";
-export * from "./DocumentToolbar";
-export * from "./DocumentUploader";
-export * from "./DocumentVersions";
-export * from "./DocumentViewer";
-export * from "./MetadataPanel";
-export * from "./RecentFiles";
-export * from "./TagManagementModal";
-export * from "./VersionHistory";
+// Note: Admin components organized by subdomain
+// Import from feature folders as needed (data/, users/, analytics/, etc.)
+// to maintain code-splitting benefits
+
+export {};

@@ -1,14 +1,14 @@
 import { Edit2, Loader2, Plus, RefreshCw, Sparkles } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
-import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { Modal } from '@/components/molecules/Modal';
 import { Tabs } from '@/components/molecules/Tabs';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 import { QUALITY_TABS } from '@/config/quality.config';
-import { useDataQualityStudio } from '../../_hooks/useDataQualityStudio';
+import { useDataQualityStudio } from '../../hooks/useDataQualityStudio';
 import { DataProfiler } from './quality/DataProfiler';
 import { DeduplicationManager } from './quality/DeduplicationManager';
 import { QualityDashboard } from './quality/QualityDashboard';

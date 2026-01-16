@@ -12,8 +12,10 @@
  * @module routes/profile/index
  */
 
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { ProfileLoaderData } from './loader';
 
 // Export loader from dedicated file
 export { profileLoader as loader } from './loader';
@@ -37,7 +39,9 @@ export function meta() {
 // ============================================================================
 
 export default function ProfileRoute() {
-  return <ProfilePage />;
+  const loaderData = useLoaderData() as ProfileLoaderData;
+
+  return <ProfilePage loaderData={loaderData} />;
 }
 
 // ============================================================================

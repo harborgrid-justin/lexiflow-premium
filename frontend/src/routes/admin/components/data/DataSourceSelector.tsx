@@ -7,7 +7,7 @@
 
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { useDataSource } from '@/routes/dashboard';
+import { useDataSource } from '@/routes/dashboard/data/DataSourceContext';
 import { Cloud, Database, Power, RefreshCw, Server } from 'lucide-react';
 import { useState } from 'react';
 

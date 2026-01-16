@@ -4,7 +4,6 @@
  */
 
 import { casesApi, documentsApi } from "@/lib/frontend-api";
-import type { Route } from "./+types/case-detail";
 
 /**
  * Case Detail Loader - Server-side Data Fetching with Streaming
@@ -16,7 +15,11 @@ import type { Route } from "./+types/case-detail";
  * This enables the page to render quickly with essential data
  * while additional data streams in progressively
  */
-export async function caseDetailLoader({ params }: Route.ClientLoaderArgs) {
+export async function caseDetailLoader({
+  params,
+}: {
+  params: { caseId?: string };
+}) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -26,7 +29,7 @@ export async function caseDetailLoader({ params }: Route.ClientLoaderArgs) {
   // Critical data - await immediately (blocks render)
   let caseResult;
   try {
-    caseResult = await casesApi.getCaseById(caseId);
+    caseResult = await casesApi.getById(caseId);
   } catch {
     caseResult = { ok: false } as const;
   }
@@ -45,10 +48,8 @@ export async function caseDetailLoader({ params }: Route.ClientLoaderArgs) {
   // These load in parallel and render when ready via Suspense
   const documentsPromise = documentsApi
     .getDocumentsByCase(caseId)
-    .then((r) => (r.ok ? r.data.data : []));
-  const partiesPromise = casesApi
-    .getCaseParties(caseId)
-    .then((r) => (r.ok ? r.data.data : []));
+    .then((r) => (r.ok ? r.data : []));
+  const partiesPromise = Promise.resolve([]);
 
   return {
     caseData,

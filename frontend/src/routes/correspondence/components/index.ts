@@ -1,10 +1,17 @@
-// components/correspondence/index.ts
+/**
+ * Admin Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ *
+ * @module routes/correspondence/components
+ */
 
-export { CommunicationLog } from './CommunicationLog';
-export { ComposeMessageModal } from './ComposeMessageModal';
-export { CorrespondenceDetail } from './CorrespondenceDetail';
-export { default as CorrespondenceManager } from './CorrespondenceManager';
-export { CreateServiceJobModal } from './CreateServiceJobModal';
-export { ServiceTracker } from './ServiceTracker';
-export { CorrespondenceErrorBoundary } from './CorrespondenceErrorBoundary';
-export * from './CorrespondenceSkeleton';
+// Note: Admin components organized by subdomain
+// Import from feature folders as needed (data/, users/, analytics/, etc.)
+// to maintain code-splitting benefits
+
+export {};

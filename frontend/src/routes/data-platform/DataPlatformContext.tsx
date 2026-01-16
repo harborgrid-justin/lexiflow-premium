@@ -9,8 +9,32 @@ export type DataSource = {
   lastSync: string;
 };
 
+export type RLSPolicy = {
+  id: string;
+  name: string;
+  table: string;
+  roles: string[];
+  definition: string;
+};
+
+export type SchemaInfo = {
+  name: string;
+  tables: number;
+  size: string;
+};
+
+export type SavedQuery = {
+  id: string;
+  name: string;
+  query: string;
+  lastExecuted: string;
+};
+
 export interface DataPlatformState {
   sources: DataSource[];
+  policies: RLSPolicy[];
+  schemas: SchemaInfo[];
+  queries: SavedQuery[];
   typeFilter: 'all' | 'Database' | 'API' | 'File' | 'Stream';
 }
 

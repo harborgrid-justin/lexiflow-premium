@@ -1,1 +1,1 @@
-export { useAutoTimeCapture } from "@/routes/billing/_hooks/useAutoTimeCapture";
+export { useAutoTimeCapture } from "@/routes/billing/hooks/useAutoTimeCapture";

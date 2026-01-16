@@ -3,9 +3,9 @@
  * PDF and document preview with annotation support
  */
 
-import type { LegalDocument } from '@/types/documents';
 import { useTheme } from "@/hooks/useTheme";
-import { useDocumentViewer } from '../_hooks/useDocumentViewer';
+import type { LegalDocument } from '@/types/documents';
+import { useDocumentViewer } from '../hooks/useDocumentViewer';
 
 interface DocumentViewerProps {
   document: LegalDocument;

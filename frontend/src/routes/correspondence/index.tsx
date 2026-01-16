@@ -12,10 +12,18 @@
  * @module routes/correspondence/index
  */
 
-import { communicationsApi } from '@/lib/frontend-api';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { communicationsApi } from '@/lib/frontend-api';
 import type { Route } from "./+types/index";
+import type { LoaderFunctionArgs } from "react-router";
+
+// Import standard components
+import { CorrespondenceProvider } from './CorrespondenceProvider';
+import { CorrespondenceView } from './CorrespondenceView';
 
 // ============================================================================
 // Meta Tags
@@ -37,25 +45,43 @@ export function meta({ data }: Route.MetaArgs) {
  * Fetches correspondence on the client side only
  * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
  */
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
-  const filter = url.searchParams.get("filter") || "all";
+export async function clientLoader({ request }: LoaderFunctionArgs) {
+  const result = await communicationsApi.getAllCorrespondence({
+    page: 1,
+    limit: 200,
+  });
 
-  try {
-    // Fetch correspondence using new enterprise API
-    const result = await communicationsApi.getAllCorrespondence({ page: 1, limit: 100 });
-    const items = result.ok ? result.data.data : [];
+  const items = result.ok ? result.data.data : [];
 
-    // Apply client-side filtering if needed
-    const filteredItems = filter === "all"
-      ? items
-      : items.filter((item: Correspondence) => item.status === filter);
+  const emails = items
+    .filter((item: any) => item.correspondenceType === "email")
+    .map((item: any) => ({
+      id: item.id,
+      read: item.status === "received",
+      from: item.sender || "Unknown",
+      date: item.date,
+      subject: item.subject,
+      preview: item.notes || "",
+    }));
 
-    return { items: filteredItems, totalCount: filteredItems.length };
-  } catch (error) {
-    console.error("Failed to load correspondence", error);
-    return { items: [], totalCount: 0 };
-  }
+  const letters = items
+    .filter((item: any) => item.correspondenceType === "letter")
+    .map((item: any) => ({
+      id: item.id,
+      title: item.subject,
+      recipient: item.recipients?.join(", ") || "Unknown",
+      date: item.date,
+    }));
+
+  const templates = items
+    .filter((item: any) => item.status === "draft")
+    .map((item: any) => ({
+      id: item.id,
+      name: item.subject,
+      category: item.correspondenceType,
+    }));
+
+  return { emails, letters, templates, items };
 }
 
 // Ensure client loader runs on hydration
@@ -73,7 +99,6 @@ export async function action({ request }: Route.ActionArgs) {
     switch (intent) {
       case "create":
         // Creation is typically handled via modal/form submission to API directly
-        // but if using form action:
         {
           const data = Object.fromEntries(formData);
           delete data.intent;
@@ -134,24 +159,28 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-import { CorrespondenceManager } from './components/CorrespondenceManager';
-
 export default function CorrespondenceIndexRoute() {
-  return <CorrespondenceManager />;
+  const initialData = useLoaderData() as typeof clientLoader;
+
+  return (
+    <Suspense fallback={<RouteSkeleton title="Loading Correspondence" />}>
+      <Await resolve={initialData} errorElement={<RouteError title="Failed to load correspondence" />}>
+        {(resolved) => (
+          <CorrespondenceProvider
+            initialEmails={resolved.emails}
+            initialLetters={resolved.letters}
+            initialTemplates={resolved.templates}
+          >
+            <CorrespondenceView />
+          </CorrespondenceProvider>
+        )}
+      </Await>
+    </Suspense>
+  );
 }
 
 // ============================================================================
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  return (
-    <RouteErrorBoundary
-      error={error}
-      title="Failed to Load Correspondence"
-      message="We couldn't load the correspondence data. Please try again."
-      backTo="/"
-      backLabel="Return to Dashboard"
-    />
-  );
-}
+export { RouteErrorBoundary as ErrorBoundary };

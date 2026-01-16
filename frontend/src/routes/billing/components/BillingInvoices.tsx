@@ -19,10 +19,10 @@ import React from 'react';
 // Removed unused DataService
 
 // Hooks & Context
-import { useThemeContext } from "@/hooks/useTheme";
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useBillingInvoices } from './hooks/useBillingInvoices';
+import { useThemeContext } from "@/hooks/useTheme";
+import { useBillingInvoices } from '../hooks/useBillingInvoices';
 import { getInvoiceBadgeVariant } from './utils/invoiceUtils';
 
 // Components

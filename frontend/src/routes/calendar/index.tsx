@@ -12,14 +12,16 @@
  * @module routes/calendar/index
  */
 
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
-// Export loader from dedicated file
-export { calendarLoader as loader } from './loader';
-
 // Import Page component
 import { CalendarPage } from './CalendarPage';
+import type { CalendarLoaderData } from './loader';
+
+// Export loader
+export { calendarLoader as loader } from './loader';
 
 // ============================================================================
 // Meta Tags
@@ -36,8 +38,10 @@ export function meta() {
 // Component
 // ============================================================================
 
-export default function CalendarRoute() {
-  return <CalendarPage />;
+export default function CalendarIndexRoute() {
+  const loaderData = useLoaderData() as CalendarLoaderData;
+
+  return <CalendarPage loaderData={loaderData} />;
 }
 
 // ============================================================================

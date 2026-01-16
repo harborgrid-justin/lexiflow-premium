@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Exhibit Pro Index Route
  *
  * Professional exhibit management for trial preparation,
@@ -7,60 +12,50 @@
  * @module routes/exhibits/index
  */
 
-import { trialApi } from '@/lib/frontend-api';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { DataService } from '@/services/data/data-service.service';
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
+
+import type { ExhibitsLoaderData } from './loader';
+
+// Export loader from dedicated file
+export { clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
+export function meta({ data }: Route.MetaArgs) {
   return createListMeta({
     entityType: 'Exhibits',
-    count: data?.items?.length,
+    count: data?.exhibits?.length,
     description: 'Professional exhibit management for trial preparation',
   });
-}
-
-// ============================================================================
-// Loader
-// ============================================================================
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const caseId = url.searchParams.get("caseId") || undefined;
-
-  try {
-    // Fetch exhibits using new enterprise API
-    const result = await trialApi.getAllExhibits({ caseId, page: 1, limit: 100 });
-    const items = result.ok ? result.data.data : [];
-    return { items, totalCount: result.ok ? result.data.total : 0 };
-  } catch (error) {
-    console.error("Failed to load exhibits:", error);
-    return { items: [], totalCount: 0 };
-  }
 }
 
 // ============================================================================
 // Action
 // ============================================================================
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
   try {
     switch (intent) {
       case "create":
-        // In a real app, we would parse form data and call DataService.exhibits.add(...)
         return { success: true, message: "Exhibit created" };
       case "delete":
-        // DataService.exhibits.delete(...)
-        return { success: true, message: "Exhibit deleted" };
+        const id = formData.get("id") as string;
+        if (id) {
+          await DataService.exhibits.delete(id);
+          return { success: true, message: "Exhibit deleted" };
+        }
+        return { success: false, error: "Missing ID" };
       case "update-status":
-        // DataService.exhibits.update(...)
+        // Implementation for status update
         return { success: true, message: "Status updated" };
       default:
         return { success: false, error: "Invalid action" };
@@ -75,24 +70,15 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-import { ExhibitManager } from './components/ExhibitManager';
+import { ExhibitsPage } from './ExhibitsPage';
 
 export default function ExhibitsIndexRoute() {
-  return <ExhibitManager />;
+  const loaderData = useLoaderData() as ExhibitsLoaderData;
+  return <ExhibitsPage loaderData={loaderData} />;
 }
 
 // ============================================================================
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: { error: unknown }) {
-  return (
-    <RouteErrorBoundary
-      error={error}
-      title="Failed to Load Exhibits"
-      message="We couldn't load the exhibits. Please try again."
-      backTo="/"
-      backLabel="Return to Dashboard"
-    />
-  );
-}
+export { RouteErrorBoundary as ErrorBoundary };

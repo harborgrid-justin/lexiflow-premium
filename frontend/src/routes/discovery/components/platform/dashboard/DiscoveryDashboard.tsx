@@ -1,15 +1,15 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 import { AlertTriangle, ArrowRight, CheckCircle, Database, FileText, Scale } from 'lucide-react';
 
 // ✅ Migrated to backend API (2025-12-21)
-import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 import { DiscoveryRequest, LegalHold, PrivilegeLogEntry } from '@/types';
+import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
 import DiscoveryCharts from './DiscoveryCharts';
 import DiscoveryMetrics from './DiscoveryMetrics';
 

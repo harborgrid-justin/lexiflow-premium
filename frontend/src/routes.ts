@@ -52,7 +52,6 @@ export default [
     route("cases/create", "routes/cases/create.tsx"),
 
     route("cases/:caseId", "routes/cases/CaseDetailLayout.tsx", [
-      index("routes/cases/CaseDetailContent.tsx"),
       route(":tab", "routes/cases/CaseDetailContent.tsx"),
     ]),
 

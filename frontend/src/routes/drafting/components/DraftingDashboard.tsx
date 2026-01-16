@@ -6,6 +6,7 @@ import { useToast } from '@/providers';
 import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@api/domains/drafting';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
+import type { DraftingLoaderData } from '../loader';
 import { ApprovalQueue } from './ApprovalQueue';
 import { DocumentGenerator } from './DocumentGenerator';
 import { DraftingStats } from './DraftingStats';
@@ -16,17 +17,21 @@ import { TemplateGallery } from './TemplateGallery';
 type View = 'overview' | 'recent' | 'templates' | 'approvals';
 type EditorView = 'template-editor' | 'document-generator' | null;
 
-const DraftingDashboard: React.FC = () => {
+interface DraftingDashboardProps {
+  initialData?: DraftingLoaderData;
+}
+
+const DraftingDashboard: React.FC<DraftingDashboardProps> = ({ initialData }) => {
   const { theme } = useTheme();
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<View>('overview');
   const [editorView, setEditorView] = useState<EditorView>(null);
-  const [recentDrafts, setRecentDrafts] = useState<GeneratedDocument[]>([]);
-  const [templates, setTemplates] = useState<DraftingTemplate[]>([]);
-  const [approvals, setApprovals] = useState<GeneratedDocument[]>([]);
-  const [stats, setStats] = useState<StatsType>({ drafts: 0, templates: 0, pendingReviews: 0, myTemplates: 0 });
-  const [loading, setLoading] = useState(true);
+  const [recentDrafts, setRecentDrafts] = useState<GeneratedDocument[]>(initialData?.recentDrafts || []);
+  const [templates, setTemplates] = useState<DraftingTemplate[]>(initialData?.templates || []);
+  const [approvals, setApprovals] = useState<GeneratedDocument[]>(initialData?.approvals || []);
+  const [stats, setStats] = useState<StatsType>(initialData?.stats || { drafts: 0, templates: 0, pendingReviews: 0, myTemplates: 0 });
+  const [loading, setLoading] = useState(!initialData);
   const [editingTemplate, setEditingTemplate] = useState<DraftingTemplate | undefined>(undefined);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | undefined>(undefined);
 
@@ -53,8 +58,10 @@ const DraftingDashboard: React.FC = () => {
   }, [addToast]);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    if (!initialData) {
+      loadData();
+    }
+  }, [loadData, initialData]);
 
   const handleCreateDraft = () => {
     setSelectedTemplateId(undefined);

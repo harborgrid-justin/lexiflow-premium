@@ -15,10 +15,10 @@
  * NO THEME USAGE: Pure routing logic
  */
 
-import React, { lazy, Suspense } from 'react';
-import { DiscoveryRequest } from '@/types';
-import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { DiscoveryRequest } from '@/types';
+import React, { lazy, Suspense } from 'react';
+import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
 
 // Lazy load components ensuring named exports are handled correctly
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));
@@ -62,7 +62,7 @@ export const DiscoveryContentRenderer: React.FC<DiscoveryContentRendererProps> =
   if (activeTab === 'production_wizard') return <DiscoveryProduction request={requests.find(r => r.id === contextId) || null} onBack={onBack} />;
 
   // Main Tab Views
-  switch(activeTab) {
+  switch (activeTab) {
     case 'dashboard': return <DiscoveryDashboard onNavigate={onNavigate} />;
     case 'requests': return <DiscoveryRequests items={requests} onNavigate={onNavigate} />;
     case 'depositions': return <DiscoveryDepositions />;

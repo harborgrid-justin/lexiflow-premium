@@ -18,7 +18,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, Tooltip, XAx
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useBillingOverviewData } from './hooks/useBillingOverviewData';
+import { useBillingOverviewData } from '../hooks/useBillingOverviewData';
 
 // Hooks & Context
 import { useChartTheme } from '@/components/organisms/ChartHelpers';

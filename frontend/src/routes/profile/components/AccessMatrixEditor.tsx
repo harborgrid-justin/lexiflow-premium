@@ -32,7 +32,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
-import { useAccessMatrix } from '../_hooks/useAccessMatrix';
+import { useAccessMatrix } from '../hooks/useAccessMatrix';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

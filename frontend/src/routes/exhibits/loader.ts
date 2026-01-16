@@ -1,8 +1,3 @@
-/**
- * Exhibits Domain - Data Loader
- * Enterprise React Architecture Pattern
- */
-
 import { DataService } from "@/services/data/data-service.service";
 
 type Exhibit = {
@@ -20,10 +15,13 @@ export interface ExhibitsLoaderData {
   exhibits: Exhibit[];
 }
 
-export async function exhibitsLoader() {
+export async function clientLoader(): Promise<ExhibitsLoaderData> {
   const exhibits = await DataService.exhibits.getAll().catch(() => []);
 
   return {
     exhibits: exhibits || [],
   };
 }
+
+// Support hydration
+(clientLoader as any).hydrate = true;

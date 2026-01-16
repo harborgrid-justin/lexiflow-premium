@@ -1,16 +1,16 @@
-import { useModalState } from '@/hooks/core';
-import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { useModalState } from '@/hooks/core';
+import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { AlertTriangle, CheckCircle, Clock, Edit, FileText, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { FeeAgreement, useFeeAgreements } from './hooks/useFeeAgreements';
+import { type FeeAgreement, useFeeAgreements } from '../../hooks/useFeeAgreements';
 
 export function FeeAgreementManagement() {
   const { theme } = useTheme();

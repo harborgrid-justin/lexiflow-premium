@@ -16,7 +16,11 @@ import { format } from 'date-fns';
 import { Briefcase, Calendar, LayoutGrid, List, MoreVertical, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 
-export function MatterManagement() {
+interface MatterManagementProps {
+  initialMatters?: Matter[];
+}
+
+export function MatterManagement({ initialMatters }: MatterManagementProps) {
   const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -33,7 +37,8 @@ export function MatterManagement() {
     },
     {
       refetchOnWindowFocus: false,
-      staleTime: 30000
+      staleTime: 30000,
+      initialData: initialMatters
     }
   );
 

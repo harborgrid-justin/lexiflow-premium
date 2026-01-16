@@ -40,34 +40,10 @@ type Pages = {
       "caseId": string;
     };
   };
-  "/cases/:caseId/overview": {
+  "/cases/:caseId/:tab": {
     params: {
       "caseId": string;
-    };
-  };
-  "/cases/:caseId/calendar": {
-    params: {
-      "caseId": string;
-    };
-  };
-  "/cases/:caseId/analytics": {
-    params: {
-      "caseId": string;
-    };
-  };
-  "/cases/:caseId/operations": {
-    params: {
-      "caseId": string;
-    };
-  };
-  "/cases/:caseId/insights": {
-    params: {
-      "caseId": string;
-    };
-  };
-  "/cases/:caseId/financials": {
-    params: {
-      "caseId": string;
+      "tab": string;
     };
   };
   "/docket": {
@@ -257,7 +233,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login" | "/register" | "/forgot-password" | "/reset-password" | "/dashboard" | "/cases" | "/cases/create" | "/cases/:caseId" | "/cases/:caseId/overview" | "/cases/:caseId/calendar" | "/cases/:caseId/analytics" | "/cases/:caseId/operations" | "/cases/:caseId/insights" | "/cases/:caseId/financials" | "/docket" | "/docket/:docketId" | "/documents" | "/documents/upload" | "/documents/:documentId" | "/correspondence" | "/correspondence/compose" | "/workflows" | "/workflows/:workflowId" | "/discovery" | "/discovery/:discoveryId" | "/evidence" | "/evidence/:evidenceId" | "/exhibits" | "/exhibits/:exhibitId" | "/research" | "/research/:researchId" | "/citations" | "/war_room" | "/war_room/:roomId" | "/pleadings" | "/pleading_builder" | "/drafting" | "/litigation" | "/litigation_builder" | "/billing" | "/reports" | "/crm" | "/crm/:clientId" | "/compliance" | "/practice" | "/daf" | "/entities" | "/data_platform" | "/analytics" | "/library" | "/clauses" | "/jurisdiction" | "/rules_engine" | "/calendar" | "/messages" | "/profile" | "/settings" | "/settings/theme" | "/admin" | "/admin/settings" | "/admin/theme-settings" | "/admin/users" | "/admin/roles" | "/admin/permissions" | "/admin/integrations" | "/admin/backup" | "/audit" | "/*";
+    page: "/" | "/login" | "/register" | "/forgot-password" | "/reset-password" | "/dashboard" | "/cases" | "/cases/create" | "/cases/:caseId" | "/cases/:caseId/:tab" | "/docket" | "/docket/:docketId" | "/documents" | "/documents/upload" | "/documents/:documentId" | "/correspondence" | "/correspondence/compose" | "/workflows" | "/workflows/:workflowId" | "/discovery" | "/discovery/:discoveryId" | "/evidence" | "/evidence/:evidenceId" | "/exhibits" | "/exhibits/:exhibitId" | "/research" | "/research/:researchId" | "/citations" | "/war_room" | "/war_room/:roomId" | "/pleadings" | "/pleading_builder" | "/drafting" | "/litigation" | "/litigation_builder" | "/billing" | "/reports" | "/crm" | "/crm/:clientId" | "/compliance" | "/practice" | "/daf" | "/entities" | "/data_platform" | "/analytics" | "/library" | "/clauses" | "/jurisdiction" | "/rules_engine" | "/calendar" | "/messages" | "/profile" | "/settings" | "/settings/theme" | "/admin" | "/admin/settings" | "/admin/theme-settings" | "/admin/users" | "/admin/roles" | "/admin/permissions" | "/admin/integrations" | "/admin/backup" | "/audit" | "/*";
   };
   "routes/auth/login.tsx": {
     id: "routes/auth/login";
@@ -277,7 +253,7 @@ type RouteFiles = {
   };
   "routes/layout.tsx": {
     id: "routes/layout";
-    page: "/" | "/dashboard" | "/cases" | "/cases/create" | "/cases/:caseId" | "/cases/:caseId/overview" | "/cases/:caseId/calendar" | "/cases/:caseId/analytics" | "/cases/:caseId/operations" | "/cases/:caseId/insights" | "/cases/:caseId/financials" | "/docket" | "/docket/:docketId" | "/documents" | "/documents/upload" | "/documents/:documentId" | "/correspondence" | "/correspondence/compose" | "/workflows" | "/workflows/:workflowId" | "/discovery" | "/discovery/:discoveryId" | "/evidence" | "/evidence/:evidenceId" | "/exhibits" | "/exhibits/:exhibitId" | "/research" | "/research/:researchId" | "/citations" | "/war_room" | "/war_room/:roomId" | "/pleadings" | "/pleading_builder" | "/drafting" | "/litigation" | "/litigation_builder" | "/billing" | "/reports" | "/crm" | "/crm/:clientId" | "/compliance" | "/practice" | "/daf" | "/entities" | "/data_platform" | "/analytics" | "/library" | "/clauses" | "/jurisdiction" | "/rules_engine" | "/calendar" | "/messages" | "/profile" | "/settings" | "/settings/theme" | "/admin" | "/admin/settings" | "/admin/theme-settings" | "/admin/users" | "/admin/roles" | "/admin/permissions" | "/admin/integrations" | "/admin/backup" | "/audit";
+    page: "/" | "/dashboard" | "/cases" | "/cases/create" | "/cases/:caseId" | "/cases/:caseId/:tab" | "/docket" | "/docket/:docketId" | "/documents" | "/documents/upload" | "/documents/:documentId" | "/correspondence" | "/correspondence/compose" | "/workflows" | "/workflows/:workflowId" | "/discovery" | "/discovery/:discoveryId" | "/evidence" | "/evidence/:evidenceId" | "/exhibits" | "/exhibits/:exhibitId" | "/research" | "/research/:researchId" | "/citations" | "/war_room" | "/war_room/:roomId" | "/pleadings" | "/pleading_builder" | "/drafting" | "/litigation" | "/litigation_builder" | "/billing" | "/reports" | "/crm" | "/crm/:clientId" | "/compliance" | "/practice" | "/daf" | "/entities" | "/data_platform" | "/analytics" | "/library" | "/clauses" | "/jurisdiction" | "/rules_engine" | "/calendar" | "/messages" | "/profile" | "/settings" | "/settings/theme" | "/admin" | "/admin/settings" | "/admin/theme-settings" | "/admin/users" | "/admin/roles" | "/admin/permissions" | "/admin/integrations" | "/admin/backup" | "/audit";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -291,41 +267,25 @@ type RouteFiles = {
     id: "routes/dashboard/DashboardView";
     page: "/dashboard";
   };
-  "routes/cases/index.tsx": {
-    id: "routes/cases/index";
+  "routes/cases/CaseListLayout.tsx": {
+    id: "routes/cases/CaseListLayout";
+    page: "/cases";
+  };
+  "routes/cases/CaseListView.tsx": {
+    id: "routes/cases/CaseListView";
     page: "/cases";
   };
   "routes/cases/create.tsx": {
     id: "routes/cases/create";
     page: "/cases/create";
   };
-  "routes/cases/case-detail.tsx": {
-    id: "routes/cases/case-detail";
-    page: "/cases/:caseId";
+  "routes/cases/CaseDetailLayout.tsx": {
+    id: "routes/cases/CaseDetailLayout";
+    page: "/cases/:caseId" | "/cases/:caseId/:tab";
   };
-  "routes/cases/overview.tsx": {
-    id: "routes/cases/overview";
-    page: "/cases/:caseId/overview";
-  };
-  "routes/cases/calendar.tsx": {
-    id: "routes/cases/calendar";
-    page: "/cases/:caseId/calendar";
-  };
-  "routes/cases/analytics.tsx": {
-    id: "routes/cases/analytics";
-    page: "/cases/:caseId/analytics";
-  };
-  "routes/cases/operations.tsx": {
-    id: "routes/cases/operations";
-    page: "/cases/:caseId/operations";
-  };
-  "routes/cases/insights.tsx": {
-    id: "routes/cases/insights";
-    page: "/cases/:caseId/insights";
-  };
-  "routes/cases/financials.tsx": {
-    id: "routes/cases/financials";
-    page: "/cases/:caseId/financials";
+  "routes/cases/CaseDetailContent.tsx": {
+    id: "routes/cases/CaseDetailContent";
+    page: "/cases/:caseId/:tab";
   };
   "routes/docket/index.tsx": {
     id: "routes/docket/index";
@@ -563,15 +523,11 @@ type RouteModules = {
   "routes/home": typeof import("./src/routes/home.tsx");
   "routes/dashboard/DashboardLayout": typeof import("./src/routes/dashboard/DashboardLayout.tsx");
   "routes/dashboard/DashboardView": typeof import("./src/routes/dashboard/DashboardView.tsx");
-  "routes/cases/index": typeof import("./src/routes/cases/index.tsx");
+  "routes/cases/CaseListLayout": typeof import("./src/routes/cases/CaseListLayout.tsx");
+  "routes/cases/CaseListView": typeof import("./src/routes/cases/CaseListView.tsx");
   "routes/cases/create": typeof import("./src/routes/cases/create.tsx");
-  "routes/cases/case-detail": typeof import("./src/routes/cases/case-detail.tsx");
-  "routes/cases/overview": typeof import("./src/routes/cases/overview.tsx");
-  "routes/cases/calendar": typeof import("./src/routes/cases/calendar.tsx");
-  "routes/cases/analytics": typeof import("./src/routes/cases/analytics.tsx");
-  "routes/cases/operations": typeof import("./src/routes/cases/operations.tsx");
-  "routes/cases/insights": typeof import("./src/routes/cases/insights.tsx");
-  "routes/cases/financials": typeof import("./src/routes/cases/financials.tsx");
+  "routes/cases/CaseDetailLayout": typeof import("./src/routes/cases/CaseDetailLayout.tsx");
+  "routes/cases/CaseDetailContent": typeof import("./src/routes/cases/CaseDetailContent.tsx");
   "routes/docket/index": typeof import("./src/routes/docket/index.tsx");
   "routes/docket/detail": typeof import("./src/routes/docket/detail.tsx");
   "routes/documents/index": typeof import("./src/routes/documents/index.tsx");

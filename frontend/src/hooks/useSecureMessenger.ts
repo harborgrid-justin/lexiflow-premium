@@ -5,4 +5,4 @@ export {
   type Conversation,
   type Message,
   type UseSecureMessengerReturn,
-} from "../routes/messages/_hooks/useSecureMessenger";
+} from "../routes/messages/hooks/useSecureMessenger";

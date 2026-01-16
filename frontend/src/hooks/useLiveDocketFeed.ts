@@ -2,4 +2,4 @@ export {
   useLiveDocketFeed,
   type LiveDocketFeedConfig,
   type LiveDocketFeedResult,
-} from "@/routes/docket/_hooks/useLiveDocketFeed";
+} from "@/routes/docket/hooks/useLiveDocketFeed";

@@ -24,7 +24,7 @@ import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks
-import { useSecuritySettings } from '../_hooks/useSecuritySettings';
+import { useSecuritySettings } from '../hooks/useSecuritySettings';
 
 // Types
 import { ExtendedUserProfile } from '@/types';

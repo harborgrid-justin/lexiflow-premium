@@ -16,15 +16,22 @@ import { Suspense } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Hooks
-import { useBillingDashboard } from './hooks/useBillingDashboard';
 
-// Components
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { ExportMenu } from '@/routes/discovery/components/ExportMenu/ExportMenu';
+// Hooks (feature-scoped)
+import { useBillingDashboard } from '../../billing/hooks/useBillingDashboard';
+
+// Components - Atoms
 import { Button } from '@/components/atoms/Button';
+
+// Components - Molecules
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { PeriodSelector } from '@/components/molecules/PeriodSelector';
+
+// Components - Layouts
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
+
+// Feature Components
+import { ExportMenu } from '@/routes/discovery/components/ExportMenu/ExportMenu';
 import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 

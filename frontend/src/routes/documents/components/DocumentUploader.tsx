@@ -3,7 +3,7 @@
  * Advanced file uploader with drag-and-drop, preview, and metadata
  */
 
-import { useDocumentUpload } from '../_hooks/useDocumentUpload';
+import { useDocumentUpload } from '../hooks/useDocumentUpload';
 import { DocumentUploaderProps } from './types/DocumentUploaderProps';
 
 export function DocumentUploader({
@@ -43,8 +43,8 @@ export function DocumentUploader({
         onDrop={handleDrop}
         onClick={triggerFileInput}
         className={`relative border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-colors ${isDragging
-            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-            : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
+          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+          : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
           }`}
       >
         <input

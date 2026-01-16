@@ -8,27 +8,42 @@
  * Enterprise React Architecture Pattern
  */
 
-import { DataService } from "@/services/data/data-service.service";
-
-type DraftDocument = {
-  id: string;
-  title: string;
-  type: string;
-  status: "Draft" | "Review" | "Final";
-  caseId?: string;
-  author: string;
-  wordCount: number;
-  lastModified: string;
-};
+import {
+  draftingApi,
+  type DraftingStats,
+  type DraftingTemplate,
+  type GeneratedDocument,
+} from "@api/domains/drafting";
 
 export interface DraftingLoaderData {
-  drafts: DraftDocument[];
+  recentDrafts: GeneratedDocument[];
+  templates: DraftingTemplate[];
+  approvals: GeneratedDocument[];
+  stats: DraftingStats;
 }
 
 export async function draftingLoader() {
-  const drafts = await DataService.drafting.getAll().catch(() => []);
+  const [recentDrafts, templates, approvals, stats] = await Promise.all([
+    draftingApi.getRecentDrafts().catch(() => []),
+    draftingApi.templates.getAll().catch(() => []),
+    draftingApi.dashboard.getPendingApprovals().catch(() => []),
+    draftingApi
+      .getStats()
+      .catch(
+        () =>
+          ({
+            drafts: 0,
+            templates: 0,
+            pendingReviews: 0,
+            myTemplates: 0,
+          }) as DraftingStats,
+      ),
+  ]);
 
   return {
-    drafts: drafts || [],
+    recentDrafts,
+    templates,
+    approvals,
+    stats,
   };
 }

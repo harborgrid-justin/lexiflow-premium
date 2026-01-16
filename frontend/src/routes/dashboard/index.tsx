@@ -1,27 +1,29 @@
 /**
- * ================================================================================
- * DASHBOARD ROUTE INDEX - LAZY LOAD EXPORTS
- * ================================================================================
- *
- * This file is the entry point for React Router's lazy loading.
- * It exports all required route components and functions.
- *
- * REQUIRED EXPORTS:
- * - loader or clientLoader: Data fetching function
- * - default: Route component
- * - ErrorBoundary: Error handling component
- * - meta: Page metadata function
- *
- * ENTERPRISE PATTERN:
- * Each route exports its own loader, component, error boundary, and metadata.
- * Router lazy loads this file only when route is accessed.
- *
- * @module routes/dashboard/index
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { dashboardRoute } from './route';
+import { useLoaderData } from "react-router";
+import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { DashboardPage } from './DashboardPage';
+import { loader } from "./loader";
 
-export { dashboardRoute as default };
-export { loader } from './loader';
-export { ErrorBoundary } from './errors';
-export { meta } from './route';
+export { loader };
+
+export function meta() {
+  return createMeta({
+    title: 'Command Center',
+    description: 'Overview of cases, tasks, and deadlines',
+  });
+}
+
+export default function DashboardRoute() {
+  const loaderData = useLoaderData<typeof loader>();
+
+  return <DashboardPage loaderData={loaderData} />;
+}
+
+export function ErrorBoundary({ error }: { error: unknown }) {
+  return <RouteErrorBoundary error={error} title="Dashboard Error" />;
+}

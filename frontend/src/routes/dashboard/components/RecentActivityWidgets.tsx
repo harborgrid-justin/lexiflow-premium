@@ -49,14 +49,14 @@ export function DeferredDataError() {
  * Dashboard Recent Docket
  * Displays recent docket entries (deferred data)
  */
-export function DashboardRecentDocket({ entries }: { entries: DocketEntry[] }) {
+export function DashboardRecentDocket({ entries }: { entries: DocketEntry[] | undefined }) {
   return (
     <div
       style={{ backgroundColor: "var(--color-surface)" }}
       className="p-4 rounded-lg border border-[var(--color-border)]"
     >
       <h3 className="font-semibold mb-4 text-[var(--color-text)]">Recent Docket Entries</h3>
-      {entries.length > 0 ? (
+      {entries && entries.length > 0 ? (
         <div className="space-y-2">
           {entries.slice(0, 5).map((entry) => (
             <div
@@ -81,14 +81,14 @@ export function DashboardRecentDocket({ entries }: { entries: DocketEntry[] }) {
  * Dashboard Recent Time
  * Displays recent time entries (deferred data)
  */
-export function DashboardRecentTime({ entries }: { entries: TimeEntry[] }) {
+export function DashboardRecentTime({ entries }: { entries: TimeEntry[] | undefined }) {
   return (
     <div
       style={{ backgroundColor: "var(--color-surface)" }}
       className="p-4 rounded-lg border border-[var(--color-border)]"
     >
       <h3 className="font-semibold mb-4 text-[var(--color-text)]">Recent Time Entries</h3>
-      {entries.length > 0 ? (
+      {entries && entries.length > 0 ? (
         <div className="space-y-2">
           {entries.slice(0, 5).map((entry) => (
             <div

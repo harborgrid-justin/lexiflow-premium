@@ -1,44 +1,28 @@
 import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
-import { useNotify } from '@/hooks/useNotify';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { billingApi } from '@/lib/frontend-api';
+import { useRateTables, type RateTable } from '../../hooks/useRateTables';
 import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { queryKeys } from '@/utils/queryKeys';
 import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
-import { memo, useCallback, useState } from 'react';
-
-interface RateTable {
-  id: string;
-  name: string;
-  description: string;
-  defaultRate: number;
-  currency: string;
-  status: 'Active' | 'Inactive' | 'Draft';
-  effectiveDate: string;
-  expirationDate?: string;
-  rates: { role: string; rate: number }[];
-  createdAt: string;
-}
+import { memo, useState } from 'react';
 
 const RateTableManagementComponent = function RateTableManagement() {
   const { theme } = useTheme();
-  const notify = useNotify();
 
-  // Fetch rate tables from backend API
-  const { data: rateTables = [], refetch } = useQuery<RateTable[]>(
-    queryKeys.billing.rateTables?.() || ['billing', 'rateTables'],
-    async () => {
-      const result = await billingApi.getRateTables();
-      return result.ok ? result.data : [];
-    }
-  );
+  // Extract data fetching and CRUD operations to custom hook (enterprise architecture compliance)
+  const {
+    rateTables,
+    isLoading,
+    createRateTable,
+    updateRateTable,
+    deleteRateTable,
+  } = useRateTables();
+
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
@@ -46,58 +30,27 @@ const RateTableManagementComponent = function RateTableManagement() {
   const [formData, setFormData] = useState<Partial<RateTable>>({ rates: [] });
 
   const handleCreate = async () => {
-    if (!formData.name || !formData.defaultRate) {
-      notify.error('Name and default rate are required');
-      return;
-    }
-    try {
-      const newTable: Partial<RateTable> = {
-        name: formData.name,
-        description: formData.description || '',
-        defaultRate: formData.defaultRate,
-        currency: 'USD',
-        status: 'Draft',
-        effectiveDate: formData.effectiveDate || new Date().toISOString().split('T')[0],
-        rates: formData.rates || [],
-      };
-      const result = await billingApi.createRateTable(newTable);
-      if (!result.ok) {
-        throw new Error(result.error.message);
-      }
-      await refetch();
+    const success = await createRateTable(formData);
+    if (success) {
       createModal.close();
       setFormData({ rates: [] });
-      notify.success('Rate table created successfully');
-    } catch {
-      notify.error('Failed to create rate table');
     }
   };
 
   const handleEdit = async () => {
     if (!tableSelection.selected) return;
-    try {
-      const result = await billingApi.updateRateTable(tableSelection.selected.id, formData);
-      if (!result.ok) {
-        throw new Error(result.error.message);
-      }
-      await refetch();
+    const success = await updateRateTable(tableSelection.selected.id, formData);
+    if (success) {
       editModal.close();
       tableSelection.deselect();
       setFormData({ rates: [] });
-      notify.success('Rate table updated successfully');
-    } catch (error) {
-      console.error('[RateTableManagement.handleEdit] Error:', error);
-      notify.error('Failed to update rate table');
     }
   };
 
   const handleDelete = async () => {
     if (!tableSelection.selected) return;
-    try {
-      const result = await billingApi.deleteRateTable(tableSelection.selected.id);
-      if (!result.ok) {
-        throw new Error(result.error.message);
-      }
+    const success = await deleteRateTable(tableSelection.selected.id);
+    if (success) {
       await refetch();
       deleteModal.close();
       tableSelection.deselect();

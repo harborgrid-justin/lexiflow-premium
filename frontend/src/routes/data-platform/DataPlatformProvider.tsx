@@ -8,8 +8,8 @@
  */
 
 import React, { useMemo, useState } from 'react';
-import type { DataPlatformLoaderData } from './loader';
 import { DataPlatformContext, DataPlatformContextValue, DataPlatformMetrics } from './DataPlatformContext';
+import type { DataPlatformLoaderData } from './loader';
 
 export interface DataPlatformProviderProps {
   children: React.ReactNode;
@@ -34,10 +34,13 @@ export function DataPlatformProvider({ children, initialData }: DataPlatformProv
 
   const contextValue = useMemo<DataPlatformContextValue>(() => ({
     sources: filteredSources,
+    policies: loaderData.policies,
+    schemas: loaderData.schemas,
+    queries: loaderData.queries,
     typeFilter,
     setTypeFilter,
     metrics,
-  }), [filteredSources, typeFilter, metrics]);
+  }), [filteredSources, loaderData.policies, loaderData.schemas, loaderData.queries, typeFilter, metrics]);
 
   return (
     <DataPlatformContext.Provider value={contextValue}>

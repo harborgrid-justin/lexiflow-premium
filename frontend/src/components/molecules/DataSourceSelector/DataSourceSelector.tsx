@@ -5,8 +5,8 @@
  */
 
 import { useBackendHealth } from '@/hooks/useBackendHealth';
-import type { DataSourceType } from '@/routes/dashboard';
-import { useDataSource } from '@/routes/dashboard';
+import type { DataSourceType } from '@/routes/dashboard/data/DataSourceContext';
+import { useDataSource } from '@/routes/dashboard/data/DataSourceContext';
 import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 

@@ -146,6 +146,18 @@ const routes: RouteObject[] = [
             lazy: () => import("./routes/analytics/index"),
           },
 
+          // Data Platform
+          {
+            path: "data-platform",
+            lazy: () => import("./routes/data-platform/DataPlatformLayout").then(m => ({ Component: m.default, loader: m.loader })),
+            children: [
+              {
+                index: true,
+                lazy: () => import("./routes/data-platform/DataPlatformView"),
+              }
+            ]
+          },
+
           // Administration
           {
             path: "admin",

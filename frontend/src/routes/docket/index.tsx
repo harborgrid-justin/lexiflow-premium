@@ -1,79 +1,48 @@
 /**
- * Docket & Filings Route
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
+ * Docket Index Route
  *
- * Displays court filings, docket entries, and case schedules with:
- * - Server-side data loading via loader
- * - Filter and search capabilities
- * - File new motion/document actions via modal dialog
+ * Enterprise React Architecture - Docket Management
+ * Exports loader and default component for React Router v7
  *
  * @module routes/docket/index
- * @status PRODUCTION READY - No mock data, modal-based CRUD
  */
 
 import { docketApi } from '@/lib/frontend-api';
 import type { CaseId } from '@/types';
-import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import { DocketList } from './components/DocketList';
+import type { Route } from "./+types/index";
+
+// Import Page component
+import { DocketPage } from './DocketPage';
+import type { clientLoader } from './loader';
+
+// Export loader
+export { clientLoader as loader } from './loader';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
+export function meta({ data }: Route.MetaArgs) {
   return createListMeta({
     entityType: 'Docket Entries',
-    count: data?.entries?.length,
+    count: data?.docketEntries?.length,
     description: 'Manage court docket entries and filings',
   });
-}
-
-// ============================================================================
-// Loader
-// ============================================================================
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const search = url.searchParams.get("search") || undefined;
-  const type = url.searchParams.get("type") || undefined;
-  const page = parseInt(url.searchParams.get("page") || "1", 10);
-
-  try {
-    // Fetch docket entries using new enterprise API
-    const result = await docketApi.getAllEntries({ search, type, page, limit: 50 });
-
-    if (!result.ok) {
-      return {
-        entries: [],
-        totalCount: 0,
-        page: 1,
-        totalPages: 1
-      };
-    }
-
-    return {
-      entries: result.data.data,
-      totalCount: result.data.total,
-      page: result.data.page,
-      totalPages: Math.ceil(result.data.total / result.data.pageSize)
-    };
-  } catch (error) {
-    console.error("Failed to load docket entries:", error);
-    return {
-      entries: [],
-      totalCount: 0,
-      page: 1,
-      totalPages: 1
-    };
-  }
 }
 
 // ============================================================================
 // Action
 // ============================================================================
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -131,22 +100,13 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function DocketIndexRoute() {
-  const data = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-  return <DocketList {...data} />;
+  const loaderData = useLoaderData() as ReturnType<typeof clientLoader>;
+
+  return <DocketPage loaderData={loaderData} />;
 }
 
 // ============================================================================
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: { error: unknown }) {
-  return (
-    <RouteErrorBoundary
-      error={error}
-      title="Failed to Load Docket"
-      message="We couldn't load the docket entries. Please try again."
-      backTo="/"
-      backLabel="Return to Dashboard"
-    />
-  );
-}
+export { RouteErrorBoundary as ErrorBoundary };

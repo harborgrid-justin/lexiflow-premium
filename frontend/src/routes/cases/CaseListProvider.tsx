@@ -219,3 +219,16 @@ export function CaseListProvider({
     </CaseListContext.Provider>
   );
 }
+
+import { useContext } from 'react';
+
+/**
+ * Hook to consume CaseListContext
+ */
+export function useCases() {
+  const context = useContext(CaseListContext);
+  if (!context) {
+    throw new Error('useCases must be used within a CaseListProvider');
+  }
+  return context;
+}

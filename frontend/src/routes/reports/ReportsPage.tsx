@@ -1,28 +1,38 @@
 /**
- * Reports & Analytics Domain - Page Component
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
+ * Reports Page Component
+ *
+ * Handles Suspense/Await wiring for reports route
+ * Receives loader data and passes to Provider → View
+ *
+ * @module routes/reports/ReportsPage
  */
 
 import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Await } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+import { ReportsCenter } from './components/ReportsCenter';
+import { ReportsProvider } from './components/ReportsContext';
 import type { ReportsLoaderData } from './loader';
-import { ReportsProvider } from './ReportsProvider';
-import { ReportsView } from './ReportsView';
 
-export function ReportsPage() {
-  const initialData = useLoaderData() as ReportsLoaderData;
+interface ReportsPageProps {
+  loaderData: ReportsLoaderData;
+}
 
+export function ReportsPage({ loaderData }: ReportsPageProps) {
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Reports" />}>
-      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Reports" />}>
+      <Await resolve={loaderData} errorElement={<RouteError title="Failed to load Reports" />}>
         {(resolved) => (
           <ReportsProvider initialData={resolved}>
-            <ReportsView />
+            <ReportsCenter />
           </ReportsProvider>
         )}
       </Await>
     </Suspense>
   );
 }
-
-export default ReportsPage;

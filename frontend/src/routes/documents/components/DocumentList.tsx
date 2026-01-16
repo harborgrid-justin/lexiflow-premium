@@ -3,19 +3,19 @@
  * Comprehensive document list with sorting, filtering, pagination, and bulk actions
  */
 
+import { DOCUMENT_LIST_COLUMNS } from '@/config/documents.config';
+import type { LegalDocument } from '@/types/documents';
+import { useDocumentList } from '../hooks/useDocumentList';
+import { type SortField } from '../utils/documentUtils';
 import { DocumentCard } from './DocumentCard';
 import { DocumentRow } from './DocumentRow';
-import type { LegalDocument } from '@/types/documents';
-import { useDocumentList } from '../_hooks/useDocumentList';
-import { DOCUMENT_LIST_COLUMNS } from '@/config/documents.config';
 
 export type ViewMode = 'grid' | 'list';
-// Exporting types from utils now to avoid duplication if needed elsewhere, 
-// or re-exporting if they were used by other components. 
-// For now, keeping the types here if they are part of the component's public API, 
+// Exporting types from utils now to avoid duplication if needed elsewhere,
+// or re-exporting if they were used by other components.
+// For now, keeping the types here if they are part of the component's public API,
 // but referencing the utils types.
 export { type SortField, type SortOrder } from '../utils/documentUtils';
-import { type SortField } from '../utils/documentUtils';
 
 interface DocumentListProps {
   documents: LegalDocument[];
@@ -39,18 +39,18 @@ export function DocumentList({
   loading = false
 }: DocumentListProps) {
   const {
-      paginatedDocuments,
-      sortConfig: { field: sortField, order: sortOrder },
-      handleSort,
-      currentPage,
-      totalPages,
-      setCurrentPage,
-      startIndex,
-      endIndex,
-      selectedIds,
-      setSelectedIds,
-      toggleSelection,
-      toggleSelectAll
+    paginatedDocuments,
+    sortConfig: { field: sortField, order: sortOrder },
+    handleSort,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+    startIndex,
+    endIndex,
+    selectedIds,
+    setSelectedIds,
+    toggleSelection,
+    toggleSelectAll
   } = useDocumentList(documents, viewMode);
 
   const SortIcon = ({ field }: { field: SortField }) => {

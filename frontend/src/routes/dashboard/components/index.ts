@@ -1,13 +1,17 @@
 /**
- * Dashboard Components
- * Main dashboard UI components
+ * Admin Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ *
+ * @module routes/dashboard/components
  */
 
-export { Dashboard } from './Dashboard';
-export { DashboardAnalytics } from './DashboardAnalytics';
-export { DashboardContent } from './DashboardContent';
-export { DashboardMetrics } from './DashboardMetrics';
-export { DashboardOverview } from './DashboardOverview';
-export { DashboardSidebar } from './DashboardSidebar';
-export { FinancialPerformance } from './FinancialPerformance';
-export { PersonalWorkspace } from './PersonalWorkspace';
+// Note: Admin components organized by subdomain
+// Import from feature folders as needed (data/, users/, analytics/, etc.)
+// to maintain code-splitting benefits
+
+export {};

@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { CheckSquare, Loader2 } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -30,7 +30,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { cn } from '@/lib/cn';
 
 // Types
-import { useBillingWIP } from './hooks/useBillingWIP';
+import { useBillingWIP } from '../hooks/useBillingWIP';
 
 // ============================================================================
 // COMPONENT

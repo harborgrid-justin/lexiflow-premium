@@ -1,4 +1,4 @@
 export {
   useLitigationBuilder,
   type UseLitigationBuilderReturn,
-} from "@/routes/litigation/_hooks/useLitigationBuilder";
+} from "@/routes/litigation/hooks/useLitigationBuilder";

@@ -1,15 +1,15 @@
-import { useWindow } from '@/providers';
-import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
-import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
 import { CaseId, DocumentId } from '@/types';
 import { Calendar, FileText, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
-import { PolicyItem, useCompliancePolicies } from './hooks/useCompliancePolicies';
+import { type PolicyItem, useCompliancePolicies } from '../hooks/useCompliancePolicies';
 
 export const CompliancePolicies = memo(() => {
     const { theme } = useTheme();

@@ -1,11 +1,17 @@
 /**
- * drafting
- * Module exports
+ * Admin Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ *
+ * @module routes/drafting/components
  */
 
-export * from './DraftingDashboard.styles';
-export { default as DraftingDashboard } from './DraftingDashboard';
+// Note: Admin components organized by subdomain
+// Import from feature folders as needed (data/, users/, analytics/, etc.)
+// to maintain code-splitting benefits
 
-// Re-export components
-export * from './components';
-
+export {};

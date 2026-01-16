@@ -12,14 +12,17 @@
  * @module routes/evidence/index
  */
 
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { createMeta } from '../_shared/meta-utils';
+import { EvidenceProvider } from './EvidenceContext';
+import { EvidenceView } from './EvidenceView';
+import type { evidenceLoader } from './loader';
 
 // Export loader from dedicated file
 export { evidenceLoader as loader } from './loader';
-
-// Import View component
-import { EvidenceView } from './EvidenceView';
 
 // ============================================================================
 // Meta Tags
@@ -37,7 +40,19 @@ export function meta() {
 // ============================================================================
 
 export default function EvidenceRoute() {
-  return <EvidenceView />;
+  const initialData = useLoaderData<typeof evidenceLoader>();
+
+  return (
+    <Suspense fallback={<RouteSkeleton title="Loading Evidence" />}>
+      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Evidence" />}>
+        {(resolved) => (
+          <EvidenceProvider initialData={resolved}>
+            <EvidenceView />
+          </EvidenceProvider>
+        )}
+      </Await>
+    </Suspense>
+  );
 }
 
 // ============================================================================

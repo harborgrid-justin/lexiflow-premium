@@ -1,12 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { Activity, AlertTriangle, CheckCircle, FileText, Loader2, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { useComplianceOverview } from './hooks/useComplianceOverview';
+import { useComplianceOverview } from '../hooks/useComplianceOverview';
 
 export const ComplianceOverview = memo(() => {
     const { theme } = useTheme();

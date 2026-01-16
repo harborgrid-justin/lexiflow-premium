@@ -23,7 +23,7 @@ import { useAppShellLogic } from "@/hooks/useAppShellLogic";
 import { WindowProvider } from "@/routes/_shared";
 import { RouteErrorBoundary } from "@/routes/_shared/RouteErrorBoundary";
 import { CaseProvider } from "@/routes/cases";
-import { DataSourceProvider } from "@/routes/dashboard";
+import { DataSourceProvider } from "@/routes/dashboard/data/DataSourceContext";
 import { requireAuthLoader } from "@/utils/route-guards";
 import { Outlet, useRouteError } from "react-router";
 

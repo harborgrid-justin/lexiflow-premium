@@ -1,11 +1,11 @@
+import { Button } from '@/components/atoms/Button/Button';
 import { TabbedPageLayout } from '@/components/layouts';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { CRM_TAB_CONFIG, CRMView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { DataService } from '@/services/data/data-service.service';
 import { Client, ClientStatus, EntityId, PaymentTerms } from '@/types';
 import { UserPlus } from 'lucide-react';
 import { Suspense, useState, useTransition } from 'react';
@@ -15,9 +15,10 @@ import { ClientPortalModal } from './ClientPortalModal';
 
 interface ClientCRMProps {
   initialTab?: CRMView;
+  initialClients?: Client[];
 }
 
-export function ClientCRM({ initialTab }: ClientCRMProps) {
+export function ClientCRM({ initialTab, initialClients }: ClientCRMProps) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTabState] = useSessionStorage<string>('crm_active_tab', initialTab || 'dashboard');
   const [showIntake, setShowIntake] = useState(false);
@@ -29,9 +30,13 @@ export function ClientCRM({ initialTab }: ClientCRMProps) {
     });
   };
 
-  const { data: clients = [], refetch } = useQuery<Client[]>(
+  const { data: clients = initialClients || [], refetch } = useQuery<Client[]>(
     ['clients', 'all'],
-    DataService.clients.getAll
+    DataService.clients.getAll,
+    {
+      enabled: !initialClients, // Only fetch if no initial data provided
+      initialData: initialClients
+    }
   );
 
   const handleAddClient = async (clientName: string) => {

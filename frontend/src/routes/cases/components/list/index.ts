@@ -16,10 +16,4 @@ export * from "./CaseListTrust";
 // ============================================================================
 // Case Management (Unified under case terminology)
 // ============================================================================
-export { CaseDetail } from "./CaseDetail"; // Case detail view
-export {
-  CaseManagement,
-  CaseManagement as CaseManagementHub,
-} from "./CaseManagement"; // Main case management component
-export { CaseModule } from "./CaseModule"; // Primary case module router
 // CaseListView is dynamically imported - don't export statically to avoid chunk splitting issues

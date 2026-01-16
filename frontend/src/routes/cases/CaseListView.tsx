@@ -48,6 +48,7 @@ import {
 } from 'lucide-react';
 import { lazy, startTransition, Suspense, useMemo } from 'react';
 import { useNavigate, useNavigation } from 'react-router';
+import { useCases } from './CaseListProvider';
 
 // Lazy load tab contents for performance
 const CaseOverviewDashboard = lazy(() => import('./components/overview').then(m => ({ default: m.CaseOverviewDashboard })));

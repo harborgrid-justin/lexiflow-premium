@@ -4,22 +4,29 @@
  */
 
 /**
- * Messages & Communication Domain - Page Component
+ * Messages Page Component
+ *
+ * Handles Suspense/Await wiring for messages route
+ * Receives loader data and passes to Provider → View
+ *
+ * @module routes/messages/MessagesPage
  */
 
 import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Await } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { MessagesLoaderData } from './loader';
 import { MessagesProvider } from './MessagesProvider';
 import { MessagesView } from './MessagesView';
+import type { MessagesLoaderData } from './loader';
 
-export function MessagesPage() {
-  const initialData = useLoaderData() as MessagesLoaderData;
+interface MessagesPageProps {
+  loaderData: MessagesLoaderData;
+}
 
+export function MessagesPage({ loaderData }: MessagesPageProps) {
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Messages" />}>
-      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Messages" />}>
+      <Await resolve={loaderData} errorElement={<RouteError title="Failed to load Messages" />}>
         {(resolved) => (
           <MessagesProvider initialData={resolved}>
             <MessagesView />
@@ -29,5 +36,3 @@ export function MessagesPage() {
     </Suspense>
   );
 }
-
-export default MessagesPage;

@@ -4,23 +4,29 @@
  */
 
 /**
- * Calendar & Scheduling Domain - Page Component
- * Enterprise React Architecture Pattern
+ * Calendar Page Component
+ *
+ * Handles Suspense/Await wiring for calendar route
+ * Receives loader data and passes to Provider → View
+ *
+ * @module routes/calendar/CalendarPage
  */
 
 import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Await } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { CalendarProvider } from './CalendarProvider';
 import { CalendarView } from './CalendarView';
 import type { CalendarLoaderData } from './loader';
 
-export function CalendarPage() {
-  const initialData = useLoaderData() as CalendarLoaderData;
+interface CalendarPageProps {
+  loaderData: CalendarLoaderData;
+}
 
+export function CalendarPage({ loaderData }: CalendarPageProps) {
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Calendar" />}>
-      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Calendar" />}>
+      <Await resolve={loaderData} errorElement={<RouteError title="Failed to load Calendar" />}>
         {(resolved) => (
           <CalendarProvider initialData={resolved}>
             <CalendarView />
@@ -30,5 +36,3 @@ export function CalendarPage() {
     </Suspense>
   );
 }
-
-export default CalendarPage;

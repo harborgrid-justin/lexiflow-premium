@@ -2,4 +2,4 @@ export {
   useScheduleController,
   type DragMode,
   type UseGanttDragReturn,
-} from "@/routes/calendar/_hooks/useScheduleController";
+} from "@/routes/calendar/hooks/useScheduleController";

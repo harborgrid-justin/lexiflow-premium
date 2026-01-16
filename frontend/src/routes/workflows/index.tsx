@@ -1,4 +1,9 @@
 /**
+ * ENTERPRISE REACT ARCHITECTURE STANDARD
+ * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
+ */
+
+/**
  * Workflows Index Route
  *
  * Manage automated workflows, task automation, and process templates
@@ -7,34 +12,25 @@
  * @module routes/workflows/index
  */
 
+import { useLoaderData } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import WorkflowsPage from './WorkflowsPage';
-import { workflowsLoader } from './loader';
 
-// ============================================================================
-// Types
-// ============================================================================
+import { WorkflowsPage } from './WorkflowsPage';
+import type { WorkflowsDeferredLoaderData } from './loader';
 
-type LoaderData = Awaited<ReturnType<typeof loader>>;
+// Export loader
+export { workflowsLoader as loader } from './loader';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: LoaderData }) {
-  void data;
+export function meta() {
   return createListMeta({
     entityType: 'Workflows',
-    // Deferred loader data may not be resolved here; keep meta stable.
     description: 'Manage automated workflows and process templates',
   });
-}
-
-// Loader
-// ============================================================================
-
-export async function loader(args: Parameters<typeof workflowsLoader>[0]) {
-  return workflowsLoader(args);
 }
 
 // ============================================================================
@@ -42,5 +38,13 @@ export async function loader(args: Parameters<typeof workflowsLoader>[0]) {
 // ============================================================================
 
 export default function WorkflowsIndexRoute() {
-  return <WorkflowsPage />;
+  const loaderData = useLoaderData() as WorkflowsDeferredLoaderData;
+
+  return <WorkflowsPage loaderData={loaderData} />;
 }
+
+// ============================================================================
+// Error Boundary
+// ============================================================================
+
+export { RouteErrorBoundary as ErrorBoundary };

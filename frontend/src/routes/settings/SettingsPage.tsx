@@ -4,22 +4,29 @@
  */
 
 /**
- * Settings Domain - Page Component
+ * Settings Page Component
+ *
+ * Handles Suspense/Await wiring for settings route
+ * Receives loader data and passes to Provider → View
+ *
+ * @module routes/settings/SettingsPage
  */
 
 import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Await } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { SettingsLoaderData } from './loader';
 import { SettingsProvider } from './SettingsProvider';
 import { SettingsView } from './SettingsView';
+import type { SettingsLoaderData } from './loader';
 
-export function SettingsPage() {
-  const initialData = useLoaderData() as SettingsLoaderData;
+interface SettingsPageProps {
+  loaderData: SettingsLoaderData;
+}
 
+export function SettingsPage({ loaderData }: SettingsPageProps) {
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Settings" />}>
-      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Settings" />}>
+      <Await resolve={loaderData} errorElement={<RouteError title="Failed to load Settings" />}>
         {(resolved) => (
           <SettingsProvider initialData={resolved}>
             <SettingsView />
@@ -29,5 +36,3 @@ export function SettingsPage() {
     </Suspense>
   );
 }
-
-export default SettingsPage;

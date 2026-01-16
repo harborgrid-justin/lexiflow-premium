@@ -1,21 +1,17 @@
-// Admin module exports
-export { default as AdminPanel } from './AdminPanel';
-export { AdminPanelContent } from './AdminPanelContent';
-export { AdminAuditLog } from './AdminAuditLog';
-export { AdminSecurity } from './AdminSecurity';
-export { FirmProfile } from './FirmProfile';
-export { SecurityCompliance } from './security/SecurityCompliance';
-export { SystemSettings } from './SystemSettings';
+/**
+ * Admin Components Barrel Export
+ *
+ * ARCHITECTURE NOTES:
+ * - Only exports presentation components
+ * - No state, hooks, or services
+ * - Components receive data via props
+ * - Components emit events via callbacks
+ *
+ * @module routes/admin/components
+ */
 
-// Re-export sub-modules
-export * from './analytics';
-export * from './api-keys';
-export * from './audit';
-export * from './data';
-export * from './hierarchy';
-export * from './integrations';
-export * from './ledger';
-export * from './platform';
-export * from './security';
-export * from './users';
-export * from './webhooks';
+// Note: Admin components organized by subdomain
+// Import from feature folders as needed (data/, users/, analytics/, etc.)
+// to maintain code-splitting benefits
+
+export {};

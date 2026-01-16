@@ -2,7 +2,7 @@ import { Button } from '@/components/atoms/Button/Button';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { AlertTriangle, FileText, Loader2, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
-import { useComplianceRisk } from './hooks/useComplianceRisk';
+import { useComplianceRisk } from '../hooks/useComplianceRisk';
 
 interface ComplianceRiskMetrics {
    high: number;

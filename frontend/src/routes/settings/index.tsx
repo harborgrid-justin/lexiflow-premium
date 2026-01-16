@@ -12,14 +12,16 @@
  * @module routes/settings/index
  */
 
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
-// Export loader from dedicated file
-export { settingsLoader as loader } from './loader';
-
 // Import Page component
 import { SettingsPage } from './SettingsPage';
+import type { SettingsLoaderData } from './loader';
+
+// Export loader from dedicated file
+export { settingsLoader as loader } from './loader';
 
 // ============================================================================
 // Meta Tags
@@ -36,8 +38,10 @@ export function meta() {
 // Component
 // ============================================================================
 
-export default function SettingsRoute() {
-  return <SettingsPage />;
+export default function SettingsIndexRoute() {
+  const loaderData = useLoaderData() as SettingsLoaderData;
+
+  return <SettingsPage loaderData={loaderData} />;
 }
 
 // ============================================================================

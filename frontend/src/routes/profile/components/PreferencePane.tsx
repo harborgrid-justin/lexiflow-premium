@@ -24,7 +24,7 @@ import { Bell, Monitor, Moon, Sun } from 'lucide-react';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks
-import { useProfilePreferences } from '../_hooks/useProfilePreferences';
+import { useProfilePreferences } from '../hooks/useProfilePreferences';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

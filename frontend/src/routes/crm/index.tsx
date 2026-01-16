@@ -17,10 +17,10 @@
 
 import { communicationsApi } from '@/lib/frontend-api';
 import { ClientStatus } from '@/types';
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
-import { ClientCRM } from './components/ClientCRM';
 
 // ============================================================================
 // Meta Tags
@@ -136,8 +136,11 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
+import { CRMPage } from './CRMPage';
+
 export default function CRMIndexRoute() {
-  return <ClientCRM />;
+  const loaderData = useLoaderData<typeof loader>();
+  return <CRMPage loaderData={loaderData} />;
 }
 
 // ============================================================================

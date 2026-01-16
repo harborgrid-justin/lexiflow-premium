@@ -16,14 +16,23 @@ import { Suspense } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Hooks
-import { ComplianceView, useComplianceDashboard } from './hooks/useComplianceDashboard';
 
-// Components
-import { Button } from '@/components/atoms/Button/Button';
-import { TabbedPageLayout } from '@/layouts/TabbedPageLayout/TabbedPageLayout';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+// Types
 import type { TabConfigItem } from '@/types/layout';
+
+// Hooks (feature-scoped)
+import { type ComplianceView, useComplianceDashboard } from '../../compliance/hooks/useComplianceDashboard';
+
+// Components - Atoms
+import { Button } from '@/components/atoms/Button';
+
+// Components - Molecules
+import { LazyLoader } from '@/components/molecules/LazyLoader';
+
+// Components - Layouts
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
+
+// Feature Components
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config

@@ -1,10 +1,10 @@
-import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { Briefcase, CheckCircle, Lock, Plus, Users } from 'lucide-react';
 import { memo } from 'react';
-import { useComplianceWalls } from './hooks/useComplianceWalls';
+import { useComplianceWalls } from '../hooks/useComplianceWalls';
 
 const ComplianceWallsComponent = function ComplianceWalls() {
     const { theme } = useTheme();

@@ -14,7 +14,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { useDashboard as useDashboardState } from '../DashboardProvider';
+import { useDashboard as useDashboardState } from '../hooks/useDashboard';
 import { DashboardOverview } from './DashboardOverview';
 import { PersonalWorkspace } from './PersonalWorkspace';
 

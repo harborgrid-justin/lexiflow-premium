@@ -12,11 +12,21 @@
  * @module routes/research/index
  */
 
-import { intelligenceApi, knowledgeApi } from '@/lib/frontend-api';
-import { ResearchTool } from '@/routes/research/components/ResearchTool';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { intelligenceApi, knowledgeApi } from '@/lib/frontend-api';
 import type { Route } from "./+types/index";
+
+// Import standard components
+import { ResearchProvider } from './ResearchProvider';
+import { ResearchView } from './ResearchView';
+import type { ResearchLoaderData } from './loader';
+
+// Export loader
+export { researchLoader as loader } from './loader';
 
 // ============================================================================
 // Meta Tags
@@ -25,33 +35,10 @@ import type { Route } from "./+types/index";
 export function meta({ data }: Route.MetaArgs) {
   return createListMeta({
     entityType: 'Research',
-    count: data?.items?.length,
+    count: data?.recentSearches?.length,
     description: 'Legal research tools and case law database',
   });
 }
-
-// ============================================================================
-// Client Loader
-// ============================================================================
-
-/**
- * Fetches research history on the client side only
- * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
- */
-export async function clientLoader() {
-  try {
-    // Fetch research history using new enterprise API
-    const result = await knowledgeApi.getResearchHistory({ page: 1, limit: 50 });
-    const history = result.ok ? result.data.data : [];
-    return { items: [], totalCount: 0, recentSearches: history };
-  } catch (error) {
-    console.error("Failed to load research history", error);
-    return { items: [], totalCount: 0, recentSearches: [] };
-  }
-}
-
-// Ensure client loader runs on hydration
-clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action
@@ -76,7 +63,6 @@ export async function action({ request }: Route.ActionArgs) {
       }
       case "save": {
         const data = Object.fromEntries(formData);
-        // Remove intent from data
         delete data.intent;
         const result = await knowledgeApi.createResearch(data);
         if (!result.ok) {
@@ -109,21 +95,23 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function ResearchIndexRoute() {
-  return <ResearchTool />;
+  const initialData = useLoaderData() as ResearchLoaderData;
+
+  return (
+    <Suspense fallback={<RouteSkeleton title="Loading Research" />}>
+      <Await resolve={initialData} errorElement={<RouteError title="Failed to load Research" />}>
+        {(resolved) => (
+          <ResearchProvider initialData={resolved}>
+            <ResearchView />
+          </ResearchProvider>
+        )}
+      </Await>
+    </Suspense>
+  );
 }
 
 // ============================================================================
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  return (
-    <RouteErrorBoundary
-      error={error}
-      title="Failed to Load Legal Research"
-      message="We couldn't load the research tools. Please try again."
-      backTo="/"
-      backLabel="Return to Dashboard"
-    />
-  );
-}
+export { RouteErrorBoundary as ErrorBoundary };

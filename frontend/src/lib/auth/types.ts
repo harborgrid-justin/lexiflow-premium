@@ -11,17 +11,17 @@
  * Represents an authenticated user
  */
 export type AuthRole =
-  | 'admin'
-  | 'attorney'
-  | 'paralegal'
-  | 'staff'
-  | 'Administrator'
-  | 'Senior Partner'
-  | 'Partner'
-  | 'Associate'
-  | 'Paralegal'
-  | 'Client User'
-  | 'Guest';
+  | "admin"
+  | "attorney"
+  | "paralegal"
+  | "staff"
+  | "Administrator"
+  | "Senior Partner"
+  | "Partner"
+  | "Associate"
+  | "Paralegal"
+  | "Client User"
+  | "Guest";
 
 export interface AuthUser {
   id: string;
@@ -83,7 +83,15 @@ export interface AuthLoginResult {
  * Authentication event for audit logging
  */
 export interface AuthEvent {
-  type: 'login' | 'logout' | 'mfa_enabled' | 'mfa_disabled' | 'password_changed' | 'token_refresh' | 'session_expired' | 'access_denied';
+  type:
+    | "login"
+    | "logout"
+    | "mfa_enabled"
+    | "mfa_disabled"
+    | "password_changed"
+    | "token_refresh"
+    | "session_expired"
+    | "access_denied";
   timestamp: Date;
   userId?: string;
   metadata?: Record<string, unknown>;
@@ -95,7 +103,7 @@ export interface AuthEvent {
 export interface SSOProvider {
   id: string;
   name: string;
-  type: 'saml' | 'oauth' | 'oidc';
+  type: "saml" | "oauth" | "oidc";
   enabled: boolean;
   loginUrl: string;
   logoUrl?: string;
@@ -111,6 +119,8 @@ export interface AuthStateValue {
   isLoading: boolean;
   /** Whether user is authenticated */
   isAuthenticated: boolean;
+  /** Derived status string for backward compatibility */
+  status?: "authenticated" | "unauthenticated" | "loading";
   /** Authentication error message */
   error: string | null;
   /** Current session information */
@@ -147,7 +157,10 @@ export interface AuthActionsValue {
   /** Disable MFA for current user */
   disableMFA: () => Promise<void>;
   /** Change password */
-  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string
+  ) => Promise<void>;
   /** Initiate SSO login */
   loginWithSSO: (providerId: string) => Promise<void>;
   /** Log authentication event */

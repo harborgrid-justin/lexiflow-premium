@@ -238,7 +238,10 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
         backgroundColor: theme.surface.base,
         boxShadow: tokens.shadows.sm,
       }}>
-        <table style={{ minWidth: '100%' }} className="divide-y" style={{ borderColor: theme.border.default }}>
+        <table
+          style={{ minWidth: '100%', borderColor: theme.border.default }}
+          className="divide-y"
+        >
           <thead style={{ backgroundColor: theme.surface.elevated }}>
             <tr>
               <th style={{ padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}` }}>
@@ -339,7 +342,10 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
               </th>
             </tr>
           </thead>
-          <tbody style={{ backgroundColor: theme.surface.base }} className="divide-y" style={{ borderColor: theme.border.default }}>
+          <tbody
+            style={{ backgroundColor: theme.surface.base, borderColor: theme.border.default }}
+            className="divide-y"
+          >
             {entries.map((entry) => (
               <tr key={entry.id}
                 className="transition-colors"

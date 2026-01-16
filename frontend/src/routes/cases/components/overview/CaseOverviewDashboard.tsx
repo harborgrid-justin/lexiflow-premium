@@ -1,5 +1,7 @@
 /** * Matter Overview Dashboard - Enterprise Matter Management Command Center * * @module MatterOverviewDashboard * @description Centralized oversight of all matter management operations * * REACT V18 CONTEXT CONSUMPTION COMPLIANCE: * - Guideline 21: Pure render logic with complex data aggregation (useMemo) * - Guideline 28: Theme (isDark) determines chart styling (pure function) * - Guideline 34: useTheme() is side-effect free read * - Guideline 33: Uses isPendingThemeChange for dashboard transitions * - Guideline 24: KPI metrics and status distributions are memoized * * Features: * - Real-time KPI metrics (active matters, intake pipeline, deadlines) * - Matter status distribution with drill-down capability * - Intake pipeline visualization with stage metrics * - Resource allocation and team utilization * - Recent activity feed with smart prioritization * - Quick action menu for common operations * - Advanced search and filtering * * @architecture * - React Query for data fetching and caching * - Real-time updates via WebSocket (future enhancement) * - Responsive grid layout with adaptive breakpoints * - Optimistic UI updates for instant feedback */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Card } from '@/components/molecules/Card/Card';
 import { cn } from '@/lib/cn';
 import { CaseStatus } from '@/types';

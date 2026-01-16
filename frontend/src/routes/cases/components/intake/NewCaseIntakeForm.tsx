@@ -1,5 +1,7 @@
 /** * New Matter Intake Form - Multi-Step Matter Onboarding Wizard * * @module NewMatterIntakeForm * @description Enterprise intake pipeline with validation, server-side conflict checking, and risk assessment * @status PRODUCTION READY * * Workflow: * 1. Client & Conflict Check (Server-side) * 2. Matter Specifics (Federal/State details) * 3. Risk & Compliance (SOL, Ethical Walls) * 4. Financial Setup (Fee Agreements, Budget) * 5. Team Staffing * 6. Document Ingestion */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { showToast } from '@/components/organisms/notifications/Toast';
 import { WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
 import { useNavigate } from 'react-router-dom';

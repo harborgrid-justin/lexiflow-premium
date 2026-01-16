@@ -1,11 +1,14 @@
 // src/app/paths/PublicPath.tsx
 import { OptimisticInput } from "@/components/performance/OptimisticInput";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/routes/dashboard";
+import { cn } from "@/lib/cn";
 import React, { useState } from "react";
 
 export function PublicPath() {
   const { login, isLoading: authLoading, error: authError } = useAuth();
+  const { theme } = useTheme();
   const { items, refresh } = useData();
   const [email, setEmail] = useState("demo@lexiflow.ai");
   const [password, setPassword] = useState("password");

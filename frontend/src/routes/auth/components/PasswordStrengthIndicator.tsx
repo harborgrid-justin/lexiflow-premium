@@ -6,7 +6,7 @@
  * @module components/auth/PasswordStrengthIndicator
  */
 
-import { useAuthState } from '@/providers/application/AuthProvider';
+import { useAuthState } from '@/providers/application/authprovider';
 import { useMemo } from 'react';
 
 interface PasswordStrengthIndicatorProps {

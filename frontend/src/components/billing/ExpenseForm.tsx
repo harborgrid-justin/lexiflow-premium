@@ -4,6 +4,7 @@
  */
 
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/cn";
 import type { FirmExpense } from '@/types/financial';
 import { FileText, Upload, X } from 'lucide-react';
 import React, { useState } from 'react';
@@ -170,7 +171,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
               <div style={{
                 pointerEvents: 'none',
                 position: 'absolute',
-                insetY: '0',
+                top: 0,
+                bottom: 0,
                 left: '0',
                 display: 'flex',
                 alignItems: 'center',

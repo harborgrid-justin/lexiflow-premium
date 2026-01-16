@@ -1,5 +1,7 @@
 /** * Matter Operations Center - Centralized Operations Hub * * @module MatterOperationsCenter * @description Task management, collaboration, and workflow coordination * * REACT V18 CONTEXT CONSUMPTION COMPLIANCE: * - Guideline 21: Pure render logic with complex task filtering * - Guideline 28: Theme (isDark) determines view mode styling (pure function) * - Guideline 34: useTheme() is side-effect free read * - Guideline 33: Uses isPendingThemeChange for operations center transitions * - Guideline 24: Task filtering and view mode computations are memoized * * Features: * - Task management and assignment * - Team collaboration tools * - Document workflow * - Deadline tracking * - Resource allocation * - Activity timeline * - Communication hub * - Workflow automation */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Card } from '@/components/molecules/Card/Card';
 import { cn } from '@/lib/cn';

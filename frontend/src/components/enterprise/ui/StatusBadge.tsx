@@ -11,8 +11,8 @@ import { motion } from 'framer-motion';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import React from "react";
 
 // ============================================================================
@@ -49,10 +49,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   animated = false,
   showDot = true,
   className }) => {
-  const { theme, isDark } = useTheme();
-  const isDarkMode = isDark;
-  const themeStyles = isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900';
-  // Theme applied via useTheme hook
+  const { theme } = useTheme();
 
   const variants: Record<StatusVariant, string> = {
     success: cn('border', theme.status.success.text, theme.status.success.background),

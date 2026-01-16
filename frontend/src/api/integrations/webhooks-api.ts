@@ -71,7 +71,7 @@ export class WebhooksApiService {
   ): Promise<unknown[]> {
     const response = await apiClient.get<PaginatedResponse<unknown>>(
       `/webhooks/${id}/deliveries`,
-      filters
+      { params: filters }
     );
     return response.data;
   }

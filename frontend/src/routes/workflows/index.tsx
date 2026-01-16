@@ -22,6 +22,7 @@ type LoaderData = Awaited<ReturnType<typeof loader>>;
 // ============================================================================
 
 export function meta({ data }: { data: LoaderData }) {
+  void data;
   return createListMeta({
     entityType: 'Workflows',
     // Deferred loader data may not be resolved here; keep meta stable.

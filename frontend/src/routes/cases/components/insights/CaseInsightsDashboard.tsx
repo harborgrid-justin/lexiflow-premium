@@ -1,5 +1,7 @@
 /** * Matter Insights Dashboard - Strategic Intelligence & Predictions * * @module MatterInsightsDashboard * @description AI-powered insights, risk assessment, and predictive analytics * * Features: * - Risk assessment and scoring * - Outcome predictions * - Budget variance analysis * - Team performance metrics * - Client satisfaction tracking * - Predictive cost modeling * - Success probability analysis * - Resource optimization recommendations */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";

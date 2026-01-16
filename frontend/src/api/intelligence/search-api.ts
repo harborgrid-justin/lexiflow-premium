@@ -91,7 +91,7 @@ export class SearchApiService {
   ): Promise<SearchResult[]> {
     const response = await apiClient.get<PaginatedResponse<SearchResult>>(
       "/search/documents",
-      { q: query, ...filters }
+      { params: { q: query, ...filters } }
     );
     return response.data;
   }

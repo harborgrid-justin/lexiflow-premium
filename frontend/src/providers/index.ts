@@ -50,13 +50,13 @@ export {
   useSessionActions,
 } from "./infrastructure/sessionprovider";
 export { ThemeProvider } from "./infrastructure/themeprovider";
-export { ToastProvider } from "./infrastructure/toastprovider";
-export { useUtility, UtilityProvider } from "./infrastructure/utilityprovider";
+export { ToastProvider, useToast } from "./infrastructure/toastprovider";
+export { UtilityProvider, useUtility } from "./infrastructure/utilityprovider";
 export {
+  WebSocketProvider,
   useWebSocket,
   useWebSocketActions,
   useWebSocketState,
-  WebSocketProvider,
 } from "./infrastructure/websocketprovider";
 
 // ============================================================================
@@ -124,8 +124,8 @@ export {
   useGlobalStateActions,
 } from "./application/stateprovider";
 export {
-  useCurrentUser,
   UserProvider,
+  useCurrentUser,
   useUserActions,
   useUserState,
 } from "./application/userprovider";
@@ -195,9 +195,15 @@ export type {
 // THEME EXPORTS (from lib for compatibility)
 // ============================================================================
 export { useTheme, useThemeContext } from "@/hooks/useTheme";
-export { createTheme, ThemeContext } from "@/lib/theme";
+export { ThemeContext, createTheme } from "@/lib/theme";
 export type { ThemeContextType, ThemeObject } from "@/lib/theme";
 export type { ToastType } from "@/lib/toast/context";
+export {
+  WindowProvider,
+  useWindow,
+  useWindowActions,
+  useWindowState,
+} from "@/routes/_shared/window/WindowContext";
 
 // Repository infrastructure exports
 export type {
@@ -216,9 +222,9 @@ export type {
   RepositoryRegistry,
   RepositoryTracer,
   ScanResult,
-  SearchableRepository,
   SearchOptions,
   SearchResult,
+  SearchableRepository,
   Span,
 } from "./repository/types";
 
@@ -231,13 +237,13 @@ export type {
 } from "./repository/config";
 
 export {
-  createConfigFromEnv,
-  createTestConfig,
-  DataSourceConfigBuilder,
   DEFAULT_OBSERVABILITY,
   DEFAULT_RETRY,
   DEFAULT_TIMEOUTS,
+  DataSourceConfigBuilder,
   ENVIRONMENT_CONFIGS,
+  createConfigFromEnv,
+  createTestConfig,
 } from "./repository/config";
 
 export {
@@ -246,10 +252,6 @@ export {
   ConflictError,
   ErrorFactory,
   ForbiddenError,
-  getErrorSeverity,
-  getUserMessage,
-  isRepositoryError,
-  isRetryableError,
   NetworkError,
   NotFoundError,
   RateLimitError,
@@ -258,6 +260,10 @@ export {
   TimeoutError,
   UnauthorizedError,
   ValidationError,
+  getErrorSeverity,
+  getUserMessage,
+  isRepositoryError,
+  isRetryableError,
 } from "./repository/errors";
 
 export type { ValidationFailure } from "./repository/errors";

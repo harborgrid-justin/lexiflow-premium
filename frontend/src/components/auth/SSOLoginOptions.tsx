@@ -8,7 +8,7 @@
 
 import { useTheme } from "@/hooks/useTheme";
 import type { SSOProvider } from '@/lib/auth/types';
-import { useAuthActions } from '@/providers/application/AuthProvider';
+import { useAuthActions } from '@/providers/application/authprovider';
 import { useState } from 'react';
 
 interface SSOLoginOptionsProps {

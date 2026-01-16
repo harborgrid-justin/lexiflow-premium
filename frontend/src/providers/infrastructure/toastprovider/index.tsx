@@ -46,7 +46,7 @@ import type {
   ToastType,
 } from '@/lib/toast/context';
 import { ToastActionsContext, ToastStateContext } from '@/lib/toast/context';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 
 // Priority mapping
 const PRIORITY_MAP: Record<ToastType, number> = {
@@ -160,3 +160,17 @@ export function ToastProvider({
 }
 
 ToastProvider.displayName = 'ToastProvider';
+
+export function useToast() {
+  const state = useContext(ToastStateContext);
+  const actions = useContext(ToastActionsContext);
+
+  if (!state || !actions) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+
+  return {
+    ...state,
+    ...actions,
+  };
+}

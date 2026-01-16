@@ -12,10 +12,12 @@
  * - ConnectionStatus indicator
  *
  * @status PRODUCTION READY - Zero mock data, backend-integrated
- * @architecture Uses communicationsApi for all operations
+ * @architecture Uses NotificationsApiService for notifications and frontend communications API for preferences
  */
 
+import { NotificationsApiService, type ApiNotification } from '@/api/communications';
 import { communicationsApi } from '@/lib/frontend-api';
+import { cn } from '@/lib/utils';
 import { useTheme } from "@/hooks/useTheme";
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +33,26 @@ import {
   type ExtendedNotificationPreferences,
   type UINotification,
 } from './index';
+
+const notificationsApi = new NotificationsApiService();
+
+function mapApiToUi(notification: ApiNotification): UINotification {
+  const fallbackType: UINotification['type'] = ['info', 'success', 'warning', 'error'].includes(notification.type)
+    ? (notification.type as UINotification['type'])
+    : 'info';
+
+  return {
+    id: notification.id,
+    title: notification.title,
+    message: notification.message,
+    type: fallbackType,
+    read: notification.read,
+    timestamp: Date.parse(notification.createdAt || notification.updatedAt || new Date().toISOString()),
+    priority: notification.priority === 'urgent' || notification.priority === 'high'
+      ? notification.priority
+      : 'normal',
+  };
+}
 
 // ============================================================================
 // PRODUCTION READY COMPONENTS
@@ -50,8 +72,8 @@ export const HeaderWithNotifications: React.FC = () => {
     const loadNotifications = async () => {
       try {
         setIsLoading(true);
-        const result = await communicationsApi.getAllNotifications({ page: 1, limit: 100 });
-        setNotifications(result.ok ? (result.data.data as UINotification[]) : []);
+        const result = await notificationsApi.getAll();
+        setNotifications(result.map(mapApiToUi));
       } catch (error) {
         console.error('[HeaderWithNotifications] Failed to load notifications:', error);
         setNotifications([]); // Show empty state on error
@@ -67,12 +89,10 @@ export const HeaderWithNotifications: React.FC = () => {
 
   const handleMarkAsRead = useCallback(async (id: string) => {
     try {
-      const result = await communicationsApi.updateNotification(id, { isRead: true });
-      if (result.ok) {
-        setNotifications((prev) =>
-          prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-        );
-      }
+      await notificationsApi.markAsRead(id);
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+      );
     } catch (error) {
       console.error('[HeaderWithNotifications] Failed to mark as read:', error);
     }
@@ -80,19 +100,16 @@ export const HeaderWithNotifications: React.FC = () => {
 
   const handleMarkAllAsRead = useCallback(async () => {
     try {
-      const unreadIds = notifications.filter(n => !n.read).map(n => n.id);
-      await Promise.all(
-        unreadIds.map(id => communicationsApi.updateNotification(id, { isRead: true }))
-      );
+      await notificationsApi.markAllAsRead();
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch (error) {
       console.error('[HeaderWithNotifications] Failed to mark all as read:', error);
     }
-  }, [notifications]);
+  }, []);
 
   const handleDelete = useCallback(async (id: string) => {
     try {
-      await communicationsApi.deleteNotification(id);
+      await notificationsApi.delete(id);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (error) {
       console.error('[HeaderWithNotifications] Failed to delete notification:', error);
@@ -101,7 +118,7 @@ export const HeaderWithNotifications: React.FC = () => {
 
   const handleClearAll = useCallback(async () => {
     try {
-      await Promise.all(notifications.map(n => communicationsApi.deleteNotification(n.id)));
+      await Promise.all(notifications.map(n => notificationsApi.delete(n.id)));
       setNotifications([]);
       setIsPanelOpen(false);
     } catch (error) {
@@ -172,8 +189,8 @@ export const NotificationCenterPage: React.FC = () => {
     const loadNotifications = async () => {
       try {
         setIsLoading(true);
-        const result = await communicationsApi.getAllNotifications({ page: 1, limit: 100 });
-        setNotifications(result.ok ? (result.data.data as UINotification[]) : []);
+        const result = await notificationsApi.getAll();
+        setNotifications(result.map(mapApiToUi));
       } catch (error) {
         console.error('[NotificationCenterPage] Failed to load:', error);
         setNotifications([]);
@@ -187,7 +204,7 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleMarkAsRead = useCallback(async (id: string) => {
     try {
-      await communicationsApi.updateNotification(id, { isRead: true });
+      await notificationsApi.markAsRead(id);
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, read: true } : n))
       );
@@ -198,9 +215,7 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleMarkAsReadBulk = useCallback(async (ids: string[]) => {
     try {
-      await Promise.all(ids.map(id =>
-        communicationsApi.updateNotification(id, { isRead: true })
-      ));
+      await Promise.all(ids.map((id) => notificationsApi.markAsRead(id)));
       setNotifications((prev) =>
         prev.map((n) => (ids.includes(n.id) ? { ...n, read: true } : n))
       );
@@ -211,18 +226,16 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleMarkAllAsRead = useCallback(async () => {
     try {
-      await Promise.all(
-        notifications.map(n => communicationsApi.updateNotification(n.id, { isRead: true }))
-      );
+      await notificationsApi.markAllAsRead();
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch (error) {
       console.error('[NotificationCenterPage] Mark all as read failed:', error);
     }
-  }, [notifications]);
+  }, []);
 
   const handleDelete = useCallback(async (id: string) => {
     try {
-      await communicationsApi.deleteNotification(id);
+      await notificationsApi.delete(id);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (error) {
       console.error('[NotificationCenterPage] Delete failed:', error);
@@ -231,7 +244,7 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleDeleteBulk = useCallback(async (ids: string[]) => {
     try {
-      await Promise.all(ids.map(id => communicationsApi.deleteNotification(id)));
+      await Promise.all(ids.map((id) => notificationsApi.delete(id)));
       setNotifications((prev) => prev.filter((n) => !ids.includes(n.id)));
     } catch (error) {
       console.error('[NotificationCenterPage] Bulk delete failed:', error);
@@ -240,12 +253,12 @@ export const NotificationCenterPage: React.FC = () => {
 
   const handleClearAll = useCallback(async () => {
     try {
-      await Promise.all(notifications.map(n => communicationsApi.deleteNotification(n.id)));
+      await notificationsApi.clearAll();
       setNotifications([]);
     } catch (error) {
       console.error('[NotificationCenterPage] Clear all failed:', error);
     }
-  }, [notifications]);
+  }, []);
 
   if (isLoading) {
     return (
@@ -301,7 +314,7 @@ export const NotificationPreferencesPage: React.FC = () => {
       try {
         setIsLoading(true);
         const result = await communicationsApi.getNotificationPreferences?.();
-        if (result?.ok) {
+        if (result?.ok && result.data) {
           setPreferences(result.data as ExtendedNotificationPreferences);
         }
       } catch (error) {
@@ -319,7 +332,9 @@ export const NotificationPreferencesPage: React.FC = () => {
       const result = await communicationsApi.updateNotificationPreferences?.(newPreferences);
       if (result?.ok) {
         setPreferences(newPreferences);
+        return;
       }
+      throw new Error('Failed to save preferences');
     } catch (error) {
       console.error('[NotificationPreferencesPage] Failed to save preferences:', error);
       throw error; // Re-throw to allow UI to handle error
@@ -349,6 +364,7 @@ export const NotificationPreferencesPage: React.FC = () => {
  */
 export const ToastExample: React.FC = () => {
   const { addToast } = useToastNotifications();
+  const { theme } = useTheme();
 
   const showSuccessToast = () => {
     addToast({

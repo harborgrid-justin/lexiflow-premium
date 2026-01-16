@@ -4,6 +4,7 @@
  * @description Real-time WebSocket connection status indicator with animations
  */
 
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -61,6 +62,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
   autoHide = true,
   latency,
 }) => {
+  const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 

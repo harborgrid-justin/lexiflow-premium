@@ -1,5 +1,7 @@
 /** * FederalLitigationCaseForm Component * * Comprehensive form for creating/editing federal litigation cases with: * - Type-safe autocomplete dropdowns for all entity references * - Quick-add modals for parties, courts, and judges * - Field-level validation with real-time error feedback * - Optimistic UI updates * - Automatic form state persistence (auto-save) * * Architecture Decisions: * 1. Form state managed with useReducer for complex state logic * 2. Field updates are debounced to prevent excessive re-renders * 3. Entity lookups are cached and prefetched * 4. Form is broken into logical sections for better UX * 5. All dropdowns support keyboard navigation (WCAG 2.1 AA compliant) */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Case, CaseStatus, CaseType } from '@/types';
 import React, { useReducer, useState } from 'react'; // CreateCaseDto interface matching backend API expectations
 interface CreateCaseDto {

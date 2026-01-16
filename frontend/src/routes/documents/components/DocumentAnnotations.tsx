@@ -15,7 +15,7 @@ export function DocumentAnnotations({
   onDelete,
   currentPage = 1
 }: DocumentAnnotationsProps) {
-  const { theme, tokens } = useTheme();
+  const { tokens } = useTheme();
 
   const {
     isAdding,

@@ -3,12 +3,15 @@ import { DeterministicLoader } from "@/components/performance/DeterministicLoade
 import { OptimisticInput } from "@/components/performance/OptimisticInput";
 import { ZeroClsWrapper } from "@/components/performance/ZeroClsWrapper";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useTheme";
 import { useEntitlements } from "@/providers/application/entitlementsprovider";
 import { useData } from "@/routes/dashboard";
+import { cn } from "@/lib/cn";
 import React, { useEffect, useMemo, useState } from "react";
 
 export const AdminPath: React.FC = () => {
   const { auth, logout } = useAuth();
+  const { theme } = useTheme();
   const { entitlements } = useEntitlements();
   const { items, refresh, isLoading, error } = useData();
   const [filter, setFilter] = useState("");

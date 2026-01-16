@@ -25,7 +25,6 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { useMemo } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

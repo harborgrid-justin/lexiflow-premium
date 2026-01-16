@@ -16,9 +16,9 @@ export interface AppSidebarProps {
 
 export const AppSidebar = memo<AppSidebarProps>(({
   isOpen,
-  isCollapsed = false,
+  isCollapsed: _isCollapsed = false,
   onToggle,
-  onToggleCollapsed,
+  onToggleCollapsed: _onToggleCollapsed,
   activeItem,
   userName,
   userEmail,

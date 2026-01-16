@@ -14,12 +14,12 @@ import { useDeferredValue, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { communicationsApi } from '@/lib/frontend-api';
+import { NotificationsApiService, type ApiNotification } from '@/api/communications';
 
 // Hooks & Context
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useToast } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
+import { useToast } from '@/providers';
 
 // Components
 import { Badge } from '@/components/atoms/Badge';
@@ -31,21 +31,10 @@ import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { cn } from '@/lib/cn';
 
 // ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
-interface Notification {
-  id: string;
-  type: 'info' | 'warning' | 'error' | 'success';
-  title: string;
-  message: string;
-  isRead: boolean;
-  createdAt: string;
-  category: 'system' | 'case' | 'document' | 'deadline' | 'billing';
-}
-
-// ============================================================================
 // COMPONENT
 // ============================================================================
+const notificationsApi = new NotificationsApiService();
+
 export function NotificationCenter() {
   const { theme } = useTheme();
   const { addToast } = useToast();
@@ -64,21 +53,17 @@ export function NotificationCenter() {
   });
 
   // --- DATA FETCHING ---
-  const { data: notifications = [], isLoading } = useQuery<Notification[]>(
+  const { data: notifications = [], isLoading } = useQuery<ApiNotification[]>(
     ['notifications', 'all'],
     async () => {
-      const result = await communicationsApi.getAllNotifications({ page: 1, limit: 100 });
-      return result.ok ? result.data.data : [];
+      return await notificationsApi.getAll();
     },
     { staleTime: 30000 }
   );
 
   // --- MUTATIONS ---
   const { mutate: markAsRead } = useMutation(
-    (id: string) => {
-      const result = communicationsApi.updateNotification(id, { isRead: true });
-      return result.then(r => r.ok ? r.data : null);
-    },
+    (id: string) => notificationsApi.markAsRead(id),
     {
       onSuccess: () => {
         queryClient.invalidate(['notifications']);
@@ -88,10 +73,7 @@ export function NotificationCenter() {
   );
 
   const { mutate: markAllAsRead } = useMutation(
-    async () => {
-      const result = await communicationsApi.markAllNotificationsAsRead();
-      return result.ok ? result.data : null;
-    },
+    () => notificationsApi.markAllAsRead(),
     {
       onSuccess: () => {
         queryClient.invalidate(['notifications']);
@@ -101,10 +83,7 @@ export function NotificationCenter() {
   );
 
   const { mutate: deleteNotification } = useMutation(
-    (id: string) => {
-      const result = communicationsApi.deleteNotification(id);
-      return result.then(r => r.ok ? r.data : null);
-    },
+    (id: string) => notificationsApi.delete(id),
     {
       onSuccess: () => {
         queryClient.invalidate(['notifications']);
@@ -116,13 +95,13 @@ export function NotificationCenter() {
   // --- LOGIC ---
   const filteredNotifications = useMemo(() => notifications.filter(n => {
     if (deferredFilter === 'all') return true;
-    if (deferredFilter === 'unread') return !n.isRead;
-    return n.category === deferredFilter;
+    if (deferredFilter === 'unread') return !n.read;
+    return n.type === deferredFilter;
   }), [notifications, deferredFilter]);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
 
-  const getTypeColor = (type: Notification['type']) => {
+  const getTypeColor = (type: ApiNotification['type']) => {
     switch (type) {
       case 'success': return theme.status.success.text;
       case 'warning': return theme.status.warning.text;
@@ -131,7 +110,7 @@ export function NotificationCenter() {
     }
   };
 
-  const getTypeBadgeVariant = (type: Notification['type']) => {
+  const getTypeBadgeVariant = (type: ApiNotification['type']) => {
     switch (type) {
       case 'success': return 'success';
       case 'warning': return 'warning';
@@ -203,9 +182,9 @@ export function NotificationCenter() {
             key={notification.id}
             className={cn(
               "p-4 rounded-lg border transition-all",
-              notification.isRead ? theme.surface.default : theme.surface.highlight,
+              notification.read ? theme.surface.default : theme.surface.highlight,
               theme.border.default,
-              !notification.isRead && "border-l-4 border-l-blue-500"
+              !notification.read && "border-l-4 border-l-blue-500"
             )}
           >
             <div className="flex items-start justify-between">
@@ -227,7 +206,7 @@ export function NotificationCenter() {
                 </div>
               </div>
               <div className="flex gap-2">
-                {!notification.isRead && (
+                {!notification.read && (
                   <Button size="sm" variant="ghost" icon={Check} onClick={() => markAsRead(notification.id)}>
                     Read
                   </Button>

@@ -48,26 +48,9 @@ export class BillingAnalyticsApiService {
     startDate: string,
     endDate: string
   ): Promise<BillingAnalytics> {
-    // The backend returns aggregated metrics from the /metrics endpoint
-    const _result = await apiClient.get<{
-      wip: unknown;
-      realization: unknown;
-      operatingSummary: unknown;
-      arAging: unknown;
-    }>(`${this.baseUrl}/metrics`);
-    // Return a placeholder BillingAnalytics structure
-    return {
-      period: { start: startDate, end: endDate },
-      totalRevenue: 0,
-      collectedRevenue: 0,
-      outstandingAR: 0,
-      writeOffs: 0,
-      realization: { rate: 0, billed: 0, collected: 0 },
-      byAttorney: [],
-      byClient: [],
-      byPracticeArea: [],
-      trend: [],
-    };
+    return apiClient.get<BillingAnalytics>(
+      `${this.baseUrl}/metrics?start=${startDate}&end=${endDate}`
+    );
   }
 
   async getByAttorney(
@@ -76,7 +59,7 @@ export class BillingAnalyticsApiService {
     endDate: string
   ): Promise<unknown> {
     return apiClient.get(
-      `${this.baseUrl}/realization?start=${startDate}&end=${endDate}`
+      `${this.baseUrl}/realization?userId=${userId}&start=${startDate}&end=${endDate}`
     );
   }
 
@@ -86,7 +69,7 @@ export class BillingAnalyticsApiService {
     endDate: string
   ): Promise<unknown> {
     return apiClient.get(
-      `${this.baseUrl}/operating-summary?start=${startDate}&end=${endDate}`
+      `${this.baseUrl}/operating-summary?clientId=${clientId}&start=${startDate}&end=${endDate}`
     );
   }
 

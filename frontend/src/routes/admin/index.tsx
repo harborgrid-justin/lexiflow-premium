@@ -12,25 +12,84 @@
 
 import { api } from '@/lib/frontend-api';
 import type { SystemMetrics } from '@/lib/frontend-api';
-import { api } from '@/lib/frontend-api';
 import { requireAdmin } from '@/utils/route-guards';
-import { Activity, AlertTriangle, Database, HardDrive, Server, Shield, Users
+import {
+  Activity, AlertTriangle, Database, HardDrive, Server, Shield, Users
 } from 'lucide-react';
 import { Link, useLoaderData, type LoaderFunctionArgs, type MetaArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createAdminMeta } from '../_shared/meta-utils'; // ============================================================================
+import { createAdminMeta } from '../_shared/meta-utils';
+
+// ============================================================================
 // Meta Tags
 // ============================================================================
-export function meta(_: MetaArgs) { return createAdminMeta({ section: 'Dashboard', description: 'System administration and configuration', });
-} // ============================================================================
+export function meta(_: MetaArgs) {
+  return createAdminMeta({
+    section: 'Dashboard',
+    description: 'System administration and configuration',
+  });
+}
+
+// ============================================================================
 // Types
 // ============================================================================
-interface AuditLogEntry { id: string; severity: 'high' | 'medium' | 'low'; action: string; entityType: string; userName: string; timestamp: string;
-} // ============================================================================
+interface AuditLogEntry {
+  id: string;
+  severity: 'high' | 'medium' | 'low';
+  action: string;
+  entityType: string;
+  userName: string;
+  timestamp: string;
+}
+
+// ============================================================================
 // Loader
 // ============================================================================
-export async function loader({ request }: LoaderFunctionArgs) { // Require admin role to access this route const { user } = requireAdmin(request); try { // Fetch system metrics const metrics = await api.metrics.getCurrent(); // Fetch user stats (assuming we can get a count or list) // For now, we'll just use the metrics active users if available, or fetch users // const users = await api.users.getAll(); // Fetch recent audit logs const allLogs = await api.auditLogs.getAll(); const auditLogs = allLogs.slice(0, 5); return { user, metrics, auditLogs, }; } catch (error) { console.error("Failed to load admin dashboard:", error); // Return fallback data if API fails return { user, metrics: { timestamp: new Date().toISOString(), system: { cpuUsage: 0, memoryUsage: 0, diskUsage: 0, uptime: 0, }, application: { activeUsers: 0, requestsPerMinute: 0, averageResponseTime: 0, errorRate: 0, }, database: { connections: 0, queryTime: 0, cacheHitRate: 0, }, } as SystemMetrics, auditLogs: [], }; }
-} // ============================================================================
+export async function loader({ request }: LoaderFunctionArgs) {
+  // Require admin role to access this route
+  const { user } = requireAdmin(request);
+
+  try {
+    // Fetch system metrics
+    const metrics = await api.metrics.getCurrent();
+
+    // Fetch recent audit logs
+    const allLogs = await api.auditLogs.getAll();
+    const auditLogs = allLogs.slice(0, 5);
+
+    return { user, metrics, auditLogs };
+  } catch (error) {
+    console.error('Failed to load admin dashboard:', error);
+
+    // Return fallback data if API fails
+    return {
+      user,
+      metrics: {
+        timestamp: new Date().toISOString(),
+        system: {
+          cpuUsage: 0,
+          memoryUsage: 0,
+          diskUsage: 0,
+          uptime: 0,
+        },
+        application: {
+          activeUsers: 0,
+          requestsPerMinute: 0,
+          averageResponseTime: 0,
+          errorRate: 0,
+        },
+        database: {
+          connections: 0,
+          queryTime: 0,
+          cacheHitRate: 0,
+        },
+      } as SystemMetrics,
+      auditLogs: [],
+    };
+  }
+}
+
+// ============================================================================
 // Component
 // ============================================================================
 
@@ -239,5 +298,6 @@ function HealthBar({ label, value, max = 100 }: { label: string; value: number; 
 // ============================================================================
 // Error Boundary
 // ============================================================================
-export function ErrorBoundary({ error }: { error: unknown }) { return ( <RouteErrorBoundary error={error} title="Failed to Load Admin Dashboard" message="We couldn't load the admin dashboard. Please try again." /> );
+export function ErrorBoundary({ error }: { error: unknown }) {
+  return (<RouteErrorBoundary error={error} title="Failed to Load Admin Dashboard" message="We couldn't load the admin dashboard. Please try again." />);
 }

@@ -175,7 +175,7 @@ function useSyncLocalStorage<T>(key: string, initialValue: T): [T, (value: T) =>
  */
 
 
-interface ThemeContextType {
+export interface ThemeContextType {
   // Guideline 22: Immutable state - frozen in development
   readonly tokens: Readonly<DesignTokens>;
   readonly density: ThemeDensity;
@@ -198,6 +198,9 @@ interface ThemeContextType {
   readonly updateToken: (category: keyof DesignTokens | 'root', key: string, value: string, subKey?: string) => void; // Non-urgent
   readonly resetTokens: () => void; // Non-urgent
 }
+
+// Backward compatibility alias
+export type ThemeContextValue = ThemeContextType;
 
 const createTheme = (tokens: DesignTokens): ThemeObject => ({
   background: tokens.colors.background,

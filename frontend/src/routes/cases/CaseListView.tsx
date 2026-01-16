@@ -19,11 +19,11 @@
  * @module routes/cases/CaseListView
  */
 
-import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from "@/hooks/useTheme";
-import { Case } from '@/types';
+import { cn } from '@/lib/cn';
+import { Case, CaseStatus } from '@/types';
 import {
   Activity,
   Archive,
@@ -160,7 +160,7 @@ export function CaseListView() {
   const activeCaseProps = useMemo(() => ({
     filteredCases,
     statusFilter: (filters.status as string) || 'All',
-    setStatusFilter: (s: string) => setFilters({ status: s === 'All' ? undefined : s as any }),
+    setStatusFilter: (s: string) => setFilters({ status: s === 'All' ? undefined : (s as CaseStatus) }),
     typeFilter: filters.type || 'All',
     setTypeFilter: (t: string) => setFilters({ type: t === 'All' ? undefined : t }),
     searchTerm: filters.search || '',
@@ -437,7 +437,7 @@ function MetricCard({ title, value, icon, trend = 'neutral' }: MetricCardProps) 
 }
 
 // Adaptive Loader placeholder
-function AdaptiveLoader({ contentType, message }: { contentType: string; message: string }) {
+function AdaptiveLoader({ contentType: _contentType, message }: { contentType: string; message: string }) {
   const { tokens } = useTheme();
   return (
     <div style={{ color: tokens.colors.textMuted }} className="text-center py-12">

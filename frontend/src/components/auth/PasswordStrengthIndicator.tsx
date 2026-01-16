@@ -6,7 +6,7 @@
  * @module components/auth/PasswordStrengthIndicator
  */
 
-import { useAuthState } from '@/providers/application/AuthProvider';
+import { useAuthState } from '@/providers/application/authprovider';
 import { useTheme } from "@/hooks/useTheme";
 import { useMemo } from 'react';
 
@@ -73,23 +73,6 @@ export function PasswordStrengthIndicator({ password, showRequirements = true }:
     blue: { bg: tokens.colors.blue500, text: tokens.colors.blue600 },
     green: { bg: theme.status.success.bg, text: theme.status.success.text },
   };
-
-  const strength = useMemo(() => {
-    if (!password) return { score: 0, label: '', color: 'gray' };
-
-    const metRequirements = requirements.filter(r => r.met).length;
-    const percentage = (metRequirements / requirements.length) * 100;
-
-    if (percentage === 100) {
-      return { score: 100, label: 'Strong', color: 'green' };
-    } else if (percentage >= 80) {
-      return { score: percentage, label: 'Good', color: 'blue' };
-    } else if (percentage >= 60) {
-      return { score: percentage, label: 'Fair', color: 'yellow' };
-    } else {
-      return { score: percentage, label: 'Weak', color: 'red' };
-    }
-  }, [password, requirements]);
 
   if (!password) return null;
 

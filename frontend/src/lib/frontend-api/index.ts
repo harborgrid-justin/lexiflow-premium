@@ -116,9 +116,6 @@ export type { FieldValidator, Schema, Validator } from "./schemas";
 // Re-export normalization (for convenience)
 export * from "@/lib/normalization";
 
-// Re-export ALL consolidated API services and classes for full compatibility
-export * from "@/api";
-
 // Re-export backend mode detection from config
 export { isBackendApiEnabled } from "@/config/network/api.config";
 
@@ -141,6 +138,7 @@ export { integrationsApi } from "./integrations";
 export { intelligenceApi } from "./intelligence";
 export { trialApi } from "./trial";
 export { workflowApi } from "./workflow";
+export type { ApiNotification } from "@/api/communications/notifications-api";
 
 // Export types from domain modules
 export type { DashboardMetrics } from "./analytics";

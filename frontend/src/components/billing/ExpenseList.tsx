@@ -3,8 +3,9 @@
  * Display and filter expenses with receipt viewing
  */
 
-import type { FirmExpense } from '@/types/financial';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import type { FirmExpense } from '@/types/financial';
 import { DollarSign, FileText, Filter, Receipt } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
@@ -29,7 +30,7 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
       Pending: { bg: tokens.colors.warning + '20', text: tokens.colors.warning },
     };
 
-    const style = statusStyles[status] || statusStyles.Draft;
+    const style = (statusStyles[status] ?? statusStyles.Draft)!;
 
     return (
       <span

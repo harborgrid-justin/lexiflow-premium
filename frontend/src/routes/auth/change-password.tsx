@@ -5,7 +5,7 @@
  */
 
 import { PasswordStrengthIndicator } from '@/components/auth/PasswordStrengthIndicator';
-import { useAuthActions, useAuthState } from '@/providers/application/AuthProvider';
+import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
 

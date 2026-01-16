@@ -40,8 +40,19 @@ export function useAuthActions(): AuthActionsValue {
  * Use sparingly - prefer specific hooks for better performance
  */
 export function useAuth() {
+  const state = useAuthState();
+  const actions = useAuthActions();
+  const status = state.isLoading
+    ? "loading"
+    : state.isAuthenticated
+      ? "authenticated"
+      : "unauthenticated";
+
+  const stateWithStatus = { ...state, status } as const;
+
   return {
-    ...useAuthState(),
-    ...useAuthActions(),
+    auth: stateWithStatus,
+    ...stateWithStatus,
+    ...actions,
   };
 }

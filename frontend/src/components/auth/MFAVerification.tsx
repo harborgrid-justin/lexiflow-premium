@@ -6,11 +6,12 @@
  * @module components/auth/MFAVerification
  */
 
-import { useAuthActions } from '@/providers/application/AuthProvider';
-import { useTheme } from "@/hooks/useTheme";
-import { useNotify } from '@/hooks/core';
-import { IntegrationOrchestrator } from '@/services/integration/IntegrationOrchestrator';
 import { Button } from '@/components/atoms/Button';
+import { useNotify } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
+import { useAuthActions } from '@/providers/application/authprovider';
+import { IntegrationOrchestrator } from '@/services/integration/integration-orchestrator.service';
+import { SystemEventPayloads, SystemEventType } from '@/types/integration-types';
 import React, { useState } from 'react';
 
 interface MFAVerificationProps {
@@ -43,11 +44,10 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
 
       if (success) {
         // Publish enterprise event
-        IntegrationOrchestrator.publish({
-          type: 'MFA_VERIFICATION_SUCCESS',
-          payload: { method: useBackupCode ? 'backup_code' : 'authenticator' },
-          timestamp: new Date().toISOString(),
-        });
+        IntegrationOrchestrator.publish(
+          'MFA_VERIFICATION_SUCCESS' as unknown as keyof typeof SystemEventType,
+          { method: useBackupCode ? 'backup_code' : 'authenticator' } as unknown as SystemEventPayloads[keyof SystemEventPayloads]
+        );
 
         notify.success('Two-factor authentication successful');
         onSuccess?.();
@@ -61,11 +61,10 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
       notify.error(`MFA verification failed: ${errorMessage}`);
 
       // Publish enterprise event for failed verification
-      IntegrationOrchestrator.publish({
-        type: 'MFA_VERIFICATION_FAILED',
-        payload: { error: errorMessage, method: useBackupCode ? 'backup_code' : 'authenticator' },
-        timestamp: new Date().toISOString(),
-      });
+      IntegrationOrchestrator.publish(
+        'MFA_VERIFICATION_FAILED' as unknown as keyof typeof SystemEventType,
+        { error: errorMessage, method: useBackupCode ? 'backup_code' : 'authenticator' } as unknown as SystemEventPayloads[keyof SystemEventPayloads]
+      );
     } finally {
       setIsLoading(false);
     }

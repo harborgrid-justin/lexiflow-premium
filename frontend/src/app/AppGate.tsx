@@ -13,7 +13,7 @@ export function AppGate() {
   const { entitlements } = useEntitlements();
 
   // Parallel Path #1: Unauthenticated users
-  if (auth.status === "anonymous") {
+  if (auth.status === "unauthenticated") {
     return <PublicPath />;
   }
 

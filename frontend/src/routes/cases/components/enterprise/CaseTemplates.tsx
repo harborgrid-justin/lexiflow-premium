@@ -1,4 +1,482 @@
+/**
+ * Case Templates Component
+ *
+ * Matter template management for different practice areas:
+ * - Pre-configured templates for common case types
+ * - Quick case creation from templates
+ * - Template customization and cloning
+ * - Practice area categorization
+ */
+
+import { CaseStatus, MatterType, type Case } from '@/types';
+import { cn } from '@/lib/cn';
+import {
+  Building,
+  Copy,
+  DollarSign,
+  Edit,
+  FileText,
+  Heart,
+  Home,
+  Plus,
+  Scale,
+  Search,
+  Shield,
+  Star,
+  Users,
+  X,
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+
+export interface CaseTemplate {
+  id: string;
+  name: string;
+  description: string;
+  practiceArea: PracticeArea;
+  matterType: MatterType;
+  icon: React.ElementType;
+  fields: TemplateField[];
+  defaultValues: Partial<Case>;
+  checklist: ChecklistItem[];
+  documents: TemplateDocument[];
+  milestones: TemplateMilestone[];
+  estimatedDuration?: number;
+  estimatedBudget?: number;
+  isStarred?: boolean;
+  usageCount?: number;
+  createdBy?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface TemplateField {
+  id: string;
+  label: string;
+  type: 'text' | 'number' | 'date' | 'select' | 'multiselect' | 'textarea';
+  required: boolean;
+  options?: string[];
+  defaultValue?: unknown;
+  helpText?: string;
+}
+
+export interface ChecklistItem {
+  id: string;
+  title: string;
+  description?: string;
+  order: number;
+  category?: string;
+  dueInDays?: number;
+}
+
+export interface TemplateDocument {
+  id: string;
+  name: string;
+  type: 'pleading' | 'motion' | 'discovery' | 'brief' | 'contract' | 'form';
+  required: boolean;
+  templateUrl?: string;
+}
+
+export interface TemplateMilestone {
+  id: string;
+  name: string;
+  daysFromStart: number;
+  description?: string;
+}
+
+export type PracticeArea =
+  | 'Litigation'
+  | 'Corporate'
+  | 'Real Estate'
+  | 'Family Law'
+  | 'Estate Planning'
+  | 'Employment'
+  | 'Intellectual Property'
+  | 'Immigration'
+  | 'Personal Injury'
+  | 'Criminal Defense';
+
+export interface CaseTemplatesProps {
+  templates?: CaseTemplate[];
+  onCreateFromTemplate?: (template: CaseTemplate, customValues?: Partial<Case>) => void;
+  onEditTemplate?: (template: CaseTemplate) => void;
+  onDeleteTemplate?: (templateId: string) => void;
+  onCloneTemplate?: (templateId: string) => void;
+  className?: string;
+}
+
+const PRACTICE_AREA_ICONS: Record<PracticeArea, React.ElementType> = {
+  Litigation: Scale,
+  Corporate: Building,
+  'Real Estate': Home,
+  'Family Law': Heart,
+  'Estate Planning': FileText,
+  Employment: Users,
+  'Intellectual Property': Shield,
+  Immigration: Users,
+  'Personal Injury': Heart,
+  'Criminal Defense': Shield,
+};
+
+const DEFAULT_TEMPLATES: CaseTemplate[] = [
+  {
+    id: 'lit-civil-1',
+    name: 'Civil Litigation - Breach of Contract',
+    description: 'Standard template for breach of contract cases',
+    practiceArea: 'Litigation',
+    matterType: MatterType.LITIGATION,
+    icon: Scale,
+    fields: [
+      { id: 'contractDate', label: 'Contract Date', type: 'date', required: true },
+      { id: 'breachDate', label: 'Date of Breach', type: 'date', required: true },
+      { id: 'damagesAmount', label: 'Damages Claimed', type: 'number', required: true },
+      {
+        id: 'contractType',
+        label: 'Contract Type',
+        type: 'select',
+        required: true,
+        options: ['Service', 'Purchase', 'Employment', 'Lease'],
+      },
+    ],
+    defaultValues: {
+      status: CaseStatus.PreFiling,
+      practiceArea: 'Litigation',
+      matterType: MatterType.LITIGATION,
+    },
+    checklist: [
+      { id: 'cl-1', title: 'Obtain and review contract', order: 1, category: 'Initial Review', dueInDays: 3 },
+      { id: 'cl-2', title: 'Interview client regarding breach', order: 2, category: 'Initial Review', dueInDays: 5 },
+      { id: 'cl-3', title: 'Calculate damages', order: 3, category: 'Case Evaluation', dueInDays: 7 },
+      { id: 'cl-4', title: 'Draft demand letter', order: 4, category: 'Pre-Litigation', dueInDays: 10 },
+      { id: 'cl-5', title: 'File complaint if necessary', order: 5, category: 'Litigation', dueInDays: 60 },
+    ],
+    documents: [
+      { id: 'doc-1', name: 'Complaint', type: 'pleading', required: true },
+      { id: 'doc-2', name: 'Summons', type: 'pleading', required: true },
+      { id: 'doc-3', name: 'Demand Letter', type: 'form', required: false },
+    ],
+    milestones: [
+      { id: 'ms-1', name: 'Case Intake Complete', daysFromStart: 7 },
+      { id: 'ms-2', name: 'Demand Letter Sent', daysFromStart: 30 },
+      { id: 'ms-3', name: 'Complaint Filed', daysFromStart: 90 },
+      { id: 'ms-4', name: 'Discovery Complete', daysFromStart: 180 },
+    ],
+    estimatedDuration: 365,
+    estimatedBudget: 50000,
+    usageCount: 24,
+  },
+];
+
+function createNewTemplate(): CaseTemplate {
+  return {
+    id: `tmpl-${Date.now()}`,
+    name: 'New Template',
+    description: '',
+    practiceArea: 'Litigation',
+    matterType: MatterType.LITIGATION,
+    icon: PRACTICE_AREA_ICONS.Litigation,
+    fields: [],
+    defaultValues: {
+      status: CaseStatus.PreFiling,
+      practiceArea: 'Litigation',
+      matterType: MatterType.LITIGATION,
+    },
+    checklist: [],
+    documents: [],
+    milestones: [],
+    isStarred: false,
+    usageCount: 0,
+  };
+}
+
+export function CaseTemplates({
+  templates = DEFAULT_TEMPLATES,
+  onCreateFromTemplate,
+  onEditTemplate,
+  onCloneTemplate,
+  className,
+}: CaseTemplatesProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPracticeArea, setSelectedPracticeArea] = useState<PracticeArea | 'All'>('All');
+  const [selectedTemplate, setSelectedTemplate] = useState<CaseTemplate | null>(null);
+  const [showTemplateDetail, setShowTemplateDetail] = useState(false);
+
+  const practiceAreas = useMemo(() => {
+    const areas = new Set(templates.map((t) => t.practiceArea));
+    return ['All', ...Array.from(areas)] as const;
+  }, [templates]);
+
+  const filteredTemplates = useMemo(() => {
+    let result = templates;
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (t) =>
+          t.name.toLowerCase().includes(query) ||
+          t.description.toLowerCase().includes(query) ||
+          t.practiceArea.toLowerCase().includes(query)
+      );
+    }
+    if (selectedPracticeArea !== 'All') {
+      result = result.filter((t) => t.practiceArea === selectedPracticeArea);
+    }
+    return result.sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0));
+  }, [templates, searchQuery, selectedPracticeArea]);
+
+  const handleTemplateSelect = (template: CaseTemplate) => {
+    setSelectedTemplate(template);
+    setShowTemplateDetail(true);
+  };
+
+  const handleCreateCase = () => {
+    if (!selectedTemplate) return;
+    onCreateFromTemplate?.(selectedTemplate);
+    setShowTemplateDetail(false);
+    setSelectedTemplate(null);
+  };
+
+  const handleCreateTemplate = () => {
+    if (!onEditTemplate) return;
+    onEditTemplate(createNewTemplate());
+  };
+
+  return (
+    <div className={cn('flex flex-col h-full space-y-4', className)}>
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-[var(--color-text)] dark:text-white">Case Templates</h2>
+          <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mt-1">
+            Start new cases quickly with pre-configured templates
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={handleCreateTemplate}
+          disabled={!onEditTemplate}
+          className={cn(
+            'flex items-center gap-2 px-4 py-2 rounded-lg',
+            onEditTemplate
+              ? 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primaryDark)]'
+              : 'bg-[var(--color-surfaceRaised)] text-[var(--color-textMuted)] cursor-not-allowed'
+          )}
+        >
+          <Plus className="h-4 w-4" /> Create Template
+        </button>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--color-textMuted)]" />
+          <input
+            type="text"
+            placeholder="Search templates..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {practiceAreas.map((area) => (
+            <button
+              key={area}
+              type="button"
+              onClick={() => setSelectedPracticeArea(area as PracticeArea | 'All')}
+              className={cn(
+                'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
+                selectedPracticeArea === area
+                  ? 'bg-[var(--color-primary)] text-white'
+                  : 'bg-[var(--color-surfaceRaised)] text-[var(--color-text)] hover:bg-[var(--color-backgroundTertiary)] dark:hover:bg-gray-700'
+              )}
+            >
+              {area !== 'All' && React.createElement(PRACTICE_AREA_ICONS[area as PracticeArea], { className: 'h-4 w-4' })}
+              {area}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filteredTemplates.map((template) => (
+          <div
+            key={template.id}
+            className="border border-[var(--color-borderLight)] rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => handleTemplateSelect(template)}
+          >
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg dark:bg-blue-900/30">
+                  <template.icon className="h-5 w-5 text-[var(--color-primary)]" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-[var(--color-text)] dark:text-white">{template.name}</h3>
+                  <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{template.practiceArea}</p>
+                </div>
+              </div>
+              {template.isStarred && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
+            </div>
+
+            <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mb-4 line-clamp-2">
+              {template.description}
+            </p>
+
+            <div className="space-y-2 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1">
+                  <FileText className="h-3 w-3" /> {template.checklist.length} tasks
+                </span>
+                <span className="flex items-center gap-1">
+                  <DollarSign className="h-3 w-3" />
+                  {template.estimatedBudget ? `$${(template.estimatedBudget / 1000).toFixed(0)}k` : 'Varies'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>~{template.estimatedDuration} days</span>
+                <span className="text-[var(--color-primary)] font-medium">Used {template.usageCount || 0} times</span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 mt-4 pt-4 border-t border-[var(--color-borderLight)]">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCreateFromTemplate?.(template);
+                }}
+                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[var(--color-primary)] text-white text-sm rounded-lg hover:bg-[var(--color-primaryDark)]"
+              >
+                <Plus className="h-4 w-4" /> Use Template
+              </button>
+              <button
+                type="button"
+                aria-label="Clone template"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCloneTemplate?.(template.id);
+                }}
+                className="p-2 border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700"
+              >
+                <Copy className="h-4 w-4 text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredTemplates.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <FileText className="h-12 w-12 text-[var(--color-textMuted)] mb-4" />
+          <h3 className="text-lg font-semibold text-[var(--color-text)] dark:text-white mb-2">No templates found</h3>
+          <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">Try adjusting your search or filters</p>
+        </div>
+      )}
+
+      {showTemplateDetail && selectedTemplate && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[var(--color-surface)] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div className="sticky top-0 bg-[var(--color-surface)] border-b border-[var(--color-borderLight)] p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-blue-100 rounded-lg dark:bg-blue-900/30">
+                    <selectedTemplate.icon className="h-6 w-6 text-[var(--color-primary)]" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-[var(--color-text)] dark:text-white">{selectedTemplate.name}</h2>
+                    <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mt-1">
+                      {selectedTemplate.practiceArea} • {selectedTemplate.matterType}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Close"
+                  onClick={() => setShowTemplateDetail(false)}
+                  className="text-[var(--color-textMuted)] hover:text-[var(--color-text)] dark:hover:text-gray-300"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div>
+                <h3 className="font-semibold text-[var(--color-text)] dark:text-white mb-2">Description</h3>
+                <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{selectedTemplate.description}</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div className="p-4 bg-[var(--color-surfaceRaised)] rounded-lg">
+                  <p className="text-xs text-[var(--color-textMuted)] mb-1">Estimated Duration</p>
+                  <p className="text-lg font-semibold text-[var(--color-text)] dark:text-white">{selectedTemplate.estimatedDuration} days</p>
+                </div>
+                <div className="p-4 bg-[var(--color-surfaceRaised)] rounded-lg">
+                  <p className="text-xs text-[var(--color-textMuted)] mb-1">Estimated Budget</p>
+                  <p className="text-lg font-semibold text-[var(--color-text)] dark:text-white">
+                    ${(selectedTemplate.estimatedBudget || 0).toLocaleString()}
+                  </p>
+                </div>
+                <div className="p-4 bg-[var(--color-surfaceRaised)] rounded-lg">
+                  <p className="text-xs text-[var(--color-textMuted)] mb-1">Usage Count</p>
+                  <p className="text-lg font-semibold text-[var(--color-text)] dark:text-white">{selectedTemplate.usageCount || 0} times</p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-[var(--color-text)] dark:text-white mb-3">
+                  Checklist ({selectedTemplate.checklist.length} items)
+                </h3>
+                <div className="space-y-2">
+                  {selectedTemplate.checklist.slice(0, 5).map((item) => (
+                    <div key={item.id} className="flex items-center gap-3 p-3 bg-[var(--color-surfaceRaised)] rounded-lg">
+                      <div className="h-5 w-5 rounded border-2 border-[var(--color-border)]" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-[var(--color-text)] dark:text-white">{item.title}</p>
+                        {item.dueInDays && <p className="text-xs text-[var(--color-textMuted)]">Due in {item.dueInDays} days</p>}
+                      </div>
+                    </div>
+                  ))}
+                  {selectedTemplate.checklist.length > 5 && (
+                    <p className="text-sm text-[var(--color-textMuted)] text-center">
+                      + {selectedTemplate.checklist.length - 5} more items
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-[var(--color-surface)] border-t border-[var(--color-borderLight)] p-6">
+              <div className="flex gap-3 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowTemplateDetail(false)}
+                  className="px-4 py-2 border border-[var(--color-border)] rounded-lg text-[var(--color-text)] hover:bg-[var(--color-surfaceRaised)]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onEditTemplate?.(selectedTemplate)}
+                  className="px-4 py-2 border border-[var(--color-border)] rounded-lg text-[var(--color-text)] hover:bg-[var(--color-surfaceRaised)]"
+                >
+                  <Edit className="h-4 w-4 inline mr-2" /> Edit Template
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCreateCase}
+                  className="px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primaryDark)]"
+                >
+                  <Plus className="h-4 w-4 inline mr-2" /> Create Case from Template
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 /** * Case Templates Component * * Matter template management for different practice areas: * - Pre-configured templates for common case types * - Quick case creation from templates * - Template customization and cloning * - Practice area categorization * - Template library management * * @module components/enterprise/CaseManagement/CaseTemplates */
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Case, CaseStatus, MatterType } from '@/types';
 import {
@@ -36,3 +514,5 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({ templates = DEFAUL
 }) => {
   const [searchQuery, setSearchQuery] = useState(''); const [selectedPracticeArea, setSelectedPracticeArea] = useState<PracticeArea | 'All'>('All'); const [selectedTemplate, setSelectedTemplate] = useState<CaseTemplate | null>(null); const [showTemplateDetail, setShowTemplateDetail] = useState(false); // Get unique practice areas const practiceAreas = useMemo(() => { const areas = new Set(templates.map(t => t.practiceArea)); return ['All', ...Array.from(areas)] as const; }, [templates]); // Filtered templates const filteredTemplates = useMemo(() => { let result = templates; if (searchQuery) { const query = searchQuery.toLowerCase(); result = result.filter(t => t.name.toLowerCase().includes(query) || t.description.toLowerCase().includes(query) || t.practiceArea.toLowerCase().includes(query) ); } if (selectedPracticeArea !== 'All') { result = result.filter(t => t.practiceArea === selectedPracticeArea); } return result.sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0)); }, [templates, searchQuery, selectedPracticeArea]); const handleTemplateSelect = (template: CaseTemplate) => { setSelectedTemplate(template); setShowTemplateDetail(true); }; const handleCreateCase = () => { if (selectedTemplate) { onCreateFromTemplate?.(selectedTemplate); setShowTemplateDetail(false); setSelectedTemplate(null); } }; return ( <div className={cn('flex flex-col h-full space-y-4', className)}> {/* Header */} <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between"> <div> <h2 className="text-2xl font-bold text-[var(--color-text)] dark:text-white">Case Templates</h2> <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mt-1"> Start new cases quickly with pre-configured templates </p> </div> <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primaryDark)]"> <Plus className="h-4 w-4" /> Create Template </button> </div> {/* Search & Filters */} <div className="flex flex-col md:flex-row gap-4"> <div className="relative flex-1"> <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--color-textMuted)]" /> <input type="text" placeholder="Search templates..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }} className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" /> </div> <div className="flex gap-2 overflow-x-auto pb-2"> {practiceAreas.map(area => ( <button key={area} onClick={() => setSelectedPracticeArea(area as PracticeArea | 'All')} className={cn( 'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors', selectedPracticeArea === area ? 'bg-[var(--color-primary)] text-white' : 'bg-[var(--color-surfaceRaised)] text-[var(--color-text)] hover:bg-[var(--color-backgroundTertiary)] dark:hover:bg-gray-700' )} > {area !== 'All' && React.createElement(PRACTICE_AREA_ICONS[area as PracticeArea], { className: 'h-4 w-4' })} {area} </button> ))} </div> </div> {/* Templates Grid */} <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> {filteredTemplates.map(template => ( <div key={template.id} className="border border-[var(--color-borderLight)] rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleTemplateSelect(template)} > {/* Header */} <div className="flex items-start justify-between mb-3"> <div className="flex items-center gap-3"> <div className="p-2 bg-blue-100 rounded-lg dark:bg-blue-900/30"> <template.icon className="h-5 w-5 text-[var(--color-primary)]" /> </div> <div> <h3 className="font-semibold text-[var(--color-text)] dark:text-white">{template.name}</h3> <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{template.practiceArea}</p> </div> </div> {template.isStarred && <Star className="h-4 w-4 text-yellow-500 fill-current" />} </div> {/* Description */} <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mb-4 line-clamp-2"> {template.description} </p> {/* Metadata */} <div className="space-y-2 text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> <div className="flex items-center justify-between"> <span className="flex items-center gap-1"> <FileText className="h-3 w-3" /> {template.checklist.length} tasks </span> <span className="flex items-center gap-1"> <DollarSign className="h-3 w-3" /> {template.estimatedBudget ? `$${(template.estimatedBudget / 1000).toFixed(0)}k` : 'Varies'} </span> </div> <div className="flex items-center justify-between"> <span>~{template.estimatedDuration} days</span> <span className="text-[var(--color-primary)] font-medium"> Used {template.usageCount || 0} times </span> </div> </div> {/* Actions */} <div className="flex gap-2 mt-4 pt-4 border-t border-[var(--color-borderLight)]"> <button onClick={(e) => { e.stopPropagation(); onCreateFromTemplate?.(template); }} className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[var(--color-primary)] text-white text-sm rounded-lg hover:bg-[var(--color-primaryDark)]" > <Plus className="h-4 w-4" /> Use Template </button> <button onClick={(e) => { e.stopPropagation(); onCloneTemplate?.(template.id); }} className="p-2 border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700" > <Copy className="h-4 w-4 text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]" /> </button> </div> </div> ))} </div> {/* Empty State */} {filteredTemplates.length === 0 && ( <div className="flex flex-col items-center justify-center py-12 text-center"> <FileText className="h-12 w-12 text-[var(--color-textMuted)] mb-4" /> <h3 className="text-lg font-semibold text-[var(--color-text)] dark:text-white mb-2"> No templates found </h3> <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Try adjusting your search or filters </p> </div> )} {/* Template Detail Modal */} {showTemplateDetail && selectedTemplate && ( <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"> <div className="bg-[var(--color-surface)] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto"> {/* Modal Header */} <div className="sticky top-0 bg-[var(--color-surface)] border-b border-[var(--color-borderLight)] p-6"> <div className="flex items-start justify-between"> <div className="flex items-center gap-4"> <div className="p-3 bg-blue-100 rounded-lg dark:bg-blue-900/30"> <selectedTemplate.icon className="h-6 w-6 text-[var(--color-primary)]" /> </div> <div> <h2 className="text-2xl font-bold text-[var(--color-text)] dark:text-white"> {selectedTemplate.name} </h2> <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mt-1"> {selectedTemplate.practiceArea} • {selectedTemplate.matterType} </p> </div> </div> <button onClick={() => setShowTemplateDetail(false)} className="text-[var(--color-textMuted)] hover:text-[var(--color-textMuted)] dark:hover:text-gray-300" > <X className="h-6 w-6" /> </button> </div> </div> {/* Modal Content */} <div className="p-6 space-y-6"> {/* Description */} <div> <h3 className="font-semibold text-[var(--color-text)] dark:text-white mb-2">Description</h3> <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]">{selectedTemplate.description}</p> </div> {/* Overview Stats */} <div className="grid grid-cols-3 gap-4"> <div className="p-4 bg-[var(--color-surfaceRaised)] rounded-lg"> <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mb-1">Estimated Duration</p> <p className="text-lg font-semibold text-[var(--color-text)] dark:text-white"> {selectedTemplate.estimatedDuration} days </p> </div> <div className="p-4 bg-[var(--color-surfaceRaised)] rounded-lg"> <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mb-1">Estimated Budget</p> <p className="text-lg font-semibold text-[var(--color-text)] dark:text-white"> ${(selectedTemplate.estimatedBudget || 0).toLocaleString()} </p> </div> <div className="p-4 bg-[var(--color-surfaceRaised)] rounded-lg"> <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] mb-1">Usage Count</p> <p className="text-lg font-semibold text-[var(--color-text)] dark:text-white"> {selectedTemplate.usageCount || 0} times </p> </div> </div> {/* Checklist */} <div> <h3 className="font-semibold text-[var(--color-text)] dark:text-white mb-3"> Checklist ({selectedTemplate.checklist.length} items) </h3> <div className="space-y-2"> {selectedTemplate.checklist.slice(0, 5).map(item => ( <div key={item.id} className="flex items-center gap-3 p-3 bg-[var(--color-surfaceRaised)] rounded-lg"> <div className="h-5 w-5 rounded border-2 border-[var(--color-border)]" /> <div className="flex-1"> <p className="text-sm font-medium text-[var(--color-text)] dark:text-white">{item.title}</p> {item.dueInDays && ( <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Due in {item.dueInDays} days </p> )} </div> </div> ))} {selectedTemplate.checklist.length > 5 && ( <p className="text-sm text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)] text-center"> + {selectedTemplate.checklist.length - 5} more items </p> )} </div> </div> {/* Documents */} <div> <h3 className="font-semibold text-[var(--color-text)] dark:text-white mb-3"> Required Documents ({selectedTemplate.documents.length}) </h3> <div className="grid grid-cols-2 gap-2"> {selectedTemplate.documents.map(doc => ( <div key={doc.id} className="flex items-center gap-2 p-2 bg-[var(--color-surfaceRaised)] rounded"> <FileText className="h-4 w-4 text-[var(--color-textMuted)]" /> <span className="text-sm text-[var(--color-text)]">{doc.name}</span> {doc.required && ( <span className="ml-auto text-xs text-red-600 dark:text-red-400">Required</span> )} </div> ))} </div> </div> {/* Milestones */} <div> <h3 className="font-semibold text-[var(--color-text)] dark:text-white mb-3"> Key Milestones </h3> <div className="space-y-3"> {selectedTemplate.milestones.map((milestone, index) => ( <div key={milestone.id} className="flex items-center gap-4"> <div className="flex flex-col items-center"> <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"> <span className="text-xs font-semibold text-[var(--color-primary)]"> {index + 1} </span> </div> {index < selectedTemplate.milestones.length - 1 && ( <div className="w-0.5 h-8 bg-[var(--color-backgroundTertiary)]" /> )} </div> <div className="flex-1"> <p className="text-sm font-medium text-[var(--color-text)] dark:text-white"> {milestone.name} </p> <p className="text-xs text-[var(--color-textMuted)] dark:text-[var(--color-textMuted)]"> Day {milestone.daysFromStart} </p> </div> </div> ))} </div> </div> </div> {/* Modal Footer */} <div className="sticky bottom-0 bg-[var(--color-surface)] border-t border-[var(--color-borderLight)] p-6"> <div className="flex gap-3 justify-end"> <button onClick={() => setShowTemplateDetail(false)} className="px-4 py-2 border border-[var(--color-border)] rounded-lg text-[var(--color-text)] hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700" > Cancel </button> <button onClick={() => onEditTemplate?.(selectedTemplate)} className="px-4 py-2 border border-[var(--color-border)] rounded-lg text-[var(--color-text)] hover:bg-[var(--color-surfaceRaised)] dark:hover:bg-gray-700" > <Edit className="h-4 w-4 inline mr-2" /> Edit Template </button> <button onClick={handleCreateCase} className="px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primaryDark)]" > <Plus className="h-4 w-4 inline mr-2" /> Create Case from Template </button> </div> </div> </div> </div> )} </div> );
 };
+
+/* eslint-enable @typescript-eslint/no-unused-vars */

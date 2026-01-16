@@ -7,7 +7,6 @@ import { useAdmin } from './AdminProvider';
 
 export function AdminView() {
   const { users, auditLogs, activeTab, setActiveTab, isPending } = useAdmin();
-  const { theme, tokens } = useTheme();
   const { state: { services, pendingOperations }, actions: { checkHealth, syncData, retryFailedOperations, clearQueue } } = useService();
 
   return (

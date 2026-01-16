@@ -59,9 +59,9 @@ export function WorkflowsProvider({
   initialData: WorkflowsLoaderData;
   children: React.ReactNode;
 }) {
-  const [templates, setTemplates] = useState<WorkflowTemplate[]>(initialData.templates);
-  const [instances, setInstances] = useState<WorkflowInstance[]>(initialData.instances);
-  const [tasks, setTasks] = useState<Task[]>(initialData.tasks);
+  const [templates, _setTemplates] = useState<WorkflowTemplate[]>(initialData.templates);
+  const [instances, _setInstances] = useState<WorkflowInstance[]>(initialData.instances);
+  const [tasks, _setTasks] = useState<Task[]>(initialData.tasks);
 
   // UI State
   const [activeTab, setActiveTab] = useState<'templates' | 'instances' | 'tasks'>('templates');

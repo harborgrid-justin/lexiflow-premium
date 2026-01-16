@@ -18,7 +18,7 @@ interface SchemaVisualizerProps {
 }
 
 export function SchemaVisualizer({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }: SchemaVisualizerProps) {
-    const { theme, mode } = useTheme();
+    const { theme, mode: _mode } = useTheme();
     const [zoom, setZoom] = useState(1);
     const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: ContextMenuItem[] } | null>(null);
 

@@ -36,7 +36,6 @@ import { createPortal } from 'react-dom';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { cn } from '@/lib/cn';
-import { } from '@/components/atoms//';
 import { useTheme } from "@/hooks/useTheme";
 
 // ============================================================================
@@ -96,7 +95,7 @@ const ToastNotification: React.FC<{
   notification: Notification;
   onDismiss: (id: string) => void;
 }> = ({ notification, onDismiss }) => {
-  const { isDark } = useTheme();
+  const { isDark, theme } = useTheme();
 
   const icons = {
     success: CheckCircle2,
@@ -165,7 +164,6 @@ const ToastNotification: React.FC<{
 
       <button
         onClick={() => onDismiss(notification.id)}
-        style={{ backgroundColor: 'transparent' }}
         style={{ backgroundColor: 'transparent' }}
         className="flex-shrink-0 p-1 rounded hover:opacity-70 transition-colors"
       >

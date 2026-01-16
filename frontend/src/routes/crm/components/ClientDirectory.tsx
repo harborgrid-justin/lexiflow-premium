@@ -9,7 +9,6 @@ import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { Client, ClientStatus } from '@/types';
-import { cn } from '@/lib/cn';
 import { Lock, MoreVertical } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ClientCard } from './ClientCard';

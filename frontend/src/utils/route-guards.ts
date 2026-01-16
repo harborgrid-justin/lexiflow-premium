@@ -11,7 +11,7 @@
  * @module utils/route-guards
  */
 
-import type { AuthUser } from '@/providers/application/AuthProvider';
+import type { AuthUser } from "@/lib/auth/types";
 
 // ============================================================================
 // Constants
@@ -347,7 +347,7 @@ export function hasAnyPermission(permissions: string[]): boolean {
  */
 export async function requireAuthLoader({ request }: { request: Request }) {
   // Client-side check only
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     const token = localStorage.getItem(AUTH_STORAGE_KEY);
     const userJson = localStorage.getItem(AUTH_USER_KEY);
 
@@ -355,19 +355,19 @@ export async function requireAuthLoader({ request }: { request: Request }) {
       // In development, try to auto-login
       if (import.meta.env.DEV) {
         try {
-          const { performAutoLogin } = await import('@/utils/dev-auto-login');
+          const { performAutoLogin } = await import("@/utils/dev-auto-login");
           const autoLoginSuccess = await performAutoLogin();
 
           if (autoLoginSuccess) {
             const newToken = localStorage.getItem(AUTH_STORAGE_KEY);
             const newUserJson = localStorage.getItem(AUTH_USER_KEY);
-            
+
             if (newToken && newUserJson) {
-               return { authenticated: true, user: JSON.parse(newUserJson) };
+              return { authenticated: true, user: JSON.parse(newUserJson) };
             }
           }
         } catch (e) {
-          console.warn('Auto-login failed', e);
+          console.warn("Auto-login failed", e);
         }
       }
 
@@ -384,12 +384,12 @@ export async function requireAuthLoader({ request }: { request: Request }) {
       const user = JSON.parse(userJson);
       return { authenticated: true, user };
     } catch {
-       throw new Response(null, {
+      throw new Response(null, {
         status: 302,
-        headers: { Location: '/login' },
+        headers: { Location: "/login" },
       });
     }
   }
-  
+
   return { authenticated: true };
 }

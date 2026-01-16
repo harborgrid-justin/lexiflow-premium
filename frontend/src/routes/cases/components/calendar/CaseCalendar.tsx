@@ -1,5 +1,7 @@
 /** * Matter Calendar - Comprehensive Matter Timeline & Scheduling * * @module MatterCalendar * @description Enterprise calendar view for matter management * * Features: * - Multi-view calendar (month, week, day, agenda) * - Matter deadlines and court dates * - Team availability and conflicts * - Drag-and-drop scheduling * - Recurring event support * - Color-coded matter categorization * - Deadline reminders and notifications * - Integration with team calendars * - Conflict detection * - Export to external calendars (iCal, Google, Outlook) */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
@@ -31,3 +33,5 @@ interface EventDetailModalProps {
   event: CalendarEvent; onClose: () => void; isDark: boolean;
 } const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose, isDark }) => (<Modal isOpen={true} onClose={onClose} title={event.title} size="md"> <div className="space-y-4"> <div> <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-[var(--color-text)]')}> Matter </label> <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-[var(--color-textMuted)]')}> {event.matterTitle} </p> </div> <div> <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-[var(--color-text)]')}> Date & Time </label> <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-[var(--color-textMuted)]')}> {new Date(event.startTime).toLocaleString()} </p> </div> {event.location && (<div> <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-[var(--color-text)]')}> Location </label> <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-[var(--color-textMuted)]')}> {event.location} </p> </div>)} {event.attendees && event.attendees.length > 0 && (<div> <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-[var(--color-text)]')}> Attendees </label> <div className="flex flex-wrap gap-2 mt-1"> {event.attendees.map((attendee, idx) => (<Badge key={idx} variant="neutral">{attendee}</Badge>))} </div> </div>)} <div className="flex gap-3 pt-4"> <Button variant="primary" className="flex-1"> Edit Event </Button> <Button variant="outline" onClick={onClose}> Close </Button> </div> </div> </Modal>
 );
+
+/* eslint-enable @typescript-eslint/no-unused-vars */

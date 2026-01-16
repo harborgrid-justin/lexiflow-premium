@@ -8,7 +8,9 @@ export const ThemeCustomizer: React.FC = () => {
     { setTheme, setDensity, updateColor: updateValue, saveChanges }
   ] = useThemeCustomizer();
 
-  const [activeTab, setActiveTab] = useState<'appearance' | 'colors' | 'typography' | 'layout' | 'effects'>('colors');
+  const tabs = ['appearance', 'colors', 'typography', 'layout', 'effects'] as const;
+  type Tab = (typeof tabs)[number];
+  const [activeTab, setActiveTab] = useState<Tab>('colors');
 
   const isSaving = status === 'saving';
 
@@ -52,10 +54,10 @@ export const ThemeCustomizer: React.FC = () => {
 
       {/* Tabs */}
       <div className="flex border-b border-slate-200 dark:border-slate-700 overflow-x-auto">
-        {['appearance', 'colors', 'typography', 'layout', 'effects'].map((tab) => (
+        {tabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab as any)}
+            onClick={() => setActiveTab(tab)}
             className={`px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2 ${activeTab === tab
               ? 'border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-900/10'
               : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'

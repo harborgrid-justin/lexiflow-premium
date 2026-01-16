@@ -1,5 +1,7 @@
 /** * @module components/matters/MatterListView * @category Matter Management * @description Filterable matter list view with search and statistics * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React from 'react';
 interface CaseListViewProps {
   filter?: 'all' | 'active' | 'intake' | 'calendar' | 'financials' | 'team'; currentUserRole?: string;

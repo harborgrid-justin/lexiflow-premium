@@ -74,12 +74,15 @@ export default tseslint.config(
       "dist/**",
       "build/**",
       "coverage/**",
+      "docs/**",
+      "code/templates/**",
       "**/*.js", // Note: If you want to lint JS configs, remove this or move it
       "**/*.cjs", // Exclude CommonJS files
       "**/*.d.ts",
       "__tests__/**",
       "archived/**",
       "cypress/**",
+      "scripts/test_search.ts",
       "**/*.test.ts",
       "**/*.test.tsx",
       "**/*.spec.ts",

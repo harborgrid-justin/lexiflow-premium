@@ -4,9 +4,9 @@
  * @description Full-featured notification center page with filtering, search, and bulk actions
  */
 
-import type { UINotification } from '@/types/notifications';
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import type { UINotification } from '@/types/notifications';
 import { formatDistanceToNow } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -412,7 +412,6 @@ export function NotificationCenter({
                 padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
-                borderBottom: `2px solid ${selectedFilter === tab.id ? theme.primary.DEFAULT : 'transparent'}`,
                 color: selectedFilter === tab.id ? theme.primary.DEFAULT : theme.text.secondary,
                 whiteSpace: 'nowrap',
                 background: 'none',

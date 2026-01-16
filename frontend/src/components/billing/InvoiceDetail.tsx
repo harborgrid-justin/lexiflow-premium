@@ -3,6 +3,8 @@
  * Display invoice details with payment tracking and PDF preview
  */
 
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/cn";
 import type { Invoice } from '@/types/financial';
 import { CreditCard, Download, Send } from 'lucide-react';
 import React, { useState } from 'react';
@@ -15,6 +17,7 @@ interface InvoiceDetailProps {
 }
 
 export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
+  const { theme } = useTheme();
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
   const getStatusBadge = (status: string) => {

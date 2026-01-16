@@ -76,12 +76,8 @@ export function withAuthErrorHandler<T>(
       return await loaderFn(args);
     } catch (error) {
       // Try to handle as auth error first
-      try {
-        handleLoaderAuthError(error, args);
-      } catch (authError) {
-        // If it was an auth error, it will be re-thrown or redirected
-        throw authError; // eslint-disable-line no-useless-catch
-      }
+      // If this is an auth error, this call will throw/redirect.
+      handleLoaderAuthError(error, args);
 
       // If we get here, it's a non-auth error
       console.error("[Loader] Non-auth error:", error);

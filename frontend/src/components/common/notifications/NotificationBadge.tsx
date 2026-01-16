@@ -4,6 +4,7 @@
  */
 
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/cn";
 
 export interface NotificationBadgeProps {
   count: number;
@@ -83,6 +84,7 @@ export interface NotificationIconProps {
 }
 
 export function NotificationIcon({ count, onClick, size = 'md', className = '' }: NotificationIconProps) {
+  const { theme } = useTheme();
   const iconSizeClasses = {
     sm: 'h-5 w-5',
     md: 'h-6 w-6',

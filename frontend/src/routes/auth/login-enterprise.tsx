@@ -7,7 +7,7 @@
 import { AccountLockedMessage } from '@/components/auth/AccountLockedMessage';
 import { MFAVerification } from '@/components/auth/MFAVerification';
 import { SSOLoginOptions } from '@/components/auth/SSOLoginOptions';
-import { useAuthActions, useAuthState } from '@/providers/application/AuthProvider';
+import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
 

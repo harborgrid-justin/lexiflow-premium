@@ -68,6 +68,7 @@ export interface CaseStats {
   utilizationRate: number;
   averageAge: number;
   conversionRate: number;
+  byStatus?: Record<string, number>;
 }
 
 /**
@@ -298,9 +299,7 @@ export class CasesApiService {
       utilizationRate: 0,
       averageAge: 0,
       conversionRate: 0,
-      byStatus: [],
-      byType: [],
-      byPriority: [],
+      byStatus: {},
     };
   }
 
@@ -549,7 +548,7 @@ export class CasesApiService {
       try {
         const response = await apiClient.get<PaginatedResponse<unknown>>(
           "/cases/archived",
-          filters
+          { params: filters }
         );
         return response.data.map(
           (c) => this.transformCase(c) as unknown as ArchivedCase

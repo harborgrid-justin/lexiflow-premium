@@ -12,6 +12,7 @@ export interface CaseStats {
   utilizationRate: number;
   averageAge: number;
   conversionRate: number;
+  byStatus?: Record<string, number>;
 }
 
 export interface MatterStatistics {

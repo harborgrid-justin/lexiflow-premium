@@ -7,7 +7,7 @@
  * @module components/guards/PermissionGuard
  */
 
-import { useAuthActions, useAuthState } from '@/providers/application/AuthProvider';
+import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 import React, { type ReactNode } from 'react';
 
 interface PermissionGuardProps {

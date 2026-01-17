@@ -214,7 +214,10 @@ export function buildEnumFilter(
  * @returns Merged and cleaned filter parameters
  */
 export function mergeFilters(...filters: FilterParams[]): FilterParams {
-  const merged = Object.assign({}, ...filters);
+  const merged = filters.reduce<FilterParams>(
+    (acc, filter) => ({ ...acc, ...filter }),
+    {},
+  );
   return cleanFilterParams(merged);
 }
 

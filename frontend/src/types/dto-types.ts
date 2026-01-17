@@ -13,21 +13,21 @@ import type {
   RiskStatusEnum,
 } from "./compliance-risk";
 import type {
-  TimeEntryStatus,
-  InvoiceStatus,
-  WorkflowStatus,
-  JurorStatus,
-  WitnessType,
-  WitnessStatus,
-  TemplateStatus,
-  UserRole,
-
   BillingModel,
-  EntityType,
   EntityRole,
-  LegalRuleType} from "./enums";
+  EntityType,
+  InvoiceStatus,
+  JurorStatus,
+  LegalRuleType,
+  TemplateStatus,
+  TimeEntryStatus,
+  UserRole,
+  WitnessStatus,
+  WitnessType,
+  WorkflowStatus,
+} from "./enums";
 import type { MetadataRecord } from "./primitives";
-import type { OrganizationTypeEnum, OrganizationStatusEnum } from "./system";
+import type { OrganizationStatusEnum, OrganizationTypeEnum } from "./system";
 
 // =============================================================================
 // BASE DTO TYPES
@@ -548,9 +548,12 @@ export function validateDTO<T extends Record<string, unknown>>(
 ): ValidationResult {
   const errors: Array<{ field: string; message: string }> = [];
 
-  for (const [field, validator] of Object.entries(rules)) {
-    const value = dto[field as keyof T];
-    const result = (validator as (value: unknown) => boolean | string)(value);
+  const entries = Object.entries(rules) as Array<
+    [keyof T, (value: unknown) => boolean | string]
+  >;
+
+  for (const [field, validator] of entries) {
+    const result = validator(dto[field]);
 
     if (result !== true) {
       errors.push({

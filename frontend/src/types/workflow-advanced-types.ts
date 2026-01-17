@@ -18,8 +18,8 @@
  * - External Triggers: Event-driven workflow automation via webhooks
  */
 
-import { type BaseEntity, type UserId } from "./primitives";
-import { type WorkflowConnection, type WorkflowNode } from "./workflow-types";
+import type { BaseEntity, UserId } from "./primitives";
+import type { WorkflowConnection, WorkflowNode } from "./workflow-types";
 
 // ============================================================================
 // FEATURE 1: CONDITIONAL BRANCHING ENGINE

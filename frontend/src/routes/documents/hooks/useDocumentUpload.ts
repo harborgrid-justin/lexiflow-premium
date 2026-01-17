@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from 'react';
-import type { CaseId } from '@/types/primitives';
+import { useState, useRef, useCallback } from "react";
+
+import type { CaseId } from "@/types/primitives";
 
 export interface UploadMetadata {
   caseId?: CaseId;
@@ -15,17 +16,21 @@ interface UseDocumentUploadProps {
   onUpload: (files: File[], metadata: UploadMetadata) => Promise<void>;
 }
 
-export function useDocumentUpload({ caseId, multiple = true, onUpload }: UseDocumentUploadProps) {
+export function useDocumentUpload({
+  caseId,
+  multiple = true,
+  onUpload,
+}: UseDocumentUploadProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [metadata, setMetadata] = useState<UploadMetadata>({
     caseId,
-    type: 'Document',
+    type: "Document",
     tags: [],
-    status: 'Draft'
+    status: "Draft",
   });
-  const [newTag, setNewTag] = useState('');
+  const [newTag, setNewTag] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -38,34 +43,47 @@ export function useDocumentUpload({ caseId, multiple = true, onUpload }: UseDocu
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
 
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    setFiles(prev => multiple ? [...prev, ...droppedFiles] : droppedFiles.slice(0, 1));
-  }, [multiple]);
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      setFiles((prev) =>
+        multiple ? [...prev, ...droppedFiles] : droppedFiles.slice(0, 1),
+      );
+    },
+    [multiple],
+  );
 
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files);
-      setFiles(prev => multiple ? [...prev, ...selectedFiles] : selectedFiles.slice(0, 1));
-    }
-  }, [multiple]);
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        const selectedFiles = Array.from(e.target.files);
+        setFiles((prev) =>
+          multiple ? [...prev, ...selectedFiles] : selectedFiles.slice(0, 1),
+        );
+      }
+    },
+    [multiple],
+  );
 
   const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const addTag = () => {
     if (newTag.trim() && !metadata.tags.includes(newTag.trim())) {
-      setMetadata(prev => ({ ...prev, tags: [...prev.tags, newTag.trim()] }));
-      setNewTag('');
+      setMetadata((prev) => ({ ...prev, tags: [...prev.tags, newTag.trim()] }));
+      setNewTag("");
     }
   };
 
   const removeTag = (tag: string) => {
-    setMetadata(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }));
+    setMetadata((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((t) => t !== tag),
+    }));
   };
 
   const handleUpload = async () => {
@@ -75,20 +93,20 @@ export function useDocumentUpload({ caseId, multiple = true, onUpload }: UseDocu
     try {
       await onUpload(files, metadata);
       setFiles([]);
-      setMetadata({ caseId, type: 'Document', tags: [], status: 'Draft' });
+      setMetadata({ caseId, type: "Document", tags: [], status: "Draft" });
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error("Upload failed:", error);
     } finally {
       setUploading(false);
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
 
   const triggerFileInput = () => {
@@ -113,6 +131,6 @@ export function useDocumentUpload({ caseId, multiple = true, onUpload }: UseDocu
     removeTag,
     handleUpload,
     formatFileSize,
-    triggerFileInput
+    triggerFileInput,
   };
 }

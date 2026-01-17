@@ -8,8 +8,8 @@ import { Await, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
-import DraftingDashboard from './components/DraftingDashboard';
+import { DraftingDashboard } from './components/DraftingDashboard';
+import type { Route } from './+types/index';
 import { draftingLoader } from './loader';
 
 export { draftingLoader as loader } from './loader';

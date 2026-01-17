@@ -316,7 +316,7 @@ export function safeJsonParse<T>(
   guard: (value: unknown) => value is T,
 ): T | null {
   try {
-    const parsed = JSON.parse(json);
+    const parsed: unknown = JSON.parse(json);
     return guard(parsed) ? parsed : null;
   } catch {
     return null;

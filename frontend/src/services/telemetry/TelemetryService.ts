@@ -111,6 +111,7 @@ export class TelemetryService extends BaseService<TelemetryConfig> {
     this.consoleEnabled = config.consoleEnabled ?? true;
     this.performanceEnabled = config.performanceEnabled ?? true;
     this.sampleRate = config.sampleRate ?? 1.0;
+    this._debug = this._debug || this.consoleEnabled;
 
     if (this.sampleRate < 0 || this.sampleRate > 1) {
       throw new Error("Sample rate must be between 0.0 and 1.0");
@@ -149,7 +150,7 @@ export class TelemetryService extends BaseService<TelemetryConfig> {
     };
 
     if (this.consoleEnabled) {
-      console.log("[Telemetry]", eventData);
+      this.log("Event", eventData);
     }
 
     // Extension point: Send to analytics backend
@@ -200,7 +201,7 @@ export class TelemetryService extends BaseService<TelemetryConfig> {
     };
 
     if (this.consoleEnabled) {
-      console.log("[Telemetry] Performance:", mark);
+      this.log("Performance", mark);
     }
 
     return mark;

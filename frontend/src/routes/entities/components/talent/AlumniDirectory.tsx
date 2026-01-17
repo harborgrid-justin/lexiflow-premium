@@ -1,20 +1,19 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { Briefcase, Building, GraduationCap, Linkedin, Mail, Network } from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { MetricTile, SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
-import { useTheme } from "@/hooks/useTheme";
-import { LegalEntity } from '@/types';
+import { useTheme } from '@/hooks/useTheme';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/dataService';
 import { queryKeys } from '@/utils/queryKeys';
-import { Briefcase, Building, GraduationCap, Linkedin, Mail, Network } from 'lucide-react';
-import React, { useState } from 'react';
+import type { LegalEntity } from '@/types';
 
-interface AlumniDirectoryProps {
-  entities: LegalEntity[];
-}
+interface AlumniDirectoryProps { }
 
-export const AlumniDirectory: React.FC<AlumniDirectoryProps> = () => {
+export function AlumniDirectory(_props: AlumniDirectoryProps) {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -120,4 +119,4 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = () => {
       )}
     </div>
   );
-};
+}

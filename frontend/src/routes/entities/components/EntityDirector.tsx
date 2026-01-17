@@ -21,8 +21,9 @@ import { useEntities } from '../hooks/useEntities';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
 import { useWindow } from '@/providers';
+import { DataService } from '@/services/dataService';
 
 // Components
 import { Button } from '@/components/atoms/Button';
@@ -34,7 +35,7 @@ import { DirectorView, EntityNavigation, getEntityFirstTab, getEntityParentTab }
 import { cn } from '@/lib/cn';
 
 // Types
-import { EntityId, LegalEntity } from '@/types';
+import type { EntityId, LegalEntity } from '@/types';
 import { EntityType } from '@/types/enums';
 
 // Sub-components
@@ -58,7 +59,7 @@ interface EntityDirectorProps {
   initialTab?: DirectorView;
 }
 
-export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) => {
+export const EntityDirector = ({ initialTab }: EntityDirectorProps) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow(); // Holographic DOM
   const [activeTab, setActiveTab] = useState<DirectorView>('directory');
@@ -121,7 +122,9 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
           actions={
             <div className="flex gap-2">
               <Button variant="secondary" icon={Search}>Global Search</Button>
-              <Button variant="primary" icon={Plus} onClick={handleAddEntity}>New Profile</Button>
+              <Button variant="primary" icon={Plus} onClick={() => void handleAddEntity()}>
+                New Profile
+              </Button>
             </div>
           }
         />

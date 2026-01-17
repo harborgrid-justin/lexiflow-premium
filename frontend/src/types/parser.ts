@@ -12,10 +12,9 @@
  * - Type-safe parsed data
  */
 
-import { type Result } from "./result";
-
-import type { Case , Party } from "./case";
+import type { Case, Party } from "./case";
 import type { DocketEntry } from "./motion-docket";
+import type { Result } from "./result";
 
 // ============================================================================
 // CONFIDENCE & METADATA
@@ -209,22 +208,24 @@ export function normalizeFallbackResult(
 export function mergeParseResults(
   results: DocketParseResult[],
 ): DocketParseResult {
-  if (results.length === 0) {
+  const firstResult = results[0];
+  if (!firstResult) {
     throw new Error("Cannot merge empty results array");
   }
+  const initialConfidence: ParseConfidence = "high";
 
   const merged: DocketParseResult = {
-    caseInfo: results[0]!.caseInfo,
+    caseInfo: firstResult.caseInfo,
     parties: [],
     docketEntries: [],
-    confidence: results.reduce(
+    confidence: results.reduce<ParseConfidence>(
       (min, r) =>
         r.confidence === "low"
           ? "low"
           : r.confidence === "medium" || min === "medium"
             ? "medium"
             : "high",
-      "high" as ParseConfidence,
+      initialConfidence,
     ),
     warnings: [],
     metadata: {

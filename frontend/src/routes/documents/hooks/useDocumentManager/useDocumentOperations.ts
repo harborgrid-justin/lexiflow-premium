@@ -3,10 +3,12 @@
  * @module hooks/useDocumentManager/useDocumentOperations
  */
 
-import type { DocumentVersion, LegalDocument } from "@/types";
 import { useCallback, useState } from "react";
-import type { UseNotifyReturn } from "../useNotify";
+
 import { validateDocId, validateTag } from "./utils";
+
+import type { UseNotifyReturn } from "../useNotify";
+import type { DocumentVersion, LegalDocument } from "@/types";
 
 interface UseDocumentOperationsParams {
   documents: LegalDocument[];
@@ -33,10 +35,10 @@ export function useDocumentOperations({
   const [isProcessingAI, setIsProcessingAI] = useState(false);
 
   const handleRestore = useCallback(
-    async (version: DocumentVersion) => {
+    (version: DocumentVersion) => {
       if (!selectedDocForHistory) {
         console.error(
-          "[useDocumentManager.handleRestore] No document selected for history"
+          "[useDocumentManager.handleRestore] No document selected for history",
         );
         return;
       }
@@ -44,7 +46,7 @@ export function useDocumentOperations({
       if (!version || !version.contentSnapshot) {
         console.error(
           "[useDocumentManager.handleRestore] Invalid version:",
-          version
+          version,
         );
         notify.error("Invalid version data");
         return;
@@ -60,15 +62,15 @@ export function useDocumentOperations({
         setSelectedDocForHistory(null);
 
         notify.success("Document restored successfully");
-        console.log(
-          `[useDocumentManager] Version restored for: ${selectedDocForHistory.id}`
+        console.warn(
+          `[useDocumentManager] Version restored for: ${selectedDocForHistory.id}`,
         );
       } catch (error) {
         console.error("[useDocumentManager.handleRestore] Error:", error);
         notify.error("Failed to restore version");
       }
     },
-    [selectedDocForHistory, updateDocument, notify, setSelectedDocForHistory]
+    [selectedDocForHistory, updateDocument, notify, setSelectedDocForHistory],
   );
 
   const handleBulkSummarize = useCallback(async () => {
@@ -79,19 +81,19 @@ export function useDocumentOperations({
 
     try {
       setIsProcessingAI(true);
-      console.log(
-        `[useDocumentManager] Starting bulk summarization for ${selectedDocs.length} documents`
+      console.warn(
+        `[useDocumentManager] Starting bulk summarization for ${selectedDocs.length} documents`,
       );
 
       await new Promise((r) => setTimeout(r, 1500));
 
       notify.success(
-        `AI Summary generated for ${selectedDocs.length} documents. Report saved to case file.`
+        `AI Summary generated for ${selectedDocs.length} documents. Report saved to case file.`,
       );
 
       setSelectedDocs([]);
 
-      console.log("[useDocumentManager] Bulk summarization completed");
+      console.warn("[useDocumentManager] Bulk summarization completed");
     } catch (error) {
       console.error("[useDocumentManager.handleBulkSummarize] Error:", error);
       notify.error("Failed to generate summaries");
@@ -101,14 +103,14 @@ export function useDocumentOperations({
   }, [selectedDocs, notify, setSelectedDocs]);
 
   const addTag = useCallback(
-    async (docId: string, tag: string) => {
+    (docId: string, tag: string) => {
       if (!validateDocId(docId, "addTag")) return;
 
       const sanitizedTag = validateTag(tag);
       if (!sanitizedTag) {
         console.error(
           "[useDocumentManager.addTag] Invalid tag after sanitization:",
-          tag
+          tag,
         );
         return;
       }
@@ -118,7 +120,7 @@ export function useDocumentOperations({
         if (!doc) {
           console.error(
             "[useDocumentManager.addTag] Document not found:",
-            docId
+            docId,
           );
           return;
         }
@@ -131,19 +133,19 @@ export function useDocumentOperations({
         const newTags = [...doc.tags, sanitizedTag];
         updateDocument(docId, { tags: newTags });
 
-        console.log(
-          `[useDocumentManager] Tag added to ${docId}: ${sanitizedTag}`
+        console.warn(
+          `[useDocumentManager] Tag added to ${docId}: ${sanitizedTag}`,
         );
       } catch (error) {
         console.error("[useDocumentManager.addTag] Error:", error);
         notify.error("Failed to add tag");
       }
     },
-    [documents, updateDocument, notify]
+    [documents, updateDocument, notify],
   );
 
   const removeTag = useCallback(
-    async (docId: string, tag: string) => {
+    (docId: string, tag: string) => {
       if (!validateDocId(docId, "removeTag")) return;
 
       try {
@@ -151,7 +153,7 @@ export function useDocumentOperations({
         if (!doc) {
           console.error(
             "[useDocumentManager.removeTag] Document not found:",
-            docId
+            docId,
           );
           return;
         }
@@ -159,13 +161,13 @@ export function useDocumentOperations({
         const newTags = doc.tags.filter((t: string) => t !== tag);
         updateDocument(docId, { tags: newTags });
 
-        console.log(`[useDocumentManager] Tag removed from ${docId}: ${tag}`);
+        console.warn(`[useDocumentManager] Tag removed from ${docId}: ${tag}`);
       } catch (error) {
         console.error("[useDocumentManager.removeTag] Error:", error);
         notify.error("Failed to remove tag");
       }
     },
-    [documents, updateDocument, notify]
+    [documents, updateDocument, notify],
   );
 
   return {

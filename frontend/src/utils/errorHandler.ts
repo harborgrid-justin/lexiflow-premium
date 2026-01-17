@@ -100,7 +100,7 @@ export class ErrorHandler {
   public static getInstance(): ErrorHandler {
     if (!ErrorHandler.instance) {
       ErrorHandler.instance = new ErrorHandler();
-      console.log("[ErrorHandler] Initialized singleton instance");
+      console.warn("[ErrorHandler] Initialized singleton instance");
     }
     return ErrorHandler.instance;
   }
@@ -134,7 +134,7 @@ export class ErrorHandler {
     expiredKeys.forEach((key) => this.errorLogCache.delete(key));
 
     if (expiredKeys.length > 0) {
-      console.log(
+      console.warn(
         `[ErrorHandler] Cleaned up ${expiredKeys.length} expired error entries`,
       );
     }
@@ -374,7 +374,7 @@ export class ErrorHandler {
             "[ErrorHandler] Failed to stringify error object:",
             stringifyError,
           );
-          return String(error);
+          return "Unserializable error object";
         }
       }
 
@@ -496,7 +496,7 @@ export class ErrorHandler {
     // });
 
     if (process.env.NODE_ENV === "development") {
-      console.debug("[ErrorHandler] Would send to monitoring:", {
+      console.warn("[ErrorHandler] Would send to monitoring:", {
         message: errorDetails.message,
         context: errorDetails.context,
         code: errorDetails.code,
@@ -538,7 +538,7 @@ export class ErrorHandler {
    */
   public clearCache(): void {
     this.errorLogCache.clear();
-    console.log("[ErrorHandler] Error cache cleared");
+    console.warn("[ErrorHandler] Error cache cleared");
   }
 }
 

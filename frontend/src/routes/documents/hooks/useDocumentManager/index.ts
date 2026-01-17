@@ -23,20 +23,23 @@
  * ```
  */
 
-import type { LegalDocument } from "@/types";
 import { useCallback, useEffect, useState } from "react";
+
 import { useNotify } from "../useNotify";
+
 import { DEFAULT_FILTERS } from "./constants";
-import type {
-  UseDocumentManagerOptions,
-  UseDocumentManagerReturn,
-} from "./types";
 import { useDocumentData } from "./useDocumentData";
 import { useDocumentFilters } from "./useDocumentFilters";
 import { useDocumentMutations } from "./useDocumentMutations";
 import { useDocumentOperations } from "./useDocumentOperations";
 import { useDragDropHandlers } from "./useDragDropHandlers";
 import { validateDocId } from "./utils";
+
+import type {
+  UseDocumentManagerOptions,
+  UseDocumentManagerReturn,
+} from "./types";
+import type { LegalDocument } from "@/types";
 
 export * from "./constants";
 export * from "./types";
@@ -46,7 +49,7 @@ export * from "./types";
  * Refactored following the 10-step protocol
  */
 export function useDocumentManager(
-  options: UseDocumentManagerOptions = {}
+  options: UseDocumentManagerOptions = {},
 ): UseDocumentManagerReturn {
   const { enableDragDrop = false } = options;
   const notify = useNotify();
@@ -54,13 +57,13 @@ export function useDocumentManager(
   // State management
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModuleFilter, setActiveModuleFilter] = useState<string>(
-    DEFAULT_FILTERS.MODULE
+    DEFAULT_FILTERS.MODULE,
   );
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [selectedDocForHistory, setSelectedDocForHistory] =
     useState<LegalDocument | null>(null);
   const [currentFolder, setCurrentFolder] = useState<string>(
-    DEFAULT_FILTERS.FOLDER
+    DEFAULT_FILTERS.FOLDER,
   );
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
   const [previewDoc, setPreviewDoc] = useState<LegalDocument | null>(null);
@@ -79,7 +82,7 @@ export function useDocumentManager(
       if (!updates || typeof updates !== "object") {
         console.error(
           "[useDocumentManager.updateDocument] Invalid updates:",
-          updates
+          updates,
         );
         return;
       }
@@ -89,15 +92,15 @@ export function useDocumentManager(
           setPreviewDoc((prev) => (prev ? { ...prev, ...updates } : null));
         }
 
-        performUpdate({ id, updates });
+        void performUpdate({ id, updates });
 
-        console.log(`[useDocumentManager] Document updated: ${id}`);
+        console.warn(`[useDocumentManager] Document updated: ${id}`);
       } catch (error) {
         console.error("[useDocumentManager.updateDocument] Error:", error);
         notify.error("Failed to update document");
       }
     },
-    [previewDoc, performUpdate, notify]
+    [previewDoc, performUpdate, notify],
   );
 
   // Filtering
@@ -138,21 +141,21 @@ export function useDocumentManager(
             setPreviewDoc(null);
           }
 
-          console.log(`[useDocumentManager] Document deselected: ${id}`);
+          console.warn(`[useDocumentManager] Document deselected: ${id}`);
         } else {
           setSelectedDocs([...selectedDocs, id]);
 
           const doc = documents.find((d) => d.id === id);
           if (doc) {
             setPreviewDoc(doc);
-            console.log(`[useDocumentManager] Document selected: ${id}`);
+            console.warn(`[useDocumentManager] Document selected: ${id}`);
           }
         }
       } catch (error) {
         console.error("[useDocumentManager.toggleSelection] Error:", error);
       }
     },
-    [selectedDocs, previewDoc, documents]
+    [selectedDocs, previewDoc, documents],
   );
 
   // Drag & drop handlers
@@ -164,10 +167,10 @@ export function useDocumentManager(
 
   // Initialization logging
   useEffect(() => {
-    console.log(
+    console.warn(
       `[useDocumentManager] Initialized with ${
         enableDragDrop ? "drag-drop enabled" : "drag-drop disabled"
-      }`
+      }`,
     );
   }, [enableDragDrop]);
 
@@ -185,7 +188,7 @@ export function useDocumentManager(
     setSelectedDocForHistory,
     showVersionHistory: useCallback(
       (doc: LegalDocument) => setSelectedDocForHistory(doc),
-      []
+      [],
     ),
     closeVersionHistory: useCallback(() => setSelectedDocForHistory(null), []),
     isProcessingAI,
@@ -193,7 +196,7 @@ export function useDocumentManager(
     currentFolder,
     navigateToFolder: useCallback(
       (folder: string) => setCurrentFolder(folder),
-      []
+      [],
     ),
     isDetailsOpen,
     toggleDetails: useCallback(() => setIsDetailsOpen((prev) => !prev), []),
@@ -207,7 +210,7 @@ export function useDocumentManager(
         const version = doc?.versions?.find((v) => v.id === versionId);
         if (version) await handleRestore(version);
       },
-      [documents, handleRestore]
+      [documents, handleRestore],
     ),
     documents,
     setDocuments,

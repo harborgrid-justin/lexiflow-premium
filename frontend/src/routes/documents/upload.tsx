@@ -6,13 +6,17 @@
  * @module routes/documents/upload
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/dataService';
 import { useNavigate } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DocumentsApiService } from '@/api/admin/documents-api';
+import { useTheme } from "@/hooks/useTheme";
+
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/upload";
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { DocumentUploader, type UploadMetadata } from './components';
+
+const documentsApi = new DocumentsApiService();
 
 // ============================================================================
 // Meta Tags
@@ -45,13 +49,13 @@ export default function DocumentUploadRoute() {
           description: metadata.description,
         };
 
-        return await DataService.documents.upload(file, uploadMetadata);
+        return await documentsApi.upload(file, uploadMetadata);
       });
 
       await Promise.all(uploadPromises);
 
       // Navigate back to documents list
-      navigate('/documents');
+      void navigate('/documents');
     } catch (error) {
       console.error('Upload failed:', error);
       throw error;
@@ -63,7 +67,7 @@ export default function DocumentUploadRoute() {
       {/* Page Header */}
       <div className="mb-8">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => void navigate(-1)}
           className={`inline-flex items-center gap-2 text-sm mb-4 ${theme.text.secondary} ${theme.primary.hover}`}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,7 +89,7 @@ export default function DocumentUploadRoute() {
         <div className={`rounded-lg border p-6 ${theme.surface.default} ${theme.border.default}`}>
           <DocumentUploader
             onUpload={handleUpload}
-            onCancel={() => navigate('/documents')}
+            onCancel={() => void navigate('/documents')}
             multiple={true}
           />
         </div>
@@ -112,7 +116,7 @@ export default function DocumentUploadRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

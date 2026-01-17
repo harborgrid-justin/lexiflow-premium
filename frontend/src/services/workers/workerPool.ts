@@ -163,25 +163,17 @@ export class WorkerPool {
    * @private
    */
   private initialize(): void {
-    console.log(`[WorkerPool] Initializing pool with ${this.size} workers...`);
-
     for (let i = 0; i < this.size; i++) {
       try {
         const worker = this.factory();
         this.workers.push(worker);
         this.available.push(worker);
-      } catch (error) {
-        console.error(`[WorkerPool] Failed to create worker ${i}:`, error);
-      }
+      } catch (error) {}
     }
 
     if (this.workers.length === 0) {
       throw new WorkerPoolInitializationError(this.size);
     }
-
-    console.log(
-      `[WorkerPool] Successfully created ${this.workers.length}/${this.size} workers`,
-    );
   }
 
   // =============================================================================

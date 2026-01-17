@@ -6,15 +6,14 @@
  */
 
 import type { LucideIcon } from "lucide-react";
-import type React from "react";
-
+import type { ComponentType } from "react";
 
 export interface TabConfigItem {
   id: string;
   label: string;
   icon: LucideIcon;
   subTabs?: TabConfigItem[];
-  component?: React.ComponentType<unknown>;
+  component?: ComponentType<unknown>;
   path?: string;
 }
 

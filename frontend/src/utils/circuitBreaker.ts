@@ -10,7 +10,7 @@
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
+type CircuitState = "CLOSED" | "OPEN" | "HALF_OPEN";
 
 interface CircuitOptions {
   failureThreshold: number; // Number of failures before opening
@@ -21,27 +21,31 @@ interface CircuitOptions {
 // CIRCUIT BREAKER CLASS
 // ============================================================================
 export class CircuitBreaker {
-  private state: CircuitState = 'CLOSED';
+  private state: CircuitState = "CLOSED";
   private failureCount = 0;
   private lastFailureTime = 0;
   private readonly options: CircuitOptions;
 
-  constructor(options: CircuitOptions = { failureThreshold: 3, recoveryTimeout: 10000 }) {
+  constructor(
+    options: CircuitOptions = { failureThreshold: 3, recoveryTimeout: 10000 },
+  ) {
     this.options = options;
   }
 
   async execute<T>(fn: () => Promise<T>): Promise<T> {
-    if (this.state === 'OPEN') {
+    if (this.state === "OPEN") {
       if (Date.now() - this.lastFailureTime > this.options.recoveryTimeout) {
-        this.state = 'HALF_OPEN';
+        this.state = "HALF_OPEN";
       } else {
-        throw new Error('CircuitBreaker: Service is currently unavailable (Circuit OPEN).');
+        throw new Error(
+          "CircuitBreaker: Service is currently unavailable (Circuit OPEN).",
+        );
       }
     }
 
     try {
       const result = await fn();
-      if (this.state === 'HALF_OPEN') {
+      if (this.state === "HALF_OPEN") {
         this.reset();
       }
       return result;
@@ -55,15 +59,15 @@ export class CircuitBreaker {
     this.failureCount++;
     this.lastFailureTime = Date.now();
     if (this.failureCount >= this.options.failureThreshold) {
-      this.state = 'OPEN';
-      console.warn('CircuitBreaker: Threshold reached. Circuit Opened.');
+      this.state = "OPEN";
+      console.warn("CircuitBreaker: Threshold reached. Circuit Opened.");
     }
   }
 
   private reset() {
-    this.state = 'CLOSED';
+    this.state = "CLOSED";
     this.failureCount = 0;
-    console.info('CircuitBreaker: Service recovered. Circuit Closed.');
+    console.warn("CircuitBreaker: Service recovered. Circuit Closed.");
   }
 
   getState(): CircuitState {

@@ -1,18 +1,30 @@
+import {
+  CheckCircle,
+  Edit,
+  Eye,
+  FileSearch,
+  FileText,
+  FolderCheck,
+  Layers,
+  List,
+  Save,
+  X,
+} from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+
 import { validateVariableValues } from '@/api/domains/drafting/utils';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
 import { useToast } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import {
-  draftingApi,
+import { draftingApi } from '@api/domains/drafting';
+import type {
   DraftingTemplate,
   GeneratedDocument,
   GenerateDocumentDto,
 } from '@api/domains/drafting';
-import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
 
 interface DocumentGeneratorProps {
   templateId?: string;
@@ -21,12 +33,12 @@ interface DocumentGeneratorProps {
   onCancel: () => void;
 }
 
-export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
+export function DocumentGenerator({
   templateId,
   caseId,
   onComplete,
   onCancel,
-}) => {
+}: DocumentGeneratorProps) {
   const { theme } = useTheme();
   const { addToast } = useToast();
 
@@ -71,7 +83,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       }
     };
 
-    loadData();
+    void loadData();
 
     // Cleanup: Prevent state updates after unmount (Principle #6)
     return () => {
@@ -107,7 +119,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       }
     };
 
-    loadData();
+    void loadData();
 
     return () => {
       isMounted = false;
@@ -134,7 +146,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
   };
 
   const handleSelectTemplate = (template: DraftingTemplate) => {
-    loadTemplate(template.id);
+    void loadTemplate(template.id);
   };
 
   const tabs = [
@@ -312,7 +324,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
   // Automatically refresh preview when moving to preview tab
   useEffect(() => {
     if (step === 'preview') {
-      handleRefreshPreview();
+      void handleRefreshPreview();
     }
   }, [step, handleRefreshPreview]);
 
@@ -666,11 +678,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
         <div className="flex items-center gap-2">
           {step === 'preview' && (
             <button
-              onClick={async () => {
-                const preview = await generatePreview();
-                setPreviewContent(preview);
-                addToast('Preview refreshed', 'success');
-              }}
+              onClick={() => void handleRefreshPreview()}
               className={cn(
                 "px-4 py-2 rounded-lg transition-colors flex items-center gap-2",
                 theme.action.secondary.bg,
@@ -686,7 +694,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
 
           {step === 'save' && (
             <button
-              onClick={handleGenerate}
+              onClick={() => void handleGenerate()}
               disabled={loading || !title.trim()}
               className={cn(
                 "px-4 py-2 rounded-lg transition-colors flex items-center gap-2",
@@ -704,4 +712,4 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       </div>
     </div>
   );
-};
+}

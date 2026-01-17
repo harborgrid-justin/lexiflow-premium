@@ -1,11 +1,17 @@
+import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
 import { useToast } from '@/providers';
-import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@api/domains/drafting';
-import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { draftingApi } from '@api/domains/drafting';
+import type {
+  DraftingStats as StatsType,
+  DraftingTemplate,
+  GeneratedDocument,
+} from '@api/domains/drafting';
 import type { DraftingLoaderData } from '../loader';
 import { ApprovalQueue } from './ApprovalQueue';
 import { DocumentGenerator } from './DocumentGenerator';
@@ -21,7 +27,7 @@ interface DraftingDashboardProps {
   initialData?: DraftingLoaderData;
 }
 
-const DraftingDashboard: React.FC<DraftingDashboardProps> = ({ initialData }) => {
+export function DraftingDashboard({ initialData }: DraftingDashboardProps) {
   const { theme } = useTheme();
   const { addToast } = useToast();
 
@@ -59,7 +65,7 @@ const DraftingDashboard: React.FC<DraftingDashboardProps> = ({ initialData }) =>
 
   useEffect(() => {
     if (!initialData) {
-      loadData();
+      void loadData();
     }
   }, [loadData, initialData]);
 
@@ -99,14 +105,14 @@ const DraftingDashboard: React.FC<DraftingDashboardProps> = ({ initialData }) =>
     addToast('Template saved successfully', 'success');
     setEditorView(null);
     setActiveTab('templates');
-    loadData();
+    void loadData();
   };
 
   const handleDocumentGenerated = () => {
     addToast('Document generated successfully', 'success');
     setEditorView(null);
     setActiveTab('recent');
-    loadData();
+    void loadData();
   };
 
   if (editorView === 'template-editor') {
@@ -329,6 +335,6 @@ const DraftingDashboard: React.FC<DraftingDashboardProps> = ({ initialData }) =>
       </div>
     </div>
   );
-};
+}
 
 export default DraftingDashboard;

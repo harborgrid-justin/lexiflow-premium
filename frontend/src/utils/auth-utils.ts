@@ -19,7 +19,7 @@ import type { AuthUser } from "@/lib/auth";
  * Get current user from request cookies/headers
  * Use in route loaders for SSR authentication
  */
-export async function getAuthUser(request: Request): Promise<AuthUser | null> {
+export function getAuthUser(request: Request): Promise<AuthUser | null> {
   void request;
   // Production implementation using StorageUtils for client-side auth
   const token = StorageUtils.get<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
@@ -29,9 +29,9 @@ export async function getAuthUser(request: Request): Promise<AuthUser | null> {
   );
 
   if (token && user) {
-    return user;
+    return Promise.resolve(user);
   }
-  return null;
+  return Promise.resolve(null);
 }
 
 /**
@@ -43,6 +43,7 @@ export async function requireAuth(request: Request): Promise<AuthUser> {
 
   if (!user) {
     // In React Router v7, throw a Response to redirect
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw new Response(null, {
       status: 302,
       headers: { Location: "/login" },
@@ -63,6 +64,7 @@ export async function requireRole(
   const user = await requireAuth(request);
 
   if (!roles.includes(user.role)) {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw new Response("Forbidden", { status: 403 });
   }
 

@@ -400,7 +400,6 @@ const validateEvidenceFilters = (
 ): ValidationResult<EvidenceFilters> => {
   const errors: Array<{ path: string; message: string }> = [];
   const filters: EvidenceFilters = {};
-  console.log("filter state:", filters);
 
   if (data && typeof data === "object") {
     const input = data as Record<string, unknown>;

@@ -39,7 +39,7 @@ export class BrowserSessionService
     super("SessionService");
   }
 
-  protected override async onStart(): Promise<void> {
+  protected override onStart(): void {
     // Visibility change listener
     this.visibilityHandler = () => {
       const event: SessionEvent = {
@@ -72,7 +72,7 @@ export class BrowserSessionService
     window.addEventListener("storage", this.storageHandler);
   }
 
-  override async stop(): Promise<void> {
+  override stop(): void {
     if (this.visibilityHandler) {
       document.removeEventListener("visibilitychange", this.visibilityHandler);
     }
@@ -94,7 +94,7 @@ export class BrowserSessionService
         "SessionService",
         error instanceof Error
           ? error.message
-          : "Failed to write to session storage"
+          : "Failed to write to session storage",
       );
     }
   }
@@ -108,7 +108,7 @@ export class BrowserSessionService
         "SessionService",
         error instanceof Error
           ? error.message
-          : "Failed to read from session storage"
+          : "Failed to read from session storage",
       );
     }
   }
@@ -122,7 +122,7 @@ export class BrowserSessionService
         "SessionService",
         error instanceof Error
           ? error.message
-          : "Failed to remove from session storage"
+          : "Failed to remove from session storage",
       );
     }
   }
@@ -136,7 +136,7 @@ export class BrowserSessionService
         "SessionService",
         error instanceof Error
           ? error.message
-          : "Failed to clear session storage"
+          : "Failed to clear session storage",
       );
     }
   }
@@ -158,7 +158,7 @@ export class BrowserSessionService
       try {
         listener(event);
       } catch (error) {
-        console.error("[SessionService] Listener error:", error);
+        this.error("Listener error:", error);
       }
     });
   }

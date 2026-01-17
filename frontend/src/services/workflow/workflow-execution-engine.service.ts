@@ -253,7 +253,6 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   private async _executeNode(node: WorkflowNode): Promise<unknown> {
     if (this.options.dryRun) {
-      console.log(`[DryRun] Executing node: ${node.label} (${node.type})`);
       await this._delay(100); // Simulate execution
       return { dryRun: true, node: node.id };
     }
@@ -343,14 +342,14 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute start node
    */
-  private async _executeStartNode(): Promise<unknown> {
+  private _executeStartNode(): unknown {
     return { type: "start", timestamp: new Date() };
   }
 
   /**
    * Execute end node
    */
-  private async _executeEndNode(node: WorkflowNode): Promise<unknown> {
+  private _executeEndNode(node: WorkflowNode): unknown {
     return {
       type: "end",
       outcome: (node.config as Record<string, unknown>)["outcome"] || "success",
@@ -494,7 +493,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute generic node
    */
-  private async _executeGenericNode(node: WorkflowNode): Promise<unknown> {
+  private _executeGenericNode(node: WorkflowNode): unknown {
     return {
       type: node.type,
       nodeId: node.id,
@@ -524,9 +523,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute multiple nodes in parallel
    */
-  private async _executeParallelNodes(
-    nodes: WorkflowNode[],
-  ): Promise<unknown[]> {
+  private _executeParallelNodes(nodes: WorkflowNode[]): Promise<unknown[]> {
     return Promise.all(nodes.map((node) => this._executeNode(node)));
   }
 

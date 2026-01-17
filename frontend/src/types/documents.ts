@@ -1,18 +1,18 @@
 // types/documents.ts
 // Auto-generated from models.ts split
 
-import { type Case } from "./case";
-import { type OcrStatus, type PermissionLevel } from "./enums";
-import {
-  type BaseEntity,
-  type UserId,
-  type GroupId,
-  type DocumentId,
-  type CaseId,
-  type MetadataRecord,
-  type JsonValue,
+import type { Case } from "./case";
+import type { OcrStatus, PermissionLevel } from "./enums";
+import type {
+  BaseEntity,
+  UserId,
+  GroupId,
+  DocumentId,
+  CaseId,
+  MetadataRecord,
+  JsonValue,
 } from "./primitives";
-import { type User } from "./system";
+import type { User } from "./system";
 
 /**
  * Signing status type for e-signature workflows

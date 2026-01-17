@@ -17,7 +17,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Briefcase, GitBranch, Link, Mail, MapPin, ShieldAlert, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -27,7 +27,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
+import { DataService } from '@/services/dataService';
 
 // Components
 import { Button } from '@/components/atoms/Button';
@@ -38,7 +39,7 @@ import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { cn } from '@/lib/cn';
 
 // Types
-import { EntityRelationship, LegalEntity } from '@/types';
+import type { EntityRelationship, LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -54,7 +55,7 @@ interface EntityProfileProps {
 // COMPONENT
 // ============================================================================
 
-export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose }) => {
+export function EntityProfile({ entityId, onClose }: EntityProfileProps) {
     // Guideline 34: Side-effect free context read
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('overview');
@@ -177,4 +178,4 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
             </div>
         </div>
     );
-};
+}

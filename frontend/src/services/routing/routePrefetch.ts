@@ -55,7 +55,7 @@ class RoutePrefetchService {
             const target = entry.target as HTMLElement;
             const path = target.getAttribute("data-prefetch-path");
             if (path) {
-              this.prefetchRoute(path, "viewport");
+              void this.prefetchRoute(path, "viewport");
             }
           }
         });
@@ -63,7 +63,7 @@ class RoutePrefetchService {
       {
         rootMargin: "50px",
         threshold: 0.1,
-      }
+      },
     );
   }
 
@@ -72,8 +72,8 @@ class RoutePrefetchService {
    */
   async prefetchRoute(
     path: string,
-    strategy: PrefetchStrategy = "hover",
-    priority: "high" | "medium" | "low" = "medium"
+    _strategy: PrefetchStrategy = "hover",
+    priority: "high" | "medium" | "low" = "medium",
   ): Promise<void> {
     if (!this.enabled) return;
     if (this.prefetchQueue.has(path)) return; // Already prefetching
@@ -84,9 +84,7 @@ class RoutePrefetchService {
 
     try {
       await prefetchPromise;
-      console.log(`[Prefetch] Successfully prefetched: ${path} (${strategy})`);
-    } catch (error) {
-      console.error(`[Prefetch] Failed to prefetch ${path}:`, error);
+    } catch {
     } finally {
       // Clean up after TTL
       setTimeout(() => {
@@ -100,7 +98,7 @@ class RoutePrefetchService {
    */
   private async executePrefetch(
     path: string,
-    priority: "high" | "medium" | "low"
+    _priority: "high" | "medium" | "low",
   ): Promise<void> {
     // Simulate network delay for demo
     if (import.meta.env.DEV) {
@@ -114,7 +112,6 @@ class RoutePrefetchService {
 
     // For React Router v7, we'd use the router's prefetch functionality
     // This is a placeholder for the actual implementation
-    console.log(`[Prefetch] Prefetching ${path} with ${priority} priority`);
   }
 
   /**
@@ -131,7 +128,7 @@ class RoutePrefetchService {
 
     // Set new timer
     const timer = window.setTimeout(() => {
-      this.prefetchRoute(path, "hover");
+      void this.prefetchRoute(path, "hover");
       this.hoverTimers.delete(path);
     }, this.HOVER_DELAY);
 
@@ -230,7 +227,7 @@ class RoutePrefetchService {
     const predicted = this.getPredictedRoutes(currentPath);
     predicted.forEach((path, index) => {
       const priority = index === 0 ? "high" : index === 1 ? "medium" : "low";
-      this.prefetchRoute(path, "predictive", priority);
+      void this.prefetchRoute(path, "predictive", priority);
     });
   }
 
@@ -246,7 +243,7 @@ class RoutePrefetchService {
     ];
 
     highPriorityRoutes.forEach((path) => {
-      this.prefetchRoute(path, "priority", "high");
+      void this.prefetchRoute(path, "priority", "high");
     });
   }
 
@@ -257,7 +254,7 @@ class RoutePrefetchService {
     try {
       const stored = localStorage.getItem("route_prefetch_metadata");
       if (stored) {
-        const data = JSON.parse(stored);
+        const data = JSON.parse(stored) as Record<string, unknown>;
         Object.entries(data).forEach(([path, meta]) => {
           const m = meta as Omit<RouteMetadata, "transitionsFrom"> & {
             transitionsFrom?: Record<string, number>;
@@ -268,9 +265,7 @@ class RoutePrefetchService {
           });
         });
       }
-    } catch (error) {
-      console.error("Failed to load prefetch metadata:", error);
-    }
+    } catch {}
   }
 
   /**

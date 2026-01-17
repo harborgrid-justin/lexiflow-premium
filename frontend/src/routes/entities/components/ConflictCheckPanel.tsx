@@ -11,13 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, CheckCircle, Loader2, Shield } from 'lucide-react';
-import React, { useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
@@ -26,7 +26,7 @@ import { Button } from '@/components/atoms/Button/Button';
 import { cn } from '@/lib/cn';
 
 // Types
-import { LegalEntity } from '@/types';
+import type { LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -35,7 +35,7 @@ interface ConflictCheckPanelProps {
     entities: LegalEntity[];
 }
 
-export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities }) => {
+export function ConflictCheckPanel({ entities }: ConflictCheckPanelProps) {
     const { theme } = useTheme();
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<LegalEntity[]>([]);
@@ -73,7 +73,7 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
                     className={cn("flex-1 p-4 text-lg rounded-lg border shadow-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all", theme.surface.default, theme.border.default)}
                     placeholder="Enter entity name, tax ID, or alias..."
                     value={query}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+                    onChange={(event) => setQuery(event.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
                 />
                 <Button
@@ -129,4 +129,4 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
             )}
         </div>
     );
-};
+}

@@ -4,7 +4,10 @@
  * Common async patterns used throughout the application.
  */
 
-import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS } from "@/config/network/api.config";
+import {
+  API_RETRY_ATTEMPTS,
+  API_RETRY_DELAY_MS,
+} from "@/config/network/api.config";
 import { SYNC_MAX_RETRY_DELAY_MS } from "@/config/network/sync.config";
 
 /**
@@ -19,7 +22,7 @@ import { SYNC_MAX_RETRY_DELAY_MS } from "@/config/network/sync.config";
  * ```
  */
 export const delay = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 /**
@@ -35,7 +38,7 @@ export const delay = (ms: number): Promise<void> => {
  * ```
  */
 export const yieldToMain = (): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, 0));
+  return new Promise((resolve) => setTimeout(resolve, 0));
 };
 
 /**
@@ -43,7 +46,7 @@ export const yieldToMain = (): Promise<void> => {
  */
 export async function asyncMap<T, U>(
   items: T[],
-  fn: (item: T) => Promise<U>
+  fn: (item: T) => Promise<U>,
 ): Promise<U[]> {
   return Promise.all(items.map(fn));
 }
@@ -53,11 +56,13 @@ export async function asyncMap<T, U>(
  */
 export async function asyncFilter<T>(
   items: T[],
-  fn: (item: T) => Promise<boolean>
+  fn: (item: T) => Promise<boolean>,
 ): Promise<T[]> {
-  const results = await Promise.all(items.map(async (item) => {
-    return (await fn(item)) ? item : null;
-  }));
+  const results = await Promise.all(
+    items.map(async (item) => {
+      return (await fn(item)) ? item : null;
+    }),
+  );
   return results.filter((item) => item !== null) as T[];
 }
 
@@ -83,7 +88,7 @@ export async function retryWithBackoff<T>(
     initialDelay?: number;
     maxDelay?: number;
     backoffFactor?: number;
-  } = {}
+  } = {},
 ): Promise<T> {
   const {
     maxRetries = API_RETRY_ATTEMPTS,
@@ -128,7 +133,7 @@ export async function retryWithBackoff<T>(
  */
 export function debounce<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
-  ms: number
+  ms: number,
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
   let timeoutId: NodeJS.Timeout | null = null;
   let pendingPromise: Promise<ReturnType<T>> | null = null;
@@ -171,7 +176,7 @@ export function debounce<T extends (...args: unknown[]) => Promise<unknown>>(
  */
 export function throttle<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
-  ms: number
+  ms: number,
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> | void {
   let isThrottled = false;
   let lastResult: Promise<ReturnType<T>> | undefined;
@@ -212,13 +217,13 @@ export function throttle<T extends (...args: unknown[]) => Promise<unknown>>(
 export async function parallelLimit<T, R>(
   items: T[],
   fn: (item: T) => Promise<R>,
-  concurrency: number
+  concurrency: number,
 ): Promise<R[]> {
   const results: R[] = [];
   const executing: Promise<void>[] = [];
 
   for (const [index, item] of items.entries()) {
-    const promise = fn(item).then(result => {
+    const promise = fn(item).then((result) => {
       results[index] = result;
     });
 
@@ -226,9 +231,9 @@ export async function parallelLimit<T, R>(
 
     if (executing.length >= concurrency) {
       await Promise.race(executing);
-      executing.splice(
-        executing.findIndex(p => p === promise),
-        1
+      void executing.splice(
+        executing.findIndex((p) => p === promise),
+        1,
       );
     }
   }
@@ -254,7 +259,7 @@ export async function parallelLimit<T, R>(
  */
 export async function withTimeout<T>(
   fn: (signal: AbortSignal) => Promise<T>,
-  timeoutMs: number
+  timeoutMs: number,
 ): Promise<T> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);

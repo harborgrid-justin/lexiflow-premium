@@ -6,7 +6,7 @@
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+import type { Route } from './+types/index';
 import { EntitiesPage } from './EntitiesPage';
 import { clientLoader } from './loader';
 

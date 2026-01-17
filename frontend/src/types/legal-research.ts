@@ -1,16 +1,15 @@
 // types/legal-research.ts
 // Domain-specific types - split from compatibility.ts
 
-import { type LegalRuleType } from "./enums";
-import {
-  type BaseEntity,
-  type DocumentId,
-  type EvidenceId,
-  type JsonValue,
-  type MetadataRecord,
-  type UserId,
+import type { LegalRuleType } from "./enums";
+import type {
+  BaseEntity,
+  DocumentId,
+  EvidenceId,
+  JsonValue,
+  MetadataRecord,
+  UserId,
 } from "./primitives";
-
 import type { SearchResult } from "./search";
 
 export interface Citation extends BaseEntity, Record<string, unknown> {

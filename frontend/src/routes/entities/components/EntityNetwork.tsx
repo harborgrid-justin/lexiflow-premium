@@ -17,7 +17,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -27,7 +27,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
+import { DataService } from '@/services/dataService';
 
 // Components
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
@@ -39,7 +40,7 @@ import { cn } from '@/lib/cn';
 import { DisjointSet } from '@/utils/datastructures/disjointSet';
 
 // Types
-import { Case, EntityRelationship, LegalEntity, Party } from '@/types';
+import type { Case, EntityRelationship, LegalEntity, Party } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
@@ -54,7 +55,7 @@ interface EntityNetworkProps {
 // COMPONENT
 // ============================================================================
 
-export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
+export function EntityNetwork({ entities }: EntityNetworkProps) {
   // Guideline 34: Side-effect free context read
   const { theme } = useTheme();
 
@@ -115,7 +116,11 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
               <ul className="text-xs space-y-1">
                 {comp.map(id => {
                   const entity = entities.find(e => e.id === id);
-                  return <li key={id} className={cn("truncate", theme.text.secondary)}>{entity?.name || id}</li>
+                  return (
+                    <li key={id} className={cn('truncate', theme.text.secondary)}>
+                      {entity?.name || id}
+                    </li>
+                  );
                 })}
               </ul>
             </Card>
@@ -124,4 +129,4 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
       </div>
     </div>
   );
-};
+}

@@ -29,6 +29,7 @@ export function handleLoaderAuthError(
   if (error instanceof Error && error.message === "SSR_AUTH_REQUIRED") {
     // During SSR, throw a redirect response
     const url = new URL(args.request.url);
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw new Response(null, {
       status: 302,
       headers: {

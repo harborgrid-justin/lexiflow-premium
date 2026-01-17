@@ -6,19 +6,19 @@
  */
 
 import { AlertOctagon, Layers, Link, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Common Components
-import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal';
+import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 
 // Context & Utils
-import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
 import { getTodayString } from '@/lib/dateUtils';
 
@@ -26,17 +26,17 @@ import { getTodayString } from '@/lib/dateUtils';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { ChainService } from '@/services/infrastructure/chainService';
 // ✅ Migrated to backend API (2025-12-21)
-import { DataService } from '@/services/data/data-service.service';
+import { DataService } from '@/services/dataService';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { CustodyActionType, validateCustodyEventSafe } from '@/services/validation/evidenceSchemas';
-import { ChainOfCustodyEvent, EvidenceItem, UserId } from '@/types';
+import type { ChainOfCustodyEvent, EvidenceItem, UserId } from '@/types';
 
 interface EvidenceChainOfCustodyProps {
   selectedItem: EvidenceItem;
   onCustodyUpdate?: (event: ChainOfCustodyEvent) => void;
 }
 
-export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ selectedItem, onCustodyUpdate }) => {
+export function EvidenceChainOfCustody({ selectedItem, onCustodyUpdate }: EvidenceChainOfCustodyProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const custodyModal = useModalState();
@@ -199,24 +199,32 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
             label="Date of Event"
             type="date"
             value={newEvent.date}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({ ...newEvent, date: e.target.value })}
+            onChange={(event) =>
+              setNewEvent({ ...newEvent, date: event.target.value })
+            }
           />
           <Input
             label="Action Performed"
             value={newEvent.action || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({ ...newEvent, action: e.target.value })}
+            onChange={(event) =>
+              setNewEvent({ ...newEvent, action: event.target.value })
+            }
             placeholder="e.g. Transferred to Lab, Returned to Client"
           />
           <Input
             label="Actor / Recorder"
             value={newEvent.actor || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({ ...newEvent, actor: e.target.value })}
+            onChange={(event) =>
+              setNewEvent({ ...newEvent, actor: event.target.value })
+            }
             placeholder="Name of person performing action"
           />
           <TextArea
             label="Notes (Optional)"
             value={newEvent.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({ ...newEvent, notes: e.target.value })}
+            onChange={(event) =>
+              setNewEvent({ ...newEvent, notes: event.target.value })
+            }
             rows={3}
             placeholder="Additional details regarding the transfer/event..."
           />
@@ -248,4 +256,4 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
       </Modal>
     </div>
   );
-};
+}

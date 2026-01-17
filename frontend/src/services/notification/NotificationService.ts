@@ -94,14 +94,14 @@ export class BrowserNotificationService
     this.soundEnabled = config.soundEnabled ?? true;
   }
 
-  protected override async onStart(): Promise<void> {
+  protected override onStart(): void {
     // Check desktop notification permission
     if ("Notification" in window) {
       this.desktopPermission = Notification.permission;
     }
   }
 
-  protected override async onStop(): Promise<void> {
+  protected override onStop(): void {
     this.dismissAll();
   }
 

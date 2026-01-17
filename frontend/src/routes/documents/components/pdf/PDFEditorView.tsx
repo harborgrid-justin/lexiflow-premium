@@ -17,14 +17,16 @@ import { queryKeys } from '@/utils/queryKeys';
 import { AcrobatToolbar } from '../preview/AcrobatToolbar';
 import { InteractiveOverlay } from '../preview/InteractiveOverlay';
 
-import type { PDFTool } from '../preview/AcrobatToolbar';
-import type { Field } from '../preview/InteractiveOverlay';
 import type { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
 import type { LegalDocument } from '@/types';
+import type { PDFTool } from '../preview/AcrobatToolbar';
+import type { Field } from '../preview/InteractiveOverlay';
 
 export function PDFEditorView() {
     const { theme } = useTheme();
-    const documentsService = DataService.documents as DocumentRepository;
+    const { documents: documentsService } = DataService as {
+        documents: DocumentRepository;
+    };
     const documentSelection = useSingleSelection<LegalDocument>(null, (a, b) => a.id === b.id);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -76,7 +78,7 @@ export function PDFEditorView() {
             setPreviewUrl(null);
         }
         return () => { isMounted = false; };
-    }, [documentSelection.selected, register]);
+    }, [documentSelection.selected, documentsService, register]);
 
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {

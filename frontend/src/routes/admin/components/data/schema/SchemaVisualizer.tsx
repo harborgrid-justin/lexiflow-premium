@@ -1,10 +1,19 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useCanvasDrag } from '@/hooks/ui';
-import { cn } from '@/lib/cn';
-import { ContextMenu } from '@/components/molecules/ContextMenu/ContextMenu';
+import { useMemo, useState, type MouseEvent, type WheelEvent } from 'react';
+
 import { Database, Edit2, Key, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { ContextData, ContextMenuItem, ContextMenuType, TableColumn, TableData } from './schemaTypes';
+
+import { ContextMenu } from '@/components/molecules/ContextMenu/ContextMenu';
+import { useCanvasDrag } from '@/hooks/ui';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
+
+import type {
+    ContextData,
+    ContextMenuItem,
+    ContextMenuType,
+    TableColumn,
+    TableData,
+} from './schemaTypes';
 
 interface SchemaVisualizerProps {
     tables: TableData[];
@@ -18,7 +27,7 @@ interface SchemaVisualizerProps {
 }
 
 export function SchemaVisualizer({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }: SchemaVisualizerProps) {
-    const { theme, mode: _mode } = useTheme();
+    const { theme } = useTheme();
     const [zoom, setZoom] = useState(1);
     const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: ContextMenuItem[] } | null>(null);
 
@@ -28,16 +37,16 @@ export function SchemaVisualizer({ tables, onAddColumn, onEditColumn, onRemoveCo
         zoom
     });
 
-    const handleWheel = (e: React.WheelEvent) => {
+    const handleWheel = (event: WheelEvent) => {
         // Note: preventDefault() cannot be called in passive listeners
         // The zoom behavior works without preventing default scroll
-        const newZoom = Math.max(0.2, Math.min(2, zoom - e.deltaY * 0.001));
+        const newZoom = Math.max(0.2, Math.min(2, zoom - event.deltaY * 0.001));
         setZoom(newZoom);
     };
 
-    const handleContextMenu = (e: React.MouseEvent, type: ContextMenuType, data: ContextData) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const handleContextMenu = (event: MouseEvent, type: ContextMenuType, data: ContextData) => {
+        event.preventDefault();
+        event.stopPropagation();
         let items: ContextMenuItem[] = [];
 
         if (type === 'table' && data && 'name' in data) {
@@ -54,7 +63,7 @@ export function SchemaVisualizer({ tables, onAddColumn, onEditColumn, onRemoveCo
         } else { // Canvas
             items = [{ label: 'Create Table', icon: Plus, action: onCreateTable }];
         }
-        setContextMenu({ x: e.clientX, y: e.clientY, items });
+        setContextMenu({ x: event.clientX, y: event.clientY, items });
     };
 
     // Calculate Relationships for ERD Lines

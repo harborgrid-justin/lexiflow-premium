@@ -4,11 +4,11 @@
  * ✅ Backend-connected via parent component DocumentAssembly (2025-12-21)
  */
 
-import React, { useEffect, useRef } from 'react';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { CheckCircle, Copy, Download, Loader2, Save, Sparkles } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
 
 interface Step3DraftReviewProps {
   result: string;
@@ -25,7 +25,7 @@ export function Step3DraftReview({
 }: Step3DraftReviewProps) {
   const { theme } = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
 
   // Auto-scroll to bottom as content streams in
   useEffect(() => {
@@ -124,7 +124,7 @@ export function Step3DraftReview({
 
           <div className={cn("flex gap-3 pt-4 border-t", theme.border.default)}>
             <button
-              onClick={handleCopy}
+              onClick={() => void handleCopy()}
               className={cn(
                 "px-4 py-2 rounded-lg border transition-colors",
                 theme.border.default,
@@ -204,4 +204,4 @@ export function Step3DraftReview({
       )}
     </div>
   );
-};
+}

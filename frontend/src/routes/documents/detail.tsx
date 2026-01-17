@@ -6,13 +6,14 @@
  * @module routes/documents/detail
  */
 
-import { documentsApi } from '@/lib/frontend-api';
-import { DataService } from '@/services/dataService';
-import { DocumentVersion } from '@/types';
 import { useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DocumentsApiService } from '@/api/admin/documents-api';
+
 import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import {
   DocumentAnnotations,
   DocumentViewer,
@@ -20,11 +21,16 @@ import {
   VersionHistory
 } from './components';
 
+import type { Annotation } from '@/routes/documents/types/DocumentAnnotationsProps';
+import type { Document, DocumentVersion } from '@/types';
+
+const documentsApi = new DocumentsApiService();
+
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
+export function meta({ data }: { data: DocumentDetailLoaderData | undefined }) {
   return createDetailMeta({
     entityType: 'Document',
     entityName: data?.document?.title,
@@ -36,33 +42,35 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 // Loader - WITH PROPER PARAM VALIDATION
 // ============================================================================
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export interface DocumentDetailLoaderData {
+  document: Document;
+  versions: DocumentVersion[];
+  annotations: Annotation[];
+}
+
+export async function loader({ params }: LoaderFunctionArgs): Promise<DocumentDetailLoaderData> {
   const { documentId } = params;
 
   // CRITICAL: Validate param exists
   if (!documentId) {
-    throw new Response("Document ID is required", { status: 400 });
+    throw new Error("Document ID is required");
   }
 
   try {
-    const [docResult, versionsResult, annotationsResult] = await Promise.all([
-      documentsApi.getDocumentById(documentId),
-      documentsApi.getDocumentVersions(documentId),
-      documentsApi.getDocumentAnnotations(documentId),
+    const [document, versions, annotations] = await Promise.all([
+      documentsApi.getById(documentId),
+      documentsApi.getVersions(documentId),
+      documentsApi.getAnnotations(documentId),
     ]);
 
-    if (!docResult.ok) {
-      throw new Response("Document not found", { status: 404 });
-    }
-
     return {
-      document: docResult.data,
-      versions: versionsResult.ok ? versionsResult.data.data : [],
-      annotations: annotationsResult.ok ? annotationsResult.data.data : [],
+      document,
+      versions,
+      annotations,
     };
   } catch (error) {
     console.error('[Document Detail Loader] Error:', error);
-    throw new Response("Document not found", { status: 404 });
+    throw new Error("Document not found");
   }
 }
 
@@ -83,17 +91,23 @@ export async function action({ params, request }: ActionFunctionArgs) {
   try {
     switch (intent) {
       case "update": {
-        const updates = JSON.parse(formData.get("data") as string);
-        await DataService.documents.update(documentId, updates);
+        const parsedUpdates = JSON.parse(formData.get("data") as string) as unknown;
+        if (!parsedUpdates || typeof parsedUpdates !== "object") {
+          throw new Error("Invalid update payload");
+        }
+        await documentsApi.update(documentId, parsedUpdates as Partial<Document>);
         return { success: true };
       }
       case "delete": {
-        await DataService.documents.delete(documentId);
+        await documentsApi.delete(documentId);
         return { success: true, redirect: "/documents" };
       }
       case "restore-version": {
-        const versionId = formData.get("versionId") as string;
-        await DataService.documents.restoreVersion(documentId, versionId);
+        const versionId = formData.get("versionId");
+        if (typeof versionId !== "string" || versionId.length === 0) {
+          throw new Error("Version ID is required");
+        }
+        await documentsApi.restoreVersion(documentId, versionId);
         return { success: true };
       }
       default:
@@ -111,25 +125,25 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
 export default function DocumentDetailRoute() {
   const navigate = useNavigate();
-  const { document: doc, versions, annotations } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { document: doc, versions, annotations } = useLoaderData<DocumentDetailLoaderData>();
   const [activeTab, setActiveTab] = useState<'viewer' | 'metadata' | 'versions' | 'annotations'>('viewer');
   const fetcher = useFetcher();
 
-  const handleUpdate = async (updates: Partial<typeof doc>) => {
-    fetcher.submit(
+  const handleUpdate = (updates: Partial<typeof doc>) => {
+    void fetcher.submit(
       { intent: "update", data: JSON.stringify(updates) },
       { method: "post" }
     );
   };
 
-  const handleRestoreVersion = async (versionNumber: number) => {
+  const handleRestoreVersion = (versionNumber: number) => {
     if (!confirm(`Restore to version ${versionNumber}?`)) return;
 
-    const versionId = versions.find((v: DocumentVersion) => v.versionNumber === versionNumber)?.id;
+    const versionId = versions.find((v) => v.versionNumber === versionNumber)?.id;
     if (!versionId) return;
 
-    fetcher.submit(
-      { intent: "restore-version", versionId: versionId as string },
+    void fetcher.submit(
+      { intent: "restore-version", versionId: versionId },
       { method: "post" }
     );
   };
@@ -140,10 +154,10 @@ export default function DocumentDetailRoute() {
       const version2 = versions.find((v: DocumentVersion) => v.versionNumber === v2);
       if (!version1 || !version2) throw new Error('Versions not found');
 
-      const result = await DataService.documents.compareVersions(
+      const result = await documentsApi.compareVersions(
         doc.id,
-        version1.id as string,
-        version2.id as string
+        version1.id,
+        version2.id
       );
 
       const comparisonWindow = window.open('', '_blank');
@@ -194,7 +208,7 @@ export default function DocumentDetailRoute() {
 
   const handleDownload = async () => {
     try {
-      const blob = await DataService.documents.download(doc.id);
+      const blob = await documentsApi.download(doc.id);
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -211,8 +225,8 @@ export default function DocumentDetailRoute() {
     if (!confirm('Are you sure you want to delete this document?')) return;
 
     try {
-      await DataService.documents.delete(doc.id);
-      navigate('/documents');
+      await documentsApi.delete(doc.id);
+      void navigate('/documents');
     } catch (error) {
       console.error('Delete failed:', error);
       alert('Failed to delete document');
@@ -225,7 +239,7 @@ export default function DocumentDetailRoute() {
       <div style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }} className="border-b px-6 py-4">
         <div className="flex items-center justify-between mb-4">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => void navigate(-1)}
             className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -236,7 +250,7 @@ export default function DocumentDetailRoute() {
 
           <div className="flex items-center gap-2">
             <button
-              onClick={handleDownload}
+              onClick={() => void handleDownload()}
               style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-50 dark:hover:bg-gray-700"
             >
@@ -246,7 +260,7 @@ export default function DocumentDetailRoute() {
               Download
             </button>
             <button
-              onClick={handleDelete}
+              onClick={() => void handleDelete()}
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/30"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -327,7 +341,7 @@ export default function DocumentDetailRoute() {
                 versions={versions}
                 currentVersion={doc.currentVersion}
                 onRestore={handleRestoreVersion}
-                onCompare={handleCompare}
+                onCompare={(v1, v2) => void handleCompare(v1, v2)}
               />
             </div>
           </div>
@@ -339,23 +353,27 @@ export default function DocumentDetailRoute() {
               <DocumentAnnotations
                 documentId={doc.id}
                 annotations={annotations}
-                onAdd={async (annotation) => {
-                  try {
-                    await DataService.documents.addAnnotation(doc.id, annotation);
-                    window.location.reload();
-                  } catch (error) {
-                    console.error('Failed to add annotation:', error);
-                    alert('Failed to add annotation');
-                  }
+                onAdd={(annotation) => {
+                  void (async () => {
+                    try {
+                      await documentsApi.addAnnotation(doc.id, annotation);
+                      window.location.reload();
+                    } catch (error) {
+                      console.error('Failed to add annotation:', error);
+                      alert('Failed to add annotation');
+                    }
+                  })();
                 }}
-                onDelete={async (id) => {
-                  try {
-                    await DataService.documents.deleteAnnotation(doc.id, id);
-                    window.location.reload();
-                  } catch (error) {
-                    console.error('Failed to delete annotation:', error);
-                    alert('Failed to delete annotation');
-                  }
+                onDelete={(id) => {
+                  void (async () => {
+                    try {
+                      await documentsApi.deleteAnnotation(doc.id, id);
+                      window.location.reload();
+                    } catch (error) {
+                      console.error('Failed to delete annotation:', error);
+                      alert('Failed to delete annotation');
+                    }
+                  })();
                 }}
               />
             </div>

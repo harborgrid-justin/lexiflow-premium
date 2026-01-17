@@ -14,14 +14,15 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
+import { createListMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
 
 // Import standard components
 import { DocumentsProvider } from './DocumentsProvider';
 import { DocumentsView } from './DocumentsView';
+
 import type { clientLoader } from './loader';
 
 // Export loader (renamed to loader for standard router usage)
@@ -31,7 +32,9 @@ export { clientLoader as loader } from './loader';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+type DocumentsLoaderData = Awaited<ReturnType<typeof clientLoader>>;
+
+export function meta({ data }: { data?: DocumentsLoaderData }) {
   return createListMeta({
     entityType: 'Documents',
     count: data?.documents?.length || 0,
@@ -44,7 +47,7 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export default function DocumentsIndexRoute() {
-  const initialData = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
+  const initialData = useLoaderData<DocumentsLoaderData>();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Documents" />}>

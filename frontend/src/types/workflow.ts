@@ -1,12 +1,17 @@
 // types/workflow.ts
 // Auto-generated from models.ts split
 
-import { type TaskDependencyType, type UserRole, type StageStatus } from './enums';
-import {
-  type BaseEntity, type UserId, type TaskId, type ProjectId,
-  type WorkflowTemplateId, type CaseId, type MetadataRecord, type JsonValue
-} from './primitives';
-
+import type { StageStatus, TaskDependencyType, UserRole } from "./enums";
+import type {
+  BaseEntity,
+  CaseId,
+  JsonValue,
+  MetadataRecord,
+  ProjectId,
+  TaskId,
+  UserId,
+  WorkflowTemplateId,
+} from "./primitives";
 
 // --- CLUSTER 6: WORKFLOW & AUTOMATION ---
 
@@ -15,11 +20,11 @@ import {
  * Backend alignment: tasks/dto/create-task.dto.ts
  */
 export enum TaskStatusBackend {
-  TODO = 'To Do',
-  IN_PROGRESS = 'In Progress',
-  BLOCKED = 'Blocked',
-  COMPLETED = 'Completed',
-  CANCELLED = 'Cancelled'
+  TODO = "To Do",
+  IN_PROGRESS = "In Progress",
+  BLOCKED = "Blocked",
+  COMPLETED = "Completed",
+  CANCELLED = "Cancelled",
 }
 
 /**
@@ -28,21 +33,21 @@ export enum TaskStatusBackend {
  * Note: Backend uses CRITICAL instead of URGENT
  */
 export enum TaskPriorityBackend {
-  LOW = 'Low',
-  MEDIUM = 'Medium',
-  HIGH = 'High',
-  CRITICAL = 'Critical'
+  LOW = "Low",
+  MEDIUM = "Medium",
+  HIGH = "High",
+  CRITICAL = "Critical",
 }
 
 /**
  * Workflow task entity
  * @see Backend: tasks/entities/task.entity.ts
  * @see Shared: packages/shared-types/src/entities/task.entity.ts
- * 
+ *
  * Extends BaseEntity with workflow-specific fields.
  * Properties marked as "Frontend extension" are not persisted in backend.
  */
-export type WorkflowTask = Omit<BaseEntity, 'createdBy'> & { 
+export type WorkflowTask = Omit<BaseEntity, "createdBy"> & {
   id: TaskId;
   // Core fields (EXACTLY aligned with backend Task entity)
   title: string;
@@ -50,21 +55,21 @@ export type WorkflowTask = Omit<BaseEntity, 'createdBy'> & {
   status: TaskStatusBackend; // Backend: enum TaskStatus
   priority: TaskPriorityBackend; // Backend: enum TaskPriority
   dueDate?: string; // Backend: timestamp, nullable
-  
+
   // Assignment (backend field names)
   assignedTo?: string; // Backend: assigned_to (uuid)
   createdBy?: string; // Backend: created_by (uuid) - overrides BaseEntity.createdBy which is UserId
-  
+
   // Relationships
   caseId?: CaseId; // Backend: case_id (uuid, nullable)
   parentTaskId?: string; // Backend: parent_task_id (uuid, nullable)
-  
+
   // Tracking (exact backend fields)
   tags?: string[]; // Backend: simple-array
   estimatedHours?: number; // Backend: estimated_hours decimal(10,2)
   actualHours?: number; // Backend: actual_hours decimal(10,2), default 0
   completionPercentage?: number; // Backend: completion_percentage int, default 0
-  
+
   // Legacy aliases for backward compatibility
   assignee?: string; // Alias - use assignedTo
   assigneeId?: UserId; // Alias - use assignedTo
@@ -81,7 +86,7 @@ export type WorkflowTask = Omit<BaseEntity, 'createdBy'> & {
   rrule?: string; // Frontend extension - recurring rule
   completion?: number; // Alias for completionPercentage
   slaId?: string; // Frontend extension
-}
+};
 
 /**
  * Backward compatibility alias
@@ -92,7 +97,7 @@ export type Task = WorkflowTask;
 /**
  * Workflow stage complexity classification
  */
-export type WorkflowComplexity = 'Low' | 'Medium' | 'High';
+export type WorkflowComplexity = "Low" | "Medium" | "High";
 
 /**
  * Basic SLA configuration
@@ -106,7 +111,7 @@ export type SLAConfigBasic = BaseEntity & {
 };
 
 /**
- * Basic approval chain configuration  
+ * Basic approval chain configuration
  * For advanced approval features, see workflow-advanced-types.ts
  */
 export type ApprovalChainBasic = BaseEntity & {
@@ -152,7 +157,7 @@ export type WorkflowProcess = BaseEntity & {
   readonly id: string;
   readonly name: string;
   readonly description?: string;
-  readonly status: 'Active' | 'Paused' | 'Completed' | 'Archived';
+  readonly status: "Active" | "Paused" | "Completed" | "Archived";
   readonly templateId?: WorkflowTemplateId;
   readonly caseId?: CaseId;
   readonly projectId?: ProjectId;
@@ -160,7 +165,7 @@ export type WorkflowProcess = BaseEntity & {
   readonly dueDate?: string;
   readonly completedDate?: string;
   readonly completionPercentage: number;
-  readonly priority?: 'Low' | 'Medium' | 'High' | 'Urgent';
+  readonly priority?: "Low" | "Medium" | "High" | "Urgent";
   readonly assignedTo?: readonly UserId[];
   readonly ownerId?: UserId;
   readonly stages?: readonly WorkflowStage[];
@@ -200,8 +205,8 @@ export type TaskFiltersExtended = {
   readonly overdue?: boolean;
   readonly hasSubtasks?: boolean;
   readonly search?: string;
-  readonly sortBy?: 'dueDate' | 'priority' | 'status' | 'createdAt' | 'title';
-  readonly sortOrder?: 'asc' | 'desc';
+  readonly sortBy?: "dueDate" | "priority" | "status" | "createdAt" | "title";
+  readonly sortOrder?: "asc" | "desc";
   readonly page?: number;
   readonly limit?: number;
 };
@@ -224,7 +229,7 @@ export interface TaskAssignmentDto {
 export interface TaskRelationshipDto {
   parentTaskId: string;
   childTaskId: string;
-  relationshipType?: 'blocks' | 'depends_on' | 'related_to';
+  relationshipType?: "blocks" | "depends_on" | "related_to";
 }
 
 export interface TaskComment {
@@ -254,7 +259,14 @@ export interface TaskHistory {
   taskId: string;
   userId: string;
   userName?: string;
-  action: 'created' | 'updated' | 'status_changed' | 'assigned' | 'commented' | 'completed' | 'deleted';
+  action:
+    | "created"
+    | "updated"
+    | "status_changed"
+    | "assigned"
+    | "commented"
+    | "completed"
+    | "deleted";
   previousValue?: JsonValue;
   newValue?: JsonValue;
   timestamp: string;
@@ -280,45 +292,50 @@ export interface TemplateDocument extends BaseEntity {
   name: string;
   description?: string;
   category: string;
-  type: 'Workflow' | 'Pleading' | 'Motion' | 'Document' | 'Email' | 'Other';
+  type: "Workflow" | "Pleading" | "Motion" | "Document" | "Email" | "Other";
   content?: string;
-  variables?: Array<{ key: string; label: string; type: string; required?: boolean }>;
+  variables?: Array<{
+    key: string;
+    label: string;
+    type: string;
+    required?: boolean;
+  }>;
   sections?: string[];
-  status: 'Draft' | 'Active' | 'Archived';
+  status: "Draft" | "Active" | "Archived";
   templateVersion?: string;
   tags?: string[];
   jurisdictions?: string[];
-  complexity?: 'Low' | 'Medium' | 'High';
+  complexity?: "Low" | "Medium" | "High";
   estimatedDuration?: string;
   createdBy?: UserId;
   modifiedBy?: UserId;
   usageCount?: number;
   metadata?: MetadataRecord;
 }
-export interface Project extends BaseEntity { 
+export interface Project extends BaseEntity {
   id: ProjectId;
   // Core fields (aligned with backend Project entity)
   name: string; // Backend: varchar(255)
   description?: string; // Backend: text, nullable
-  status: 'Not Started' | 'In Progress' | 'On Hold' | 'Completed' | 'Cancelled'; // Backend: enum ProjectStatus
-  priority: 'Low' | 'Medium' | 'High' | 'Urgent'; // Backend: enum ProjectPriority
-  
+  status: "Not Started" | "In Progress" | "On Hold" | "Completed" | "Cancelled"; // Backend: enum ProjectStatus
+  priority: "Low" | "Medium" | "High" | "Urgent"; // Backend: enum ProjectPriority
+
   // Relationships
   caseId?: CaseId; // Backend: uuid, nullable, with FK to cases
   projectManagerId?: string; // Backend: uuid, nullable
   assignedTeamId?: string; // Backend: uuid, nullable
-  
+
   // Dates
   startDate?: string; // Backend: date
   dueDate?: string; // Backend: date
   completedDate?: string; // Backend: date
-  
+
   // Progress tracking
   completionPercentage: number; // Backend: decimal(5,2), default 0
   estimatedHours?: number; // Backend: decimal(12,2)
   actualHours?: number; // Backend: decimal(12,2)
   budget?: number; // Backend: decimal(12,2)
-  
+
   // Content
   notes?: string; // Backend: text
   tasks?: Array<{
@@ -334,16 +351,16 @@ export interface Project extends BaseEntity {
     dueDate?: string;
     completedDate?: string;
   }>;
-  milestones?: Array<{ // Backend: jsonb
+  milestones?: Array<{
+    // Backend: jsonb
     name: string;
     dueDate?: string;
     completedDate?: string;
     status: string;
   }>;
   metadata?: MetadataRecord; // Backend: jsonb
-  
+
   // Frontend-specific (legacy)
   title?: string; // Alias for name
   lead?: string; // Alias for projectManagerId
 }
-

@@ -7,8 +7,7 @@
  * @module types/theme
  */
 
-import { type ThemeMode } from "@/lib/theme/tokens";
-
+import type { ThemeMode } from "@/lib/theme/tokens";
 import type { ReactNode } from "react";
 
 // Theme type for the actual theme object returned by useTheme
@@ -31,7 +30,7 @@ export interface ThemeObject {
       arg0: string,
       input: string,
       input1: unknown,
-      primary: string
+      primary: string,
     ): string | undefined;
     default: string;
     light: string;

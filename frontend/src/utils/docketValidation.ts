@@ -268,7 +268,7 @@ export function validateDocketEntry(
   } else if (!isValidDocketEntryType(entry.type)) {
     errors.push({
       field: "type",
-      message: `Invalid entry type: ${entry.type}. Must be one of: Filing, Order, Notice, Minute Entry, Exhibit, Hearing, Motion`,
+      message: `Invalid entry type: ${String(entry.type)}. Must be one of: Filing, Order, Notice, Minute Entry, Exhibit, Hearing, Motion`,
       code: "INVALID_VALUE",
     });
   }

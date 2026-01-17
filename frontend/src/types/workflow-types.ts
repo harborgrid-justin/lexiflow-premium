@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
-import { type MetadataRecord } from "./primitives";
+import type { MetadataRecord } from "./primitives";
 
 export type NodeType =
   | "Start"

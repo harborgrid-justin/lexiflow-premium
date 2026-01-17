@@ -1,23 +1,32 @@
+import { AlertTriangle, Building, Download, Network, Plus, ShieldCheck, User } from 'lucide-react';
+import { useMemo } from 'react';
+
+import { api } from '@/api';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { ActionRow, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import {
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/organisms/Table/Table';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
-import { LegalEntity } from '@/types';
+import type { LegalEntity } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { AlertTriangle, Building, Download, Network, Plus, ShieldCheck, User } from 'lucide-react';
-import React, { useMemo } from 'react';
 
 interface UboRegisterProps {
   entities: LegalEntity[];
   onSelect: (e: LegalEntity) => void;
 }
 
-export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntities, onSelect }) => {
+export function UboRegister({ entities: legacyEntities, onSelect }: UboRegisterProps) {
   const { theme } = useTheme();
 
   // ✅ Fetch entities from backend API
@@ -47,13 +56,11 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
   }), [corporations, stats]);
 
   const handleExportFinCEN = () => {
-    console.log('[UboRegister] Export FinCEN Report');
-
+    console.warn('[UboRegister] Export FinCEN Report');
   };
 
   const handleAddUBO = () => {
-    console.log('[UboRegister] Add UBO Entry');
-
+    console.warn('[UboRegister] Add UBO Entry');
   };
 
   if (isLoading) return <AdaptiveLoader contentType="list" itemCount={8} shimmer />;
@@ -152,4 +159,4 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
       </TableContainer>
     </div>
   );
-};
+}

@@ -1,18 +1,17 @@
+import { Code, Eye, FileText, Save, X } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+
 import { api } from '@/api';
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
 import { useToast } from '@/providers';
-import {
+import { draftingApi, TemplateCategory, TemplateStatus } from '@api/domains/drafting';
+import type {
   ClauseReference,
   CreateTemplateDto,
-  draftingApi,
   DraftingTemplate,
-  TemplateCategory,
-  TemplateStatus,
   TemplateVariable,
-  UpdateTemplateDto
+  UpdateTemplateDto,
 } from '@api/domains/drafting';
-import { Code, Eye, FileText, Save, X } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
 
 interface TemplateEditorProps {
   template?: DraftingTemplate;
@@ -20,11 +19,11 @@ interface TemplateEditorProps {
   onCancel: () => void;
 }
 
-export const TemplateEditor: React.FC<TemplateEditorProps> = ({
+export function TemplateEditor({
   template,
   onSave,
   onCancel,
-}) => {
+}: TemplateEditorProps) {
   const { addToast } = useToast();
   const { theme, tokens } = useTheme();
 
@@ -57,7 +56,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   }, []);
 
   useEffect(() => {
-    loadClauses();
+    void loadClauses();
   }, [loadClauses]);
 
   const handleAddVariable = () => {
@@ -227,7 +226,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
             <X className="h-4 w-4" />
           </button>
           <button
-            onClick={handleSave}
+            onClick={() => void handleSave()}
             disabled={loading}
             style={{
               padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
@@ -764,4 +763,4 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       </div>
     </div>
   );
-};
+}

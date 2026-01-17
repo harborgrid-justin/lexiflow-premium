@@ -370,10 +370,13 @@ const validateProductionConfig = (
     config.batesPrefix = batesPrefix;
   }
 
+  const startNumberInput = input["startNumber"];
   const startNumber =
-    typeof input["startNumber"] === "number"
-      ? input["startNumber"]
-      : parseInt(String(input["startNumber"] || ""));
+    typeof startNumberInput === "number"
+      ? startNumberInput
+      : typeof startNumberInput === "string"
+        ? parseInt(startNumberInput, 10)
+        : NaN;
   if (isNaN(startNumber) || startNumber < 1) {
     errors.push({
       path: "startNumber",

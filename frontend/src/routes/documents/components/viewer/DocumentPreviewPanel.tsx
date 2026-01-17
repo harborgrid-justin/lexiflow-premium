@@ -16,30 +16,25 @@ import { useEffect, useMemo, useState } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Services & Data
+// Components
+import { Button } from '@/components/atoms/Button/Button';
+import { TagList } from '@/components/molecules/TagList/TagList';
+import { useBlobRegistry } from '@/hooks/useBlobRegistry';
+import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 
-// Hooks & Context
-import { useBlobRegistry } from '@/hooks/useBlobRegistry';
-import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers';
-import { useTheme } from "@/hooks/useTheme";
-
-// Components
-import { Button } from '@/components/atoms/Button/Button';
-import { TagList } from '@/components/molecules/TagList/TagList';
 import { PIIPanel } from '../preview/PIIPanel';
 import { PreviewContent } from '../preview/PreviewContent';
 import { PreviewHeader } from '../preview/PreviewHeader';
 
-// Utils & Constants
-import { cn } from '@/lib/cn';
-
-// Types
-import { LegalDocument, UserRole } from '@/types';
+import type { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
+import type { LegalDocument, UserRole } from '@/types';
 
 interface DocumentPreviewPanelProps {
     document: LegalDocument | null;
@@ -56,6 +51,9 @@ export function DocumentPreviewPanel({
     const { theme } = useTheme();
     const { openWindow } = useWindow();
     const notify = useNotify();
+    const { documents: documentsService } = DataService as {
+        documents: DocumentRepository;
+    };
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [isRedactionMode, setIsRedactionMode] = useState(false);
 
@@ -64,7 +62,7 @@ export function DocumentPreviewPanel({
 
     // Mutation for Redaction
     const { mutate: performRedaction, isLoading: isRedacting } = useMutation(
-        DataService.documents.redact,
+        (docId: string) => documentsService.redact(docId),
         {
             onSuccess: () => {
                 notify.success("Document redacted and saved as new version.");
@@ -79,7 +77,7 @@ export function DocumentPreviewPanel({
         if (document && document.tags.includes('Local')) {
             const loadBlob = async () => {
                 // Retrieve raw blob from IndexedDB
-                const blob = await DataService.documents.getFile(document.id);
+                const blob = await documentsService.getFile(document.id);
 
                 if (isMounted && blob) {
                     // Create managed URL
@@ -87,12 +85,12 @@ export function DocumentPreviewPanel({
                     setPreviewUrl(url);
                 }
             };
-            loadBlob();
+            void loadBlob();
         } else {
             setPreviewUrl(null);
         }
         return () => { isMounted = false; };
-    }, [document, register]); // The registry hook handles cleanup automatically
+    }, [document, documentsService, register]); // The registry hook handles cleanup automatically
 
     const handleToggleEncryption = () => {
         if (!document || !onUpdate) return;
@@ -117,7 +115,7 @@ export function DocumentPreviewPanel({
 
     const handleApplyRedactions = () => {
         if (!document) return;
-        performRedaction(document.id);
+        void performRedaction(document.id);
     };
 
     const redactedSummary = useMemo(() => {

@@ -98,7 +98,7 @@ const MAX_STRING_LENGTH = 100_000;
 const validateNumber = (
   value: number | string | undefined | null,
   methodName: string,
-  defaultValue: number = 0
+  defaultValue: number = 0,
 ): number => {
   // Return default for null/undefined without throwing
   if (value === undefined || value === null || value === "") {
@@ -109,14 +109,14 @@ const validateNumber = (
 
   if (isNaN(num)) {
     console.warn(
-      `[FormattersService.${methodName}] Value must be a valid number, got: ${value}, using default: ${defaultValue}`
+      `[FormattersService.${methodName}] Value must be a valid number, got: ${value}, using default: ${defaultValue}`,
     );
     return defaultValue;
   }
 
   if (!isFinite(num)) {
     console.warn(
-      `[FormattersService.${methodName}] Value must be finite, got: ${num}, using default: ${defaultValue}`
+      `[FormattersService.${methodName}] Value must be finite, got: ${num}, using default: ${defaultValue}`,
     );
     return defaultValue;
   }
@@ -130,7 +130,7 @@ const validateNumber = (
  */
 const validateDate = (
   value: string | Date | undefined,
-  methodName: string
+  methodName: string,
 ): Date => {
   if (!value) {
     throw new Error(`[FormattersService.${methodName}] Date is required`);
@@ -139,7 +139,9 @@ const validateDate = (
   const date = new Date(value);
 
   if (isNaN(date.getTime())) {
-    throw new Error(`[FormattersService.${methodName}] Invalid date: ${value}`);
+    throw new Error(
+      `[FormattersService.${methodName}] Invalid date: ${String(value)}`,
+    );
   }
 
   return date;
@@ -151,7 +153,7 @@ const validateDate = (
  */
 const validateString = (
   value: string | undefined,
-  methodName: string
+  methodName: string,
 ): string => {
   if (value === undefined || value === null) {
     throw new Error(`[FormattersService.${methodName}] String is required`);
@@ -169,11 +171,11 @@ const validateCurrency = (currency: string): string => {
 
   if (
     !SUPPORTED_CURRENCIES.includes(
-      upper as (typeof SUPPORTED_CURRENCIES)[number]
+      upper as (typeof SUPPORTED_CURRENCIES)[number],
     )
   ) {
     console.warn(
-      `[FormattersService] Unsupported currency "${currency}", using ${DEFAULT_CURRENCY}`
+      `[FormattersService] Unsupported currency "${currency}", using ${DEFAULT_CURRENCY}`,
     );
     return DEFAULT_CURRENCY;
   }
@@ -220,7 +222,7 @@ export const FormattersService = {
   currency: (
     amount: number | string | undefined | null,
     currency: string = DEFAULT_CURRENCY,
-    locale: string = DEFAULT_LOCALE
+    locale: string = DEFAULT_LOCALE,
   ): string => {
     try {
       const num = validateNumber(amount, "currency", 0);
@@ -250,7 +252,7 @@ export const FormattersService = {
    */
   currencyValue: (
     amount: number | string | undefined | null,
-    decimals: number = 2
+    decimals: number = 2,
   ): string => {
     try {
       const num = validateNumber(amount, "currencyValue", 0);
@@ -294,7 +296,7 @@ export const FormattersService = {
    */
   date: (
     date: string | Date | undefined,
-    options?: Intl.DateTimeFormatOptions
+    options?: Intl.DateTimeFormatOptions,
   ): string => {
     try {
       const validDate = validateDate(date, "date");
@@ -403,7 +405,7 @@ export const FormattersService = {
 
       if (num < 0) {
         throw new Error(
-          "[FormattersService.fileSize] Bytes cannot be negative"
+          "[FormattersService.fileSize] Bytes cannot be negative",
         );
       }
 
@@ -498,14 +500,14 @@ export const FormattersService = {
   truncate: (
     str: string | undefined,
     maxLength: number = 50,
-    ellipsis: string = "..."
+    ellipsis: string = "...",
   ): string => {
     try {
       const validStr = validateString(str, "truncate");
 
       if (maxLength < 0 || maxLength > MAX_STRING_LENGTH) {
         throw new Error(
-          `[FormattersService.truncate] maxLength must be between 0 and ${MAX_STRING_LENGTH}`
+          `[FormattersService.truncate] maxLength must be between 0 and ${MAX_STRING_LENGTH}`,
         );
       }
 
@@ -600,7 +602,7 @@ export const FormattersService = {
   percentage: (
     value: number | string | undefined,
     decimals: number = 0,
-    isFraction: boolean = false
+    isFraction: boolean = false,
   ): string => {
     try {
       const num = validateNumber(value, "percentage");
@@ -632,7 +634,7 @@ export const FormattersService = {
  */
 export function formatDate(
   date: string | Date | undefined,
-  options?: Intl.DateTimeFormatOptions
+  options?: Intl.DateTimeFormatOptions,
 ): string {
   if (!date) return "N/A";
   return FormattersService.date(date, options);
@@ -674,7 +676,7 @@ export function formatDateTime(date: string | Date | undefined): string {
  */
 export function formatDateDisplay(
   date: string | Date,
-  format: "short" | "long" = "short"
+  format: "short" | "long" = "short",
 ): string {
   return format === "short" ? formatDateShort(date) : formatDateLong(date);
 }

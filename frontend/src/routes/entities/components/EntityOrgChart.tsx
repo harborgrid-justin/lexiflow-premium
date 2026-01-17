@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Building2, User } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,7 +21,8 @@ import React, { useMemo } from 'react';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from '@/hooks/useTheme';
+import { DataService } from '@/services/dataService';
 
 // Components
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
@@ -30,7 +31,7 @@ import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLo
 import { cn } from '@/lib/cn';
 
 // Types
-import { LegalEntity } from '@/types';
+import type { LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -40,7 +41,7 @@ interface EntityOrgChartProps {
     onSelect: (e: LegalEntity) => void;
 }
 
-export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEntities, onSelect }) => {
+export function EntityOrgChart({ entities: propEntities, onSelect }: EntityOrgChartProps) {
     const { theme } = useTheme();
 
     // Enterprise Data Access
@@ -106,4 +107,4 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
             </div>
         </div>
     );
-};
+}

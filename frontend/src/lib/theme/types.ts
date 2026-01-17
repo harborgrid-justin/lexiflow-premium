@@ -15,11 +15,15 @@ export interface ThemeObject {
   background: string;
   surface: {
     default: string;
+    base: string;
     raised: string;
+    elevated: string;
     highlight: string;
     paper: string;
     overlay: string;
     input: string;
+    muted: string;
+    hover: string;
     active: string;
     primary: string;
     secondary: string;
@@ -30,7 +34,7 @@ export interface ThemeObject {
       arg0: string,
       input: string,
       input1: unknown,
-      primary: string
+      primary: string,
     ): string | undefined;
     default: string;
     light: string;

@@ -21,9 +21,9 @@
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
-  CostForecast,
-  InfrastructureCostMetric,
-  ReplicationStatus,
+  type CostForecast,
+  type InfrastructureCostMetric,
+  type ReplicationStatus,
 } from "@/types";
 
 export const OperationsService = {

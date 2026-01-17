@@ -42,7 +42,8 @@ export const queryKeys = {
     detail: (id: string) => ["documents", "detail", id] as const,
     byCaseId: (caseId: string) => ["documents", "byCaseId", caseId] as const,
     templates: () => ["documents", "templates"] as const,
-    annotations: (documentId: string) => ["documents", "annotations", documentId] as const,
+    annotations: (documentId: string) =>
+      ["documents", "annotations", documentId] as const,
   },
 
   // Docket Entries
@@ -503,6 +504,7 @@ export const queryKeys = {
     all: () => ["warRoom", "all"] as const,
     detail: (caseId: string) => ["warRoom", "detail", caseId] as const,
     advisors: (caseId: string) => ["warRoom", "advisors", caseId] as const,
+    experts: (caseId: string) => ["warRoom", "experts", caseId] as const,
     opposition: (caseId: string) => ["warRoom", "opposition", caseId] as const,
     data: (id: string) => ["warRoom", "data", id] as const,
   },

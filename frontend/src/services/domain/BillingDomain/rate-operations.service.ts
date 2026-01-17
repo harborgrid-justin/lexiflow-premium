@@ -4,8 +4,10 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { RateTable } from "./types";
+
 import { OperationError } from "./types";
+
+import type { RateTable } from "./types";
 
 /**
  * Get rate tables for a specific timekeeper

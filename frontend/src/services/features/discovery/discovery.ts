@@ -123,21 +123,21 @@
 
 // Backend API Integration
 import { api } from "@/api";
+import {
+  type CustodianInterview,
+  type Deposition,
+  type DiscoveryRequest,
+  type ESISource,
+  type Examination,
+  type ProductionSet,
+  type SanctionMotion,
+  type StipulationRequest,
+  type Transcript,
+  type Vendor,
+} from "@/types";
 import { delay } from "@/utils/async";
 
 // Type Definitions
-import {
-  CustodianInterview,
-  Deposition,
-  DiscoveryRequest,
-  ESISource,
-  Examination,
-  ProductionSet,
-  SanctionMotion,
-  StipulationRequest,
-  Transcript,
-  Vendor,
-} from "@/types";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                       DISCOVERY SERVICE PUBLIC API

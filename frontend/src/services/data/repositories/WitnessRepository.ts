@@ -17,7 +17,7 @@
  * - Proper error handling and logging
  */
 
-import { Witness, WitnessesApiService } from "@/api/discovery/witnesses-api";
+import { type Witness, WitnessesApiService } from "@/api/discovery/witnesses-api";
 import { ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 

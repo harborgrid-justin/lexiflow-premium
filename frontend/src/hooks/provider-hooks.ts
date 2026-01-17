@@ -33,8 +33,14 @@
  */
 
 // Import hooks for use in combination functions
-import { useEntitlementsState as useEntitlementsStateHook } from "@/providers/application/entitlementsprovider";
-import { useRoleState as useRoleStateHook } from "@/providers/application/roleprovider";
+import {
+  useEntitlementsActions as useEntitlementsActionsHook,
+  useEntitlementsState as useEntitlementsStateHook,
+} from "@/providers/application/entitlementsprovider";
+import {
+  useRoleActions as useRoleActionsHook,
+  useRoleState as useRoleStateHook,
+} from "@/providers/application/roleprovider";
 import {
   useUserActions as useUserActionsHook,
   useUserState as useUserStateHook,
@@ -254,12 +260,14 @@ export function useAuthUser() {
     requiresMFA: authState.requiresMFA,
 
     // User profile
-    profile: userState.profile,
-    preferences: userState.preferences,
+    profile: userState.currentUser,
+    permissions: userState.permissions,
+    roles: userState.roles,
 
     // Actions
     updateProfile: userActions.updateProfile,
-    updatePreferences: userActions.updatePreferences,
+    uploadAvatar: userActions.uploadAvatar,
+    refreshProfile: userActions.loadCurrentUser,
   };
 }
 
@@ -272,18 +280,23 @@ export function useAuthUser() {
  */
 export function usePermissions() {
   const entitlementsState = useEntitlementsStateHook();
+  const entitlementsActions = useEntitlementsActionsHook();
   const roleState = useRoleStateHook();
+  const roleActions = useRoleActionsHook();
 
   return {
-    // Permission checks
-    hasPermission: entitlementsState.hasPermission,
-    hasAnyPermission: entitlementsState.hasAnyPermission,
-    hasAllPermissions: entitlementsState.hasAllPermissions,
+    entitlements: entitlementsState.entitlements,
+    entitlementsLoading: entitlementsState.isLoading,
+    entitlementsError: entitlementsState.error,
+    refreshEntitlements: entitlementsActions.refresh,
+    resetEntitlements: entitlementsActions.reset,
 
-    // Role checks
-    hasRole: roleState.hasRole,
-    isAtLeast: roleState.isAtLeast,
-    canPerform: roleState.canPerform,
+    roles: roleState.currentRoles,
+    hasRole: roleActions.hasRole,
+    hasAnyRole: roleActions.hasAnyRole,
+    hasAllRoles: roleActions.hasAllRoles,
+    hasRoleOrHigher: roleActions.hasRoleOrHigher,
+    getAllPermissions: roleActions.getAllPermissions,
   };
 }
 

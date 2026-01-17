@@ -1,6 +1,6 @@
 import { ProjectsApiService } from "@/api/workflow/projects-api";
 import { Repository } from "@/services/core/Repository";
-import { Project } from "@/types";
+import { type Project } from "@/types";
 
 export class ProjectRepository extends Repository<Project> {
   private projectsApi: ProjectsApiService;

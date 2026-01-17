@@ -20,12 +20,17 @@ export const JurisdictionRules: React.FC<JurisdictionRulesProps> = ({ jurisdicti
   );
 
   // Format rules from backend or provide empty state
-  const rules = (rulesData as Array<{ name?: string; description?: string; notes?: string }>).length > 0 ? (rulesData as Array<{ name?: string; description?: string; notes?: string }>).map((rule: { name?: string; description?: string; notes?: string }, idx: number) => ({
-    id: idx + 1,
-    rule: rule.name || rule.description || 'Rule',
-    status: 'Pass' as const,
-    msg: rule.notes || undefined
-  })) : [];
+  const rules: Array<{ id: number; rule: string; status: 'Pass'; msg?: string }> =
+    (rulesData as Array<{ name?: string; description?: string; notes?: string }>).length > 0
+      ? (rulesData as Array<{ name?: string; description?: string; notes?: string }>).map(
+        (rule: { name?: string; description?: string; notes?: string }, idx: number) => ({
+          id: idx + 1,
+          rule: rule.name || rule.description || 'Rule',
+          status: 'Pass' as const,
+          ...(rule.notes ? { msg: rule.notes } : {})
+        })
+      )
+      : [];
 
   if (isLoading) {
     return (

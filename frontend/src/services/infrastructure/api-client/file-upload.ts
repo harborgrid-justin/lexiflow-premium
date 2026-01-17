@@ -4,9 +4,10 @@
  */
 
 import { AuthenticationError, ValidationError } from "@/services/core/errors";
+
+import { getAuthToken } from "./auth-manager";
 import { buildBaseURL, getOrigin } from "./config";
 import { validateEndpoint, buildURL } from "./request-builder";
-import { getAuthToken } from "./auth-manager";
 import { handleResponse } from "./response-handler";
 
 /**

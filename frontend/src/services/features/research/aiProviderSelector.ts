@@ -3,9 +3,12 @@
  */
 
 import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
+
 import { GeminiService } from "../research/geminiService";
-import type { AIServiceInterface } from "./aiProvider";
+
 import { OpenAIService } from "./openaiService";
+
+import type { AIServiceInterface } from "./aiProvider";
 
 export type AIProvider = "gemini" | "openai";
 
@@ -38,14 +41,14 @@ export const isProviderConfigured = (provider: AIProvider): boolean => {
 
   if (provider === "gemini") {
     return !!(
-      import.meta.env.VITE_GEMINI_API_KEY ||
-      import.meta.env.GEMINI_API_KEY ||
+      import.meta.env["VITE_GEMINI_API_KEY"] ||
+      import.meta.env["GEMINI_API_KEY"] ||
       defaultStorage.getItem("gemini_api_key")
     );
   } else {
     return !!(
-      import.meta.env.VITE_OPENAI_API_KEY ||
-      import.meta.env.OPENAI_API_KEY ||
+      import.meta.env["VITE_OPENAI_API_KEY"] ||
+      import.meta.env["OPENAI_API_KEY"] ||
       defaultStorage.getItem("openai_api_key")
     );
   }
@@ -57,14 +60,14 @@ export const getProviderApiKey = (provider: AIProvider): string | null => {
 
   if (provider === "gemini") {
     return (
-      import.meta.env.VITE_GEMINI_API_KEY ||
-      import.meta.env.GEMINI_API_KEY ||
+      import.meta.env["VITE_GEMINI_API_KEY"] ||
+      import.meta.env["GEMINI_API_KEY"] ||
       defaultStorage.getItem("gemini_api_key")
     );
   } else {
     return (
-      import.meta.env.VITE_OPENAI_API_KEY ||
-      import.meta.env.OPENAI_API_KEY ||
+      import.meta.env["VITE_OPENAI_API_KEY"] ||
+      import.meta.env["OPENAI_API_KEY"] ||
       defaultStorage.getItem("openai_api_key")
     );
   }
@@ -73,7 +76,7 @@ export const getProviderApiKey = (provider: AIProvider): string | null => {
 // Set API key for a provider
 export const setProviderApiKey = (
   provider: AIProvider,
-  apiKey: string
+  apiKey: string,
 ): void => {
   if (typeof localStorage === "undefined") return;
 
@@ -89,7 +92,7 @@ export const getProviderDisplayName = (provider: AIProvider): string => {
 
 // Get provider status
 export const getProviderStatus = (
-  provider: AIProvider
+  provider: AIProvider,
 ): { configured: boolean; hasKey: boolean } => {
   const hasKey = !!getProviderApiKey(provider);
   return {

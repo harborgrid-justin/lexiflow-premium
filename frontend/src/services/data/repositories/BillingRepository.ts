@@ -1,5 +1,5 @@
 import {
-  BillingAnalytics,
+  type BillingAnalytics,
   BillingAnalyticsApiService,
 } from "@/api/billing/billing-analytics-api";
 import { InvoicesApiService } from "@/api/billing/invoices-api";
@@ -27,15 +27,15 @@ import { ClientsApiService } from "@/api/communications/clients-api";
 import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import {
-  CaseId,
-  Client,
-  FinancialPerformanceData,
-  Invoice,
-  OperatingSummary,
-  TimeEntry,
-  TrustAccount,
-  TrustTransaction,
-  WIPStat,
+  type CaseId,
+  type Client,
+  type FinancialPerformanceData,
+  type Invoice,
+  type OperatingSummary,
+  type TimeEntry,
+  type TrustAccount,
+  type TrustTransaction,
+  type WIPStat,
 } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 import { delay } from "@/utils/async";

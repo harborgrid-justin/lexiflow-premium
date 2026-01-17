@@ -19,6 +19,7 @@ import { Activity, AlertCircle, AlertTriangle, CheckSquare, FileText, Users } fr
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";

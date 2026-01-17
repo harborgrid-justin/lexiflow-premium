@@ -1,7 +1,8 @@
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { db, STORES } from "@/services/data/db";
-import { Custodian } from "@/types";
+import { type Custodian } from "@/types";
+
 import { validateCaseId, validateId } from "./utils";
 
 export const getCustodians = async (

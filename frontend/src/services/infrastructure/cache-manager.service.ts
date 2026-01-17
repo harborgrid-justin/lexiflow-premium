@@ -35,6 +35,7 @@
  */
 
 import { ValidationError } from "@/services/core/errors";
+
 import type { QueryState } from "./queryTypes";
 
 /**

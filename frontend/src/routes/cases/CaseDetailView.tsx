@@ -6,8 +6,6 @@ import { useCaseDetail } from './hooks/useCaseDetail';
 
 interface CaseDetailViewProps {
   caseData: Case;
-  onBack: () => void;
-  onSelectCase: (c: Case) => void;
   initialTab?: string;
 }
 
@@ -19,8 +17,6 @@ interface CaseDetailViewProps {
  */
 export const CaseDetailView: React.FC<CaseDetailViewProps> = ({
   caseData,
-  onBack,
-  onSelectCase,
   initialTab = 'Overview'
 }) => {
   // Initialize the hook with passed data

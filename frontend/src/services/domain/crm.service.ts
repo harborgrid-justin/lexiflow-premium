@@ -84,26 +84,26 @@
  * - Analytics calculated from backend data
  */
 
-import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import {
-  CaseStatus,
-  Client,
-  ClientStatus,
-  ClientType,
-  EntityId,
-  Matter,
-  MatterType,
-  PaymentTerms,
-  UserId,
-} from "@/types";
-import { SystemEventType } from "@/types/integration-types";
 
 // Backend API Services
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
 import { ConcurrencyError, OperationError } from "@/services/core/errors";
+import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { Opportunity, ClientRelationship } from "@/types/crm";
+import {
+  CaseStatus,
+  type Client,
+  ClientStatus,
+  ClientType,
+  EntityId,
+  type Matter,
+  MatterType,
+  PaymentTerms,
+  type UserId,
+} from "@/types";
+import { type ClientRelationship, type Opportunity } from "@/types/crm";
+import { SystemEventType } from "@/types/integration-types";
 
 // In-memory state for fallback mode (simulating database constraints)
 const conversionMap = new Map<string, { clientId: string; caseId: string }>();
@@ -163,7 +163,7 @@ export const CRMService = {
   getBusinessDevelopmentMetrics:
     async (): Promise<BusinessDevelopmentMetrics> => {
       return apiClient.get<BusinessDevelopmentMetrics>(
-        "/crm/business-development"
+        "/crm/business-development",
       );
     },
 
@@ -214,7 +214,7 @@ export const CRMService = {
     const lockKey = `lead-conversion-${lead.id}`;
     if (activeLocks.has(lockKey)) {
       throw new ConcurrencyError(
-        `Lead conversion for ${lead.id} already in progress`
+        `Lead conversion for ${lead.id} already in progress`,
       );
     }
     activeLocks.add(lockKey);
@@ -224,7 +224,7 @@ export const CRMService = {
       try {
         const result = await apiClient.post<{ client: Client; case: Matter }>(
           "/crm/leads/convert",
-          { leadId: lead.id }
+          { leadId: lead.id },
         );
         conversionMap.set(lead.id, {
           clientId: result.client.id,
@@ -235,7 +235,7 @@ export const CRMService = {
         // Fallback if endpoint not waiting
         console.warn(
           "Backend conversion endpoint failed, trying separate calls",
-          error
+          error,
         );
       }
 
@@ -269,13 +269,14 @@ export const CRMService = {
       // 2. Create Case via backend API
       let newCase;
       try {
+        const filingDate = new Date().toISOString().split("T")[0];
         newCase = await casesApi.add({
           title: lead.title,
           client: lead.client,
-          clientId: newClient.id as EntityId,
+          clientId: newClient.id,
           matterType: MatterType.OTHER,
           status: CaseStatus.Active,
-          filingDate: new Date().toISOString().split("T")[0],
+          ...(filingDate ? { filingDate } : {}),
           description: `Converted from Lead ${lead.id}`,
           ownerId: "usr-admin-justin" as UserId,
           isArchived: false,
@@ -288,7 +289,7 @@ export const CRMService = {
         console.error(
           "Case creation failed - Manual Rollback Required for Client " +
             newClient.id,
-          e
+          e,
         );
         throw new OperationError("Case creation failed. Inconsistent state.");
       }
@@ -315,7 +316,7 @@ export const CRMService = {
       });
 
       console.log(
-        `[CRM] Successfully converted Lead ${lead.id} to Client ${newClient.id} and Case ${newCase.id}`
+        `[CRM] Successfully converted Lead ${lead.id} to Client ${newClient.id} and Case ${newCase.id}`,
       );
     } catch (error) {
       console.error(`[CRM] Failed to convert lead ${lead.id}:`, error);

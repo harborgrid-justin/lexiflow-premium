@@ -52,7 +52,7 @@ import {
   BackupsApiService,
   type BackupSchedule,
 } from "@/api/admin/backups-api";
-import { ArchiveStats, BackupSnapshot, SnapshotType } from "@/types";
+import { type ArchiveStats, type BackupSnapshot, type SnapshotType } from "@/types";
 
 // =============================================================================
 // REACT QUERY KEYS

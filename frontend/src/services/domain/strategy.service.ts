@@ -34,7 +34,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { Citation, Defense, LegalArgument } from "@/types";
+import { type Citation, type Defense, type LegalArgument } from "@/types";
 
 interface Strategy {
   id: string;

@@ -8,8 +8,10 @@
 
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import type { Custodian } from "@/types";
+
 import { validateId } from "../shared/validation";
+
+import type { Custodian } from "@/types";
 
 /**
  * Custodian Service Class

@@ -1,6 +1,6 @@
 import { ExpensesApiService } from "@/api/billing/expenses-api";
 import { Repository } from "@/services/core/Repository";
-import { FirmExpense } from "@/types";
+import { type FirmExpense } from "@/types";
 
 export class ExpenseRepository extends Repository<FirmExpense> {
   private expensesApi: ExpensesApiService;

@@ -4,29 +4,28 @@
  * @description Intelligent citation parser supporting all major Bluebook citation types
  */
 
+import { IdGenerator } from "@/lib/idGenerator";
 import {
-  BluebookCitation,
+  type BluebookCitation,
   BluebookCitationType,
-  CaseCitation,
-  StatuteCitation,
-  ConstitutionCitation,
-  BookCitation,
-  PeriodicalCitation,
-  RegulationCitation,
-  WebCitation,
-  CitationValidationError,
+  type CaseCitation,
+  type StatuteCitation,
+  type ConstitutionCitation,
+  type BookCitation,
+  type PeriodicalCitation,
+  type RegulationCitation,
+  type WebCitation,
+  type CitationValidationError,
   ValidationSeverity,
   CourtLevel,
   CitationSignal,
-  Author
-} from '@/types/bluebook';
-import { IdGenerator } from '@/lib/idGenerator';
+  type Author,
+} from "@/types/bluebook";
 
 /**
  * Citation parser class with regex-based pattern matching
  */
 export class BluebookParser {
-
   /**
    * Parse a raw citation string into structured format
    */
@@ -68,30 +67,40 @@ export class BluebookParser {
     for (const pattern of patterns) {
       const match = text.match(pattern);
       if (match) {
-        const [, party1, party2, volume, reporter, page, pinpoint, courtOrYear, year] = match;
+        const [
+          ,
+          party1,
+          party2,
+          volume,
+          reporter,
+          page,
+          pinpoint,
+          courtOrYear,
+          year,
+        ] = match;
 
         // Determine if last group is court or year
         const actualYear = year || courtOrYear;
         const court = year ? courtOrYear : undefined;
 
         return {
-          id: IdGenerator.generic('cite'),
+          id: IdGenerator.generic("cite"),
           type: BluebookCitationType.CASE,
           rawText: text,
           formatted: text,
-          caseName: `${party1?.trim() || ''} v. ${party2?.trim() || ''}`,
-          party1: party1?.trim() || '',
-          party2: party2?.trim() || '',
-          volume: parseInt(volume || '0'),
-          reporter: reporter?.replace(/\s+/g, ' ').trim() || '',
-          page: parseInt(page || '0'),
-          court: this.determineCourtLevel(reporter || '', court),
-          courtAbbreviation: court?.trim() || '',
-          year: parseInt(actualYear || '0'),
-          pinpoint: pinpoint,
+          caseName: `${party1?.trim() || ""} v. ${party2?.trim() || ""}`,
+          party1: party1?.trim() || "",
+          party2: party2?.trim() || "",
+          volume: parseInt(volume || "0"),
+          reporter: reporter?.replace(/\s+/g, " ").trim() || "",
+          page: parseInt(page || "0"),
+          court: this.determineCourtLevel(reporter || "", court),
+          courtAbbreviation: court?.trim() || "",
+          year: parseInt(actualYear || "0"),
           isValid: true,
           validationErrors: [],
-          metadata: this.createDefaultMetadata()
+          metadata: this.createDefaultMetadata(),
+          ...(pinpoint ? { pinpoint } : {}),
         };
       }
     }
@@ -119,17 +128,20 @@ export class BluebookParser {
         const year = match[3] || match[4];
 
         return {
-          id: IdGenerator.generic('cite'),
+          id: IdGenerator.generic("cite"),
           type: BluebookCitationType.STATUTE,
           rawText: text,
           formatted: text,
-          title: (titleOrCode && isNaN(parseInt(titleOrCode))) ? titleOrCode : parseInt(titleOrCode || '0'),
-          code: match[2] || 'U.S.C.',
-          section: section || '',
-          year: year ? parseInt(year) : undefined,
+          title:
+            titleOrCode && isNaN(parseInt(titleOrCode))
+              ? titleOrCode
+              : parseInt(titleOrCode || "0"),
+          code: match[2] || "U.S.C.",
+          section: section || "",
           isValid: true,
           validationErrors: [],
-          metadata: this.createDefaultMetadata()
+          metadata: this.createDefaultMetadata(),
+          ...(year ? { year: parseInt(year) } : {}),
         };
       }
     }
@@ -140,7 +152,9 @@ export class BluebookParser {
   /**
    * Parse constitutional citation (e.g., "U.S. Const. amend. XIV, § 1")
    */
-  private static parseConstitutionCitation(text: string): ConstitutionCitation | null {
+  private static parseConstitutionCitation(
+    text: string,
+  ): ConstitutionCitation | null {
     const patterns = [
       // U.S. Constitution Amendment
       /^(U.S.|United States)\s+Const.?\s+amend.\s+([IVX]+),?\s*(?:§\s*(\d+))?/i,
@@ -155,21 +169,25 @@ export class BluebookParser {
     for (const pattern of patterns) {
       const match = text.match(pattern);
       if (match) {
-        const isAmendment = text.toLowerCase().includes('amend');
-        const jurisdiction = match[1]?.includes('.') ? 'U.S.' : (match[1] || 'U.S.');
+        const isAmendment = text.toLowerCase().includes("amend");
+        const jurisdiction = match[1]?.includes(".")
+          ? "U.S."
+          : match[1] || "U.S.";
 
         return {
-          id: IdGenerator.generic('cite'),
+          id: IdGenerator.generic("cite"),
           type: BluebookCitationType.CONSTITUTION,
           rawText: text,
           formatted: text,
           jurisdiction,
-          article: !isAmendment ? match[2] : undefined,
-          amendment: isAmendment ? this.romanToDecimal(match[2] || '') : undefined,
-          section: match[3],
           isValid: true,
           validationErrors: [],
-          metadata: this.createDefaultMetadata()
+          metadata: this.createDefaultMetadata(),
+          ...(!isAmendment && match[2] ? { article: match[2] } : {}),
+          ...(isAmendment
+            ? { amendment: this.romanToDecimal(match[2] || "") }
+            : {}),
+          ...(match[3] ? { section: match[3] } : {}),
         };
       }
     }
@@ -180,22 +198,24 @@ export class BluebookParser {
   /**
    * Parse regulation citation (e.g., "29 C.F.R. § 1614.101 (2020)")
    */
-  private static parseRegulationCitation(text: string): RegulationCitation | null {
+  private static parseRegulationCitation(
+    text: string,
+  ): RegulationCitation | null {
     const pattern = /^(\d+)\s+C.F.R.\s+§\s*([\d.]+)\s*(?:\((\d{4})\))?/i;
     const match = text.match(pattern);
 
     if (match) {
       return {
-        id: IdGenerator.generic('cite'),
+        id: IdGenerator.generic("cite"),
         type: BluebookCitationType.REGULATION,
         rawText: text,
         formatted: text,
-        title: parseInt(match[1] || '0'),
-        section: match[2] || '',
+        title: parseInt(match[1] || "0"),
+        section: match[2] || "",
         year: match[3] ? parseInt(match[3]) : new Date().getFullYear(),
         isValid: true,
         validationErrors: [],
-        metadata: this.createDefaultMetadata()
+        metadata: this.createDefaultMetadata(),
       };
     }
 
@@ -207,24 +227,25 @@ export class BluebookParser {
    */
   private static parseBookCitation(text: string): BookCitation | null {
     // Pattern: Author(s), Title (Edition Year)
-    const pattern = /^([\w\s.,&]+),\s+(.+?)\s+(?:\((\d+)(?:st|nd|rd|th)?\s+ed.\s+)?(\d{4})\)/i;
+    const pattern =
+      /^([\w\s.,&]+),\s+(.+?)\s+(?:\((\d+)(?:st|nd|rd|th)?\s+ed.\s+)?(\d{4})\)/i;
     const match = text.match(pattern);
 
-    if (match && text.includes('(')) {
-      const authors = this.parseAuthors(match[1] || '');
+    if (match && text.includes("(")) {
+      const authors = this.parseAuthors(match[1] || "");
 
       return {
-        id: IdGenerator.generic('cite'),
+        id: IdGenerator.generic("cite"),
         type: BluebookCitationType.BOOK,
         rawText: text,
         formatted: text,
         authors,
-        title: match[2]?.trim() || '',
-        edition: match[3] ? parseInt(match[3]) : undefined,
-        year: parseInt(match[4] || '0'),
+        title: match[2]?.trim() || "",
+        year: parseInt(match[4] || "0"),
         isValid: true,
         validationErrors: [],
-        metadata: this.createDefaultMetadata()
+        metadata: this.createDefaultMetadata(),
+        ...(match[3] ? { edition: parseInt(match[3]) } : {}),
       };
     }
 
@@ -234,28 +255,31 @@ export class BluebookParser {
   /**
    * Parse law review/journal citation
    */
-  private static parsePeriodicalCitation(text: string): PeriodicalCitation | null {
+  private static parsePeriodicalCitation(
+    text: string,
+  ): PeriodicalCitation | null {
     // Pattern: Author, Title, Vol Publication Page (Year)
-    const pattern = /^([\w\s.,&]+),\s+(.+?),\s+(\d+)\s+([\w\s.&]+)\s+(\d+)(?:,\s*(\d+))?\s*\((\d{4})\)/i;
+    const pattern =
+      /^([\w\s.,&]+),\s+(.+?),\s+(\d+)\s+([\w\s.&]+)\s+(\d+)(?:,\s*(\d+))?\s*\((\d{4})\)/i;
     const match = text.match(pattern);
 
     if (match) {
-      const authors = this.parseAuthors(match[1] || '');
+      const authors = this.parseAuthors(match[1] || "");
 
       return {
-        id: IdGenerator.generic('cite'),
+        id: IdGenerator.generic("cite"),
         type: BluebookCitationType.LAW_REVIEW,
         rawText: text,
         formatted: text,
         authors,
-        title: match[2]?.trim() || '',
-        volume: parseInt(match[3] || '0'),
-        publication: match[4]?.trim() || '',
-        page: parseInt(match[5] || '0'),
-        year: parseInt(match[7] || '0'),
+        title: match[2]?.trim() || "",
+        volume: parseInt(match[3] || "0"),
+        publication: match[4]?.trim() || "",
+        page: parseInt(match[5] || "0"),
+        year: parseInt(match[7] || "0"),
         isValid: true,
         validationErrors: [],
-        metadata: this.createDefaultMetadata()
+        metadata: this.createDefaultMetadata(),
       };
     }
 
@@ -271,19 +295,22 @@ export class BluebookParser {
 
     if (match) {
       // Extract title (text before URL)
-      const title = text.substring(0, text.indexOf(match[0])).trim().replace(/,$/, '');
+      const title = text
+        .substring(0, text.indexOf(match[0]))
+        .trim()
+        .replace(/,$/, "");
 
       return {
-        id: IdGenerator.generic('cite'),
+        id: IdGenerator.generic("cite"),
         type: BluebookCitationType.WEB_RESOURCE,
         rawText: text,
         formatted: text,
-        title: title || 'Untitled Web Resource',
-        url: match[1] || '',
+        title: title || "Untitled Web Resource",
+        url: match[1] || "",
         accessDate: new Date().toISOString(),
         isValid: true,
         validationErrors: [],
-        metadata: this.createDefaultMetadata()
+        metadata: this.createDefaultMetadata(),
       };
     }
 
@@ -293,20 +320,23 @@ export class BluebookParser {
   /**
    * Extract citation signal if present
    */
-  static extractSignal(text: string): { signal: CitationSignal; remainder: string } {
+  static extractSignal(text: string): {
+    signal: CitationSignal;
+    remainder: string;
+  } {
     const signals: Record<string, CitationSignal> = {
-      'see also': CitationSignal.SEE_ALSO,
-      'see generally': CitationSignal.SEE_GENERALLY,
-      'but see': CitationSignal.BUT_SEE,
-      'but cf': CitationSignal.BUT_CF,
-      'see': CitationSignal.SEE,
-      'cf': CitationSignal.CF,
-      'compare': CitationSignal.COMPARE,
-      'with': CitationSignal.WITH,
-      'contra': CitationSignal.CONTRA,
-      'accord': CitationSignal.ACCORD,
-      'e.g.': CitationSignal.E_G,
-      'eg': CitationSignal.E_G,
+      "see also": CitationSignal.SEE_ALSO,
+      "see generally": CitationSignal.SEE_GENERALLY,
+      "but see": CitationSignal.BUT_SEE,
+      "but cf": CitationSignal.BUT_CF,
+      see: CitationSignal.SEE,
+      cf: CitationSignal.CF,
+      compare: CitationSignal.COMPARE,
+      with: CitationSignal.WITH,
+      contra: CitationSignal.CONTRA,
+      accord: CitationSignal.ACCORD,
+      "e.g.": CitationSignal.E_G,
+      eg: CitationSignal.E_G,
     };
 
     const lower = text.toLowerCase().trim();
@@ -315,7 +345,7 @@ export class BluebookParser {
       if (lower.startsWith(key)) {
         return {
           signal: value,
-          remainder: text.substring(key.length).trim().replace(/^,\s*/, '')
+          remainder: text.substring(key.length).trim().replace(/^,\s*/, ""),
         };
       }
     }
@@ -331,15 +361,23 @@ export class BluebookParser {
     return authors.map((name): Author => {
       const parts = name.trim().split(/\s+/);
       if (parts.length === 1) {
-        return { firstName: '', lastName: parts[0] || '', fullName: parts[0] || '' };
+        return {
+          firstName: "",
+          lastName: parts[0] || "",
+          fullName: parts[0] || "",
+        };
       } else if (parts.length === 2) {
-        return { firstName: parts[0] || '', lastName: parts[1] || '', fullName: name.trim() };
+        return {
+          firstName: parts[0] || "",
+          lastName: parts[1] || "",
+          fullName: name.trim(),
+        };
       } else {
         return {
-          firstName: parts[0] || '',
-          middleName: parts.slice(1, -1).join(' '),
-          lastName: parts[parts.length - 1] || '',
-          fullName: name.trim()
+          firstName: parts[0] || "",
+          middleName: parts.slice(1, -1).join(" "),
+          lastName: parts[parts.length - 1] || "",
+          fullName: name.trim(),
         };
       }
     });
@@ -348,15 +386,21 @@ export class BluebookParser {
   /**
    * Determine court level from reporter abbreviation
    */
-  private static determineCourtLevel(reporter: string, court?: string): CourtLevel {
-    const r = reporter.replace(/\s+/g, '').toLowerCase();
+  private static determineCourtLevel(
+    reporter: string,
+    court?: string,
+  ): CourtLevel {
+    const r = reporter.replace(/\s+/g, "").toLowerCase();
 
-    if (r.includes('u.s.') && !r.includes('f.')) return CourtLevel.SUPREME_COURT;
-    if (r.includes('f.2d') || r.includes('f.3d') || r.includes('f.4th')) return CourtLevel.CIRCUIT;
-    if (r.includes('f.supp')) return CourtLevel.DISTRICT;
-    if (r.includes('bankr')) return CourtLevel.BANKRUPTCY;
-    if (court && court.toLowerCase().includes('cir.')) return CourtLevel.CIRCUIT;
-    if (court && court.toLowerCase().includes('d.')) return CourtLevel.DISTRICT;
+    if (r.includes("u.s.") && !r.includes("f."))
+      return CourtLevel.SUPREME_COURT;
+    if (r.includes("f.2d") || r.includes("f.3d") || r.includes("f.4th"))
+      return CourtLevel.CIRCUIT;
+    if (r.includes("f.supp")) return CourtLevel.DISTRICT;
+    if (r.includes("bankr")) return CourtLevel.BANKRUPTCY;
+    if (court && court.toLowerCase().includes("cir."))
+      return CourtLevel.CIRCUIT;
+    if (court && court.toLowerCase().includes("d.")) return CourtLevel.DISTRICT;
 
     return CourtLevel.STATE_SUPREME; // Default for state reporters
   }
@@ -365,7 +409,15 @@ export class BluebookParser {
    * Convert Roman numeral to decimal
    */
   private static romanToDecimal(roman: string): number {
-    const map: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+    const map: Record<string, number> = {
+      I: 1,
+      V: 5,
+      X: 10,
+      L: 50,
+      C: 100,
+      D: 500,
+      M: 1000,
+    };
     let result = 0;
     for (let i = 0; i < roman.length; i++) {
       const currentChar = roman.charAt(i);
@@ -386,18 +438,20 @@ export class BluebookParser {
    */
   private static createUnknownCitation(text: string): BluebookCitation {
     return {
-      id: IdGenerator.generic('cite'),
+      id: IdGenerator.generic("cite"),
       type: BluebookCitationType.CASE, // Default type
       rawText: text,
       formatted: text,
       isValid: false,
-      validationErrors: [{
-        code: 'PARSE_FAILED',
-        message: 'Unable to parse citation format',
-        severity: ValidationSeverity.ERROR,
-        suggestion: 'Verify citation follows Bluebook format'
-      }],
-      metadata: this.createDefaultMetadata()
+      validationErrors: [
+        {
+          code: "PARSE_FAILED",
+          message: "Unable to parse citation format",
+          severity: ValidationSeverity.ERROR,
+          suggestion: "Verify citation follows Bluebook format",
+        },
+      ],
+      metadata: this.createDefaultMetadata(),
     };
   }
 
@@ -410,7 +464,7 @@ export class BluebookParser {
       createdAt: now,
       updatedAt: now,
       shortFormEstablished: false,
-      citationCount: 0
+      citationCount: 0,
     };
   }
 
@@ -418,7 +472,9 @@ export class BluebookParser {
    * Batch parse multiple citations
    */
   static batchParse(citations: string[]): BluebookCitation[] {
-    return citations.map(c => this.parse(c)).filter(Boolean) as BluebookCitation[];
+    return citations
+      .map((c) => this.parse(c))
+      .filter(Boolean) as BluebookCitation[];
   }
 
   /**
@@ -433,7 +489,9 @@ export class BluebookParser {
         errors.push(...this.validateCaseCitation(citation as CaseCitation));
         break;
       case BluebookCitationType.STATUTE:
-        errors.push(...this.validateStatuteCitation(citation as StatuteCitation));
+        errors.push(
+          ...this.validateStatuteCitation(citation as StatuteCitation),
+        );
         break;
       // Add more type-specific validations
     }
@@ -444,30 +502,36 @@ export class BluebookParser {
   /**
    * Validate case citation
    */
-  private static validateCaseCitation(citation: CaseCitation): CitationValidationError[] {
+  private static validateCaseCitation(
+    citation: CaseCitation,
+  ): CitationValidationError[] {
     const errors: CitationValidationError[] = [];
 
     if (!citation.caseName || citation.caseName.length < 3) {
       errors.push({
-        code: 'INVALID_CASE_NAME',
-        message: 'Case name is too short or missing',
-        severity: ValidationSeverity.ERROR
+        code: "INVALID_CASE_NAME",
+        message: "Case name is too short or missing",
+        severity: ValidationSeverity.ERROR,
       });
     }
 
-    if (!citation.year || citation.year < 1700 || citation.year > new Date().getFullYear()) {
+    if (
+      !citation.year ||
+      citation.year < 1700 ||
+      citation.year > new Date().getFullYear()
+    ) {
       errors.push({
-        code: 'INVALID_YEAR',
-        message: 'Year is invalid or missing',
-        severity: ValidationSeverity.ERROR
+        code: "INVALID_YEAR",
+        message: "Year is invalid or missing",
+        severity: ValidationSeverity.ERROR,
       });
     }
 
     if (!citation.reporter || citation.reporter.length === 0) {
       errors.push({
-        code: 'MISSING_REPORTER',
-        message: 'Reporter abbreviation is required',
-        severity: ValidationSeverity.ERROR
+        code: "MISSING_REPORTER",
+        message: "Reporter abbreviation is required",
+        severity: ValidationSeverity.ERROR,
       });
     }
 
@@ -477,26 +541,27 @@ export class BluebookParser {
   /**
    * Validate statute citation
    */
-  private static validateStatuteCitation(citation: StatuteCitation): CitationValidationError[] {
+  private static validateStatuteCitation(
+    citation: StatuteCitation,
+  ): CitationValidationError[] {
     const errors: CitationValidationError[] = [];
 
     if (!citation.section) {
       errors.push({
-        code: 'MISSING_SECTION',
-        message: 'Section number is required',
-        severity: ValidationSeverity.ERROR
+        code: "MISSING_SECTION",
+        message: "Section number is required",
+        severity: ValidationSeverity.ERROR,
       });
     }
 
     if (!citation.code) {
       errors.push({
-        code: 'MISSING_CODE',
-        message: 'Code designation is required',
-        severity: ValidationSeverity.ERROR
+        code: "MISSING_CODE",
+        message: "Code designation is required",
+        severity: ValidationSeverity.ERROR,
       });
     }
 
     return errors;
   }
 }
-

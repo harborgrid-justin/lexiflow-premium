@@ -1,23 +1,23 @@
-import {
-  ApiKey,
-  ApiServiceSpec,
-  AuditLogEntry,
-  Connector,
-  DataAnomaly,
-  GovernancePolicy,
-  GovernanceRule,
-  PipelineJob,
-  RLSPolicy,
-  TenantConfig,
-  type Permission,
-  type RolePermissions,
-} from "@/types";
 /**
  * ? Migrated to backend API (2025-12-21)
  */
 import { adminApi } from "@/api/domains/admin.api";
 import { authApi } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
+import {
+  type ApiKey,
+  type ApiServiceSpec,
+  type AuditLogEntry,
+  type Connector,
+  type DataAnomaly,
+  type GovernancePolicy,
+  type GovernanceRule,
+  type PipelineJob,
+  type RLSPolicy,
+  type TenantConfig,
+  type Permission,
+  type RolePermissions,
+} from "@/types";
 
 export const AdminService = {
   // Real backend API access
@@ -37,7 +37,7 @@ export const AdminService = {
 
       return auditLogs.sort(
         (a: AuditLogEntry, b: AuditLogEntry) =>
-          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
       );
     } catch (error) {
       console.error("[AdminService.getLogs] Error fetching audit logs:", error);
@@ -86,7 +86,7 @@ export const AdminService = {
     } catch (error) {
       console.error(
         "[AdminService.getIntegrations] Backend unavailable:",
-        error
+        error,
       );
       return [];
     }
@@ -114,7 +114,7 @@ export const AdminService = {
     } catch (error) {
       console.error(
         "[AdminService.getSecuritySettings] Backend unavailable:",
-        error
+        error,
       );
       // Fallback to default security settings
       return [
@@ -162,7 +162,26 @@ export const AdminService = {
   // Permissions from backend
   getRolePermissions: async (roleId: string): Promise<RolePermissions> => {
     try {
-      return await authApi.permissions.getRolePermissions(roleId);
+      const result = await authApi.permissions.getRolePermissions(roleId);
+      if (!result.ok) {
+        throw result.error;
+      }
+
+      const permissionNames = result.data;
+      const permissions: Permission[] = permissionNames.map(
+        (permissionName, index) => ({
+          id: `${roleId}-${permissionName}-${index}`,
+          resource: permissionName,
+          action: "*",
+          effect: "allow",
+        }),
+      );
+
+      return {
+        roleId,
+        roleName: roleId,
+        permissions,
+      };
     } catch (error) {
       console.warn("Failed to fetch permissions from backend", error);
       throw error;
@@ -170,9 +189,28 @@ export const AdminService = {
   },
   updateRolePermissions: async (
     roleId: string,
-    permissions: Permission[]
+    permissions: Permission[],
   ): Promise<RolePermissions> => {
-    return await authApi.permissions.updateRolePermissions(roleId, permissions);
+    const permissionNames = permissions.map((permission) =>
+      permission.action === "*"
+        ? permission.resource
+        : `${permission.resource}:${permission.action}`,
+    );
+
+    const result = await authApi.permissions.updateRolePermissions(
+      roleId,
+      permissionNames,
+    );
+
+    if (!result.ok) {
+      throw result.error;
+    }
+
+    return {
+      roleId,
+      roleName: roleId,
+      permissions,
+    };
   },
 
   // Data Platform - ETL Pipelines
@@ -186,7 +224,11 @@ export const AdminService = {
   },
   getApiKeys: async (): Promise<ApiKey[]> => {
     try {
-      return await authApi.apiKeys.getAll();
+      const result = await authApi.apiKeys.getAll();
+      if (!result.ok) {
+        throw result.error;
+      }
+      return result.data as ApiKey[];
     } catch (error) {
       console.warn("Failed to fetch API keys from backend", error);
       return [];
@@ -212,7 +254,7 @@ export const AdminService = {
     } catch (error) {
       console.error(
         "[AdminService.getDataDomains] Backend unavailable:",
-        error
+        error,
       );
       return [];
     }
@@ -279,7 +321,7 @@ export const AdminService = {
   getGovernancePolicies: async (): Promise<GovernancePolicy[]> => {
     try {
       return await apiClient.get<GovernancePolicy[]>(
-        "/admin/governance/policies"
+        "/admin/governance/policies",
       );
     } catch (error) {
       console.warn("Failed to fetch governance policies", error);

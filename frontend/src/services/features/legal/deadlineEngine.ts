@@ -206,7 +206,7 @@
  * - Notification integration: Auto-schedule reminders
  */
 
-import { DocketEntry, DocketEntryType } from '@/types';
+import { type DocketEntry, type DocketEntryType } from "@/types";
 
 // =============================================================================
 // TYPES & INTERFACES
@@ -217,8 +217,8 @@ import { DocketEntry, DocketEntryType } from '@/types';
  */
 export interface DeadlineRule {
   entryType: DocketEntryType;
-  triggerPattern?: RegExp;  // Match title/description
-  jurisdiction: 'Federal' | 'State' | 'Both';
+  triggerPattern?: RegExp; // Match title/description
+  jurisdiction: "Federal" | "State" | "Both";
   deadlines: DeadlineDefinition[];
 }
 
@@ -230,8 +230,8 @@ export interface DeadlineDefinition {
   daysFromFiling: number;
   businessDaysOnly?: boolean;
   description: string;
-  priority: 'Critical' | 'High' | 'Normal';
-  ruleReference?: string;  // E.g., "FRCP 26(a)(1)"
+  priority: "Critical" | "High" | "Normal";
+  ruleReference?: string; // E.g., "FRCP 26(a)(1)"
 }
 
 /**
@@ -240,11 +240,11 @@ export interface DeadlineDefinition {
 export interface GeneratedDeadline {
   id: string;
   title: string;
-  date: string;  // YYYY-MM-DD
+  date: string; // YYYY-MM-DD
   docketEntryId: string;
   caseId: string;
-  status: 'Pending' | 'Satisfied';
-  priority: 'Critical' | 'High' | 'Normal';
+  status: "Pending" | "Satisfied";
+  priority: "Critical" | "High" | "Normal";
   description: string;
   ruleReference?: string;
 }
@@ -260,194 +260,194 @@ export interface GeneratedDeadline {
 const DEADLINE_RULES: DeadlineRule[] = [
   // Discovery Deadlines (Federal)
   {
-    entryType: 'Filing',
+    entryType: "Filing",
     triggerPattern: /initial\s+disclosures?/i,
-    jurisdiction: 'Federal',
+    jurisdiction: "Federal",
     deadlines: [
       {
-        title: 'Initial Disclosures Due',
+        title: "Initial Disclosures Due",
         daysFromFiling: 14,
         businessDaysOnly: true,
-        description: 'Parties must exchange initial disclosures',
-        priority: 'High',
-        ruleReference: 'FRCP 26(a)(1)'
-      }
-    ]
+        description: "Parties must exchange initial disclosures",
+        priority: "High",
+        ruleReference: "FRCP 26(a)(1)",
+      },
+    ],
   },
   {
-    entryType: 'Order',
+    entryType: "Order",
     triggerPattern: /discovery\s+(order|schedule)/i,
-    jurisdiction: 'Federal',
+    jurisdiction: "Federal",
     deadlines: [
       {
-        title: 'Fact Discovery Cutoff',
+        title: "Fact Discovery Cutoff",
         daysFromFiling: 90,
         businessDaysOnly: true,
-        description: 'Complete all fact discovery',
-        priority: 'Critical',
-        ruleReference: 'Court Order'
+        description: "Complete all fact discovery",
+        priority: "Critical",
+        ruleReference: "Court Order",
       },
       {
-        title: 'Expert Disclosures Due',
+        title: "Expert Disclosures Due",
         daysFromFiling: 60,
         businessDaysOnly: true,
-        description: 'Disclose expert witnesses',
-        priority: 'High',
-        ruleReference: 'FRCP 26(a)(2)'
-      }
-    ]
+        description: "Disclose expert witnesses",
+        priority: "High",
+        ruleReference: "FRCP 26(a)(2)",
+      },
+    ],
   },
 
   // Motion Deadlines (Federal)
   {
-    entryType: 'Filing',
+    entryType: "Filing",
     triggerPattern: /motion\s+(to|for)/i,
-    jurisdiction: 'Both',
+    jurisdiction: "Both",
     deadlines: [
       {
-        title: 'Opposition Brief Due',
+        title: "Opposition Brief Due",
         daysFromFiling: 21,
         businessDaysOnly: true,
-        description: 'Opposing party must file response',
-        priority: 'High',
-        ruleReference: 'Local Rule 7.1'
+        description: "Opposing party must file response",
+        priority: "High",
+        ruleReference: "Local Rule 7.1",
       },
       {
-        title: 'Reply Brief Due',
+        title: "Reply Brief Due",
         daysFromFiling: 35,
         businessDaysOnly: true,
-        description: 'Moving party may file reply',
-        priority: 'Normal',
-        ruleReference: 'Local Rule 7.1'
-      }
-    ]
+        description: "Moving party may file reply",
+        priority: "Normal",
+        ruleReference: "Local Rule 7.1",
+      },
+    ],
   },
 
   // Complaint Filing Deadlines
   {
-    entryType: 'Filing',
+    entryType: "Filing",
     triggerPattern: /complaint/i,
-    jurisdiction: 'Both',
+    jurisdiction: "Both",
     deadlines: [
       {
-        title: 'Answer Due',
+        title: "Answer Due",
         daysFromFiling: 21,
         businessDaysOnly: false,
-        description: 'Defendant must file answer or motion',
-        priority: 'Critical',
-        ruleReference: 'FRCP 12(a)(1)(A)'
+        description: "Defendant must file answer or motion",
+        priority: "Critical",
+        ruleReference: "FRCP 12(a)(1)(A)",
       },
       {
-        title: 'Service Deadline',
+        title: "Service Deadline",
         daysFromFiling: 90,
         businessDaysOnly: false,
-        description: 'Complete service on all defendants',
-        priority: 'Critical',
-        ruleReference: 'FRCP 4(m)'
-      }
-    ]
+        description: "Complete service on all defendants",
+        priority: "Critical",
+        ruleReference: "FRCP 4(m)",
+      },
+    ],
   },
 
   // Scheduling Order Deadlines
   {
-    entryType: 'Order',
+    entryType: "Order",
     triggerPattern: /scheduling\s+order/i,
-    jurisdiction: 'Both',
+    jurisdiction: "Both",
     deadlines: [
       {
-        title: 'Amend Pleadings Deadline',
+        title: "Amend Pleadings Deadline",
         daysFromFiling: 60,
         businessDaysOnly: true,
-        description: 'Last day to amend pleadings as of right',
-        priority: 'High',
-        ruleReference: 'Court Order'
+        description: "Last day to amend pleadings as of right",
+        priority: "High",
+        ruleReference: "Court Order",
       },
       {
-        title: 'Join Parties Deadline',
+        title: "Join Parties Deadline",
         daysFromFiling: 60,
         businessDaysOnly: true,
-        description: 'Last day to join additional parties',
-        priority: 'High',
-        ruleReference: 'Court Order'
-      }
-    ]
+        description: "Last day to join additional parties",
+        priority: "High",
+        ruleReference: "Court Order",
+      },
+    ],
   },
 
   // Summary Judgment Deadlines
   {
-    entryType: 'Filing',
+    entryType: "Filing",
     triggerPattern: /motion\s+for\s+summary\s+judgment/i,
-    jurisdiction: 'Both',
+    jurisdiction: "Both",
     deadlines: [
       {
-        title: 'Summary Judgment Opposition',
+        title: "Summary Judgment Opposition",
         daysFromFiling: 28,
         businessDaysOnly: true,
-        description: 'File opposition to summary judgment',
-        priority: 'Critical',
-        ruleReference: 'FRCP 56(c)'
+        description: "File opposition to summary judgment",
+        priority: "Critical",
+        ruleReference: "FRCP 56(c)",
       },
       {
-        title: 'Summary Judgment Reply',
+        title: "Summary Judgment Reply",
         daysFromFiling: 42,
         businessDaysOnly: true,
-        description: 'File reply brief',
-        priority: 'High',
-        ruleReference: 'Local Rule 56.1'
-      }
-    ]
+        description: "File reply brief",
+        priority: "High",
+        ruleReference: "Local Rule 56.1",
+      },
+    ],
   },
 
   // Orders Requiring Response
   {
-    entryType: 'Order',
+    entryType: "Order",
     triggerPattern: /\b(respond|response|reply)\b/i,
-    jurisdiction: 'Both',
+    jurisdiction: "Both",
     deadlines: [
       {
-        title: 'Response to Order Due',
+        title: "Response to Order Due",
         daysFromFiling: 21,
         businessDaysOnly: true,
-        description: 'Comply with court order requiring response',
-        priority: 'High',
-        ruleReference: 'Court Order'
-      }
-    ]
+        description: "Comply with court order requiring response",
+        priority: "High",
+        ruleReference: "Court Order",
+      },
+    ],
   },
 
   // Appeal Deadlines
   {
-    entryType: 'Order',
+    entryType: "Order",
     triggerPattern: /final\s+(judgment|order)/i,
-    jurisdiction: 'Federal',
+    jurisdiction: "Federal",
     deadlines: [
       {
-        title: 'Notice of Appeal Due',
+        title: "Notice of Appeal Due",
         daysFromFiling: 30,
         businessDaysOnly: false,
-        description: 'File notice of appeal',
-        priority: 'Critical',
-        ruleReference: 'FRAP 4(a)(1)(A)'
-      }
-    ]
+        description: "File notice of appeal",
+        priority: "Critical",
+        ruleReference: "FRAP 4(a)(1)(A)",
+      },
+    ],
   },
 
   // Settlement Conference
   {
-    entryType: 'Notice',
+    entryType: "Notice",
     triggerPattern: /settlement\s+conference/i,
-    jurisdiction: 'Both',
+    jurisdiction: "Both",
     deadlines: [
       {
-        title: 'Settlement Conference Date',
+        title: "Settlement Conference Date",
         daysFromFiling: 0,
         businessDaysOnly: false,
-        description: 'Attend settlement conference',
-        priority: 'Critical',
-        ruleReference: 'Court Notice'
-      }
-    ]
-  }
+        description: "Attend settlement conference",
+        priority: "Critical",
+        ruleReference: "Court Notice",
+      },
+    ],
+  },
 ];
 
 // =============================================================================
@@ -489,7 +489,7 @@ function addCalendarDays(startDate: Date, days: number): Date {
  * @private
  */
 function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0]!;
+  return date.toISOString().split("T")[0]!;
 }
 
 /**
@@ -512,21 +512,27 @@ export const DeadlineEngine = {
   /**
    * Generate deadlines for a docket entry
    */
-  generateDeadlines(entry: DocketEntry, jurisdiction: 'Federal' | 'State' = 'Federal'): GeneratedDeadline[] {
+  generateDeadlines(
+    entry: DocketEntry,
+    jurisdiction: "Federal" | "State" = "Federal",
+  ): GeneratedDeadline[] {
     const deadlines: GeneratedDeadline[] = [];
-    const entryDate = new Date(entry.date || entry.entryDate || entry.dateFiled);
+    const entryDate = new Date(
+      entry.date || entry.entryDate || entry.dateFiled,
+    );
 
     // Find matching rules
-    const matchingRules = DEADLINE_RULES.filter(rule => {
+    const matchingRules = DEADLINE_RULES.filter((rule) => {
       // Check entry type
       if (rule.entryType !== entry.type) return false;
 
       // Check jurisdiction
-      if (rule.jurisdiction !== 'Both' && rule.jurisdiction !== jurisdiction) return false;
+      if (rule.jurisdiction !== "Both" && rule.jurisdiction !== jurisdiction)
+        return false;
 
       // Check trigger pattern if specified
       if (rule.triggerPattern) {
-        const searchText = `${entry.title} ${entry.description || ''}`;
+        const searchText = `${entry.title} ${entry.description || ""}`;
         if (!rule.triggerPattern.test(searchText)) return false;
       }
 
@@ -546,10 +552,10 @@ export const DeadlineEngine = {
           date: formatDate(deadlineDate),
           docketEntryId: entry.id,
           caseId: entry.caseId,
-          status: 'Pending',
+          status: "Pending",
           priority: def.priority,
           description: def.description,
-          ruleReference: def.ruleReference
+          ...(def.ruleReference ? { ruleReference: def.ruleReference } : {}),
         });
       });
     });
@@ -574,8 +580,10 @@ export const DeadlineEngine = {
   /**
    * Calculate deadline status
    */
-  calculateDeadlineStatus(deadline: GeneratedDeadline): 'Upcoming' | 'Due Soon' | 'Overdue' | 'Satisfied' {
-    if (deadline.status === 'Satisfied') return 'Satisfied';
+  calculateDeadlineStatus(
+    deadline: GeneratedDeadline,
+  ): "Upcoming" | "Due Soon" | "Overdue" | "Satisfied" {
+    if (deadline.status === "Satisfied") return "Satisfied";
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -583,17 +591,22 @@ export const DeadlineEngine = {
     const deadlineDate = new Date(deadline.date);
     deadlineDate.setHours(0, 0, 0, 0);
 
-    const daysUntilDeadline = Math.ceil((deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    const daysUntilDeadline = Math.ceil(
+      (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+    );
 
-    if (daysUntilDeadline < 0) return 'Overdue';
-    if (daysUntilDeadline <= 7) return 'Due Soon';
-    return 'Upcoming';
+    if (daysUntilDeadline < 0) return "Overdue";
+    if (daysUntilDeadline <= 7) return "Due Soon";
+    return "Upcoming";
   },
 
   /**
    * Get deadlines for multiple entries
    */
-  generateBatchDeadlines(entries: DocketEntry[], jurisdiction: 'Federal' | 'State' = 'Federal'): GeneratedDeadline[] {
+  generateBatchDeadlines(
+    entries: DocketEntry[],
+    jurisdiction: "Federal" | "State" = "Federal",
+  ): GeneratedDeadline[] {
     const allDeadlines: GeneratedDeadline[] = [];
 
     for (const entry of entries) {
@@ -603,6 +616,5 @@ export const DeadlineEngine = {
 
     // Sort by date
     return allDeadlines.sort((a, b) => a.date.localeCompare(b.date));
-  }
+  },
 };
-

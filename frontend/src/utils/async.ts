@@ -4,8 +4,8 @@
  * Common async patterns used throughout the application.
  */
 
-import { SYNC_MAX_RETRY_DELAY_MS } from "@/config/network/sync.config";
 import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS } from "@/config/network/api.config";
+import { SYNC_MAX_RETRY_DELAY_MS } from "@/config/network/sync.config";
 
 /**
  * Delay execution for a specified number of milliseconds.

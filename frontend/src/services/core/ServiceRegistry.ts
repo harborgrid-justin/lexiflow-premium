@@ -21,7 +21,7 @@
  * - Testing: Supports mock service replacement
  */
 
-import { IService, ServiceError, ServiceState } from "./ServiceLifecycle";
+import { type IService, ServiceError, ServiceState } from "./ServiceLifecycle";
 
 export { ServiceError };
 

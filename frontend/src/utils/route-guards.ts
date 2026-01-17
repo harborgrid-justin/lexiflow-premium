@@ -13,12 +13,47 @@
 
 import type { AuthUser } from "@/lib/auth/types";
 
+/* eslint-disable @typescript-eslint/only-throw-error */
+
 // ============================================================================
 // Constants
 // ============================================================================
 
 const AUTH_STORAGE_KEY = "lexiflow-auth-token";
 const AUTH_USER_KEY = "lexiflow_auth_user";
+
+function parseAuthUser(userJson: string): AuthUser | null {
+  try {
+    const parsed = JSON.parse(userJson) as Record<string, unknown>;
+
+    if (!parsed || typeof parsed !== "object") {
+      return null;
+    }
+
+    if (
+      typeof parsed["id"] !== "string" ||
+      typeof parsed["email"] !== "string" ||
+      typeof parsed["name"] !== "string" ||
+      typeof parsed["role"] !== "string"
+    ) {
+      return null;
+    }
+
+    const permissions = Array.isArray(parsed["permissions"])
+      ? parsed["permissions"].filter(
+          (permission): permission is string => typeof permission === "string",
+        )
+      : [];
+
+    return {
+      ...(parsed as Omit<AuthUser, "permissions">),
+      permissions,
+    } as AuthUser;
+  } catch (error) {
+    console.error("[RouteGuards] Failed to parse stored user", error);
+    return null;
+  }
+}
 
 // ============================================================================
 // Types
@@ -52,7 +87,7 @@ export function getCurrentUser(): AuthUser | null {
       return null;
     }
 
-    return JSON.parse(userJson) as AuthUser;
+    return parseAuthUser(userJson);
   } catch (error) {
     console.error("[RouteGuards] Error getting current user:", error);
     return null;
@@ -99,7 +134,9 @@ export function requireGuest(request: Request): RouteGuardResult {
   // Log request metadata for security auditing
   const userAgent = request.headers.get("User-Agent") || "Unknown";
   const referer = request.headers.get("Referer") || "Direct";
-  console.debug(`Guest route access: ${userAgent}, from: ${referer}`);
+  if (import.meta.env.DEV) {
+    console.warn(`Guest route access: ${userAgent}, from: ${referer}`);
+  }
 
   if (user) {
     // Already authenticated - redirect to dashboard
@@ -127,10 +164,10 @@ export function requireGuest(request: Request): RouteGuardResult {
  * @throws Response with 403 Forbidden if user doesn't have required role
  */
 export function requireRole(
-  _request: Request,
+  request: Request,
   ...allowedRoles: UserRole[]
 ): RouteGuardResult {
-  const { user } = requireAuthentication(_request);
+  const { user } = requireAuthentication(request);
 
   if (!user) {
     throw new Response("Forbidden - Insufficient permissions", {
@@ -196,10 +233,10 @@ export function requireStaff(request: Request): RouteGuardResult {
  * @throws Response with 403 Forbidden if user doesn't have permission
  */
 export function requirePermission(
-  _request: Request,
-  permission: string
+  request: Request,
+  permission: string,
 ): RouteGuardResult {
-  const { user } = requireAuthentication(_request);
+  const { user } = requireAuthentication(request);
 
   if (!user || !user.permissions.includes(permission)) {
     throw new Response("Forbidden - Missing required permission", {
@@ -220,17 +257,17 @@ export function requirePermission(
  * @throws Response with 403 Forbidden if user doesn't have all permissions
  */
 export function requireAllPermissions(
-  _request: Request,
-  permissions: string[]
+  request: Request,
+  permissions: string[],
 ): RouteGuardResult {
-  const { user } = requireAuthentication(_request);
+  const { user } = requireAuthentication(request);
 
   if (!user) {
     throw new Response("Unauthorized", { status: 401 });
   }
 
   const hasAllPermissions = permissions.every((perm) =>
-    user.permissions.includes(perm)
+    user.permissions.includes(perm),
   );
 
   if (!hasAllPermissions) {
@@ -252,17 +289,17 @@ export function requireAllPermissions(
  * @throws Response with 403 Forbidden if user doesn't have any permission
  */
 export function requireAnyPermission(
-  _request: Request,
-  permissions: string[]
+  request: Request,
+  permissions: string[],
 ): RouteGuardResult {
-  const { user } = requireAuthentication(_request);
+  const { user } = requireAuthentication(request);
 
   if (!user) {
     throw new Response("Unauthorized", { status: 401 });
   }
 
   const hasAnyPermission = permissions.some((perm) =>
-    user.permissions.includes(perm)
+    user.permissions.includes(perm),
   );
 
   if (!hasAnyPermission) {
@@ -363,7 +400,10 @@ export async function requireAuthLoader({ request }: { request: Request }) {
             const newUserJson = localStorage.getItem(AUTH_USER_KEY);
 
             if (newToken && newUserJson) {
-              return { authenticated: true, user: JSON.parse(newUserJson) };
+              const parsedUser = parseAuthUser(newUserJson);
+              if (parsedUser) {
+                return { authenticated: true, user: parsedUser };
+              }
             }
           }
         } catch (e) {
@@ -381,8 +421,11 @@ export async function requireAuthLoader({ request }: { request: Request }) {
     }
 
     try {
-      const user = JSON.parse(userJson);
-      return { authenticated: true, user };
+      const parsedUser = parseAuthUser(userJson);
+      if (parsedUser) {
+        return { authenticated: true, user: parsedUser };
+      }
+      throw new Error("Invalid stored user");
     } catch {
       throw new Response(null, {
         status: 302,
@@ -393,3 +436,5 @@ export async function requireAuthLoader({ request }: { request: Request }) {
 
   return { authenticated: true };
 }
+
+/* eslint-enable @typescript-eslint/only-throw-error */

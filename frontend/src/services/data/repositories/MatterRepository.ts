@@ -1,7 +1,7 @@
 // services/repositories/MatterRepository.ts
 import { casesApi } from "@/api/litigation/cases-api";
 import { Repository } from "@/services/core/Repository";
-import { Matter, MatterId, MatterStatus } from "@/types";
+import { type Matter, type MatterId, MatterStatus } from "@/types";
 
 export class MatterRepository extends Repository<Matter> {
   constructor() {

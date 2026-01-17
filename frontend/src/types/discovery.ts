@@ -2,12 +2,12 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  ConferralMethod,
-  ConferralResult,
-  DiscoveryStatus,
-  DiscoveryType,
+  type ConferralMethod,
+  type ConferralResult,
+  type DiscoveryStatus,
+  type DiscoveryType,
 } from "./enums";
-import { BaseEntity, CaseId, DocumentId, MotionId } from "./primitives";
+import { type BaseEntity, type CaseId, type DocumentId, type MotionId } from "./primitives";
 
 export interface DiscoveryRequest extends BaseEntity {
   caseId: CaseId;

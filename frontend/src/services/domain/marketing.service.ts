@@ -17,7 +17,7 @@
 // ================================================================================
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { MarketingCampaign, MarketingMetric } from "@/types";
+import { type MarketingCampaign, type MarketingMetric } from "@/types";
 
 export const MarketingService = {
   getMetrics: async (): Promise<MarketingMetric[]> => {

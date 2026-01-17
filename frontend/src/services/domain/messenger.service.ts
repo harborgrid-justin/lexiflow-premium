@@ -21,8 +21,9 @@
  * @updated 2025-12-19
  */
 
-import type { Conversation, Message } from "@/api/communications/messaging-api";
 import { api } from "@/services/api";
+
+import type { Conversation, Message } from "@/api/communications/messaging-api";
 
 export const MessengerService = {
   getAll: async () => {
@@ -42,8 +43,8 @@ export const MessengerService = {
     return api.messaging.createConversation({
       participantIds: item.participants,
       type: item.participants.length > 1 ? "group" : "direct",
-      subject: item.subject,
-      initialMessage: item.initialMessage,
+      ...(item.subject ? { subject: item.subject } : {}),
+      ...(item.initialMessage ? { initialMessage: item.initialMessage } : {}),
     });
   },
 
@@ -74,8 +75,8 @@ export const MessengerService = {
     return api.messaging.sendMessage({
       conversationId: data.conversationId,
       content: data.body,
-      priority: data.priority,
-      attachments: data.attachments,
+      ...(data.priority ? { priority: data.priority } : {}),
+      ...(data.attachments ? { attachments: data.attachments } : {}),
     });
   },
 
@@ -87,8 +88,8 @@ export const MessengerService = {
     return api.messaging.createConversation({
       participantIds: data.participants,
       type: data.participants.length > 1 ? "group" : "direct",
-      subject: data.subject,
-      initialMessage: data.initialMessage,
+      ...(data.subject ? { subject: data.subject } : {}),
+      ...(data.initialMessage ? { initialMessage: data.initialMessage } : {}),
     });
   },
 

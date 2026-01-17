@@ -11,7 +11,7 @@
 
 import { isBackendApiEnabled } from "@/config/network/api.config";
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { Mutation, SyncResult } from "./types/syncTypes";
+
 import {
   MAX_RETRY_ATTEMPTS,
   BASE_RETRY_DELAY,
@@ -19,6 +19,8 @@ import {
   BACKOFF_JITTER_FACTOR,
 } from "./config/syncConfig";
 import { QueueManager } from "./queue/queueManager";
+
+import type { Mutation, SyncResult } from "./types/syncTypes";
 
 /**
  * Calculates exponential backoff delay for retry attempts.
@@ -89,11 +91,16 @@ const processMutation = async (mutation: Mutation): Promise<boolean> => {
         ? (mutation.payload as Record<string, unknown>)
         : {};
 
+    const payloadId =
+      typeof payloadObj["id"] === "string" ? payloadObj["id"] : undefined;
+    const payloadLegacyId =
+      typeof payloadObj["_id"] === "string" ? payloadObj["_id"] : undefined;
+
     const backendPayload = {
       id: mutation.id,
       operation,
       entityType,
-      entityId: payloadObj.id || payloadObj._id || mutation.id,
+      entityId: payloadId || payloadLegacyId || mutation.id,
       payload: mutation.patch || mutation.payload, // Prefer patch for efficiency
       timestamp: mutation.timestamp,
       retryCount: mutation.retryCount,
@@ -103,7 +110,7 @@ const processMutation = async (mutation: Mutation): Promise<boolean> => {
     await apiClient.post("/sync/queue", backendPayload);
 
     console.log(
-      `[BackendSync] Successfully synced mutation ${mutation.id} to backend`
+      `[BackendSync] Successfully synced mutation ${mutation.id} to backend`,
     );
     return true;
   } catch (error: unknown) {
@@ -111,13 +118,13 @@ const processMutation = async (mutation: Mutation): Promise<boolean> => {
       error instanceof Error ? error.message : "Unknown error";
     console.error(
       `[BackendSync] Failed to sync mutation ${mutation.id}:`,
-      errorMessage
+      errorMessage,
     );
 
     // Check if we should retry
     if (mutation.retryCount >= MAX_RETRY_ATTEMPTS) {
       console.error(
-        `[BackendSync] Mutation ${mutation.id} exceeded max retries, marking as failed`
+        `[BackendSync] Mutation ${mutation.id} exceeded max retries, marking as failed`,
       );
     }
 
@@ -234,26 +241,29 @@ export const BackendSyncService = {
       for (const item of backendQueue) {
         if (item && typeof item === "object") {
           const itemObj = item as Record<string, unknown>;
-          const itemId = typeof itemObj.id === "string" ? itemObj.id : "";
+          const itemId = typeof itemObj["id"] === "string" ? itemObj["id"] : "";
           if (itemId && !localIds.has(itemId)) {
+            const itemType = String(itemObj["entityType"] || "");
+            const itemOperation = String(itemObj["operation"] || "");
+            const createdAt = itemObj["createdAt"];
+            const status = itemObj["status"];
+            const retryCount = itemObj["retryCount"];
+            const error = itemObj["error"];
             const mutation: Mutation = {
               id: itemId,
-              type: `${String(itemObj.entityType || "").toUpperCase()}_${String(itemObj.operation || "").toUpperCase()}`,
-              payload: itemObj.payload,
-              patch: undefined,
-              timestamp: itemObj.createdAt
-                ? new Date(String(itemObj.createdAt)).getTime()
+              type: `${itemType.toUpperCase()}_${itemOperation.toUpperCase()}`,
+              payload: itemObj["payload"],
+              timestamp: createdAt
+                ? new Date(String(createdAt)).getTime()
                 : Date.now(),
               status:
-                itemObj.status === "pending" ||
-                itemObj.status === "syncing" ||
-                itemObj.status === "failed"
-                  ? itemObj.status
+                status === "pending" ||
+                status === "syncing" ||
+                status === "failed"
+                  ? status
                   : "pending",
-              retryCount:
-                typeof itemObj.retryCount === "number" ? itemObj.retryCount : 0,
-              lastError:
-                typeof itemObj.error === "string" ? itemObj.error : undefined,
+              retryCount: typeof retryCount === "number" ? retryCount : 0,
+              ...(typeof error === "string" ? { lastError: error } : {}),
             };
             localQueue.push(mutation);
             added++;
@@ -267,7 +277,7 @@ export const BackendSyncService = {
     } catch (error: unknown) {
       console.error(
         "[BackendSync] Failed to sync from backend:",
-        error instanceof Error ? error.message : "Unknown error"
+        error instanceof Error ? error.message : "Unknown error",
       );
     }
   },
@@ -287,7 +297,10 @@ export const BackendSyncService = {
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
-      console.error("[BackendSync] Failed to get backend status:", errorMessage);
+      console.error(
+        "[BackendSync] Failed to get backend status:",
+        errorMessage,
+      );
       return {
         pending: 0,
         conflicts: 0,

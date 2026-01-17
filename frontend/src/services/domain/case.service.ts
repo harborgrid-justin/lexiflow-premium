@@ -109,12 +109,12 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
+import { CasesApiService } from "@/api/litigation/cases-api";
 import { Repository } from "@/services/core/Repository";
-import { Case, CasePhase, CaseStatus, Party } from "@/types";
+import { apiClient } from "@/services/infrastructure/api-client.service";
+import { type Case, type CasePhase, CaseStatus, type Party } from "@/types";
 
 // Backend API Integration (Primary Data Source)
-import { CasesApiService } from "@/api/litigation/cases-api";
-import { apiClient } from "@/services/infrastructure/api-client.service";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                        CASE REPOSITORY IMPLEMENTATION

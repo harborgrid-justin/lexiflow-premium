@@ -4,10 +4,6 @@
  * @description Dropdown panel for displaying and managing notifications
  */
 
-import React, { useMemo } from 'react';
-import type { UINotification } from '@/types/notifications';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { formatDistanceToNow } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -25,6 +21,12 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
+import React, { useMemo } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { UINotification } from '@/types/notifications';
 
 // ============================================================================
 // TYPES & INTERFACES

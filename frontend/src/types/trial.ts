@@ -1,10 +1,10 @@
 // types/trial.ts
 // Auto-generated from models.ts split
 
+import { type JurorStatus, type WitnessType, type WitnessStatus } from './enums';
 import {
-  BaseEntity, CaseId, EvidenceId, MetadataRecord
+  type BaseEntity, type CaseId, type EvidenceId, type MetadataRecord
 } from './primitives';
-import { JurorStatus, WitnessType, WitnessStatus } from './enums';
 
 // --- CLUSTER 5: TRIAL & STRATEGY ---
 

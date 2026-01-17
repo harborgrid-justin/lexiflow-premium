@@ -4,6 +4,7 @@
  */
 
 import { StorageUtils } from '@/utils/storage';
+
 import { validateHistoryTerm } from './validation';
 
 const HISTORY_KEY = 'lexiflow_search_history';

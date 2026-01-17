@@ -63,7 +63,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div role="alert" className={cn('p-4 m-4 border rounded-lg', theme.status.error.background, 'border-red-200', theme.status.error.text)}>
+        <div
+          role="alert"
+          className="p-4 m-4 border rounded-lg border-red-200 bg-red-50 text-red-800"
+        >
           <div className="flex items-center gap-3">
             <AlertTriangle className="h-6 w-6" />
             <h3 className="font-bold">An error occurred in {this.props.scope || 'this component'}.</h3>
@@ -74,7 +77,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <div className="mt-4 flex gap-2">
             <button
               onClick={this.handleReset}
-              className={cn('px-3 py-1 text-white rounded text-sm font-medium flex items-center', theme.status.error.background, 'hover:opacity-90')}
+              className="px-3 py-1 text-white rounded text-sm font-medium flex items-center bg-red-600 hover:opacity-90"
             >
               <RefreshCw className="h-3 w-3 inline mr-1" />
               Try Again

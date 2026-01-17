@@ -8,7 +8,7 @@
  */
 
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import type { WarRoomLoaderData } from './loader';
+import type { WarRoomLoaderData } from '../loader';
 
 type WarRoomSession = {
   id: string;

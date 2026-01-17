@@ -8,8 +8,9 @@
  * repositories to trigger cross-domain workflows without tight coupling.
  */
 
-import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
+
+import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
 
 type EventHandler = (payload: unknown) => Promise<void>;
 

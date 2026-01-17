@@ -31,7 +31,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { Precedent, QAItem, WikiArticle } from "@/types";
+import { type Precedent, type QAItem, type WikiArticle } from "@/types";
 
 /**
  * Query keys for React Query integration

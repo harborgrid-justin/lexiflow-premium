@@ -41,15 +41,15 @@ export type {
 export { REAL_ESTATE_QUERY_KEYS } from "./queryKeys";
 
 // Import all operations
-import * as propertyOps from "./property-operations.service";
+import * as acquisitionOps from "./acquisition-operations.service";
+import * as auditOps from "./audit-operations.service";
+import * as costShareOps from "./cost-share-operations.service";
 import * as disposalOps from "./disposal-operations.service";
 import * as encroachmentOps from "./encroachment-operations.service";
-import * as acquisitionOps from "./acquisition-operations.service";
-import * as utilizationOps from "./utilization-operations.service";
-import * as costShareOps from "./cost-share-operations.service";
-import * as outgrantOps from "./outgrant-operations.service";
 import * as financialOps from "./other-financial-operations.service";
-import * as auditOps from "./audit-operations.service";
+import * as outgrantOps from "./outgrant-operations.service";
+import * as propertyOps from "./property-operations.service";
+import * as utilizationOps from "./utilization-operations.service";
 
 /**
  * Real Estate Service

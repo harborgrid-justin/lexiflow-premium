@@ -45,17 +45,17 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import {
-  apiClient,
-  type PaginatedResponse,
-} from "@/services/infrastructure/api-client.service";
-import { DocketEntry } from "@/types";
-import { SystemEventType } from "@/types/integration-types";
-
-// Backend API Integration (Primary Data Source)
-import {
   DocketApiService,
   type DocketFilterOptions,
 } from "@/api/litigation/docket-api";
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/api-client.service";
+import { type DocketEntry } from "@/types";
+import { SystemEventType } from "@/types/integration-types";
+
+// Backend API Integration (Primary Data Source)
 
 // ============================================================================
 // ERROR CLASSES

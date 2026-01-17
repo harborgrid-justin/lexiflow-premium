@@ -1,4 +1,4 @@
-import { BLOB_MANAGER_TEMP_TTL_MS } from '@/config/features/services.config';
+import { BLOB_MANAGER_TEMP_TTL_MS } from "@/config/features/services.config";
 
 /**
  * @module services/blobManager
@@ -57,9 +57,9 @@ class BlobManagerService {
 
     const entry: BlobRegistryEntry = {
       url,
-      context,
       createdAt: Date.now(),
-      blob: import.meta.env.DEV ? blob : undefined, // Keep reference in dev for debugging
+      ...(context ? { context } : {}),
+      ...(import.meta.env.DEV ? { blob } : {}), // Keep reference in dev for debugging
     };
 
     this.registry.set(url, entry);
@@ -177,7 +177,10 @@ class BlobManagerService {
    * Create a temporary blob URL that auto-revokes after specified time
    * Useful for immediate downloads
    */
-  createTemporary(blob: Blob | File, ttlMs: number = BLOB_MANAGER_TEMP_TTL_MS): string {
+  createTemporary(
+    blob: Blob | File,
+    ttlMs: number = BLOB_MANAGER_TEMP_TTL_MS,
+  ): string {
     const url = this.create(blob, "temporary");
 
     setTimeout(() => {
@@ -209,7 +212,7 @@ if (typeof window !== "undefined") {
         console.debug(`[BlobManager] Auto-cleaned ${revoked} old blob URLs`);
       }
     },
-    2 * 60 * 1000
+    2 * 60 * 1000,
   );
 }
 
@@ -218,7 +221,7 @@ if (typeof window !== "undefined") {
 // ============================================================================
 if (import.meta.env.DEV && typeof window !== "undefined") {
   // Expose to window for debugging
-  (window as unknown as Record<string, unknown>).__blobManager = BlobManager;
+  (window as unknown as Record<string, unknown>)["__blobManager"] = BlobManager;
 
   // Log warnings for URLs not cleaned up after 10 minutes
   setInterval(() => {
@@ -226,7 +229,7 @@ if (import.meta.env.DEV && typeof window !== "undefined") {
     if (stats.oldestAge > 10 * 60 * 1000) {
       console.warn(
         `[BlobManager] Memory leak warning: ${stats.total} blob URLs tracked, ` +
-          `oldest is ${Math.round(stats.oldestAge / 1000 / 60)} minutes old`
+          `oldest is ${Math.round(stats.oldestAge / 1000 / 60)} minutes old`,
       );
     }
   }, 60 * 1000);

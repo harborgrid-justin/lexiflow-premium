@@ -1,10 +1,11 @@
 // types/evidence.ts
 // Domain-specific types - split from compatibility.ts
 
+import { type EvidenceType, type AdmissibilityStatus } from './enums';
 import {
-  BaseEntity, DocumentId, EvidenceId, CaseId, UUID, MetadataRecord
+  type BaseEntity, type DocumentId, type EvidenceId, type CaseId, type UUID, type MetadataRecord
 } from './primitives';
-import { EvidenceType, AdmissibilityStatus } from './enums';
+
 import type { FileChunk } from './motion-docket';
 
 export interface TrialExhibit extends BaseEntity { 

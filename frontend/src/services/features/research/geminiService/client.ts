@@ -4,6 +4,7 @@
  */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
 import { AI_CONFIG } from "@/config/features/ai.config";
 
 /**

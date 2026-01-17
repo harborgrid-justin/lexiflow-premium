@@ -21,6 +21,7 @@ import React, { useState } from 'react';
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -53,7 +54,7 @@ interface AdvisoryBoardProps {
 // COMPONENT
 // ============================================================================
 
-export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
+export function AdvisoryBoard({ caseId }: AdvisoryBoardProps) {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================
@@ -178,7 +179,9 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
           <AdvisorList
             advisors={filteredAdvisors}
             onSelect={handleSelectAdvisor}
-            selectedId={advisorSelection.selected?.id}
+            {...(advisorSelection.selected?.id
+              ? { selectedId: advisorSelection.selected.id }
+              : {})}
           />
         </div>
 
@@ -253,4 +256,4 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
       </Modal>
     </div>
   );
-};
+}

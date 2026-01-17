@@ -47,7 +47,7 @@ export const CollaborationService = {
   update: async (id: string, updates: unknown) => {
     return apiClient.patch<Workspace>(
       `/collaboration/workspaces/${id}`,
-      updates
+      updates,
     );
   },
   delete: async (id: string) => {
@@ -57,12 +57,12 @@ export const CollaborationService = {
   // Collaboration specific methods
   getWorkspaces: async (userId?: string): Promise<Workspace[]> => {
     return apiClient.get<Workspace[]>("/collaboration/workspaces", {
-      userId,
+      params: userId ? { userId } : undefined,
     });
   },
 
   createWorkspace: async (
-    workspace: Partial<Workspace>
+    workspace: Partial<Workspace>,
   ): Promise<Workspace> => {
     return apiClient.post<Workspace>("/collaboration/workspaces", workspace);
   },
@@ -76,13 +76,13 @@ export const CollaborationService = {
 
   getComments: async (resourceId: string): Promise<Comment[]> => {
     return apiClient.get<Comment[]>(
-      `/collaboration/comments?resourceId=${resourceId}`
+      `/collaboration/comments?resourceId=${resourceId}`,
     );
   },
 
   addComment: async (
     resourceId: string,
-    comment: Partial<Comment>
+    comment: Partial<Comment>,
   ): Promise<Comment> => {
     return apiClient.post<Comment>("/collaboration/comments", {
       resourceId,
@@ -93,7 +93,10 @@ export const CollaborationService = {
   shareResource: async (
     resourceId: string,
     userId: string,
-    options?: { permissions?: "view" | "edit" | "admin"; resourceType?: string }
+    options?: {
+      permissions?: "view" | "edit" | "admin";
+      resourceType?: string;
+    },
   ): Promise<boolean> => {
     await apiClient.post("/collaboration/share", {
       resourceId,

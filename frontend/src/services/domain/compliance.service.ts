@@ -81,12 +81,13 @@ import { ComplianceError } from "@/services/core/errors";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
-  ComplianceMetrics,
-  ConflictCheck,
-  EthicalWall,
-  Risk,
-  UserId,
+  type ComplianceMetrics,
+  type ConflictCheck,
+  type EthicalWall,
+  type Risk,
+  type UserId,
 } from "@/types";
+import { SystemEventType } from "@/types/integration-types";
 
 /**
  * Conflict interfaces for enhanced detection
@@ -150,7 +151,7 @@ export const ComplianceService = {
   validateEntityName: (entityName: string, methodName: string): void => {
     if (!entityName || entityName.trim() === "") {
       throw new Error(
-        `[ComplianceService.${methodName}] Invalid entityName parameter`
+        `[ComplianceService.${methodName}] Invalid entityName parameter`,
       );
     }
   },
@@ -186,7 +187,7 @@ export const ComplianceService = {
    * // ]
    */
   getRiskStats: async (
-    mode: "light" | "dark" = "light"
+    mode: "light" | "dark" = "light",
   ): Promise<Array<{ name: string; value: number; color: string }>> => {
     try {
       const { ChartColorService } =
@@ -198,15 +199,15 @@ export const ComplianceService = {
       const risks = await apiClient.get<Risk[]>("/compliance/risks");
 
       const high = risks.filter(
-        (r) => r.impact === "High" || r.probability === "High"
+        (r) => r.impact === "High" || r.probability === "High",
       ).length;
       const medium = risks.filter(
         (r) =>
           (r.impact === "Medium" || r.probability === "Medium") &&
-          r.impact !== "High"
+          r.impact !== "High",
       ).length;
       const low = risks.filter(
-        (r) => r.impact === "Low" && r.probability === "Low"
+        (r) => r.impact === "Low" && r.probability === "Low",
       ).length;
 
       return [
@@ -272,9 +273,9 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
           foundIn: apiCheck.foundIn || [],
           checkedById: apiCheck.checkedById,
           checkedBy: apiCheck.checkedBy || "System",
-          createdAt: apiCheck.createdAt,
-          updatedAt: apiCheck.updatedAt,
-        })
+          createdAt: apiCheck.createdAt || new Date().toISOString(),
+          updatedAt: apiCheck.updatedAt || new Date().toISOString(),
+        }),
       );
     } catch (error) {
       console.error("[ComplianceService.getConflicts] Error:", error);
@@ -333,7 +334,7 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
       checkFormerClients?: boolean;
       checkLateralHires?: boolean;
       depth?: number;
-    }
+    },
   ): Promise<ConflictCheckResult> => {
     // const depth = options?.depth || 3;
     // const conflicts: Conflict[] = [];
@@ -349,7 +350,7 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
       // We assume this endpoint exists or will exist matching the pattern.
       return await apiClient.post<ConflictCheckResult>(
         "/compliance/conflicts/comprehensive",
-        { clientId, ...options }
+        { clientId, ...options },
       );
     } catch (error) {
       console.error("Backend conflict check failed", error);
@@ -375,18 +376,20 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
       const apiWalls = await complianceApi.compliance.getEthicalWalls();
 
       // API returns EthicalWall[] directly
-      return apiWalls.map(
-        (apiWall): EthicalWall => ({
+      return apiWalls.map((apiWall): EthicalWall => {
+        const createdAt = apiWall.createdAt ?? new Date().toISOString();
+        const updatedAt = apiWall.updatedAt ?? createdAt;
+        return {
           id: apiWall.id,
           caseId: apiWall.caseId,
           title: apiWall.title,
           restrictedGroups: apiWall.restrictedGroups || [],
           authorizedUsers: apiWall.authorizedUsers || [],
           status: apiWall.status,
-          createdAt: apiWall.createdAt,
-          updatedAt: apiWall.updatedAt,
-        })
-      );
+          createdAt,
+          updatedAt,
+        };
+      });
     } catch (error) {
       console.error("[ComplianceService.getEthicalWalls] Error:", error);
       throw new Error("Failed to fetch ethical walls");
@@ -420,13 +423,13 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
   createEthicalWall: async (wall: EthicalWall): Promise<EthicalWall> => {
     if (!wall || typeof wall !== "object") {
       throw new Error(
-        "[ComplianceService.createEthicalWall] Invalid ethical wall data"
+        "[ComplianceService.createEthicalWall] Invalid ethical wall data",
       );
     }
 
     if (!wall.title || wall.title.trim() === "") {
       throw new Error(
-        "[ComplianceService.createEthicalWall] Ethical wall must have a title"
+        "[ComplianceService.createEthicalWall] Ethical wall must have a title",
       );
     }
 
@@ -441,12 +444,12 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
           {
             wall: result,
             caseId: wall.caseId,
-          }
+          },
         );
       } catch (eventError) {
         console.warn(
           "[ComplianceService] Failed to publish integration event",
-          eventError
+          eventError,
         );
       }
 

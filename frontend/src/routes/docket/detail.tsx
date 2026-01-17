@@ -8,7 +8,6 @@
 
 import { docketApi } from '@/lib/frontend-api';
 import { DocketDetail } from '@/routes/cases/components/docket/DocketDetail';
-import { useDocketEntry, useCaseDocket } from './hooks/useDocket';
 import type { CaseId } from '@/types';
 import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { createDetailMeta } from '../_shared/meta-utils';

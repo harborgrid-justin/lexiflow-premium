@@ -9,8 +9,10 @@ import {
   ValidationError,
 } from "@/services/core/errors";
 import { keysToCamel } from "@/utils/caseConverter";
+
 import { clearAuthTokens, getRefreshToken } from "./auth-manager";
 import { refreshAccessToken } from "./token-refresh";
+
 import type { ApiError } from "./types";
 
 /**
@@ -36,14 +38,14 @@ export async function handleResponse<T>(response: Response): Promise<T> {
 
     if (response.status === 401 && !isLoginRequest) {
       console.warn(
-        "[ResponseHandler] Received 401 Unauthorized, attempting token refresh"
+        "[ResponseHandler] Received 401 Unauthorized, attempting token refresh",
       );
 
       // During SSR, we cannot access localStorage or redirect
       // Return a special error that the loader can handle
       if (isSSR) {
         console.log(
-          "[ResponseHandler] SSR detected, returning auth error for loader handling"
+          "[ResponseHandler] SSR detected, returning auth error for loader handling",
         );
         throw new AuthenticationError("SSR_AUTH_REQUIRED");
       }
@@ -61,12 +63,12 @@ export async function handleResponse<T>(response: Response): Promise<T> {
             throw new AuthenticationError("TOKEN_REFRESHED");
           } else {
             console.warn(
-              "[ResponseHandler] Token refresh failed, clearing tokens and redirecting"
+              "[ResponseHandler] Token refresh failed, clearing tokens and redirecting",
             );
             clearAuthTokens();
             window.location.href = "/login";
             throw new AuthenticationError(
-              "Session expired. Please login again."
+              "Session expired. Please login again.",
             );
           }
         } catch (error) {
@@ -100,26 +102,24 @@ export async function handleResponse<T>(response: Response): Promise<T> {
 
     // Create error object with response details attached
     interface ErrorResponse {
-      data?: { message?: string; details?: unknown };
+      data?: ApiError;
       status?: number;
     }
 
-    interface ErrorWithResponse extends ExternalServiceError {
+    type ErrorWithResponse = ExternalServiceError & {
       response?: ErrorResponse;
       status?: number;
-      statusCode?: number;
-    }
+    };
 
     const error: ErrorWithResponse = new ExternalServiceError(
       "API",
       errorData.message || `HTTP ${response.status}: ${response.statusText}`,
-      response.status
+      response.status,
     ) as ErrorWithResponse;
 
     // Attach response details for test assertions
-    error.response = errorData;
+    error.response = { data: errorData, status: response.status };
     error.status = response.status;
-    error.statusCode = response.status;
 
     throw error;
   }

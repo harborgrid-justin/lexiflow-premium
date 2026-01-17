@@ -8,8 +8,10 @@
 
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import type { CustodianInterview } from "@/types";
+
 import { validateCaseId } from "../shared/validation";
+
+import type { CustodianInterview } from "@/types";
 
 /**
  * Interview Service Class

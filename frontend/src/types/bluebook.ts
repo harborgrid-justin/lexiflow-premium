@@ -4,7 +4,7 @@
  * @description Comprehensive type definitions for Bluebook citation formatting system
  */
 
-import { BaseEntity } from './primitives';
+import { type BaseEntity } from './primitives';
 
 // =============================================================================
 // ENUMS

@@ -20,10 +20,10 @@ export type {
 } from "./types";
 
 // Import all operation modules
-import * as docProcessing from "./documentProcessing";
-import * as research from "./legalResearch";
 import * as contentGen from "./contentGeneration";
 import * as dataProc from "./dataProcessing";
+import * as docProcessing from "./documentProcessing";
+import * as research from "./legalResearch";
 import * as workflow from "./workflowAutomation";
 
 /**

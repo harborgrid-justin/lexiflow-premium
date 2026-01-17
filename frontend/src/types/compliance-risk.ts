@@ -1,8 +1,8 @@
 // types/compliance-risk.ts
 // Domain-specific types - split from compatibility.ts
 
-import { RiskCategory } from "./enums";
-import { BaseEntity, CaseId, GroupId, JsonValue, UserId } from "./primitives";
+import { type RiskCategory } from "./enums";
+import { type BaseEntity, type CaseId, type GroupId, type JsonValue, type UserId } from "./primitives";
 
 // Backend Risk entity enums (from risks/dto/create-risk.dto.ts)
 export enum RiskImpact {

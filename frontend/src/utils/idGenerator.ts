@@ -4,15 +4,15 @@
  */
 
 import {
-  CaseId,
-  UserId,
-  PleadingDocument,
-  PleadingTemplate,
-  FormattingRule,
-  EvidenceId,
-  DocumentId,
-  DocketId,
-  PartyId
+  type CaseId,
+  type UserId,
+  type PleadingDocument,
+  type PleadingTemplate,
+  type FormattingRule,
+  type EvidenceId,
+  type DocumentId,
+  type DocketId,
+  type PartyId
 } from '@/types';
 
 /**
@@ -30,7 +30,7 @@ const generateSecureId = (prefix: string): string => {
  */
 export const IdGenerator = {
   pleading: (): PleadingDocument['id'] => {
-    return generateSecureId('plead') as PleadingDocument['id'];
+    return generateSecureId('plead');
   },
 
   section: (): string => {
@@ -38,11 +38,11 @@ export const IdGenerator = {
   },
 
   template: (): PleadingTemplate['id'] => {
-    return generateSecureId('tmpl') as PleadingTemplate['id'];
+    return generateSecureId('tmpl');
   },
 
   formattingRule: (): FormattingRule['id'] => {
-    return generateSecureId('rule') as FormattingRule['id'];
+    return generateSecureId('rule');
   },
 
   case: (): CaseId => {

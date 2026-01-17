@@ -21,7 +21,7 @@ import { CitationsApiService } from "@/api/intelligence/citations-api";
 import { ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { Citation } from "@/types";
+import { type Citation } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
 export const CITATION_QUERY_KEYS = {

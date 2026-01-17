@@ -4,7 +4,7 @@
  * @author PhD-Level Engineering Team
  * @architecture Backend-first with PostgreSQL persistence
  * @version 2.0.0
- * 
+ *
  * TYPE SYSTEM ARCHITECTURE:
  * - Conditional Branching: Rule-based decision trees with expression evaluation
  * - Parallel Execution: Concurrent task orchestration with join strategies
@@ -18,8 +18,8 @@
  * - External Triggers: Event-driven workflow automation via webhooks
  */
 
-import { BaseEntity, UserId } from './primitives';
-import { WorkflowNode, WorkflowConnection } from './workflow-types';
+import { type BaseEntity, type UserId } from "./primitives";
+import { type WorkflowConnection, type WorkflowNode } from "./workflow-types";
 
 // ============================================================================
 // FEATURE 1: CONDITIONAL BRANCHING ENGINE
@@ -32,9 +32,18 @@ import { WorkflowNode, WorkflowConnection } from './workflow-types';
 export interface ConditionalRule {
   id: string;
   field: string;
-  operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in' | 'regex' | 'custom';
+  operator:
+    | "equals"
+    | "not_equals"
+    | "contains"
+    | "greater_than"
+    | "less_than"
+    | "in"
+    | "not_in"
+    | "regex"
+    | "custom";
   value: unknown;
-  valueType: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
+  valueType: "string" | "number" | "boolean" | "date" | "array" | "object";
   caseSensitive?: boolean;
   customExpression?: string; // For advanced JavaScript expressions
 }
@@ -44,7 +53,7 @@ export interface ConditionalBranch {
   name: string;
   description?: string;
   rules: ConditionalRule[];
-  logic: 'AND' | 'OR' | 'XOR' | 'NAND' | 'NOR'; // Logical operators
+  logic: "AND" | "OR" | "XOR" | "NAND" | "NOR"; // Logical operators
   priority: number; // Evaluation order
   targetNodeId: string;
   fallthrough: boolean; // Continue to next branch if true
@@ -55,7 +64,7 @@ export interface ConditionalBranchingConfig {
   nodeId: string;
   branches: ConditionalBranch[];
   defaultBranchId?: string; // Fallback if no rules match
-  evaluationStrategy: 'first_match' | 'best_match' | 'all_match';
+  evaluationStrategy: "first_match" | "best_match" | "all_match";
   timeout?: number; // Max evaluation time in ms
   metadata?: {
     lastModified: string;
@@ -75,23 +84,23 @@ export interface ConditionalBranchingConfig {
 /**
  * Concurrent task execution with advanced join strategies
  */
-export type ParallelJoinStrategy = 
-  | 'wait_all'           // Wait for all branches to complete
-  | 'wait_any'           // Continue when first branch completes
-  | 'wait_majority'      // Continue when >50% complete
-  | 'wait_custom'        // Custom threshold
-  | 'timed_join';        // Continue after timeout regardless
+export type ParallelJoinStrategy =
+  | "wait_all" // Wait for all branches to complete
+  | "wait_any" // Continue when first branch completes
+  | "wait_majority" // Continue when >50% complete
+  | "wait_custom" // Custom threshold
+  | "timed_join"; // Continue after timeout regardless
 
 export interface ParallelBranch {
   id: string;
   name: string;
   nodeIds: string[]; // Sequence of nodes in this branch
   estimatedDuration?: number; // In milliseconds
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
   dependencies?: string[]; // Other branch IDs that must complete first
   maxRetries?: number;
   retryDelay?: number;
-  onError: 'fail_all' | 'continue' | 'retry' | 'fallback';
+  onError: "fail_all" | "continue" | "retry" | "fallback";
   fallbackBranchId?: string;
 }
 
@@ -102,9 +111,9 @@ export interface ParallelExecutionConfig {
   customThreshold?: number; // For wait_custom (0-1 ratio)
   timeout?: number; // Max wait time for timed_join
   resourcePoolSize?: number; // Max concurrent executions
-  loadBalancing: 'round_robin' | 'least_loaded' | 'random' | 'priority';
+  loadBalancing: "round_robin" | "least_loaded" | "random" | "priority";
   errorHandling: {
-    strategy: 'fail_fast' | 'continue_on_error' | 'compensating_transaction';
+    strategy: "fail_fast" | "continue_on_error" | "compensating_transaction";
     compensationWorkflow?: string; // Workflow ID to run on failure
   };
   metrics?: {
@@ -137,7 +146,7 @@ export interface WorkflowVersion extends BaseEntity {
   parentVersionId?: string; // Previous version
   branchName?: string; // For workflow branching
   mergeConflicts?: WorkflowMergeConflict[];
-  status: 'draft' | 'published' | 'archived' | 'deprecated';
+  status: "draft" | "published" | "archived" | "deprecated";
   publishedAt?: string;
   deprecationReason?: string;
 }
@@ -168,14 +177,18 @@ export interface WorkflowDiff {
 
 export interface WorkflowMergeConflict {
   id: string;
-  conflictType: 'node_modified' | 'node_deleted' | 'connection_conflict' | 'config_conflict';
+  conflictType:
+    | "node_modified"
+    | "node_deleted"
+    | "connection_conflict"
+    | "config_conflict";
   nodeId?: string;
   connectionId?: string;
   configPath?: string;
   baseValue: unknown;
   branchAValue: unknown;
   branchBValue: unknown;
-  resolution?: 'use_branch_a' | 'use_branch_b' | 'manual' | 'merge_both';
+  resolution?: "use_branch_a" | "use_branch_b" | "manual" | "merge_both";
   resolvedValue?: unknown;
   resolvedBy?: UserId;
   resolvedAt?: string;
@@ -193,11 +206,11 @@ export interface WorkflowTemplateMetadata {
   tags: string[];
   jurisdiction?: string[];
   practiceAreas: string[];
-  complexity: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  complexity: "beginner" | "intermediate" | "advanced" | "expert";
   estimatedDuration: {
     min: number;
     max: number;
-    unit: 'hours' | 'days' | 'weeks' | 'months';
+    unit: "hours" | "days" | "weeks" | "months";
   };
   requiredRoles: string[];
   requiredIntegrations?: string[];
@@ -209,7 +222,7 @@ export interface WorkflowTemplateMetadata {
   aiCategories?: Array<{
     category: string;
     confidence: number;
-    suggestedBy: 'ml_model' | 'user' | 'admin';
+    suggestedBy: "ml_model" | "user" | "admin";
   }>;
 }
 
@@ -232,7 +245,7 @@ export interface WorkflowTemplate extends BaseEntity {
   forkCount: number;
   isPublic: boolean;
   isCertified: boolean; // Vetted by legal experts
-  license: 'proprietary' | 'mit' | 'apache' | 'cc-by' | 'cc-by-sa';
+  license: "proprietary" | "mit" | "apache" | "cc-by" | "cc-by-sa";
   changeLog: Array<{
     version: string;
     changes: string;
@@ -258,7 +271,16 @@ export interface WorkflowTemplateReview {
 
 export interface WorkflowVariable {
   name: string;
-  type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object' | 'user' | 'case' | 'document';
+  type:
+    | "string"
+    | "number"
+    | "boolean"
+    | "date"
+    | "array"
+    | "object"
+    | "user"
+    | "case"
+    | "document";
   required: boolean;
   defaultValue?: unknown;
   description?: string;
@@ -287,7 +309,7 @@ export interface SLAConfig {
   businessHoursOnly: boolean;
   businessHours?: {
     start: string; // HH:MM
-    end: string;   // HH:MM
+    end: string; // HH:MM
     timezone: string;
     excludeWeekends: boolean;
     excludeHolidays: boolean;
@@ -324,18 +346,18 @@ export interface EscalationLevel {
 }
 
 export type EscalationAction =
-  | { type: 'email'; to: string[]; template: string }
-  | { type: 'sms'; to: string[]; message: string }
-  | { type: 'slack'; channel: string; message: string }
-  | { type: 'webhook'; url: string; payload: Record<string, unknown> }
-  | { type: 'create_task'; assignee: UserId; priority: 'high' | 'urgent' }
-  | { type: 'reassign_workflow'; to: UserId }
-  | { type: 'trigger_workflow'; workflowId: string };
+  | { type: "email"; to: string[]; template: string }
+  | { type: "sms"; to: string[]; message: string }
+  | { type: "slack"; channel: string; message: string }
+  | { type: "webhook"; url: string; payload: Record<string, unknown> }
+  | { type: "create_task"; assignee: UserId; priority: "high" | "urgent" }
+  | { type: "reassign_workflow"; to: UserId }
+  | { type: "trigger_workflow"; workflowId: string };
 
 export interface SLAStatus {
   nodeId: string;
   slaConfigId: string;
-  status: 'on_track' | 'at_risk' | 'breached' | 'paused' | 'completed';
+  status: "on_track" | "at_risk" | "breached" | "paused" | "completed";
   startTime: string;
   targetTime: string;
   currentTime: string;
@@ -365,10 +387,10 @@ export interface ApprovalChain {
   levels: ApprovalLevel[];
   requireSequential: boolean; // Must approve in order
   allowParallel: boolean; // Multiple approvers at same level can approve concurrently
-  defaultAction: 'approve' | 'reject' | 'none';
-  timeoutAction: 'auto_approve' | 'auto_reject' | 'escalate' | 'extend';
+  defaultAction: "approve" | "reject" | "none";
+  timeoutAction: "auto_approve" | "auto_reject" | "escalate" | "extend";
   timeoutDuration?: number; // In milliseconds
-  notificationStrategy: 'immediate' | 'digest' | 'on_demand';
+  notificationStrategy: "immediate" | "digest" | "on_demand";
 }
 
 export interface ApprovalLevel {
@@ -390,7 +412,7 @@ export interface ApprovalLevel {
 }
 
 export interface ApprovalApprover {
-  type: 'user' | 'role' | 'group' | 'dynamic';
+  type: "user" | "role" | "group" | "dynamic";
   id: string; // User ID, role name, or group ID
   dynamicResolver?: string; // Expression to resolve approver at runtime
   weight?: number; // Weighted approval (e.g., senior partner = 2 votes)
@@ -398,12 +420,12 @@ export interface ApprovalApprover {
 }
 
 export type WorkflowAction =
-  | { type: 'email'; config: Record<string, unknown> }
-  | { type: 'notification'; config: Record<string, unknown> }
-  | { type: 'webhook'; config: Record<string, unknown> }
-  | { type: 'update_field'; field: string; value: unknown }
-  | { type: 'trigger_workflow'; workflowId: string }
-  | { type: 'script'; code: string };
+  | { type: "email"; config: Record<string, unknown> }
+  | { type: "notification"; config: Record<string, unknown> }
+  | { type: "webhook"; config: Record<string, unknown> }
+  | { type: "update_field"; field: string; value: unknown }
+  | { type: "trigger_workflow"; workflowId: string }
+  | { type: "script"; code: string };
 
 export interface ApprovalInstance {
   id: string;
@@ -411,7 +433,7 @@ export interface ApprovalInstance {
   workflowInstanceId: string;
   nodeId: string;
   currentLevel: number;
-  status: 'pending' | 'approved' | 'rejected' | 'timeout' | 'cancelled';
+  status: "pending" | "approved" | "rejected" | "timeout" | "cancelled";
   startedAt: string;
   completedAt?: string;
   decisions: ApprovalDecision[];
@@ -422,7 +444,7 @@ export interface ApprovalDecision {
   id: string;
   level: number;
   approverId: UserId;
-  decision: 'approve' | 'reject' | 'abstain';
+  decision: "approve" | "reject" | "abstain";
   comments?: string;
   attachments?: string[];
   decidedAt: string;
@@ -454,7 +476,7 @@ export interface WorkflowSnapshot {
   id: string;
   workflowInstanceId: string;
   version: number;
-  type: 'auto' | 'manual' | 'milestone' | 'error' | 'scheduled';
+  type: "auto" | "manual" | "milestone" | "error" | "scheduled";
   label?: string;
   description?: string;
   createdAt: string;
@@ -463,7 +485,7 @@ export interface WorkflowSnapshot {
   checksum: string; // Integrity verification
   compressed: boolean;
   sizeBytes: number;
-  retentionPolicy: 'permanent' | 'temporary' | 'time_based';
+  retentionPolicy: "permanent" | "temporary" | "time_based";
   expiresAt?: string;
   restoreCount: number;
   lastRestoredAt?: string;
@@ -479,7 +501,10 @@ export interface WorkflowState {
   slaStatuses: SLAStatus[];
   parallelExecutions: Array<{
     configId: string;
-    branchStatuses: Record<string, 'pending' | 'running' | 'completed' | 'failed'>;
+    branchStatuses: Record<
+      string,
+      "pending" | "running" | "completed" | "failed"
+    >;
   }>;
   conditionalBranches: Array<{
     configId: string;
@@ -488,7 +513,7 @@ export interface WorkflowState {
   }>;
   externalTriggers: Array<{
     id: string;
-    status: 'listening' | 'triggered' | 'completed' | 'failed';
+    status: "listening" | "triggered" | "completed" | "failed";
   }>;
 }
 
@@ -499,12 +524,12 @@ export interface RollbackOperation {
   initiatedBy: UserId;
   initiatedAt: string;
   completedAt?: string;
-  status: 'in_progress' | 'completed' | 'failed' | 'cancelled';
-  strategy: 'full' | 'partial' | 'compensating';
+  status: "in_progress" | "completed" | "failed" | "cancelled";
+  strategy: "full" | "partial" | "compensating";
   affectedNodes: string[];
   compensatingActions?: Array<{
     action: string;
-    status: 'pending' | 'completed' | 'failed';
+    status: "pending" | "completed" | "failed";
     error?: string;
   }>;
   error?: string;
@@ -574,8 +599,8 @@ export interface WorkflowBottleneck {
   id: string;
   nodeId: string;
   nodeName: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  type: 'duration' | 'waiting' | 'resource' | 'error' | 'sequential';
+  severity: "low" | "medium" | "high" | "critical";
+  type: "duration" | "waiting" | "resource" | "error" | "sequential";
   description: string;
   impact: {
     averageDelay: number;
@@ -593,8 +618,14 @@ export interface WorkflowBottleneck {
 
 export interface OptimizationSuggestion {
   id: string;
-  type: 'parallelization' | 'caching' | 'reordering' | 'elimination' | 'consolidation' | 'automation';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  type:
+    | "parallelization"
+    | "caching"
+    | "reordering"
+    | "elimination"
+    | "consolidation"
+    | "automation";
+  priority: "low" | "medium" | "high" | "critical";
   title: string;
   description: string;
   affectedNodes: string[];
@@ -603,7 +634,7 @@ export interface OptimizationSuggestion {
     costSavings?: number;
     errorReduction?: number;
   };
-  effort: 'low' | 'medium' | 'high';
+  effort: "low" | "medium" | "high";
   autoApplicable: boolean;
   implementation?: {
     steps: string[];
@@ -618,7 +649,7 @@ export interface WorkflowTrend {
     timestamp: string;
     value: number;
   }>;
-  trend: 'improving' | 'stable' | 'degrading';
+  trend: "improving" | "stable" | "degrading";
   trendPercentage: number;
   forecast?: Array<{
     timestamp: string;
@@ -646,7 +677,13 @@ export interface WorkflowComparison {
 export interface AIWorkflowSuggestion {
   id: string;
   workflowId: string;
-  type: 'optimization' | 'automation' | 'simplification' | 'best_practice' | 'compliance' | 'risk_mitigation';
+  type:
+    | "optimization"
+    | "automation"
+    | "simplification"
+    | "best_practice"
+    | "compliance"
+    | "risk_mitigation";
   confidence: number; // 0-1
   title: string;
   description: string;
@@ -663,11 +700,16 @@ export interface AIWorkflowSuggestion {
     riskReduction?: number;
     qualityImprovement?: number;
   };
-  implementationDifficulty: 'trivial' | 'easy' | 'moderate' | 'difficult' | 'expert';
+  implementationDifficulty:
+    | "trivial"
+    | "easy"
+    | "moderate"
+    | "difficult"
+    | "expert";
   autoApply: boolean;
   appliedAt?: string;
   appliedBy?: UserId;
-  status: 'pending' | 'accepted' | 'rejected' | 'applied';
+  status: "pending" | "accepted" | "rejected" | "applied";
   feedback?: {
     helpful: boolean;
     comments?: string;
@@ -676,7 +718,15 @@ export interface AIWorkflowSuggestion {
 }
 
 export interface AIWorkflowChange {
-  action: 'add_node' | 'remove_node' | 'modify_node' | 'add_connection' | 'remove_connection' | 'reorder' | 'parallelize' | 'add_approval';
+  action:
+    | "add_node"
+    | "remove_node"
+    | "modify_node"
+    | "add_connection"
+    | "remove_connection"
+    | "reorder"
+    | "parallelize"
+    | "add_approval";
   target?: string; // Node ID or connection ID
   details: Record<string, unknown>;
   reversible: boolean;
@@ -684,7 +734,12 @@ export interface AIWorkflowChange {
 
 export interface AIWorkflowModel {
   modelId: string;
-  modelType: 'pattern_recognition' | 'anomaly_detection' | 'optimization' | 'prediction' | 'classification';
+  modelType:
+    | "pattern_recognition"
+    | "anomaly_detection"
+    | "optimization"
+    | "prediction"
+    | "classification";
   version: string;
   trainedOn: {
     datasetSize: number;
@@ -724,7 +779,14 @@ export interface ExternalTrigger {
   id: string;
   name: string;
   description?: string;
-  type: 'webhook' | 'api_poll' | 'email' | 'file_watch' | 'database' | 'queue' | 'custom';
+  type:
+    | "webhook"
+    | "api_poll"
+    | "email"
+    | "file_watch"
+    | "database"
+    | "queue"
+    | "custom";
   enabled: boolean;
   config: ExternalTriggerConfig;
   filters: TriggerFilter[];
@@ -736,7 +798,7 @@ export interface ExternalTrigger {
   };
   retryPolicy?: {
     maxRetries: number;
-    backoffStrategy: 'fixed' | 'exponential' | 'linear';
+    backoffStrategy: "fixed" | "exponential" | "linear";
     initialDelay: number;
     maxDelay: number;
   };
@@ -749,7 +811,7 @@ export interface ExternalTrigger {
   };
 }
 
-export type ExternalTriggerConfig = 
+export type ExternalTriggerConfig =
   | WebhookConfig
   | ApiPollConfig
   | EmailConfig
@@ -759,22 +821,22 @@ export type ExternalTriggerConfig =
   | CustomConfig;
 
 export interface WebhookConfig {
-  type: 'webhook';
+  type: "webhook";
   url: string; // Generated webhook URL
-  method: 'POST' | 'PUT' | 'PATCH';
+  method: "POST" | "PUT" | "PATCH";
   expectedHeaders?: Record<string, string>;
   signatureValidation?: {
     header: string;
     secret: string;
-    algorithm: 'sha256' | 'sha512' | 'hmac';
+    algorithm: "sha256" | "sha512" | "hmac";
   };
   ipWhitelist?: string[];
 }
 
 export interface ApiPollConfig {
-  type: 'api_poll';
+  type: "api_poll";
   endpoint: string;
-  method: 'GET' | 'POST';
+  method: "GET" | "POST";
   headers?: Record<string, string>;
   body?: Record<string, unknown>;
   pollInterval: number; // In milliseconds
@@ -784,7 +846,7 @@ export interface ApiPollConfig {
 }
 
 export interface EmailConfig {
-  type: 'email';
+  type: "email";
   emailAddress: string; // Generated email address
   subjectFilter?: string; // Regex
   senderFilter?: string; // Regex
@@ -796,16 +858,16 @@ export interface EmailConfig {
 }
 
 export interface FileWatchConfig {
-  type: 'file_watch';
+  type: "file_watch";
   path: string;
   pattern: string; // Glob pattern
-  events: Array<'created' | 'modified' | 'deleted'>;
+  events: Array<"created" | "modified" | "deleted">;
   recursive: boolean;
   debounce: number; // Wait X ms after last change
 }
 
 export interface DatabaseConfig {
-  type: 'database';
+  type: "database";
   connectionString: string;
   query: string;
   pollInterval: number;
@@ -814,16 +876,16 @@ export interface DatabaseConfig {
 }
 
 export interface QueueConfig {
-  type: 'queue';
-  queueType: 'sqs' | 'rabbitmq' | 'kafka' | 'redis' | 'azure_queue';
+  type: "queue";
+  queueType: "sqs" | "rabbitmq" | "kafka" | "redis" | "azure_queue";
   connectionConfig: Record<string, unknown>;
   queueName: string;
-  consumeStrategy: 'peek' | 'consume' | 'subscribe';
+  consumeStrategy: "peek" | "consume" | "subscribe";
   acknowledgeOnSuccess: boolean;
 }
 
 export interface CustomConfig {
-  type: 'custom';
+  type: "custom";
   code: string; // JavaScript function
   dependencies?: string[];
   timeout: number;
@@ -831,20 +893,27 @@ export interface CustomConfig {
 
 export interface TriggerFilter {
   field: string;
-  operator: 'equals' | 'not_equals' | 'contains' | 'regex' | 'greater_than' | 'less_than' | 'exists';
+  operator:
+    | "equals"
+    | "not_equals"
+    | "contains"
+    | "regex"
+    | "greater_than"
+    | "less_than"
+    | "exists";
   value: unknown;
   caseSensitive?: boolean;
 }
 
 export interface DataTransformation {
-  type: 'jmespath' | 'jsonata' | 'javascript' | 'template';
+  type: "jmespath" | "jsonata" | "javascript" | "template";
   expression: string;
   outputSchema?: Record<string, unknown>;
   validateOutput: boolean;
 }
 
 export interface TriggerAuthentication {
-  type: 'none' | 'basic' | 'bearer' | 'api_key' | 'oauth2' | 'custom';
+  type: "none" | "basic" | "bearer" | "api_key" | "oauth2" | "custom";
   credentials?: Record<string, string>;
   oauth2Config?: {
     authUrl: string;
@@ -864,7 +933,7 @@ export interface TriggerEvent {
   metadata?: Record<string, unknown>;
   processedAt?: string;
   workflowInstanceId?: string;
-  status: 'received' | 'processing' | 'completed' | 'failed' | 'ignored';
+  status: "received" | "processing" | "completed" | "failed" | "ignored";
   error?: string;
 }
 
@@ -877,15 +946,22 @@ export interface EnhancedWorkflowInstance extends BaseEntity {
   semanticVersion: string;
   name: string;
   description?: string;
-  status: 'draft' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled' | 'rolled_back';
-  
+  status:
+    | "draft"
+    | "running"
+    | "paused"
+    | "completed"
+    | "failed"
+    | "cancelled"
+    | "rolled_back";
+
   // Core workflow data
   nodes: WorkflowNode[];
   connections: WorkflowConnection[];
   currentNodeId?: string;
   completedNodes: string[];
   failedNodes: string[];
-  
+
   // Feature integrations
   conditionalConfigs: ConditionalBranchingConfig[];
   parallelConfigs: ParallelExecutionConfig[];
@@ -908,14 +984,14 @@ export interface EnhancedWorkflowInstance extends BaseEntity {
   cancelledAt?: string;
   duration?: number;
   estimatedCompletion?: string;
-  
+
   // Ownership and permissions
   createdBy: UserId;
   assignedTo?: UserId[];
   teamId?: string;
   caseId?: string;
   matterId?: string;
-  
+
   // Audit trail
   auditLog: Array<{
     timestamp: string;
@@ -931,12 +1007,14 @@ export interface EnhancedWorkflowInstance extends BaseEntity {
   metadata: Record<string, unknown>;
 }
 
+export type WorkflowInstance = EnhancedWorkflowInstance;
+
 // ============================================================================
 // QUERY AND FILTER TYPES
 // ============================================================================
 
 export interface WorkflowQueryFilters {
-  status?: EnhancedWorkflowInstance['status'][];
+  status?: EnhancedWorkflowInstance["status"][];
   createdBy?: UserId;
   assignedTo?: UserId;
   caseId?: string;
@@ -946,7 +1024,7 @@ export interface WorkflowQueryFilters {
     start: string;
     end: string;
   };
-  slaStatus?: SLAStatus['status'][];
+  slaStatus?: SLAStatus["status"][];
   hasBottlenecks?: boolean;
   hasPendingApprovals?: boolean;
   tags?: string[];
@@ -954,8 +1032,15 @@ export interface WorkflowQueryFilters {
 }
 
 export interface WorkflowSortOptions {
-  field: 'createdAt' | 'updatedAt' | 'startedAt' | 'completedAt' | 'duration' | 'priority' | 'slaStatus';
-  order: 'asc' | 'desc';
+  field:
+    | "createdAt"
+    | "updatedAt"
+    | "startedAt"
+    | "completedAt"
+    | "duration"
+    | "priority"
+    | "slaStatus";
+  order: "asc" | "desc";
 }
 
 // ============================================================================

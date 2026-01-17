@@ -13,7 +13,14 @@
  * - Statute of limitations tracking
  */
 
-import { addDays, addMonths, addYears, differenceInDays, isWeekend, isSameDay } from 'date-fns';
+import {
+  addDays,
+  addMonths,
+  addYears,
+  differenceInDays,
+  isWeekend,
+  isSameDay,
+} from "date-fns";
 
 // ============================================================================
 // Types
@@ -22,7 +29,7 @@ import { addDays, addMonths, addYears, differenceInDays, isWeekend, isSameDay } 
 export interface CourtRule {
   id: string;
   name: string;
-  jurisdiction: 'federal' | 'state' | 'local';
+  jurisdiction: "federal" | "state" | "local";
   state?: string;
   district?: string;
 }
@@ -99,10 +106,18 @@ export const getFederalHolidays = (year: number): Date[] => {
 /**
  * Get nth weekday of month
  */
-const getNthWeekdayOfMonth = (year: number, month: number, weekday: number, n: number): Date => {
+const getNthWeekdayOfMonth = (
+  year: number,
+  month: number,
+  weekday: number,
+  n: number,
+): Date => {
   const firstDay = new Date(year, month, 1);
   const firstWeekday = firstDay.getDay();
-  const offset = (weekday >= firstWeekday) ? (weekday - firstWeekday) : (7 - firstWeekday + weekday);
+  const offset =
+    weekday >= firstWeekday
+      ? weekday - firstWeekday
+      : 7 - firstWeekday + weekday;
   const date = 1 + offset + (n - 1) * 7;
   return new Date(year, month, date);
 };
@@ -110,10 +125,15 @@ const getNthWeekdayOfMonth = (year: number, month: number, weekday: number, n: n
 /**
  * Get last weekday of month
  */
-const getLastWeekdayOfMonth = (year: number, month: number, weekday: number): Date => {
+const getLastWeekdayOfMonth = (
+  year: number,
+  month: number,
+  weekday: number,
+): Date => {
   const lastDay = new Date(year, month + 1, 0);
   const lastWeekday = lastDay.getDay();
-  const offset = (weekday <= lastWeekday) ? (lastWeekday - weekday) : (7 - weekday + lastWeekday);
+  const offset =
+    weekday <= lastWeekday ? lastWeekday - weekday : 7 - weekday + lastWeekday;
   const date = lastDay.getDate() - offset;
   return new Date(year, month, date);
 };
@@ -218,10 +238,10 @@ export class CourtDeadlineService {
       daysFromStart: 21,
       businessDays,
       excludedDays,
-      rule: 'FRCP 12(a)(1)(A)',
-      description: 'Answer to complaint (21 days from service)',
+      rule: "FRCP 12(a)(1)(A)",
+      description: "Answer to complaint (21 days from service)",
       warnings: [
-        'If service is waived, defendant has 60 days (90 days if outside US)',
+        "If service is waived, defendant has 60 days (90 days if outside US)",
       ],
     };
   }
@@ -240,8 +260,8 @@ export class CourtDeadlineService {
       daysFromStart: 60,
       businessDays,
       excludedDays,
-      rule: 'FRCP 12(a)(1)(A)(ii)',
-      description: 'Answer when United States is a defendant (60 days)',
+      rule: "FRCP 12(a)(1)(A)(ii)",
+      description: "Answer when United States is a defendant (60 days)",
     };
   }
 
@@ -249,7 +269,9 @@ export class CourtDeadlineService {
    * FRCP 26(a)(1): Initial disclosures
    * 14 days after Rule 26(f) conference
    */
-  calculateInitialDisclosuresDeadline(conferenceDate: Date): DeadlineCalculation {
+  calculateInitialDisclosuresDeadline(
+    conferenceDate: Date,
+  ): DeadlineCalculation {
     const dueDate = addDays(conferenceDate, 14);
     const businessDays = this.getBusinessDaysBetween(conferenceDate, dueDate);
     const excludedDays = this.getExcludedDays(conferenceDate, dueDate);
@@ -259,8 +281,8 @@ export class CourtDeadlineService {
       daysFromStart: 14,
       businessDays,
       excludedDays,
-      rule: 'FRCP 26(a)(1)',
-      description: 'Initial disclosures (14 days after Rule 26(f) conference)',
+      rule: "FRCP 26(a)(1)",
+      description: "Initial disclosures (14 days after Rule 26(f) conference)",
     };
   }
 
@@ -276,8 +298,8 @@ export class CourtDeadlineService {
       daysFromStart: 1,
       businessDays: 0,
       excludedDays: [],
-      rule: 'FRCP 26(d)(2)',
-      description: 'Discovery may commence (day after Rule 26(f) conference)',
+      rule: "FRCP 26(d)(2)",
+      description: "Discovery may commence (day after Rule 26(f) conference)",
     };
   }
 
@@ -285,7 +307,9 @@ export class CourtDeadlineService {
    * FRCP 56(c): Summary judgment opposition
    * 21 days after motion filed (or court order)
    */
-  calculateSummaryJudgmentOppositionDeadline(motionFiledDate: Date): DeadlineCalculation {
+  calculateSummaryJudgmentOppositionDeadline(
+    motionFiledDate: Date,
+  ): DeadlineCalculation {
     const dueDate = addDays(motionFiledDate, 21);
     const businessDays = this.getBusinessDaysBetween(motionFiledDate, dueDate);
     const excludedDays = this.getExcludedDays(motionFiledDate, dueDate);
@@ -295,8 +319,8 @@ export class CourtDeadlineService {
       daysFromStart: 21,
       businessDays,
       excludedDays,
-      rule: 'FRCP 56(c)',
-      description: 'Summary judgment opposition (21 days from motion)',
+      rule: "FRCP 56(c)",
+      description: "Summary judgment opposition (21 days from motion)",
     };
   }
 
@@ -318,11 +342,11 @@ export class CourtDeadlineService {
       daysFromStart: 30,
       businessDays,
       excludedDays,
-      rule: 'FRAP 4(a)(1)(A)',
-      description: 'Notice of appeal (30 days from judgment)',
+      rule: "FRAP 4(a)(1)(A)",
+      description: "Notice of appeal (30 days from judgment)",
       warnings: [
-        'If United States is a party, 60 days',
-        'Extensions available under certain circumstances',
+        "If United States is a party, 60 days",
+        "Extensions available under certain circumstances",
       ],
     };
   }
@@ -341,8 +365,8 @@ export class CourtDeadlineService {
       daysFromStart: 60,
       businessDays,
       excludedDays,
-      rule: 'FRAP 4(a)(1)(B)',
-      description: 'Notice of appeal when United States is a party (60 days)',
+      rule: "FRAP 4(a)(1)(B)",
+      description: "Notice of appeal when United States is a party (60 days)",
     };
   }
 
@@ -355,7 +379,7 @@ export class CourtDeadlineService {
    */
   calculateStatuteOfLimitations(
     incidentDate: Date,
-    statute: StatuteOfLimitations
+    statute: StatuteOfLimitations,
   ): DeadlineCalculation {
     let dueDate = new Date(incidentDate);
 
@@ -380,7 +404,7 @@ export class CourtDeadlineService {
       excludedDays,
       rule: `Statute of Limitations - ${statute.jurisdiction}`,
       description: `${statute.claimType} (${statute.years} years)`,
-      warnings: statute.exceptions,
+      ...(statute.exceptions ? { warnings: statute.exceptions } : {}),
     };
   }
 
@@ -390,42 +414,42 @@ export class CourtDeadlineService {
   getCommonStatutesOfLimitations(): StatuteOfLimitations[] {
     return [
       {
-        claimType: 'Personal Injury',
-        jurisdiction: 'Federal',
+        claimType: "Personal Injury",
+        jurisdiction: "Federal",
         years: 2,
-        description: 'Federal Tort Claims Act',
+        description: "Federal Tort Claims Act",
       },
       {
-        claimType: 'Breach of Contract',
-        jurisdiction: 'Federal',
+        claimType: "Breach of Contract",
+        jurisdiction: "Federal",
         years: 6,
-        description: 'Written contracts',
+        description: "Written contracts",
       },
       {
-        claimType: 'Securities Fraud',
-        jurisdiction: 'Federal',
+        claimType: "Securities Fraud",
+        jurisdiction: "Federal",
         years: 2,
-        description: 'From discovery (5 years maximum)',
-        exceptions: ['Discovery rule applies'],
+        description: "From discovery (5 years maximum)",
+        exceptions: ["Discovery rule applies"],
       },
       {
-        claimType: 'Medical Malpractice',
-        jurisdiction: 'California',
+        claimType: "Medical Malpractice",
+        jurisdiction: "California",
         years: 3,
-        description: 'From injury or 1 year from discovery',
-        exceptions: ['Discovery rule applies', 'Minors have extended time'],
+        description: "From injury or 1 year from discovery",
+        exceptions: ["Discovery rule applies", "Minors have extended time"],
       },
       {
-        claimType: 'Personal Injury',
-        jurisdiction: 'New York',
+        claimType: "Personal Injury",
+        jurisdiction: "New York",
         years: 3,
-        description: 'Most personal injury claims',
+        description: "Most personal injury claims",
       },
       {
-        claimType: 'Breach of Written Contract',
-        jurisdiction: 'Texas',
+        claimType: "Breach of Written Contract",
+        jurisdiction: "Texas",
         years: 4,
-        description: 'Written contracts',
+        description: "Written contracts",
       },
     ];
   }
@@ -451,11 +475,11 @@ export class CourtDeadlineService {
       daysFromStart,
       businessDays,
       excludedDays,
-      rule: 'FRCP 6(d)',
-      description: 'Service deadline (3 days before filing for mail service)',
+      rule: "FRCP 6(d)",
+      description: "Service deadline (3 days before filing for mail service)",
       warnings: [
-        'Add 3 days for service by mail',
-        'Electronic service does not add time',
+        "Add 3 days for service by mail",
+        "Electronic service does not add time",
       ],
     };
   }

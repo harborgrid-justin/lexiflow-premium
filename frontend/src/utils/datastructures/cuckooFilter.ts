@@ -56,7 +56,7 @@ export class CuckooFilter {
         const bucket = this.buckets[index]!;
         for (let i = 0; i < this.bucketSize; i++) {
             if (bucket[i] === null) {
-                bucket[i]! = fp;
+                bucket[i] = fp;
                 return true;
             }
         }

@@ -4,8 +4,10 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { PaginationParams, TimeEntry } from "./types";
+
 import { OperationError } from "./types";
+
+import type { PaginationParams, TimeEntry } from "./types";
 
 /**
  * Retrieves all time entries

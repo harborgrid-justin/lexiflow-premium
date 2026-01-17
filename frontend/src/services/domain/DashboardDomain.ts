@@ -6,8 +6,10 @@
 
 import { api } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { TaskStatusBackend } from "@/types";
-import { Invoice } from "@/types/financial";
+import { type TaskStatusBackend } from "@/types";
+import { type Invoice , type TimeEntry } from "@/types/financial";
+
+import type { Motion } from "@/types/motion-docket";
 
 interface DashboardWidget {
   id: string;
@@ -47,18 +49,18 @@ export const DashboardService = {
   // Dashboard specific methods
   getWidgets: async (dashboardId: string): Promise<DashboardWidget[]> => {
     const dashboard = await apiClient.get<{ widgets?: DashboardWidget[] }>(
-      `/dashboards/${dashboardId}`
+      `/dashboards/${dashboardId}`,
     );
     return dashboard?.widgets || [];
   },
 
   addWidget: async (
     dashboardId: string,
-    widget: Partial<DashboardWidget>
+    widget: Partial<DashboardWidget>,
   ): Promise<DashboardWidget> => {
     return apiClient.post<DashboardWidget>(
       `/dashboards/${dashboardId}/widgets`,
-      widget
+      widget,
     );
   },
 
@@ -69,7 +71,7 @@ export const DashboardService = {
 
   updateLayout: async (
     dashboardId: string,
-    layout: unknown
+    layout: unknown,
   ): Promise<unknown> => {
     return apiClient.patch(`/dashboards/${dashboardId}/layout`, { layout });
   },
@@ -80,12 +82,12 @@ export const DashboardService = {
       const startOfMonth = new Date(
         now.getFullYear(),
         now.getMonth(),
-        1
+        1,
       ).toISOString();
       const endOfMonth = new Date(
         now.getFullYear(),
         now.getMonth() + 1,
-        0
+        0,
       ).toISOString();
 
       const [stats, tasks, invoices, auditLogs] = await Promise.all([
@@ -100,7 +102,7 @@ export const DashboardService = {
 
       const revenue = invoices.reduce(
         (sum: number, inv: Invoice) => sum + (inv.totalAmount || 0),
-        0
+        0,
       );
 
       return {
@@ -114,7 +116,7 @@ export const DashboardService = {
     } catch (error) {
       console.error(
         "[DashboardService.getMetrics] Error fetching metrics:",
-        error
+        error,
       );
       return {
         activeCases: 0,
@@ -135,12 +137,12 @@ export const DashboardService = {
     ]);
 
     const pendingMotions = motions.filter(
-      (m) => !["Decided", "Withdrawn"].includes(m.status)
+      (m: Motion) => !["Decided", "Withdrawn"].includes(m.status),
     ).length;
 
     const billableHours = timeEntries.reduce(
-      (sum, entry) => sum + (entry.duration || 0),
-      0
+      (sum: number, entry: TimeEntry) => sum + (entry.duration || 0),
+      0,
     );
 
     return {

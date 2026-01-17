@@ -1,15 +1,15 @@
 // types/system.ts
 // System Configuration & Infrastructure Types
 
-import { OrganizationType, UserRole } from "./enums";
+import { type OrganizationType, type UserRole } from "./enums";
 import {
-  BaseEntity,
-  EntityId,
-  GroupId,
-  JsonValue,
-  MetadataRecord,
-  OrgId,
-  UserId,
+  type BaseEntity,
+  type EntityId,
+  type GroupId,
+  type JsonValue,
+  type MetadataRecord,
+  type OrgId,
+  type UserId,
 } from "./primitives";
 
 export interface TenantConfig {

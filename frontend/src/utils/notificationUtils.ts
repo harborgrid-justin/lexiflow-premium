@@ -1,23 +1,24 @@
 /**
  * notificationUtils.ts
- * 
+ *
  * Utility functions for consistent notification behavior
  * Replaces scattered alert() calls with proper notification system
  */
 
-import { toast } from 'react-hot-toast';
-import { TIMEOUTS } from '@/config/ports.config';
+import { toast } from "react-hot-toast";
+
+import { TIMEOUTS } from "@/config/ports.config";
 
 // ============================================================================
 // TYPES
 // ============================================================================
-export type NotificationType = 'success' | 'error' | 'info' | 'warning';
+export type NotificationType = "success" | "error" | "info" | "warning";
 
 export interface NotificationOptions {
   /** Duration in milliseconds */
   duration?: number;
   /** Position on screen */
-  position?: 'top-right' | 'top-center' | 'bottom-right' | 'bottom-center';
+  position?: "top-right" | "top-center" | "bottom-right" | "bottom-center";
   /** Custom icon */
   icon?: string;
 }
@@ -29,33 +30,42 @@ export interface NotificationOptions {
 /**
  * Show success notification
  */
-export const notifySuccess = (message: string, options?: NotificationOptions): void => {
+export const notifySuccess = (
+  message: string,
+  options?: NotificationOptions,
+): void => {
   toast.success(message, {
     duration: options?.duration || TIMEOUTS.NOTIFICATION_SUCCESS,
-    position: options?.position || 'top-right',
-    icon: options?.icon
+    position: options?.position || "top-right",
+    ...(options?.icon ? { icon: options.icon } : {}),
   });
 };
 
 /**
  * Show error notification
  */
-export const notifyError = (message: string, options?: NotificationOptions): void => {
+export const notifyError = (
+  message: string,
+  options?: NotificationOptions,
+): void => {
   toast.error(message, {
     duration: options?.duration || TIMEOUTS.NOTIFICATION_ERROR,
-    position: options?.position || 'top-right',
-    icon: options?.icon
+    position: options?.position || "top-right",
+    ...(options?.icon ? { icon: options.icon } : {}),
   });
 };
 
 /**
  * Show info notification
  */
-export const notifyInfo = (message: string, options?: NotificationOptions): void => {
+export const notifyInfo = (
+  message: string,
+  options?: NotificationOptions,
+): void => {
   toast(message, {
     duration: options?.duration || TIMEOUTS.NOTIFICATION_SUCCESS,
-    position: options?.position || 'top-right',
-    icon: options?.icon || 'ℹ️'
+    position: options?.position || "top-right",
+    icon: options?.icon || "ℹ️",
   });
 };
 
@@ -63,16 +73,19 @@ export const notifyInfo = (message: string, options?: NotificationOptions): void
  * Show warning notification
  * Note: Toast styles are fixed (not theme-aware) to maintain high visibility
  */
-export const notifyWarning = (message: string, options?: NotificationOptions): void => {
+export const notifyWarning = (
+  message: string,
+  options?: NotificationOptions,
+): void => {
   toast(message, {
     duration: options?.duration || 4000,
-    position: options?.position || 'top-right',
-    icon: options?.icon || '⚠️',
+    position: options?.position || "top-right",
+    icon: options?.icon || "⚠️",
     // Fixed light colors for visibility - toast notifications should be consistent
     style: {
-      background: '#fef3c7',
-      color: '#92400e'
-    }
+      background: "#fef3c7",
+      color: "#92400e",
+    },
   });
 };
 
@@ -87,23 +100,23 @@ export const notifyLoading = (message: string): string => {
  * Update an existing notification
  */
 export const updateNotification = (
-  id: string, 
-  type: NotificationType, 
-  message: string
+  id: string,
+  type: NotificationType,
+  message: string,
 ): void => {
   switch (type) {
-    case 'success':
+    case "success":
       toast.success(message, { id });
       break;
-    case 'error':
+    case "error":
       toast.error(message, { id });
       break;
-    case 'warning':
-      toast(message, { id, icon: '⚠️' });
+    case "warning":
+      toast(message, { id, icon: "⚠️" });
       break;
-    case 'info':
+    case "info":
     default:
-      toast(message, { id, icon: 'ℹ️' });
+      toast(message, { id, icon: "ℹ️" });
       break;
   }
 };
@@ -127,13 +140,14 @@ export const dismissAllNotifications = (): void => {
 // ============================================================================
 
 export const COMMON_MESSAGES = {
-  SAVE_SUCCESS: 'Changes saved successfully',
-  SAVE_ERROR: 'Failed to save changes',
-  DELETE_SUCCESS: 'Item deleted successfully',
-  DELETE_ERROR: 'Failed to delete item',
-  LOAD_ERROR: 'Failed to load data',
-  NETWORK_ERROR: 'Network connection error',
-  PERMISSION_DENIED: 'You do not have permission to perform this action',
-  INVALID_INPUT: 'Please check your input and try again',
-  BACKEND_UNAVAILABLE: 'Backend service is not available. Please try again later.'
+  SAVE_SUCCESS: "Changes saved successfully",
+  SAVE_ERROR: "Failed to save changes",
+  DELETE_SUCCESS: "Item deleted successfully",
+  DELETE_ERROR: "Failed to delete item",
+  LOAD_ERROR: "Failed to load data",
+  NETWORK_ERROR: "Network connection error",
+  PERMISSION_DENIED: "You do not have permission to perform this action",
+  INVALID_INPUT: "Please check your input and try again",
+  BACKEND_UNAVAILABLE:
+    "Backend service is not available. Please try again later.",
 } as const;

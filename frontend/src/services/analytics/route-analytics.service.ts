@@ -7,8 +7,6 @@
  * @module services/analytics/routeAnalytics
  */
 
-import { performance } from "@/utils/performance";
-
 export interface RouteAnalyticsEvent {
   type: "page_view" | "route_change" | "navigation_intent" | "route_error";
   path: string;
@@ -22,7 +20,7 @@ interface WindowAnalytics {
   gtag?: (
     command: string,
     action: string,
-    params?: Record<string, unknown>
+    params?: Record<string, unknown>,
   ) => void;
   mixpanel?: {
     track: (event: string, properties?: Record<string, unknown>) => void;
@@ -84,9 +82,9 @@ class RouteAnalyticsService {
     const event: RouteAnalyticsEvent = {
       type: "route_change",
       path: currentPath,
-      previousPath,
+      ...(previousPath ? { previousPath } : {}),
       timestamp: Date.now(),
-      loadTime,
+      ...(typeof loadTime === "number" ? { loadTime } : {}),
     };
 
     this.track(event);
@@ -111,7 +109,7 @@ class RouteAnalyticsService {
       type: "page_view",
       path,
       timestamp: Date.now(),
-      metadata,
+      ...(metadata ? { metadata } : {}),
     };
 
     this.track(event);
@@ -228,7 +226,7 @@ class RouteAnalyticsService {
    * Send to custom analytics backend
    */
   private async sendToCustomEndpoint(
-    event: RouteAnalyticsEvent
+    event: RouteAnalyticsEvent,
   ): Promise<void> {
     try {
       // Only send in production
@@ -255,7 +253,7 @@ class RouteAnalyticsService {
       const recentEvents = this.events.slice(-100); // Keep last 100 events
       localStorage.setItem(
         "route_analytics_events",
-        JSON.stringify(recentEvents)
+        JSON.stringify(recentEvents),
       );
     } catch {
       // Ignore storage errors

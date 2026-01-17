@@ -3,10 +3,12 @@
  * Research queries, citation validation, and Shepardizing
  */
 
-import { getClient } from "./client";
 import { Prompts } from "@/services/ai/prompts";
 import { ShepardizeSchema } from "@/services/ai/schemas";
 import { safeParseJSON, withRetry } from "@/utils/apiUtils";
+
+import { getClient } from "./client";
+
 import type {
   GroundingChunk,
   ResearchResponse,

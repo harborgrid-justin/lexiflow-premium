@@ -22,8 +22,8 @@ import { knowledgeApi } from '@/lib/frontend-api';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';
@@ -46,7 +46,7 @@ interface KnowledgeAnalyticsData {
 // ============================================================================
 
 export function KnowledgeAnalytics() {
-    const { theme, mode } = useTheme();
+    const { theme } = useTheme();
     const chartTheme = useChartTheme();
 
     // Enterprise Data Access

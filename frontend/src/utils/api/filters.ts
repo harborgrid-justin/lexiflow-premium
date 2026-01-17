@@ -18,7 +18,7 @@
 export interface BaseFilter {
   search?: string;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 /**
@@ -46,7 +46,10 @@ export interface TagFilter {
 /**
  * Filter builder result
  */
-export type FilterParams = Record<string, string | number | boolean | undefined>;
+export type FilterParams = Record<
+  string,
+  string | number | boolean | undefined
+>;
 
 /**
  * Remove undefined and null values from object
@@ -54,12 +57,14 @@ export type FilterParams = Record<string, string | number | boolean | undefined>
  * @param obj - Object with potential undefined/null values
  * @returns Cleaned object
  */
-export function cleanFilterParams<T extends Record<string, unknown>>(obj: T): Partial<T> {
+export function cleanFilterParams<T extends Record<string, unknown>>(
+  obj: T,
+): Partial<T> {
   const cleaned: Partial<T> = {};
 
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       cleaned[key as keyof T] = value as T[keyof T];
     }
   });
@@ -92,7 +97,7 @@ export function buildSearchFilter(search?: string): FilterParams {
  */
 export function buildSortFilter(
   sortBy?: string,
-  sortOrder: 'asc' | 'desc' = 'asc'
+  sortOrder: "asc" | "desc" = "asc",
 ): FilterParams {
   if (!sortBy) {
     return {};
@@ -113,16 +118,17 @@ export function buildSortFilter(
  */
 export function buildDateRangeFilter(
   dateFrom?: string | Date,
-  dateTo?: string | Date
+  dateTo?: string | Date,
 ): FilterParams {
   const params: FilterParams = {};
 
   if (dateFrom) {
-    params.dateFrom = dateFrom instanceof Date ? dateFrom.toISOString() : dateFrom;
+    params["dateFrom"] =
+      dateFrom instanceof Date ? dateFrom.toISOString() : dateFrom;
   }
 
   if (dateTo) {
-    params.dateTo = dateTo instanceof Date ? dateTo.toISOString() : dateTo;
+    params["dateTo"] = dateTo instanceof Date ? dateTo.toISOString() : dateTo;
   }
 
   return params;
@@ -140,7 +146,7 @@ export function buildStatusFilter(status?: string | string[]): FilterParams {
   }
 
   if (Array.isArray(status)) {
-    return status.length > 0 ? { status: status.join(',') } : {};
+    return status.length > 0 ? { status: status.join(",") } : {};
   }
 
   return { status };
@@ -158,7 +164,7 @@ export function buildTagFilter(tags?: string | string[]): FilterParams {
   }
 
   if (Array.isArray(tags)) {
-    return tags.length > 0 ? { tags: tags.join(',') } : {};
+    return tags.length > 0 ? { tags: tags.join(",") } : {};
   }
 
   return { tags };
@@ -186,13 +192,16 @@ export function buildBooleanFilter(key: string, value?: boolean): FilterParams {
  * @param value - Enum value or array of values
  * @returns Filter parameters
  */
-export function buildEnumFilter(key: string, value?: string | string[]): FilterParams {
+export function buildEnumFilter(
+  key: string,
+  value?: string | string[],
+): FilterParams {
   if (!value) {
     return {};
   }
 
   if (Array.isArray(value)) {
-    return value.length > 0 ? { [key]: value.join(',') } : {};
+    return value.length > 0 ? { [key]: value.join(",") } : {};
   }
 
   return { [key]: value };
@@ -234,7 +243,7 @@ export function buildFilters(filters: {
   status?: string | string[];
   tags?: string | string[];
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
   [key: string]: unknown;
 }): FilterParams {
   const {
@@ -254,7 +263,7 @@ export function buildFilters(filters: {
     buildStatusFilter(status),
     buildTagFilter(tags),
     buildSortFilter(sortBy, sortOrder),
-    cleanFilterParams(customFilters as FilterParams)
+    cleanFilterParams(customFilters as FilterParams),
   );
 }
 
@@ -274,7 +283,10 @@ export function parseFilterArray(value?: string | string[]): string[] {
     return value;
   }
 
-  return value.split(',').map((v) => v.trim()).filter(Boolean);
+  return value
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean);
 }
 
 /**
@@ -286,7 +298,7 @@ export function parseFilterArray(value?: string | string[]): string[] {
  */
 export function isValidDateRange(
   dateFrom?: string | Date,
-  dateTo?: string | Date
+  dateTo?: string | Date,
 ): boolean {
   if (!dateFrom || !dateTo) {
     return true; // Allow partial ranges
@@ -334,9 +346,9 @@ export function parseFilterQuery(queryString: string): FilterParams {
 
   params.forEach((value, key) => {
     // Parse boolean values
-    if (value === 'true') {
+    if (value === "true") {
       filters[key] = true;
-    } else if (value === 'false') {
+    } else if (value === "false") {
       filters[key] = false;
     }
     // Parse numeric values
@@ -359,7 +371,10 @@ export function parseFilterQuery(queryString: string): FilterParams {
  * @param filters2 - Second filter object
  * @returns True if filters are equal
  */
-export function areFiltersEqual(filters1: FilterParams, filters2: FilterParams): boolean {
+export function areFiltersEqual(
+  filters1: FilterParams,
+  filters2: FilterParams,
+): boolean {
   const clean1 = cleanFilterParams(filters1);
   const clean2 = cleanFilterParams(filters2);
 
@@ -386,7 +401,10 @@ export interface FilterPreset {
   createdAt: string;
 }
 
-export function createFilterPreset(name: string, filters: FilterParams): FilterPreset {
+export function createFilterPreset(
+  name: string,
+  filters: FilterParams,
+): FilterPreset {
   return {
     name,
     filters: cleanFilterParams(filters),
@@ -398,17 +416,21 @@ export function createFilterPreset(name: string, filters: FilterParams): FilterP
  * Common filter presets for legal platform
  */
 export const COMMON_FILTER_PRESETS = {
-  activeCases: createFilterPreset('Active Cases', { status: 'active' }),
-  openCases: createFilterPreset('Open Cases', { status: 'open' }),
-  closedCases: createFilterPreset('Closed Cases', { status: 'closed' }),
-  recentCases: createFilterPreset('Recent Cases', {
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
+  activeCases: createFilterPreset("Active Cases", { status: "active" }),
+  openCases: createFilterPreset("Open Cases", { status: "open" }),
+  closedCases: createFilterPreset("Closed Cases", { status: "closed" }),
+  recentCases: createFilterPreset("Recent Cases", {
+    sortBy: "createdAt",
+    sortOrder: "desc",
   }),
-  highPriority: createFilterPreset('High Priority', { priority: 'high' }),
-  overdueItems: createFilterPreset('Overdue', { overdue: true }),
-  thisMonth: createFilterPreset('This Month', {
-    dateFrom: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString(),
+  highPriority: createFilterPreset("High Priority", { priority: "high" }),
+  overdueItems: createFilterPreset("Overdue", { overdue: true }),
+  thisMonth: createFilterPreset("This Month", {
+    dateFrom: new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      1,
+    ).toISOString(),
     dateTo: new Date().toISOString(),
   }),
 } as const;

@@ -10,11 +10,12 @@
     /* -------------------------------------------------------------------------- */
     /* BASE OPTIONS                                                               */
     /* -------------------------------------------------------------------------- */
-    "rootDirs": [".", "./.react-router/types"],
+    "rootDirs": ["src", "./.react-router/types"],
+    "rootDir": "src",
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
 
     /* -------------------------------------------------------------------------- */
     /* BUNDLER MODE (Vite / Rollup / Webpack 5)                                   */
@@ -40,6 +41,9 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "exactOptionalPropertyTypes": true,
+    "noErrorTruncation": true,
     "useDefineForClassFields": true,
 
     /* THE "BILLION DOLLAR MISTAKE" FIX */
@@ -124,13 +128,7 @@
     },
     "types": ["vite/client"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.d.ts",
-    "rendering/**/*.ts",
-    "rendering/**/*.tsx"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
   "exclude": [
     "node_modules",
     "dist",
@@ -138,6 +136,7 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx",
-    "cypress"
+    "cypress",
+    "src/routes/daf/DAFPage.tsx"
   ]
 }

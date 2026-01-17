@@ -24,4 +24,4 @@ export async function clientLoader(): Promise<ExhibitsLoaderData> {
 }
 
 // Support hydration
-(clientLoader as any).hydrate = true;
+(clientLoader as unknown as { hydrate: boolean }).hydrate = true;

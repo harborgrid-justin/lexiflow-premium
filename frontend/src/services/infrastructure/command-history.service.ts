@@ -8,7 +8,7 @@
  */
 
 import { CANVAS_CONSTANTS } from '@/types/canvas-constants';
-import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
+import { type TypedWorkflowNode, type WorkflowConnection } from '@/types/workflow-types';
 
 /**
  * Base command interface

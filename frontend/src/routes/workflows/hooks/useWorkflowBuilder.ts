@@ -79,7 +79,7 @@ export interface UseWorkflowBuilderReturn {
  * @returns Object with workflow state and operations
  */
 export function useWorkflowBuilder(
-  initialTemplate?: WorkflowTemplateData | null
+  initialTemplate?: WorkflowTemplateData | null,
 ): UseWorkflowBuilderReturn {
   const [nodes, setNodes] = useState<WorkflowNode[]>(() => {
     if (initialTemplate) {
@@ -149,23 +149,24 @@ export function useWorkflowBuilder(
       };
 
       if (type === "Decision") {
-        newNode.ports =
-          LITIGATION_PORTS[nodeLabel] || LITIGATION_PORTS["Default"];
+        const ports =
+          LITIGATION_PORTS[nodeLabel] || LITIGATION_PORTS["Default"] || [];
+        newNode.ports = ports;
       }
 
       setNodes((prev) => [...prev, newNode]);
       return id;
     },
-    []
+    [],
   );
 
   const updateNode = useCallback(
     (id: string, updates: Partial<WorkflowNode>) => {
       setNodes((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, ...updates } : n))
+        prev.map((n) => (n.id === id ? { ...n, ...updates } : n)),
       );
     },
-    []
+    [],
   );
 
   const deleteNode = useCallback((id: string) => {
@@ -180,7 +181,7 @@ export function useWorkflowBuilder(
         return;
       }
       const exists = connections.some(
-        (c) => c.from === from && c.to === to && c.fromPort === fromPort
+        (c) => c.from === from && c.to === to && c.fromPort === fromPort,
       );
       if (exists) {
         console.warn("Connection already exists.");
@@ -192,7 +193,7 @@ export function useWorkflowBuilder(
         id,
         from,
         to,
-        fromPort,
+        ...(fromPort ? { fromPort } : {}),
         toPort: "input",
       };
 
@@ -206,16 +207,16 @@ export function useWorkflowBuilder(
 
       setConnections((prev) => [...prev, newConnection]);
     },
-    [nodes, connections]
+    [nodes, connections],
   );
 
   const updateConnection = useCallback(
     (id: string, updates: Partial<WorkflowConnection>) => {
       setConnections((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, ...updates } : c))
+        prev.map((c) => (c.id === id ? { ...c, ...updates } : c)),
       );
     },
-    []
+    [],
   );
 
   const deleteConnection = useCallback((id: string) => {

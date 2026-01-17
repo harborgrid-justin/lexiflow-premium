@@ -8,9 +8,11 @@
 
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError } from "@/services/core/errors";
+
+import { discoveryRequestService } from "./discovery-request.service";
+
 import type { DiscoveryRequest } from "@/types";
 import type { DiscoveryTimelineEvent } from "@/types/discovery-enhanced";
-import { discoveryRequestService } from "./discovery-request.service";
 
 /**
  * Timeline Service Class

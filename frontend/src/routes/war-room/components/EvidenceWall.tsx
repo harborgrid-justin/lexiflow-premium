@@ -60,7 +60,7 @@ interface WallItem extends Record<string, unknown> {
 // COMPONENT
 // ============================================================================
 
-export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
+export function EvidenceWall({ warRoomData }: EvidenceWallProps) {
     // ============================================================================
     // HOOKS & CONTEXT
     // ============================================================================
@@ -142,12 +142,22 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
 
     const handleViewItem = (item: WallItem) => {
         const winId = `ev-wall-${item.id}`;
+        const document =
+            item.original &&
+                typeof item.original === 'object' &&
+                'content' in item.original &&
+                'versions' in item.original
+                ? (item.original as LegalDocument)
+                : null;
         openWindow(
             winId,
             `Evidence Preview: ${item.title}`,
             <div className={cn("h-full", theme.background)}>
                 <DocumentPreviewPanel
-                    document={{ id: item.id } as { id: string }} onViewHistory={() => { }}
+                    document={document}
+                    onViewHistory={(doc) => {
+                        void doc;
+                    }}
 
                 />
             </div>
@@ -201,4 +211,4 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
             </div>
         </div>
     );
-};
+}

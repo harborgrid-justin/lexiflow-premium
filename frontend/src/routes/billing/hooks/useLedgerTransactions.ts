@@ -54,7 +54,8 @@ export function useLedgerTransactions(): [
           closeWindow(windowId);
         }
         return true;
-      } catch (err) {
+      } catch (error) {
+        console.error("Failed to add transaction", error);
         return false;
       }
     },

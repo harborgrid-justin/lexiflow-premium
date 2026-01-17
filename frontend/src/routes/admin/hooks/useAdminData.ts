@@ -1,4 +1,3 @@
-import { useNotify } from "@/hooks/useNotify";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/query-keys.service";
@@ -6,8 +5,6 @@ import { queryKeys } from "@/utils/query-keys.service";
 import { Category } from "./EntitySidebar";
 
 export const useAdminData = (activeCategory: Category) => {
-  const notify = useNotify();
-
   // Independent Queries
   const usersQuery = useQuery(queryKeys.users.all(), () =>
     DataService.users.getAll(),

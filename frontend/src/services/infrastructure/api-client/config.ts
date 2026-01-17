@@ -8,20 +8,20 @@ import {
   getApiBaseUrl,
   getApiPrefix,
 } from "@/config/network/api.config";
+import { HOSTS, TIMEOUTS, URLS } from "@/config/ports.config";
 import {
   AUTH_REFRESH_TOKEN_STORAGE_KEY,
   AUTH_TOKEN_STORAGE_KEY,
 } from "@/config/security/security.config";
-import { TIMEOUTS, URLS, HOSTS } from "@/config/ports.config";
 
 export const DEFAULT_TIMEOUT = API_TIMEOUT_MS;
 export const HEALTH_CHECK_TIMEOUT = TIMEOUTS.HEALTH_CHECK;
 
 export const AUTH_TOKEN_KEY =
-  import.meta.env?.VITE_AUTH_TOKEN_KEY || AUTH_TOKEN_STORAGE_KEY;
+  import.meta.env?.["VITE_AUTH_TOKEN_KEY"] || AUTH_TOKEN_STORAGE_KEY;
 
 export const REFRESH_TOKEN_KEY =
-  import.meta.env?.VITE_AUTH_REFRESH_TOKEN_KEY ||
+  import.meta.env?.["VITE_AUTH_REFRESH_TOKEN_KEY"] ||
   AUTH_REFRESH_TOKEN_STORAGE_KEY;
 
 /**

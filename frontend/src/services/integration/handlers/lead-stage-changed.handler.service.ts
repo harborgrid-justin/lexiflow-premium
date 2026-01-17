@@ -6,9 +6,11 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
-import type { SystemEventPayloads } from "@/types/integration-types";
 import { SystemEventType } from "@/types/integration-types";
+
 import { BaseEventHandler } from "./base-event.handler.service";
+
+import type { SystemEventPayloads } from "@/types/integration-types";
 
 export class LeadStageChangedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]

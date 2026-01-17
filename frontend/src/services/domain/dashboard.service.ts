@@ -24,8 +24,8 @@
 
 import { api } from "@/api";
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { TaskStatusBackend } from "@/types";
-import { Invoice } from "@/types/financial";
+import { type TaskStatusBackend } from "@/types";
+import { type Invoice } from "@/types/financial";
 
 interface DashboardWidget {
   id: string;

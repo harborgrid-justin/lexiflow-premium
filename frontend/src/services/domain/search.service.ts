@@ -45,12 +45,12 @@ export const SearchService = {
    */
   search: async (
     query: string,
-    filters?: { types?: string[]; caseId?: string }
+    filters?: { types?: string[]; caseId?: string },
   ): Promise<SearchResult[]> => {
     try {
       const params: Record<string, unknown> = { q: query };
-      if (filters?.types) params.types = filters.types.join(",");
-      if (filters?.caseId) params.caseId = filters.caseId;
+      if (filters?.types) params["types"] = filters.types.join(",");
+      if (filters?.caseId) params["caseId"] = filters.caseId;
 
       return await apiClient.get<SearchResult[]>("/search", params);
     } catch (error) {
@@ -79,7 +79,7 @@ export const SearchService = {
       const recent = await SearchService.getRecentSearches();
       const updated = [query, ...recent.filter((q) => q !== query)].slice(
         0,
-        MAX_RECENT_SEARCHES
+        MAX_RECENT_SEARCHES,
       );
       localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
       return true;
@@ -93,7 +93,7 @@ export const SearchService = {
     try {
       await apiClient.post(`/search/index/document/${documentId}`, {});
       console.log(
-        `[SearchService] Document ${documentId} indexed successfully`
+        `[SearchService] Document ${documentId} indexed successfully`,
       );
       return true;
     } catch (error) {

@@ -30,11 +30,11 @@ import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import {
-  CaseId,
-  TaskPriorityBackend,
+  type CaseId,
+  type TaskPriorityBackend,
   TaskStatusBackend,
-  UserId,
-  WorkflowTask,
+  type UserId,
+  type WorkflowTask,
 } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
@@ -90,7 +90,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   private validateCaseId(caseId: string, methodName: string): void {
     if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
       throw new Error(
-        `[TaskRepository.${methodName}] Invalid caseId parameter`
+        `[TaskRepository.${methodName}] Invalid caseId parameter`,
       );
     }
   }
@@ -102,7 +102,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   private validateUserId(userId: string, methodName: string): void {
     if (!userId || typeof userId !== "string" || userId.trim() === "") {
       throw new Error(
-        `[TaskRepository.${methodName}] Invalid userId parameter`
+        `[TaskRepository.${methodName}] Invalid userId parameter`,
       );
     }
   }
@@ -216,7 +216,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
    */
   override async update(
     id: string,
-    updates: Partial<WorkflowTaskEntity>
+    updates: Partial<WorkflowTaskEntity>,
   ): Promise<WorkflowTaskEntity> {
     this.validateId(id, "update");
 
@@ -240,12 +240,12 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
           SystemEventType.TASK_COMPLETED,
           {
             task: result,
-          }
+          },
         );
       } catch (eventError) {
         console.warn(
           "[TaskRepository] Failed to publish integration event",
-          eventError
+          eventError,
         );
       }
     }
@@ -315,20 +315,20 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
    */
   async updateStatus(
     id: string,
-    status: TaskStatusBackend
+    status: TaskStatusBackend,
   ): Promise<WorkflowTaskEntity> {
     this.validateId(id, "updateStatus");
 
     if (!status || typeof status !== "string" || status.trim() === "") {
       throw new ValidationError(
-        "[TaskRepository.updateStatus] Invalid status parameter"
+        "[TaskRepository.updateStatus] Invalid status parameter",
       );
     }
 
     try {
       return (await this.tasksApi.updateStatus(
         id,
-        status
+        status,
       )) as WorkflowTaskEntity;
     } catch (error) {
       console.error("[TaskRepository.updateStatus] Error:", error);
@@ -346,13 +346,13 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
    */
   async updatePriority(
     id: string,
-    priority: TaskPriorityBackend
+    priority: TaskPriorityBackend,
   ): Promise<WorkflowTaskEntity> {
     this.validateId(id, "updatePriority");
 
     if (!priority) {
       throw new ValidationError(
-        "[TaskRepository.updatePriority] Invalid priority parameter"
+        "[TaskRepository.updatePriority] Invalid priority parameter",
       );
     }
 
@@ -369,13 +369,13 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
    */
   async updateProgress(
     id: string,
-    progress: number
+    progress: number,
   ): Promise<WorkflowTaskEntity> {
     this.validateId(id, "updateProgress");
 
     if (typeof progress !== "number" || progress < 0 || progress > 100) {
       throw new ValidationError(
-        "[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)"
+        "[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)",
       );
     }
 
@@ -429,7 +429,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
     try {
       return (await this.tasksApi.patch(id, {
-        assignedTo: undefined,
+        assignedTo: null,
       })) as WorkflowTaskEntity;
     } catch (error) {
       console.error("[TaskRepository.unassignTask] Error:", error);
@@ -518,7 +518,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   async getByStatus(status: string): Promise<WorkflowTaskEntity[]> {
     if (!status || typeof status !== "string" || status.trim() === "") {
       throw new ValidationError(
-        "[TaskRepository.getByStatus] Invalid status parameter"
+        "[TaskRepository.getByStatus] Invalid status parameter",
       );
     }
 
@@ -542,7 +542,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   async getByPriority(priority: string): Promise<WorkflowTaskEntity[]> {
     if (!priority || typeof priority !== "string" || priority.trim() === "") {
       throw new ValidationError(
-        "[TaskRepository.getByPriority] Invalid priority parameter"
+        "[TaskRepository.getByPriority] Invalid priority parameter",
       );
     }
 
@@ -594,7 +594,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         tasks = tasks.filter(
           (task) =>
             task.title?.toLowerCase().includes(lowerQuery) ||
-            task.description?.toLowerCase().includes(lowerQuery)
+            task.description?.toLowerCase().includes(lowerQuery),
         );
       }
 
@@ -665,7 +665,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
       console.error("[TaskRepository.getStatistics] Error:", error);
       throw new OperationError(
         "getStatistics",
-        "Failed to get task statistics"
+        "Failed to get task statistics",
       );
     }
   }

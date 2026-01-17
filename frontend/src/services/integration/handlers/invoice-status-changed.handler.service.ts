@@ -7,13 +7,15 @@
 
 import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
 import { ChainService } from "@/services/infrastructure/chainService";
+import { SystemEventType } from "@/types/integration-types";
+
+import { BaseEventHandler } from "./base-event.handler.service";
+
 import type { UserId } from "@/types";
 import type {
   IntegrationResult,
   SystemEventPayloads,
 } from "@/types/integration-types";
-import { SystemEventType } from "@/types/integration-types";
-import { BaseEventHandler } from "./base-event.handler.service";
 
 export class InvoiceStatusChangedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED]
@@ -21,7 +23,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.INVOICE_STATUS_CHANGED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED]
+    payload: SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED],
   ): Promise<IntegrationResult> {
     const actions: string[] = [];
     const errors: string[] = [];
@@ -45,7 +47,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<
   private async handleOverdueInvoice(
     invoice: SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED]["invoice"],
     actions: string[],
-    errors: string[]
+    errors: string[],
   ): Promise<void> {
     const { DataService } = await import("@/services/data/dataService");
 
@@ -63,7 +65,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<
     try {
       const collectionTemplate = await DataService.playbooks.getByIndex(
         "type",
-        "collection"
+        "collection",
       );
 
       if (collectionTemplate && collectionTemplate.length > 0) {
@@ -74,13 +76,13 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<
       } else {
         console.warn("[InvoiceHandler] No collection workflow template found");
         actions.push(
-          "Overdue invoice detected (no collection workflow available)"
+          "Overdue invoice detected (no collection workflow available)",
         );
       }
     } catch (err: unknown) {
       console.error(
         "[InvoiceHandler] Failed to deploy collection workflow:",
-        err
+        err,
       );
       const errorMessage = err instanceof Error ? err.message : String(err);
       errors.push(`Collection workflow deployment failed: ${errorMessage}`);
@@ -89,7 +91,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<
 
   private async logPaymentToBlockchain(
     invoice: SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED]["invoice"],
-    actions: string[]
+    actions: string[],
   ): Promise<void> {
     const prevHash =
       "0000000000000000000000000000000000000000000000000000000000000000";
@@ -102,9 +104,11 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<
         action: "INVOICE_PAID",
         resource: `Invoice/${invoice.id}`,
         ip: "internal",
-        newValue: invoice.amount,
+        ...(typeof invoice.amount === "number"
+          ? { newValue: invoice.amount }
+          : {}),
       },
-      prevHash
+      prevHash,
     );
 
     actions.push("Logged INVOICE_PAID to immutable ledger");

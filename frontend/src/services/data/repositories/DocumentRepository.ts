@@ -34,7 +34,7 @@ import {
 } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { BlobManager } from "@/services/infrastructure/blob-manager.service";
-import { DocumentVersion, FileChunk, LegalDocument } from "@/types";
+import { type DocumentVersion, type FileChunk, type LegalDocument } from "@/types";
 
 const yieldToMain = () => new Promise((resolve) => setTimeout(resolve, 0));
 

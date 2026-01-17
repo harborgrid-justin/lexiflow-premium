@@ -8,8 +8,10 @@
 
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { SanctionMotion, StipulationRequest } from "@/types";
+
 import { validateCaseId } from "../shared/validation";
+
+import type { SanctionMotion, StipulationRequest } from "@/types";
 
 /**
  * Sanction & Stipulation Service Class

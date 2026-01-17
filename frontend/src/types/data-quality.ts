@@ -1,7 +1,7 @@
 // types/data-quality.ts
 // Data Quality & Governance Types
 
-import { BaseEntity, MetadataRecord } from './primitives';
+import { type BaseEntity, type MetadataRecord } from './primitives';
 
 export type SqlCmd = 'SELECT' | 'INSERT' | 'UPDATE' | 'DELETE' | 'ALL';
 export type RLSPermissionLevel = 'None' | 'Read' | 'Write' | 'Full' | 'Own';

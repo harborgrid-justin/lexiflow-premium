@@ -104,13 +104,15 @@
  * - Activity monitoring: 1-minute idle, 5-minute away thresholds
  */
 
+import EventEmitter from "eventemitter3";
+
 import {
   WS_RECONNECT_ATTEMPTS,
   WS_RECONNECT_DELAY_MS,
   WS_URL,
 } from "@/config/network/websocket.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import EventEmitter from "eventemitter3";
+
 import type {
   CollaborativeEdit,
   CollaborationConfig,
@@ -131,9 +133,30 @@ type WSMessagePayload =
   | { documentId: string }
   | { userId: string };
 
-type WSMessageType = 'presence_update' | 'cursor_move' | 'edit_operation' | 'lock_request' | 'lock_release' | 'conflict_detected';
-type WSMessage = { type: WSMessageType; payload: WSMessagePayload };
-type EditConflict = { editId: string; reason: string };
+type WSMessageType =
+  | "presence-update"
+  | "cursor-move"
+  | "edit-operation"
+  | "lock-request"
+  | "lock-release"
+  | "user-joined"
+  | "user-left"
+  | "conflict-detected";
+
+type WSMessage = {
+  type: WSMessageType;
+  payload: WSMessagePayload;
+  timestamp: Date;
+  userId: string;
+};
+
+type EditConflict = {
+  id: string;
+  edit1: CollaborativeEdit;
+  edit2: CollaborativeEdit;
+  type: "overlap" | "conflict";
+  resolutionStrategy: "last-write-wins" | "manual";
+};
 
 const MAX_PENDING_EDITS = 1000;
 
@@ -165,19 +188,19 @@ export class CollaborationService extends EventEmitter {
   constructor(
     userId: string,
     userName: string,
-    config: CollaborationConfig = {}
+    config: CollaborationConfig = {},
   ) {
     super();
 
     // Validate parameters
     if (!userId || false) {
       throw new ValidationError(
-        "[CollaborationService] Invalid userId parameter"
+        "[CollaborationService] Invalid userId parameter",
       );
     }
     if (!userName || false) {
       throw new ValidationError(
-        "[CollaborationService] Invalid userName parameter"
+        "[CollaborationService] Invalid userName parameter",
       );
     }
 
@@ -194,7 +217,7 @@ export class CollaborationService extends EventEmitter {
     };
 
     console.log(
-      `[CollaborationService] Initialized for user: ${userName} (${userId})`
+      `[CollaborationService] Initialized for user: ${userName} (${userId})`,
     );
     this.startActivityMonitoring();
   }
@@ -218,7 +241,7 @@ export class CollaborationService extends EventEmitter {
     return new Promise((resolve, reject) => {
       try {
         console.log(
-          `[CollaborationService] Connecting to ${this.config.wsUrl}...`
+          `[CollaborationService] Connecting to ${this.config.wsUrl}...`,
         );
         this.ws = new WebSocket(this.config.wsUrl);
 
@@ -240,7 +263,7 @@ export class CollaborationService extends EventEmitter {
           } catch (error) {
             console.error(
               "[CollaborationService] Failed to parse message:",
-              error
+              error,
             );
           }
         };
@@ -377,7 +400,7 @@ export class CollaborationService extends EventEmitter {
       userColor: this.getUserColor(this.currentUserId),
       status,
       lastActivity: new Date(),
-      currentDocument: document,
+      ...(document ? { currentDocument: document } : {}),
     };
 
     this.presenceMap.set(this.currentUserId, presence);
@@ -390,13 +413,13 @@ export class CollaborationService extends EventEmitter {
   updateCursor(
     documentId: string,
     position: CursorPosition["position"],
-    selection?: CursorPosition["selection"]
+    selection?: CursorPosition["selection"],
   ): void {
     const cursor: CursorPosition = {
       userId: this.currentUserId,
       documentId,
       position,
-      selection,
+      ...(selection ? { selection } : {}),
     };
 
     this.cursorMap.set(this.currentUserId, cursor);
@@ -422,7 +445,7 @@ export class CollaborationService extends EventEmitter {
       const toRemove = Math.floor(MAX_PENDING_EDITS * 0.2); // Remove oldest 20%
       this.pendingEdits.splice(0, toRemove);
       console.warn(
-        `[CollaborationService] Evicted ${toRemove} oldest pending edits`
+        `[CollaborationService] Evicted ${toRemove} oldest pending edits`,
       );
     }
 
@@ -435,14 +458,14 @@ export class CollaborationService extends EventEmitter {
    */
   requestLock(
     documentId: string,
-    section?: { start: number; end: number }
+    section?: { start: number; end: number },
   ): Promise<boolean> {
     return new Promise((resolve) => {
       const lockRequest: Omit<DocumentLock, "lockedAt" | "expiresAt"> = {
         documentId,
         userId: this.currentUserId,
         userName: this.currentUserName,
-        section,
+        ...(section ? { section } : {}),
       };
 
       let timeoutId: NodeJS.Timeout | null = null;
@@ -497,7 +520,7 @@ export class CollaborationService extends EventEmitter {
    */
   getActiveUsers(): UserPresence[] {
     return Array.from(this.presenceMap.values()).filter(
-      (p) => p.status === "active"
+      (p) => p.status === "active",
     );
   }
 
@@ -506,7 +529,7 @@ export class CollaborationService extends EventEmitter {
    */
   getUsersInDocument(documentId: string): UserPresence[] {
     return Array.from(this.presenceMap.values()).filter(
-      (p) => p.currentDocument === documentId
+      (p) => p.currentDocument === documentId,
     );
   }
 
@@ -583,7 +606,7 @@ export class CollaborationService extends EventEmitter {
    */
   private rangesOverlap(
     r1: { start: number; end: number },
-    r2: { start: number; end: number }
+    r2: { start: number; end: number },
   ): boolean {
     return r1.start < r2.end && r2.start < r1.end;
   }
@@ -716,7 +739,7 @@ let serviceInstance: CollaborationService | null = null;
 export function getCollaborationService(
   userId?: string,
   userName?: string,
-  config?: CollaborationConfig
+  config?: CollaborationConfig,
 ): CollaborationService {
   if (!serviceInstance && userId && userName) {
     serviceInstance = new CollaborationService(userId, userName, config);
@@ -725,7 +748,7 @@ export function getCollaborationService(
   if (!serviceInstance) {
     throw new OperationError(
       "CollaborationService.getInstance",
-      "CollaborationService not initialized. Provide userId and userName."
+      "CollaborationService not initialized. Provide userId and userName.",
     );
   }
 

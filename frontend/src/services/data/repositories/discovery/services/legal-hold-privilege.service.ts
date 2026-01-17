@@ -7,6 +7,7 @@
  */
 
 import { discoveryApi } from "@/api/domains/discovery.api";
+
 import type { LegalHold, PrivilegeLogEntry } from "@/types";
 import type {
   LegalHoldEnhanced,

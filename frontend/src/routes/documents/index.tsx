@@ -14,8 +14,8 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
 
@@ -44,7 +44,7 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export default function DocumentsIndexRoute() {
-  const initialData = useLoaderData() as typeof clientLoader;
+  const initialData = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Documents" />}>

@@ -13,6 +13,7 @@
  */
 
 import { PageFrame } from "@/layouts/PageFrame";
+import type { DocketEntry, TimeEntry } from '@/types';
 import { Suspense } from 'react';
 import { Await, useRevalidator } from 'react-router';
 import { RouteSkeleton } from '../_shared/RouteSkeletons';
@@ -24,10 +25,10 @@ import {
   DeferredDataError,
   DeferredDataSkeleton
 } from './components/RecentActivityWidgets';
-import type { loader } from './loader';
+import type { DashboardLoaderData } from './loader';
 
 interface DashboardPageProps {
-  loaderData: Awaited<ReturnType<typeof loader>>;
+  loaderData: DashboardLoaderData;
 }
 
 export function DashboardPage({ loaderData }: DashboardPageProps) {
@@ -54,16 +55,16 @@ export function DashboardPage({ loaderData }: DashboardPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
             <Suspense fallback={<DeferredDataSkeleton title="Recent Docket" />}>
               <Await resolve={loaderData.recentDocketEntries} errorElement={<DeferredDataError />}>
-                {(docketEntries) => (
-                  <DashboardRecentDocket entries={docketEntries as any} />
+                {(docketEntries: DocketEntry[]) => (
+                  <DashboardRecentDocket entries={docketEntries} />
                 )}
               </Await>
             </Suspense>
 
             <Suspense fallback={<DeferredDataSkeleton title="Recent Time" />}>
               <Await resolve={loaderData.recentTimeEntries} errorElement={<DeferredDataError />}>
-                {(timeEntries) => (
-                  <DashboardRecentTime entries={timeEntries as any} />
+                {(timeEntries: TimeEntry[]) => (
+                  <DashboardRecentTime entries={timeEntries} />
                 )}
               </Await>
             </Suspense>

@@ -11,8 +11,10 @@ import {
   EntityNotFoundError,
   OperationError,
 } from "@/services/core/errors";
-import type { ProcessingJob } from "@/types/discovery-enhanced";
+
 import { validateId } from "../shared/validation";
+
+import type { ProcessingJob } from "@/types/discovery-enhanced";
 
 /**
  * Processing Job Service Class

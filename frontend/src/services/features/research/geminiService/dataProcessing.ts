@@ -3,10 +3,12 @@
  * Docket parsing, case data extraction, and intent prediction
  */
 
-import { getClient } from "./client";
 import { Prompts } from "@/services/ai/prompts";
 import { DocketSchema, IntentResultSchema } from "@/services/ai/schemas";
 import { safeParseJSON, withRetry } from "@/utils/apiUtils";
+
+import { getClient } from "./client";
+
 import type { IntentResult, ParsedDocket } from "./types";
 
 /**

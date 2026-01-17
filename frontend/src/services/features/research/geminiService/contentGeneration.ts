@@ -3,9 +3,10 @@
  * Draft generation, streaming, and reply generation
  */
 
-import { getClient } from "./client";
 import { Prompts } from "@/services/ai/prompts";
 import { withRetry } from "@/utils/apiUtils";
+
+import { getClient } from "./client";
 
 /**
  * Stream draft generation for real-time UI updates

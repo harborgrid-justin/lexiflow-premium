@@ -19,28 +19,28 @@
  * Supported field types for dynamic form generation
  */
 export type FieldType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'number'
-  | 'tel'
-  | 'url'
-  | 'search'
-  | 'date'
-  | 'datetime-local'
-  | 'time'
-  | 'month'
-  | 'week'
-  | 'color'
-  | 'textarea'
-  | 'select'
-  | 'multiselect'
-  | 'radio'
-  | 'checkbox'
-  | 'toggle'
-  | 'file'
-  | 'range'
-  | 'custom';
+  | "text"
+  | "email"
+  | "password"
+  | "number"
+  | "tel"
+  | "url"
+  | "search"
+  | "date"
+  | "datetime-local"
+  | "time"
+  | "month"
+  | "week"
+  | "color"
+  | "textarea"
+  | "select"
+  | "multiselect"
+  | "radio"
+  | "checkbox"
+  | "toggle"
+  | "file"
+  | "range"
+  | "custom";
 
 /**
  * Field visibility conditions
@@ -49,7 +49,14 @@ export type FieldCondition<TFormData = Record<string, unknown>> = {
   /** Field to watch */
   field: keyof TFormData;
   /** Comparison operator */
-  operator: 'equals' | 'notEquals' | 'contains' | 'greaterThan' | 'lessThan' | 'isEmpty' | 'isNotEmpty';
+  operator:
+    | "equals"
+    | "notEquals"
+    | "contains"
+    | "greaterThan"
+    | "lessThan"
+    | "isEmpty"
+    | "isNotEmpty";
   /** Value to compare against */
   value?: unknown;
 };
@@ -57,12 +64,12 @@ export type FieldCondition<TFormData = Record<string, unknown>> = {
 /**
  * Field size variants
  */
-export type FieldSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
+export type FieldSize = "sm" | "md" | "lg" | "xl" | "full";
 
 /**
  * Field layout
  */
-export type FieldLayout = 'vertical' | 'horizontal' | 'inline';
+export type FieldLayout = "vertical" | "horizontal" | "inline";
 
 // ============================================================================
 // VALIDATION TYPES
@@ -71,7 +78,7 @@ export type FieldLayout = 'vertical' | 'horizontal' | 'inline';
 /**
  * Validation severity levels
  */
-export type ValidationSeverity = 'error' | 'warning' | 'info';
+export type ValidationSeverity = "error" | "warning" | "info";
 
 /**
  * Validation result
@@ -92,7 +99,7 @@ export interface ValidationResult {
  */
 export type AsyncValidator<T = unknown> = (
   value: T,
-  formData?: Record<string, unknown>
+  formData?: Record<string, unknown>,
 ) => Promise<ValidationResult>;
 
 /**
@@ -100,7 +107,7 @@ export type AsyncValidator<T = unknown> = (
  */
 export type SyncValidator<T = unknown> = (
   value: T,
-  formData?: Record<string, unknown>
+  formData?: Record<string, unknown>,
 ) => ValidationResult;
 
 /**
@@ -137,7 +144,9 @@ export interface CrossFieldValidationRule<TFormData = Record<string, unknown>> {
   /** Fields involved in validation */
   fields: Array<keyof TFormData>;
   /** Validation function */
-  validator: (formData: TFormData) => ValidationResult | Promise<ValidationResult>;
+  validator: (
+    formData: TFormData,
+  ) => ValidationResult | Promise<ValidationResult>;
   /** Error message */
   message?: string;
 }
@@ -194,7 +203,7 @@ export interface BaseFieldSchema<T = unknown> {
  * Text input field schema
  */
 export interface TextFieldSchema extends BaseFieldSchema<string> {
-  type: 'text' | 'email' | 'password' | 'tel' | 'url' | 'search';
+  type: "text" | "email" | "password" | "tel" | "url" | "search";
   /** Min length */
   minLength?: number;
   /** Max length */
@@ -213,7 +222,7 @@ export interface TextFieldSchema extends BaseFieldSchema<string> {
  * Number input field schema
  */
 export interface NumberFieldSchema extends BaseFieldSchema<number> {
-  type: 'number' | 'range';
+  type: "number" | "range";
   /** Minimum value */
   min?: number;
   /** Maximum value */
@@ -221,7 +230,7 @@ export interface NumberFieldSchema extends BaseFieldSchema<number> {
   /** Step increment */
   step?: number;
   /** Number format (e.g., currency) */
-  format?: 'currency' | 'percent' | 'decimal';
+  format?: "currency" | "percent" | "decimal";
   /** Decimal places */
   precision?: number;
   /** Currency code (if format is currency) */
@@ -232,7 +241,7 @@ export interface NumberFieldSchema extends BaseFieldSchema<number> {
  * Date/time field schema
  */
 export interface DateFieldSchema extends BaseFieldSchema<string | Date> {
-  type: 'date' | 'datetime-local' | 'time' | 'month' | 'week';
+  type: "date" | "datetime-local" | "time" | "month" | "week";
   /** Minimum date */
   min?: string | Date;
   /** Maximum date */
@@ -247,7 +256,7 @@ export interface DateFieldSchema extends BaseFieldSchema<string | Date> {
  * Color field schema
  */
 export interface ColorFieldSchema extends BaseFieldSchema<string> {
-  type: 'color';
+  type: "color";
 }
 
 /**
@@ -270,7 +279,7 @@ export interface SelectOption<T = string> {
  * Select field schema
  */
 export interface SelectFieldSchema<T = string> extends BaseFieldSchema<T> {
-  type: 'select' | 'multiselect' | 'radio';
+  type: "select" | "multiselect" | "radio";
   /** Available options */
   options: SelectOption<T>[] | (() => Promise<SelectOption<T>[]>);
   /** Allow custom values (combobox) */
@@ -289,7 +298,7 @@ export interface SelectFieldSchema<T = string> extends BaseFieldSchema<T> {
  * Textarea field schema
  */
 export interface TextAreaFieldSchema extends BaseFieldSchema<string> {
-  type: 'textarea';
+  type: "textarea";
   /** Number of rows */
   rows?: number;
   /** Auto-resize */
@@ -310,16 +319,16 @@ export interface TextAreaFieldSchema extends BaseFieldSchema<string> {
  * Checkbox/toggle field schema
  */
 export interface CheckboxFieldSchema extends BaseFieldSchema<boolean> {
-  type: 'checkbox' | 'toggle';
+  type: "checkbox" | "toggle";
   /** Label position */
-  labelPosition?: 'left' | 'right';
+  labelPosition?: "left" | "right";
 }
 
 /**
  * File upload field schema
  */
 export interface FileFieldSchema extends BaseFieldSchema<File | File[]> {
-  type: 'file';
+  type: "file";
   /** Accepted file types */
   accept?: string;
   /** Allow multiple files */
@@ -338,7 +347,7 @@ export interface FileFieldSchema extends BaseFieldSchema<File | File[]> {
  * Custom field schema
  */
 export interface CustomFieldSchema extends BaseFieldSchema<unknown> {
-  type: 'custom';
+  type: "custom";
   /** Custom component */
   component: React.ComponentType<CustomFieldProps>;
   /** Additional props for custom component */
@@ -477,6 +486,10 @@ export interface WizardStep<TFormData = Record<string, unknown>> {
   component?: React.ComponentType<WizardStepProps<TFormData>>;
   /** Validation rules for this step */
   validationRules?: CrossFieldValidationRule<TFormData>[];
+  /** Optional schema-level validation (e.g., Zod) */
+  validationSchema?: {
+    safeParse: (data: Partial<TFormData>) => { success: boolean };
+  };
   /** Skip condition */
   skipWhen?: FieldCondition<TFormData> | FieldCondition<TFormData>[];
   /** Can navigate away without validation */
@@ -524,7 +537,7 @@ export interface WizardConfig<TFormData = Record<string, unknown>> {
   /** Show progress indicator */
   showProgress?: boolean;
   /** Progress indicator type */
-  progressType?: 'dots' | 'bar' | 'steps';
+  progressType?: "dots" | "bar" | "steps";
   /** Allow step navigation */
   allowStepNavigation?: boolean;
   /** Persist data between sessions */
@@ -594,7 +607,10 @@ export interface FormState<TFormData = Record<string, unknown>> {
  */
 export interface FormHandlers<TFormData = Record<string, unknown>> {
   /** Handle field change */
-  handleChange: <K extends keyof TFormData>(field: K, value: TFormData[K]) => void;
+  handleChange: <K extends keyof TFormData>(
+    field: K,
+    value: TFormData[K],
+  ) => void;
   /** Handle field blur */
   handleBlur: <K extends keyof TFormData>(field: K) => void;
   /** Handle field focus */
@@ -608,13 +624,22 @@ export interface FormHandlers<TFormData = Record<string, unknown>> {
   /** Validate all fields */
   validateAll: () => Promise<boolean>;
   /** Set field value */
-  setFieldValue: <K extends keyof TFormData>(field: K, value: TFormData[K]) => void;
+  setFieldValue: <K extends keyof TFormData>(
+    field: K,
+    value: TFormData[K],
+  ) => void;
   /** Set multiple field values */
   setFieldValues: (values: Partial<TFormData>) => void;
   /** Set field error */
-  setFieldError: <K extends keyof TFormData>(field: K, error: string | null) => void;
+  setFieldError: <K extends keyof TFormData>(
+    field: K,
+    error: string | null,
+  ) => void;
   /** Set field touched */
-  setFieldTouched: <K extends keyof TFormData>(field: K, touched?: boolean) => void;
+  setFieldTouched: <K extends keyof TFormData>(
+    field: K,
+    touched?: boolean,
+  ) => void;
 }
 
 // ============================================================================
@@ -634,9 +659,9 @@ export interface FormConfig<TFormData = Record<string, unknown>> {
   /** Cancel handler */
   onCancel?: () => void;
   /** Validation mode */
-  validationMode?: 'onChange' | 'onBlur' | 'onSubmit' | 'all';
+  validationMode?: "onChange" | "onBlur" | "onSubmit" | "all";
   /** Re-validate mode */
-  revalidateMode?: 'onChange' | 'onBlur' | 'onSubmit';
+  revalidateMode?: "onChange" | "onBlur" | "onSubmit";
   /** Enable auto-save */
   enableAutoSave?: boolean;
   /** Auto-save delay */

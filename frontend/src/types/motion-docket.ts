@@ -2,20 +2,20 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  DocketEntryType,
-  MotionOutcome,
-  MotionStatus,
-  MotionType,
+  type DocketEntryType,
+  type MotionOutcome,
+  type MotionStatus,
+  type MotionType,
 } from "./enums";
 import {
-  BaseEntity,
-  CaseId,
-  DocketId,
-  DocumentId,
-  EvidenceId,
-  JsonValue,
-  MetadataRecord,
-  MotionId,
+  type BaseEntity,
+  type CaseId,
+  type DocketId,
+  type DocumentId,
+  type EvidenceId,
+  type JsonValue,
+  type MetadataRecord,
+  type MotionId,
 } from "./primitives";
 
 // SearchResult is exported from ./search.ts

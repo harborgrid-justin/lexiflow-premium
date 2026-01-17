@@ -39,7 +39,7 @@ export const DataSourceService = {
       return await apiClient.get<DataSource[]>("/integrations/data-sources");
     } catch {
       console.warn(
-        "[DataSourceService] Backend endpoint not available, returning empty array"
+        "[DataSourceService] Backend endpoint not available, returning empty array",
       );
       return [];
     }
@@ -53,7 +53,7 @@ export const DataSourceService = {
   update: async (id: string, updates: unknown) => {
     return apiClient.patch<DataSource>(
       `/integrations/data-sources/${id}`,
-      updates
+      updates,
     );
   },
   delete: async (id: string) => {
@@ -90,7 +90,7 @@ export const DataSourceService = {
 
   sync: async (
     sourceId: string,
-    options?: { fullSync?: boolean }
+    options?: { fullSync?: boolean },
   ): Promise<boolean> => {
     try {
       await apiClient.post(`/data-sources/${sourceId}/sync`, options);
@@ -104,11 +104,12 @@ export const DataSourceService = {
   testConnection: async (sourceId: string): Promise<ConnectionStatus> => {
     try {
       const result = await dataPlatformApi.dataSources.test(sourceId);
+      const error = result.message;
       return {
         connected: result.success,
         latency: 0,
         version: "Unknown",
-        error: result.message,
+        ...(error ? { error } : {}),
       };
     } catch (e) {
       return {

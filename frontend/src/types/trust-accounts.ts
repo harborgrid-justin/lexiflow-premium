@@ -4,7 +4,7 @@
 // Generated from: backend/src/billing/trust-accounts/entities/trust-transaction.entity.ts
 // Last sync: 2025-01-XX
 
-import { BaseEntity, CaseId, EntityId, Money, UserId } from "./primitives";
+import { type BaseEntity, type CaseId, type EntityId, type Money, type UserId } from "./primitives";
 
 /**
  * Trust Account Types - Matches backend TrustAccountType enum

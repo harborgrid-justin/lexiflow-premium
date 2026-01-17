@@ -224,8 +224,8 @@ export class BrowserNotificationService
   private showDesktopNotification(notification: Notification): void {
     try {
       const desktopNotif = new Notification(notification.title, {
-        body: notification.message,
-        icon: notification.icon,
+        body: notification.message ?? "",
+        ...(notification.icon ? { icon: notification.icon } : {}),
         tag: notification.id,
       });
 
@@ -268,7 +268,7 @@ export class BrowserNotificationService
       gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(
         0.01,
-        audioContext.currentTime + 0.2
+        audioContext.currentTime + 0.2,
       );
 
       oscillator.start(audioContext.currentTime);

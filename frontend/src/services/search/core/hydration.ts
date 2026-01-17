@@ -4,8 +4,9 @@
  */
 
 import { DataService } from '@/services/data/data-service.service';
-import type { Case, Clause, Client, DocketEntry, EvidenceItem, LegalDocument, LegalRule, Motion, User, WorkflowTask } from '@/types';
+
 import type { GlobalSearchResult } from './types';
+import type { Case, Clause, Client, DocketEntry, EvidenceItem, LegalDocument, LegalRule, Motion, User, WorkflowTask } from '@/types';
 
 /** Fetch all domain data and normalize into search items */
 export async function hydrateSearchIndex(): Promise<GlobalSearchResult[]> {

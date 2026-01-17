@@ -78,7 +78,7 @@ export interface UpdateTaskDto {
   priority?: TaskPriorityBackend;
   dueDate?: string;
   caseId?: string;
-  assignedTo?: string;
+  assignedTo?: string | null;
   parentTaskId?: string;
   tags?: string[];
   estimatedHours?: number;
@@ -158,11 +158,11 @@ export class TasksApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[TasksApiService.${methodName}] Invalid ${paramName} parameter`
+        `[TasksApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -314,7 +314,7 @@ export class TasksApiService {
    */
   async updateStatus(
     id: string,
-    status: TaskStatusBackend
+    status: TaskStatusBackend,
   ): Promise<WorkflowTask> {
     this.validateId(id, "updateStatus");
     if (!status) {
@@ -335,7 +335,7 @@ export class TasksApiService {
   async updateProgress(
     id: string,
     completionPercentage: number,
-    actualHours?: number
+    actualHours?: number,
   ): Promise<WorkflowTask> {
     this.validateId(id, "updateProgress");
     if (
@@ -344,7 +344,7 @@ export class TasksApiService {
       completionPercentage > 100
     ) {
       throw new Error(
-        "[TasksApiService.updateProgress] completionPercentage must be between 0 and 100"
+        "[TasksApiService.updateProgress] completionPercentage must be between 0 and 100",
       );
     }
     return this.patch(id, { completionPercentage, actualHours });
@@ -392,11 +392,11 @@ export class TasksApiService {
    */
   async bulkUpdateStatus(
     taskIds: string[],
-    status: TaskStatusBackend
+    status: TaskStatusBackend,
   ): Promise<TaskBulkOperationResult> {
     if (!Array.isArray(taskIds) || taskIds.length === 0) {
       throw new Error(
-        "[TasksApiService.bulkUpdateStatus] taskIds must be a non-empty array"
+        "[TasksApiService.bulkUpdateStatus] taskIds must be a non-empty array",
       );
     }
     if (!status) {
@@ -405,7 +405,7 @@ export class TasksApiService {
     try {
       return await apiClient.post<TaskBulkOperationResult>(
         `${this.baseUrl}/bulk/status`,
-        { taskIds, status }
+        { taskIds, status },
       );
     } catch (error) {
       console.error("[TasksApiService.bulkUpdateStatus] Error:", error);
@@ -423,18 +423,18 @@ export class TasksApiService {
    */
   async bulkAssign(
     taskIds: string[],
-    assignedTo: string
+    assignedTo: string,
   ): Promise<TaskBulkOperationResult> {
     if (!Array.isArray(taskIds) || taskIds.length === 0) {
       throw new Error(
-        "[TasksApiService.bulkAssign] taskIds must be a non-empty array"
+        "[TasksApiService.bulkAssign] taskIds must be a non-empty array",
       );
     }
     this.validateId(assignedTo, "bulkAssign");
     try {
       return await apiClient.post<TaskBulkOperationResult>(
         `${this.baseUrl}/bulk/assign`,
-        { taskIds, assignedTo }
+        { taskIds, assignedTo },
       );
     } catch (error) {
       console.error("[TasksApiService.bulkAssign] Error:", error);
@@ -452,13 +452,13 @@ export class TasksApiService {
   async bulkDelete(taskIds: string[]): Promise<TaskBulkOperationResult> {
     if (!Array.isArray(taskIds) || taskIds.length === 0) {
       throw new Error(
-        "[TasksApiService.bulkDelete] taskIds must be a non-empty array"
+        "[TasksApiService.bulkDelete] taskIds must be a non-empty array",
       );
     }
     try {
       return await apiClient.post<TaskBulkOperationResult>(
         `${this.baseUrl}/bulk/delete`,
-        { taskIds }
+        { taskIds },
       );
     } catch (error) {
       console.error("[TasksApiService.bulkDelete] Error:", error);
@@ -481,7 +481,7 @@ export class TasksApiService {
     this.validateId(parentId, "getSubtasks");
     try {
       return await apiClient.get<WorkflowTask[]>(
-        `${this.baseUrl}/${parentId}/subtasks`
+        `${this.baseUrl}/${parentId}/subtasks`,
       );
     } catch (error) {
       console.error("[TasksApiService.getSubtasks] Error:", error);
@@ -499,14 +499,14 @@ export class TasksApiService {
    */
   async addSubtask(
     parentId: string,
-    subtaskData: CreateTaskDto
+    subtaskData: CreateTaskDto,
   ): Promise<WorkflowTask> {
     this.validateId(parentId, "addSubtask");
     this.validateObject(subtaskData, "subtaskData", "addSubtask");
     try {
       return await apiClient.post<WorkflowTask>(
         `${this.baseUrl}/${parentId}/subtasks`,
-        subtaskData
+        subtaskData,
       );
     } catch (error) {
       console.error("[TasksApiService.addSubtask] Error:", error);
@@ -529,7 +529,7 @@ export class TasksApiService {
     this.validateId(taskId, "getComments");
     try {
       return await apiClient.get<TaskComment[]>(
-        `${this.baseUrl}/${taskId}/comments`
+        `${this.baseUrl}/${taskId}/comments`,
       );
     } catch (error) {
       console.error("[TasksApiService.getComments] Error:", error);
@@ -553,7 +553,7 @@ export class TasksApiService {
     try {
       return await apiClient.post<TaskComment>(
         `${this.baseUrl}/${taskId}/comments`,
-        { content }
+        { content },
       );
     } catch (error) {
       console.error("[TasksApiService.addComment] Error:", error);
@@ -576,7 +576,7 @@ export class TasksApiService {
     this.validateId(taskId, "getAttachments");
     try {
       return await apiClient.get<TaskAttachment[]>(
-        `${this.baseUrl}/${taskId}/attachments`
+        `${this.baseUrl}/${taskId}/attachments`,
       );
     } catch (error) {
       console.error("[TasksApiService.getAttachments] Error:", error);
@@ -605,7 +605,7 @@ export class TasksApiService {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        },
       );
     } catch (error) {
       console.error("[TasksApiService.uploadAttachment] Error:", error);
@@ -628,7 +628,7 @@ export class TasksApiService {
     this.validateId(taskId, "getHistory");
     try {
       return await apiClient.get<TaskHistory[]>(
-        `${this.baseUrl}/${taskId}/history`
+        `${this.baseUrl}/${taskId}/history`,
       );
     } catch (error) {
       console.error("[TasksApiService.getHistory] Error:", error);

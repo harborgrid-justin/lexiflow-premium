@@ -32,14 +32,18 @@ interface AuditLogEntry {
   action: string;
   entityType: string;
   userName: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  timestamp: any; // Can be string or Date
+  timestamp: string | Date;
 }
+
+type AdminUser = {
+  id: string;
+  name?: string;
+} & Record<string, unknown>;
 
 interface AdminContextValue {
   metrics: SystemMetrics;
   auditLogs: AuditLogEntry[];
-  user: any; // Session user
+  user: AdminUser; // Session user
 }
 
 const AdminContext = createContext<AdminContextValue | null>(null);
@@ -55,7 +59,7 @@ export function AdminProvider({
   children: React.ReactNode;
   metrics: SystemMetrics;
   auditLogs: AuditLogEntry[];
-  user: any;
+  user: AdminUser;
 }) {
   const value = useMemo<AdminContextValue>(() => ({
     metrics,

@@ -4,8 +4,9 @@
  * @description Comprehensive TypeScript types for enterprise dashboard components
  */
 
-import { LucideIcon } from 'lucide-react';
-import React from "react";
+import { type LucideIcon } from 'lucide-react';
+
+import type React from "react";
 
 // ============================================================================
 // CORE DASHBOARD TYPES

@@ -2,27 +2,28 @@
  * @module services/validation/schemas/invoice-schema
  * @description Invoice validation schema
  * Encapsulates all business logic for validating invoices with line items
- * 
+ *
  * @responsibility Validate invoice data with financial integrity checks
  */
 
-import { InvoiceStatusEnum } from '@/types/enums';
-import type { CaseId } from '@/types';
-import { 
-  isValidDate, 
-  isValidDateRange, 
-  isValidStringLength, 
+import { sanitizeString } from "@/services/validation/sanitizers/input-sanitizer";
+import {
+  isValidDate,
+  isValidDateRange,
+  isValidStringLength,
   isValidInvoiceNumber,
-  isValidEnum 
-} from '@/services/validation/validators/common-validators';
-import { 
-  isValidAmount, 
+  isValidEnum,
+} from "@/services/validation/validators/common-validators";
+import {
+  isValidAmount,
   isValidRate,
   validateLineItemCalculation,
   validateInvoiceTotal,
-  FINANCIAL_CONSTRAINTS 
-} from '@/services/validation/validators/financial-validators';
-import { sanitizeString } from '@/services/validation/sanitizers/input-sanitizer';
+  FINANCIAL_CONSTRAINTS,
+} from "@/services/validation/validators/financial-validators";
+import { InvoiceStatusEnum } from "@/types/enums";
+
+import type { CaseId } from "@/types";
 
 /**
  * Invoice line item interface
@@ -64,10 +65,10 @@ export interface InvoiceValidationResult {
 
 /**
  * Validate invoice with financial integrity checks
- * 
+ *
  * @param invoice - Invoice to validate
  * @returns Validation result with errors and sanitized data
- * 
+ *
  * @example
  * ```ts
  * const result = validateInvoiceSafe({
@@ -81,7 +82,7 @@ export interface InvoiceValidationResult {
  *     { description: 'Legal services', quantity: 10, rate: 150, amount: 1500 }
  *   ]
  * });
- * 
+ *
  * if (result.valid) {
  *   await saveInvoice(result.sanitized);
  * } else {
@@ -89,76 +90,92 @@ export interface InvoiceValidationResult {
  * }
  * ```
  */
-export function validateInvoiceSafe(invoice: InvoiceInput): InvoiceValidationResult {
+export function validateInvoiceSafe(
+  invoice: InvoiceInput,
+): InvoiceValidationResult {
   const errors: string[] = [];
-  
+
   try {
     // Required fields
-    if (!invoice.caseId || typeof invoice.caseId !== 'string') {
-      errors.push('Valid case ID is required');
+    if (!invoice.caseId || typeof invoice.caseId !== "string") {
+      errors.push("Valid case ID is required");
     }
-    
+
     if (!invoice.clientId || false) {
-      errors.push('Valid client ID is required');
+      errors.push("Valid client ID is required");
     }
-    
+
     if (!invoice.date || !isValidDate(invoice.date)) {
-      errors.push('Valid invoice date is required');
+      errors.push("Valid invoice date is required");
     }
-    
+
     if (!invoice.dueDate || !isValidDate(invoice.dueDate)) {
-      errors.push('Valid due date is required');
+      errors.push("Valid due date is required");
     }
-    
+
     // Due date must be after invoice date
-    if (invoice.date && invoice.dueDate && !isValidDateRange(invoice.date, invoice.dueDate)) {
-      errors.push('Due date must be after invoice date');
+    if (
+      invoice.date &&
+      invoice.dueDate &&
+      !isValidDateRange(invoice.date, invoice.dueDate)
+    ) {
+      errors.push("Due date must be after invoice date");
     }
-    
+
     // Amount validation
     if (!isValidAmount(invoice.amount)) {
-      errors.push('Invoice amount must be a positive number with max 2 decimal places');
+      errors.push(
+        "Invoice amount must be a positive number with max 2 decimal places",
+      );
     }
-    
+
     if (invoice.amount > FINANCIAL_CONSTRAINTS.MAX_INVOICE_AMOUNT) {
-      errors.push(`Invoice amount cannot exceed $${FINANCIAL_CONSTRAINTS.MAX_INVOICE_AMOUNT.toLocaleString()}`);
+      errors.push(
+        `Invoice amount cannot exceed $${FINANCIAL_CONSTRAINTS.MAX_INVOICE_AMOUNT.toLocaleString()}`,
+      );
     }
-    
+
     // Tax validation
     if (invoice.tax !== undefined && !isValidAmount(invoice.tax)) {
-      errors.push('Tax must be a valid amount with max 2 decimal places');
+      errors.push("Tax must be a valid amount with max 2 decimal places");
     }
-    
+
     // Discount validation
     if (invoice.discount !== undefined) {
       if (!isValidAmount(invoice.discount)) {
-        errors.push('Discount must be a valid amount with max 2 decimal places');
+        errors.push(
+          "Discount must be a valid amount with max 2 decimal places",
+        );
       }
       if (invoice.discount > invoice.amount) {
-        errors.push('Discount cannot exceed invoice amount');
+        errors.push("Discount cannot exceed invoice amount");
       }
     }
-    
+
     // Status validation
     if (!isValidEnum(invoice.status, Object.values(InvoiceStatusEnum))) {
-      errors.push(`Invalid status. Must be one of: ${Object.values(InvoiceStatusEnum).join(', ')}`);
+      errors.push(
+        `Invalid status. Must be one of: ${Object.values(InvoiceStatusEnum).join(", ")}`,
+      );
     }
-    
+
     // Invoice number format (if provided)
     if (invoice.invoiceNumber && !isValidInvoiceNumber(invoice.invoiceNumber)) {
-      errors.push('Invoice number must be in format INV-XXXXXX');
+      errors.push("Invoice number must be in format INV-XXXXXX");
     }
-    
+
     // Line items validation
     if (invoice.items) {
       if (invoice.items.length === 0) {
-        errors.push('Invoice must have at least one line item');
+        errors.push("Invoice must have at least one line item");
       }
-      
+
       let calculatedTotal = 0;
       invoice.items.forEach((item, index) => {
         if (!isValidStringLength(item.description, 5)) {
-          errors.push(`Item ${index + 1}: Description must be at least 5 characters`);
+          errors.push(
+            `Item ${index + 1}: Description must be at least 5 characters`,
+          );
         }
         if (item.quantity <= 0 || !Number.isFinite(item.quantity)) {
           errors.push(`Item ${index + 1}: Invalid quantity`);
@@ -169,43 +186,61 @@ export function validateInvoiceSafe(invoice: InvoiceInput): InvoiceValidationRes
         if (!isValidAmount(item.amount)) {
           errors.push(`Item ${index + 1}: Invalid amount`);
         }
-        
+
         // Verify amount = quantity * rate
-        if (!validateLineItemCalculation(item.quantity, item.rate, item.amount)) {
+        if (
+          !validateLineItemCalculation(item.quantity, item.rate, item.amount)
+        ) {
           const expected = (item.quantity * item.rate).toFixed(2);
-          errors.push(`Item ${index + 1}: Amount mismatch (expected ${expected})`);
+          errors.push(
+            `Item ${index + 1}: Amount mismatch (expected ${expected})`,
+          );
         }
-        
+
         calculatedTotal += item.amount;
       });
-      
+
       // Verify total matches sum of items
-      if (!validateInvoiceTotal(calculatedTotal, invoice.amount, invoice.tax, invoice.discount)) {
-        errors.push('Invoice total does not match sum of line items');
+      if (
+        !validateInvoiceTotal(
+          calculatedTotal,
+          invoice.amount,
+          invoice.tax,
+          invoice.discount,
+        )
+      ) {
+        errors.push("Invoice total does not match sum of line items");
       }
     }
-    
+
     if (errors.length > 0) {
       return { valid: false, errors };
     }
-    
+
     // Sanitize inputs
     const sanitized: InvoiceInput = {
       ...invoice,
-      notes: invoice.notes ? sanitizeString(invoice.notes) : undefined,
-      billingAddress: invoice.billingAddress ? sanitizeString(invoice.billingAddress) : undefined,
-      items: invoice.items?.map(item => ({
-        ...item,
-        description: sanitizeString(item.description)
-      }))
+      ...(invoice.notes ? { notes: sanitizeString(invoice.notes) } : {}),
+      ...(invoice.billingAddress
+        ? { billingAddress: sanitizeString(invoice.billingAddress) }
+        : {}),
+      ...(invoice.items
+        ? {
+            items: invoice.items.map((item) => ({
+              ...item,
+              description: sanitizeString(item.description),
+            })),
+          }
+        : {}),
     };
-    
+
     return { valid: true, errors: [], sanitized };
-    
   } catch (error) {
-    return { 
-      valid: false, 
-      errors: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`] 
+    return {
+      valid: false,
+      errors: [
+        `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      ],
     };
   }
 }

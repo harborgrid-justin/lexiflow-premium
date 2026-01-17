@@ -21,7 +21,7 @@ import type { LoaderFunctionArgs } from "react-router";
  */
 export function handleLoaderAuthError(
   error: unknown,
-  args: LoaderFunctionArgs
+  args: LoaderFunctionArgs,
 ): never {
   console.error("[Loader] Authentication error:", error);
 
@@ -69,7 +69,7 @@ export function handleLoaderAuthError(
  */
 export function withAuthErrorHandler<T>(
   loaderFn: (args: LoaderFunctionArgs) => Promise<T>,
-  fallbackData?: T
+  fallbackData?: T,
 ) {
   return async (args: LoaderFunctionArgs): Promise<T> => {
     try {
@@ -83,7 +83,7 @@ export function withAuthErrorHandler<T>(
       console.error("[Loader] Non-auth error:", error);
 
       if (fallbackData !== undefined) {
-        return fallbackData;
+        return fallbackData as T;
       }
 
       // No fallback provided, re-throw

@@ -1,6 +1,7 @@
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError } from "@/services/core/errors";
 import { db, STORES } from "@/services/data/db";
+
 import type { LegalHold } from "@/types/discovery";
 import type { LegalHoldEnhanced } from "@/types/discovery-enhanced";
 

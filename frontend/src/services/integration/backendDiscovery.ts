@@ -22,7 +22,7 @@ class BackendDiscovery {
     // Simulate service discovery
     const defaultService: BackendService = {
       name: "lexiflow-api",
-      url: import.meta.env.VITE_API_URL || "http://localhost:3001",
+      url: import.meta.env["VITE_API_URL"] || "http://localhost:3001",
       version: "1.0.0",
       status: "online",
     };

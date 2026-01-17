@@ -8,15 +8,15 @@ import { PageHeader } from '@/components/organisms/PageHeader';
 import { useService } from '@/providers/application/serviceprovider';
 import { Activity, ArrowRight, Server, Settings, Shield, Users } from 'lucide-react';
 import { Link } from 'react-router';
-import { useAdmin } from './hooks/useAdmin';
-import { StatCard } from './components/StatCard';
+import { AdminNavLink } from './components/AdminNavLink';
 import { AuditLogRow } from './components/AuditLogRow';
 import { ServiceStatusBadge } from './components/ServiceStatusBadge';
-import { AdminNavLink } from './components/AdminNavLink';
+import { StatCard } from './components/StatCard';
+import { useAdmin } from './hooks/useAdmin';
 
 export default function AdminDashboardView() {
   const { metrics, auditLogs } = useAdmin();
-  const { state: { services, pendingOperations }, actions: { checkHealth, syncData, retryFailedOperations, clearQueue } } = useService();
+  const { state: { services, pendingOperations }, actions: { checkHealth, syncData, retryFailedOperations } } = useService();
 
   return (
     <div className="h-full flex flex-col space-y-6">

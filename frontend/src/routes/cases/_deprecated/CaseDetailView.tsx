@@ -78,7 +78,7 @@ export function CaseDetailView({ caseData, onBack, onSelectCase }: CaseDetailVie
   } = useCaseDetailContext();
 
   // Compatibility wrappers
-  const handleAnalyze = useCallback((doc: any) => analyzeWithAI(doc.id), [analyzeWithAI]);
+  const handleAnalyze = useCallback((doc: LegalDocument) => analyzeWithAI(doc.id), [analyzeWithAI]);
   const handleDraft = useCallback(() => draftDocument('Motion/Clause', draftPrompt), [draftDocument, draftPrompt]);
   const handleGenerateWorkflow = useCallback(() => generateAIWorkflow(), [generateAIWorkflow]);
 

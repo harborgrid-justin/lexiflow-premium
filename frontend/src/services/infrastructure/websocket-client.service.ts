@@ -27,9 +27,11 @@
  * - Room-based access control
  */
 
-import io, { Socket } from 'socket.io-client';
+import io, { type Socket } from 'socket.io-client';
+
 import { getWsUrl, WEBSOCKET_CONFIG } from '@/config/network/websocket.config';
 import { TIMEOUTS } from '@/config/ports.config';
+
 import { apiClient } from './apiClient';
 
 /**

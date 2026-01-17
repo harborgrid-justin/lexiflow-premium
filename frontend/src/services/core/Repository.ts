@@ -1,8 +1,9 @@
 import { REPOSITORY_CACHE_MAX_SIZE } from "@/config/database/cache.config";
 import { queryClient } from "@/services/infrastructure/query-client.service";
-import { BaseEntity, UserId } from "@/types";
+import { type BaseEntity, type UserId } from "@/types";
 import { errorHandler } from "@/utils/errorHandler";
 import { LRUCache } from "@/utils/LRUCache";
+
 import { MicroORM } from "./microORM";
 
 type Listener<T> = (item: T) => void;

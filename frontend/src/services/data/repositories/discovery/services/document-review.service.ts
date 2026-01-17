@@ -8,11 +8,13 @@
 
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError } from "@/services/core/errors";
+
+import { validateId } from "../shared/validation";
+
 import type {
   DocumentCoding,
   ReviewDocument,
 } from "@/types/discovery-enhanced";
-import { validateId } from "../shared/validation";
 
 /**
  * Document Review Service Class

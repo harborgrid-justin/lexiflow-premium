@@ -1,6 +1,6 @@
 import { ExhibitsApiService } from "@/api/trial/exhibits-api";
 import { Repository } from "@/services/core/Repository";
-import { TrialExhibit } from "@/types";
+import { type TrialExhibit } from "@/types";
 
 export class ExhibitRepository extends Repository<TrialExhibit> {
   private exhibitsApi: ExhibitsApiService;

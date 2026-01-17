@@ -27,7 +27,7 @@ export interface GraphData {
 export const transformToGraphNodes = (
   caseData: Case,
   parties: Party[],
-  evidence: EvidenceItem[]
+  evidence: EvidenceItem[],
 ): NexusNodeData[] => {
   const rootNode: NexusNodeData = {
     id: "root",
@@ -58,7 +58,7 @@ export const transformToGraphNodes = (
  */
 export const createGraphLinks = (
   parties: Party[],
-  evidence: EvidenceItem[]
+  evidence: EvidenceItem[],
 ): Omit<GraphLink, "sourceIndex" | "targetIndex">[] => {
   const partyLinks = parties.map((p) => ({
     source: "root",
@@ -87,7 +87,7 @@ export const truncateLabel = (text: string, maxLength: number): string => {
  * Converts link data to indexed format for physics simulation
  */
 export const indexGraphLinks = (
-  links: Omit<GraphLink, "sourceIndex" | "targetIndex">[]
+  links: Omit<GraphLink, "sourceIndex" | "targetIndex">[],
 ): GraphLink[] => {
   return links.map((l) => ({
     sourceIndex: 0, // Will be computed by physics engine
@@ -104,7 +104,7 @@ export const indexGraphLinks = (
 export const buildGraphData = (
   caseData: Case,
   parties: Party[],
-  evidence: EvidenceItem[]
+  evidence: EvidenceItem[],
 ): GraphData => {
   const nodes = transformToGraphNodes(caseData, parties, evidence);
   const rawLinks = createGraphLinks(parties, evidence);
@@ -119,15 +119,15 @@ export const buildGraphData = (
 export const getNodeStrokeColor = (
   type: string,
   chartTheme: { colors: Record<string, string> },
-  fallback: string
+  fallback: string,
 ): string => {
   switch (type) {
     case "party":
-      return chartTheme.colors.blue || fallback;
+      return chartTheme.colors["blue"] || fallback;
     case "org":
-      return chartTheme.colors.purple || fallback;
+      return chartTheme.colors["purple"] || fallback;
     case "evidence":
-      return chartTheme.colors.amber || fallback;
+      return chartTheme.colors["amber"] || fallback;
     default:
       return fallback;
   }

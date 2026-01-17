@@ -6,7 +6,7 @@
 import { OrganizationsApiService } from "@/api/integrations/organizations-api";
 import { ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { Organization } from "@/types";
+import { type Organization } from "@/types";
 
 export const ORGANIZATION_QUERY_KEYS = {
   all: () => ["organizations"] as const,

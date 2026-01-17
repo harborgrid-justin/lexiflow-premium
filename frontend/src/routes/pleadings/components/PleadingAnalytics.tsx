@@ -20,6 +20,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, Res
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
+import { DataService } from '@/services/data/data-service.service';
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';
@@ -56,16 +57,16 @@ export const PleadingAnalytics: React.FC = () => {
     const analytics = useMemo(() => {
         // Motion success rate
         // 'filed' status indicates success in this context
-        const filed = pleadings.filter(p => p.status === 'filed').length;
+        const filed = pleadings.filter((p) => p.status === 'filed').length;
         const total = pleadings.length;
         const successRate = total > 0 ? Math.round((filed / total) * 100) : 0;
 
         // Average drafting time
         // Calculate days between creation and filing
-        const completedPleadings = pleadings.filter(p => p.createdAt && p.filedDate);
+        const completedPleadings = pleadings.filter((p) => p.createdAt && p.filedDate);
         let avgDraftingTime = 0;
         if (completedPleadings.length > 0) {
-            const totalDays = completedPleadings.reduce((acc, p) => {
+            const totalDays = completedPleadings.reduce((acc: number, p) => {
                 const start = new Date(p.createdAt!).getTime();
                 const end = new Date(p.filedDate!).getTime();
                 // Ensure positive duration
@@ -95,7 +96,7 @@ export const PleadingAnalytics: React.FC = () => {
             monthlyCounts[monthName] = 0;
         }
 
-        pleadings.forEach(p => {
+        pleadings.forEach((p) => {
             if (p.createdAt) {
                 const date = new Date(p.createdAt);
                 const month = date.toLocaleString('default', { month: 'short' });
@@ -106,7 +107,7 @@ export const PleadingAnalytics: React.FC = () => {
         });
 
         // Better approach for monthly trend to ensure order:
-        const trendData = [];
+        const trendData: Array<{ month: string; count: number }> = [];
         for (let i = 5; i >= 0; i--) {
             const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
             const monthName = d.toLocaleString('default', { month: 'short' });
@@ -119,7 +120,7 @@ export const PleadingAnalytics: React.FC = () => {
 
         // Motion type distribution
         const typeCounts: Record<string, number> = {};
-        pleadings.forEach(p => {
+        pleadings.forEach((p) => {
             const type = p.type ? (p.type.charAt(0).toUpperCase() + p.type.slice(1)) : 'Unknown';
             typeCounts[type] = (typeCounts[type] || 0) + 1;
         });
@@ -139,6 +140,16 @@ export const PleadingAnalytics: React.FC = () => {
             motionTypes,
         };
     }, [pleadings, clauseDataFromApi]);
+
+    if (isLoading) {
+        return (
+            <div className="p-6">
+                <Card title="Pleading Analytics">
+                    <div className="p-4 text-sm">Loading analytics...</div>
+                </Card>
+            </div>
+        );
+    }
 
     return (
         <div className="h-full overflow-y-auto p-6 space-y-6">

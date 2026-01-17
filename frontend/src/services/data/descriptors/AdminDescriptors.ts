@@ -2,12 +2,13 @@ import { adminApi, analyticsApi, complianceApi } from "@/lib/frontend-api";
 import { api } from "@/services/api";
 import { AdminService } from "@/services/domain/admin.service";
 import { DataCatalogService } from "@/services/domain/data-catalog.service";
+
 import { getDataQualityService } from "../factories/repository-factories.service";
 
 export const AdminDescriptors: PropertyDescriptorMap = {
   admin: { get: () => AdminService, enumerable: true },
   reports: {
-    get: () => complianceApi.reports,
+    get: () => complianceApi.complianceReporting,
     enumerable: true,
   },
   quality: { get: () => getDataQualityService(), enumerable: true },
@@ -29,15 +30,24 @@ export const AdminDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   dashboard: {
-    get: () => analyticsApi.dashboard,
+    get: () => ({
+      getDashboardMetrics: analyticsApi.getDashboardMetrics,
+      getCaseAnalytics: analyticsApi.getCaseAnalytics,
+      getRevenueAnalytics: analyticsApi.getRevenueAnalytics,
+      getTeamMetrics: analyticsApi.getTeamMetrics,
+      getCustomReport: analyticsApi.getCustomReport,
+    }),
     enumerable: true,
   },
   metrics: {
-    get: () => adminApi.metrics,
+    get: () => ({
+      getSystemMetrics: adminApi.getSystemMetrics,
+      getSystemHealth: adminApi.getSystemHealth,
+    }),
     enumerable: true,
   },
   serviceJobs: {
-    get: () => adminApi.serviceJobs,
+    get: () => adminApi.processingJobs,
     enumerable: true,
   },
   dataSourcesIntegration: {

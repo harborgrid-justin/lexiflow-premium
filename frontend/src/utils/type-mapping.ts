@@ -4,7 +4,7 @@
  * Uses Recursive Conditional Types to transform backend DTOs into frontend domain models.
  */
 
-import { Brand } from "@/types";
+import type { Brand } from "@/types";
 
 // Primitive types mapping
 type BackendToFrontendPrimitive<T> = T extends string
@@ -21,8 +21,7 @@ type BackendToFrontendPrimitive<T> = T extends string
 
 // Recursive mapper
 export type DomainMapper<T> = {
-  [K in keyof T]: // Handle Arrays
-  T[K] extends Array<infer U>
+  [K in keyof T]: T[K] extends Array<infer U> // Handle Arrays
     ? Array<DomainMapper<U>>
     : // Handle Objects
       T[K] extends object
@@ -45,13 +44,17 @@ export type DomainMapper<T> = {
  */
 export function mapDtoToDomain<T extends object>(dto: T): DomainMapper<T> {
   if (Array.isArray(dto)) {
-    return dto.map((item) =>
-      typeof item === "object" && item !== null ? mapDtoToDomain(item) : item
+    const items = dto as unknown[];
+    const mapped = items.map((item) =>
+      typeof item === "object" && item !== null
+        ? mapDtoToDomain(item)
+        : item,
     ) as DomainMapper<T>;
+    return mapped;
   }
 
   if (dto === null || typeof dto !== "object") {
-    return dto as DomainMapper<T>;
+    throw new Error("DTO must be a non-null object");
   }
 
   const result: Record<string, unknown> = {};

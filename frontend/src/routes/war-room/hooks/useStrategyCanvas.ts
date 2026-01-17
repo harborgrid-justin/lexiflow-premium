@@ -30,8 +30,8 @@ import {
   WorkflowConnection,
 } from "@/types/workflow-types";
 import React, { useCallback, useRef, useState } from "react";
-import { useCommandHistory } from "./useCommandHistory";
-import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
+import { useCommandHistory } from "@/hooks/core/useCommandHistory";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 export interface UseStrategyCanvasProps {
   initialNodes?: TypedWorkflowNode[];
@@ -59,7 +59,7 @@ export interface UseStrategyCanvasReturn {
     x: number,
     y: number,
     label?: string,
-    litType?: string
+    litType?: string,
   ) => string;
   updateNode: (id: string, updates: Partial<TypedWorkflowNode>) => void;
   deleteNode: (id: string) => void;
@@ -74,7 +74,7 @@ export interface UseStrategyCanvasReturn {
   setIsSidebarOpen: (open: boolean) => void;
   setIsPropertiesOpen: (open: boolean) => void;
   setContextMenu: (
-    menu: { x: number; y: number; items: ContextMenuItem[] } | null
+    menu: { x: number; y: number; items: ContextMenuItem[] } | null,
   ) => void;
 
   // Event Handlers
@@ -138,7 +138,7 @@ export function useStrategyCanvas({
     (
       updater:
         | TypedWorkflowNode[]
-        | ((prev: TypedWorkflowNode[]) => TypedWorkflowNode[])
+        | ((prev: TypedWorkflowNode[]) => TypedWorkflowNode[]),
     ) => {
       setNodes((prev) => {
         const newNodes =
@@ -147,14 +147,14 @@ export function useStrategyCanvas({
         return newNodes;
       });
     },
-    [onNodesChange]
+    [onNodesChange],
   );
 
   const updateConnections = useCallback(
     (
       updater:
         | WorkflowConnection[]
-        | ((prev: WorkflowConnection[]) => WorkflowConnection[])
+        | ((prev: WorkflowConnection[]) => WorkflowConnection[]),
     ) => {
       setConnections((prev) => {
         const newConns =
@@ -163,7 +163,7 @@ export function useStrategyCanvas({
         return newConns;
       });
     },
-    [onConnectionsChange]
+    [onConnectionsChange],
   );
 
   // Node Operations
@@ -173,7 +173,7 @@ export function useStrategyCanvas({
       x: number,
       y: number,
       label?: string,
-      litType?: string
+      litType?: string,
     ): string => {
       const id = `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       const newNode = createTypedNode(type, label || type, x, y, id);
@@ -185,13 +185,13 @@ export function useStrategyCanvas({
       const command = new AddNodeCommand(
         newNode,
         (node) => updateNodes((prev) => [...prev, node]),
-        (id) => updateNodes((prev) => prev.filter((n) => n.id !== id))
+        (id) => updateNodes((prev) => prev.filter((n) => n.id !== id)),
       );
 
       execute(command);
       return id;
     },
-    [execute, updateNodes]
+    [execute, updateNodes],
   );
 
   const updateNode = useCallback(
@@ -207,14 +207,14 @@ export function useStrategyCanvas({
           updateNodes(
             (prev) =>
               prev.map((n) =>
-                n.id === nodeId ? ({ ...n, ...upd } as TypedWorkflowNode) : n
-              ) as TypedWorkflowNode[]
-          )
+                n.id === nodeId ? ({ ...n, ...upd } as TypedWorkflowNode) : n,
+              ) as TypedWorkflowNode[],
+          ),
       );
 
       execute(command);
     },
-    [nodes, execute, updateNodes]
+    [nodes, execute, updateNodes],
   );
 
   const deleteNode = useCallback(
@@ -223,7 +223,7 @@ export function useStrategyCanvas({
       if (!node) return;
 
       const relatedConnections = connections.filter(
-        (c) => c.from === id || c.to === id
+        (c) => c.from === id || c.to === id,
       );
 
       const command = new DeleteNodeCommand(
@@ -233,7 +233,7 @@ export function useStrategyCanvas({
         (nodeId) => updateNodes((prev) => prev.filter((n) => n.id !== nodeId)),
         (conn) => updateConnections((prev) => [...prev, conn]),
         (connId) =>
-          updateConnections((prev) => prev.filter((c) => c.id !== connId))
+          updateConnections((prev) => prev.filter((c) => c.id !== connId)),
       );
 
       execute(command);
@@ -247,34 +247,39 @@ export function useStrategyCanvas({
       execute,
       updateNodes,
       updateConnections,
-    ]
+    ],
   );
 
   // Connection Operations
   const addConnection = useCallback(
     (from: string, to: string, fromPort?: string) => {
       const id = `conn-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const newConnection: WorkflowConnection = { id, from, to, fromPort };
+      const newConnection: WorkflowConnection = {
+        id,
+        from,
+        to,
+        ...(fromPort ? { fromPort } : {}),
+      };
 
       const command = new AddConnectionCommand(
         newConnection,
         (conn) => updateConnections((prev) => [...prev, conn]),
         (connId) =>
-          updateConnections((prev) => prev.filter((c) => c.id !== connId))
+          updateConnections((prev) => prev.filter((c) => c.id !== connId)),
       );
 
       execute(command);
     },
-    [execute, updateConnections]
+    [execute, updateConnections],
   );
 
   const updateConnection = useCallback(
     (id: string, updates: Partial<WorkflowConnection>) => {
       updateConnections((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, ...updates } : c))
+        prev.map((c) => (c.id === id ? { ...c, ...updates } : c)),
       );
     },
-    [updateConnections]
+    [updateConnections],
   );
 
   const deleteConnection = useCallback(
@@ -286,14 +291,14 @@ export function useStrategyCanvas({
         conn,
         (c) => updateConnections((prev) => [...prev, c]),
         (connId) =>
-          updateConnections((prev) => prev.filter((c) => c.id !== connId))
+          updateConnections((prev) => prev.filter((c) => c.id !== connId)),
       );
 
       execute(command);
 
       if (selectedConnectionId === id) setSelectedConnectionId(null);
     },
-    [connections, selectedConnectionId, execute, updateConnections]
+    [connections, selectedConnectionId, execute, updateConnections],
   );
 
   // Event Handlers
@@ -301,7 +306,7 @@ export function useStrategyCanvas({
     (event: React.DragEvent) => {
       event.preventDefault();
       const type = event.dataTransfer.getData(
-        "application/reactflow"
+        "application/reactflow",
       ) as NodeType;
       const litType = event.dataTransfer.getData("application/litigation-node");
 
@@ -312,7 +317,7 @@ export function useStrategyCanvas({
         event,
         canvasRef.current,
         pan,
-        scale
+        scale,
       );
       const finalType: NodeType = (type || "Task") as NodeType;
       const id = addNode(finalType, x, y, litType || finalType);
@@ -321,7 +326,7 @@ export function useStrategyCanvas({
       setSelectedConnectionId(null);
       setIsPropertiesOpen(true);
     },
-    [pan, scale, addNode]
+    [pan, scale, addNode],
   );
 
   const handleMouseMove = useCallback(
@@ -331,7 +336,7 @@ export function useStrategyCanvas({
           e,
           canvasRef.current,
           pan,
-          scale
+          scale,
         );
         updateNode(draggingNodeId, {
           x: pos.x - dragOffset.x,
@@ -339,7 +344,7 @@ export function useStrategyCanvas({
         });
       }
     },
-    [draggingNodeId, dragOffset, scale, pan, updateNode, dragStartPos]
+    [draggingNodeId, dragOffset, scale, pan, updateNode, dragStartPos],
   );
 
   const handleMouseDownNode = useCallback(
@@ -351,7 +356,7 @@ export function useStrategyCanvas({
           e,
           canvasRef.current,
           pan,
-          scale
+          scale,
         );
         setDragOffset({ x: mousePos.x - node.x, y: mousePos.y - node.y });
         setDragStartPos({ x: node.x, y: node.y });
@@ -361,7 +366,7 @@ export function useStrategyCanvas({
         setIsPropertiesOpen(true);
       }
     },
-    [nodes, pan, scale]
+    [nodes, pan, scale],
   );
 
   const handleMouseUp = useCallback(() => {
@@ -377,9 +382,9 @@ export function useStrategyCanvas({
             updateNodes(
               (prev) =>
                 prev.map((n) =>
-                  n.id === id ? ({ ...n, ...updates } as TypedWorkflowNode) : n
-                ) as TypedWorkflowNode[]
-            )
+                  n.id === id ? ({ ...n, ...updates } as TypedWorkflowNode) : n,
+                ) as TypedWorkflowNode[],
+            ),
         );
         execute(command);
       }
@@ -404,7 +409,7 @@ export function useStrategyCanvas({
     (id: string) => {
       deleteNode(id);
     },
-    [deleteNode]
+    [deleteNode],
   );
 
   const handleContextMenu = useCallback(
@@ -434,10 +439,10 @@ export function useStrategyCanvas({
                 n.type,
                 n.x + CANVAS_CONSTANTS.DUPLICATE_OFFSET,
                 n.y + CANVAS_CONSTANTS.DUPLICATE_OFFSET,
-                n.label
+                n.label,
               );
           },
-          deleteNode
+          deleteNode,
         );
         setContextMenu({ x: e.clientX, y: e.clientY, items });
       } else {
@@ -446,13 +451,13 @@ export function useStrategyCanvas({
           e,
           canvasRef.current,
           pan,
-          scale
+          scale,
         );
         const items = generateCanvasContextMenuItems(position, addNode);
         setContextMenu({ x: e.clientX, y: e.clientY, items });
       }
     },
-    [nodes, pan, scale, addNode, deleteNode]
+    [nodes, pan, scale, addNode, deleteNode],
   );
 
   // Keyboard Shortcuts
@@ -468,18 +473,18 @@ export function useStrategyCanvas({
             node.type,
             node.x + CANVAS_CONSTANTS.DUPLICATE_OFFSET,
             node.y + CANVAS_CONSTANTS.DUPLICATE_OFFSET,
-            node.label
+            node.label,
           );
         }
       }
     },
     onZoomIn: () =>
       setScale((s) =>
-        Math.min(CANVAS_CONSTANTS.MAX_ZOOM, s + CANVAS_CONSTANTS.ZOOM_STEP)
+        Math.min(CANVAS_CONSTANTS.MAX_ZOOM, s + CANVAS_CONSTANTS.ZOOM_STEP),
       ),
     onZoomOut: () =>
       setScale((s) =>
-        Math.max(CANVAS_CONSTANTS.MIN_ZOOM, s - CANVAS_CONSTANTS.ZOOM_STEP)
+        Math.max(CANVAS_CONSTANTS.MIN_ZOOM, s - CANVAS_CONSTANTS.ZOOM_STEP),
       ),
     onZoomReset: () => setScale(CANVAS_CONSTANTS.DEFAULT_ZOOM),
   });

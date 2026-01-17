@@ -9,7 +9,7 @@
  */
 interface PerformanceMetric {
   componentId: string;
-  phase: 'mount' | 'update';
+  phase: "mount" | "update";
   actualDuration: number;
   baseDuration: number;
   startTime: number;
@@ -22,7 +22,7 @@ interface PerformanceMetric {
  */
 type ProfilerOnRenderCallback = (
   id: string,
-  phase: 'mount' | 'update',
+  phase: "mount" | "update",
   actualDuration: number,
   baseDuration: number,
   startTime: number,
@@ -31,7 +31,7 @@ type ProfilerOnRenderCallback = (
     id: number;
     name: string;
     timestamp: number;
-  }>
+  }>,
 ) => void;
 
 /**
@@ -45,7 +45,7 @@ const onRenderCallbackImpl: ProfilerOnRenderCallback = function (
   baseDuration,
   startTime,
   commitTime,
-  interactions
+  interactions,
 ) {
   const metric: PerformanceMetric = {
     componentId: id,
@@ -58,13 +58,15 @@ const onRenderCallbackImpl: ProfilerOnRenderCallback = function (
   };
 
   // In production, send to analytics endpoint (e.g. Application Insights, Datadog)
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[Telemetry] ${id} (${phase}) took ${actualDuration.toFixed(2)}ms`);
+  if (process.env.NODE_ENV === "development") {
+    console.warn(
+      `[Telemetry] ${id} (${phase}) took ${actualDuration.toFixed(2)}ms`,
+    );
 
     if (actualDuration > 16) {
       console.warn(
         `[Telemetry] Slow render detected in ${id}: ${actualDuration.toFixed(2)}ms ` +
-        `(base: ${baseDuration.toFixed(2)}ms, interactions: ${interactions.size})`
+          `(base: ${baseDuration.toFixed(2)}ms, interactions: ${interactions.size})`,
       );
     }
 
@@ -72,7 +74,7 @@ const onRenderCallbackImpl: ProfilerOnRenderCallback = function (
     if (baseDuration > 0 && actualDuration > baseDuration * 1.5) {
       console.warn(
         `[Telemetry] Performance degradation in ${id}: ` +
-        `actual ${actualDuration.toFixed(2)}ms vs base ${baseDuration.toFixed(2)}ms`
+          `actual ${actualDuration.toFixed(2)}ms vs base ${baseDuration.toFixed(2)}ms`,
       );
     }
   }
@@ -102,11 +104,11 @@ function sendMetricToMonitoring(metric: PerformanceMetric): void {
   //   }
   // });
 
-  if (process.env.NODE_ENV === 'development' && metric.actualDuration > 100) {
-    console.debug('[Telemetry] Would send metric:', {
+  if (process.env.NODE_ENV === "development" && metric.actualDuration > 100) {
+    console.warn("[Telemetry] Would send metric:", {
       component: metric.componentId,
       duration: metric.actualDuration,
-      phase: metric.phase
+      phase: metric.phase,
     });
   }
 }
@@ -114,9 +116,13 @@ function sendMetricToMonitoring(metric: PerformanceMetric): void {
 /**
  * Log custom metric with optional tags
  */
-export const logMetric = (name: string, value: number, tags?: Record<string, string>): void => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[Metric] ${name}: ${value}`, tags);
+export const logMetric = (
+  name: string,
+  value: number,
+  tags?: Record<string, string>,
+): void => {
+  if (process.env.NODE_ENV === "development") {
+    console.warn(`[Metric] ${name}: ${value}`, tags);
   }
 
   // Send to monitoring service

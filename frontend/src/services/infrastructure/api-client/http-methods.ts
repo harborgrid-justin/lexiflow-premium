@@ -4,6 +4,7 @@
  */
 
 import { AuthenticationError } from "@/services/core/errors";
+
 import { buildBaseURL, DEFAULT_TIMEOUT, getOrigin } from "./config";
 import {
   buildHeaders,
@@ -18,7 +19,7 @@ import { handleResponse } from "./response-handler";
  */
 export async function get<T>(
   endpoint: string,
-  options?: { params?: Record<string, unknown>; headers?: HeadersInit }
+  options?: { params?: Record<string, unknown>; headers?: HeadersInit },
 ): Promise<T> {
   validateEndpoint(endpoint, "get");
   try {
@@ -58,7 +59,7 @@ export async function get<T>(
 export async function post<T>(
   endpoint: string,
   data?: unknown,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<T> {
   validateEndpoint(endpoint, "post");
   validateData(data, "post");
@@ -77,7 +78,7 @@ export async function post<T>(
       typeof headers === "object" &&
       "Content-Type" in headers
     ) {
-      delete (headers as Record<string, string>)["Content-Type"];
+      delete (headers)["Content-Type"];
     }
 
     const response = await fetch(url.toString(), {
@@ -85,10 +86,10 @@ export async function post<T>(
       method: "POST", // Then override specific properties
       headers,
       body: isFormData
-        ? (data as FormData)
+        ? (data)
         : data
           ? JSON.stringify(data)
-          : undefined,
+          : null,
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
 
@@ -118,7 +119,7 @@ export async function put<T>(endpoint: string, data?: unknown): Promise<T> {
     const response = await fetch(url.toString(), {
       method: "PUT",
       headers: await buildHeaders(),
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : null,
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
 
@@ -148,7 +149,7 @@ export async function patch<T>(endpoint: string, data?: unknown): Promise<T> {
     const response = await fetch(url.toString(), {
       method: "PATCH",
       headers: await buildHeaders(),
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : null,
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
 

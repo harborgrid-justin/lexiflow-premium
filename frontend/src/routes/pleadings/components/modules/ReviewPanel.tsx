@@ -21,6 +21,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
 
     // Cross-Module: Create Workflow Task
     const handleRequestReview = async () => {
+        const dueDate = new Date(Date.now() + 86400000).toISOString().split('T')[0] ?? '';
         const task: WorkflowTask = {
             id: `t-${Date.now()}` as TaskId,
             title: 'Review Pleading Draft',
@@ -29,7 +30,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
             priority: TaskPriorityBackend.HIGH,
             assignee: 'Senior Partner',
             assigneeId: 'usr-partner-alex' as UserId,
-            dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+            dueDate,
             description: `Please review document ${docId}.`,
             relatedModule: 'Documents',
             relatedItemId: docId

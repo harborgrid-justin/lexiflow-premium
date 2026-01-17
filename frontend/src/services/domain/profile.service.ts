@@ -16,15 +16,15 @@
 //
 // ================================================================================
 
-import { AuditLog } from "@/api/admin/audit-logs-api";
+import { type AuditLog } from "@/api/admin/audit-logs-api";
 import { adminApi } from "@/api/domains/admin.api";
 import { authApi } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
-  ExtendedUserProfile,
-  GranularPermission,
-  UpdateUserDto,
-  UserId,
+  type ExtendedUserProfile,
+  type GranularPermission,
+  type UpdateUserDto,
+  type UserId,
 } from "@/types";
 
 export const ProfileDomain = {
@@ -71,7 +71,7 @@ export const ProfileDomain = {
         user?.id || user?.userId || storedUserId() || tokenUserId();
 
       const permissions = Array.isArray(
-        (user as { permissions?: unknown })?.permissions
+        (user as { permissions?: unknown })?.permissions,
       )
         ? (user as { permissions: GranularPermission[] }).permissions
         : [];
@@ -90,7 +90,7 @@ export const ProfileDomain = {
     }
   },
   updateProfile: async (
-    updates: Partial<ExtendedUserProfile>
+    updates: Partial<ExtendedUserProfile>,
   ): Promise<ExtendedUserProfile> => {
     const current = await ProfileDomain.getCurrentProfile();
     const updated = { ...current, ...updates };
@@ -98,12 +98,12 @@ export const ProfileDomain = {
     try {
       // Map ExtendedUserProfile updates to UpdateUserDto
       const dto: UpdateUserDto = {
-        firstName: updates.firstName,
-        lastName: updates.lastName,
-        email: updates.email,
-        role: updates.role,
-        department: updates.department,
-        title: updates.title,
+        ...(updates.firstName ? { firstName: updates.firstName } : {}),
+        ...(updates.lastName ? { lastName: updates.lastName } : {}),
+        ...(updates.email ? { email: updates.email } : {}),
+        ...(updates.role ? { role: updates.role } : {}),
+        ...(updates.department ? { department: updates.department } : {}),
+        ...(updates.title ? { title: updates.title } : {}),
         // Add other fields if they exist in UpdateUserDto
       };
       await authApi.users.update(current.id, dto);
@@ -115,7 +115,7 @@ export const ProfileDomain = {
     return updated;
   },
   updatePreferences: async (
-    prefs: Partial<ExtendedUserProfile["preferences"]>
+    prefs: Partial<ExtendedUserProfile["preferences"]>,
   ): Promise<void> => {
     const current = await ProfileDomain.getCurrentProfile();
 
@@ -127,7 +127,7 @@ export const ProfileDomain = {
     }
   },
   updateSecurity: async (
-    sec: Partial<ExtendedUserProfile["security"]>
+    sec: Partial<ExtendedUserProfile["security"]>,
   ): Promise<void> => {
     const current = await ProfileDomain.getCurrentProfile();
 
@@ -139,7 +139,7 @@ export const ProfileDomain = {
     }
   },
   addPermission: async (
-    perm: GranularPermission
+    perm: GranularPermission,
   ): Promise<GranularPermission> => {
     const current = await ProfileDomain.getCurrentProfile();
     const newPerm = { ...perm, id: `perm-${Date.now()}` };

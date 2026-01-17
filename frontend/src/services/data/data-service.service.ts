@@ -13,7 +13,7 @@
  */
 
 import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
-import { RepositoryRegistry } from "./repositories/RepositoryRegistry";
+
 
 import { AdminDescriptors } from "./descriptors/AdminDescriptors";
 import { AnalyticsDescriptors } from "./descriptors/AnalyticsDescriptors";
@@ -28,6 +28,7 @@ import { LegalResearchDescriptors } from "./descriptors/LegalResearchDescriptors
 import { LitigationDescriptors } from "./descriptors/LitigationDescriptors";
 import { OperationsDescriptors } from "./descriptors/OperationsDescriptors";
 import { TrialDescriptors } from "./descriptors/TrialDescriptors";
+import { RepositoryRegistry } from "./repositories/RepositoryRegistry";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                          ╔═══════════════════════╗

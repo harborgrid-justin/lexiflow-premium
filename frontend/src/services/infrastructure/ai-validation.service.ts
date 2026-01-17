@@ -7,7 +7,7 @@
  * @module services/aiValidationService
  */
 
-import { CANVAS_CONSTANTS} from '@/types/canvas-constants';
+import { CANVAS_CONSTANTS } from "@/types/canvas-constants";
 
 /**
  * Rate limiter state
@@ -15,6 +15,22 @@ import { CANVAS_CONSTANTS} from '@/types/canvas-constants';
 interface RateLimiterState {
   requests: number[];
   windowStart: number;
+}
+
+interface WorkflowNodeRecord extends Record<string, unknown> {
+  id?: unknown;
+  type?: unknown;
+  label?: unknown;
+  x?: unknown;
+  y?: unknown;
+  config?: unknown;
+}
+
+interface WorkflowConnectionRecord extends Record<string, unknown> {
+  id?: unknown;
+  from?: unknown;
+  to?: unknown;
+  label?: unknown;
 }
 
 /**
@@ -36,22 +52,29 @@ export class AIValidationService {
   /**
    * Validate and sanitize user prompt before sending to AI
    */
-  static validatePrompt(prompt: string, userId: string = 'default'): AIValidationResult {
+  static validatePrompt(
+    prompt: string,
+    userId: string = "default",
+  ): AIValidationResult {
     const errors: string[] = [];
 
     // Check length
     if (prompt.length < CANVAS_CONSTANTS.AI_MIN_PROMPT_LENGTH) {
-      errors.push(`Prompt must be at least ${CANVAS_CONSTANTS.AI_MIN_PROMPT_LENGTH} characters`);
+      errors.push(
+        `Prompt must be at least ${CANVAS_CONSTANTS.AI_MIN_PROMPT_LENGTH} characters`,
+      );
     }
 
     if (prompt.length > CANVAS_CONSTANTS.AI_MAX_PROMPT_LENGTH) {
-      errors.push(`Prompt cannot exceed ${CANVAS_CONSTANTS.AI_MAX_PROMPT_LENGTH} characters`);
+      errors.push(
+        `Prompt cannot exceed ${CANVAS_CONSTANTS.AI_MAX_PROMPT_LENGTH} characters`,
+      );
     }
 
     // Check rate limiting
     if (!this.checkRateLimit(userId)) {
       errors.push(
-        `Rate limit exceeded. Maximum ${CANVAS_CONSTANTS.AI_RATE_LIMIT_REQUESTS} requests per minute.`
+        `Rate limit exceeded. Maximum ${CANVAS_CONSTANTS.AI_RATE_LIMIT_REQUESTS} requests per minute.`,
       );
     }
 
@@ -60,13 +83,13 @@ export class AIValidationService {
 
     // Check for potentially malicious content
     if (this.containsMaliciousPatterns(sanitizedPrompt)) {
-      errors.push('Prompt contains potentially unsafe content');
+      errors.push("Prompt contains potentially unsafe content");
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-      sanitizedPrompt: errors.length === 0 ? sanitizedPrompt : undefined,
+      ...(errors.length === 0 ? { sanitizedPrompt } : {}),
     };
   }
 
@@ -75,16 +98,16 @@ export class AIValidationService {
    */
   private static sanitizePrompt(prompt: string): string {
     // Remove HTML tags
-    let sanitized = prompt.replace(/<[^>]*>/g, '');
+    let sanitized = prompt.replace(/<[^>]*>/g, "");
 
     // Remove potentially dangerous characters
-    sanitized = sanitized.replace(/[<>"'`]/g, '');
+    sanitized = sanitized.replace(/[<>"'`]/g, "");
 
     // Normalize whitespace
-    sanitized = sanitized.replace(/\s+/g, ' ').trim();
+    sanitized = sanitized.replace(/\s+/g, " ").trim();
 
     // Limit special characters
-    sanitized = sanitized.replace(/[^\w\s.,?!()-]/g, '');
+    sanitized = sanitized.replace(/[^\w\s.,?!()-]/g, "");
 
     return sanitized;
   }
@@ -102,7 +125,7 @@ export class AIValidationService {
       /vbscript:/i,
     ];
 
-    return maliciousPatterns.some(pattern => pattern.test(prompt));
+    return maliciousPatterns.some((pattern) => pattern.test(prompt));
   }
 
   /**
@@ -112,35 +135,37 @@ export class AIValidationService {
     const errors: string[] = [];
 
     // Check response structure
-    if (!response || typeof response !== 'object') {
-      errors.push('Invalid AI response structure');
+    if (!response || typeof response !== "object") {
+      errors.push("Invalid AI response structure");
       return { isValid: false, errors };
     }
 
     const responseObj = response as Record<string, unknown>;
 
     // Validate nodes array
-    if (!Array.isArray(responseObj.nodes)) {
-      errors.push('AI response missing valid nodes array');
+    if (!Array.isArray(responseObj["nodes"])) {
+      errors.push("AI response missing valid nodes array");
     } else {
-      this.validateNodesArray(responseObj.nodes, errors);
+      this.validateNodesArray(responseObj["nodes"], errors);
     }
 
     // Validate connections array
-    if (!Array.isArray(responseObj.connections)) {
-      errors.push('AI response missing valid connections array');
+    if (!Array.isArray(responseObj["connections"])) {
+      errors.push("AI response missing valid connections array");
     } else {
-      const nodes = Array.isArray(responseObj.nodes) ? responseObj.nodes : [];
-      this.validateConnectionsArray(responseObj.connections, nodes, errors);
+      const nodes = Array.isArray(responseObj["nodes"])
+        ? responseObj["nodes"]
+        : [];
+      this.validateConnectionsArray(responseObj["connections"], nodes, errors);
     }
 
     // Sanitize response
-    const sanitizedResponse = errors.length === 0 ? this.sanitizeAIResponse(response) : undefined;
-
     return {
       isValid: errors.length === 0,
       errors,
-      sanitizedResponse,
+      ...(errors.length === 0
+        ? { sanitizedResponse: this.sanitizeAIResponse(response) }
+        : {}),
     };
   }
 
@@ -149,12 +174,14 @@ export class AIValidationService {
    */
   private static validateNodesArray(nodes: unknown[], errors: string[]): void {
     if (nodes.length === 0) {
-      errors.push('AI response contains no nodes');
+      errors.push("AI response contains no nodes");
       return;
     }
 
     if (nodes.length > CANVAS_CONSTANTS.MAX_NODES) {
-      errors.push(`AI generated too many nodes (max: ${CANVAS_CONSTANTS.MAX_NODES})`);
+      errors.push(
+        `AI generated too many nodes (max: ${CANVAS_CONSTANTS.MAX_NODES})`,
+      );
     }
 
     // Validate each node
@@ -166,27 +193,27 @@ export class AIValidationService {
     }
 
     // Check for required node types
-    const hasStart = nodes.some(n => {
-      if (n && typeof n === 'object') {
-        const nodeObj = n as Record<string, unknown>;
-        return nodeObj.type === 'Start';
+    const hasStart = nodes.some((n) => {
+      if (n && typeof n === "object") {
+        const nodeObj = n as WorkflowNodeRecord;
+        return nodeObj.type === "Start";
       }
       return false;
     });
-    const hasEnd = nodes.some(n => {
-      if (n && typeof n === 'object') {
-        const nodeObj = n as Record<string, unknown>;
-        return nodeObj.type === 'End';
+    const hasEnd = nodes.some((n) => {
+      if (n && typeof n === "object") {
+        const nodeObj = n as WorkflowNodeRecord;
+        return nodeObj.type === "End";
       }
       return false;
     });
 
     if (!hasStart) {
-      errors.push('AI response missing Start node');
+      errors.push("AI response missing Start node");
     }
 
     if (!hasEnd) {
-      errors.push('AI response missing End node');
+      errors.push("AI response missing End node");
     }
   }
 
@@ -196,17 +223,19 @@ export class AIValidationService {
   private static validateConnectionsArray(
     connections: unknown[],
     nodes: unknown[],
-    errors: string[]
+    errors: string[],
   ): void {
     if (connections.length > CANVAS_CONSTANTS.MAX_CONNECTIONS) {
-      errors.push(`AI generated too many connections (max: ${CANVAS_CONSTANTS.MAX_CONNECTIONS})`);
+      errors.push(
+        `AI generated too many connections (max: ${CANVAS_CONSTANTS.MAX_CONNECTIONS})`,
+      );
     }
 
     const nodeIds = new Set<string>();
-    nodes.forEach(n => {
-      if (n && typeof n === 'object') {
-        const nodeObj = n as Record<string, unknown>;
-        if (typeof nodeObj.id === 'string') {
+    nodes.forEach((n) => {
+      if (n && typeof n === "object") {
+        const nodeObj = n as WorkflowNodeRecord;
+        if (typeof nodeObj.id === "string") {
           nodeIds.add(nodeObj.id);
         }
       }
@@ -221,10 +250,10 @@ export class AIValidationService {
       }
 
       // Validate connection references existing nodes
-      if (conn && typeof conn === 'object') {
-        const connObj = conn as Record<string, unknown>;
-        const fromId = typeof connObj.from === 'string' ? connObj.from : '';
-        const toId = typeof connObj.to === 'string' ? connObj.to : '';
+      if (conn && typeof conn === "object") {
+        const connObj = conn;
+        const fromId = typeof connObj.from === "string" ? connObj.from : "";
+        const toId = typeof connObj.to === "string" ? connObj.to : "";
         if (!nodeIds.has(fromId) || !nodeIds.has(toId)) {
           errors.push(`Connection ${i} references non-existent nodes`);
         }
@@ -235,65 +264,94 @@ export class AIValidationService {
   /**
    * Check if node structure is valid
    */
-  private static isValidNode(node: unknown): node is Record<string, unknown> {
-    if (!node || typeof node !== 'object') return false;
-    const nodeObj = node as Record<string, unknown>;
+  private static isValidNode(node: unknown): node is WorkflowNodeRecord {
+    if (!node || typeof node !== "object") return false;
+    const nodeObj = node as WorkflowNodeRecord;
     return (
-      typeof nodeObj.id === 'string' &&
-      typeof nodeObj.type === 'string' &&
-      typeof nodeObj.label === 'string' &&
-      typeof nodeObj.x === 'number' &&
-      typeof nodeObj.y === 'number' &&
-      (nodeObj.config === undefined || nodeObj.config === null || typeof nodeObj.config === 'object')
+      typeof nodeObj.id === "string" &&
+      typeof nodeObj.type === "string" &&
+      typeof nodeObj.label === "string" &&
+      typeof nodeObj.x === "number" &&
+      typeof nodeObj.y === "number" &&
+      (nodeObj.config === undefined ||
+        nodeObj.config === null ||
+        typeof nodeObj.config === "object")
     );
   }
 
   /**
    * Check if connection structure is valid
    */
-  private static isValidConnection(conn: unknown): conn is Record<string, unknown> {
-    if (!conn || typeof conn !== 'object') return false;
-    const connObj = conn as Record<string, unknown>;
+  private static isValidConnection(
+    conn: unknown,
+  ): conn is WorkflowConnectionRecord {
+    if (!conn || typeof conn !== "object") return false;
+    const connObj = conn as WorkflowConnectionRecord;
     return (
-      typeof connObj.id === 'string' &&
-      typeof connObj.from === 'string' &&
-      typeof connObj.to === 'string'
+      typeof connObj.id === "string" &&
+      typeof connObj.from === "string" &&
+      typeof connObj.to === "string"
     );
   }
 
   /**
    * Sanitize AI response to ensure safe values
    */
-  private static sanitizeAIResponse(response: unknown): Record<string, unknown> {
-    if (!response || typeof response !== 'object') {
+  private static sanitizeAIResponse(
+    response: unknown,
+  ): Record<string, unknown> {
+    if (!response || typeof response !== "object") {
       return { nodes: [], connections: [] };
     }
 
     const responseObj = response as Record<string, unknown>;
-    const nodes = Array.isArray(responseObj.nodes) ? responseObj.nodes : [];
-    const connections = Array.isArray(responseObj.connections) ? responseObj.connections : [];
+    const nodes = Array.isArray(responseObj["nodes"])
+      ? responseObj["nodes"]
+      : [];
+    const connections = Array.isArray(responseObj["connections"])
+      ? responseObj["connections"]
+      : [];
 
     return {
       nodes: nodes.map((node: unknown) => {
-        const nodeObj = node && typeof node === 'object' ? node as Record<string, unknown> : {};
+        const nodeObj =
+          node && typeof node === "object" ? (node as WorkflowNodeRecord) : {};
         return {
           ...nodeObj,
-          id: this.sanitizeString(typeof nodeObj.id === 'string' ? nodeObj.id : ''),
-          label: this.sanitizeString(typeof nodeObj.label === 'string' ? nodeObj.label : ''),
-          type: this.sanitizeString(typeof nodeObj.type === 'string' ? nodeObj.type : ''),
-          x: this.clamp(typeof nodeObj.x === 'number' ? nodeObj.x : 0, 0, 2000),
-          y: this.clamp(typeof nodeObj.y === 'number' ? nodeObj.y : 0, 0, 2000),
+          id: this.sanitizeString(
+            typeof nodeObj.id === "string" ? nodeObj.id : "",
+          ),
+          label: this.sanitizeString(
+            typeof nodeObj.label === "string" ? nodeObj.label : "",
+          ),
+          type: this.sanitizeString(
+            typeof nodeObj.type === "string" ? nodeObj.type : "",
+          ),
+          x: this.clamp(typeof nodeObj.x === "number" ? nodeObj.x : 0, 0, 2000),
+          y: this.clamp(typeof nodeObj.y === "number" ? nodeObj.y : 0, 0, 2000),
           config: this.sanitizeConfig(nodeObj.config),
         };
       }),
       connections: connections.map((conn: unknown) => {
-        const connObj = conn && typeof conn === 'object' ? conn as Record<string, unknown> : {};
+        const connObj =
+          conn && typeof conn === "object"
+            ? (conn as WorkflowConnectionRecord)
+            : {};
         return {
           ...connObj,
-          id: this.sanitizeString(typeof connObj.id === 'string' ? connObj.id : ''),
-          from: this.sanitizeString(typeof connObj.from === 'string' ? connObj.from : ''),
-          to: this.sanitizeString(typeof connObj.to === 'string' ? connObj.to : ''),
-          label: connObj.label && typeof connObj.label === 'string' ? this.sanitizeString(connObj.label) : undefined,
+          id: this.sanitizeString(
+            typeof connObj.id === "string" ? connObj.id : "",
+          ),
+          from: this.sanitizeString(
+            typeof connObj.from === "string" ? connObj.from : "",
+          ),
+          to: this.sanitizeString(
+            typeof connObj.to === "string" ? connObj.to : "",
+          ),
+          label:
+            connObj.label && typeof connObj.label === "string"
+              ? this.sanitizeString(connObj.label)
+              : undefined,
         };
       }),
     };
@@ -303,25 +361,24 @@ export class AIValidationService {
    * Sanitize string values
    */
   private static sanitizeString(value: string): string {
-
-    return value.slice(0, 200).replace(/[<>"'`]/g, '');
+    return value.slice(0, 200).replace(/[<>"'`]/g, "");
   }
 
   /**
    * Sanitize config object
    */
   private static sanitizeConfig(config: unknown): Record<string, unknown> {
-    if (!config || typeof config !== 'object') return {};
+    if (!config || typeof config !== "object") return {};
 
     const sanitized: Record<string, unknown> = {};
     const configObj = config as Record<string, unknown>;
     for (const key of Object.keys(configObj)) {
       const value = configObj[key];
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         sanitized[key] = this.sanitizeString(value);
-      } else if (typeof value === 'number') {
+      } else if (typeof value === "number") {
         sanitized[key] = this.clamp(value, -10000, 10000);
-      } else if (typeof value === 'boolean') {
+      } else if (typeof value === "boolean") {
         sanitized[key] = value;
       }
     }
@@ -340,11 +397,14 @@ export class AIValidationService {
    */
   private static checkRateLimit(userId: string): boolean {
     const now = Date.now();
-    const state = this.rateLimiter.get(userId) || { requests: [], windowStart: now };
+    const state = this.rateLimiter.get(userId) || {
+      requests: [],
+      windowStart: now,
+    };
 
     // Remove requests outside the window
     state.requests = state.requests.filter(
-      timestamp => now - timestamp < CANVAS_CONSTANTS.AI_RATE_LIMIT_WINDOW_MS
+      (timestamp) => now - timestamp < CANVAS_CONSTANTS.AI_RATE_LIMIT_WINDOW_MS,
     );
 
     // Check if limit exceeded
@@ -362,23 +422,25 @@ export class AIValidationService {
   /**
    * Reset rate limiter for user (for testing)
    */
-  static resetRateLimit(userId: string = 'default'): void {
+  static resetRateLimit(userId: string = "default"): void {
     this.rateLimiter.delete(userId);
   }
 
   /**
    * Get remaining requests for user
    */
-  static getRemainingRequests(userId: string = 'default'): number {
+  static getRemainingRequests(userId: string = "default"): number {
     const state = this.rateLimiter.get(userId);
     if (!state) return CANVAS_CONSTANTS.AI_RATE_LIMIT_REQUESTS;
 
     const now = Date.now();
     const recentRequests = state.requests.filter(
-      timestamp => now - timestamp < CANVAS_CONSTANTS.AI_RATE_LIMIT_WINDOW_MS
+      (timestamp) => now - timestamp < CANVAS_CONSTANTS.AI_RATE_LIMIT_WINDOW_MS,
     );
 
-    return Math.max(0, CANVAS_CONSTANTS.AI_RATE_LIMIT_REQUESTS - recentRequests.length);
+    return Math.max(
+      0,
+      CANVAS_CONSTANTS.AI_RATE_LIMIT_REQUESTS - recentRequests.length,
+    );
   }
 }
-

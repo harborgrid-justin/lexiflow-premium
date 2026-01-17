@@ -3,10 +3,11 @@
  * Time entry refinement, strategy generation, and linting
  */
 
-import { getClient } from "./client";
 import { Prompts } from "@/services/ai/prompts";
 import { LinterResultSchema, StrategyGraphSchema } from "@/services/ai/schemas";
 import { safeParseJSON, withRetry } from "@/utils/apiUtils";
+
+import { getClient } from "./client";
 
 /**
  * Refine time entry description for ABA compliance

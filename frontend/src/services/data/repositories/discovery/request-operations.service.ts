@@ -1,11 +1,12 @@
 import { discoveryApi } from "@/api/domains/discovery.api";
-import { DiscoveryRequest } from "@/types";
-import { db, STORES } from "@/services/data/db";
 import {
   EntityNotFoundError,
   OperationError,
   ValidationError,
 } from "@/services/core/errors";
+import { db, STORES } from "@/services/data/db";
+import { type DiscoveryRequest } from "@/types";
+
 import { validateCaseId, validateId } from "./utils";
 
 export const getRequests = async (

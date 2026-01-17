@@ -1,7 +1,7 @@
 // types/data-infrastructure.ts
 // Data Platform Infrastructure Types
 
-import { BaseEntity } from "./primitives";
+import { type BaseEntity } from "./primitives";
 
 export interface SchemaTable {
   name: string;

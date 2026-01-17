@@ -4,9 +4,6 @@
  * @description User preferences panel for notification settings
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { NotificationPreferences as NotificationPreferencesType } from '@/types/notifications';
 import { motion } from 'framer-motion';
 import {
   AlertTriangle,
@@ -26,6 +23,11 @@ import {
   VolumeX,
 } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { NotificationPreferences as NotificationPreferencesType } from '@/types/notifications';
 
 // ============================================================================
 // TYPES & INTERFACES

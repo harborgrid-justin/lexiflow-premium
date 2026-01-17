@@ -3,14 +3,16 @@
  * Document analysis, contract review, and brief critique
  */
 
-import { getClient } from "./client";
+import { GEMINI_MODEL_DEFAULT } from "@/config/features/ai.config";
 import { Prompts } from "@/services/ai/prompts";
 import {
   AnalyzedDocSchema,
   BriefCritiqueSchema,
 } from "@/services/ai/schemas";
-import { GEMINI_MODEL_DEFAULT } from "@/config/features/ai.config";
 import { safeParseJSON, withRetry } from "@/utils/apiUtils";
+
+import { getClient } from "./client";
+
 import type { AnalyzedDoc, BriefCritique } from "./types";
 
 /**

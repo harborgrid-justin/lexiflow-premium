@@ -8,10 +8,14 @@ import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/queryKeys";
 
+type Entity = Record<string, unknown> & { id?: string };
+
 export function useEntities() {
   const notify = useNotify();
 
-  const { data: entities = [], isLoading: entitiesLoading } = useQuery(
+  const { data: entities = [], isLoading: entitiesLoading } = useQuery<
+    Entity[]
+  >(
     queryKeys.entities.all(),
     async () => {
       const data = await DataService.entities.getAll();
@@ -26,7 +30,7 @@ export function useEntities() {
   );
 
   const updateEntityMutation = useMutation(
-    async ({ id, data }: { id: string; data: any }) => {
+    async ({ id, data }: { id: string; data: Entity }) => {
       return await DataService.entities.update(id, data);
     },
     {

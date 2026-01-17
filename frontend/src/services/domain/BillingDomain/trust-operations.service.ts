@@ -4,8 +4,10 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { TrustTransaction } from "./types";
+
 import { ComplianceError, OperationError } from "./types";
+
+import type { TrustTransaction } from "./types";
 
 /**
  * Get trust account details

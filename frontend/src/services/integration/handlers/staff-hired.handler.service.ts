@@ -5,9 +5,11 @@
  * Integration: Opp #9 from architecture docs
  */
 
-import type { SystemEventPayloads } from "@/types/integration-types";
 import { SystemEventType } from "@/types/integration-types";
+
 import { BaseEventHandler } from "./base-event.handler.service";
+
+import type { SystemEventPayloads } from "@/types/integration-types";
 
 export class StaffHiredHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]

@@ -3,7 +3,7 @@
  * Advanced analytics, metrics, and reporting interfaces for legal platform
  */
 
-import { BaseEntity } from "./primitives";
+import { type BaseEntity } from "./primitives";
 
 // ====================
 // METRIC CARDS ====================

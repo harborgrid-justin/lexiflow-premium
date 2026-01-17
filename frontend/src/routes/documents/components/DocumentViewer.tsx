@@ -58,7 +58,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
               onClick={prevPage}
               disabled={currentPage === 1}
               style={{
-                color: tokens.colors.textSecondary,
+                color: tokens.colors.textMuted,
                 opacity: currentPage === 1 ? 0.5 : 1
               }}
               className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
@@ -74,7 +74,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
               onClick={nextPage}
               disabled={currentPage === totalPages}
               style={{
-                color: tokens.colors.textSecondary,
+                color: tokens.colors.textMuted,
                 opacity: currentPage === totalPages ? 0.5 : 1
               }}
               className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
@@ -94,7 +94,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
               onClick={zoomOut}
               disabled={zoom === 50}
               style={{
-                color: tokens.colors.textSecondary,
+                color: tokens.colors.textMuted,
                 opacity: zoom === 50 ? 0.5 : 1
               }}
               className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
@@ -110,7 +110,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
               onClick={zoomIn}
               disabled={zoom === 200}
               style={{
-                color: tokens.colors.textSecondary,
+                color: tokens.colors.textMuted,
                 opacity: zoom === 200 ? 0.5 : 1
               }}
               className="p-2 hover:opacity-75 disabled:cursor-not-allowed"
@@ -202,7 +202,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
                 className="mt-8 pt-4"
               >
                 <p style={{ color: tokens.colors.textMuted }} className="text-xs mb-2">OCR Extracted Text:</p>
-                <p style={{ color: tokens.colors.textSecondary }} className="text-sm whitespace-pre-wrap">
+                <p style={{ color: tokens.colors.textMuted }} className="text-sm whitespace-pre-wrap">
                   {document.fullTextContent.slice(0, 500)}
                   {document.fullTextContent.length > 500 && '...'}
                 </p>

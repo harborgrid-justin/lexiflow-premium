@@ -32,9 +32,9 @@ export { BILLING_QUERY_KEYS } from "./queryKeys";
 
 // Import base repository and operations
 import * as analyticsOps from "./analytics-operations.service";
+import { BillingRepositoryBase } from "./billing-repository.service";
 import * as invoiceOps from "./invoice-operations.service";
 import * as rateOps from "./rate-operations.service";
-import { BillingRepositoryBase } from "./billing-repository.service";
 import * as timeEntryOps from "./time-entry-operations.service";
 import * as trustOps from "./trust-operations.service";
 import * as utilityOps from "./utility-operations.service";

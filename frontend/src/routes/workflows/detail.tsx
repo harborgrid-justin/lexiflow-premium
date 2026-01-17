@@ -11,17 +11,17 @@ import { useTheme } from "@/hooks/useTheme";
 import { requireAuthentication } from '@/utils/route-guards';
 import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
 import { createDetailMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data?: { template?: { id?: string; name?: string } } }) {
+  const template = data?.template;
   return createDetailMeta({
     entityType: 'Workflow',
-    entityName: data?.template?.name,
-    entityId: data?.template?.id,
+    ...(template?.name ? { entityName: template.name } : {}),
+    ...(template?.id ? { entityId: template.id } : {}),
   });
 }
 
@@ -29,7 +29,13 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params, request }: Route.LoaderArgs) {
+export async function loader({
+  params,
+  request,
+}: {
+  params: { workflowId?: string };
+  request: Request;
+}) {
   // Auth check
   requireAuthentication(request);
 
@@ -55,7 +61,13 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({
+  params,
+  request,
+}: {
+  params: { workflowId?: string };
+  request: Request;
+}) {
   const { workflowId } = params;
 
   if (!workflowId) {

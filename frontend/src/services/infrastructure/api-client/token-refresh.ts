@@ -3,8 +3,8 @@
  * Handles JWT access token refresh with deduplication
  */
 
-import { buildBaseURL, getOrigin } from "./config";
 import { setAuthTokens } from "./auth-manager";
+import { buildBaseURL, getOrigin } from "./config";
 
 let refreshPromise: Promise<boolean> | null = null;
 

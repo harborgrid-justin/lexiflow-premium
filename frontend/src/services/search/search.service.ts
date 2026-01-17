@@ -15,6 +15,7 @@
  */
 
 import { GlobalSearchEngine, saveHistory, getHistory } from './core';
+
 import type { GlobalSearchResult } from './core';
 
 export type { SearchResultType, GlobalSearchResult } from './core';

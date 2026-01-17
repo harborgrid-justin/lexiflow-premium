@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 // ============================================================================
 // Services & Data
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
-import { useTasks } from '../../../hooks/useTasks';
+import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context

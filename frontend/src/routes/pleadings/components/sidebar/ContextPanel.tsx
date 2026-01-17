@@ -81,9 +81,9 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     evidence.forEach((item) => {
       const evidenceItem = item as Record<string, unknown>;
       allFacts.push({
-        id: String(evidenceItem.id || ''),
-        content: String(evidenceItem.description || evidenceItem.title || 'Evidence item'),
-        source: `Exhibit ${evidenceItem.exhibitNumber || evidenceItem.id}`,
+        id: String(evidenceItem['id'] || ''),
+        content: String(evidenceItem['description'] || evidenceItem['title'] || 'Evidence item'),
+        source: `Exhibit ${evidenceItem['exhibitNumber'] || evidenceItem['id']}`,
         category: 'evidence'
       });
     });
@@ -93,8 +93,8 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
       caseData.parties.forEach((partyUnknown: unknown) => {
         const party = partyUnknown as Record<string, unknown>;
         allFacts.push({
-          id: `party-${party.id || party.name}`,
-          content: `${party.name} - ${party.role}`,
+          id: `party-${party['id'] || party['name']}`,
+          content: `${party['name']} - ${party['role']}`,
           source: 'Party List',
           category: 'witness'
         });

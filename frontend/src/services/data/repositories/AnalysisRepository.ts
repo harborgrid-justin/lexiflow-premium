@@ -3,9 +3,9 @@
  * Enterprise-grade repository for legal analysis management with backend API integration
  */
 
-import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
-import { BriefAnalysisSession, CounselProfile, JudgeProfile } from "@/types";
+import { Repository } from "@/services/core/Repository";
+import { type BriefAnalysisSession, type CounselProfile, type JudgeProfile } from "@/types";
 
 export const ANALYSIS_QUERY_KEYS = {
   all: () => ["analysis"] as const,

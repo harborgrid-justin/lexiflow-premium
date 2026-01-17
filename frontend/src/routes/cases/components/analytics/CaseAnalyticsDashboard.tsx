@@ -48,11 +48,19 @@ export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }
   const practiceAreaFilter = 'all';
 
   // Extract data fetching to custom hook (enterprise architecture compliance)
-  const { matters, timeEntries, invoices, metrics, isLoading } = useCaseAnalytics(
+  const { metrics, isLoading } = useCaseAnalytics(
     caseId,
     dateRange,
     practiceAreaFilter
   );
+
+  if (isLoading) {
+    return (
+      <div className={cn('p-6', isDark ? 'bg-slate-900' : 'bg-white')}>
+        <Card className="p-6">Loading analytics...</Card>
+      </div>
+    );
+  }
 
   return (
     <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>

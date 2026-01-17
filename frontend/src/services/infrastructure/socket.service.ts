@@ -11,13 +11,14 @@
  * - Connection management and reconnection logic
  */
 
+import { io, type Socket } from "socket.io-client";
+
 import type {
   Message,
   OnlinePresence,
   TypingIndicator,
 } from "@/api/communications/messaging-api";
 import type { ApiNotification } from "@/api/communications/notifications-api";
-import { io, Socket } from "socket.io-client";
 
 export interface SocketConfig {
   url: string;
@@ -58,7 +59,7 @@ class SocketService {
    */
   async connect(
     config: SocketConfig,
-    handlers: SocketEventHandlers = {}
+    handlers: SocketEventHandlers = {},
   ): Promise<void> {
     if (this.socket?.connected) {
       console.log("[SocketService] Already connected");
@@ -77,7 +78,7 @@ class SocketService {
       console.log("[SocketService] Connecting to", config.url);
 
       this.socket = io(config.url, {
-        auth: config.auth,
+        ...(config.auth ? { auth: config.auth } : {}),
         reconnection: config.reconnection ?? true,
         reconnectionAttempts: config.reconnectionAttempts ?? 5,
         reconnectionDelay: config.reconnectionDelay ?? 1000,
@@ -151,7 +152,7 @@ class SocketService {
       (data: { messageId: string; userId: string }) => {
         console.log("[SocketService] Message delivered:", data.messageId);
         this.handlers.onMessageDelivered?.(data.messageId, data.userId);
-      }
+      },
     );
 
     this.socket.on(
@@ -159,7 +160,7 @@ class SocketService {
       (data: { messageId: string; userId: string }) => {
         console.log("[SocketService] Message read:", data.messageId);
         this.handlers.onMessageRead?.(data.messageId, data.userId);
-      }
+      },
     );
 
     this.socket.on("user:typing", (indicator: TypingIndicator) => {
@@ -304,10 +305,11 @@ class SocketService {
     reconnectAttempts: number;
     transportType?: string;
   } {
+    const transportType = this.socket?.io.engine.transport.name;
     return {
       connected: this.socket?.connected ?? false,
       reconnectAttempts: this.reconnectAttempts,
-      transportType: this.socket?.io.engine.transport.name,
+      ...(transportType ? { transportType } : {}),
     };
   }
 
@@ -328,7 +330,7 @@ class SocketService {
   on(event: string, handler: (...args: unknown[]) => void): void {
     if (!this.socket) {
       console.warn(
-        `[SocketService] Cannot listen to ${event} - socket not initialized`
+        `[SocketService] Cannot listen to ${event} - socket not initialized`,
       );
       return;
     }

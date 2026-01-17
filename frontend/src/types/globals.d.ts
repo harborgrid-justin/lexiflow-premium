@@ -28,7 +28,7 @@ declare const NOTIFICATION_AUTO_DISMISS_MS: number;
 // Process environment
 declare namespace NodeJS {
   interface ProcessEnv {
-    NODE_ENV: 'development' | 'production' | 'test';
+    NODE_ENV: "development" | "production" | "test";
     VITE_API_URL?: string;
     VITE_WS_URL?: string;
     [key: string]: string | undefined;
@@ -38,5 +38,3 @@ declare namespace NodeJS {
     env: ProcessEnv;
   }
 }
-
-declare const process: NodeJS.Process;

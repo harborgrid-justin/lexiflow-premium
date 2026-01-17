@@ -65,13 +65,13 @@ const sanitizeXml = (xml: string): string => {
   // 1. Escape ampersands that aren't already escaped entities
   let clean = xml.replace(
     /&(?!(?:apos|quot|[gl]t|amp|#\d+|#x[\da-fA-F]+);)/g,
-    "&amp;"
+    "&amp;",
   );
 
   // 2. Fix unescaped < in attributes or text (heuristic: < followed by space or number is not a tag start)
   clean = clean.replace(
     /<(?=\s|\d|[!@#$%^&*()_+\-=[\]{};':"\\|,./?])/g,
-    "&lt;"
+    "&lt;",
   );
 
   return clean;
@@ -103,7 +103,7 @@ export const parseCaseXml = (xmlString: string): XMLParsedCaseData => {
     console.error("XML Parse Failure. Error:", errorMsg);
     console.debug(
       "Failed XML snippet (first 500 chars):",
-      xmlString.substring(0, 500)
+      xmlString.substring(0, 500),
     );
 
     throw new Error(`XML Parsing Error: ${errorMsg}`);
@@ -118,10 +118,10 @@ export const parseCaseXml = (xmlString: string): XMLParsedCaseData => {
   const caseTypeEl = xmlDoc.querySelector("caseType");
   const origCourt = xmlDoc.querySelector("origCourts > origCourt");
   const origPersonPresiding = xmlDoc.querySelector(
-    "origCourts > origCourt > origPerson[role='Presiding Judge']"
+    "origCourts > origCourt > origPerson[role='Presiding Judge']",
   );
   const origPersonMagistrate = xmlDoc.querySelector(
-    "origCourts > origCourt > origPerson[role*='Magistrate']"
+    "origCourts > origCourt > origPerson[role*='Magistrate']",
   ); // Loose matching
 
   const caseNumber = getAttr(stub, "caseNumber");
@@ -204,15 +204,17 @@ export const parseCaseXml = (xmlString: string): XMLParsedCaseData => {
       title,
       description: natureOfSuit,
       filingDate: parseDate(filingDate),
-      dateTerminated: dateTerminated ? parseDate(dateTerminated) : undefined,
+      ...(dateTerminated ? { dateTerminated: parseDate(dateTerminated) } : {}),
       natureOfSuit,
       court: origCourtName,
       judge: origPersonPresiding
         ? `${getAttr(origPersonPresiding, "firstName")} ${getAttr(origPersonPresiding, "lastName")}`
         : "",
-      magistrateJudge: origPersonMagistrate
-        ? `${getAttr(origPersonMagistrate, "firstName")} ${getAttr(origPersonMagistrate, "lastName")}`
-        : undefined,
+      ...(origPersonMagistrate
+        ? {
+            magistrateJudge: `${getAttr(origPersonMagistrate, "firstName")} ${getAttr(origPersonMagistrate, "lastName")}`,
+          }
+        : {}),
       type,
       status,
       origCourtCaseNumber: getAttr(origCourt, "caseNumber"), // "1:24-cv-01442-LMB-IDD"

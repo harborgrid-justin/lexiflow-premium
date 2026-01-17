@@ -5,10 +5,12 @@
  * Optimized for Vite 7+ using Oxc and Lightning CSS.
  */
 
-import { reactRouter } from "@react-router/dev/vite";
 import path from "node:path";
+
+import { reactRouter } from "@react-router/dev/vite";
 import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths"; // 1. Add this to fix alias resolution
+
 import { HOSTS, PORTS, URLS } from "./src/config/ports.config";
 
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
@@ -37,8 +39,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           secure: false,
           rewrite: (path) => path,
           // Suppress proxy errors when backend is offline
-          configure: (proxy, _options) => {
-            proxy.on("error", (err, _req, _res) => {
+          configure: (proxy) => {
+            proxy.on("error", (err) => {
               // Silently handle connection refused errors (backend offline)
               if (err.code === "ECONNREFUSED") {
                 return;
@@ -74,7 +76,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     // 4. Global Constants
     define: {
       __APP_VERSION__: JSON.stringify(
-        process.env.npm_package_version || "1.0.0"
+        process.env.npm_package_version || "1.0.0",
       ),
     },
 

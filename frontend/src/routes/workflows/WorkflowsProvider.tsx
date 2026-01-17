@@ -72,8 +72,8 @@ export function WorkflowsProvider({
   // Computed Metrics (memoized for performance)
   const metrics = useMemo<WorkflowMetrics>(() => ({
     totalTemplates: templates.length,
-    activeInstances: instances.filter(i => i.status === 'Running' || i.status === 'Paused').length,
-    completedInstances: instances.filter(i => i.status === 'Completed').length,
+    activeInstances: instances.filter(i => i.status === 'running' || i.status === 'paused').length,
+    completedInstances: instances.filter(i => i.status === 'completed').length,
     pendingTasks: tasks.filter(t => t.status === 'To Do' || t.status === 'In Progress').length,
     overdueTasks: tasks.filter(t => {
       if (!t.dueDate) return false;
@@ -93,10 +93,6 @@ export function WorkflowsProvider({
       );
     }
 
-    if (statusFilter !== 'all') {
-      result = result.filter(t => t.status === statusFilter);
-    }
-
     return result;
   }, [templates, searchTerm, statusFilter]);
 
@@ -106,7 +102,7 @@ export function WorkflowsProvider({
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter(i =>
-        i.workflowName?.toLowerCase().includes(term)
+        i.name.toLowerCase().includes(term)
       );
     }
 

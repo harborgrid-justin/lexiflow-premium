@@ -12,10 +12,26 @@ import { useMemo } from "react";
 
 export type DateRange = "7d" | "30d" | "90d" | "ytd" | "all";
 
+type CaseSummary = {
+  createdAt?: string;
+  updatedAt?: string;
+  practiceArea?: string;
+  status?: CaseStatus;
+};
+
+type TimeEntrySummary = {
+  duration?: number;
+};
+
+type InvoiceSummary = {
+  createdAt?: string;
+  totalAmount?: number;
+};
+
 export interface CaseAnalyticsData {
-  matters: any[];
-  timeEntries: any[];
-  invoices: any[];
+  matters: CaseSummary[];
+  timeEntries: TimeEntrySummary[];
+  invoices: InvoiceSummary[];
   metrics: {
     totalMatters: number;
     revenue: number;

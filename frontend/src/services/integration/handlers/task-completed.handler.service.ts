@@ -5,13 +5,15 @@
  * Integration: Opp #3 from architecture docs
  */
 
+import { SystemEventType } from "@/types/integration-types";
+
+import { BaseEventHandler } from "./base-event.handler.service";
+
 import type { CaseId, TimeEntry, UserId, UUID } from "@/types";
 import type {
   IntegrationResult,
   SystemEventPayloads,
 } from "@/types/integration-types";
-import { SystemEventType } from "@/types/integration-types";
-import { BaseEventHandler } from "./base-event.handler.service";
 
 export class TaskCompletedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]

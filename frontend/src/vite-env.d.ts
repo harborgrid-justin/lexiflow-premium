@@ -10,7 +10,6 @@
 interface ImportMetaEnv {
   // Application Environment
   readonly VITE_ENV?: string;
-  readonly MODE: string;
 
   // API Configuration
   readonly VITE_API_BASE_URL?: string;

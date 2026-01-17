@@ -1,34 +1,83 @@
-import { AuditLog } from "@/api/admin/audit-logs-api";
+import { type AuditLog } from "@/api/admin/audit-logs-api";
 import { adminApi } from "@/api/domains/admin.api";
 import { authApi } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import {
-  ExtendedUserProfile,
-  GranularPermission,
-  UpdateUserDto,
-  UserId,
+  type EntityId,
+  type ExtendedUserProfile,
+  type GranularPermission,
+  type UpdateUserDto,
+  type UserId,
+  type UserPreferences,
+  type UserSecurityProfile,
 } from "@/types";
+
+import type { UserProfile } from "@/lib/frontend-api/auth";
 
 export const ProfileDomain = {
   getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
     try {
-      const user = await authApi.auth.getCurrentUser();
+      const userResult = await authApi.auth.getCurrentUser();
+      if (!userResult.ok) {
+        throw userResult.error;
+      }
+
+      const user: UserProfile = userResult.data;
 
       let permissions: GranularPermission[] = [];
       try {
         permissions = await apiClient.get<GranularPermission[]>(
-          `/users/${user.id}/permissions`
+          `/users/${user.id}/permissions`,
         );
       } catch (e) {
         console.warn("Failed to fetch permissions", e);
       }
 
+      const defaultPreferences: UserPreferences = {
+        theme: "system",
+        notifications: {
+          email: true,
+          push: true,
+          slack: false,
+          digestFrequency: "Daily",
+        },
+        dashboardLayout: [],
+        density: "comfortable",
+        locale: "en-US",
+        timezone: "UTC",
+      };
+
+      const defaultSecurity: UserSecurityProfile = {
+        mfaEnabled: false,
+        mfaMethod: "App",
+        lastPasswordChange: new Date(0).toISOString(),
+        passwordExpiry: new Date(0).toISOString(),
+        activeSessions: [],
+      };
+
+      const [firstName, ...lastNameParts] = user.name.split(" ");
+      const lastName = lastNameParts.join(" ");
+
       return {
         ...user,
         id: user.id as UserId,
-        preferences: (user as unknown as ExtendedUserProfile).preferences || {},
-        security: (user as unknown as ExtendedUserProfile).security || {},
+        firstName:
+          (user as unknown as ExtendedUserProfile).firstName || firstName || "",
+        lastName:
+          (user as unknown as ExtendedUserProfile).lastName || lastName || "",
+        entityId: user.id as unknown as EntityId,
+        title: (user as unknown as ExtendedUserProfile).title || "",
+        department: (user as unknown as ExtendedUserProfile).department || "",
+        managerId: (user as unknown as ExtendedUserProfile).managerId,
+        preferences:
+          (user as unknown as ExtendedUserProfile).preferences ||
+          defaultPreferences,
+        security:
+          (user as unknown as ExtendedUserProfile).security || defaultSecurity,
         accessMatrix: permissions,
+        skills: (user as unknown as ExtendedUserProfile).skills || [],
+        barAdmissions:
+          (user as unknown as ExtendedUserProfile).barAdmissions || [],
       } as ExtendedUserProfile;
     } catch (error) {
       console.warn("Failed to fetch profile from backend", error);
@@ -36,7 +85,7 @@ export const ProfileDomain = {
     }
   },
   updateProfile: async (
-    updates: Partial<ExtendedUserProfile>
+    updates: Partial<ExtendedUserProfile>,
   ): Promise<ExtendedUserProfile> => {
     const current = await ProfileDomain.getCurrentProfile();
     const updated = { ...current, ...updates };
@@ -44,15 +93,18 @@ export const ProfileDomain = {
     try {
       // Map ExtendedUserProfile updates to UpdateUserDto
       const dto: UpdateUserDto = {
-        firstName: updates.firstName,
-        lastName: updates.lastName,
-        email: updates.email,
-        role: updates.role,
-        department: updates.department,
-        title: updates.title,
+        ...(updates.firstName ? { firstName: updates.firstName } : {}),
+        ...(updates.lastName ? { lastName: updates.lastName } : {}),
+        ...(updates.email ? { email: updates.email } : {}),
+        ...(updates.role ? { role: updates.role } : {}),
+        ...(updates.department ? { department: updates.department } : {}),
+        ...(updates.title ? { title: updates.title } : {}),
         // Add other fields if they exist in UpdateUserDto
       };
-      await authApi.users.update(current.id, dto);
+      const updateResult = await authApi.users.update(current.id, dto);
+      if (!updateResult.ok) {
+        throw updateResult.error;
+      }
     } catch (error) {
       console.warn("Backend update for profile failed", error);
       throw error;
@@ -61,7 +113,7 @@ export const ProfileDomain = {
     return updated;
   },
   updatePreferences: async (
-    prefs: Partial<ExtendedUserProfile["preferences"]>
+    prefs: Partial<ExtendedUserProfile["preferences"]>,
   ): Promise<void> => {
     const current = await ProfileDomain.getCurrentProfile();
 
@@ -73,7 +125,7 @@ export const ProfileDomain = {
     }
   },
   updateSecurity: async (
-    sec: Partial<ExtendedUserProfile["security"]>
+    sec: Partial<ExtendedUserProfile["security"]>,
   ): Promise<void> => {
     const current = await ProfileDomain.getCurrentProfile();
 
@@ -85,7 +137,7 @@ export const ProfileDomain = {
     }
   },
   addPermission: async (
-    perm: GranularPermission
+    perm: GranularPermission,
   ): Promise<GranularPermission> => {
     const current = await ProfileDomain.getCurrentProfile();
     const newPerm = { ...perm, id: `perm-${Date.now()}` };

@@ -12,6 +12,7 @@
  * @module routes/exhibits/index
  */
 
+import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -46,13 +47,14 @@ export async function action({ request }: Route.ActionArgs) {
     switch (intent) {
       case "create":
         return { success: true, message: "Exhibit created" };
-      case "delete":
+      case "delete": {
         const id = formData.get("id") as string;
         if (id) {
           await DataService.exhibits.delete(id);
           return { success: true, message: "Exhibit deleted" };
         }
         return { success: false, error: "Missing ID" };
+      }
       case "update-status":
         // Implementation for status update
         return { success: true, message: "Status updated" };

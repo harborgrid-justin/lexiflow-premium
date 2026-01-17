@@ -2,8 +2,9 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import type { LegalDocument } from '@/types/documents';
 import { useState } from 'react';
+
+import type { LegalDocument } from '@/types/documents';
 type WorkflowStatus = 'draft' | 'pending_review' | 'in_review' | 'approved' | 'rejected' | 'completed'; interface WorkflowStep {
   id: string; name: string; type: 'review' | 'approval' | 'sign' | 'custom'; assigneeId: string; assigneeName: string; status: 'pending' | 'in_progress' | 'completed' | 'skipped'; dueDate?: string; completedAt?: string; comments?: string; order: number;
 } interface DocumentWorkflow {

@@ -10,7 +10,7 @@
 
 import { communicationsApi } from "@/lib/frontend-api";
 
-type Message = {
+type CommunicationMessage = {
   id: string;
   subject: string;
   from: string;
@@ -23,7 +23,7 @@ type Message = {
 };
 
 export interface MessagesLoaderData {
-  messages: Message[];
+  messages: CommunicationMessage[];
   unreadCount: number;
 }
 
@@ -32,8 +32,12 @@ export async function messagesLoader() {
     page: 1,
     limit: 100,
   });
-  const messages = result.ok ? result.data.data : [];
-  const unreadCount = messages.filter((m: Message) => !m.read).length;
+  const messages: CommunicationMessage[] = result.ok
+    ? (result.data.data as CommunicationMessage[])
+    : [];
+  const unreadCount = messages.filter(
+    (m: CommunicationMessage) => !m.read,
+  ).length;
 
   return {
     messages: messages || [],

@@ -44,8 +44,14 @@ import { DataService } from "@/services/data/data-service.service";
 import { Scheduler } from "@/utils/scheduler";
 
 // Types
-import { Contact } from "@/lib/frontend-api";
 import { Attachment, Conversation, Message } from "@/types";
+
+interface Contact {
+  id: string;
+  name: string;
+  role?: string;
+  email?: string;
+}
 
 // Re-export types for consumers
 export type { Attachment, Contact, Conversation, Message };
@@ -183,10 +189,10 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
   const filteredConversations = useMemo(() => {
     const term = searchTerm.toLowerCase();
     return sortedConversations.filter(
-      (c) =>
+      (c: Conversation) =>
         c.name.toLowerCase().includes(term) ||
-        c.role.toLowerCase().includes(term) ||
-        c.messages.some((m) => m.text.toLowerCase().includes(term)),
+        (c.role || "").toLowerCase().includes(term) ||
+        c.messages.some((m: Message) => m.text.toLowerCase().includes(term)),
     );
   }, [sortedConversations, searchTerm]);
 
@@ -194,7 +200,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
     // Ensure contactsList is an array before filtering
     const safeContactsList = Array.isArray(contactsList) ? contactsList : [];
     return safeContactsList.filter(
-      (c) =>
+      (c: Contact) =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (c.role || "").toLowerCase().includes(searchTerm.toLowerCase()),
     );
@@ -215,10 +221,10 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
       );
     }
 
-    const targetConv = conversations.find((c) => c.id === id);
+    const targetConv = conversations.find((c: Conversation) => c.id === id);
     setInputText(targetConv?.draft || "");
     setPendingAttachments([]);
-    setIsPrivilegedMode(targetConv?.role.includes("Client") || false);
+    setIsPrivilegedMode(targetConv?.role?.includes("Client") || false);
     setActiveConvId(id);
 
     setConversations((prev) =>
@@ -269,7 +275,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
           c.id === activeConvId
             ? {
                 ...c,
-                messages: c.messages.map((m) =>
+                messages: c.messages.map((m: Message) =>
                   m.id === newMessage.id
                     ? { ...m, status: "delivered" as const }
                     : m,

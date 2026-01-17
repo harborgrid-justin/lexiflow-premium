@@ -21,9 +21,10 @@
  * - O(1) duplicate detection
  */
 
-import { QueueManager } from "./queue/queueManager";
-import { CacheManager } from "./cache/cacheManager";
 import { BackendSyncService } from "./backend-sync.service";
+import { CacheManager } from "./cache/cacheManager";
+import { QueueManager } from "./queue/queueManager";
+
 import type { Mutation, SyncResult } from "./types/syncTypes";
 
 /**

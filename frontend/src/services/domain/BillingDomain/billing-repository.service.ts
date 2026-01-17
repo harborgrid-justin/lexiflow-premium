@@ -3,8 +3,9 @@
  * Base class and validation methods for BillingRepository
  */
 
-import { Repository } from "@/services/core/Repository";
 import { BillingApiService } from "@/api/billing/finance";
+import { Repository } from "@/services/core/Repository";
+
 import type { TimeEntry } from "./types";
 
 /**

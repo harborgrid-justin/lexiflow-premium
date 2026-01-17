@@ -24,7 +24,7 @@ import {
 } from "@/api/intelligence/clauses-api";
 import { ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { BaseEntity, Clause } from "@/types";
+import { type BaseEntity, type Clause } from "@/types";
 
 export const CLAUSE_QUERY_KEYS = {
   all: () => ["clauses"] as const,

@@ -1,7 +1,7 @@
 import { TimeEntriesApiService } from "@/api/billing/work-logs-api";
 import { HRApiService } from "@/api/hr/hr-api";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { StaffMember } from "@/types";
+import { type StaffMember } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
 class HRRepositoryClass {

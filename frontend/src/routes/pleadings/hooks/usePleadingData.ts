@@ -7,7 +7,10 @@
 
 import { queryClient, useMutation, useQuery } from "@/hooks/backend";
 import { DataService } from "@/services/data/data-service.service";
-import type { Pleading } from "@/types";
+import type { PleadingDocument, PleadingTemplate } from "@/types";
+
+type Citation = Record<string, unknown>;
+type EvidenceItem = Record<string, unknown>;
 
 export function usePleadingData() {
   // Fetch all pleadings using DataService repository
@@ -15,46 +18,44 @@ export function usePleadingData() {
     data: pleadings = [],
     isLoading: pleadingsLoading,
     refetch: refetchPleadings,
-  } = useQuery(["pleadings"], async () => {
+  } = useQuery<PleadingDocument[]>(["pleadings"], async () => {
     const data = await DataService.pleadings.getAll();
-    return data || [];
+    return (data || []) as PleadingDocument[];
   });
 
   // Fetch templates
-  const { data: templates = [], isLoading: templatesLoading } = useQuery(
-    ["pleadings", "templates"],
-    async () => {
-      const data = await DataService.templates.getAll();
-      return data?.filter((t: any) => t.type === "pleading") || [];
-    },
-  );
+  const { data: templates = [], isLoading: templatesLoading } = useQuery<
+    PleadingTemplate[]
+  >(["pleadings", "templates"], async () => {
+    const data = await DataService.templates.getAll();
+    return (
+      data?.filter((t: PleadingTemplate) => t.category === "pleading") || []
+    );
+  });
 
   // Fetch citations repository
-  const { data: citations = [], isLoading: citationsLoading } = useQuery(
-    ["citations"],
-    async () => {
-      const data = await DataService.citations.getAll();
-      return data || [];
-    },
-  );
+  const { data: citations = [], isLoading: citationsLoading } = useQuery<
+    Citation[]
+  >(["citations"], async () => {
+    const data = await DataService.citations.getAll();
+    return data || [];
+  });
 
   // Fetch evidence repository
-  const { data: evidence = [], isLoading: evidenceLoading } = useQuery(
-    ["evidence"],
-    async () => {
-      const data = await DataService.evidence.getAll();
-      return data || [];
-    },
-  );
+  const { data: evidence = [], isLoading: evidenceLoading } = useQuery<
+    EvidenceItem[]
+  >(["evidence"], async () => {
+    const data = await DataService.evidence.getAll();
+    return data || [];
+  });
 
   // Create/Update pleading
   const savePleadingMutation = useMutation(
-    async (pleading: Partial<Pleading> & { id?: string }) => {
+    async (pleading: Partial<PleadingDocument> & { id?: string }) => {
       if (pleading.id) {
         return await DataService.pleadings.update(pleading.id, pleading);
-      } else {
-        return await DataService.pleadings.add(pleading);
       }
+      return await DataService.pleadings.add(pleading);
     },
     {
       onSuccess: () => {
@@ -77,7 +78,7 @@ export function usePleadingData() {
 
   // Add citation
   const addCitationMutation = useMutation(
-    async (citation: any) => {
+    async (citation: Citation) => {
       return await DataService.citations.add(citation);
     },
     {
@@ -128,10 +129,12 @@ export function usePleadingEditor(pleadingId?: string) {
   );
 
   // Auto-save mutation
-  const autoSaveMutation = useMutation(async (updates: Partial<Pleading>) => {
-    if (!pleadingId) throw new Error("Pleading ID required");
-    return await DataService.pleadings.update(pleadingId, updates);
-  });
+  const autoSaveMutation = useMutation(
+    async (updates: Partial<PleadingDocument>) => {
+      if (!pleadingId) throw new Error("Pleading ID required");
+      return await DataService.pleadings.update(pleadingId, updates);
+    },
+  );
 
   return {
     pleading,

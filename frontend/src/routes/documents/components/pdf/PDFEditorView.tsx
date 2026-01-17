@@ -1,24 +1,30 @@
+import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
-import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from "@/hooks/useTheme";
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { LegalDocument } from '@/types';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
+import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
-import { Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
-import { Field, InteractiveOverlay } from '../preview/InteractiveOverlay';
+
+import { AcrobatToolbar } from '../preview/AcrobatToolbar';
+import { InteractiveOverlay } from '../preview/InteractiveOverlay';
+
+import type { PDFTool } from '../preview/AcrobatToolbar';
+import type { Field } from '../preview/InteractiveOverlay';
+import type { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
+import type { LegalDocument } from '@/types';
 
 export function PDFEditorView() {
     const { theme } = useTheme();
+    const documentsService = DataService.documents as DocumentRepository;
     const documentSelection = useSingleSelection<LegalDocument>(null, (a, b) => a.id === b.id);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -26,9 +32,9 @@ export function PDFEditorView() {
     const { register } = useBlobRegistry();
 
     // Load documents from IndexedDB via useQuery for accurate, cached data
-    const { data: allDocs = [], isLoading, error, refetch } = useQuery(
+    const { data: allDocs = [], isLoading, error, refetch } = useQuery<LegalDocument[]>(
         queryKeys.documents.all(),
-        () => DataService.documents.getAll()
+        (_signal) => documentsService.getAll()
     );
 
     // Filter PDF documents
@@ -57,7 +63,7 @@ export function PDFEditorView() {
         let isMounted = true;
         if (documentSelection.selected) {
             const loadUrl = async () => {
-                const blob = await DataService.documents.getFile(documentSelection.selected!.id);
+                const blob = await documentsService.getFile(documentSelection.selected!.id);
                 if (isMounted && blob) {
                     const url = register(blob);
                     setPreviewUrl(url);
@@ -65,7 +71,7 @@ export function PDFEditorView() {
                     setPreviewUrl(null);
                 }
             };
-            loadUrl();
+            void loadUrl();
         } else {
             setPreviewUrl(null);
         }
@@ -88,7 +94,7 @@ export function PDFEditorView() {
     };
 
     if (error) {
-        return <ErrorState message="Failed to load documents" onRetry={refetch} />;
+        return <ErrorState message="Failed to load documents" onRetry={() => void refetch()} />;
     }
 
     return (

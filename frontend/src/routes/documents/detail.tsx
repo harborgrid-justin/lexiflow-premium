@@ -7,6 +7,7 @@
  */
 
 import { documentsApi } from '@/lib/frontend-api';
+import { DataService } from '@/services/dataService';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
@@ -197,7 +198,7 @@ export default function DocumentDetailRoute() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = document.title;
+      a.download = doc.title;
       a.click();
       URL.revokeObjectURL(url);
     } catch (error) {
@@ -257,7 +258,7 @@ export default function DocumentDetailRoute() {
         </div>
 
         <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          {document.title}
+          {doc.title}
         </h1>
 
         {/* Tabs */}

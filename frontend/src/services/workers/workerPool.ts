@@ -98,7 +98,7 @@ function validateFactory(factory: unknown, methodName: string): void {
   if (typeof factory !== "function") {
     throw new ValidationError(
       `[WorkerPool.${methodName}] Factory must be a function`,
-      { factory: typeof factory }
+      { factory: typeof factory },
     );
   }
 }
@@ -111,7 +111,7 @@ function validatePoolSize(size: unknown, methodName: string): void {
   if (typeof size !== "number" || size <= 0 || !Number.isInteger(size)) {
     throw new ValidationError(
       `[WorkerPool.${methodName}] Pool size must be a positive integer`,
-      { size }
+      { size },
     );
   }
 }
@@ -149,8 +149,8 @@ export class WorkerPool {
     private factory: () => Worker,
     private size: number = Math.max(
       1,
-      Math.floor((navigator.hardwareConcurrency || 4) / 2)
-    )
+      Math.floor((navigator.hardwareConcurrency || 4) / 2),
+    ),
   ) {
     validateFactory(factory, "constructor");
     validatePoolSize(size, "constructor");
@@ -180,7 +180,7 @@ export class WorkerPool {
     }
 
     console.log(
-      `[WorkerPool] Successfully created ${this.workers.length}/${this.size} workers`
+      `[WorkerPool] Successfully created ${this.workers.length}/${this.size} workers`,
     );
   }
 
@@ -216,7 +216,7 @@ export class WorkerPool {
   acquire(timeout?: number): Promise<Worker> {
     if (this.isTerminated) {
       return Promise.reject(
-        new Error("[WorkerPool.acquire] Worker pool has been terminated")
+        new Error("[WorkerPool.acquire] Worker pool has been terminated"),
       );
     }
 
@@ -228,7 +228,9 @@ export class WorkerPool {
 
     // Slow path: queue the request
     return new Promise<Worker>((resolve, reject) => {
-      const task: WorkerTask<Worker> = { resolve, reject, timeout };
+      const task: WorkerTask<Worker> = timeout
+        ? { resolve, reject, timeout }
+        : { resolve, reject };
       this.queue.push(task);
 
       // Set timeout if specified
@@ -239,8 +241,8 @@ export class WorkerPool {
             this.queue.splice(index, 1);
             reject(
               new Error(
-                `[WorkerPool.acquire] Worker acquisition timed out after ${timeout}ms`
-              )
+                `[WorkerPool.acquire] Worker acquisition timed out after ${timeout}ms`,
+              ),
             );
           }
         }, timeout);
@@ -320,12 +322,12 @@ export class WorkerPool {
    */
   async execute<T>(
     task: (worker: Worker) => Promise<T>,
-    timeout?: number
+    timeout?: number,
   ): Promise<T> {
     if (typeof task !== "function") {
       throw new ValidationError(
         "[WorkerPool.execute] Task must be a function",
-        { task: typeof task }
+        { task: typeof task },
       );
     }
 
@@ -363,12 +365,12 @@ export class WorkerPool {
    * - Memory: O(n) where n = number of tasks
    */
   async executeAll<T>(
-    tasks: Array<(worker: Worker) => Promise<T>>
+    tasks: Array<(worker: Worker) => Promise<T>>,
   ): Promise<T[]> {
     if (!Array.isArray(tasks)) {
       throw new ValidationError(
         "[WorkerPool.executeAll] Tasks must be an array",
-        { tasks: typeof tasks }
+        { tasks: typeof tasks },
       );
     }
 
@@ -406,7 +408,7 @@ export class WorkerPool {
     // Reject all queued tasks
     this.queue.forEach((task) => {
       task.reject(
-        new Error("[WorkerPool] Pool terminated while task was queued")
+        new Error("[WorkerPool] Pool terminated while task was queued"),
       );
     });
     this.queue = [];
@@ -423,7 +425,7 @@ export class WorkerPool {
     });
 
     console.log(
-      `[WorkerPool] Terminated ${terminatedCount}/${this.workers.length} workers`
+      `[WorkerPool] Terminated ${terminatedCount}/${this.workers.length} workers`,
     );
 
     this.workers = [];

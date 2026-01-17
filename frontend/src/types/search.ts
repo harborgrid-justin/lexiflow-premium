@@ -23,18 +23,20 @@ export interface SearchResult {
  */
 export interface SearchQuery {
   q: string;
-  type?: 'all' | 'cases' | 'documents' | 'docket' | 'contacts' | 'tasks';
+  type?: "all" | "cases" | "documents" | "docket" | "contacts" | "tasks";
   filters?: Record<string, unknown>;
   page?: number;
   limit?: number;
 }
+
+export type ResearchQuery = SearchQuery;
 
 /**
  * Search suggestion for autocomplete
  */
 export interface SearchSuggestion {
   text: string;
-  type: 'query' | 'entity' | 'tag';
+  type: "query" | "entity" | "tag";
   score: number;
   count?: number;
 }
@@ -54,7 +56,7 @@ export interface SearchStats {
  */
 export interface ReindexResult {
   jobId: string;
-  status: 'queued' | 'running' | 'completed' | 'failed';
+  status: "queued" | "running" | "completed" | "failed";
   documentsProcessed?: number;
   totalDocuments?: number;
   startedAt?: string;

@@ -36,6 +36,7 @@ import {
 
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from "@/providers";
@@ -179,8 +180,8 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
 
   const handleNavigate = (tab: string, context?: Record<string, unknown>) => {
     setActiveTab(tab as WarRoomView);
-    if (tab === "witnesses" && context?.witnessId) {
-      setSelectedWitnessId(context.witnessId as string);
+    if (tab === "witnesses" && context?.["witnessId"]) {
+      setSelectedWitnessId(context["witnessId"] as string);
     }
   };
 
@@ -488,7 +489,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
         </div>
 
         {/* Sub-Navigation (Pills) */}
-        {activeParentTab && activeParentTab.subTabs.length > 1 && (
+        {activeParentTab?.subTabs && activeParentTab.subTabs.length > 1 && (
           <div
             className={cn(
               "flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4",

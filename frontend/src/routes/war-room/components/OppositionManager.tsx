@@ -21,6 +21,7 @@ import React, { useState } from 'react';
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -54,7 +55,7 @@ interface OppositionManagerProps {
 // COMPONENT
 // ============================================================================
 
-export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) => {
+export function OppositionManager({ caseId }: OppositionManagerProps) {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================
@@ -180,7 +181,9 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
           <OppositionList
             entities={filteredEntities}
             onSelect={handleSelectEntity}
-            selectedId={entitySelection.selected?.id}
+            {...(entitySelection.selected?.id
+              ? { selectedId: entitySelection.selected.id }
+              : {})}
           />
         </div>
 
@@ -254,4 +257,4 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
       </Modal>
     </div>
   );
-};
+}

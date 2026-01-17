@@ -10,10 +10,12 @@
  */
 
 import { StorageUtils } from "@/utils/storage";
-import type { Mutation } from "../types/syncTypes";
-import { QUEUE_KEY } from "../config/syncConfig";
+
 import { CacheManager } from "../cache/cacheManager";
+import { QUEUE_KEY } from "../config/syncConfig";
 import { createPatch, isPatchEmpty } from "../utils/patchGenerator";
+
+import type { Mutation } from "../types/syncTypes";
 
 /**
  * Queue Manager - Singleton module for mutation queue operations.

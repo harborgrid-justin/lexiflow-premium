@@ -2,20 +2,20 @@
 // Auto-generated from models.ts split
 
 import {
-  BillingModel,
-  InvoiceStatus,
-  LedesActivityCode,
-  TimeEntryStatus,
+  type BillingModel,
+  type InvoiceStatus,
+  type LedesActivityCode,
+  type TimeEntryStatus,
 } from "./enums";
 import {
-  BaseEntity,
-  CaseId,
-  EntityId,
-  MetadataRecord,
-  Money,
-  UserId,
+  type BaseEntity,
+  type CaseId,
+  type EntityId,
+  type MetadataRecord,
+  type Money,
+  type UserId,
 } from "./primitives";
-import { TrustSubLedger } from "./trust-accounts";
+import { type TrustSubLedger } from "./trust-accounts";
 
 // --- CLUSTER 3: FINANCIAL & BILLING ---
 

@@ -2,8 +2,8 @@
  * AI Service Interface - Common interface for AI providers
  */
 
-import type { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeResult } from '@/types/intelligence';
 import type { ParsedDocket } from '@/types';
+import type { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeResult } from '@/types/intelligence';
 
 /**
  * Common interface for AI services (Gemini, OpenAI, etc.)

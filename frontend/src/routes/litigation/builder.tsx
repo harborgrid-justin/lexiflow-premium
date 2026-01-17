@@ -129,8 +129,6 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
       case "save": {
         const name = formData.get("name") as string;
         const caseId = formData.get("caseId") as string;
-        const templateId = formData.get("templateId") as string;
-        const objectives = formData.get("objectives") as string;
 
         if (!name?.trim()) {
           return { success: false, error: "Strategy name is required" };

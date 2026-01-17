@@ -1,7 +1,7 @@
 // types/primitives.ts
 // Domain Primitives & Value Objects
 
-import { CurrencyCode } from "./enums";
+import { type CurrencyCode } from "./enums";
 
 export type Brand<K, T> = K & { readonly __brand: T };
 export type UUID = Brand<string, "UUID">;

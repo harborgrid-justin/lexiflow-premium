@@ -1,7 +1,7 @@
 // types/analytics.ts
 // Analytics and Integrations types
 
-import { BaseEntity, MetadataRecord } from "./primitives";
+import { type BaseEntity, type MetadataRecord } from "./primitives";
 
 // ====================
 // ANALYTICS ====================

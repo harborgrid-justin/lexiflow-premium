@@ -5,9 +5,9 @@
 
 import { WitnessesApiService } from "@/api/discovery/witnesses-api";
 import { ExhibitsApiService } from "@/api/trial/exhibits-api";
-import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
-import { Fact, Juror, TrialExhibit, Witness } from "@/types";
+import { Repository } from "@/services/core/Repository";
+import { type Fact, type Juror, type TrialExhibit, type Witness } from "@/types";
 
 export const TRIAL_QUERY_KEYS = {
   exhibits: {
@@ -48,7 +48,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
   private validateCaseId(caseId: string, methodName: string): void {
     if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
       throw new Error(
-        `[TrialRepository.${methodName}] Invalid caseId parameter`
+        `[TrialRepository.${methodName}] Invalid caseId parameter`,
       );
     }
   }
@@ -60,7 +60,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
   getJurors = async (caseId: string): Promise<Juror[]> => {
     this.validateCaseId(caseId, "getJurors");
     console.warn(
-      "[TrialRepository.getJurors] Juror backend API not implemented"
+      "[TrialRepository.getJurors] Juror backend API not implemented",
     );
     return [];
   };
@@ -68,11 +68,11 @@ export class TrialRepository extends Repository<TrialExhibit> {
   addJuror = async (juror: Juror): Promise<void> => {
     if (!juror || typeof juror !== "object") {
       throw new ValidationError(
-        "[TrialRepository.addJuror] Invalid juror data"
+        "[TrialRepository.addJuror] Invalid juror data",
       );
     }
     console.error(
-      "[TrialRepository.addJuror] Juror backend API not implemented"
+      "[TrialRepository.addJuror] Juror backend API not implemented",
     );
     throw new Error("Juror operations not yet implemented in backend");
   };
@@ -80,11 +80,11 @@ export class TrialRepository extends Repository<TrialExhibit> {
   strikeJuror = async (
     id: string,
     _party: "Plaintiff" | "Defense",
-    _cause?: string
+    _cause?: string,
   ): Promise<void> => {
     this.validateId(id, "strikeJuror");
     console.error(
-      "[TrialRepository.strikeJuror] Juror backend API not implemented"
+      "[TrialRepository.strikeJuror] Juror backend API not implemented",
     );
     throw new Error("Juror operations not yet implemented in backend");
   };
@@ -107,7 +107,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
     this.validateCaseId(caseId, "getWitnesses");
     try {
       return (await this.witnessesApi.getByCaseId(
-        caseId
+        caseId,
       )) as unknown as Witness[];
     } catch (error) {
       console.error("[TrialRepository.getWitnesses] Error:", error);
@@ -119,7 +119,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
     this.validateId(id, "rateWitness");
     if (typeof score !== "number" || score < 0 || score > 100) {
       throw new ValidationError(
-        "[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)"
+        "[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)",
       );
     }
 
@@ -138,7 +138,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
   addExhibit = async (exhibit: TrialExhibit): Promise<TrialExhibit> => {
     if (!exhibit || typeof exhibit !== "object") {
       throw new ValidationError(
-        "[TrialRepository.addExhibit] Invalid exhibit data"
+        "[TrialRepository.addExhibit] Invalid exhibit data",
       );
     }
     return await this.add(exhibit);
@@ -188,7 +188,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
 
   override async update(
     id: string,
-    updates: Partial<TrialExhibit>
+    updates: Partial<TrialExhibit>,
   ): Promise<TrialExhibit> {
     this.validateId(id, "update");
     try {
@@ -220,8 +220,8 @@ export class TrialRepository extends Repository<TrialExhibit> {
   }): Promise<TrialExhibit[]> {
     try {
       const filters: Record<string, string> = {};
-      if (criteria.caseId) filters.caseId = criteria.caseId;
-      if (criteria.status) filters.status = criteria.status;
+      if (criteria.caseId) filters["caseId"] = criteria.caseId;
+      if (criteria.status) filters["status"] = criteria.status;
 
       let exhibits = await this.exhibitsApi.getAll(filters);
 
@@ -231,7 +231,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
           (e) =>
             e.title?.toLowerCase().includes(lowerQuery) ||
             e.description?.toLowerCase().includes(lowerQuery) ||
-            e.exhibitNumber?.toLowerCase().includes(lowerQuery)
+            e.exhibitNumber?.toLowerCase().includes(lowerQuery),
         );
       }
 

@@ -60,7 +60,9 @@ class FrontendMemoryMonitor {
     if (typeof window === "undefined") {
       return;
     }
-    console.log("[MemoryMonitor] Starting with interval:", intervalMs);
+    if (import.meta.env.DEV) {
+      console.warn("[MemoryMonitor] Starting with interval:", intervalMs);
+    }
 
     this.monitorInterval = window.setInterval(() => {
       this.takeSnapshot();
@@ -75,7 +77,9 @@ class FrontendMemoryMonitor {
     if (this.monitorInterval && typeof window !== "undefined") {
       window.clearInterval(this.monitorInterval);
       this.monitorInterval = null;
-      console.log("[MemoryMonitor] Stopped");
+      if (import.meta.env.DEV) {
+        console.warn("[MemoryMonitor] Stopped");
+      }
     }
   }
 
@@ -87,7 +91,7 @@ class FrontendMemoryMonitor {
       return null;
     }
 
-    const memory = (performance as Record<string, unknown>).memory as {
+    const memory = (performance as Record<string, unknown>)["memory"] as {
       usedJSHeapSize: number;
       totalJSHeapSize: number;
       jsHeapSizeLimit: number;
@@ -124,17 +128,12 @@ class FrontendMemoryMonitor {
     if (usagePercent > 90) {
       console.error(
         `[MemoryMonitor] CRITICAL: Memory usage at ${usagePercent.toFixed(1)}% ` +
-          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
+          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`,
       );
     } else if (usagePercent > 75) {
       console.warn(
         `[MemoryMonitor] WARNING: Memory usage at ${usagePercent.toFixed(1)}% ` +
-          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
-      );
-    } else {
-      console.debug(
-        `[MemoryMonitor] Memory OK: ${usagePercent.toFixed(1)}% ` +
-          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
+          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`,
       );
     }
   }
@@ -161,7 +160,7 @@ class FrontendMemoryMonitor {
       }
 
       console.warn(
-        `[MemoryMonitor] Slow render: ${componentName} took ${duration.toFixed(2)}ms`
+        `[MemoryMonitor] Slow render: ${componentName} took ${duration.toFixed(2)}ms`,
       );
     }
   }
@@ -210,7 +209,7 @@ class FrontendMemoryMonitor {
         used: acc.used + s.usedJSHeapSize,
         total: acc.total + s.totalJSHeapSize,
       }),
-      { used: 0, total: 0 }
+      { used: 0, total: 0 },
     );
 
     const average = {
@@ -301,7 +300,9 @@ class FrontendMemoryMonitor {
     this.metrics.memorySnapshots.length = 0;
     this.metrics.cacheHits = 0;
     this.metrics.cacheMisses = 0;
-    console.log("[MemoryMonitor] Metrics reset");
+    if (import.meta.env.DEV) {
+      console.warn("[MemoryMonitor] Metrics reset");
+    }
   }
 
   /**
@@ -317,7 +318,7 @@ class FrontendMemoryMonitor {
         topSlowComponents: this.getTopSlowComponents(),
       },
       null,
-      2
+      2,
     );
   }
 }
@@ -327,7 +328,7 @@ export const memoryMonitor = FrontendMemoryMonitor.getInstance();
 
 // Development mode helper
 if (import.meta.env.DEV && typeof window !== "undefined") {
-  (window as unknown as Record<string, unknown>).__memoryMonitor =
+  (window as unknown as Record<string, unknown>)["__memoryMonitor"] =
     memoryMonitor;
-  console.log("[MemoryMonitor] Available globally as window.__memoryMonitor");
+  console.warn("[MemoryMonitor] Available globally as window.__memoryMonitor");
 }

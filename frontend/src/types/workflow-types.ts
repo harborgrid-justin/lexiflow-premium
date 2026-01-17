@@ -20,7 +20,8 @@ import {
   Square,
 } from "lucide-react";
 import * as React from "react";
-import { MetadataRecord } from "./primitives";
+
+import { type MetadataRecord } from "./primitives";
 
 export type NodeType =
   | "Start"
@@ -294,7 +295,7 @@ export type TypedWorkflowNode =
  */
 export function isNodeType<T extends TypedWorkflowNode["type"]>(
   node: TypedWorkflowNode,
-  type: T
+  type: T,
 ): node is Extract<TypedWorkflowNode, { type: T }> {
   return node.type === type;
 }
@@ -307,7 +308,7 @@ export function createTypedNode(
   label: string,
   x: number,
   y: number,
-  id?: string
+  id?: string,
 ): TypedWorkflowNode {
   const baseProps = {
     id: id || `node-${Date.now()}`,
@@ -328,7 +329,7 @@ export function createTypedNode(
         ...baseProps,
         type: "Decision",
         config: {},
-        ports: LITIGATION_PORTS["Default"],
+        ports: LITIGATION_PORTS["Default"] ?? [],
       };
     case "Parallel":
       return {

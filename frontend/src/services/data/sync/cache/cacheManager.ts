@@ -9,15 +9,18 @@
  * @since 2025-12-18
  */
 
-import { LinearHash } from "@/utils/datastructures/linearHash";
 import { defaultWindowAdapter } from "@/services/infrastructure/adapters/WindowAdapter";
-import type { CacheEntry, CacheStats } from "../types/syncTypes";
+import { LinearHash } from "@/utils/datastructures/linearHash";
+
 import {
   MAX_CACHE_SIZE,
   CACHE_TTL_MS,
   CLEANUP_INTERVAL_MS,
   CACHE_EVICTION_RATIO,
 } from "../config/syncConfig";
+
+import type { CacheEntry, CacheStats } from "../types/syncTypes";
+
 
 /**
  * Bounded Linear Hash for O(1) duplicate detection.

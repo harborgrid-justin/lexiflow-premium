@@ -10,9 +10,9 @@
  * @module routes/cases/create
  */
 
-import { useCases } from './hooks/useCases';
 import { catalogApi, jurisdictionApi } from '@/lib/frontend-api';
 import NewCase from '@/routes/cases/components/create/NewCase';
+import { DataService } from '@/services/data/data-service.service';
 import { CaseStatus } from '@/types';
 import { requireAuthentication } from '@/utils/route-guards';
 import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
@@ -95,7 +95,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Create the case
-    const newCase = await api.cases.add({
+    const newCase = await DataService.cases.add({
       ...caseData,
       jurisdiction: caseData.jurisdiction,
     });

@@ -18,6 +18,7 @@ import React from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -54,16 +55,16 @@ interface CaseHistoryItem {
 // ============================================================================
 // HELPER COMPONENTS
 // ============================================================================
-const SectionHeader: React.FC<{ title: string; className?: string }> = ({ title, className }) => {
+function SectionHeader({ title, className }: { title: string; className?: string }) {
     const { theme } = useTheme();
     return (
         <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default, className)}>
             {title}
         </h4>
     );
-};
+}
 
-const CaseHistoryCard: React.FC<{ caseItem: CaseHistoryItem }> = ({ caseItem }) => {
+function CaseHistoryCard({ caseItem }: { caseItem: CaseHistoryItem }) {
     const { theme } = useTheme();
     return (
         <div
@@ -76,7 +77,7 @@ const CaseHistoryCard: React.FC<{ caseItem: CaseHistoryItem }> = ({ caseItem }) 
             <p className={cn("text-xs font-medium", theme.text.primary)}>Result: {caseItem.result}</p>
         </div>
     );
-};
+}
 
 // ============================================================================
 // CONSTANTS

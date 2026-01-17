@@ -22,7 +22,7 @@ const AUTH_USER_KEY = "lexiflow_auth_user";
  * Check if auto-login is enabled
  */
 export function isAutoLoginEnabled(): boolean {
-  return import.meta.env.VITE_AUTO_LOGIN === "true" || import.meta.env.DEV;
+  return import.meta.env["VITE_AUTO_LOGIN"] === "true" || import.meta.env.DEV;
 }
 
 /**
@@ -89,7 +89,7 @@ export async function performAutoLogin(): Promise<boolean> {
 export async function initializeAutoLogin(): Promise<void> {
   if (isAutoLoginEnabled() && !isAuthenticated()) {
     console.log(
-      "[DevAutoLogin] Auto-login is enabled and user is not authenticated"
+      "[DevAutoLogin] Auto-login is enabled and user is not authenticated",
     );
     try {
       const success = await performAutoLogin();

@@ -1,27 +1,28 @@
 // types/misc.ts
 // Miscellaneous types - split from compatibility.ts
 
-import type * as React from "react";
-import type { LazyExoticComponent } from "react";
+import {
+  type EntityRole,
+  type EntityType,
+  type NavCategory,
+  type ServiceMethod,
+  type ServiceStatus,
+} from "./enums";
+import {
+  type BaseEntity,
+  type CaseId,
+  type EntityId,
+  type MetadataRecord,
+  type UserId,
+} from "./primitives";
+
 import type { Case, Party } from "./case";
 import type { LegalDocument } from "./documents";
-import {
-  EntityRole,
-  EntityType,
-  NavCategory,
-  ServiceMethod,
-  ServiceStatus,
-} from "./enums";
 import type { EvidenceItem } from "./evidence";
 import type { DocketEntry, Motion } from "./motion-docket";
-import {
-  BaseEntity,
-  CaseId,
-  EntityId,
-  MetadataRecord,
-  UserId,
-} from "./primitives";
 import type { WorkflowTask } from "./workflow";
+import type { LazyExoticComponent } from "react";
+import type * as React from "react";
 
 export interface Attachment {
   id?: string;

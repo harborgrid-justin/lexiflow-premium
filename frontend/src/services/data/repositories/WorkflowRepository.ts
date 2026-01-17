@@ -3,11 +3,11 @@ import { TEMPLATE_LIBRARY } from "@/api/types/workflowTemplates";
 import { TasksApiService } from "@/api/workflow/tasks-api";
 import { WorkflowApiService } from "@/api/workflow/workflow-api";
 import {
-  CasePhase,
+  type CasePhase,
   TaskPriorityBackend,
   TaskStatusBackend,
-  WorkflowTask,
-  WorkflowTemplateData,
+  type WorkflowTask,
+  type WorkflowTemplateData,
 } from "@/types";
 import { delay } from "@/utils/async";
 import { StorageUtils } from "@/utils/storage";
@@ -264,7 +264,7 @@ class WorkflowRepositoryClass {
       await delay(100);
       const tasks = (await this.tasksApi.getAll({
         caseId: id,
-      })) as WorkflowTask[];
+      }));
       const total = tasks?.length || 0;
       const completed =
         tasks?.filter((t) => t.status === TaskStatusBackend.COMPLETED).length ||

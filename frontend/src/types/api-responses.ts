@@ -7,14 +7,14 @@
  * @module ApiResponseTypes
  */
 
-import type { TimeEntry, Invoice } from './financial';
-import type { WorkflowProcess, WorkflowTemplateData } from './workflow';
-import type { TrialExhibit } from './evidence';
-import type { Juror, Witness } from './trial';
-import type { User, Organization } from './system';
 import type { Risk } from './compliance-risk';
-import type { LegalEntity, JudgeProfile } from './misc';
+import type { TrialExhibit } from './evidence';
+import type { TimeEntry, Invoice } from './financial';
 import type { LegalRule, BriefAnalysisSession } from './legal-research';
+import type { LegalEntity, JudgeProfile } from './misc';
+import type { User, Organization } from './system';
+import type { Juror, Witness } from './trial';
+import type { WorkflowProcess, WorkflowTemplateData } from './workflow';
 
 /**
  * Generic API response wrapper

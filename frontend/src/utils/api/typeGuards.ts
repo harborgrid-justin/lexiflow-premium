@@ -75,12 +75,13 @@ export function isDateString(value: unknown): value is string {
  */
 export function isApiError(error: unknown): error is ApiError {
   if (!isObject(error)) return false;
+  const errorRecord = error;
 
   return (
-    "message" in error &&
-    isString(error.message) &&
-    "statusCode" in error &&
-    isNumber(error.statusCode)
+    "message" in errorRecord &&
+    isString(errorRecord["message"]) &&
+    "statusCode" in errorRecord &&
+    isNumber(errorRecord["statusCode"])
   );
 }
 
@@ -88,12 +89,15 @@ export function isApiError(error: unknown): error is ApiError {
  * Check if response is a valid API success response
  */
 export function isApiResponse<T>(
-  response: unknown
+  response: unknown,
 ): response is ApiResponse<T> {
   if (!isObject(response)) return false;
+  const responseRecord = response;
 
   return (
-    "success" in response && isBoolean(response.success) && "data" in response
+    "success" in responseRecord &&
+    isBoolean(responseRecord["success"]) &&
+    "data" in responseRecord
   );
 }
 
@@ -101,21 +105,22 @@ export function isApiResponse<T>(
  * Check if response is a paginated response
  */
 export function isPaginatedResponse<T>(
-  response: unknown
+  response: unknown,
 ): response is PaginatedResponse<T> {
   if (!isObject(response)) return false;
+  const responseRecord = response;
 
   return (
-    "data" in response &&
-    isArray(response.data) &&
-    "total" in response &&
-    isNumber(response.total) &&
-    "page" in response &&
-    isNumber(response.page) &&
-    "limit" in response &&
-    isNumber(response.limit) &&
-    "totalPages" in response &&
-    isNumber(response.totalPages)
+    "data" in responseRecord &&
+    isArray(responseRecord["data"]) &&
+    "total" in responseRecord &&
+    isNumber(responseRecord["total"]) &&
+    "page" in responseRecord &&
+    isNumber(responseRecord["page"]) &&
+    "limit" in responseRecord &&
+    isNumber(responseRecord["limit"]) &&
+    "totalPages" in responseRecord &&
+    isNumber(responseRecord["totalPages"])
   );
 }
 
@@ -125,7 +130,7 @@ export function isPaginatedResponse<T>(
  * @throws Error if response is invalid
  */
 export function validatePaginatedResponse<T>(
-  response: unknown
+  response: unknown,
 ): asserts response is PaginatedResponse<T> {
   if (!isPaginatedResponse(response)) {
     throw new Error("Invalid paginated response structure");
@@ -154,7 +159,7 @@ export function validatePaginatedResponse<T>(
  * @throws Error if response is invalid
  */
 export function validateApiResponse<T>(
-  response: unknown
+  response: unknown,
 ): asserts response is ApiResponse<T> {
   if (!isApiResponse(response)) {
     throw new Error("Invalid API response structure");
@@ -181,7 +186,7 @@ export function hasProperties<T extends string>(
  */
 export function isArrayOf<T>(
   value: unknown,
-  guard: (item: unknown) => item is T
+  guard: (item: unknown) => item is T,
 ): value is T[] {
   return isArray(value) && value.every(guard);
 }
@@ -230,7 +235,7 @@ export function isUrl(value: unknown): value is string {
  */
 export function isEnumValue<T extends string | number>(
   value: unknown,
-  enumObj: Record<string, T>
+  enumObj: Record<string, T>,
 ): value is T {
   return Object.values(enumObj).includes(value as T);
 }
@@ -268,8 +273,8 @@ export function extractError(error: unknown): Error {
     return error;
   }
 
-  if (isObject(error) && "message" in error && isString(error.message)) {
-    return new Error(error.message);
+  if (isObject(error) && "message" in error && isString(error["message"])) {
+    return new Error(error["message"]);
   }
 
   return new Error("An unknown error occurred");
@@ -282,7 +287,7 @@ export function extractError(error: unknown): Error {
  */
 export function assertDefined<T>(
   value: T | null | undefined,
-  message: string = "Value is null or undefined"
+  message: string = "Value is null or undefined",
 ): asserts value is T {
   if (value === null || value === undefined) {
     throw new Error(message);
@@ -296,7 +301,7 @@ export function assertDefined<T>(
  */
 export function assertTruthy<T>(
   value: T,
-  message: string = "Value is falsy"
+  message: string = "Value is falsy",
 ): asserts value is NonNullable<T> {
   if (!value) {
     throw new Error(message);
@@ -308,7 +313,7 @@ export function assertTruthy<T>(
  */
 export function safeJsonParse<T>(
   json: string,
-  guard: (value: unknown) => value is T
+  guard: (value: unknown) => value is T,
 ): T | null {
   try {
     const parsed = JSON.parse(json);
@@ -322,7 +327,7 @@ export function safeJsonParse<T>(
  * Create a type guard from a schema validator
  */
 export function createTypeGuard<T>(
-  validator: (value: unknown) => boolean
+  validator: (value: unknown) => boolean,
 ): (value: unknown) => value is T {
   return (value: unknown): value is T => validator(value);
 }
@@ -333,7 +338,7 @@ export function createTypeGuard<T>(
 export function validateAndTransform<TInput, TOutput>(
   data: unknown,
   validator: (value: unknown) => value is TInput,
-  transformer: (value: TInput) => TOutput
+  transformer: (value: TInput) => TOutput,
 ): TOutput {
   if (!validator(data)) {
     throw new Error("Data validation failed");
@@ -346,7 +351,7 @@ export function validateAndTransform<TInput, TOutput>(
  */
 export function isPartial<T extends Record<string, unknown>>(
   obj: unknown,
-  requiredProps: (keyof T)[]
+  requiredProps: (keyof T)[],
 ): obj is Partial<T> {
   if (!isObject(obj)) return false;
   // Partial means some or all properties may be present
@@ -358,12 +363,12 @@ export function isPartial<T extends Record<string, unknown>>(
  */
 export function isComplete<T extends Record<string, unknown>>(
   obj: unknown,
-  requiredProps: (keyof T)[]
+  requiredProps: (keyof T)[],
 ): obj is T {
   if (!isObject(obj)) return false;
   return requiredProps.every(
     (prop) =>
-      prop in obj && (obj as Record<keyof T, unknown>)[prop] !== undefined
+      prop in obj && (obj as Record<keyof T, unknown>)[prop] !== undefined,
   );
 }
 

@@ -12,14 +12,14 @@
  * @module routes/correspondence/index
  */
 
-import { Suspense } from 'react';
-import { Await, useLoaderData } from 'react-router';
-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
 import { communicationsApi } from '@/lib/frontend-api';
-import type { Route } from "./+types/index";
+import { Suspense } from 'react';
 import type { LoaderFunctionArgs } from "react-router";
+import { Await, useLoaderData } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // Import standard components
 import { CorrespondenceProvider } from './CorrespondenceProvider';
@@ -45,7 +45,7 @@ export function meta({ data }: Route.MetaArgs) {
  * Fetches correspondence on the client side only
  * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
  */
-export async function clientLoader({ request }: LoaderFunctionArgs) {
+export async function clientLoader({ request: _request }: LoaderFunctionArgs) {
   const result = await communicationsApi.getAllCorrespondence({
     page: 1,
     limit: 200,
@@ -53,9 +53,20 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
 
   const items = result.ok ? result.data.data : [];
 
+  type CorrespondenceItem = {
+    id: string;
+    correspondenceType?: string;
+    status?: string;
+    sender?: string;
+    date?: string;
+    subject?: string;
+    notes?: string;
+    recipients?: string[];
+  };
+
   const emails = items
-    .filter((item: any) => item.correspondenceType === "email")
-    .map((item: any) => ({
+    .filter((item: CorrespondenceItem) => item.correspondenceType === "email")
+    .map((item: CorrespondenceItem) => ({
       id: item.id,
       read: item.status === "received",
       from: item.sender || "Unknown",
@@ -65,8 +76,8 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
     }));
 
   const letters = items
-    .filter((item: any) => item.correspondenceType === "letter")
-    .map((item: any) => ({
+    .filter((item: CorrespondenceItem) => item.correspondenceType === "letter")
+    .map((item: CorrespondenceItem) => ({
       id: item.id,
       title: item.subject,
       recipient: item.recipients?.join(", ") || "Unknown",
@@ -74,8 +85,8 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
     }));
 
   const templates = items
-    .filter((item: any) => item.status === "draft")
-    .map((item: any) => ({
+    .filter((item: CorrespondenceItem) => item.status === "draft")
+    .map((item: CorrespondenceItem) => ({
       id: item.id,
       name: item.subject,
       category: item.correspondenceType,
@@ -160,7 +171,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function CorrespondenceIndexRoute() {
-  const initialData = useLoaderData() as typeof clientLoader;
+  const initialData = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Correspondence" />}>

@@ -5,10 +5,12 @@
  * Integration: Opp #10 from architecture docs
  */
 
+import { SystemEventType } from "@/types/integration-types";
+
+import { BaseEventHandler } from "./base-event.handler.service";
+
 import type { DocketEntry, DocketId } from "@/types";
 import type { SystemEventPayloads } from "@/types/integration-types";
-import { SystemEventType } from "@/types/integration-types";
-import { BaseEventHandler } from "./base-event.handler.service";
 
 export class ServiceCompletedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED]

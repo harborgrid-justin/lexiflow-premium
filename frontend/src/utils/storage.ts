@@ -97,7 +97,7 @@ export const StorageUtils = {
   validateKey: (key: string, methodName: string): void => {
     if (!key || typeof key !== "string" || key.trim() === "") {
       throw new Error(
-        `[StorageUtils.${methodName}] Storage key is required and must be a non-empty string`
+        `[StorageUtils.${methodName}] Storage key is required and must be a non-empty string`,
       );
     }
   },
@@ -140,7 +140,7 @@ export const StorageUtils = {
       } catch (parseError) {
         console.error(
           `[StorageUtils.get] JSON parse error for key "${key}":`,
-          parseError
+          parseError,
         );
         return defaultData;
       }
@@ -221,7 +221,7 @@ export const StorageUtils = {
         error.name === "QuotaExceededError"
       ) {
         console.warn(
-          "[StorageUtils] LocalStorage quota exceeded. Consider clearing old data."
+          "[StorageUtils] LocalStorage quota exceeded. Consider clearing old data.",
         );
       }
 
@@ -307,7 +307,7 @@ export const StorageUtils = {
         window.localStorage.removeItem(key);
       });
 
-      console.log(`[StorageUtils] Cleared ${keysToRemove.length} items`);
+      console.warn(`[StorageUtils] Cleared ${keysToRemove.length} items`);
 
       if (typeof window !== "undefined") {
         window.location.reload();
@@ -411,7 +411,7 @@ export const StorageUtils = {
 
       if (size > STORAGE_SIZE_WARNING_THRESHOLD) {
         console.warn(
-          `[StorageUtils] Storage size (${(size / 1024 / 1024).toFixed(2)} MB) exceeds warning threshold`
+          `[StorageUtils] Storage size (${(size / 1024 / 1024).toFixed(2)} MB) exceeds warning threshold`,
         );
       }
     } catch (error) {

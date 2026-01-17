@@ -7,7 +7,9 @@
  * @module providers/authUtils
  */
 
-import type { AuthUser } from "./authTypes";
+import { STORAGE_KEYS, StorageUtils } from "@/utils/storage";
+
+import type { AuthUser } from "@/lib/auth";
 
 // ============================================================================
 // Utility Functions for Loaders
@@ -17,10 +19,14 @@ import type { AuthUser } from "./authTypes";
  * Get current user from request cookies/headers
  * Use in route loaders for SSR authentication
  */
-export async function getAuthUser(_request: Request): Promise<AuthUser | null> {
+export async function getAuthUser(request: Request): Promise<AuthUser | null> {
+  void request;
   // Production implementation using StorageUtils for client-side auth
-  const token = StorageUtils.getItem<string>(STORAGE_KEYS.AUTH_TOKEN);
-  const user = StorageUtils.getItem<AuthUser>(STORAGE_KEYS.USER_SESSION);
+  const token = StorageUtils.get<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
+  const user = StorageUtils.get<AuthUser | null>(
+    STORAGE_KEYS.USER_SESSION,
+    null,
+  );
 
   if (token && user) {
     return user;

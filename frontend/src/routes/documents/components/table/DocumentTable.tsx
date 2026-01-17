@@ -1,9 +1,10 @@
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { useTheme } from "@/hooks/useTheme";
-import { LegalDocument } from '@/types';
-import { cn } from '@/lib/cn';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useCallback, useMemo, useState, useTransition } from 'react';
+
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import type { LegalDocument } from '@/types';
 import { DocumentRow } from './DocumentRow';
 
 interface DocumentTableProps {

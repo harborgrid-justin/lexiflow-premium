@@ -5,13 +5,15 @@
  * Integration: Opp #4 from architecture docs
  */
 
+import { SystemEventType } from "@/types/integration-types";
+
+import { BaseEventHandler } from "./base-event.handler.service";
+
 import type { EvidenceId, EvidenceItem, UUID } from "@/types";
 import type {
   IntegrationResult,
   SystemEventPayloads,
 } from "@/types/integration-types";
-import { SystemEventType } from "@/types/integration-types";
-import { BaseEventHandler } from "./base-event.handler.service";
 
 export class DocumentUploadedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.DOCUMENT_UPLOADED]
@@ -19,7 +21,7 @@ export class DocumentUploadedHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.DOCUMENT_UPLOADED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.DOCUMENT_UPLOADED]
+    payload: SystemEventPayloads[typeof SystemEventType.DOCUMENT_UPLOADED],
   ): Promise<IntegrationResult> {
     const actions: string[] = [];
     const { document } = payload;
@@ -31,6 +33,11 @@ export class DocumentUploadedHandler extends BaseEventHandler<
 
     // Dynamic import to avoid circular dependency
     const { DataService } = await import("@/services/data/dataService");
+
+    const fileSizeValue =
+      typeof document.fileSize === "number"
+        ? String(document.fileSize)
+        : document.fileSize;
 
     const evidenceItem: EvidenceItem = {
       id: `ev-auto-${Date.now()}` as EvidenceId,
@@ -53,10 +60,7 @@ export class DocumentUploadedHandler extends BaseEventHandler<
         },
       ],
       tags: ["Auto-Ingest"],
-      fileSize:
-        typeof document.fileSize === "number"
-          ? String(document.fileSize)
-          : document.fileSize,
+      ...(fileSizeValue ? { fileSize: fileSizeValue } : {}),
     };
 
     await DataService.evidence.add(evidenceItem);
@@ -66,7 +70,7 @@ export class DocumentUploadedHandler extends BaseEventHandler<
   }
 
   private shouldReplicateToEvidence(
-    document: SystemEventPayloads[typeof SystemEventType.DOCUMENT_UPLOADED]["document"]
+    document: SystemEventPayloads[typeof SystemEventType.DOCUMENT_UPLOADED]["document"],
   ): boolean {
     const isProduction =
       document.tags.includes("Production") || document.title.includes("Prod_");

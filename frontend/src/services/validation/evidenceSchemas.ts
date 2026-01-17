@@ -122,8 +122,9 @@
  * Used by EvidenceRepository, DiscoveryPlatform, ChainOfCustody components
  */
 
-import type { ChainOfCustodyEvent, EvidenceItem } from "@/types";
 import { AdmissibilityStatusEnum, CustodyActionType } from "@/types/enums";
+
+import type { ChainOfCustodyEvent, EvidenceItem } from "@/types";
 
 // =============================================================================
 // XSS PREVENTION (Private)
@@ -182,7 +183,7 @@ const custodyActions = Object.values(CustodyActionType);
  * Validates all evidence intake and update operations
  */
 const validateEvidenceItem = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<EvidenceItem>> => {
   const errors: Array<{ path: string; message: string }> = [];
 
@@ -196,25 +197,25 @@ const validateEvidenceItem = (
 
   const record = data as Record<string, unknown>;
 
-  if (!record.id || typeof record.id !== "string") {
+  if (!record["id"] || typeof record["id"] !== "string") {
     errors.push({ path: "id", message: "Evidence ID is required" });
   }
 
   if (
-    !record.trackingUuid ||
-    typeof record.trackingUuid !== "string" ||
-    !isValidUUID(record.trackingUuid)
+    !record["trackingUuid"] ||
+    typeof record["trackingUuid"] !== "string" ||
+    !isValidUUID(record["trackingUuid"])
   ) {
     errors.push({ path: "trackingUuid", message: "Invalid UUID format" });
   }
 
-  if (!record.caseId || typeof record.caseId !== "string") {
+  if (!record["caseId"] || typeof record["caseId"] !== "string") {
     errors.push({ path: "caseId", message: "Case ID is required" });
   }
 
   const title =
-    record.title && typeof record.title === "string"
-      ? sanitizeString(record.title)
+    record["title"] && typeof record["title"] === "string"
+      ? sanitizeString(record["title"])
       : "";
   if (!title) {
     errors.push({ path: "title", message: "Title is required" });
@@ -222,22 +223,24 @@ const validateEvidenceItem = (
     errors.push({ path: "title", message: "Title too long" });
   }
 
-  if (!evidenceTypes.includes(record.type as (typeof evidenceTypes)[number])) {
+  if (
+    !evidenceTypes.includes(record["type"] as (typeof evidenceTypes)[number])
+  ) {
     errors.push({ path: "type", message: "Invalid evidence type" });
   }
 
   const description =
-    record.description && typeof record.description === "string"
-      ? sanitizeString(record.description)
+    record["description"] && typeof record["description"] === "string"
+      ? sanitizeString(record["description"])
       : "";
   if (description.length > 5000) {
     errors.push({ path: "description", message: "Description too long" });
   }
 
   if (
-    !record.collectionDate ||
-    typeof record.collectionDate !== "string" ||
-    !isValidDate(record.collectionDate)
+    !record["collectionDate"] ||
+    typeof record["collectionDate"] !== "string" ||
+    !isValidDate(record["collectionDate"])
   ) {
     errors.push({
       path: "collectionDate",
@@ -246,8 +249,8 @@ const validateEvidenceItem = (
   }
 
   const collectedBy =
-    record.collectedBy && typeof record.collectedBy === "string"
-      ? sanitizeString(record.collectedBy)
+    record["collectedBy"] && typeof record["collectedBy"] === "string"
+      ? sanitizeString(record["collectedBy"])
       : "";
   if (!collectedBy) {
     errors.push({ path: "collectedBy", message: "Collector name is required" });
@@ -256,8 +259,8 @@ const validateEvidenceItem = (
   }
 
   const custodian =
-    record.custodian && typeof record.custodian === "string"
-      ? sanitizeString(record.custodian)
+    record["custodian"] && typeof record["custodian"] === "string"
+      ? sanitizeString(record["custodian"])
       : "";
   if (!custodian) {
     errors.push({ path: "custodian", message: "Custodian is required" });
@@ -266,8 +269,8 @@ const validateEvidenceItem = (
   }
 
   const location =
-    record.location && typeof record.location === "string"
-      ? sanitizeString(record.location)
+    record["location"] && typeof record["location"] === "string"
+      ? sanitizeString(record["location"])
       : "";
   if (location.length > 500) {
     errors.push({ path: "location", message: "Location too long" });
@@ -275,7 +278,7 @@ const validateEvidenceItem = (
 
   if (
     !admissibilityStatuses.includes(
-      record.admissibility as (typeof admissibilityStatuses)[number]
+      record["admissibility"] as (typeof admissibilityStatuses)[number],
     )
   ) {
     errors.push({
@@ -284,14 +287,17 @@ const validateEvidenceItem = (
     });
   }
 
-  if (record.tags && (!Array.isArray(record.tags) || record.tags.length > 20)) {
+  if (
+    record["tags"] &&
+    (!Array.isArray(record["tags"]) || record["tags"].length > 20)
+  ) {
     errors.push({ path: "tags", message: "Too many tags (max 20)" });
   }
 
   if (
-    record.blockchainHash &&
-    typeof record.blockchainHash === "string" &&
-    !isValidHash(record.blockchainHash)
+    record["blockchainHash"] &&
+    typeof record["blockchainHash"] === "string" &&
+    !isValidHash(record["blockchainHash"])
   ) {
     errors.push({ path: "blockchainHash", message: "Invalid hash format" });
   }
@@ -318,7 +324,7 @@ const validateEvidenceItem = (
  * Validates custody log entries
  */
 const validateCustodyEvent = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<ChainOfCustodyEvent> => {
   const errors: Array<{ path: string; message: string }> = [];
 
@@ -332,28 +338,30 @@ const validateCustodyEvent = (
 
   const record = data as Record<string, unknown>;
 
-  if (!record.id || typeof record.id !== "string") {
+  if (!record["id"] || typeof record["id"] !== "string") {
     errors.push({ path: "id", message: "Event ID is required" });
   }
 
   const dateRegex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(.\d{3})?Z)?$/;
   if (
-    !record.date ||
-    typeof record.date !== "string" ||
-    !dateRegex.test(record.date)
+    !record["date"] ||
+    typeof record["date"] !== "string" ||
+    !dateRegex.test(record["date"])
   ) {
     errors.push({ path: "date", message: "Invalid date format" });
   }
 
   if (
-    !custodyActions.includes(record.action as (typeof custodyActions)[number])
+    !custodyActions.includes(
+      record["action"] as (typeof custodyActions)[number],
+    )
   ) {
     errors.push({ path: "action", message: "Invalid custody action" });
   }
 
   const actor =
-    record.actor && typeof record.actor === "string"
-      ? sanitizeString(record.actor)
+    record["actor"] && typeof record["actor"] === "string"
+      ? sanitizeString(record["actor"])
       : "";
   if (!actor) {
     errors.push({ path: "actor", message: "Actor name is required" });
@@ -362,8 +370,8 @@ const validateCustodyEvent = (
   }
 
   const notes =
-    record.notes && typeof record.notes === "string"
-      ? sanitizeString(record.notes)
+    record["notes"] && typeof record["notes"] === "string"
+      ? sanitizeString(record["notes"])
       : undefined;
   if (notes && notes.length > 2000) {
     errors.push({ path: "notes", message: "Notes too long" });
@@ -378,7 +386,7 @@ const validateCustodyEvent = (
     data: {
       ...data,
       actor,
-      notes,
+      ...(notes ? { notes } : {}),
     } as ChainOfCustodyEvent,
   };
 };
@@ -388,7 +396,7 @@ const validateCustodyEvent = (
  * Validates filter parameters to prevent injection attacks
  */
 const validateEvidenceFilters = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<EvidenceFilters> => {
   const errors: Array<{ path: string; message: string }> = [];
   const filters: EvidenceFilters = {};
@@ -397,8 +405,8 @@ const validateEvidenceFilters = (
   if (data && typeof data === "object") {
     const input = data as Record<string, unknown>;
 
-    if (input.search && typeof input.search === "string") {
-      const search = sanitizeString(input.search);
+    if (input["search"] && typeof input["search"] === "string") {
+      const search = sanitizeString(input["search"]);
       if (search.length > 200) {
         errors.push({ path: "search", message: "Search query too long" });
       } else {
@@ -406,19 +414,19 @@ const validateEvidenceFilters = (
       }
     }
 
-    if (input.dateFrom && typeof input.dateFrom === "string") {
-      if (!isValidDate(input.dateFrom) && input.dateFrom !== "") {
+    if (input["dateFrom"] && typeof input["dateFrom"] === "string") {
+      if (!isValidDate(input["dateFrom"]) && input["dateFrom"] !== "") {
         errors.push({ path: "dateFrom", message: "Invalid date format" });
       } else {
-        filters.dateFrom = input.dateFrom;
+        filters.dateFrom = input["dateFrom"];
       }
     }
 
-    if (input.dateTo && typeof input.dateTo === "string") {
-      if (!isValidDate(input.dateTo) && input.dateTo !== "") {
+    if (input["dateTo"] && typeof input["dateTo"] === "string") {
+      if (!isValidDate(input["dateTo"]) && input["dateTo"] !== "") {
         errors.push({ path: "dateTo", message: "Invalid date format" });
       } else {
-        filters.dateTo = input.dateTo;
+        filters.dateTo = input["dateTo"];
       }
     }
   }
@@ -434,19 +442,19 @@ const validateEvidenceFilters = (
  * Safe validation helpers - returns { success: true, data } or { success: false, error }
  */
 export const validateEvidenceItemSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<EvidenceItem>> => {
   return validateEvidenceItem(data);
 };
 
 export const validateCustodyEventSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<ChainOfCustodyEvent> => {
   return validateCustodyEvent(data);
 };
 
 export const validateEvidenceFiltersSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<EvidenceFilters> => {
   return validateEvidenceFilters(data);
 };

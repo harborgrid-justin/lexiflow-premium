@@ -1,6 +1,7 @@
 import { PhaseRepository } from "@/services/domain/case.service";
 import { DataQualityService } from "@/services/domain/data-quality.service";
 import { KnowledgeRepository } from "@/services/domain/knowledge.service";
+
 import { AnalysisRepository } from "../repositories/AnalysisRepository";
 import { CitationRepository } from "../repositories/CitationRepository";
 import { ClientRepository } from "../repositories/ClientRepository";

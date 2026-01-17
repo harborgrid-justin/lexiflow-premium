@@ -2,13 +2,17 @@
  * @module services/validation/schemas/billing-filters-schema
  * @description Billing filters validation schema
  * Encapsulates validation logic for billing query parameters
- * 
+ *
  * @responsibility Validate billing filter inputs for queries
  */
 
-import type { CaseId, UserId } from '@/types';
-import { isValidDate, isValidDateRange } from '@/services/validation/validators/common-validators';
-import { sanitizeString } from '@/services/validation/sanitizers/input-sanitizer';
+import { sanitizeString } from "@/services/validation/sanitizers/input-sanitizer";
+import {
+  isValidDate,
+  isValidDateRange,
+} from "@/services/validation/validators/common-validators";
+
+import type { CaseId, UserId } from "@/types";
 
 /**
  * Billing filters input interface
@@ -37,10 +41,10 @@ export interface BillingFiltersValidationResult {
 
 /**
  * Validate billing filter parameters
- * 
+ *
  * @param filters - Billing filters to validate
  * @returns Validation result with errors and sanitized data
- * 
+ *
  * @example
  * ```ts
  * const result = validateBillingFiltersSafe({
@@ -50,7 +54,7 @@ export interface BillingFiltersValidationResult {
  *   maxAmount: 10000,
  *   status: 'billed'
  * });
- * 
+ *
  * if (result.valid) {
  *   const records = await queryBillingRecords(result.sanitized);
  * } else {
@@ -59,57 +63,68 @@ export interface BillingFiltersValidationResult {
  * ```
  */
 export function validateBillingFiltersSafe(
-  filters: BillingFiltersInput
+  filters: BillingFiltersInput,
 ): BillingFiltersValidationResult {
   const errors: string[] = [];
-  
+
   try {
     // Date range validation
     if (filters.dateFrom && !isValidDate(filters.dateFrom)) {
-      errors.push('Invalid dateFrom format');
+      errors.push("Invalid dateFrom format");
     }
-    
+
     if (filters.dateTo && !isValidDate(filters.dateTo)) {
-      errors.push('Invalid dateTo format');
+      errors.push("Invalid dateTo format");
     }
-    
-    if (filters.dateFrom && filters.dateTo && 
-        !isValidDateRange(filters.dateFrom, filters.dateTo)) {
-      errors.push('dateFrom must be before dateTo');
+
+    if (
+      filters.dateFrom &&
+      filters.dateTo &&
+      !isValidDateRange(filters.dateFrom, filters.dateTo)
+    ) {
+      errors.push("dateFrom must be before dateTo");
     }
-    
+
     // Amount range validation
-    if (filters.minAmount !== undefined && 
-        (typeof filters.minAmount !== 'number' || filters.minAmount < 0)) {
-      errors.push('minAmount must be a non-negative number');
+    if (
+      filters.minAmount !== undefined &&
+      (typeof filters.minAmount !== "number" || filters.minAmount < 0)
+    ) {
+      errors.push("minAmount must be a non-negative number");
     }
-    
-    if (filters.maxAmount !== undefined && 
-        (typeof filters.maxAmount !== 'number' || filters.maxAmount < 0)) {
-      errors.push('maxAmount must be a non-negative number');
+
+    if (
+      filters.maxAmount !== undefined &&
+      (typeof filters.maxAmount !== "number" || filters.maxAmount < 0)
+    ) {
+      errors.push("maxAmount must be a non-negative number");
     }
-    
-    if (filters.minAmount !== undefined && filters.maxAmount !== undefined &&
-        filters.minAmount > filters.maxAmount) {
-      errors.push('minAmount cannot exceed maxAmount');
+
+    if (
+      filters.minAmount !== undefined &&
+      filters.maxAmount !== undefined &&
+      filters.minAmount > filters.maxAmount
+    ) {
+      errors.push("minAmount cannot exceed maxAmount");
     }
-    
+
     if (errors.length > 0) {
       return { valid: false, errors };
     }
-    
+
     // Sanitize search input
     const sanitized: BillingFiltersInput = {
       ...filters,
-      search: filters.search ? sanitizeString(filters.search) : undefined,
+      ...(filters.search ? { search: sanitizeString(filters.search) } : {}),
     };
-    
+
     return { valid: true, errors: [], sanitized };
-    
   } catch (error) {
-    return { 
-      valid: false, 
-      errors: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`] 
+    return {
+      valid: false,
+      errors: [
+        `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      ],
     };
   }
 }

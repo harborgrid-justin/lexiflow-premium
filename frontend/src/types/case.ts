@@ -1,14 +1,9 @@
 // types/case.ts
 // Auto-generated from models.ts split
 
+import { type CaseTeamMember } from './case-team';
 import {
-  BaseEntity, UserId, OrgId,
-  EntityId, PartyId,
-  CaseId, MatterId, Money, JurisdictionObject, MetadataRecord, JsonValue
-} from './primitives';
-import { CaseTeamMember } from './case-team';
-import {
-  CaseStatus, MatterType, BillingModel,
+  type CaseStatus, type MatterType, type BillingModel,
   
   
   
@@ -16,11 +11,16 @@ import {
   
   
   
-  MatterStatus, MatterPriority, BillingArrangement
+  type MatterStatus, type MatterPriority, type BillingArrangement
 } from './enums';
-import { FeeAgreement } from './financial';
-import { Citation, LegalArgument, Defense } from './legal-research';
-import { Project } from './workflow';
+import { type FeeAgreement } from './financial';
+import { type Citation, type LegalArgument, type Defense } from './legal-research';
+import {
+  type BaseEntity, type UserId, type OrgId,
+  type EntityId, type PartyId,
+  type CaseId, type MatterId, type Money, type JurisdictionObject, type MetadataRecord, type JsonValue
+} from './primitives';
+import { type Project } from './workflow';
 
 // --- CLUSTER 2: CASE & LITIGATION ---
 export interface Case extends BaseEntity { 

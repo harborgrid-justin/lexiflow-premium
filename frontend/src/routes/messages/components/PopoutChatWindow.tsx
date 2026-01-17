@@ -23,6 +23,7 @@ export function PopoutChatWindow({ conversation, formatTime }: PopoutChatWindowP
       id: Date.now().toString(),
       senderId: 'me',
       content: inputText,
+      text: inputText,
       timestamp: new Date().toISOString(),
       status: 'sent' as const,
       attachments: pendingAttachments,
@@ -51,7 +52,7 @@ export function PopoutChatWindow({ conversation, formatTime }: PopoutChatWindowP
       setTimeout(() => {
         setActiveConversation(prev => ({
           ...prev,
-          messages: prev.messages.map(m =>
+          messages: prev.messages.map((m: { id: string; status?: string }) =>
             m.id === newMessage.id ? { ...m, status: 'delivered' } : m
           )
         }));

@@ -16,17 +16,17 @@
 //
 // ================================================================================
 
+import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
-  CleansingRule,
-  DataAnomaly,
-  DataProfile,
-  DedupeCluster,
-  QualityMetricHistory,
+  type CleansingRule,
+  type DataAnomaly,
+  type DataProfile,
+  type DedupeCluster,
+  type QualityMetricHistory,
 } from "@/types";
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { apiClient } from "@/services/infrastructure/api-client.service";
 
 export class DataQualityService {
   async getAnomalies(): Promise<DataAnomaly[]> {

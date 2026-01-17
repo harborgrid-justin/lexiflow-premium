@@ -24,7 +24,6 @@
  * - Type-safe operations throughout
  */
 
-import type { DiscoveryProcess } from "@/api/discovery/discovery-api";
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError } from "@/services/core/errors";
 
@@ -48,6 +47,8 @@ import {
   timelineService,
   vendorService,
 } from "./discovery/services";
+
+import type { DiscoveryProcess } from "@/api/discovery/discovery-api";
 
 /**
  * Query keys for React Query integration

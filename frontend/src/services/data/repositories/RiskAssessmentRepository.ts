@@ -7,7 +7,7 @@ import { RisksApiService } from "@/api/workflow/risk-assessments-api";
 import { ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { Risk } from "@/types";
+import { type Risk } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
 export const RISK_QUERY_KEYS = {

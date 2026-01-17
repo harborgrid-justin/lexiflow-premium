@@ -1,11 +1,11 @@
 // types/workflow.ts
 // Auto-generated from models.ts split
 
+import { type TaskDependencyType, type UserRole, type StageStatus } from './enums';
 import {
-  BaseEntity, UserId, TaskId, ProjectId,
-  WorkflowTemplateId, CaseId, MetadataRecord, JsonValue
+  type BaseEntity, type UserId, type TaskId, type ProjectId,
+  type WorkflowTemplateId, type CaseId, type MetadataRecord, type JsonValue
 } from './primitives';
-import { TaskDependencyType, UserRole, StageStatus } from './enums';
 
 
 // --- CLUSTER 6: WORKFLOW & AUTOMATION ---

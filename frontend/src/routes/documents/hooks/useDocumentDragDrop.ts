@@ -14,7 +14,8 @@
  * // After:
  * const { isDragging, isUploading, handleDragEnter, handleDragLeave, handleDrop, ...rest } =
  *   useDocumentManager({ enableDragDrop: true });
- * ```
+  currentFolder: string,
+  uploading?: boolean,
  *
  * NO THEME USAGE: Utility hook for drag-drop logic
  */
@@ -104,7 +105,7 @@ export function useDocumentDragDrop(
     },
   );
 
-  const setIsUploading = (uploading: boolean) => {
+  const setIsUploading = (_uploading: boolean) => {
     // Provided for backward compatibility
   };
 

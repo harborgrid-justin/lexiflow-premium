@@ -1,13 +1,24 @@
+import { MOCK_ADVISORS } from "@/api/types/advisor";
 import {
   MOCK_JUDGE_STATS,
   MOCK_OUTCOME_DATA,
 } from "@/api/types/analyticsStats";
+import {
+  MOCK_OPERATING_SUMMARY,
+  MOCK_REALIZATION_DATA,
+} from "@/api/types/billingStats";
 import { MOCK_CASES } from "@/api/types/case";
 import { MOCK_CLAUSES } from "@/api/types/clause";
+import { MOCK_CLE_TRACKING } from "@/api/types/cle";
 import { MOCK_CLIENTS } from "@/api/types/client";
 import { MOCK_CONFERRALS } from "@/api/types/conferralSession";
 import { MOCK_CONFLICTS } from "@/api/types/conflictCheck";
 import { MOCK_CONVERSATIONS } from "@/api/types/conversation";
+import { MOCK_CRM_ANALYTICS, MOCK_LEADS } from "@/api/types/crm";
+import {
+  MOCK_DISCOVERY_CUSTODIANS,
+  MOCK_DISCOVERY_FUNNEL,
+} from "@/api/types/discoveryCharts";
 import {
   MOCK_DEPOSITIONS,
   MOCK_ESI_SOURCES,
@@ -19,13 +30,18 @@ import { MOCK_DOCKET_ENTRIES } from "@/api/types/docketEntry";
 import { MOCK_DOCUMENTS } from "@/api/types/document";
 import { MOCK_WALLS } from "@/api/types/ethicalWall";
 import { MOCK_EVIDENCE } from "@/api/types/evidenceItem";
+import { MOCK_EXHIBITS } from "@/api/types/exhibit";
+import { MOCK_FACILITIES } from "@/api/types/facility";
 import { MOCK_EXPENSES } from "@/api/types/firmExpense";
 import { BUSINESS_PROCESSES } from "@/api/types/firmProcess";
 import { MOCK_GROUPS } from "@/api/types/group";
+import { MOCK_INVOICES } from "@/api/types/invoice";
 import { MOCK_JOINT_PLANS } from "@/api/types/jointPlan";
 import { MOCK_JUDGES } from "@/api/types/judgeProfile";
+import { MOCK_JURISDICTIONS } from "@/api/types/jurisdiction";
 import { MOCK_LEGAL_HOLDS } from "@/api/types/legalHold";
 import { MOCK_RULES } from "@/api/types/legalRule";
+import { MOCK_MAINTENANCE_TICKETS } from "@/api/types/maintenanceTicket";
 import {
   MOCK_PRECEDENTS,
   MOCK_QA_ITEMS,
@@ -54,22 +70,6 @@ import {
 import { DatabaseManager, STORES } from "./db";
 
 // New mock data imports
-import { MOCK_ADVISORS } from "@/api/types/advisor";
-import {
-  MOCK_OPERATING_SUMMARY,
-  MOCK_REALIZATION_DATA,
-} from "@/api/types/billingStats";
-import { MOCK_CLE_TRACKING } from "@/api/types/cle";
-import { MOCK_CRM_ANALYTICS, MOCK_LEADS } from "@/api/types/crm";
-import {
-  MOCK_DISCOVERY_CUSTODIANS,
-  MOCK_DISCOVERY_FUNNEL,
-} from "@/api/types/discoveryCharts";
-import { MOCK_EXHIBITS } from "@/api/types/exhibit";
-import { MOCK_FACILITIES } from "@/api/types/facility";
-import { MOCK_INVOICES } from "@/api/types/invoice";
-import { MOCK_JURISDICTIONS } from "@/api/types/jurisdiction";
-import { MOCK_MAINTENANCE_TICKETS } from "@/api/types/maintenanceTicket";
 import { MOCK_OPPOSITION } from "@/api/types/opposition";
 import { MOCK_REPORTERS } from "@/api/types/reporters";
 import { MOCK_RFPS } from "@/api/types/rfp";

@@ -28,7 +28,7 @@
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { Client } from "@/types";
+import { type Client } from "@/types";
 
 /**
  * Query keys for React Query integration

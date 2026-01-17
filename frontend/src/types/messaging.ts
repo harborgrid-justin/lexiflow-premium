@@ -10,8 +10,8 @@ export interface Message {
   senderName: string;
   senderAvatar?: string;
   content: string;
-  type: 'text' | 'file' | 'system';
-  status: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
+  type: "text" | "file" | "system";
+  status: "sending" | "sent" | "delivered" | "read" | "failed";
   attachments?: MessageAttachment[];
   metadata?: Record<string, unknown>;
   replyTo?: string;
@@ -31,9 +31,18 @@ export interface MessageAttachment {
   thumbnailUrl?: string;
 }
 
+export interface Contact {
+  id: string;
+  name: string;
+  role?: string;
+  isOnline?: boolean;
+  avatarUrl?: string;
+  email?: string;
+}
+
 export interface Conversation {
   id: string;
-  type: 'direct' | 'group' | 'case' | 'matter';
+  type: "direct" | "group" | "case" | "matter";
   name?: string;
   participants: ConversationParticipant[];
   lastMessage?: Message;
@@ -54,7 +63,7 @@ export interface ConversationParticipant {
   userName: string;
   userAvatar?: string;
   userEmail?: string;
-  role: 'owner' | 'admin' | 'member';
+  role: "owner" | "admin" | "member";
   isOnline: boolean;
   lastSeen?: string;
   isTyping: boolean;
@@ -62,7 +71,7 @@ export interface ConversationParticipant {
 }
 
 export interface CreateConversationDto {
-  type: 'direct' | 'group' | 'case' | 'matter';
+  type: "direct" | "group" | "case" | "matter";
   name?: string;
   participantIds: string[];
   caseId?: string;
@@ -72,7 +81,7 @@ export interface CreateConversationDto {
 export interface SendMessageDto {
   conversationId: string;
   content: string;
-  type?: 'text' | 'file' | 'system';
+  type?: "text" | "file" | "system";
   attachments?: File[];
   replyTo?: string;
   metadata?: Record<string, unknown>;
@@ -110,7 +119,7 @@ export interface OnlinePresence {
 
 export interface DeliveryStatus {
   messageId: string;
-  status: 'sent' | 'delivered' | 'read';
+  status: "sent" | "delivered" | "read";
   userId: string;
   timestamp: string;
 }

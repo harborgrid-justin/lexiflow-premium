@@ -4,6 +4,7 @@
  */
 
 import { AuthenticationError } from "@/services/core/errors";
+
 import { buildBaseURL, DEFAULT_TIMEOUT, getOrigin } from "./config";
 import { buildHeaders, buildURL, validateEndpoint } from "./request-builder";
 import { handleResponse } from "./response-handler";

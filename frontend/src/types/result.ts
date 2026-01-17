@@ -95,7 +95,7 @@ export function map<T, U, E>(
   if (result.ok) {
     return ok(fn(result.value));
   }
-  return result as Err<E>;
+  return result;
 }
 
 /**
@@ -106,9 +106,9 @@ export function mapErr<T, E, F>(
   fn: (error: E) => F
 ): Result<T, F> {
   if (!result.ok) {
-    return err(fn((result as Err<E>).error));
+    return err(fn((result).error));
   }
-  return result as Ok<T>;
+  return result;
 }
 
 /**
@@ -121,7 +121,7 @@ export function andThen<T, U, E>(
   if (result.ok) {
     return fn(result.value);
   }
-  return result as Err<E>;
+  return result;
 }
 
 /**
@@ -138,7 +138,7 @@ export function unwrapOrElse<T, E>(
   result: Result<T, E>,
   fn: (error: E) => T
 ): T {
-  return result.ok ? result.value : fn((result as Err<E>).error);
+  return result.ok ? result.value : fn((result).error);
 }
 
 /**
@@ -146,7 +146,7 @@ export function unwrapOrElse<T, E>(
  * Useful for destructuring patterns
  */
 export function toTuple<T, E>(result: Result<T, E>): [T, null] | [null, E] {
-  return result.ok ? [result.value, null] : [null, (result as Err<E>).error];
+  return result.ok ? [result.value, null] : [null, (result).error];
 }
 
 /**
@@ -157,7 +157,7 @@ export function collect<T, E>(results: Result<T, E>[]): Result<T[], E> {
   const values: T[] = [];
   for (const result of results) {
     if (!result.ok) {
-      return result as Err<E>;
+      return result;
     }
     values.push(result.value);
   }

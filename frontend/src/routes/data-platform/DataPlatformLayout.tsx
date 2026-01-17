@@ -1,13 +1,14 @@
 import { Suspense } from 'react';
-import { Await, useLoaderData, Outlet } from 'react-router';
+import { Await, Outlet, useLoaderData } from 'react-router';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
 import { DataPlatformProvider } from './DataPlatformProvider';
+import type { DataPlatformLoaderData } from './loader';
 import { dataPlatformLoader } from './loader';
 
 export { dataPlatformLoader as loader };
 
 export default function DataPlatformLayout() {
-  const initialData = useLoaderData() as any;
+  const initialData = useLoaderData() as DataPlatformLoaderData;
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Data Platform" />}>

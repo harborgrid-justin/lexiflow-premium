@@ -26,7 +26,7 @@
 import { MotionsApiService } from "@/api/litigation/motions-api";
 import { ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { Motion } from "@/types";
+import { type Motion } from "@/types";
 
 /**
  * Query keys for React Query integration

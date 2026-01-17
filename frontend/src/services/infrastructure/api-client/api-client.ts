@@ -3,20 +3,21 @@
  * Enterprise-grade HTTP client with authentication and health monitoring
  */
 
+import { API_CLIENT_DEFAULT_TIMEOUT_MS } from "@/config/features/services.config";
+
 import * as AuthManager from "./auth-manager";
 import * as BlobHandler from "./blob-handler";
 import { buildBaseURL } from "./config";
 import * as FileUpload from "./file-upload";
 import * as HealthCheck from "./health-check";
 import * as HttpMethods from "./http-methods";
-import { API_CLIENT_DEFAULT_TIMEOUT_MS } from '@/config/features/services.config';
 
 /**
  * API Request Configuration
  */
 interface RequestConfig {
   url: string;
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   data?: unknown;
   headers?: Record<string, string>;
   params?: Record<string, unknown>;
@@ -28,9 +29,9 @@ interface RequestConfig {
  */
 export class ApiClient {
   private _baseURL: string | null = null;
-  private _authToken: string | null = null;
-  private requestInterceptors: Array<(config: RequestConfig) => RequestConfig> = [];
-  private responseInterceptors: Array<<T = unknown>(response: T) => T> = [];
+  private requestInterceptors: Array<(config: RequestConfig) => RequestConfig> =
+    [];
+  private responseInterceptors: Array<(response: unknown) => unknown> = [];
   private _retryAttempts: number = 0;
   private _timeout: number = API_CLIENT_DEFAULT_TIMEOUT_MS;
 
@@ -60,13 +61,16 @@ export class ApiClient {
   // HTTP methods - wrapped to apply interceptors
   public get = async <T>(
     endpoint: string,
-    options?: { params?: Record<string, unknown>; headers?: HeadersInit }
+    options?: {
+      params?: Record<string, unknown> | undefined;
+      headers?: HeadersInit | undefined;
+    },
   ): Promise<T> => {
     let config: RequestConfig = {
       url: endpoint,
       method: "GET",
-      params: options?.params,
       headers: (options?.headers as Record<string, string>) || {},
+      ...(options?.params ? { params: options.params } : {}),
     };
 
     // Apply request interceptors
@@ -74,14 +78,14 @@ export class ApiClient {
       config = interceptor(config);
     }
 
-    let result = await HttpMethods.get<T>(endpoint, {
-      params: config.params,
-      headers: config.headers,
-    });
+    let result = (await HttpMethods.get<T>(endpoint, {
+      ...(config.params ? { params: config.params } : {}),
+      ...(config.headers ? { headers: config.headers } : {}),
+    })) as T;
 
     // Apply response interceptors
     for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result);
+      result = interceptor(result) as T;
     }
 
     return result;
@@ -90,7 +94,7 @@ export class ApiClient {
   public post = async <T>(
     endpoint: string,
     data?: unknown,
-    options?: RequestInit
+    options?: RequestInit,
   ): Promise<T> => {
     let config: RequestConfig = {
       url: endpoint,
@@ -104,68 +108,82 @@ export class ApiClient {
       config = interceptor(config);
     }
 
-    let result = await HttpMethods.post<T>(endpoint, config.data, {
+    let result = (await HttpMethods.post<T>(endpoint, config.data, {
       ...options,
-      headers: config.headers,
-    });
+      ...(config.headers ? { headers: config.headers } : {}),
+    })) as T;
 
     // Apply response interceptors
     for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result);
+      result = interceptor(result) as T;
     }
 
     return result;
   };
 
   public put = async <T>(endpoint: string, data?: unknown): Promise<T> => {
-    let config: RequestConfig = { url: endpoint, method: "PUT", data, headers: {} };
+    let config: RequestConfig = {
+      url: endpoint,
+      method: "PUT",
+      data,
+      headers: {},
+    };
 
     // Apply request interceptors
     for (const interceptor of this.requestInterceptors) {
       config = interceptor(config);
     }
 
-    let result = await HttpMethods.put<T>(endpoint, config.data);
+    let result = (await HttpMethods.put<T>(endpoint, config.data)) as T;
 
     // Apply response interceptors
     for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result);
+      result = interceptor(result) as T;
     }
 
     return result;
   };
 
   public patch = async <T>(endpoint: string, data?: unknown): Promise<T> => {
-    let config: RequestConfig = { url: endpoint, method: "PATCH", data, headers: {} };
+    let config: RequestConfig = {
+      url: endpoint,
+      method: "PATCH",
+      data,
+      headers: {},
+    };
 
     // Apply request interceptors
     for (const interceptor of this.requestInterceptors) {
       config = interceptor(config);
     }
 
-    let result = await HttpMethods.patch<T>(endpoint, config.data);
+    let result = (await HttpMethods.patch<T>(endpoint, config.data)) as T;
 
     // Apply response interceptors
     for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result);
+      result = interceptor(result) as T;
     }
 
     return result;
   };
 
   public delete = async <T>(endpoint: string): Promise<T> => {
-    let config: RequestConfig = { url: endpoint, method: "DELETE", headers: {} };
+    let config: RequestConfig = {
+      url: endpoint,
+      method: "DELETE",
+      headers: {},
+    };
 
     // Apply request interceptors
     for (const interceptor of this.requestInterceptors) {
       config = interceptor(config);
     }
 
-    let result = await HttpMethods.deleteFn<T>(endpoint);
+    let result = (await HttpMethods.deleteFn<T>(endpoint)) as T;
 
     // Apply response interceptors
     for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result);
+      result = interceptor(result) as T;
     }
 
     return result;
@@ -193,7 +211,6 @@ export class ApiClient {
   }
 
   public setAuthToken(token: string): void {
-    this._authToken = token;
     // Also update the auth manager - extract Bearer prefix if present
     const actualToken = token.startsWith("Bearer ")
       ? token.substring(7)
@@ -210,22 +227,30 @@ export class ApiClient {
   }
 
   // Interceptor management
-  public addRequestInterceptor(interceptor: (config: RequestConfig) => RequestConfig): void {
+  public addRequestInterceptor(
+    interceptor: (config: RequestConfig) => RequestConfig,
+  ): void {
     this.requestInterceptors.push(interceptor);
   }
 
-  public removeRequestInterceptor(interceptor: (config: RequestConfig) => RequestConfig): void {
+  public removeRequestInterceptor(
+    interceptor: (config: RequestConfig) => RequestConfig,
+  ): void {
     const index = this.requestInterceptors.indexOf(interceptor);
     if (index > -1) {
       this.requestInterceptors.splice(index, 1);
     }
   }
 
-  public addResponseInterceptor<T>(interceptor: (response: T) => T): void {
+  public addResponseInterceptor(
+    interceptor: (response: unknown) => unknown,
+  ): void {
     this.responseInterceptors.push(interceptor);
   }
 
-  public removeResponseInterceptor<T>(interceptor: (response: T) => T): void {
+  public removeResponseInterceptor(
+    interceptor: (response: unknown) => unknown,
+  ): void {
     const index = this.responseInterceptors.indexOf(interceptor);
     if (index > -1) {
       this.responseInterceptors.splice(index, 1);
@@ -233,11 +258,13 @@ export class ApiClient {
   }
 
   // Internal accessor for interceptors
-  public getRequestInterceptors(): Array<(config: RequestConfig) => RequestConfig> {
+  public getRequestInterceptors(): Array<
+    (config: RequestConfig) => RequestConfig
+  > {
     return this.requestInterceptors;
   }
 
-  public getResponseInterceptors(): Array<<T>(response: T) => T> {
+  public getResponseInterceptors(): Array<(response: unknown) => unknown> {
     return this.responseInterceptors;
   }
 

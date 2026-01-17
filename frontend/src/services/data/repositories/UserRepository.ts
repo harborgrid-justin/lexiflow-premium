@@ -5,7 +5,7 @@
 
 import { UsersApiService } from "@/api/auth/users-api";
 import { Repository } from "@/services/core/Repository";
-import { User } from "@/types";
+import { type User } from "@/types";
 
 export const USER_QUERY_KEYS = {
   all: () => ["users"] as const,

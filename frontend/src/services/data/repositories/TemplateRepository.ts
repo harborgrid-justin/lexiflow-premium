@@ -4,9 +4,9 @@
  */
 
 import { WorkflowTemplateService } from "@/api/workflow/core/template.service";
-import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
-import { WorkflowTemplateData } from "@/types";
+import { Repository } from "@/services/core/Repository";
+import { type WorkflowTemplateData } from "@/types";
 
 export const TEMPLATE_QUERY_KEYS = {
   all: () => ["templates"] as const,
@@ -27,7 +27,7 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
   private validateId(id: string, methodName: string): void {
     if (!id || id.trim() === "") {
       throw new Error(
-        `[TemplateRepository.${methodName}] Invalid id parameter`
+        `[TemplateRepository.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -43,7 +43,7 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
   }
 
   override async getById(
-    id: string
+    id: string,
   ): Promise<WorkflowTemplateData | undefined> {
     this.validateId(id, "getById");
     try {
@@ -56,11 +56,11 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
   }
 
   override async add(
-    item: WorkflowTemplateData
+    item: WorkflowTemplateData,
   ): Promise<WorkflowTemplateData> {
     if (!item || typeof item !== "object") {
       throw new ValidationError(
-        "[TemplateRepository.add] Invalid template data"
+        "[TemplateRepository.add] Invalid template data",
       );
     }
     try {
@@ -75,14 +75,14 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
 
   override async update(
     id: string,
-    updates: Partial<WorkflowTemplateData>
+    updates: Partial<WorkflowTemplateData>,
   ): Promise<WorkflowTemplateData> {
     this.validateId(id, "update");
     try {
       const template = await this.templateService.updateTemplate(
         id,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updates as any
+        updates as any,
       );
       return template as unknown as WorkflowTemplateData;
     } catch (error) {
@@ -118,13 +118,13 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
       const lowerQuery = query.toLowerCase();
       return templates.filter(
         (t) =>
-          ((t as Record<string, unknown>).name as string | undefined)
+          ((t as Record<string, unknown>)["name"] as string | undefined)
             ?.toLowerCase()
             .includes(lowerQuery) ||
-          ((t as Record<string, unknown>).description as string | undefined)
+          ((t as Record<string, unknown>)["description"] as string | undefined)
             ?.toLowerCase()
             .includes(lowerQuery) ||
-          t.id?.toLowerCase().includes(lowerQuery)
+          t.id?.toLowerCase().includes(lowerQuery),
       );
     } catch (error) {
       console.error("[TemplateRepository] Backend API error", error);

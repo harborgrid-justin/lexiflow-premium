@@ -1,10 +1,10 @@
-import { CommunicationItem, ServiceJob } from "@/types";
 /**
  * ? Migrated to backend API (2025-12-21)
  */
 import { communicationsApi } from "@/api/domains/communications.api";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { apiClient } from "@/services/infrastructure/apiClient";
+import { type CommunicationItem, type ServiceJob } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
 export const CorrespondenceService = {

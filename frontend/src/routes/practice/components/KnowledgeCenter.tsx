@@ -18,7 +18,7 @@ import { useState } from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { usePracticeManagement } from '../hooks/usePracticeManagement';
+import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";

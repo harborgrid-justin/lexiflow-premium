@@ -8,6 +8,7 @@
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { Case } from '@/types';

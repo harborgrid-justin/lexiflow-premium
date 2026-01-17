@@ -7,30 +7,42 @@
  * Case/Party/DocketEntry types with pacerData preservation.
  */
 
-import { ValidationError, FileProcessingError } from '@/services/core/errors';
+import { ValidationError, FileProcessingError } from "@/services/core/errors";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { yieldToMain } from '@/utils/apiUtils';
 
 // Types
-import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId, MatterType } from '@/types';
-import { PacerCase, PacerParty, PacerJurisdictionType } from '@/types/pacer';
+import {
+  CaseStatus,
+  type DocketEntry,
+  type DocketEntryType,
+  type Party,
+  type Case,
+  type CaseId,
+  type PartyId,
+  type DocketId,
+  MatterType,
+} from "@/types";
+import { type PacerCase, type PacerParty, type PacerJurisdictionType } from "@/types/pacer";
+import { yieldToMain } from "@/utils/apiUtils";
 
 // ============================================================================
 // SERVICE
 // ============================================================================
 export const XmlDocketParser = {
-  parse: async (xmlString: string): Promise<{
-    caseInfo: Partial<Case>,
-    parties: Party[],
-    docketEntries: DocketEntry[]
+  parse: async (
+    xmlString: string,
+  ): Promise<{
+    caseInfo: Partial<Case>;
+    parties: Party[];
+    docketEntries: DocketEntry[];
   }> => {
     // Validate input
     if (!xmlString || !xmlString.trim()) {
-      throw new ValidationError('XML string is empty or undefined');
+      throw new ValidationError("XML string is empty or undefined");
     }
 
     let doc: Document;
@@ -42,15 +54,21 @@ export const XmlDocketParser = {
       doc = parser.parseFromString(xmlString, "text/xml");
 
       // Check for XML parse errors
-      const parserError = doc.querySelector('parsererror');
+      const parserError = doc.querySelector("parsererror");
       if (parserError) {
-        throw new FileProcessingError('XML Document', `XML parsing error: ${parserError.textContent || 'Malformed XML'}`);
+        throw new FileProcessingError(
+          "XML Document",
+          `XML parsing error: ${parserError.textContent || "Malformed XML"}`,
+        );
       }
     } catch (error) {
       if (error instanceof FileProcessingError) {
         throw error;
       }
-      throw new FileProcessingError('XML Document', `Failed to parse XML: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new FileProcessingError(
+        "XML Document",
+        `Failed to parse XML: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
 
     // 1. Extract Case Info
@@ -61,34 +79,42 @@ export const XmlDocketParser = {
 
       // Require at minimum a stub node
       if (!stub) {
-        throw new ValidationError('Missing required <stub> element in XML');
+        throw new ValidationError("Missing required <stub> element in XML");
       }
 
       const pacerData: Partial<PacerCase> = {
-          caseTitle: stub.getAttribute("shortTitle") || "Unknown Case",
-          caseNumberFull: stub.getAttribute("caseNumber") || "",
-          dateFiled: stub.getAttribute("dateFiled") || "",
-          courtId: stub.getAttribute("origCourt") || "",
-          natureOfSuit: stub.getAttribute("natureOfSuit") || "",
-          caseType: caseTypeNode?.getAttribute("type") || "cv",
-          jurisdictionType: (caseTypeNode?.getAttribute("type") === "Bankruptcy-District Court" ? 'ap' : 'cv') as PacerJurisdictionType,
-          caseStatus: stub.getAttribute("dateTerminated") ? 'C' : 'O',
+        caseTitle: stub.getAttribute("shortTitle") || "Unknown Case",
+        caseNumberFull: stub.getAttribute("caseNumber") || "",
+        dateFiled: stub.getAttribute("dateFiled") || "",
+        courtId: stub.getAttribute("origCourt") || "",
+        natureOfSuit: stub.getAttribute("natureOfSuit") || "",
+        caseType: caseTypeNode?.getAttribute("type") || "cv",
+        jurisdictionType: (caseTypeNode?.getAttribute("type") ===
+        "Bankruptcy-District Court"
+          ? "ap"
+          : "cv") as PacerJurisdictionType,
+        caseStatus: stub.getAttribute("dateTerminated") ? "C" : "O",
       };
 
+      const dateTerminated = stub.getAttribute("dateTerminated");
+
       caseInfo = {
-        title: pacerData.caseTitle,
+        title: pacerData.caseTitle || "Unknown Case",
         id: (pacerData.caseNumberFull || "Unknown ID") as CaseId,
         filingDate: pacerData.dateFiled || "",
         court: pacerData.courtId || "Federal Court",
-        status: pacerData.caseStatus === 'C' ? CaseStatus.Closed : CaseStatus.Discovery,
+        status:
+          pacerData.caseStatus === "C"
+            ? CaseStatus.Closed
+            : CaseStatus.Discovery,
         matterType: MatterType.LITIGATION, // Both appeals and litigation map to LITIGATION
         description: `Imported via XML. NOS: ${pacerData.natureOfSuit}`,
         jurisdiction: "Federal",
-        dateTerminated: stub.getAttribute("dateTerminated") || undefined,
-        pacerData: pacerData as PacerCase
+        pacerData: pacerData as PacerCase,
+        ...(dateTerminated ? { dateTerminated } : {}),
       };
     } catch (error) {
-      console.error('Error extracting case info:', error);
+      console.error("Error extracting case info:", error);
       // Return minimal case info on partial failure
       caseInfo = {
         title: "XML Parse Error - Review Required",
@@ -97,8 +123,8 @@ export const XmlDocketParser = {
         court: "Unknown Court",
         status: CaseStatus.Active,
         matterType: MatterType.LITIGATION,
-        description: `Case info extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        jurisdiction: "Federal"
+        description: `Case info extraction failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        jurisdiction: "Federal",
       };
     }
 
@@ -115,24 +141,39 @@ export const XmlDocketParser = {
           const name = p.getAttribute("info") || "Unknown";
           const typeStr = p.getAttribute("type") || "";
 
-          let type: 'Individual' | 'Corporation' | 'Government' = 'Individual';
-          if (name.includes("Inc") || name.includes("Corp") || name.includes("LLC")) type = 'Corporation';
+          let type: "Individual" | "Corporation" | "Government" = "Individual";
+          if (
+            name.includes("Inc") ||
+            name.includes("Corp") ||
+            name.includes("LLC")
+          )
+            type = "Corporation";
 
           const pacerParty: Partial<PacerParty> = {
-              lastName: name,
-              partyRole: typeStr.trim(),
+            lastName: name,
+            partyRole: typeStr.trim(),
           };
 
           parties.push({
             id: `p-xml-${i}` as PartyId,
             caseId: (caseInfo.id || `case-${Date.now()}`) as CaseId,
             name: name,
-            role: typeStr.trim() || 'Other',
-            contact: attorney?.getAttribute("email") || attorney?.getAttribute("personalPhone") || "",
+            role: typeStr.trim() || "Other",
+            contact:
+              attorney?.getAttribute("email") ||
+              attorney?.getAttribute("personalPhone") ||
+              "",
             type: type,
-            counsel: attorney ? `${attorney.getAttribute("firstName") || ''} ${attorney.getAttribute("lastName") || ''}`.trim() : undefined,
-            partyGroup: p.getAttribute("prisonerNumber") ? "Prisoner" : undefined,
-            pacerData: JSON.parse(JSON.stringify(pacerParty))
+            pacerData: JSON.parse(JSON.stringify(pacerParty)),
+            ...(attorney
+              ? {
+                  counsel:
+                    `${attorney.getAttribute("firstName") || ""} ${attorney.getAttribute("lastName") || ""}`.trim(),
+                }
+              : {}),
+            ...(p.getAttribute("prisonerNumber")
+              ? { partyGroup: "Prisoner" }
+              : {}),
           });
 
           // Yield every 50 parties to avoid blocking
@@ -143,7 +184,7 @@ export const XmlDocketParser = {
         }
       }
     } catch (error) {
-      console.error('Error extracting parties:', error);
+      console.error("Error extracting parties:", error);
       // Return empty parties array on failure, but continue processing
     }
 
@@ -153,7 +194,7 @@ export const XmlDocketParser = {
       const docketNodes = Array.from(doc.querySelectorAll("docketText"));
 
       if (docketNodes.length === 0) {
-        console.warn('No docket entries found in XML');
+        console.warn("No docket entries found in XML");
       }
 
       for (let i = 0; i < docketNodes.length; i++) {
@@ -162,7 +203,7 @@ export const XmlDocketParser = {
           if (!dt) continue;
           const text = dt.getAttribute("text") || "";
           const date = dt.getAttribute("dateFiled") || "";
-          const docLink = dt.getAttribute("docLink") || undefined;
+          const docLink = dt.getAttribute("docLink");
 
           // Skip entries with no text
           if (!text.trim()) {
@@ -170,14 +211,14 @@ export const XmlDocketParser = {
             continue;
           }
 
-          let type: DocketEntryType = 'Filing';
-          if (text.toUpperCase().includes("ORDER")) type = 'Order';
-          else if (text.toUpperCase().includes("NOTICE")) type = 'Notice';
-          else if (text.toUpperCase().includes("MINUTE")) type = 'Minute Entry';
-          else if (text.toUpperCase().includes("EXHIBIT")) type = 'Exhibit';
+          let type: DocketEntryType = "Filing";
+          if (text.toUpperCase().includes("ORDER")) type = "Order";
+          else if (text.toUpperCase().includes("NOTICE")) type = "Notice";
+          else if (text.toUpperCase().includes("MINUTE")) type = "Minute Entry";
+          else if (text.toUpperCase().includes("EXHIBIT")) type = "Exhibit";
 
           const seqMatch = text.match(/\[(\d+)\]/);
-          const seq = (seqMatch && seqMatch[1]) ? parseInt(seqMatch[1]) : i + 1;
+          const seq = seqMatch && seqMatch[1] ? parseInt(seqMatch[1]) : i + 1;
 
           docketEntries.push({
             id: `dk-xml-${i}` as DocketId,
@@ -185,34 +226,42 @@ export const XmlDocketParser = {
             caseId: caseInfo.id || ("Unknown" as CaseId),
             date: date || new Date().toISOString(),
             type: type,
-            title: text.substring(0, 150) + (text.length > 150 ? '...' : ''),
+            title: text.substring(0, 150) + (text.length > 150 ? "..." : ""),
             description: text,
-            filedBy: text.toLowerCase().includes("plaintiff") || text.toLowerCase().includes("appellant") ? "Appellant/Plaintiff" :
-              text.toLowerCase().includes("defendant") || text.toLowerCase().includes("appellee") ? "Appellee/Defendant" : "Court",
-            docLink: docLink,
+            filedBy:
+              text.toLowerCase().includes("plaintiff") ||
+              text.toLowerCase().includes("appellant")
+                ? "Appellant/Plaintiff"
+                : text.toLowerCase().includes("defendant") ||
+                    text.toLowerCase().includes("appellee")
+                  ? "Appellee/Defendant"
+                  : "Court",
             isSealed: text.toUpperCase().includes("SEALED"),
             dateFiled: "",
-            entryDate: ""
+            entryDate: "",
+            ...(docLink ? { docLink } : {}),
           });
 
           // Yield every 50 entries
           if (i % 50 === 0) await yieldToMain();
         } catch (entryError) {
-          console.warn(`Failed to parse docket entry at index ${i}:`, entryError);
+          console.warn(
+            `Failed to parse docket entry at index ${i}:`,
+            entryError,
+          );
           // Continue with remaining entries
         }
       }
     } catch (error) {
-      console.error('Error extracting docket entries:', error);
+      console.error("Error extracting docket entries:", error);
       // Return partial results even if docket entries fail
     }
 
     // Validate we have at least minimal data
     if (!caseInfo.id) {
-      throw new ValidationError('Failed to extract case information from XML');
+      throw new ValidationError("Failed to extract case information from XML");
     }
 
     return { caseInfo, parties, docketEntries };
-  }
+  },
 };
-

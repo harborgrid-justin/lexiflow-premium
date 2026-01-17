@@ -7,6 +7,7 @@
  */
 
 import { OperationError } from "@/services/core/errors";
+
 import type { FunnelStat } from "../shared/types";
 
 /**

@@ -31,11 +31,12 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Errors
+import { api } from "@/api";
 import { OperationError } from "@/services/core/errors";
 
 // API & Query Keys
-import { api } from "@/api";
 import { queryClient } from "@/services/infrastructure/query-client.service";
+import { type LegalRule } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 
 // Types
@@ -43,7 +44,6 @@ import type {
   CreateJurisdictionRuleDto,
   JurisdictionRule,
 } from "@/api/intelligence/jurisdiction-api";
-import { LegalRule } from "@/types";
 
 // ============================================================================
 // TYPE MAPPING UTILITIES
@@ -61,9 +61,9 @@ function mapToLegalRule(rule: JurisdictionRule): LegalRule {
     jurisdiction: rule.jurisdiction?.name || rule.jurisdictionId || "Unknown",
     effectiveDate: rule.effectiveDate || new Date().toISOString(),
     source: rule.fullText || "",
-    url: rule.url,
     createdAt: rule.createdAt || new Date().toISOString(),
     updatedAt: rule.updatedAt || new Date().toISOString(),
+    ...(rule.url ? { url: rule.url } : {}),
   };
 }
 
@@ -71,17 +71,17 @@ function mapToLegalRule(rule: JurisdictionRule): LegalRule {
  * Maps LegalRule to CreateJurisdictionRuleDto for backend
  */
 function mapToCreateDto(
-  rule: Omit<LegalRule, "id">
+  rule: Omit<LegalRule, "id">,
 ): CreateJurisdictionRuleDto {
   return {
     jurisdictionId: rule.jurisdiction || "default",
     code: rule.code,
     name: rule.name,
     type: rule.type as JurisdictionRule["type"],
-    description: rule.description,
-    effectiveDate: rule.effectiveDate,
-    fullText: rule.source,
-    url: rule.url,
+    ...(rule.description ? { description: rule.description } : {}),
+    ...(rule.effectiveDate ? { effectiveDate: rule.effectiveDate } : {}),
+    ...(rule.source ? { fullText: rule.source } : {}),
+    ...(rule.url ? { url: rule.url } : {}),
   };
 }
 
@@ -102,7 +102,7 @@ export const RuleService = {
    */
   search: async (
     query: string,
-    jurisdictionId?: string
+    jurisdictionId?: string,
   ): Promise<LegalRule[]> => {
     const rules = await api.jurisdiction.searchRules(query, jurisdictionId);
     return rules.map(mapToLegalRule);
@@ -138,7 +138,7 @@ export const RuleService = {
    */
   update: async (
     id: string,
-    updates: Partial<LegalRule>
+    updates: Partial<LegalRule>,
   ): Promise<LegalRule> => {
     const updateDto: Partial<
       Omit<CreateJurisdictionRuleDto, "jurisdictionId">

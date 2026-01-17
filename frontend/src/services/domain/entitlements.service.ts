@@ -14,6 +14,8 @@
 // ================================================================================
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+import { OrganizationTypeEnum } from "@/types";
+
 import type { Organization, User } from "@/types";
 
 export type Plan = "free" | "pro" | "enterprise";
@@ -50,11 +52,7 @@ export class EntitlementsService {
         canUseAdminTools = true;
         maxCases = 10000;
         storageLimitGB = 10000;
-      } else if (
-        user.role === "Senior Partner" ||
-        user.role === "Associate" ||
-        user.role === "Partner"
-      ) {
+      } else if (user.role === "Senior Partner" || user.role === "Associate") {
         plan = "pro";
         maxCases = 500;
         storageLimitGB = 100;
@@ -72,11 +70,11 @@ export class EntitlementsService {
           } catch (err) {
             console.warn(
               "Could not fetch organization details, using role-based entitlements",
-              err
+              err,
             );
           }
         }
-      } else if (user.role === "Paralegal" || user.role === "staff") {
+      } else if (user.role === "Paralegal") {
         plan = "pro";
         maxCases = 100;
         storageLimitGB = 50;
@@ -117,16 +115,13 @@ export class EntitlementsService {
 
     // Example mapping based on organization type
     if (
-      org.organizationType === "corporation" ||
-      org.organizationType === "enterprise"
+      org.organizationType === OrganizationTypeEnum.CORPORATION ||
+      org.organizationType === OrganizationTypeEnum.LLC ||
+      org.organizationType === OrganizationTypeEnum.PARTNERSHIP
     ) {
       plan = "enterprise";
       maxCases = 10000;
       storageLimitGB = 10000;
-    } else if (org.organizationType === "law_firm") {
-      plan = "enterprise";
-      maxCases = 5000;
-      storageLimitGB = 5000;
     }
 
     return {

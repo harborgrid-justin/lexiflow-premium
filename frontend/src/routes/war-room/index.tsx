@@ -13,6 +13,7 @@
  */
 
 import { casesApi } from '@/lib/frontend-api';
+import { CaseStatus } from '@/types';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -75,7 +76,7 @@ export async function action({ request }: ActionFunctionArgs) {
         if (title) {
           const result = await casesApi.create({
             title,
-            status: 'Trial',
+            status: CaseStatus.Trial,
             description: 'Created from War Room',
             client: 'Unknown', // Should be provided
             practiceArea: 'Litigation'
@@ -101,7 +102,7 @@ export async function action({ request }: ActionFunctionArgs) {
       case "archive": {
         const id = formData.get("id") as string;
         if (id) {
-          const result = await casesApi.update(id, { status: 'Closed' });
+          const result = await casesApi.update(id, { status: CaseStatus.Closed });
           if (!result.ok) {
             return { success: false, error: result.error.message };
           }

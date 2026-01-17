@@ -4,8 +4,10 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { Invoice, TimeEntry } from "./types";
+
 import { OperationError } from "./types";
+
+import type { Invoice, TimeEntry } from "./types";
 
 /**
  * Get all invoices

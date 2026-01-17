@@ -71,9 +71,12 @@ export function useOpposition(caseId: string) {
  * Hook to fetch opposition case history
  */
 export function useOppositionHistory(entityId: string) {
+  const warRoomService = DataService.warRoom as {
+    getOppositionCaseHistory?: (id: string) => Promise<unknown>;
+  };
   return useQuery(
     ["opposition-history", entityId],
-    () => DataService.warRoom.getOppositionCaseHistory?.(entityId),
+    () => warRoomService.getOppositionCaseHistory?.(entityId),
     { enabled: !!entityId },
   );
 }

@@ -15,8 +15,9 @@
  * - Persistent storage via defaultStorage
  */
 
+import { TIMEOUTS } from "@/config/ports.config";
+
 import { defaultStorage } from "./adapters/StorageAdapter";
-import { TIMEOUTS } from '@/config/ports.config';
 
 class ValidationError extends Error {
   constructor(message: string) {
@@ -131,7 +132,7 @@ class NotificationServiceClass {
         const permission = await Notification.requestPermission();
         this.desktopEnabled = permission === "granted";
         console.log(
-          `[NotificationService] Desktop notifications: ${permission}`
+          `[NotificationService] Desktop notifications: ${permission}`,
         );
       }
 
@@ -144,7 +145,7 @@ class NotificationServiceClass {
       } catch (error) {
         console.warn(
           "[NotificationService] Failed to load preferences:",
-          error
+          error,
         );
       }
 
@@ -166,11 +167,11 @@ class NotificationServiceClass {
    */
   private validateNotification(
     notification: Partial<Notification>,
-    methodName: string
+    methodName: string,
   ): void {
     if (!notification.title || false) {
       throw new ValidationError(
-        `[NotificationService.${methodName}] Invalid title parameter`
+        `[NotificationService.${methodName}] Invalid title parameter`,
       );
     }
     if (
@@ -178,7 +179,7 @@ class NotificationServiceClass {
       !["info", "success", "warning", "error"].includes(notification.type)
     ) {
       throw new ValidationError(
-        `[NotificationService.${methodName}] Invalid type parameter`
+        `[NotificationService.${methodName}] Invalid type parameter`,
       );
     }
     if (
@@ -186,7 +187,7 @@ class NotificationServiceClass {
       !["low", "normal", "high", "urgent"].includes(notification.priority)
     ) {
       throw new ValidationError(
-        `[NotificationService.${methodName}] Invalid priority parameter`
+        `[NotificationService.${methodName}] Invalid priority parameter`,
       );
     }
   }
@@ -198,7 +199,7 @@ class NotificationServiceClass {
   private validateId(id: string, methodName: string): void {
     if (!id || false) {
       throw new ValidationError(
-        `[NotificationService.${methodName}] Invalid id parameter`
+        `[NotificationService.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -209,11 +210,11 @@ class NotificationServiceClass {
    */
   private validatePriority(
     priority: NotificationPriority,
-    methodName: string
+    methodName: string,
   ): void {
     if (!["low", "normal", "high", "urgent"].includes(priority)) {
       throw new ValidationError(
-        `[NotificationService.${methodName}] Invalid priority parameter`
+        `[NotificationService.${methodName}] Invalid priority parameter`,
       );
     }
   }
@@ -249,7 +250,7 @@ class NotificationServiceClass {
       if (this.notifications.length > this.maxNotifications) {
         this.notifications = this.notifications.slice(0, this.maxNotifications);
         console.debug(
-          `[NotificationService] Evicted old notifications (limit: ${this.maxNotifications})`
+          `[NotificationService] Evicted old notifications (limit: ${this.maxNotifications})`,
         );
       }
 
@@ -473,7 +474,7 @@ class NotificationServiceClass {
   subscribe(listener: NotificationListener): () => void {
     if (typeof listener !== "function") {
       throw new ValidationError(
-        "[NotificationService.subscribe] Listener must be a function"
+        "[NotificationService.subscribe] Listener must be a function",
       );
     }
     try {
@@ -507,7 +508,7 @@ class NotificationServiceClass {
     } catch (error) {
       console.warn(
         "[NotificationService.setSoundEnabled] Failed to save preference:",
-        error
+        error,
       );
     }
   }
@@ -571,7 +572,7 @@ class NotificationServiceClass {
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(
         0.01,
-        audioContext.currentTime + 0.1
+        audioContext.currentTime + 0.1,
       );
 
       oscillator.start(audioContext.currentTime);
@@ -592,11 +593,11 @@ class NotificationServiceClass {
       const desktopNotification = new globalThis.Notification(
         notification.title,
         {
-          body: notification.message,
+          body: notification.message ?? "",
           icon: notification.icon || "/favicon.ico",
           tag: notification.id,
           requireInteraction: notification.priority === "urgent",
-        }
+        },
       );
 
       // Track desktop notification for cleanup
@@ -615,7 +616,7 @@ class NotificationServiceClass {
     } catch (error) {
       console.warn(
         "[NotificationService.showDesktopNotification] Error:",
-        error
+        error,
       );
     }
   }
@@ -631,7 +632,7 @@ class NotificationServiceClass {
       } catch (error) {
         console.error(
           "[NotificationService.notifyListeners] Listener error:",
-          error
+          error,
         );
       }
     });
@@ -655,7 +656,7 @@ class NotificationServiceClass {
       } catch (error) {
         console.warn(
           "[NotificationService] Error closing desktop notification:",
-          error
+          error,
         );
       }
     });
@@ -697,11 +698,11 @@ export const notify = {
   info: (
     title: string,
     message?: string,
-    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
   ) => {
     return NotificationService.add({
       title,
-      message,
+      message: message ?? "",
       type: "info",
       priority: "normal",
       ...options,
@@ -714,11 +715,11 @@ export const notify = {
   success: (
     title: string,
     message?: string,
-    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
   ) => {
     return NotificationService.add({
       title,
-      message,
+      message: message ?? "",
       type: "success",
       priority: "normal",
       duration: NOTIFICATION_SUCCESS_DISMISS_MS,
@@ -732,11 +733,11 @@ export const notify = {
   warning: (
     title: string,
     message?: string,
-    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
   ) => {
     return NotificationService.add({
       title,
-      message,
+      message: message ?? "",
       type: "warning",
       priority: "high",
       duration: NOTIFICATION_AUTO_DISMISS_MS,
@@ -750,11 +751,11 @@ export const notify = {
   error: (
     title: string,
     message?: string,
-    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
   ) => {
     return NotificationService.add({
       title,
-      message,
+      message: message ?? "",
       type: "error",
       priority: "urgent",
       duration: 0, // Persistent
@@ -769,7 +770,7 @@ export const notify = {
     title: string,
     message: string,
     onUndo: () => void,
-    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
   ) => {
     return NotificationService.add({
       title,

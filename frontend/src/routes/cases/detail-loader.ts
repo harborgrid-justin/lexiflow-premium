@@ -60,4 +60,4 @@ export async function caseDetailLoader({
 }
 
 // Force client-side execution for hydration (needed for localStorage auth)
-(caseDetailLoader as any).hydrate = true;
+(caseDetailLoader as unknown as { hydrate: boolean }).hydrate = true;

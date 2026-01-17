@@ -5,7 +5,17 @@
  * Provides basic parsing with quality indicators
  */
 
-import { DocketEntry, DocketEntryType, Case, Party, CaseId, PartyId, DocketId, MatterType, CaseStatus } from '@/types';
+import {
+  type DocketEntry,
+  type DocketEntryType,
+  type Case,
+  type Party,
+  type CaseId,
+  type PartyId,
+  type DocketId,
+  MatterType,
+  CaseStatus,
+} from "@/types";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -15,7 +25,7 @@ export interface FallbackParseResult {
   caseInfo: Partial<Case>;
   parties: Party[];
   docketEntries: DocketEntry[];
-  quality: 'Low' | 'Medium' | 'High';
+  quality: "Low" | "Medium" | "High";
   confidence: number; // 0-100
   warnings: string[];
 }
@@ -48,7 +58,8 @@ const PATTERNS = {
   attorney: /(?:attorney|counsel)(?:\s+for)?:\s*([^\n]+)/i,
 
   // Court patterns
-  court: /(?:in\s+the\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+(?:District\s+)?Court/i
+  court:
+    /(?:in\s+the\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+(?:District\s+)?Court/i,
 };
 
 // ============================================================================
@@ -63,7 +74,7 @@ function normalizeDate(dateStr: string): string {
     // Try parsing various formats
     let date: Date;
 
-    if (dateStr.includes('-') && dateStr.length === 10) {
+    if (dateStr.includes("-") && dateStr.length === 10) {
       // Already in YYYY-MM-DD
       return dateStr;
     }
@@ -76,32 +87,45 @@ function normalizeDate(dateStr: string): string {
       // Determine if format is MM/DD/YYYY or DD/MM/YYYY (assume US format)
       if (third && third.length === 4) {
         // MM/DD/YYYY
-        date = new Date(parseInt(third), parseInt(first || '1') - 1, parseInt(second || '1'));
+        date = new Date(
+          parseInt(third),
+          parseInt(first || "1") - 1,
+          parseInt(second || "1"),
+        );
       } else if (first && first.length === 4) {
         // YYYY/MM/DD
-        date = new Date(parseInt(first), parseInt(second || '1') - 1, parseInt(third || '1'));
+        date = new Date(
+          parseInt(first),
+          parseInt(second || "1") - 1,
+          parseInt(third || "1"),
+        );
       } else {
         // Two-digit year, assume MM/DD/YY
-        const year = parseInt(third || '0') + (parseInt(third || '0') < 50 ? 2000 : 1900);
-        date = new Date(year, parseInt(first || '1') - 1, parseInt(second || '1'));
+        const year =
+          parseInt(third || "0") + (parseInt(third || "0") < 50 ? 2000 : 1900);
+        date = new Date(
+          year,
+          parseInt(first || "1") - 1,
+          parseInt(second || "1"),
+        );
       }
 
       if (!isNaN(date.getTime())) {
-        return date.toISOString().split('T')[0]!;
+        return date.toISOString().split("T")[0]!;
       }
     }
 
     // Fallback: use Date constructor
     date = new Date(dateStr);
     if (!isNaN(date.getTime())) {
-      return date.toISOString().split('T')[0]!;
+      return date.toISOString().split("T")[0]!;
     }
   } catch (e) {
-    console.warn('Date normalization failed:', dateStr, e);
+    console.warn("Date normalization failed:", dateStr, e);
   }
 
   // Return current date as fallback
-  return new Date().toISOString().split('T')[0]!;
+  return new Date().toISOString().split("T")[0]!;
 }
 
 /**
@@ -110,20 +134,23 @@ function normalizeDate(dateStr: string): string {
 function determineEntryType(text: string): DocketEntryType {
   const lower = text.toLowerCase();
 
-  if (PATTERNS.order.test(lower)) return 'Order';
-  if (PATTERNS.motion.test(lower)) return 'Motion';
-  if (PATTERNS.notice.test(lower)) return 'Notice';
-  if (lower.includes('minute entry')) return 'Minute Entry';
-  if (lower.includes('exhibit')) return 'Exhibit';
-  if (lower.includes('hearing')) return 'Hearing';
+  if (PATTERNS.order.test(lower)) return "Order";
+  if (PATTERNS.motion.test(lower)) return "Motion";
+  if (PATTERNS.notice.test(lower)) return "Notice";
+  if (lower.includes("minute entry")) return "Minute Entry";
+  if (lower.includes("exhibit")) return "Exhibit";
+  if (lower.includes("hearing")) return "Hearing";
 
-  return 'Filing'; // Default
+  return "Filing"; // Default
 }
 
 /**
  * Extract case information
  */
-function extractCaseInfo(text: string): { caseInfo: Partial<Case>; confidence: number } {
+function extractCaseInfo(text: string): {
+  caseInfo: Partial<Case>;
+  confidence: number;
+} {
   const info: Partial<Case> = {};
   let confidence = 0;
 
@@ -145,13 +172,15 @@ function extractCaseInfo(text: string): { caseInfo: Partial<Case>; confidence: n
   // Default values
   if (!info.id) {
     info.id = `CASE-${Date.now()}` as CaseId;
-    info.title = 'Imported Case (No Number Found)';
+    info.title = "Imported Case (No Number Found)";
   }
 
   info.status = CaseStatus.Discovery;
   info.matterType = MatterType.LITIGATION;
-  info.jurisdiction = info.court?.toLowerCase().includes('federal') ? 'Federal' : 'State';
-  info.filingDate = new Date().toISOString().split('T')[0];
+  info.jurisdiction = info.court?.toLowerCase().includes("federal")
+    ? "Federal"
+    : "State";
+  info.filingDate = new Date().toISOString().split("T")[0] ?? "";
 
   return { caseInfo: info, confidence };
 }
@@ -159,23 +188,30 @@ function extractCaseInfo(text: string): { caseInfo: Partial<Case>; confidence: n
 /**
  * Extract parties
  */
-function extractParties(text: string, caseId: CaseId): { parties: Party[]; confidence: number } {
+function extractParties(
+  text: string,
+  caseId: CaseId,
+): { parties: Party[]; confidence: number } {
   const parties: Party[] = [];
   let confidence = 0;
 
   // Extract plaintiff
   const plaintiffMatch = text.match(PATTERNS.plaintiff);
   if (plaintiffMatch && plaintiffMatch[1]) {
-    const names = plaintiffMatch[1].split(/,|\band\b/).map(n => n.trim());
+    const names = plaintiffMatch[1].split(/,|\band\b/).map((n) => n.trim());
     names.forEach((name, idx) => {
       if (name) {
         parties.push({
           id: `plaintiff-${idx}` as PartyId,
           caseId: caseId,
           name: name,
-          role: 'Plaintiff',
-          type: name.toLowerCase().includes('inc') || name.toLowerCase().includes('corp') ? 'Corporation' : 'Individual',
-          contact: ''
+          role: "Plaintiff",
+          type:
+            name.toLowerCase().includes("inc") ||
+            name.toLowerCase().includes("corp")
+              ? "Corporation"
+              : "Individual",
+          contact: "",
         });
       }
     });
@@ -185,16 +221,20 @@ function extractParties(text: string, caseId: CaseId): { parties: Party[]; confi
   // Extract defendant
   const defendantMatch = text.match(PATTERNS.defendant);
   if (defendantMatch && defendantMatch[1]) {
-    const names = defendantMatch[1].split(/,|\band\b/).map(n => n.trim());
+    const names = defendantMatch[1].split(/,|\band\b/).map((n) => n.trim());
     names.forEach((name, idx) => {
       if (name) {
         parties.push({
           id: `defendant-${idx}` as PartyId,
           caseId: caseId,
           name: name,
-          role: 'Defendant',
-          type: name.toLowerCase().includes('inc') || name.toLowerCase().includes('corp') ? 'Corporation' : 'Individual',
-          contact: ''
+          role: "Defendant",
+          type:
+            name.toLowerCase().includes("inc") ||
+            name.toLowerCase().includes("corp")
+              ? "Corporation"
+              : "Individual",
+          contact: "",
         });
       }
     });
@@ -207,12 +247,15 @@ function extractParties(text: string, caseId: CaseId): { parties: Party[]; confi
 /**
  * Extract docket entries
  */
-function extractDocketEntries(text: string, caseId: CaseId): { entries: DocketEntry[]; confidence: number } {
+function extractDocketEntries(
+  text: string,
+  caseId: CaseId,
+): { entries: DocketEntry[]; confidence: number } {
   const entries: DocketEntry[] = [];
   let confidence = 0;
 
   // Split text into lines
-  const lines = text.split('\n');
+  const lines = text.split("\n");
 
   let entryNumber = 1;
   for (const line of lines) {
@@ -223,20 +266,20 @@ function extractDocketEntries(text: string, caseId: CaseId): { entries: DocketEn
     const match = trimmed.match(PATTERNS.docketLine);
     if (match) {
       const [, seqStr, dateStr, description] = match;
-      const normalizedDate = normalizeDate(dateStr || '');
+      const normalizedDate = normalizeDate(dateStr || "");
 
       entries.push({
         id: `dk-fallback-${Date.now()}-${entryNumber}` as DocketId,
-        sequenceNumber: parseInt(seqStr || '0') || entryNumber,
+        sequenceNumber: parseInt(seqStr || "0") || entryNumber,
         caseId: caseId,
         date: normalizedDate,
         dateFiled: normalizedDate,
         entryDate: normalizedDate,
-        type: determineEntryType(description || ''),
-        title: (description || '').substring(0, 100),
-        description: description || '',
-        filedBy: 'Unknown',
-        isSealed: false
+        type: determineEntryType(description || ""),
+        title: (description || "").substring(0, 100),
+        description: description || "",
+        filedBy: "Unknown",
+        isSealed: false,
       });
 
       entryNumber++;
@@ -257,8 +300,8 @@ function extractDocketEntries(text: string, caseId: CaseId): { entries: DocketEn
           type: determineEntryType(trimmed),
           title: trimmed.substring(0, 100),
           description: trimmed,
-          filedBy: 'Unknown',
-          isSealed: false
+          filedBy: "Unknown",
+          isSealed: false,
         });
 
         entryNumber++;
@@ -282,35 +325,42 @@ export const FallbackDocketParser = {
     const warnings: string[] = [];
 
     if (!text || text.trim().length < 50) {
-      warnings.push('Input text is too short for reliable parsing');
+      warnings.push("Input text is too short for reliable parsing");
     }
 
     // Extract case info
     const { caseInfo, confidence: caseConfidence } = extractCaseInfo(text);
 
     // Extract parties
-    const { parties, confidence: partiesConfidence } = extractParties(text, caseInfo.id!);
+    const { parties, confidence: partiesConfidence } = extractParties(
+      text,
+      caseInfo.id!,
+    );
     if (parties.length === 0) {
-      warnings.push('No parties found - may need manual entry');
+      warnings.push("No parties found - may need manual entry");
     }
 
     // Extract docket entries
-    const { entries, confidence: entriesConfidence } = extractDocketEntries(text, caseInfo.id!);
+    const { entries, confidence: entriesConfidence } = extractDocketEntries(
+      text,
+      caseInfo.id!,
+    );
     if (entries.length === 0) {
-      warnings.push('No docket entries found - check input format');
+      warnings.push("No docket entries found - check input format");
     }
 
     // Calculate overall confidence
-    const totalConfidence = (caseConfidence + partiesConfidence + entriesConfidence) / 3;
+    const totalConfidence =
+      (caseConfidence + partiesConfidence + entriesConfidence) / 3;
 
     // Determine quality level
-    let quality: 'Low' | 'Medium' | 'High';
-    if (totalConfidence >= 70) quality = 'High';
-    else if (totalConfidence >= 40) quality = 'Medium';
-    else quality = 'Low';
+    let quality: "Low" | "Medium" | "High";
+    if (totalConfidence >= 70) quality = "High";
+    else if (totalConfidence >= 40) quality = "Medium";
+    else quality = "Low";
 
-    if (quality === 'Low') {
-      warnings.push('Low confidence parse - recommend manual review');
+    if (quality === "Low") {
+      warnings.push("Low confidence parse - recommend manual review");
     }
 
     return {
@@ -319,7 +369,7 @@ export const FallbackDocketParser = {
       docketEntries: entries,
       quality,
       confidence: Math.round(totalConfidence),
-      warnings
+      warnings,
     };
   },
 
@@ -327,10 +377,6 @@ export const FallbackDocketParser = {
    * Validate parsed result
    */
   validateResult(result: FallbackParseResult): boolean {
-    return !!(
-        result.caseInfo.id &&
-        result.docketEntries.length > 0
-    );
-  }
+    return !!(result.caseInfo.id && result.docketEntries.length > 0);
+  },
 };
-

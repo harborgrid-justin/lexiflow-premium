@@ -6,9 +6,11 @@
  */
 
 import { db } from "@/services/data/db.service";
-import type { SystemEventPayloads } from "@/types/integration-types";
 import { SystemEventType } from "@/types/integration-types";
+
 import { BaseEventHandler } from "./base-event.handler.service";
+
+import type { SystemEventPayloads } from "@/types/integration-types";
 
 export class CitationSavedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]
@@ -16,7 +18,7 @@ export class CitationSavedHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.CITATION_SAVED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]
+    payload: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED],
   ) {
     const actions: string[] = [];
     const { citation, queryContext } = payload;
@@ -30,7 +32,7 @@ export class CitationSavedHandler extends BaseEventHandler<
       const suggestionCount = await this.createPleadingSuggestions(citation);
       if (suggestionCount > 0) {
         actions.push(
-          `Created citation suggestions for ${suggestionCount} active pleading(s)`
+          `Created citation suggestions for ${suggestionCount} active pleading(s)`,
         );
       }
     }
@@ -40,13 +42,13 @@ export class CitationSavedHandler extends BaseEventHandler<
 
   private async cacheResearchResult(
     citation: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]["citation"],
-    queryContext: string | undefined
+    queryContext: string | undefined,
   ): Promise<void> {
     const cacheEntry = {
       id: `cache-${Date.now()}`,
       citationId: citation.id,
       caseId: citation.caseId,
-      authority: citation.authority,
+      authority: (citation as Record<string, unknown>)["authority"] as string,
       citationText: citation.citation,
       context: queryContext,
       relevanceScore: citation.relevance || 0,
@@ -57,16 +59,16 @@ export class CitationSavedHandler extends BaseEventHandler<
   }
 
   private async createPleadingSuggestions(
-    citation: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]["citation"]
+    citation: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]["citation"],
   ): Promise<number> {
     const { DataService } = await import("@/services/data/dataService");
 
     const activePleadings = await DataService.pleadings.getByIndex(
       "status",
-      "Draft"
+      "Draft",
     );
     const casePleadings = activePleadings.filter(
-      (pl: unknown) => (pl as { caseId: string }).caseId === citation.caseId
+      (pl: unknown) => (pl as { caseId: string }).caseId === citation.caseId,
     );
 
     for (const pleading of casePleadings) {

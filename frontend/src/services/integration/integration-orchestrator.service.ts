@@ -68,12 +68,14 @@
 
 import { ValidationError } from "@/services/core/errors";
 import { IntegrationEventPublisher } from "@/services/data/integration/integration-event-publisher.service";
+import { SystemEventType } from "@/types/integration-types";
+
+import { EventHandlerRegistry } from "./handlers";
+
 import type {
   IntegrationResult,
   SystemEventPayloads,
 } from "@/types/integration-types";
-import { SystemEventType } from "@/types/integration-types";
-import { EventHandlerRegistry } from "./handlers";
 
 // =============================================================================
 // VALIDATION (Private)
@@ -130,7 +132,7 @@ export class IntegrationOrchestrator {
         type,
         async (payload: unknown) => {
           await this.publish(
-            type as keyof SystemEventPayloads,
+            type,
             payload as SystemEventPayloads[keyof SystemEventPayloads]
           );
         }

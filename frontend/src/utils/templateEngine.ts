@@ -3,7 +3,7 @@
  * @description Safe template variable substitution engine
  */
 
-import { Case, PleadingSection } from '@/types';
+import type { Case, PleadingSection } from "@/types";
 
 export interface TemplateContext {
   case?: Case;
@@ -18,8 +18,11 @@ const TEMPLATE_VARIABLE_PATTERN = /\{\{([^}]+)\}\}/g;
 /**
  * Safely gets nested property from object
  */
-function getNestedProperty(obj: Record<string, unknown>, path: string): unknown {
-  const keys = path.trim().split('.');
+function getNestedProperty(
+  obj: Record<string, unknown>,
+  path: string,
+): unknown {
+  const keys = path.trim().split(".");
   let current: unknown = obj;
 
   for (const key of keys) {
@@ -32,27 +35,58 @@ function getNestedProperty(obj: Record<string, unknown>, path: string): unknown 
   return current;
 }
 
+function stringifyTemplateValue(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    typeof value === "bigint"
+  ) {
+    return String(value);
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+
+  if (typeof value === "function") {
+    return value.name || "function";
+  }
+
+  if (typeof value === "symbol") {
+    return value.description ?? "symbol";
+  }
+
+  return JSON.stringify(value);
+}
+
 /**
  * Substitutes template variables in content
  */
 export function substituteVariables(
   content: string,
-  context: TemplateContext
+  context: TemplateContext,
 ): string {
-  return content.replace(TEMPLATE_VARIABLE_PATTERN, (match, variablePath) => {
-    const value = getNestedProperty(context, variablePath);
+  return content.replace(
+    TEMPLATE_VARIABLE_PATTERN,
+    (match: string, variablePath: string) => {
+      const value = getNestedProperty(context, variablePath);
 
-    if (value === undefined || value === null) {
-      // Return original match when value not found
-      return match;
-    }
+      if (value === undefined || value === null) {
+        // Return original match when value not found
+        return match;
+      }
 
-    if (typeof value === 'object') {
-      return JSON.stringify(value);
-    }
-
-    return String(value);
-  });
+      return stringifyTemplateValue(value);
+    },
+  );
 }
 
 /**
@@ -60,11 +94,13 @@ export function substituteVariables(
  */
 export function hydrateTemplateSections(
   sections: Partial<PleadingSection>[],
-  context: TemplateContext
+  context: TemplateContext,
 ): Partial<PleadingSection>[] {
-  return sections.map(section => ({
+  return sections.map((section) => ({
     ...section,
-    content: section.content ? substituteVariables(section.content, context) : ''
+    content: section.content
+      ? substituteVariables(section.content, context)
+      : "",
   }));
 }
 
@@ -87,7 +123,7 @@ export function extractTemplateVariables(content: string): string[] {
  */
 export function validateTemplateContext(
   content: string,
-  context: TemplateContext
+  context: TemplateContext,
 ): { valid: boolean; missingVariables: string[] } {
   const variables = extractTemplateVariables(content);
   const missing: string[] = [];
@@ -101,7 +137,7 @@ export function validateTemplateContext(
 
   return {
     valid: missing.length === 0,
-    missingVariables: missing
+    missingVariables: missing,
   };
 }
 
@@ -109,29 +145,29 @@ export function validateTemplateContext(
  * Creates standard template context from case data
  */
 export function createTemplateContext(caseData: Case): TemplateContext {
-  const plaintiff = caseData.parties?.find(p =>
-    p.role.includes('Plaintiff') || p.role.includes('Appellant')
+  const plaintiff = caseData.parties?.find(
+    (p) => p.role.includes("Plaintiff") || p.role.includes("Appellant"),
   );
 
-  const defendant = caseData.parties?.find(p =>
-    p.role.includes('Defendant') || p.role.includes('Appellee')
+  const defendant = caseData.parties?.find(
+    (p) => p.role.includes("Defendant") || p.role.includes("Appellee"),
   );
 
   return {
     case: caseData,
-    Plaintiff: plaintiff?.name || '[PLAINTIFF]',
-    Defendant: defendant?.name || '[DEFENDANT]',
+    Plaintiff: plaintiff?.name || "[PLAINTIFF]",
+    Defendant: defendant?.name || "[DEFENDANT]",
     CaseNumber: caseData.id,
-    Court: caseData.court || '[COURT]',
-    Judge: caseData.judge || '[JUDGE]',
+    Court: caseData.court || "[COURT]",
+    Judge: caseData.judge || "[JUDGE]",
     FilingDate: caseData.filingDate || new Date().toISOString(),
-    Title: caseData.title || '[CASE TITLE]',
+    Title: caseData.title || "[CASE TITLE]",
     // Add all parties as array
     Parties: caseData.parties || [],
     // Add nested access
-    'case.id': caseData.id,
-    'case.title': caseData.title,
-    'case.court': caseData.court,
-    'case.judge': caseData.judge
+    "case.id": caseData.id,
+    "case.title": caseData.title,
+    "case.court": caseData.court,
+    "case.judge": caseData.judge,
   };
 }

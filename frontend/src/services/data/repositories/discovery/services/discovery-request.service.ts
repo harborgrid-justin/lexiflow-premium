@@ -8,8 +8,10 @@
 
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import type { DiscoveryRequest } from "@/types";
+
 import { validateCaseId, validateId } from "../shared/validation";
+
+import type { DiscoveryRequest } from "@/types";
 
 /**
  * Discovery Request Service Class

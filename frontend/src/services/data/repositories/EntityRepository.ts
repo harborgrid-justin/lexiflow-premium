@@ -5,15 +5,15 @@
 
 import {
   LegalEntitiesApiService,
-  LegalEntityApi,
+  type LegalEntityApi,
 } from "@/api/domains/legal-entities.api";
-import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
+import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { LegalEntity } from "@/types";
-import { EntityRole } from "@/types/enums";
+import { type LegalEntity } from "@/types";
+import { type EntityRole } from "@/types/enums";
 import { SystemEventType } from "@/types/integration-types";
-import { EntityId, MetadataRecord } from "@/types/primitives";
+import { type EntityId, type MetadataRecord } from "@/types/primitives";
 
 export const ENTITY_QUERY_KEYS = {
   all: () => ["entities"] as const,
@@ -73,7 +73,7 @@ export class EntityRepository extends Repository<LegalEntity> {
       id: entity.id as EntityId,
       name: (entityAny.name as string) || "Unknown Entity",
       type: this.mapEntityType(entity.entityType || "other"),
-      roles: (entityAny.roles as unknown as EntityRole[]) || [],
+      roles: (entityAny.roles as EntityRole[]) || [],
       riskScore: (entityAny.riskScore as number) || 0,
       tags: (entityAny.tags as string[]) || [],
       status: ((entity.status as string) || "Active") as "Prospect" | "Active" | "Inactive" | "Blacklisted" | "Deceased",

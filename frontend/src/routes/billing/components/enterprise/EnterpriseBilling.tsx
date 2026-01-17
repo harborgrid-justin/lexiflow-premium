@@ -96,6 +96,7 @@ export function EnterpriseBilling({ firmId, onExportData }: EnterpriseBillingPro
 
   return (
     <div className="space-y-6">
+      {isLoading && <div className="text-sm">Loading billing data...</div>}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-[var(--color-text)]">

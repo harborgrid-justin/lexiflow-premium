@@ -6,13 +6,14 @@
  * Ensures FRCP compliance for discovery requests, privilege logs, and legal holds
  */
 
-import type { DiscoveryRequest, LegalHold, PrivilegeLogEntry } from "@/types";
 import {
   DiscoveryRequestStatusEnum,
   ESICollectionStatusEnum,
   LegalHoldStatusEnum,
   PrivilegeBasisEnum,
 } from "@/types/enums";
+
+import type { DiscoveryRequest, LegalHold, PrivilegeLogEntry } from "@/types";
 
 // XSS Prevention: Sanitize HTML/script tags
 const sanitizeString = (str: string): string => {
@@ -77,7 +78,7 @@ const discoveryTypes = [
  * Validates discovery request data with FRCP compliance checks
  */
 const validateDiscoveryRequest = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<DiscoveryRequest>> => {
   const errors: Array<{ path: string; message: string }> = [];
 
@@ -138,7 +139,7 @@ const validateDiscoveryRequest = (
   const dataStatus = "status" in data ? data.status : undefined;
   if (
     !discoveryRequestStatuses.includes(
-      dataStatus as (typeof discoveryRequestStatuses)[number]
+      dataStatus as (typeof discoveryRequestStatuses)[number],
     )
   ) {
     errors.push({ path: "status", message: "Invalid status" });
@@ -175,7 +176,7 @@ const validateDiscoveryRequest = (
  * Validates FRCP 26(b)(5) privilege log entries
  */
 const validatePrivilegeLogEntry = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<PrivilegeLogEntry>> => {
   const errors: Array<{ path: string; message: string }> = [];
 
@@ -200,7 +201,7 @@ const validatePrivilegeLogEntry = (
   const dataBasis = "basis" in data ? data.basis : undefined;
   if (
     !privilegeBasisTypes.includes(
-      dataBasis as (typeof privilegeBasisTypes)[number]
+      dataBasis as (typeof privilegeBasisTypes)[number],
     )
   ) {
     errors.push({ path: "basis", message: "Invalid privilege basis" });
@@ -267,7 +268,7 @@ const validatePrivilegeLogEntry = (
  * Validates legal hold data with preservation requirements
  */
 const validateLegalHold = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<LegalHold>> => {
   const errors: Array<{ path: string; message: string }> = [];
 
@@ -281,13 +282,13 @@ const validateLegalHold = (
 
   const record = data as Record<string, unknown>;
 
-  if (!record.id || typeof record.id !== "string") {
+  if (!record["id"] || typeof record["id"] !== "string") {
     errors.push({ path: "id", message: "Hold ID is required" });
   }
 
   const custodian =
-    record.custodian && typeof record.custodian === "string"
-      ? sanitizeString(record.custodian)
+    record["custodian"] && typeof record["custodian"] === "string"
+      ? sanitizeString(record["custodian"])
       : "";
   if (!custodian) {
     errors.push({ path: "custodian", message: "Custodian is required" });
@@ -296,17 +297,17 @@ const validateLegalHold = (
   }
 
   const dept =
-    record.dept && typeof record.dept === "string"
-      ? sanitizeString(record.dept)
+    record["dept"] && typeof record["dept"] === "string"
+      ? sanitizeString(record["dept"])
       : "";
   if (dept.length > 200) {
     errors.push({ path: "dept", message: "Department name too long" });
   }
 
   if (
-    !record.issued ||
-    typeof record.issued !== "string" ||
-    !isValidDate(record.issued)
+    !record["issued"] ||
+    typeof record["issued"] !== "string" ||
+    !isValidDate(record["issued"])
   ) {
     errors.push({
       path: "issued",
@@ -316,7 +317,7 @@ const validateLegalHold = (
 
   if (
     !legalHoldStatuses.includes(
-      record.status as (typeof legalHoldStatuses)[number]
+      record["status"] as (typeof legalHoldStatuses)[number],
     )
   ) {
     errors.push({ path: "status", message: "Invalid status" });
@@ -341,7 +342,7 @@ const validateLegalHold = (
  * Validates production settings including Bates numbering
  */
 const validateProductionConfig = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<ProductionConfig> => {
   const errors: Array<{ path: string; message: string }> = [];
   const config: ProductionConfig = {};
@@ -354,8 +355,8 @@ const validateProductionConfig = (
   const input = data as Record<string, unknown>;
 
   const batesPrefix =
-    input.batesPrefix && typeof input.batesPrefix === "string"
-      ? input.batesPrefix.trim()
+    input["batesPrefix"] && typeof input["batesPrefix"] === "string"
+      ? input["batesPrefix"].trim()
       : "";
   if (!batesPrefix) {
     errors.push({ path: "batesPrefix", message: "Bates prefix is required" });
@@ -370,9 +371,9 @@ const validateProductionConfig = (
   }
 
   const startNumber =
-    typeof input.startNumber === "number"
-      ? input.startNumber
-      : parseInt(String(input.startNumber || ""));
+    typeof input["startNumber"] === "number"
+      ? input["startNumber"]
+      : parseInt(String(input["startNumber"] || ""));
   if (isNaN(startNumber) || startNumber < 1) {
     errors.push({
       path: "startNumber",
@@ -389,11 +390,11 @@ const validateProductionConfig = (
 
   const validFormats = ["PDF", "Native", "TIFF"];
   if (
-    input.format &&
-    typeof input.format === "string" &&
-    validFormats.includes(input.format)
+    input["format"] &&
+    typeof input["format"] === "string" &&
+    validFormats.includes(input["format"])
   ) {
-    config.format = input.format;
+    config.format = input["format"];
   } else {
     errors.push({
       path: "format",
@@ -423,8 +424,8 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
   const input = data as Record<string, unknown>;
 
   const name =
-    input.name && typeof input.name === "string"
-      ? sanitizeString(input.name)
+    input["name"] && typeof input["name"] === "string"
+      ? sanitizeString(input["name"])
       : "";
   if (!name) {
     errors.push({ path: "name", message: "Source name is required" });
@@ -440,21 +441,21 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
     "OneDrive",
     "Database",
   ];
-  if (!validTypes.includes(input.type as string)) {
+  if (!validTypes.includes(input["type"] as string)) {
     errors.push({ path: "type", message: "Invalid source type" });
   }
 
   if (
     !esiCollectionStatuses.includes(
-      input.status as (typeof esiCollectionStatuses)[number]
+      input["status"] as (typeof esiCollectionStatuses)[number],
     )
   ) {
     errors.push({ path: "status", message: "Invalid status" });
   }
 
   const custodian =
-    input.custodian && typeof input.custodian === "string"
-      ? sanitizeString(input.custodian)
+    input["custodian"] && typeof input["custodian"] === "string"
+      ? sanitizeString(input["custodian"])
       : "";
   if (custodian.length > 200) {
     errors.push({ path: "custodian", message: "Custodian name too long" });
@@ -479,7 +480,7 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
  * Validates filter parameters to prevent injection attacks
  */
 const validateDiscoveryFilters = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<DiscoveryFilters> => {
   const errors: Array<{ path: string; message: string }> = [];
   const filters: DiscoveryFilters = {};
@@ -490,8 +491,8 @@ const validateDiscoveryFilters = (
 
   const input = data as Record<string, unknown>;
 
-  if (input.search && typeof input.search === "string") {
-    const search = sanitizeString(input.search);
+  if (input["search"] && typeof input["search"] === "string") {
+    const search = sanitizeString(input["search"]);
     if (search.length > 200) {
       errors.push({ path: "search", message: "Search query too long" });
     } else {
@@ -499,28 +500,28 @@ const validateDiscoveryFilters = (
     }
   }
 
-  if (input.dateFrom && typeof input.dateFrom === "string") {
-    if (!isValidDate(input.dateFrom) && input.dateFrom !== "") {
+  if (input["dateFrom"] && typeof input["dateFrom"] === "string") {
+    if (!isValidDate(input["dateFrom"]) && input["dateFrom"] !== "") {
       errors.push({ path: "dateFrom", message: "Invalid date format" });
     } else {
-      filters.dateFrom = input.dateFrom;
+      filters.dateFrom = input["dateFrom"];
     }
   }
 
-  if (input.dateTo && typeof input.dateTo === "string") {
-    if (!isValidDate(input.dateTo) && input.dateTo !== "") {
+  if (input["dateTo"] && typeof input["dateTo"] === "string") {
+    if (!isValidDate(input["dateTo"]) && input["dateTo"] !== "") {
       errors.push({ path: "dateTo", message: "Invalid date format" });
     } else {
-      filters.dateTo = input.dateTo;
+      filters.dateTo = input["dateTo"];
     }
   }
 
   // Copy other filter properties
-  if (input.status && typeof input.status === "string") {
-    filters.status = input.status;
+  if (input["status"] && typeof input["status"] === "string") {
+    filters.status = input["status"];
   }
-  if (input.type && typeof input.type === "string") {
-    filters.type = input.type;
+  if (input["type"] && typeof input["type"] === "string") {
+    filters.type = input["type"];
   }
 
   if (errors.length > 0) {
@@ -534,37 +535,37 @@ const validateDiscoveryFilters = (
  * Safe validation helpers - returns { success: true, data } or { success: false, error }
  */
 export const validateDiscoveryRequestSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<DiscoveryRequest>> => {
   return validateDiscoveryRequest(data);
 };
 
 export const validatePrivilegeLogEntrySafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<PrivilegeLogEntry>> => {
   return validatePrivilegeLogEntry(data);
 };
 
 export const validateLegalHoldSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<Partial<LegalHold>> => {
   return validateLegalHold(data);
 };
 
 export const validateProductionConfigSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<ProductionConfig> => {
   return validateProductionConfig(data);
 };
 
 export const validateESISourceSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<ESISource> => {
   return validateESISource(data);
 };
 
 export const validateDiscoveryFiltersSafe = (
-  data: unknown
+  data: unknown,
 ): ValidationResult<DiscoveryFilters> => {
   return validateDiscoveryFilters(data);
 };

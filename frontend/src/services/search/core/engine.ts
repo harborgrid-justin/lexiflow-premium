@@ -4,9 +4,11 @@
  */
 
 import { SearchWorker } from "../searchWorker";
-import type { GlobalSearchResult } from "./types";
-import { validateQuery } from "./validation";
+
 import { hydrateSearchIndex } from "./hydration";
+import { validateQuery } from "./validation";
+
+import type { GlobalSearchResult } from "./types";
 
 /** GlobalSearchEngine - Manages Web Worker singleton for off-thread search indexing */
 export class GlobalSearchEngine {

@@ -3,18 +3,19 @@
  * Provides fallback when Gemini quota is exceeded
  */
 
+import OpenAI from "openai";
+
 import { MissingConfigurationError } from "@/services/core/errors";
 import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
-import { ParsedDocket } from "@/types";
+import { type ParsedDocket } from "@/types";
 import {
-  AnalyzedDoc,
-  BriefCritique,
-  IntentResult,
-  ResearchResponse,
-  ShepardizeResult,
+  type AnalyzedDoc,
+  type BriefCritique,
+  type IntentResult,
+  type ResearchResponse,
+  type ShepardizeResult,
 } from "@/types/intelligence";
 import { withRetry } from "@/utils/apiUtils";
-import OpenAI from "openai";
 
 // Note: Import AI types from @/types, don't re-export them
 
@@ -24,15 +25,15 @@ import OpenAI from "openai";
 
 const getClient = () => {
   const apiKey =
-    import.meta.env.VITE_OPENAI_API_KEY ||
-    import.meta.env.OPENAI_API_KEY ||
+    import.meta.env["VITE_OPENAI_API_KEY"] ||
+    import.meta.env["OPENAI_API_KEY"] ||
     (typeof localStorage !== "undefined"
       ? defaultStorage.getItem("openai_api_key")
       : null);
 
   if (!apiKey) {
     throw new MissingConfigurationError(
-      "OpenAI API key not configured. Please set VITE_OPENAI_API_KEY environment variable or openai_api_key in storage."
+      "OpenAI API key not configured. Please set VITE_OPENAI_API_KEY environment variable or openai_api_key in storage.",
     );
   }
 
@@ -140,7 +141,7 @@ export const OpenAIService = {
 
   async *streamDraft(
     context: string,
-    type: string
+    type: string,
   ): AsyncGenerator<string, void, unknown> {
     try {
       const client = getClient();
@@ -392,7 +393,7 @@ export const OpenAIService = {
    */
   async legalResearch(
     query: string,
-    _jurisdiction?: string
+    _jurisdiction?: string,
   ): Promise<ResearchResponse> {
     return this.conductResearch(query);
   },
@@ -415,11 +416,11 @@ export const OpenAIService = {
     const firstCitation = citations[0];
     if (!firstCitation) {
       return {
-        caseName: 'Unknown Case',
-        citation: '',
-        summary: 'No citation found',
+        caseName: "Unknown Case",
+        citation: "",
+        summary: "No citation found",
         history: [],
-        treatment: []
+        treatment: [],
       };
     }
     return this.shepardizeCitation(firstCitation);
@@ -432,7 +433,7 @@ export const OpenAIService = {
    */
   async draftDocument(
     prompt: string,
-    onChunk: (chunk: string) => void
+    onChunk: (chunk: string) => void,
   ): Promise<void> {
     const stream = this.streamDraft(prompt, "document");
     for await (const chunk of stream) {

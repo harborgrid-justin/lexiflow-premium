@@ -39,7 +39,7 @@ export interface UpdateTaskDto {
   priority?: string;
   dueDate?: string;
   caseId?: string;
-  assignedTo?: string;
+  assignedTo?: string | null;
   parentTaskId?: string;
   tags?: string[];
   estimatedHours?: number;

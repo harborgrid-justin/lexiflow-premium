@@ -1,16 +1,8 @@
-import { analyticsApi, workflowApi } from '@/lib/frontend-api';
+import { analyticsApi, workflowApi } from "@/lib/frontend-api";
 import { AnalysisService } from "@/services/domain/analysis.service";
 import { AnalyticsService } from "@/services/domain/analytics.service";
 
 export const AnalyticsDescriptors: PropertyDescriptorMap = {
-  aiOps: {
-    get: () => analyticsApi.aiOps,
-    enumerable: true,
-  },
-  knowledge: {
-    get: () => analyticsApi.knowledge,
-    enumerable: true,
-  },
   citations: {
     get: () => analyticsApi.citations,
     enumerable: true,

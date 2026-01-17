@@ -6,10 +6,12 @@
  */
 
 import { ChainService } from "@/services/infrastructure/chainService";
+import { SystemEventType } from "@/types/integration-types";
+
+import { BaseEventHandler } from "./base-event.handler.service";
+
 import type { UserId } from "@/types";
 import type { SystemEventPayloads } from "@/types/integration-types";
-import { SystemEventType } from "@/types/integration-types";
-import { BaseEventHandler } from "./base-event.handler.service";
 
 export class EvidenceStatusUpdatedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.EVIDENCE_STATUS_UPDATED]

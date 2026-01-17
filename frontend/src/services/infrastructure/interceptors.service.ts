@@ -21,21 +21,24 @@ import type {
   RequestInterceptor,
   ResponseInterceptor,
   ErrorInterceptor,
-} from './apiClientEnhanced';
+} from "./apiClientEnhanced";
 
 /**
  * Logging interceptor for development mode
  * Logs all requests and responses to console
  */
-export const loggingRequestInterceptor: RequestInterceptor = (endpoint, config) => {
+export const loggingRequestInterceptor: RequestInterceptor = (
+  endpoint,
+  config,
+) => {
   if (import.meta.env?.DEV) {
-    console.log('[API Request]', {
+    console.log("[API Request]", {
       endpoint,
       config,
       timestamp: new Date().toISOString(),
     });
   }
-  return { endpoint, config };
+  return config ? { endpoint, config } : { endpoint };
 };
 
 /**
@@ -43,10 +46,10 @@ export const loggingRequestInterceptor: RequestInterceptor = (endpoint, config) 
  */
 export const loggingResponseInterceptor: ResponseInterceptor = <T>(
   response: T,
-  endpoint: string
+  endpoint: string,
 ) => {
   if (import.meta.env?.DEV) {
-    console.log('[API Response]', {
+    console.log("[API Response]", {
       endpoint,
       response,
       timestamp: new Date().toISOString(),
@@ -61,14 +64,17 @@ export const loggingResponseInterceptor: ResponseInterceptor = <T>(
  */
 const requestStartTimes = new Map<string, number>();
 
-export const performanceRequestInterceptor: RequestInterceptor = (endpoint, config) => {
+export const performanceRequestInterceptor: RequestInterceptor = (
+  endpoint,
+  config,
+) => {
   requestStartTimes.set(endpoint, performance.now());
-  return { endpoint, config };
+  return config ? { endpoint, config } : { endpoint };
 };
 
 export const performanceResponseInterceptor: ResponseInterceptor = <T>(
   response: T,
-  endpoint: string
+  endpoint: string,
 ) => {
   const startTime = requestStartTimes.get(endpoint);
   if (startTime) {
@@ -77,12 +83,16 @@ export const performanceResponseInterceptor: ResponseInterceptor = <T>(
 
     // Log slow requests (> 2 seconds)
     if (duration > 2000 && import.meta.env?.DEV) {
-      console.warn(`[API] Slow request detected: ${endpoint} (${Math.round(duration)}ms)`);
+      console.warn(
+        `[API] Slow request detected: ${endpoint} (${Math.round(duration)}ms)`,
+      );
     }
 
     // Log in production if extremely slow (> 5 seconds)
     if (duration > 5000) {
-      console.error(`[API] Very slow request: ${endpoint} (${Math.round(duration)}ms)`);
+      console.error(
+        `[API] Very slow request: ${endpoint} (${Math.round(duration)}ms)`,
+      );
     }
   }
 
@@ -97,14 +107,14 @@ export const authErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
   if (error instanceof Error) {
     const errorMessage = error.message.toLowerCase();
 
-    if (errorMessage.includes('401') || errorMessage.includes('unauthorized')) {
-      console.error('[API] Unauthorized access:', endpoint);
-      return new Error('Your session has expired. Please log in again.');
+    if (errorMessage.includes("401") || errorMessage.includes("unauthorized")) {
+      console.error("[API] Unauthorized access:", endpoint);
+      return new Error("Your session has expired. Please log in again.");
     }
 
-    if (errorMessage.includes('403') || errorMessage.includes('forbidden')) {
-      console.error('[API] Forbidden access:', endpoint);
-      return new Error('You do not have permission to access this resource.');
+    if (errorMessage.includes("403") || errorMessage.includes("forbidden")) {
+      console.error("[API] Forbidden access:", endpoint);
+      return new Error("You do not have permission to access this resource.");
     }
   }
 
@@ -115,14 +125,20 @@ export const authErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
  * Rate limiting error handler
  * Detects 429 Too Many Requests and provides user-friendly message
  */
-export const rateLimitErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
+export const rateLimitErrorInterceptor: ErrorInterceptor = (
+  error,
+  endpoint,
+) => {
   if (error instanceof Error) {
     const errorMessage = error.message.toLowerCase();
 
-    if (errorMessage.includes('429') || errorMessage.includes('too many requests')) {
-      console.error('[API] Rate limit exceeded:', endpoint);
+    if (
+      errorMessage.includes("429") ||
+      errorMessage.includes("too many requests")
+    ) {
+      console.error("[API] Rate limit exceeded:", endpoint);
       return new Error(
-        'Too many requests. Please wait a moment before trying again.'
+        "Too many requests. Please wait a moment before trying again.",
       );
     }
   }
@@ -139,26 +155,26 @@ export const networkErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
     const errorMessage = error.message.toLowerCase();
 
     if (
-      errorMessage.includes('network') ||
-      errorMessage.includes('failed to fetch') ||
-      errorMessage.includes('networkerror')
+      errorMessage.includes("network") ||
+      errorMessage.includes("failed to fetch") ||
+      errorMessage.includes("networkerror")
     ) {
-      console.error('[API] Network error:', endpoint, error);
+      console.error("[API] Network error:", endpoint, error);
       return new Error(
-        'Network connection failed. Please check your internet connection and try again.'
+        "Network connection failed. Please check your internet connection and try again.",
       );
     }
 
-    if (errorMessage.includes('timeout')) {
-      console.error('[API] Timeout error:', endpoint, error);
+    if (errorMessage.includes("timeout")) {
+      console.error("[API] Timeout error:", endpoint, error);
       return new Error(
-        'Request timed out. The server is taking too long to respond.'
+        "Request timed out. The server is taking too long to respond.",
       );
     }
 
-    if (errorMessage.includes('aborted')) {
-      console.error('[API] Request aborted:', endpoint, error);
-      return new Error('Request was cancelled.');
+    if (errorMessage.includes("aborted")) {
+      console.error("[API] Request aborted:", endpoint, error);
+      return new Error("Request was cancelled.");
     }
   }
 
@@ -169,16 +185,19 @@ export const networkErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
  * Validation error handler
  * Transforms backend validation errors into user-friendly messages
  */
-export const validationErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
+export const validationErrorInterceptor: ErrorInterceptor = (
+  error,
+  endpoint,
+) => {
   if (error instanceof Error) {
     const errorMessage = error.message.toLowerCase();
 
     if (
-      errorMessage.includes('400') ||
-      errorMessage.includes('bad request') ||
-      errorMessage.includes('validation')
+      errorMessage.includes("400") ||
+      errorMessage.includes("bad request") ||
+      errorMessage.includes("validation")
     ) {
-      console.error('[API] Validation error:', endpoint, error);
+      console.error("[API] Validation error:", endpoint, error);
 
       // Try to extract validation details if available
       try {
@@ -190,7 +209,7 @@ export const validationErrorInterceptor: ErrorInterceptor = (error, endpoint) =>
           }
           if (errorData.errors && Array.isArray(errorData.errors)) {
             return new Error(
-              `Validation failed: ${errorData.errors.map((e: { message: string }) => e.message).join(', ')}`
+              `Validation failed: ${errorData.errors.map((e: { message: string }) => e.message).join(", ")}`,
             );
           }
         }
@@ -198,7 +217,9 @@ export const validationErrorInterceptor: ErrorInterceptor = (error, endpoint) =>
         // Ignore JSON parsing errors
       }
 
-      return new Error('Invalid request. Please check your input and try again.');
+      return new Error(
+        "Invalid request. Please check your input and try again.",
+      );
     }
   }
 
@@ -214,30 +235,38 @@ export const serverErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
     const errorMessage = error.message.toLowerCase();
 
     if (
-      errorMessage.includes('500') ||
-      errorMessage.includes('internal server error')
+      errorMessage.includes("500") ||
+      errorMessage.includes("internal server error")
     ) {
-      console.error('[API] Internal server error:', endpoint, error);
+      console.error("[API] Internal server error:", endpoint, error);
       return new Error(
-        'An internal server error occurred. Our team has been notified.'
+        "An internal server error occurred. Our team has been notified.",
       );
     }
 
-    if (errorMessage.includes('502') || errorMessage.includes('bad gateway')) {
-      console.error('[API] Bad gateway:', endpoint, error);
-      return new Error('Service temporarily unavailable. Please try again later.');
-    }
-
-    if (errorMessage.includes('503') || errorMessage.includes('service unavailable')) {
-      console.error('[API] Service unavailable:', endpoint, error);
+    if (errorMessage.includes("502") || errorMessage.includes("bad gateway")) {
+      console.error("[API] Bad gateway:", endpoint, error);
       return new Error(
-        'Service is temporarily unavailable. Please try again in a few minutes.'
+        "Service temporarily unavailable. Please try again later.",
       );
     }
 
-    if (errorMessage.includes('504') || errorMessage.includes('gateway timeout')) {
-      console.error('[API] Gateway timeout:', endpoint, error);
-      return new Error('Request timed out. Please try again.');
+    if (
+      errorMessage.includes("503") ||
+      errorMessage.includes("service unavailable")
+    ) {
+      console.error("[API] Service unavailable:", endpoint, error);
+      return new Error(
+        "Service is temporarily unavailable. Please try again in a few minutes.",
+      );
+    }
+
+    if (
+      errorMessage.includes("504") ||
+      errorMessage.includes("gateway timeout")
+    ) {
+      console.error("[API] Gateway timeout:", endpoint, error);
+      return new Error("Request timed out. Please try again.");
     }
   }
 
@@ -257,7 +286,7 @@ export const requestIdInterceptor: RequestInterceptor = (endpoint, config) => {
       ...config,
       headers: {
         ...config?.headers,
-        'X-Request-ID': requestId,
+        "X-Request-ID": requestId,
       },
     },
   };
@@ -267,9 +296,12 @@ export const requestIdInterceptor: RequestInterceptor = (endpoint, config) => {
  * Tenant isolation interceptor
  * Adds tenant ID header for multi-tenant applications
  */
-export const tenantIsolationInterceptor: RequestInterceptor = (endpoint, config) => {
+export const tenantIsolationInterceptor: RequestInterceptor = (
+  endpoint,
+  config,
+) => {
   // Get tenant ID from localStorage or auth context
-  const tenantId = localStorage.getItem('tenant_id');
+  const tenantId = localStorage.getItem("tenant_id");
 
   if (tenantId) {
     return {
@@ -278,13 +310,13 @@ export const tenantIsolationInterceptor: RequestInterceptor = (endpoint, config)
         ...config,
         headers: {
           ...config?.headers,
-          'X-Tenant-ID': tenantId,
+          "X-Tenant-ID": tenantId,
         },
       },
     };
   }
 
-  return { endpoint, config };
+  return config ? { endpoint, config } : { endpoint };
 };
 
 /**
@@ -303,9 +335,15 @@ export function setupInterceptors(client: {
   // Development mode interceptors
   if (import.meta.env?.DEV) {
     unsubscribers.push(client.addRequestInterceptor(loggingRequestInterceptor));
-    unsubscribers.push(client.addResponseInterceptor(loggingResponseInterceptor));
-    unsubscribers.push(client.addRequestInterceptor(performanceRequestInterceptor));
-    unsubscribers.push(client.addResponseInterceptor(performanceResponseInterceptor));
+    unsubscribers.push(
+      client.addResponseInterceptor(loggingResponseInterceptor),
+    );
+    unsubscribers.push(
+      client.addRequestInterceptor(performanceRequestInterceptor),
+    );
+    unsubscribers.push(
+      client.addResponseInterceptor(performanceResponseInterceptor),
+    );
   }
 
   // Always active interceptors
@@ -319,12 +357,12 @@ export function setupInterceptors(client: {
   unsubscribers.push(client.addErrorInterceptor(validationErrorInterceptor));
   unsubscribers.push(client.addErrorInterceptor(serverErrorInterceptor));
 
-  console.log('[Interceptors] All interceptors registered');
+  console.log("[Interceptors] All interceptors registered");
 
   // Return cleanup function
   return () => {
     unsubscribers.forEach((unsubscribe) => unsubscribe());
-    console.log('[Interceptors] All interceptors removed');
+    console.log("[Interceptors] All interceptors removed");
   };
 }
 

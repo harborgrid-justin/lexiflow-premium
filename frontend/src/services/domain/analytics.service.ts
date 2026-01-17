@@ -77,9 +77,9 @@
 import { analyticsApi } from "@/api/domains/analytics.api";
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
-  JudgeMotionStat,
-  OpposingCounselProfile,
-  OutcomePredictionData,
+  type JudgeMotionStat,
+  type OpposingCounselProfile,
+  type OutcomePredictionData,
 } from "@/types";
 
 /**

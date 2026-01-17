@@ -27,20 +27,20 @@
  */
 
 import { PleadingsApiService } from "@/api/litigation/pleadings-api";
+import { IdGenerator } from "@/lib/idGenerator";
+import { validateTemplate } from "@/lib/validation";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { db } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { IdGenerator } from "@/lib/idGenerator";
-import { validateTemplate } from "@/lib/validation";
 import {
-  Case,
-  CaseId,
-  FormattingRule,
-  PleadingDocument,
-  PleadingSection,
-  PleadingTemplate,
-  UserId,
+  type Case,
+  type CaseId,
+  type FormattingRule,
+  type PleadingDocument,
+  type PleadingSection,
+  type PleadingTemplate,
+  type UserId,
 } from "@/types";
 import {
   createTemplateContext,
@@ -71,7 +71,7 @@ export class VersionConflictError extends Error {
   constructor(
     message: string,
     public readonly expectedVersion: number,
-    public readonly actualVersion: number
+    public readonly actualVersion: number,
   ) {
     super(message);
     this.name = "VersionConflictError";
@@ -97,7 +97,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
    */
   private logInitialization(): void {
     console.log(
-      `[PleadingRepository] Initialized with Backend API (PostgreSQL)`
+      `[PleadingRepository] Initialized with Backend API (PostgreSQL)`,
     );
   }
 
@@ -108,7 +108,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
   private validateId(id: string, methodName: string): void {
     if (!id || typeof id !== "string" || id.trim() === "") {
       throw new Error(
-        `[PleadingRepository.${methodName}] Invalid id parameter`
+        `[PleadingRepository.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -120,7 +120,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
   private validateCaseId(caseId: string, methodName: string): void {
     if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
       throw new Error(
-        `[PleadingRepository.${methodName}] Invalid caseId parameter`
+        `[PleadingRepository.${methodName}] Invalid caseId parameter`,
       );
     }
   }
@@ -152,19 +152,19 @@ export class PleadingRepository extends Repository<PleadingDocument> {
    * @throws Error if caseId is invalid or fetch fails
    */
   override getByCaseId = async (
-    caseId: string
+    caseId: string,
   ): Promise<PleadingDocument[]> => {
     this.validateCaseId(caseId, "getByCaseId");
 
     try {
       return (await this.pleadingsApi.getByCaseId(
-        caseId
+        caseId,
       )) as unknown as PleadingDocument[];
     } catch (error) {
       console.error("[PleadingRepository.getByCaseId] Error:", error);
       throw new OperationError(
         "getByCaseId",
-        "Failed to fetch pleadings by case ID"
+        "Failed to fetch pleadings by case ID",
       );
     }
   };
@@ -181,7 +181,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
     try {
       return (await this.pleadingsApi.getById(
-        id
+        id,
       )) as unknown as PleadingDocument;
     } catch (error) {
       console.error("[PleadingRepository.getById] Error:", error);
@@ -199,13 +199,13 @@ export class PleadingRepository extends Repository<PleadingDocument> {
   override async add(item: PleadingDocument): Promise<PleadingDocument> {
     if (!item || typeof item !== "object") {
       throw new ValidationError(
-        "[PleadingRepository.add] Invalid pleading data"
+        "[PleadingRepository.add] Invalid pleading data",
       );
     }
 
     try {
       return (await this.pleadingsApi.create(
-        item as unknown as Parameters<typeof this.pleadingsApi.create>[0]
+        item as unknown as Parameters<typeof this.pleadingsApi.create>[0],
       )) as unknown as PleadingDocument;
     } catch (error) {
       console.error("[PleadingRepository.add] Error:", error);
@@ -223,20 +223,20 @@ export class PleadingRepository extends Repository<PleadingDocument> {
    */
   override async update(
     id: string,
-    updates: Partial<PleadingDocument>
+    updates: Partial<PleadingDocument>,
   ): Promise<PleadingDocument> {
     this.validateId(id, "update");
 
     if (!updates || typeof updates !== "object") {
       throw new ValidationError(
-        "[PleadingRepository.update] Invalid updates data"
+        "[PleadingRepository.update] Invalid updates data",
       );
     }
 
     try {
       return (await this.pleadingsApi.update(
         id,
-        updates as unknown as Parameters<typeof this.pleadingsApi.update>[1]
+        updates as unknown as Parameters<typeof this.pleadingsApi.update>[1],
       )) as unknown as PleadingDocument;
     } catch (error) {
       console.error("[PleadingRepository.update] Error:", error);
@@ -261,7 +261,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     } catch (error) {
       console.warn(
         "[PleadingRepository] Backend API failed, falling back",
-        error
+        error,
       );
     }
 
@@ -287,13 +287,13 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     try {
       return await db.getAll<PleadingTemplate>(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        STORES.PLEADING_TEMPLATES as any
+        STORES["PLEADING_TEMPLATES"] as any,
       );
     } catch (error) {
       console.error("[PleadingRepository.getTemplates] Error:", error);
       throw new OperationError(
         "getTemplates",
-        "Failed to fetch pleading templates"
+        "Failed to fetch pleading templates",
       );
     }
   };
@@ -312,29 +312,32 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     templateId: string,
     caseId: string,
     title: string,
-    userId: string
+    userId: string,
   ): Promise<PleadingDocument> => {
     this.validateId(templateId, "createFromTemplate");
     this.validateCaseId(caseId, "createFromTemplate");
 
     if (!title || typeof title !== "string" || title.trim() === "") {
       throw new ValidationError(
-        "[PleadingRepository.createFromTemplate] Invalid title parameter"
+        "[PleadingRepository.createFromTemplate] Invalid title parameter",
       );
     }
 
     if (!userId || typeof userId !== "string" || userId.trim() === "") {
       throw new ValidationError(
-        "[PleadingRepository.createFromTemplate] Invalid userId parameter"
+        "[PleadingRepository.createFromTemplate] Invalid userId parameter",
       );
     }
 
     try {
       const [template, caseData] = await Promise.all([
+         
+        db.get<PleadingTemplate>(
+          STORES["PLEADING_TEMPLATES"] as any,
+          templateId,
+        ),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        db.get<PleadingTemplate>(STORES.PLEADING_TEMPLATES as any, templateId),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        db.get<Case>(STORES.CASES as any, caseId),
+        db.get<Case>(STORES["CASES"] as any, caseId),
       ]);
 
       if (!template) {
@@ -349,7 +352,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       const validation = validateTemplate(template);
       if (!validation.valid) {
         throw new Error(
-          `Invalid template: ${validation.errors.map((e) => e.message).join(", ")}`
+          `Invalid template: ${validation.errors.map((e) => e.message).join(", ")}`,
         );
       }
 
@@ -359,7 +362,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       // Hydrate sections using template engine
       const hydratedPartialSections = hydrateTemplateSections(
         template.defaultSections,
-        context
+        context,
       );
 
       // Convert to full PleadingSection objects with generated IDs
@@ -369,8 +372,8 @@ export class PleadingRepository extends Repository<PleadingDocument> {
           type: s.type || "Paragraph",
           content: s.content || "",
           order: idx,
-          meta: s.meta,
-        })
+          ...(s.meta ? { meta: s.meta } : {}),
+        }),
       );
 
       const newDoc: PleadingDocument = {
@@ -396,7 +399,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       }
       throw new OperationError(
         "createFromTemplate",
-        "Failed to create pleading from template"
+        "Failed to create pleading from template",
       );
     }
   };
@@ -418,7 +421,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
   updateWithVersionCheck = async (
     id: string,
     updates: Partial<PleadingDocument>,
-    expectedVersion: number
+    expectedVersion: number,
   ): Promise<PleadingDocument> => {
     this.validateId(id, "updateWithVersionCheck");
 
@@ -434,7 +437,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
         throw new VersionConflictError(
           "Version conflict: document was modified by another user",
           expectedVersion,
-          current.version
+          current.version,
         );
       }
 
@@ -451,14 +454,14 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     } catch (error) {
       console.error(
         "[PleadingRepository.updateWithVersionCheck] Error:",
-        error
+        error,
       );
       if (error instanceof VersionConflictError) {
         throw error;
       }
       throw new OperationError(
         "updateWithVersionCheck",
-        "Failed to update pleading with version check"
+        "Failed to update pleading with version check",
       );
     }
   };
@@ -475,7 +478,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
    * @throws Error if fetch fails
    */
   getFormattingRules = async (
-    jurisdictionId?: string
+    jurisdictionId?: string,
   ): Promise<FormattingRule> => {
     try {
       // Check for backend rules if available
@@ -521,7 +524,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       console.error("[PleadingRepository.getFormattingRules] Error:", error);
       throw new OperationError(
         "getFormattingRules",
-        "Failed to get formatting rules"
+        "Failed to get formatting rules",
       );
     }
   };
@@ -551,7 +554,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       if ((this as any).useBackend) {
         // Request PDF generation from backend
         const response = await apiClient.post<{ url: string }>(
-          `/litigation/pleadings/${pleadingId}/pdf`
+          `/litigation/pleadings/${pleadingId}/pdf`,
         );
         // Check for response data
         if (response && typeof response === "object" && "data" in response) {
@@ -571,11 +574,11 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       // Fallback for local mode: cannot generate PDF client-side without heavy library
       // Return a blob URL if possible or throw
       console.warn(
-        "[PleadingRepository] PDF generation requires backend service."
+        "[PleadingRepository] PDF generation requires backend service.",
       );
       throw new OperationError(
         "generatePDF",
-        "PDF generation is not available in offline mode"
+        "PDF generation is not available in offline mode",
       );
     } catch (error) {
       console.error("[PleadingRepository.generatePDF] Error:", error);
@@ -613,7 +616,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
       if (criteria.type) {
         pleadings = pleadings.filter(
-          (p) => (p as { type?: string }).type === criteria.type
+          (p) => (p as { type?: string }).type === criteria.type,
         );
       }
 
@@ -623,7 +626,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
       if (criteria.filingStatus) {
         pleadings = pleadings.filter(
-          (p) => p.filingStatus === criteria.filingStatus
+          (p) => p.filingStatus === criteria.filingStatus,
         );
       }
 
@@ -633,8 +636,8 @@ export class PleadingRepository extends Repository<PleadingDocument> {
           (p) =>
             p.title?.toLowerCase().includes(lowerQuery) ||
             p.sections?.some((s) =>
-              s.content?.toLowerCase().includes(lowerQuery)
-            )
+              s.content?.toLowerCase().includes(lowerQuery),
+            ),
         );
       }
 

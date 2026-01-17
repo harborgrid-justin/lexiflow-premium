@@ -23,20 +23,20 @@ export const TemplateArchitect: React.FC<TemplateArchitectProps> = ({ variables 
           <LayoutTemplate className="h-4 w-4 mr-2" /> Template Architect
         </h3>
         <div className={cn("flex p-0.5 rounded-lg", theme.surface.highlight)}>
-           <button
-             onClick={() => setActiveTab('variables')}
-             className={cn("p-1.5 rounded-md transition-colors", activeTab === 'variables' ? cn(theme.surface.default, "shadow text-blue-600") : "text-slate-500")}
-             title="Variables"
-            >
-             <Sliders className="h-3.5 w-3.5" />
-           </button>
-           <button
-             onClick={() => setActiveTab('rules')}
-             className={cn("p-1.5 rounded-md transition-colors", activeTab === 'rules' ? cn(theme.surface.default, "shadow text-blue-600") : "text-slate-500")}
-             title="Jurisdiction Rules"
-            >
-             <Settings className="h-3.5 w-3.5" />
-           </button>
+          <button
+            onClick={() => setActiveTab('variables')}
+            className={cn("p-1.5 rounded-md transition-colors", activeTab === 'variables' ? cn(theme.surface.default, "shadow text-blue-600") : "text-slate-500")}
+            title="Variables"
+          >
+            <Sliders className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={() => setActiveTab('rules')}
+            className={cn("p-1.5 rounded-md transition-colors", activeTab === 'rules' ? cn(theme.surface.default, "shadow text-blue-600") : "text-slate-500")}
+            title="Jurisdiction Rules"
+          >
+            <Settings className="h-3.5 w-3.5" />
+          </button>
         </div>
       </div>
 
@@ -44,7 +44,7 @@ export const TemplateArchitect: React.FC<TemplateArchitectProps> = ({ variables 
         {activeTab === 'variables' ? (
           <VariableManager variables={variables} onUpdateVariable={onUpdateVariable} />
         ) : (
-          <JurisdictionRules jurisdiction={jurisdiction} />
+          <JurisdictionRules {...(jurisdiction ? { jurisdiction } : {})} />
         )}
       </div>
     </div>

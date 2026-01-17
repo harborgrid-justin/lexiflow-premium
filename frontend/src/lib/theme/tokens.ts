@@ -11,6 +11,151 @@ export type ThemeMode = "light" | "dark" | "system";
 export type ThemeDensity = "compact" | "normal" | "comfortable" | "spacious";
 export type FontMode = "sans" | "serif" | "mono";
 
+export interface SpacingScale {
+  xs: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+  "2xl": string;
+  "3xl"?: string;
+  gutter?: string;
+  [key: string]: string;
+}
+
+export interface TypographySizeScale {
+  xs: string;
+  sm: string;
+  base: string;
+  lg: string;
+  xl: string;
+  "2xl": string;
+  "3xl": string;
+  [key: string]: string;
+}
+
+export interface TypographyWeightScale {
+  light: number;
+  normal: number;
+  medium: number;
+  semibold: number;
+  bold: number;
+  extrabold: number;
+  [key: string]: string | number;
+}
+
+export interface LineHeightScale {
+  tight: string;
+  snug: string;
+  normal: string;
+  relaxed: string;
+  loose: string;
+  [key: string]: string;
+}
+
+export interface LetterSpacingScale {
+  tighter: string;
+  tight: string;
+  normal: string;
+  wide: string;
+  wider: string;
+  [key: string]: string;
+}
+
+export interface ShadowScale {
+  xs: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+  xxl: string;
+  [key: string]: string;
+}
+
+export interface BorderRadiusScale {
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+  full: string;
+  [key: string]: string;
+}
+
+export interface TransitionScale {
+  fast: string;
+  normal: string;
+  slow: string;
+  slower: string;
+  bounce: string;
+  spring: string;
+  fade: string;
+  [key: string]: string;
+}
+
+export interface ZIndexScale {
+  base: number;
+  dropdown: number;
+  overlay: number;
+  modal: number;
+  popover: number;
+  tooltip: number;
+  toast: number;
+  max: number;
+  [key: string]: number;
+}
+
+export interface LayoutScale {
+  sidebarWidth: string;
+  sidebarCollapsedWidth: string;
+  topbarHeight: string;
+  headerHeight: string;
+  footerHeight: string;
+  contentMaxWidth: string;
+  pagePadding: string;
+  cardPadding: string;
+  formWidth: string;
+  drawerWidth: string;
+  panelWidth: string;
+  navHeight: string;
+  rowHeight: string;
+  gap: string;
+  [key: string]: string | number;
+}
+
+export interface AnimationDurationScale {
+  fast: string;
+  normal: string;
+  slow: string;
+  slower: string;
+  [key: string]: string;
+}
+
+export interface AnimationEasingScale {
+  linear: string;
+  ease: string;
+  easeIn: string;
+  easeOut: string;
+  easeInOut: string;
+  bounce: string;
+  [key: string]: string;
+}
+
+export interface AnimationKeyframesScale {
+  fadeIn: string;
+  fadeOut: string;
+  slideUp: string;
+  slideDown: string;
+  scaleIn: string;
+  scaleOut: string;
+  [key: string]: string;
+}
+
+export interface EffectsScale {
+  blur: Record<string, string>;
+  opacity: Record<string, string>;
+  backdrop: Record<string, string>;
+}
+
 export interface DesignTokens {
   mode: ThemeMode;
   density: ThemeDensity;
@@ -32,43 +177,65 @@ export interface DesignTokens {
     borderLight: string;
     text: string;
     textMuted: string;
-    charts: Record<string, string>;
-    annotations: Record<string, string>;
-    gradients: Record<string, string>;
+    charts: {
+      primary: string;
+      secondary: string;
+      success: string;
+      warning: string;
+      danger: string;
+      info: string;
+      neutral: string;
+      blue: string;
+      emerald: string;
+      purple: string;
+      [key: string]: string;
+    };
+    annotations: {
+      note: string;
+      highlight: string;
+      warning: string;
+      info: string;
+      [key: string]: string;
+    };
+    gradients: {
+      primary: string;
+      secondary: string;
+      accent: string;
+      success: string;
+      warning: string;
+      info: string;
+      [key: string]: string;
+    };
   };
   spacing: {
-    compact: Record<string, string>;
-    normal: Record<string, string>;
-    comfortable: Record<string, string>;
-    spacious: Record<string, string>;
-    layout: Record<string, string>;
+    compact: SpacingScale;
+    normal: SpacingScale;
+    comfortable: SpacingScale;
+    spacious: SpacingScale;
+    layout: SpacingScale;
   };
   typography: {
     fontSans: string;
     fontSerif: string;
     fontMono: string;
-    weights: Record<string, string | number>;
-    sizes: Record<string, string>;
-    fontSize: Record<string, string>;
-    fontWeight: Record<string, string | number>;
-    lineHeight: Record<string, string>;
-    letterSpacing: Record<string, string>;
+    weights: TypographyWeightScale;
+    sizes: TypographySizeScale;
+    fontSize: TypographySizeScale;
+    fontWeight: TypographyWeightScale;
+    lineHeight: LineHeightScale;
+    letterSpacing: LetterSpacingScale;
   };
-  shadows: Record<string, string>;
-  borderRadius: Record<string, string>;
-  transitions: Record<string, string>;
-  zIndex: Record<string, number>;
-  layout: Record<string, string | number>;
+  shadows: ShadowScale;
+  borderRadius: BorderRadiusScale;
+  transitions: TransitionScale;
+  zIndex: ZIndexScale;
+  layout: LayoutScale;
   animations: {
-    duration: Record<string, string>;
-    easing: Record<string, string>;
-    keyframes: Record<string, string>;
+    duration: AnimationDurationScale;
+    easing: AnimationEasingScale;
+    keyframes: AnimationKeyframesScale;
   };
-  effects: {
-    blur: Record<string, string>;
-    opacity: Record<string, string>;
-    backdrop: Record<string, string>;
-  };
+  effects: EffectsScale;
   semantic: Record<string, string>;
 }
 
@@ -88,6 +255,7 @@ const PALETTE = {
     950: "#020617",
   },
   blue: {
+    400: "#60a5fa",
     500: "#3b82f6",
     600: "#2563eb",
     700: "#1d4ed8",
@@ -96,9 +264,11 @@ const PALETTE = {
     500: "#10b981",
   },
   amber: {
+    400: "#fbbf24",
     500: "#f59e0b",
   },
   rose: {
+    400: "#fb7185",
     500: "#f43f5e",
   },
   violet: {
@@ -110,11 +280,15 @@ export const DEFAULT_LIGHT_THEME: ThemeObject = {
   background: PALETTE.slate[50], // surface-ground
   surface: {
     default: "#ffffff",
+    base: "#ffffff",
     raised: PALETTE.slate[50],
+    elevated: PALETTE.slate[50],
     highlight: PALETTE.slate[100],
     paper: "#ffffff",
     overlay: "rgba(255, 255, 255, 0.95)",
     input: "#ffffff",
+    muted: PALETTE.slate[100],
+    hover: PALETTE.slate[100],
     active: PALETTE.slate[100],
     primary: PALETTE.slate[50],
     secondary: PALETTE.slate[100],
@@ -281,11 +455,15 @@ export const DEFAULT_DARK_THEME: ThemeObject = {
   background: "#020617", // slate-950
   surface: {
     default: PALETTE.slate[900],
+    base: PALETTE.slate[900],
     raised: PALETTE.slate[800],
+    elevated: PALETTE.slate[800],
     highlight: PALETTE.slate[700],
     paper: PALETTE.slate[900],
     overlay: "rgba(15, 23, 42, 0.95)",
     input: PALETTE.slate[900],
+    muted: PALETTE.slate[800],
+    hover: PALETTE.slate[800],
     active: PALETTE.slate[800],
     primary: PALETTE.slate[900],
     secondary: PALETTE.slate[800],
@@ -788,7 +966,7 @@ export const DEFAULT_TOKENS: DesignTokens = LIGHT_TOKENS;
 export const getTokens = (
   mode: ThemeMode = "light",
   density: ThemeDensity = "normal",
-  fontMode: FontMode = "sans"
+  fontMode: FontMode = "sans",
 ): DesignTokens => {
   const base = mode === "dark" ? DARK_TOKENS : LIGHT_TOKENS;
   return {

@@ -34,7 +34,7 @@ import {
 } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { EvidenceItem } from "@/types";
+import { type EvidenceItem } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 import { delay } from "@/utils/async";
 
@@ -74,7 +74,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
    */
   private logInitialization(): void {
     console.log(
-      `[EvidenceRepository] Initialized with Backend API (PostgreSQL)`
+      `[EvidenceRepository] Initialized with Backend API (PostgreSQL)`,
     );
   }
 
@@ -85,7 +85,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
   private validateId(id: string, methodName: string): void {
     if (!id || false || id.trim() === "") {
       throw new Error(
-        `[EvidenceRepository.${methodName}] Invalid id parameter`
+        `[EvidenceRepository.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -97,7 +97,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
   private validateCaseId(caseId: string, methodName: string): void {
     if (!caseId || false || caseId.trim() === "") {
       throw new Error(
-        `[EvidenceRepository.${methodName}] Invalid caseId parameter`
+        `[EvidenceRepository.${methodName}] Invalid caseId parameter`,
       );
     }
   }
@@ -147,7 +147,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       console.error("[EvidenceRepository.getByCaseId] Error:", error);
       throw new OperationError(
         "getByCaseId",
-        "Failed to fetch evidence items by case ID"
+        "Failed to fetch evidence items by case ID",
       );
     }
   };
@@ -180,7 +180,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
   override async add(item: EvidenceItem): Promise<EvidenceItem> {
     if (!item || typeof item !== "object") {
       throw new ValidationError(
-        "[EvidenceRepository.add] Invalid evidence item data"
+        "[EvidenceRepository.add] Invalid evidence item data",
       );
     }
 
@@ -203,13 +203,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
    */
   override async update(
     id: string,
-    updates: Partial<EvidenceItem>
+    updates: Partial<EvidenceItem>,
   ): Promise<EvidenceItem> {
     this.validateId(id, "update");
 
     if (!updates || typeof updates !== "object") {
       throw new ValidationError(
-        "[EvidenceRepository.update] Invalid updates data"
+        "[EvidenceRepository.update] Invalid updates data",
       );
     }
 
@@ -235,12 +235,12 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
               item: result,
               oldStatus: existing.admissibility,
               newStatus: updates.admissibility,
-            }
+            },
           );
         } catch (eventError) {
           console.warn(
             "[EvidenceRepository] Failed to publish integration event",
-            eventError
+            eventError,
           );
         }
       }
@@ -269,7 +269,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
     } catch (error) {
       console.warn(
         "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
-        error
+        error,
       );
     }
 
@@ -297,7 +297,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
    * // Returns: { verified: true, timestamp: '2025-12-22T...', ... }
    */
   verifyIntegrity = async (
-    id: string
+    id: string,
   ): Promise<{
     verified: boolean;
     timestamp: string;
@@ -315,17 +315,19 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
         currentCustodian?: string;
       };
 
+      const lastCustodian = itemExt?.currentCustodian ?? item?.custodian;
+
       return {
         verified: true,
         timestamp: new Date().toISOString(),
         chainIntact: itemExt?.chainOfCustodyIntact ?? true,
-        lastCustodian: itemExt?.currentCustodian ?? item?.custodian,
+        ...(lastCustodian !== undefined ? { lastCustodian } : {}),
       };
     } catch (error) {
       console.error("[EvidenceRepository.verifyIntegrity] Error:", error);
       throw new OperationError(
         "verifyIntegrity",
-        "Failed to verify evidence integrity"
+        "Failed to verify evidence integrity",
       );
     }
   };
@@ -340,7 +342,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
    */
   async updateAdmissibility(
     id: string,
-    status: "pending" | "admissible" | "inadmissible" | "challenged"
+    status: "pending" | "admissible" | "inadmissible" | "challenged",
   ): Promise<EvidenceItem> {
     this.validateId(id, "updateAdmissibility");
 
@@ -349,7 +351,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       !["pending", "admissible", "inadmissible", "challenged"].includes(status)
     ) {
       throw new ValidationError(
-        "[EvidenceRepository.updateAdmissibility] Invalid status parameter"
+        "[EvidenceRepository.updateAdmissibility] Invalid status parameter",
       );
     }
 
@@ -370,13 +372,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
   async updateCustody(
     id: string,
     custodian: string,
-    notes?: string
+    notes?: string,
   ): Promise<EvidenceItem> {
     this.validateId(id, "updateCustody");
 
     if (!custodian || custodian.trim() === "") {
       throw new ValidationError(
-        "[EvidenceRepository.updateCustody] Invalid custodian parameter"
+        "[EvidenceRepository.updateCustody] Invalid custodian parameter",
       );
     }
 
@@ -406,7 +408,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       console.error("[EvidenceRepository.updateCustody] Error:", error);
       throw new OperationError(
         "updateCustody",
-        "Failed to update chain of custody"
+        "Failed to update chain of custody",
       );
     }
   }
@@ -432,7 +434,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       console.error("[EvidenceRepository.generateReport] Error:", error);
       throw new OperationError(
         "generateReport",
-        "Failed to generate evidence report"
+        "Failed to generate evidence report",
       );
     }
   };
@@ -501,7 +503,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       console.error("[EvidenceRepository.getStatistics] Error:", error);
       throw new OperationError(
         "getStatistics",
-        "Failed to get evidence statistics"
+        "Failed to get evidence statistics",
       );
     }
   }
@@ -559,7 +561,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
           (item) =>
             item.admissibility?.toString() === admissibility ||
             item.admissibility?.toString().toLowerCase() ===
-              admissibility.toLowerCase()
+              admissibility.toLowerCase(),
         );
       }
 

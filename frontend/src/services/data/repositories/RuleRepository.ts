@@ -3,10 +3,10 @@
  * Enterprise-grade repository for legal rule management with backend API integration
  */
 
-import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
+import { Repository } from "@/services/core/Repository";
 import { RuleService } from "@/services/features/rules/rules";
-import { LegalRule } from "@/types";
+import { type LegalRule } from "@/types";
 
 export const RULE_QUERY_KEYS = {
   all: () => ["rules"] as const,

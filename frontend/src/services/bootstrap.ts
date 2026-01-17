@@ -18,10 +18,10 @@
  */
 
 import { BrowserClipboardService } from "./clipboard/ClipboardService";
-import { BrowserNotificationService } from "./notification/NotificationService";
 import { ServiceRegistry, registerService } from "./core/ServiceRegistry";
 import { WebCryptoService } from "./crypto/CryptoService";
 import { EnvironmentFeatureFlagService } from "./featureFlags/feature-flag.service";
+import { BrowserNotificationService } from "./notification/NotificationService";
 import { BrowserSessionService } from "./session/session.service";
 import { BrowserStorageService } from "./storage/storage.service";
 import { ConsoleTelemetryService } from "./telemetry/TelemetryService";

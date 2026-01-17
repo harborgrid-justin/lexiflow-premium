@@ -17,7 +17,7 @@
 // ================================================================================
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { JudgeProfile } from "@/types";
+import { type JudgeProfile } from "@/types";
 
 export interface AnalysisConfig {
   includeHistorical: boolean;
@@ -44,7 +44,7 @@ export const AnalysisService = {
       // (JudgeListItemDto usually contains id, name, court etc.)
       return (await apiClient.get(
         "/analytics/judge-stats"
-      )) as unknown as JudgeProfile[];
+      ));
     } catch (e) {
       console.warn("Failed to fetch judge profiles", e);
       return [];

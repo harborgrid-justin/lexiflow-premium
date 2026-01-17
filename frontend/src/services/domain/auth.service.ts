@@ -18,6 +18,7 @@ import {
   clearAuthTokens,
   setAuthTokens,
 } from "@/services/infrastructure/api-client/auth-manager";
+
 import type { User } from "@/types";
 
 const AUTH_STORAGE_KEY = "lexiflow_auth_token";

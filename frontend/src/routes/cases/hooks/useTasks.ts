@@ -1,7 +1,7 @@
 /**
  * @module hooks/useTasks
  * @description Production hook for task management
- * 
+ *
  * Provides access to:
  * - All tasks
  * - Single task by ID
@@ -10,41 +10,39 @@
  * - Task filtering by status/assignee
  */
 
-import { useQuery, useMutation, queryClient } from '@/hooks/backend';
-import { DataService } from '@/services/data/data-service.service';
+import { queryClient, useMutation, useQuery } from "@/hooks/backend";
+import { DataService } from "@/services/data/data-service.service";
+import { WorkflowTask } from "@/types";
 
 /**
  * Main tasks hook - access all tasks
  */
 export function useTasks() {
-  const { data: tasks = [], isLoading } = useQuery(
-    ['tasks'],
-    async () => {
-      const data = await DataService.tasks.getAll();
-      return data || [];
-    }
-  );
+  const { data: tasks = [], isLoading } = useQuery(["tasks"], async () => {
+    const data = await DataService.tasks.getAll();
+    return data || [];
+  });
 
   const createTask = useMutation(
-    async (taskData: any) => {
+    async (taskData: WorkflowTask) => {
       return await DataService.tasks.add(taskData);
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['tasks']);
+        queryClient.invalidateQueries(["tasks"]);
       },
-    }
+    },
   );
 
   const updateTask = useMutation(
-    async ({ id, updates }: { id: string; updates: any }) => {
+    async ({ id, updates }: { id: string; updates: Partial<WorkflowTask> }) => {
       return await DataService.tasks.update(id, updates);
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['tasks']);
+        queryClient.invalidateQueries(["tasks"]);
       },
-    }
+    },
   );
 
   const deleteTask = useMutation(
@@ -53,9 +51,9 @@ export function useTasks() {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['tasks']);
+        queryClient.invalidateQueries(["tasks"]);
       },
-    }
+    },
   );
 
   return {
@@ -72,25 +70,25 @@ export function useTasks() {
  */
 export function useTask(taskId: string) {
   const { data: task, isLoading } = useQuery(
-    ['task', taskId],
+    ["task", taskId],
     async () => {
       return await DataService.tasks.getById(taskId);
     },
     {
       enabled: !!taskId,
-    }
+    },
   );
 
   const updateTask = useMutation(
-    async (updates: any) => {
+    async (updates: Partial<WorkflowTask>) => {
       return await DataService.tasks.update(taskId, updates);
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['task', taskId]);
-        queryClient.invalidateQueries(['tasks']);
+        queryClient.invalidateQueries(["task", taskId]);
+        queryClient.invalidateQueries(["tasks"]);
       },
-    }
+    },
   );
 
   return {
@@ -105,27 +103,29 @@ export function useTask(taskId: string) {
  */
 export function useCaseTasks(caseId: string) {
   const { data: tasks = [], isLoading } = useQuery(
-    ['case-tasks', caseId],
+    ["case-tasks", caseId],
     async () => {
       const data = await DataService.tasks.getAll();
       // Filter by caseId on client side
-      return (data || []).filter((task: any) => task.caseId === caseId);
+      return (data || []).filter(
+        (task: WorkflowTask) => task.caseId === caseId,
+      );
     },
     {
       enabled: !!caseId,
-    }
+    },
   );
 
   const createTask = useMutation(
-    async (taskData: any) => {
+    async (taskData: WorkflowTask) => {
       return await DataService.tasks.add({ ...taskData, caseId });
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['case-tasks', caseId]);
-        queryClient.invalidateQueries(['tasks']);
+        queryClient.invalidateQueries(["case-tasks", caseId]);
+        queryClient.invalidateQueries(["tasks"]);
       },
-    }
+    },
   );
 
   return {
@@ -140,15 +140,17 @@ export function useCaseTasks(caseId: string) {
  */
 export function useMyTasks(userId?: string) {
   const { data: tasks = [], isLoading } = useQuery(
-    ['my-tasks', userId],
+    ["my-tasks", userId],
     async () => {
       const data = await DataService.tasks.getAll();
       // Filter by userId if provided
       if (userId) {
-        return (data || []).filter((task: any) => task.assignedTo === userId);
+        return (data || []).filter(
+          (task: WorkflowTask) => task.assignedTo === userId,
+        );
       }
       return data || [];
-    }
+    },
   );
 
   return {

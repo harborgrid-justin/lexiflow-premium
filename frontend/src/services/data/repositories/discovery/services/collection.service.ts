@@ -11,8 +11,10 @@ import {
   EntityNotFoundError,
   OperationError,
 } from "@/services/core/errors";
-import type { DataCollection } from "@/types/discovery-enhanced";
+
 import { validateId } from "../shared/validation";
+
+import type { DataCollection } from "@/types/discovery-enhanced";
 
 /**
  * Collection Service Class

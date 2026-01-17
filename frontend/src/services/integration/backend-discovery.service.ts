@@ -109,15 +109,14 @@ class BackendDiscoveryService {
           available: true,
           healthy: response.status === 200,
           lastChecked: new Date(),
-          version,
+          ...(version ? { version } : {}),
           latency,
-          error: undefined,
         });
 
         // Only log on status change or first success
         if (!wasHealthy || !this.status.lastChecked) {
           console.log(
-            `[BackendDiscovery] Backend is ${this.status.healthy ? "healthy" : "available"} (${latency}ms)`
+            `[BackendDiscovery] Backend is ${this.status.healthy ? "healthy" : "available"} (${latency}ms)`,
           );
         }
       } else {
@@ -130,7 +129,7 @@ class BackendDiscoveryService {
         });
 
         console.warn(
-          `[BackendDiscovery] Backend returned error: ${response.status}`
+          `[BackendDiscovery] Backend returned error: ${response.status}`,
         );
       }
     } catch (error) {
@@ -186,7 +185,7 @@ class BackendDiscoveryService {
         } catch (error) {
           console.error(
             "[BackendDiscovery] Error in listener callback:",
-            error
+            error,
           );
         }
       });

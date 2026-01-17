@@ -47,7 +47,30 @@ export * from "./integration-types";
 export * from "./legal-research";
 export * from "./messaging";
 export { CalendarEventType } from "./misc";
-export type { CasePhase, LegalEntity, ServiceJob, StaffMember } from "./misc";
+export type {
+  Attachment,
+  CalendarEventItem,
+  CasePhase,
+  CounselProfile,
+  CommunicationItem,
+  Conversation,
+  EntityRelationship,
+  JudgeMotionStat,
+  JudgeProfile,
+  LegalEntity,
+  Message,
+  ModuleDefinition,
+  NexusNodeData,
+  OpposingCounselProfile,
+  OutcomePredictionData,
+  ParsedDocket,
+  ProductionSet,
+  ServiceJob,
+  StaffMember,
+  TimelineEvent,
+  WarRoom,
+  WarRoomData,
+} from "./misc";
 export * from "./motion-docket";
 export * from "./notifications";
 export * from "./pacer";
@@ -56,6 +79,7 @@ export * from "./pleading-types";
 export * from "./pleadings";
 export * from "./query-keys";
 export * from "./search";
+export type { SearchQuery as ResearchQuery } from "./search";
 export * from "./statistics";
 export * from "./system";
 export * from "./trial";

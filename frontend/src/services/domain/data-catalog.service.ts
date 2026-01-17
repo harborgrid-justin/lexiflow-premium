@@ -16,18 +16,18 @@
 //
 // ================================================================================
 
-import {
-  DataDictionaryItem,
-  DataLakeItem,
-  LineageLink,
-  LineageNode,
-  SchemaTable,
-} from "@/types";
 /**
  * ? Migrated to backend API (2025-12-21)
  */
 import { api } from "@/api";
 import { apiClient } from "@/services/infrastructure/api-client.service";
+import {
+  type DataDictionaryItem,
+  type DataLakeItem,
+  type LineageLink,
+  type LineageNode,
+  type SchemaTable,
+} from "@/types";
 
 export const DataCatalogService = {
   getDictionary: async (): Promise<DataDictionaryItem[]> => {

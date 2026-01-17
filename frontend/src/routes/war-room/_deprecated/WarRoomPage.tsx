@@ -9,8 +9,8 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { WarRoomLoaderData } from './loader';
+import { RouteError, RouteSkeleton } from '../../_shared/RouteSkeletons';
+import type { WarRoomLoaderData } from '../loader';
 import { WarRoomProvider } from './WarRoomProvider';
 import { WarRoomView } from './WarRoomView';
 

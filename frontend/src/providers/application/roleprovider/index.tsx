@@ -124,8 +124,8 @@ function logRoleEvent(event: RoleEvent): void {
 
     // Keep last 100 events
     localStorage.setItem(ROLE_AUDIT_LOG_KEY, JSON.stringify(logs.slice(-100)));
-  } catch (err) {
-    console.error('[RoleProvider] Failed to log event:', err);
+  } catch (error) {
+    console.error('[RoleProvider] Failed to log event:', error);
   }
 }
 
@@ -401,7 +401,8 @@ export function RoleProvider({
             setAvailableRoles(response.roles);
           });
         }
-      } catch (err) {
+      } catch (error) {
+        console.error('[RoleProvider] Failed to load available roles', error);
         if (mounted) {
           setAvailableRoles(DEFAULT_AVAILABLE_ROLES);
         }

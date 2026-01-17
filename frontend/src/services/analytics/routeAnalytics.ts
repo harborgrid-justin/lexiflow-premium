@@ -19,7 +19,7 @@ class RouteAnalytics {
     this.events.push({
       path,
       timestamp: Date.now(),
-      metadata,
+      ...(metadata ? { metadata } : {}),
     });
 
     // In production, send to analytics service

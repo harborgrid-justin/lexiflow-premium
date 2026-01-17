@@ -106,7 +106,7 @@ export class LRUCache<T> {
 
     const entry: CacheEntry<T> = {
       value,
-      timestamp: this.options.ttl ? Date.now() : undefined,
+      ...(this.options.ttl ? { timestamp: Date.now() } : {}),
     };
 
     this.cache.set(key, entry);

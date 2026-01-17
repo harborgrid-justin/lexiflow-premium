@@ -57,11 +57,12 @@
 
 import { workflowApi } from "@/api/domains/workflow.api";
 import {
-  CalendarEvent as ApiCalendarEvent,
-  CalendarFilters,
+  type CalendarEvent as ApiCalendarEvent,
+  type CalendarFilters,
 } from "@/api/workflow/calendar-api";
 import { ValidationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { CalendarEventType } from "@/types";
 
 // =============================================================================
@@ -115,7 +116,7 @@ interface CalendarEvent {
 function validateEventId(id: unknown, methodName: string): void {
   if (!id || typeof id !== "string" || id.trim() === "") {
     throw new ValidationError(
-      `[CalendarService.${methodName}] Event ID is required and must be a non-empty string`
+      `[CalendarService.${methodName}] Event ID is required and must be a non-empty string`,
     );
   }
 }
@@ -129,7 +130,7 @@ function validateEventType(type: unknown, methodName: string): void {
 
   if (type && typeof type === "string" && !validTypes.includes(type)) {
     throw new ValidationError(
-      `[CalendarService.${methodName}] Invalid event type. Must be: ${validTypes.join(", ")}`
+      `[CalendarService.${methodName}] Invalid event type. Must be: ${validTypes.join(", ")}`,
     );
   }
 }
@@ -141,18 +142,18 @@ function validateEventType(type: unknown, methodName: string): void {
 function validateDateString(
   date: unknown,
   fieldName: string,
-  methodName: string
+  methodName: string,
 ): void {
   if (!date || typeof date !== "string") {
     throw new ValidationError(
-      `[CalendarService.${methodName}] ${fieldName} must be an ISO 8601 date string`
+      `[CalendarService.${methodName}] ${fieldName} must be an ISO 8601 date string`,
     );
   }
 
   const parsed = new Date(date);
   if (isNaN(parsed.getTime())) {
     throw new ValidationError(
-      `[CalendarService.${methodName}] Invalid ${fieldName} format: ${date}`
+      `[CalendarService.${methodName}] Invalid ${fieldName} format: ${date}`,
     );
   }
 }
@@ -163,11 +164,11 @@ function validateDateString(
  */
 function validateEventData(
   event: Partial<CalendarEvent>,
-  methodName: string
+  methodName: string,
 ): void {
   if (!event || typeof event !== "object") {
     throw new ValidationError(
-      `[CalendarService.${methodName}] Event data is required`
+      `[CalendarService.${methodName}] Event data is required`,
     );
   }
 
@@ -216,7 +217,7 @@ export const CalendarService = {
       if (!Array.isArray(events)) {
         console.warn(
           "[CalendarService.getAll] Expected array but got:",
-          typeof events
+          typeof events,
         );
         return [];
       }
@@ -279,11 +280,11 @@ export const CalendarService = {
         eventType: (item.type as CalendarEventType) || "reminder",
         startDate: item.startDate || new Date().toISOString(),
         endDate: item.endDate || new Date().toISOString(),
-        description: item.description,
-        location: item.location,
-        attendees: item.attendees,
-        caseId: item.caseId,
-        reminder: item.reminder,
+        ...(item.description ? { description: item.description } : {}),
+        ...(item.location ? { location: item.location } : {}),
+        ...(item.attendees ? { attendees: item.attendees } : {}),
+        ...(item.caseId ? { caseId: item.caseId } : {}),
+        ...(item.reminder ? { reminder: item.reminder } : {}),
       };
 
       const event = await workflowApi.calendar.create(createDto);
@@ -313,7 +314,7 @@ export const CalendarService = {
    */
   update: async (
     id: string,
-    updates: Partial<CalendarEvent>
+    updates: Partial<CalendarEvent>,
   ): Promise<CalendarEvent> => {
     try {
       validateEventId(id, "update");
@@ -393,16 +394,22 @@ export const CalendarService = {
       const response = await workflowApi.calendar.getAll(filters);
 
       // Handle paginated response format { data: [], total: 0 }
-      const events = Array.isArray(response) ? response : (response as { data?: unknown[] })?.data || [];
+      const events = Array.isArray(response)
+        ? (response)
+        : (response as { data?: ApiCalendarEvent[] })?.data || [];
 
       // Ensure events is an array
       if (!Array.isArray(events)) {
-        console.warn('[CalendarService.getEvents] Expected array, got:', typeof events, events);
+        console.warn(
+          "[CalendarService.getEvents] Expected array, got:",
+          typeof events,
+          events,
+        );
         return [];
       }
 
       // Map API events to domain events
-      return events.map((e: ApiCalendarEvent) => ({
+      return events.map((e) => ({
         ...e,
         type: e.eventType as unknown as CalendarEvent["type"],
       }));
@@ -430,7 +437,7 @@ export const CalendarService = {
     try {
       if (typeof days !== "number" || days <= 0) {
         throw new ValidationError(
-          "[CalendarService.getUpcoming] Days must be a positive number"
+          "[CalendarService.getUpcoming] Days must be a positive number",
         );
       }
 
@@ -469,7 +476,7 @@ export const CalendarService = {
    * });
    */
   createEvent: async (
-    event: Partial<CalendarEvent>
+    event: Partial<CalendarEvent>,
   ): Promise<CalendarEvent> => {
     try {
       validateEventData(event, "createEvent");
@@ -490,7 +497,7 @@ export const CalendarService = {
    */
   updateEvent: async (
     eventId: string,
-    updates: Partial<CalendarEvent>
+    updates: Partial<CalendarEvent>,
   ): Promise<CalendarEvent> => {
     return CalendarService.update(eventId, updates);
   },

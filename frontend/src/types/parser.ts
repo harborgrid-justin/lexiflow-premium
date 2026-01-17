@@ -12,10 +12,10 @@
  * - Type-safe parsed data
  */
 
-import { Result } from './result';
-import type { Case } from './case';
-import type { Party } from './case';
-import type { DocketEntry } from './motion-docket';
+import { type Result } from "./result";
+
+import type { Case , Party } from "./case";
+import type { DocketEntry } from "./motion-docket";
 
 // ============================================================================
 // CONFIDENCE & METADATA
@@ -24,12 +24,12 @@ import type { DocketEntry } from './motion-docket';
 /**
  * Confidence level for parsed data quality
  */
-export type ParseConfidence = 'high' | 'medium' | 'low';
+export type ParseConfidence = "high" | "medium" | "low";
 
 /**
  * Parser source identifier
  */
-export type ParserSource = 'xml' | 'ai' | 'fallback' | 'manual';
+export type ParserSource = "xml" | "ai" | "fallback" | "manual";
 
 /**
  * Parse metadata
@@ -53,13 +53,13 @@ export interface ParseMetadata {
  * Parse error codes
  */
 export enum ParseErrorCode {
-  INVALID_FORMAT = 'INVALID_FORMAT',
-  MISSING_REQUIRED_DATA = 'MISSING_REQUIRED_DATA',
-  MALFORMED_XML = 'MALFORMED_XML',
-  AI_SERVICE_ERROR = 'AI_SERVICE_ERROR',
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  TIMEOUT = 'TIMEOUT',
-  UNKNOWN = 'UNKNOWN'
+  INVALID_FORMAT = "INVALID_FORMAT",
+  MISSING_REQUIRED_DATA = "MISSING_REQUIRED_DATA",
+  MALFORMED_XML = "MALFORMED_XML",
+  AI_SERVICE_ERROR = "AI_SERVICE_ERROR",
+  NETWORK_ERROR = "NETWORK_ERROR",
+  TIMEOUT = "TIMEOUT",
+  UNKNOWN = "UNKNOWN",
 }
 
 /**
@@ -141,7 +141,7 @@ export function parseSuccess<T>(
   data: T,
   confidence: ParseConfidence,
   metadata: ParseMetadata,
-  warnings: ParseWarning[] = []
+  warnings: ParseWarning[] = [],
 ): ParseResult<T> {
   return { data, confidence, warnings, metadata };
 }
@@ -154,9 +154,15 @@ export function parseError(
   message: string,
   details?: string,
   field?: string,
-  line?: number
+  line?: number,
 ): ParseError {
-  return { code, message, details, field, line };
+  return {
+    code,
+    message,
+    ...(details ? { details } : {}),
+    ...(field ? { field } : {}),
+    ...(typeof line === "number" ? { line } : {}),
+  };
 }
 
 /**
@@ -165,9 +171,13 @@ export function parseError(
 export function parseWarning(
   message: string,
   field?: string,
-  suggestion?: string
+  suggestion?: string,
 ): ParseWarning {
-  return { message, field, suggestion };
+  return {
+    message,
+    ...(field ? { field } : {}),
+    ...(suggestion ? { suggestion } : {}),
+  };
 }
 
 /**
@@ -181,15 +191,15 @@ export function normalizeFallbackResult(
     confidence: ParseConfidence;
     warnings: string[];
   },
-  metadata: ParseMetadata
+  metadata: ParseMetadata,
 ): DocketParseResult {
   return {
     caseInfo: legacyResult.caseInfo,
     parties: legacyResult.parties,
     docketEntries: legacyResult.entries,
     confidence: legacyResult.confidence,
-    warnings: legacyResult.warnings.map(w => parseWarning(w)),
-    metadata
+    warnings: legacyResult.warnings.map((w) => parseWarning(w)),
+    metadata,
   };
 }
 
@@ -197,27 +207,34 @@ export function normalizeFallbackResult(
  * Merge multiple parse results (useful for partial recovery)
  */
 export function mergeParseResults(
-  results: DocketParseResult[]
+  results: DocketParseResult[],
 ): DocketParseResult {
   if (results.length === 0) {
-    throw new Error('Cannot merge empty results array');
+    throw new Error("Cannot merge empty results array");
   }
 
   const merged: DocketParseResult = {
     caseInfo: results[0]!.caseInfo,
     parties: [],
     docketEntries: [],
-    confidence: results.reduce((min, r) =>
-      r.confidence === 'low' ? 'low' :
-      r.confidence === 'medium' || min === 'medium' ? 'medium' : 'high',
-      'high' as ParseConfidence
+    confidence: results.reduce(
+      (min, r) =>
+        r.confidence === "low"
+          ? "low"
+          : r.confidence === "medium" || min === "medium"
+            ? "medium"
+            : "high",
+      "high" as ParseConfidence,
     ),
     warnings: [],
     metadata: {
-      source: 'manual',
+      source: "manual",
       timestamp: new Date().toISOString(),
-      durationMs: results.reduce((sum, r) => sum + (r.metadata.durationMs || 0), 0)
-    }
+      durationMs: results.reduce(
+        (sum, r) => sum + (r.metadata.durationMs || 0),
+        0,
+      ),
+    },
   };
 
   // Merge parties and entries

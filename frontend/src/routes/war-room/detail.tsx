@@ -11,17 +11,18 @@ import type { Advisor, Case, Expert, WarRoom } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/detail";
+import { DataService } from "@/services/data/dataService";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data?: unknown }) {
+  const item = (data as { item?: Case } | undefined)?.item;
   return createDetailMeta({
     entityType: 'War Room',
-    entityName: (data as { item: Case } | undefined)?.item?.title,
-    entityId: (data as { item: Case } | undefined)?.item?.id,
+    ...(item?.title ? { entityName: item.title } : {}),
+    ...(item?.id ? { entityId: item.id } : {}),
   });
 }
 
@@ -29,7 +30,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader - WITH PROPER PARAM VALIDATION
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: { params: { roomId?: string } }) {
   const { roomId } = params;
 
   // CRITICAL: Validate param exists
@@ -61,7 +62,13 @@ export async function loader({ params }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({
+  params,
+  request,
+}: {
+  params: { roomId?: string };
+  request: Request;
+}) {
   const { roomId } = params;
 
   if (!roomId) {

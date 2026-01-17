@@ -1,12 +1,15 @@
 import { CaseRepository } from "@/services/domain/case.service";
 import { DocketRepository } from "@/services/domain/docket.service";
-import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
+
 import {
   IntegrationEventPublisher,
   createIntegratedRepository,
 } from "../integration/IntegrationEventPublisher";
+
 import { BillingRepository } from "./BillingRepository";
 import { DocumentRepository } from "./DocumentRepository";
+
+import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
 
 /**
  * Integrated repositories automatically publish integration events on mutations.

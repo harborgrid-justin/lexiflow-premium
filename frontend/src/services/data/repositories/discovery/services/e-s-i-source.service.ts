@@ -8,8 +8,10 @@
 
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import type { ESISource } from "@/types";
+
 import { validateCaseId, validateId } from "../shared/validation";
+
+import type { ESISource } from "@/types";
 
 /**
  * ESI Source Service Class

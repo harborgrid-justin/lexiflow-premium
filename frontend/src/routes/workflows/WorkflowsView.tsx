@@ -1,4 +1,13 @@
-/** * Workflows Domain - View Component * Enterprise React Architecture Pattern * * Responsibilities: * - UI rendering (presentation) * - User interaction handlers * - Accessibility features * - React 18 concurrent features */
+/**
+ * Workflows Domain - View Component
+ * Enterprise React Architecture Pattern
+ *
+ * Responsibilities:
+ * - UI rendering (presentation)
+ * - User interaction handlers
+ * - Accessibility features
+ * - React 18 concurrent features
+ */
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
@@ -6,19 +15,357 @@ import type { Task, WorkflowInstance, WorkflowTemplate } from '@/types';
 import { AlertTriangle, CheckCircle, Clock, Play, Plus } from 'lucide-react';
 import React, { useId } from 'react';
 import { Link } from 'react-router-dom';
-import { useWorkflows } from './WorkflowsProvider'; /** * Main Workflows View */
+import { useWorkflows } from './WorkflowsProvider';
+
 export function WorkflowsView() {
-  const { templates, instances, tasks, metrics, activeTab, setActiveTab, searchTerm, setSearchTerm, statusFilter, setStatusFilter, isPending } = useWorkflows(); const searchId = useId(); return (<div className="h-full flex flex-col"> <PageHeader title="Workflow Automation" subtitle="Automated workflows, task management, and process templates" actions={<Button variant="primary" size="md"> <Plus className="w-4 h-4" /> New Workflow </Button>} /> {/* Metrics Cards */} <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4"> <MetricCard icon={<Play className="w-5 h-5 text-[var(--color-primary)]" />} label="Templates" value={metrics.totalTemplates} /> <MetricCard icon={<Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />} label="Active Instances" value={metrics.activeInstances} /> <MetricCard icon={<CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />} label="Completed" value={metrics.completedInstances} /> <MetricCard icon={<Clock className="w-5 h-5 text-[var(--color-primary)]" />} label="Pending Tasks" value={metrics.pendingTasks} /> <MetricCard icon={<AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-400" />} label="Overdue Tasks" value={metrics.overdueTasks} /> </div> {/* Filters and Search */} <div className="px-4 pb-4 space-y-4"> <div className="flex gap-4 items-center"> <div className="flex-1"> <label htmlFor={searchId} className="sr-only">Search workflows</label> <input id={searchId} type="search" placeholder="Search workflows..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] dark:text-white" /> </div> <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-4 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] dark:text-white" aria-label="Filter by status" > <option value="all">All Statuses</option> <option value="Active">Active</option> <option value="Draft">Draft</option> <option value="Archived">Archived</option> </select> </div> {/* Tabs */} <div className="flex gap-2 border-b border-[var(--color-borderLight)]"> <TabButton active={activeTab === 'templates'} onClick={() => setActiveTab('templates')} > Templates ({templates.length}) </TabButton> <TabButton active={activeTab === 'instances'} onClick={() => setActiveTab('instances')} > Instances ({instances.length}) </TabButton> <TabButton active={activeTab === 'tasks'} onClick={() => setActiveTab('tasks')} > Tasks ({tasks.length}) </TabButton> </div> </div> {/* Content */} <div className="flex-1 overflow-auto px-4 pb-4"> {isPending && (<div className="text-center py-8"> <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" /> </div>)} {!isPending && activeTab === 'templates' && (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> {templates.map(template => (<TemplateCard key={template.id} template={template} />))} {templates.length === 0 && (<div className="col-span-full text-center py-12 text-[var(--color-textMuted)]"> No workflow templates found </div>)} </div>)} {!isPending && activeTab === 'instances' && (<div className="space-y-3"> {instances.map(instance => (<InstanceRow key={instance.id} instance={instance} />))} {instances.length === 0 && (<div className="text-center py-12 text-[var(--color-textMuted)]"> No workflow instances found </div>)} </div>)} {!isPending && activeTab === 'tasks' && (<div className="space-y-3"> {tasks.map(task => (<TaskRow key={task.id} task={task} />))} {tasks.length === 0 && (<div className="text-center py-12 text-[var(--color-textMuted)]"> No tasks found </div>)} </div>)} </div> </div>);
-} /** * Sub-components */ function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
-  return (<div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4"> <div className="flex items-center gap-3"> {icon} <div> <div className="text-2xl font-bold text-[var(--color-text)] dark:text-white">{value}</div> <div className="text-sm text-[var(--color-textMuted)]">{label}</div> </div> </div> </div>);
-} function TabButton({ active, onClick, children }: {
-  active: boolean; onClick: () => void; children: React.ReactNode;
+  const {
+    templates,
+    instances,
+    tasks,
+    metrics,
+    activeTab,
+    setActiveTab,
+    searchTerm,
+    setSearchTerm,
+    statusFilter,
+    setStatusFilter,
+    isPending,
+  } = useWorkflows();
+  const searchId = useId();
+
+  return (
+    <div className="h-full flex flex-col">
+      <PageHeader
+        title="Workflow Automation"
+        subtitle="Automated workflows, task management, and process templates"
+        actions={(
+          <Button variant="primary" size="md">
+            <Plus className="w-4 h-4" />
+            New Workflow
+          </Button>
+        )}
+      />
+
+      {/* Metrics Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4">
+        <MetricCard
+          icon={<Play className="w-5 h-5 text-[var(--color-primary)]" />}
+          label="Templates"
+          value={metrics.totalTemplates}
+        />
+        <MetricCard
+          icon={<Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+          label="Active Instances"
+          value={metrics.activeInstances}
+        />
+        <MetricCard
+          icon={<CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />}
+          label="Completed"
+          value={metrics.completedInstances}
+        />
+        <MetricCard
+          icon={<Clock className="w-5 h-5 text-[var(--color-primary)]" />}
+          label="Pending Tasks"
+          value={metrics.pendingTasks}
+        />
+        <MetricCard
+          icon={<AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
+          label="Overdue Tasks"
+          value={metrics.overdueTasks}
+        />
+      </div>
+
+      {/* Filters and Search */}
+      <div className="px-4 pb-4 space-y-4">
+        <div className="flex gap-4 items-center">
+          <div className="flex-1">
+            <label htmlFor={searchId} className="sr-only">
+              Search workflows
+            </label>
+            <input
+              id={searchId}
+              type="search"
+              placeholder="Search workflows..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] dark:text-white"
+            />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-4 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] dark:text-white"
+            aria-label="Filter by status"
+          >
+            <option value="all">All Statuses</option>
+            <option value="running">Running</option>
+            <option value="paused">Paused</option>
+            <option value="completed">Completed</option>
+            <option value="failed">Failed</option>
+            <option value="draft">Draft</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="rolled_back">Rolled Back</option>
+          </select>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 border-b border-[var(--color-borderLight)]">
+          <TabButton
+            active={activeTab === 'templates'}
+            onClick={() => setActiveTab('templates')}
+          >
+            Templates ({templates.length})
+          </TabButton>
+          <TabButton
+            active={activeTab === 'instances'}
+            onClick={() => setActiveTab('instances')}
+          >
+            Instances ({instances.length})
+          </TabButton>
+          <TabButton
+            active={activeTab === 'tasks'}
+            onClick={() => setActiveTab('tasks')}
+          >
+            Tasks ({tasks.length})
+          </TabButton>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-auto px-4 pb-4">
+        {isPending && (
+          <div className="text-center py-8">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+          </div>
+        )}
+
+        {!isPending && activeTab === 'templates' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {templates.map((template) => (
+              <TemplateCard key={template.id} template={template} />
+            ))}
+            {templates.length === 0 && (
+              <div className="col-span-full text-center py-12 text-[var(--color-textMuted)]">
+                No workflow templates found
+              </div>
+            )}
+          </div>
+        )}
+
+        {!isPending && activeTab === 'instances' && (
+          <div className="space-y-3">
+            {instances.map((instance) => (
+              <InstanceRow key={instance.id} instance={instance} />
+            ))}
+            {instances.length === 0 && (
+              <div className="text-center py-12 text-[var(--color-textMuted)]">
+                No workflow instances found
+              </div>
+            )}
+          </div>
+        )}
+
+        {!isPending && activeTab === 'tasks' && (
+          <div className="space-y-3">
+            {tasks.map((task) => (
+              <TaskRow key={task.id} task={task} />
+            ))}
+            {tasks.length === 0 && (
+              <div className="text-center py-12 text-[var(--color-textMuted)]">
+                No tasks found
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function MetricCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number;
 }) {
-  return (<button onClick={onClick} className={`px-4 py-2 font-medium border-b-2 transition-colors ${active ? 'border-blue-600 text-[var(--color-primary)] ' : 'border-transparent text-[var(--color-textMuted)] hover:text-[var(--color-text)] dark:hover:text-white'}`} > {children} </button>);
-} function TemplateCard({ template }: { template: WorkflowTemplate }) {
-  return (<Link to={`/workflows/${template.id}`} className="block bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-colors" > <div className="flex items-start justify-between mb-2"> <div className="font-medium text-[var(--color-text)] dark:text-white">{template.name}</div> <span className={`px-2 py-1 rounded text-xs font-medium ${template.status === 'Active' ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400' : 'bg-slate-100 text-[var(--color-text)] '}`}> {template.status} </span> </div> <div className="text-sm text-[var(--color-textMuted)] mb-3"> {template.description} </div> <div className="flex items-center gap-2 text-xs text-[var(--color-textMuted)]"> <span>{template.stepCount || 0} steps</span> <span>•</span> <span>{template.category}</span> </div> </Link>);
-} function InstanceRow({ instance }: { instance: WorkflowInstance }) {
-  return (<div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4"> <div className="flex items-center justify-between"> <div className="flex-1"> <Link to={`/workflows/instance/${instance.id}`} className="font-medium text-[var(--color-text)] dark:text-white hover:text-[var(--color-primary)] dark:hover:text-blue-400" > {instance.workflowName} </Link> <div className="text-sm text-[var(--color-textMuted)] mt-1"> Case: {instance.caseId} • Started {new Date(instance.startedAt).toLocaleDateString()} </div> </div> <div className="flex items-center gap-4"> <div className="text-right"> <div className="text-sm font-medium text-[var(--color-text)] dark:text-white"> {instance.completedSteps || 0}/{instance.totalSteps || 0} </div> <div className="text-xs text-[var(--color-textMuted)]">Steps</div> </div> <span className={`px-3 py-1 rounded-full text-xs font-medium ${instance.status === 'Running' ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 ' : instance.status === 'Completed' ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400' : instance.status === 'Failed' ? 'bg-rose-100 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400' : 'bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'}`}> {instance.status} </span> </div> </div> </div>);
-} function TaskRow({ task }: { task: Task }) {
-  const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 'Completed'; return (<div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4"> <div className="flex items-center justify-between"> <div className="flex-1"> <div className="font-medium text-[var(--color-text)] dark:text-white">{task.title}</div> <div className="text-sm text-[var(--color-textMuted)] mt-1"> {task.description} {task.dueDate && (<span className={isOverdue ? 'text-rose-600 dark:text-rose-400 ml-2' : 'ml-2'}> Due: {new Date(task.dueDate).toLocaleDateString()} </span>)} </div> </div> <div className="flex items-center gap-3"> {task.priority && (<span className={`px-2 py-1 rounded text-xs font-medium ${task.priority === 'High' ? 'bg-rose-100 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400' : task.priority === 'Medium' ? 'bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400' : 'bg-slate-100 text-[var(--color-text)] '}`}> {task.priority} </span>)} <span className={`px-3 py-1 rounded-full text-xs font-medium ${task.status === 'Completed' ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400' : task.status === 'In Progress' ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 ' : 'bg-slate-100 text-[var(--color-text)] '}`}> {task.status} </span> </div> </div> </div>);
+  return (
+    <div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4">
+      <div className="flex items-center gap-3">
+        {icon}
+        <div>
+          <div className="text-2xl font-bold text-[var(--color-text)] dark:text-white">
+            {value}
+          </div>
+          <div className="text-sm text-[var(--color-textMuted)]">{label}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-4 py-2 font-medium border-b-2 transition-colors ${active
+          ? 'border-blue-600 text-[var(--color-primary)] '
+          : 'border-transparent text-[var(--color-textMuted)] hover:text-[var(--color-text)] dark:hover:text-white'
+        }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function TemplateCard({ template }: { template: WorkflowTemplate }) {
+  const templateStatus = template.isCertified
+    ? 'Certified'
+    : template.isPublic
+      ? 'Public'
+      : 'Private';
+  const category =
+    template.metadata?.categories?.[0] ||
+    template.metadata?.complexity ||
+    'General';
+
+  return (
+    <Link
+      to={`/workflows/${template.id}`}
+      className="block bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+    >
+      <div className="flex items-start justify-between mb-2">
+        <div className="font-medium text-[var(--color-text)] dark:text-white">
+          {template.name}
+        </div>
+        <span
+          className={`px-2 py-1 rounded text-xs font-medium ${template.isCertified
+              ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+              : 'bg-slate-100 text-[var(--color-text)] '
+            }`}
+        >
+          {templateStatus}
+        </span>
+      </div>
+      <div className="text-sm text-[var(--color-textMuted)] mb-3">
+        {template.description}
+      </div>
+      <div className="flex items-center gap-2 text-xs text-[var(--color-textMuted)]">
+        <span>{template.nodes.length} steps</span>
+        <span>•</span>
+        <span>{category}</span>
+      </div>
+    </Link>
+  );
+}
+
+function InstanceRow({ instance }: { instance: WorkflowInstance }) {
+  const startedAt = instance.startedAt
+    ? new Date(instance.startedAt).toLocaleDateString()
+    : 'N/A';
+  const completedCount = instance.completedNodes?.length || 0;
+  const totalCount = instance.nodes?.length || 0;
+
+  return (
+    <div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <Link
+            to={`/workflows/instance/${instance.id}`}
+            className="font-medium text-[var(--color-text)] dark:text-white hover:text-[var(--color-primary)] dark:hover:text-blue-400"
+          >
+            {instance.name}
+          </Link>
+          <div className="text-sm text-[var(--color-textMuted)] mt-1">
+            Case: {instance.caseId} • Started {startedAt}
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="text-right">
+            <div className="text-sm font-medium text-[var(--color-text)] dark:text-white">
+              {completedCount}/{totalCount}
+            </div>
+            <div className="text-xs text-[var(--color-textMuted)]">Steps</div>
+          </div>
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-medium ${instance.status === 'running'
+                ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 '
+                : instance.status === 'completed'
+                  ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+                  : instance.status === 'failed'
+                    ? 'bg-rose-100 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400'
+                    : 'bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'
+              }`}
+          >
+            {instance.status}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TaskRow({ task }: { task: Task }) {
+  const isOverdue =
+    task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 'Completed';
+
+  return (
+    <div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-borderLight)] p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className="font-medium text-[var(--color-text)] dark:text-white">
+            {task.title}
+          </div>
+          <div className="text-sm text-[var(--color-textMuted)] mt-1">
+            {task.description}
+            {task.dueDate && (
+              <span
+                className={
+                  isOverdue
+                    ? 'text-rose-600 dark:text-rose-400 ml-2'
+                    : 'ml-2'
+                }
+              >
+                Due: {new Date(task.dueDate).toLocaleDateString()}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          {task.priority && (
+            <span
+              className={`px-2 py-1 rounded text-xs font-medium ${task.priority === 'High'
+                  ? 'bg-rose-100 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400'
+                  : task.priority === 'Medium'
+                    ? 'bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'
+                    : 'bg-slate-100 text-[var(--color-text)] '
+                }`}
+            >
+              {task.priority}
+            </span>
+          )}
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-medium ${task.status === 'Completed'
+                ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+                : task.status === 'In Progress'
+                  ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 '
+                  : 'bg-slate-100 text-[var(--color-text)] '
+              }`}
+          >
+            {task.status}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
 }

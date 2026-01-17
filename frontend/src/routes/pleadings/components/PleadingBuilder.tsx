@@ -17,7 +17,7 @@ import React, { Suspense, lazy, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { queryClient } from '@/hooks/useQueryHooks';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API with queryKeys (2025-12-21)
 
@@ -26,6 +26,7 @@ import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from "@/hooks/useTheme";
+import { DataService } from '@/services/data/data-service.service';
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
@@ -86,7 +87,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ caseId }) => {
             );
         },
         {
-            onSuccess: (newDoc) => {
+            onSuccess: (newDoc: PleadingDocument) => {
                 createModal.close();
                 setValidationErrors([]);
                 setActivePleading(newDoc);
@@ -241,7 +242,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ caseId }) => {
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({ ...newDocData, templateId: e.target.value })}
                         >
                             <option value="">Select Template...</option>
-                            {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                            {templates.map((t: PleadingTemplate) => <option key={t.id} value={t.id}>{t.name}</option>)}
                         </select>
                     </div>
 

@@ -3,7 +3,7 @@
  * Industry-standard e-discovery workflow types
  */
 
-import { BaseEntity, CaseId, DocumentId } from "./primitives";
+import { type BaseEntity, type CaseId, type DocumentId } from "./primitives";
 
 // ============================================================================
 // Collection Types
@@ -98,7 +98,7 @@ export interface DocumentCoding {
   customFields?: Record<string, string | number | boolean>;
 }
 
-import { UserId } from "@/types";
+import { type UserId } from "@/types";
 
 export interface ReviewQueue extends BaseEntity {
   caseId: CaseId;

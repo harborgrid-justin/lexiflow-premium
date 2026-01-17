@@ -6,7 +6,7 @@
  * Includes React.memo wrappers, component profiling, and render optimization helpers.
  */
 
-import React, { Attributes, ComponentType, memo } from "react";
+import React, { memo, type Attributes, type ComponentType } from "react";
 
 /**
  * Performance optimization configuration
@@ -83,7 +83,7 @@ export function shallowPropsEqual<P>(prevProps: P, nextProps: P): boolean {
 export function createMemoizedComponent<P>(
   Component: ComponentType<P>,
   propsAreEqual?: (prevProps: Readonly<P>, nextProps: Readonly<P>) => boolean,
-  config: OptimizationConfig = {}
+  config: OptimizationConfig = {},
 ): ComponentType<P> {
   const {
     enableWarnings = import.meta.env.DEV,
@@ -107,21 +107,21 @@ export function createMemoizedComponent<P>(
       if (enableWarnings && duration > warnThreshold) {
         console.warn(
           `[Performance] ${Component.displayName || Component.name || "Component"} ` +
-            `render took ${duration.toFixed(2)}ms (threshold: ${warnThreshold}ms)`
+            `render took ${duration.toFixed(2)}ms (threshold: ${warnThreshold}ms)`,
         );
       }
 
       if (debug) {
-        console.log(
+        console.warn(
           `[Performance] ${Component.displayName || Component.name || "Component"} ` +
-            `rendered in ${duration.toFixed(2)}ms`
+            `rendered in ${duration.toFixed(2)}ms`,
         );
       }
     }, []);
 
     return React.createElement(
       MemoizedComponent as ComponentType<unknown>,
-      props as Attributes
+      props as Attributes,
     );
   }
 
@@ -190,8 +190,8 @@ export function profileComponent<P>(
     actualDuration: number,
     baseDuration: number,
     startTime: number,
-    commitTime: number
-  ) => void
+    commitTime: number,
+  ) => void,
 ): ComponentType<P> {
   function ProfiledComponent(props: P): React.ReactElement {
     const handleRender = (
@@ -200,7 +200,7 @@ export function profileComponent<P>(
       actualDuration: number,
       baseDuration: number,
       startTime: number,
-      commitTime: number
+      commitTime: number,
     ) => {
       if (onRender) {
         onRender(
@@ -209,12 +209,12 @@ export function profileComponent<P>(
           actualDuration,
           baseDuration,
           startTime,
-          commitTime
+          commitTime,
         );
       } else if (import.meta.env.DEV) {
-        console.log(
+        console.warn(
           `[Profiler] ${profId} ${phase}: ${actualDuration.toFixed(2)}ms ` +
-            `(base: ${baseDuration.toFixed(2)}ms)`
+            `(base: ${baseDuration.toFixed(2)}ms)`,
         );
       }
     };
@@ -224,8 +224,8 @@ export function profileComponent<P>(
       { id, onRender: handleRender as React.ProfilerOnRenderCallback },
       React.createElement(
         Component as React.ComponentType<Record<string, unknown>>,
-        props as Record<string, unknown> & React.Attributes
-      )
+        props as Record<string, unknown> & React.Attributes,
+      ),
     );
   }
 
@@ -252,7 +252,7 @@ export function lazyWithErrorBoundary<
       {
         fallback: React.createElement("div", {}, "Loading..."),
       },
-      React.createElement(LazyComponent, props)
+      React.createElement(LazyComponent, props),
     );
   };
 
@@ -279,12 +279,12 @@ export function lazyWithErrorBoundary<
  */
 export function debounceRenders<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
-  delay: number = 300
+  delay: number = 300,
 ): ComponentType<P> {
   const DebouncedComponent = (props: P) => {
     const [debouncedProps, setDebouncedProps] = React.useState<P>(props);
     const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(
-      undefined
+      undefined,
     );
 
     React.useEffect(() => {
@@ -320,7 +320,7 @@ export function debounceRenders<P extends Record<string, unknown>>(
  */
 export function throttleRenders<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
-  interval: number = 100
+  interval: number = 100,
 ): ComponentType<P> {
   const ThrottledComponent = (props: P) => {
     const [throttledProps, setThrottledProps] = React.useState<P>(props);
@@ -368,13 +368,13 @@ export function throttleRenders<P extends Record<string, unknown>>(
  */
 export function batchRenders<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
-  batchWindow: number = 50
+  batchWindow: number = 50,
 ): ComponentType<P> {
   const BatchedComponent = (props: P) => {
     const [batchedProps, setBatchedProps] = React.useState<P>(props);
     const propsQueueRef = React.useRef<P[]>([]);
     const timerRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(
-      undefined
+      undefined,
     );
 
     React.useEffect(() => {
@@ -425,7 +425,7 @@ export function batchRenders<P extends Record<string, unknown>>(
  */
 export function conditionallyRender<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
-  shouldRender: (props: P) => boolean
+  shouldRender: (props: P) => boolean,
 ): ComponentType<P> {
   const ConditionalComponent = (props: P) => {
     if (!shouldRender(props)) {
@@ -480,9 +480,9 @@ export const ComponentUtils = {
    */
   setDisplayName<P>(
     Component: ComponentType<P>,
-    name: string
+    name: string,
   ): ComponentType<P> {
-    (Component as unknown as Record<string, unknown>).displayName = name;
+    (Component as unknown as Record<string, unknown>)["displayName"] = name;
     return Component;
   },
 
@@ -491,12 +491,12 @@ export const ComponentUtils = {
    */
   wrapWithName<P>(
     Component: ComponentType<P>,
-    wrapper: string
+    wrapper: string,
   ): ComponentType<P> {
     const originalName = ComponentUtils.getDisplayName(Component);
     return ComponentUtils.setDisplayName(
       Component,
-      `${wrapper}(${originalName})`
+      `${wrapper}(${originalName})`,
     );
   },
 };

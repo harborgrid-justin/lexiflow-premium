@@ -28,7 +28,7 @@ export const NotificationService = {
       item && typeof item === "object" ? (item as Record<string, unknown>) : {};
     const notification = {
       ...itemObj,
-      timestamp: itemObj.timestamp || new Date().toISOString(),
+      timestamp: itemObj["timestamp"] || new Date().toISOString(),
       read: false,
     };
     return (
@@ -41,7 +41,7 @@ export const NotificationService = {
       updates && typeof updates === "object"
         ? (updates as Record<string, unknown>)
         : {};
-    if (updatesObj.read === true) {
+    if (updatesObj["read"] === true) {
       return (
         communicationsApi.notifications?.markAsRead?.(id) || {
           id,
@@ -90,7 +90,7 @@ export const NotificationService = {
 
   getUnreadCount: async (): Promise<number> => {
     const result = await apiClient.get<{ count: number }>(
-      "/communications/notifications/unread-count"
+      "/communications/notifications/unread-count",
     );
     return result.count;
   },

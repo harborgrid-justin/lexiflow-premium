@@ -5,9 +5,11 @@
  * Integration: Opp #8 from architecture docs
  */
 
-import type { SystemEventPayloads } from "@/types/integration-types";
 import { SystemEventType } from "@/types/integration-types";
+
 import { BaseEventHandler } from "./base-event.handler.service";
+
+import type { SystemEventPayloads } from "@/types/integration-types";
 
 export class WallErectedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.WALL_ERECTED]

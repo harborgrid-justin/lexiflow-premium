@@ -22,7 +22,7 @@ import { EnhancedSearch } from './components/components/advanced/EnhancedSearch'
 import type { searchLoader } from './loader';
 
 interface SearchPageProps {
-  loaderData: ReturnType<typeof searchLoader>;
+  loaderData: Awaited<ReturnType<typeof searchLoader>>;
 }
 
 export function SearchPage({ loaderData }: SearchPageProps) {

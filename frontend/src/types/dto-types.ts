@@ -8,6 +8,11 @@
  */
 
 import type {
+  RiskImpact,
+  RiskProbability,
+  RiskStatusEnum,
+} from "./compliance-risk";
+import type {
   TimeEntryStatus,
   InvoiceStatus,
   WorkflowStatus,
@@ -16,23 +21,13 @@ import type {
   WitnessStatus,
   TemplateStatus,
   UserRole,
-} from './enums';
-import type {
+
   BillingModel,
   EntityType,
   EntityRole,
-  LegalRuleType,
-} from './enums';
-import type {
-  RiskImpact,
-  RiskProbability,
-  RiskStatusEnum,
-} from './compliance-risk';
-import type { MetadataRecord } from './primitives';
-import type {
-  OrganizationTypeEnum,
-  OrganizationStatusEnum,
-} from './system';
+  LegalRuleType} from "./enums";
+import type { MetadataRecord } from "./primitives";
+import type { OrganizationTypeEnum, OrganizationStatusEnum } from "./system";
 
 // =============================================================================
 // BASE DTO TYPES
@@ -41,12 +36,12 @@ import type {
 /**
  * Omit standard BaseEntity fields for create operations
  */
-export type CreateDTO<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt' | 'userId'>;
+export type CreateDTO<T> = Omit<T, "id" | "createdAt" | "updatedAt" | "userId">;
 
 /**
  * Partial for update operations
  */
-export type UpdateDTO<T> = Partial<Omit<T, 'id' | 'createdAt'>>;
+export type UpdateDTO<T> = Partial<Omit<T, "id" | "createdAt">>;
 
 // =============================================================================
 // BILLING DTOs
@@ -140,7 +135,7 @@ export interface CreateWorkflowProcessDTO {
   projectId?: string;
   startDate?: string;
   dueDate?: string;
-  priority?: 'Low' | 'Medium' | 'High' | 'Urgent';
+  priority?: "Low" | "Medium" | "High" | "Urgent";
   assignedTo?: string[];
   ownerId?: string;
 }
@@ -150,7 +145,7 @@ export interface UpdateWorkflowProcessDTO {
   description?: string;
   status?: WorkflowStatus;
   dueDate?: string;
-  priority?: 'Low' | 'Medium' | 'High' | 'Urgent';
+  priority?: "Low" | "Medium" | "High" | "Urgent";
   completionPercentage?: number;
   completedDate?: string;
 }
@@ -159,13 +154,18 @@ export interface CreateWorkflowTemplateDTO {
   name: string;
   description?: string;
   category: string;
-  type?: 'Workflow' | 'Pleading' | 'Motion' | 'Document' | 'Email' | 'Other';
+  type?: "Workflow" | "Pleading" | "Motion" | "Document" | "Email" | "Other";
   content?: string;
-  variables?: Array<{ key: string; label: string; type: string; required?: boolean }>;
+  variables?: Array<{
+    key: string;
+    label: string;
+    type: string;
+    required?: boolean;
+  }>;
   sections?: string[];
   tags?: string[];
   jurisdictions?: string[];
-  complexity?: 'Low' | 'Medium' | 'High';
+  complexity?: "Low" | "Medium" | "High";
   estimatedDuration?: string;
 }
 
@@ -175,7 +175,12 @@ export interface UpdateWorkflowTemplateDTO {
   category?: string;
   content?: string;
   status?: TemplateStatus;
-  variables?: Array<{ key: string; label: string; type: string; required?: boolean }>;
+  variables?: Array<{
+    key: string;
+    label: string;
+    type: string;
+    required?: boolean;
+  }>;
   sections?: string[];
   tags?: string[];
 }
@@ -210,7 +215,7 @@ export interface UpdateJurorDTO {
 
 export interface StrikeJurorDTO {
   jurorId: string;
-  strikeParty: 'Plaintiff' | 'Defense';
+  strikeParty: "Plaintiff" | "Defense";
   peremptoryStrike?: boolean;
   causeStrike?: string;
 }
@@ -251,9 +256,23 @@ export interface CreateTrialExhibitDTO {
   caseId: string;
   exhibitNumber: string;
   description: string;
-  type: 'Document' | 'Photo' | 'Video' | 'Audio' | 'Physical' | 'Demonstrative' | 'Expert Report' | 'Other';
-  party: 'Plaintiff' | 'Defense' | 'Joint' | 'Court';
-  status?: 'Draft' | 'Marked' | 'Offered' | 'Admitted' | 'Excluded' | 'Withdrawn';
+  type:
+    | "Document"
+    | "Photo"
+    | "Video"
+    | "Audio"
+    | "Physical"
+    | "Demonstrative"
+    | "Expert Report"
+    | "Other";
+  party: "Plaintiff" | "Defense" | "Joint" | "Court";
+  status?:
+    | "Draft"
+    | "Marked"
+    | "Offered"
+    | "Admitted"
+    | "Excluded"
+    | "Withdrawn";
   documentId?: string;
   source?: string;
   tags?: string[];
@@ -264,13 +283,19 @@ export interface CreateTrialExhibitDTO {
 export interface UpdateTrialExhibitDTO {
   exhibitNumber?: string;
   description?: string;
-  status?: 'Draft' | 'Marked' | 'Offered' | 'Admitted' | 'Excluded' | 'Withdrawn';
+  status?:
+    | "Draft"
+    | "Marked"
+    | "Offered"
+    | "Admitted"
+    | "Excluded"
+    | "Withdrawn";
   dateIntroduced?: string;
   admissionDate?: string;
   admittedBy?: string;
   judgeRuling?: string;
   foundationEstablished?: boolean;
-  authenticity?: 'Verified' | 'Challenged' | 'Stipulated';
+  authenticity?: "Verified" | "Challenged" | "Stipulated";
   orderPresented?: number;
   notes?: string;
 }
@@ -416,7 +441,7 @@ export interface UpdateEntityDTO {
   roles?: EntityRole[];
   email?: string;
   phone?: string;
-  status?: 'Active' | 'Inactive' | 'Prospect' | 'Blacklisted' | 'Deceased';
+  status?: "Active" | "Inactive" | "Prospect" | "Blacklisted" | "Deceased";
   riskScore?: number;
   tags?: string[];
   notes?: string;
@@ -454,7 +479,7 @@ export interface UpdateRuleDTO {
   summary?: string;
   text?: string;
   fullText?: string;
-  status?: 'Active' | 'Superseded' | 'Repealed' | 'Draft';
+  status?: "Active" | "Superseded" | "Repealed" | "Draft";
   tags?: string[];
 }
 
@@ -464,7 +489,7 @@ export interface UpdateRuleDTO {
 
 export interface CreateAnalysisSessionDTO {
   caseId?: string;
-  sessionType: 'Brief' | 'Case' | 'Motion' | 'Discovery' | 'Trial' | 'General';
+  sessionType: "Brief" | "Case" | "Motion" | "Discovery" | "Trial" | "General";
   inputData?: string;
 }
 
@@ -518,25 +543,23 @@ export interface ValidationResult {
 }
 
 export function validateDTO<T extends Record<string, unknown>>(
-  dto: T, 
-  rules: Record<keyof T, (value: unknown) => boolean | string>
+  dto: T,
+  rules: Record<keyof T, (value: unknown) => boolean | string>,
 ): ValidationResult {
   const errors: Array<{ field: string; message: string }> = [];
 
   for (const [field, validator] of Object.entries(rules)) {
     const value = dto[field as keyof T];
     const result = (validator as (value: unknown) => boolean | string)(value);
-    
+
     if (result !== true) {
       errors.push({
         field,
-        message: typeof result === 'string' ? result : `Invalid value for ${field}`,
+        message:
+          typeof result === "string" ? result : `Invalid value for ${field}`,
       });
     }
   }
 
-  return {
-    valid: errors.length === 0,
-    errors: errors.length > 0 ? errors : undefined,
-  };
+  return errors.length > 0 ? { valid: false, errors } : { valid: true };
 }

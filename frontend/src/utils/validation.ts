@@ -27,7 +27,11 @@
  * - Immutable validation patterns
  */
 
-import { PleadingDocument, PleadingSection, PleadingTemplate } from "@/types";
+import type {
+  PleadingDocument,
+  PleadingSection,
+  PleadingTemplate,
+} from "@/types";
 
 /**
  * Validation result structure
@@ -96,11 +100,11 @@ export const ValidationService = {
   validateRequired: (
     value: unknown,
     fieldName: string,
-    methodName: string
+    methodName: string,
   ): void => {
     if (value === null || value === undefined) {
       throw new Error(
-        `[ValidationService.${methodName}] ${fieldName} is required and cannot be null or undefined`
+        `[ValidationService.${methodName}] ${fieldName} is required and cannot be null or undefined`,
       );
     }
   },
@@ -113,11 +117,11 @@ export const ValidationService = {
   validateString: (
     value: string,
     fieldName: string,
-    methodName: string
+    methodName: string,
   ): void => {
     if (typeof value !== "string") {
       throw new Error(
-        `[ValidationService.${methodName}] ${fieldName} must be a string`
+        `[ValidationService.${methodName}] ${fieldName} must be a string`,
       );
     }
   },
@@ -130,11 +134,11 @@ export const ValidationService = {
   validateArray: (
     value: unknown[],
     fieldName: string,
-    methodName: string
+    methodName: string,
   ): void => {
     if (!Array.isArray(value)) {
       throw new Error(
-        `[ValidationService.${methodName}] ${fieldName} must be an array`
+        `[ValidationService.${methodName}] ${fieldName} must be an array`,
       );
     }
   },
@@ -163,25 +167,25 @@ export const ValidationService = {
    * - Reports empty sections
    */
   validatePleadingCompleteness: (
-    document: PleadingDocument
+    document: PleadingDocument,
   ): ValidationResult => {
     try {
       ValidationService.validateRequired(
         document,
         "document",
-        "validatePleadingCompleteness"
+        "validatePleadingCompleteness",
       );
 
       if (!document || typeof document !== "object") {
         throw new Error(
-          "[ValidationService.validatePleadingCompleteness] Invalid document structure"
+          "[ValidationService.validatePleadingCompleteness] Invalid document structure",
         );
       }
 
       ValidationService.validateArray(
         document.sections,
         "document.sections",
-        "validatePleadingCompleteness"
+        "validatePleadingCompleteness",
       );
 
       const errors: ValidationError[] = [];
@@ -204,7 +208,7 @@ export const ValidationService = {
       const emptySections = document.sections.filter(
         (s) =>
           !s.content ||
-          (typeof s.content === "string" && s.content.trim().length === 0)
+          (typeof s.content === "string" && s.content.trim().length === 0),
       );
 
       if (emptySections.length > 0) {
@@ -218,7 +222,7 @@ export const ValidationService = {
       // Check for duplicate section orders
       const orders = document.sections.map((s) => s.order);
       const duplicateOrders = orders.filter(
-        (order, index) => orders.indexOf(order) !== index
+        (order, index) => orders.indexOf(order) !== index,
       );
 
       if (duplicateOrders.length > 0) {
@@ -234,7 +238,7 @@ export const ValidationService = {
         (s) =>
           typeof s.order !== "number" ||
           s.order < 0 ||
-          !Number.isInteger(s.order)
+          !Number.isInteger(s.order),
       );
 
       if (invalidOrders.length > 0) {
@@ -254,7 +258,7 @@ export const ValidationService = {
     } catch (error) {
       console.error(
         "[ValidationService.validatePleadingCompleteness] Error:",
-        error
+        error,
       );
       return {
         valid: false,
@@ -299,12 +303,12 @@ export const ValidationService = {
       ValidationService.validateRequired(
         template,
         "template",
-        "validateTemplate"
+        "validateTemplate",
       );
 
       if (!template || typeof template !== "object") {
         throw new Error(
-          "[ValidationService.validateTemplate] Invalid template structure"
+          "[ValidationService.validateTemplate] Invalid template structure",
         );
       }
 
@@ -413,12 +417,12 @@ export const ValidationService = {
       ValidationService.validateRequired(
         section,
         "section",
-        "validateSectionContent"
+        "validateSectionContent",
       );
 
       if (!section || typeof section !== "object") {
         throw new Error(
-          "[ValidationService.validateSectionContent] Invalid section structure"
+          "[ValidationService.validateSectionContent] Invalid section structure",
         );
       }
 
@@ -522,7 +526,7 @@ export const ValidationService = {
       ValidationService.validateArray(sections, "sections", "validateSections");
 
       return sections.map((section) =>
-        ValidationService.validateSectionContent(section)
+        ValidationService.validateSectionContent(section),
       );
     } catch (error) {
       console.error("[ValidationService.validateSections] Error:", error);

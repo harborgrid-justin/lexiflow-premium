@@ -1,15 +1,15 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useModalState } from '@/hooks/core';
-import { useSelection } from '@/hooks/useSelectionState';
-import { useRateTables, type RateTable } from '../../hooks/useRateTables';
-import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useModalState } from '@/hooks/core';
+import { useSelection } from '@/hooks/useSelectionState';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
-import { memo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
+import { useRateTables, type RateTable } from '../../hooks/useRateTables';
 
 const RateTableManagementComponent = function RateTableManagement() {
   const { theme } = useTheme();
@@ -21,6 +21,7 @@ const RateTableManagementComponent = function RateTableManagement() {
     createRateTable,
     updateRateTable,
     deleteRateTable,
+    refetch,
   } = useRateTables();
 
   const createModal = useModalState();
@@ -54,9 +55,6 @@ const RateTableManagementComponent = function RateTableManagement() {
       await refetch();
       deleteModal.close();
       tableSelection.deselect();
-      notify.success('Rate table deleted successfully');
-    } catch {
-      notify.error('Failed to delete rate table');
     }
   };
 
@@ -114,48 +112,52 @@ const RateTableManagementComponent = function RateTableManagement() {
         </Button>
       </div>
 
-      <TableContainer>
-        <TableHeader>
-          <TableHead>Name</TableHead>
-          <TableHead>Default Rate</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Effective Date</TableHead>
-          <TableHead>Roles Configured</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableHeader>
-        <TableBody>
-          {rateTables.map(table => (
-            <TableRow key={table.id}>
-              <TableCell>
-                <div>
-                  <span className={cn("font-medium", theme.text.primary)}>{table.name}</span>
-                  <p className={cn("text-xs", theme.text.tertiary)}>{table.description}</p>
-                </div>
-              </TableCell>
-              <TableCell>
-                <span className={cn("font-semibold text-green-600")}>${table.defaultRate}/hr</span>
-              </TableCell>
-              <TableCell>
-                <Badge variant={table.status === 'Active' ? 'success' : table.status === 'Draft' ? 'warning' : 'neutral'}>
-                  {table.status}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-sm">{table.effectiveDate}</TableCell>
-              <TableCell>
-                <Badge variant="info">
-                  <Users className="h-3 w-3 mr-1" /> {table.rates.length} roles
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-1">
-                  <Button size="sm" variant="ghost" icon={Edit} onClick={() => openEditModal(table)}>Edit</Button>
-                  <Button size="sm" variant="ghost" icon={Trash2} onClick={() => openDeleteModal(table)}>Delete</Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </TableContainer>
+      {isLoading ? (
+        <div className="p-4 text-sm">Loading rate tables...</div>
+      ) : (
+        <TableContainer>
+          <TableHeader>
+            <TableHead>Name</TableHead>
+            <TableHead>Default Rate</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Effective Date</TableHead>
+            <TableHead>Roles Configured</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableHeader>
+          <TableBody>
+            {rateTables.map(table => (
+              <TableRow key={table.id}>
+                <TableCell>
+                  <div>
+                    <span className={cn("font-medium", theme.text.primary)}>{table.name}</span>
+                    <p className={cn("text-xs", theme.text.tertiary)}>{table.description}</p>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span className={cn("font-semibold text-green-600")}>${table.defaultRate}/hr</span>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={table.status === 'Active' ? 'success' : table.status === 'Draft' ? 'warning' : 'neutral'}>
+                    {table.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-sm">{table.effectiveDate}</TableCell>
+                <TableCell>
+                  <Badge variant="info">
+                    <Users className="h-3 w-3 mr-1" /> {table.rates.length} roles
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" icon={Edit} onClick={() => openEditModal(table)}>Edit</Button>
+                    <Button size="sm" variant="ghost" icon={Trash2} onClick={() => openDeleteModal(table)}>Delete</Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableContainer>
+      )}
 
       {/* Create/Edit Modal */}
       <Modal

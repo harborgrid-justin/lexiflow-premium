@@ -1,7 +1,8 @@
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { db, STORES } from "@/services/data/db";
-import { Deposition } from "@/types";
+import { type Deposition } from "@/types";
+
 import { validateCaseId } from "./utils";
 
 export const getDepositions = async (

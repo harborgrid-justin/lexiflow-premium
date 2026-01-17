@@ -7,8 +7,8 @@
  * @module services/graphValidationService
  */
 
-import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 import { VALIDATION_MESSAGES, CANVAS_CONSTANTS } from '@/types/canvas-constants';
+import { type TypedWorkflowNode, type WorkflowConnection } from '@/types/workflow-types';
 
 /**
  * Validation result interface

@@ -7,9 +7,10 @@
  * ✅ REFACTORED: Now uses centralized theme tokens instead of hardcoded colors
  */
 
+import { type CSSProperties } from "react";
+
 import { ChartColorService } from "@/lib/theme/chartColorService";
-import { ThemeMode } from "@theme/tokens";
-import { CSSProperties } from "react";
+import { type ThemeMode } from "@theme/tokens";
 
 // ============================================================================
 // TYPES

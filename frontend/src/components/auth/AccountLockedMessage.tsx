@@ -23,6 +23,8 @@ export function AccountLockedMessage({
   contactPhone = '1-800-LEXIFLOW',
 }: AccountLockedMessageProps) {
   const { theme, tokens } = useTheme();
+  const gradientBackground = String(theme.colors.gradients.primary);
+  const accentColor = String(theme.colors.blue400);
 
   const getReasonText = () => {
     switch (reason) {
@@ -57,7 +59,7 @@ export function AccountLockedMessage({
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.colors.gradients.primary, padding: tokens.spacing.normal.md }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: gradientBackground, padding: tokens.spacing.normal.md }}>
       <div style={{ maxWidth: '28rem', width: '100%' }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: tokens.spacing.layout.lg }}>
@@ -103,20 +105,20 @@ export function AccountLockedMessage({
               <ul className="space-y-2 text-sm" style={{ color: theme.text.secondary }}>
                 {reason === 'failed_attempts' && (
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: theme.colors.blue400 }} fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: accentColor }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Wait for the automatic unlock period to expire</span>
                   </li>
                 )}
                 <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: theme.colors.blue400 }} fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: accentColor }} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Contact your system administrator for immediate assistance</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: theme.colors.blue400 }} fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: accentColor }} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>If you believe this is an error, contact our security team</span>

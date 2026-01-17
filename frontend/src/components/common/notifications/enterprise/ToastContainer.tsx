@@ -83,6 +83,27 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
   gap = 8,
 }) => {
   const { theme, tokens } = useTheme();
+  const toStyleValue = (value: unknown) => String(value);
+  const classToken = (value: unknown) => String(value);
+  const statusSuccessText = toStyleValue(theme.status.success.text);
+  const statusErrorText = toStyleValue(theme.status.error.text);
+  const statusWarningText = toStyleValue(theme.status.warning.text);
+  const statusSuccessBg = toStyleValue(theme.status.success.bg);
+  const statusErrorBg = toStyleValue(theme.status.error.bg);
+  const statusWarningBg = toStyleValue(theme.status.warning.bg);
+  const primaryDefault = toStyleValue(theme.primary.DEFAULT);
+  const surfaceElevated = toStyleValue(theme.surface.elevated);
+  const surfaceHover = toStyleValue(theme.surface.hover);
+  const textPrimary = toStyleValue(theme.text.primary);
+  const textSecondary = toStyleValue(theme.text.secondary);
+  const primaryClass = classToken(theme.primary.DEFAULT);
+  const primaryHoverClass = classToken(theme.primary.hover);
+  const statusErrorBgClass = classToken(theme.status.error.bg);
+  const surfaceDefaultClass = classToken(theme.surface.default);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const textSecondaryClass = classToken(theme.text.secondary);
+  const surfaceHoverClass = classToken(theme.surface.hover);
+  const borderFocusedClass = classToken(theme.border.focused);
   // HYDRATION-SAFE: Track mounted state for browser-only APIs
   const [isMounted, setIsMounted] = React.useState(false);
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
@@ -181,13 +202,13 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
     const iconClass = 'h-5 w-5';
     switch (type) {
       case 'success':
-        return <CheckCircle style={{ color: theme.status.success.text }} className={iconClass} />;
+        return <CheckCircle style={{ color: statusSuccessText }} className={iconClass} />;
       case 'error':
-        return <AlertCircle style={{ color: theme.status.error.text }} className={iconClass} />;
+        return <AlertCircle style={{ color: statusErrorText }} className={iconClass} />;
       case 'warning':
-        return <AlertTriangle style={{ color: theme.status.warning.text }} className={iconClass} />;
+        return <AlertTriangle style={{ color: statusWarningText }} className={iconClass} />;
       default:
-        return <Info style={{ color: theme.primary.DEFAULT }} className={iconClass} />;
+        return <Info style={{ color: primaryDefault }} className={iconClass} />;
     }
   };
 
@@ -195,13 +216,13 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
   const getColorScheme = (type: ToastNotification['type']) => {
     switch (type) {
       case 'success':
-        return { borderColor: theme.status.success.text, backgroundColor: theme.status.success.bg };
+        return { borderColor: statusSuccessText, backgroundColor: statusSuccessBg };
       case 'error':
-        return { borderColor: theme.status.error.text, backgroundColor: theme.status.error.bg };
+        return { borderColor: statusErrorText, backgroundColor: statusErrorBg };
       case 'warning':
-        return { borderColor: theme.status.warning.text, backgroundColor: theme.status.warning.bg };
+        return { borderColor: statusWarningText, backgroundColor: statusWarningBg };
       default:
-        return { borderColor: theme.primary.DEFAULT, backgroundColor: theme.primary.DEFAULT + '20' };
+        return { borderColor: primaryDefault, backgroundColor: `${primaryDefault}20` };
     }
   };
 
@@ -317,7 +338,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
                 boxShadow: tokens.shadows.xl,
                 backdropFilter: 'blur(8px)',
                 ...(toast.priority === 'urgent' && {
-                  outline: `2px solid ${theme.status.error.text}`,
+                  outline: `2px solid ${statusErrorText}`,
                   outlineOffset: '2px'
                 })
               }}
@@ -329,10 +350,10 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <h4 style={{ fontWeight: tokens.typography.fontWeight.semibold, fontSize: tokens.typography.fontSize.sm, color: theme.text.primary, marginBottom: tokens.spacing.compact.xs }}>
+                <h4 style={{ fontWeight: tokens.typography.fontWeight.semibold, fontSize: tokens.typography.fontSize.sm, color: textPrimary, marginBottom: tokens.spacing.compact.xs }}>
                   {toast.title}
                 </h4>
-                <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary, lineHeight: '1.5' }}>
+                <p style={{ fontSize: tokens.typography.fontSize.sm, color: textSecondary, lineHeight: '1.5' }}>
                   {toast.message}
                 </p>
 
@@ -349,11 +370,11 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
                         className={cn(
                           'px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
                           action.variant === 'primary' &&
-                          cn(theme.colors.primary, 'text-white', `hover:${theme.colors.hoverPrimary}`),
+                          cn(primaryClass, 'text-white', `hover:${primaryHoverClass}`),
                           action.variant === 'danger' &&
-                          cn(theme.status.error.background, 'text-white', 'hover:bg-red-700'),
+                          cn(statusErrorBgClass, 'text-white', 'hover:bg-red-700'),
                           (!action.variant || action.variant === 'secondary') &&
-                          cn(theme.surface.default, theme.text.primary, `hover:${theme.surface.hover}`)
+                          cn(surfaceDefaultClass, textPrimaryClass, `hover:${surfaceHoverClass}`)
                         )}
                       >
                         {action.label}
@@ -366,7 +387,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
               {/* Close Button */}
               <button
                 onClick={() => removeToast(toast.id)}
-                className={cn("flex-shrink-0 p-1 rounded-lg transition-colors focus:outline-none focus:ring-2", `hover:${theme.surface.hover}`, theme.text.secondary, theme.border.focus)}
+                className={cn("flex-shrink-0 p-1 rounded-lg transition-colors focus:outline-none focus:ring-2", `hover:${surfaceHoverClass}`, textSecondaryClass, borderFocusedClass)}
                 aria-label="Dismiss notification"
               >
                 <X className="h-4 w-4" />
@@ -399,21 +420,25 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
             padding: tokens.spacing.compact.sm,
             borderRadius: tokens.borderRadius.full,
             boxShadow: tokens.shadows.lg,
-            backgroundColor: theme.surface.elevated,
+            backgroundColor: surfaceElevated,
             pointerEvents: 'auto',
             transition: 'background-color 0.2s',
             ...(position.includes('right') ? { right: '1rem' } : { left: '1rem' }),
             ...(position.includes('top') ? { top: '5rem' } : { bottom: '5rem' })
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = surfaceHover;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = surfaceElevated;
+          }}
           aria-label={isSoundEnabled ? 'Disable sound' : 'Enable sound'}
           title={isSoundEnabled ? 'Disable sound' : 'Enable sound'}
         >
           {isSoundEnabled ? (
-            <Volume2 style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
+            <Volume2 style={{ width: '1rem', height: '1rem', color: textSecondary }} />
           ) : (
-            <VolumeX style={{ width: '1rem', height: '1rem', color: theme.text.secondary }} />
+            <VolumeX style={{ width: '1rem', height: '1rem', color: textSecondary }} />
           )}
         </motion.button>
       )}

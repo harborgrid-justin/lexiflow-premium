@@ -20,8 +20,8 @@ export class BillingApiService {
   }
 
   private logInitialization(): void {
-    console.log(
-      "[BillingApiService] Initialized with Backend API (PostgreSQL)"
+    console.warn(
+      "[BillingApiService] Initialized with Backend API (PostgreSQL)",
     );
   }
 
@@ -34,7 +34,7 @@ export class BillingApiService {
   approveTimeEntry = this.timeEntry.approveTimeEntry.bind(this.timeEntry);
   billTimeEntry = this.timeEntry.billTimeEntry.bind(this.timeEntry);
   getUnbilledTimeEntries = this.timeEntry.getUnbilledTimeEntries.bind(
-    this.timeEntry
+    this.timeEntry,
   );
   getTimeEntryTotals = this.timeEntry.getTimeEntryTotals.bind(this.timeEntry);
   deleteTimeEntry = this.timeEntry.deleteTimeEntry.bind(this.timeEntry);
@@ -49,28 +49,28 @@ export class BillingApiService {
   getTrustAccounts = this.trustAccount.getTrustAccounts.bind(this.trustAccount);
   getTrustAccount = this.trustAccount.getTrustAccount.bind(this.trustAccount);
   createTrustAccount = this.trustAccount.createTrustAccount.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   updateTrustAccount = this.trustAccount.updateTrustAccount.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   deleteTrustAccount = this.trustAccount.deleteTrustAccount.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   getTrustTransactions = this.trustAccount.getTrustTransactions.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   createTrustTransaction = this.trustAccount.createTrustTransaction.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   depositTrustFunds = this.trustAccount.depositTrustFunds.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   withdrawTrustFunds = this.trustAccount.withdrawTrustFunds.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   getTrustAccountBalance = this.trustAccount.getTrustAccountBalance.bind(
-    this.trustAccount
+    this.trustAccount,
   );
   getLowBalanceTrustAccounts =
     this.trustAccount.getLowBalanceTrustAccounts.bind(this.trustAccount);
@@ -81,7 +81,7 @@ export class BillingApiService {
   getRates = this.analytics.getRates.bind(this.analytics);
   getOverviewStats = this.analytics.getOverviewStats.bind(this.analytics);
   getFinancialPerformance = this.analytics.getFinancialPerformance.bind(
-    this.analytics
+    this.analytics,
   );
   getTopAccounts = this.analytics.getTopAccounts.bind(this.analytics);
 }

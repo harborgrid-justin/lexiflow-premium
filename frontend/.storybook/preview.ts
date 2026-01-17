@@ -1,10 +1,10 @@
-import type { Preview } from "@storybook/react-vite";
-
 import React from "react";
 
 import "../index.css"; // Import Tailwind CSS
 import { ThemeProvider } from "../src/features/theme";
 import { ToastProvider } from "../src/providers";
+
+import type { Preview } from "@storybook/react-vite";
 
 const preview: Preview = {
   decorators: [
@@ -12,7 +12,7 @@ const preview: Preview = {
       React.createElement(
         ThemeProvider,
         {},
-        React.createElement(ToastProvider, {}, React.createElement(Story))
+        React.createElement(ToastProvider, {}, React.createElement(Story)),
       ),
   ],
   parameters: {

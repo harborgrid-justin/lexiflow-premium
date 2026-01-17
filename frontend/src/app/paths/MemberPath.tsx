@@ -10,27 +10,86 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/cn";
 import { useData } from "@/routes/dashboard";
 
+type DashboardItem = {
+  id: string;
+  label: string;
+  type?: string;
+  status?: string;
+};
+
+type DashboardData = {
+  items: DashboardItem[];
+  refresh: () => void | Promise<void>;
+  isLoading: boolean;
+  error?: unknown;
+};
+
+const isDashboardItem = (value: unknown): value is DashboardItem => {
+  return !!value && typeof value === "object" && "id" in value && "label" in value;
+};
+
+const parseDashboardData = (value: unknown): DashboardData => {
+  if (!value || typeof value !== "object") {
+    return { items: [], refresh: () => undefined, isLoading: false };
+  }
+
+  const record = value as Record<string, unknown>;
+  const rawItems = Array.isArray(record.items) ? record.items : [];
+  const items = rawItems.filter(isDashboardItem);
+
+  const refresh =
+    typeof record.refresh === "function"
+      ? (record.refresh as () => void | Promise<void>)
+      : () => undefined;
+
+  return {
+    items,
+    refresh,
+    isLoading: Boolean(record.isLoading),
+    error: record.error,
+  };
+};
+
+const toErrorMessage = (value: unknown): string | undefined => {
+  if (!value) return undefined;
+  if (typeof value === "string") return value;
+  if (value instanceof Error) return value.message;
+  return "Unexpected error";
+};
+
 export const MemberPath: React.FC<{ enableNewDashboard?: boolean }> = ({ enableNewDashboard = false }) => {
   const { auth, logout } = useAuth();
   const { theme } = useTheme();
-  const { items, refresh, isLoading, error } = useData();
+  const dashboardData = parseDashboardData(useData() as unknown);
+  const { items, refresh, isLoading, error } = dashboardData;
+  const errorMessage = toErrorMessage(error);
   const [filter, setFilter] = useState("");
 
   // Principle 14: Predictive Pre-Rendering
   // Simulate preloading details when hovering over a case
   const preloadDetails = usePredictivePreload(() => {
-    console.log("Preloading case details...");
+    console.warn("Preloading case details...");
   });
 
   useEffect(() => {
-    refresh();
+    void refresh();
   }, [refresh]);
 
   // Filter items based on optimistic input
   const filteredItems = useMemo(() => {
     if (!filter) return items;
-    return items.filter(i => i.label.toLowerCase().includes(filter.toLowerCase()));
+    return items.filter((item) =>
+      item.label.toLowerCase().includes(filter.toLowerCase())
+    );
   }, [items, filter]);
+
+  const handleRefresh = () => {
+    void refresh();
+  };
+
+  const handleLogout = () => {
+    void logout();
+  };
 
   return (
     <div className="p-8">
@@ -41,7 +100,7 @@ export const MemberPath: React.FC<{ enableNewDashboard?: boolean }> = ({ enableN
             User: {auth.status === "authenticated" ? auth.user?.email : "n/a"}
           </span>
           <button
-            onClick={() => logout()}
+            onClick={handleLogout}
             className="text-sm text-red-600 hover:text-red-800"
           >
             Logout
@@ -72,13 +131,13 @@ export const MemberPath: React.FC<{ enableNewDashboard?: boolean }> = ({ enableN
               className="border rounded px-2 py-1 text-sm w-64"
               metricName="CaseFilter"
             />
-            <button onClick={refresh} className="text-blue-600 hover:text-blue-800 text-sm">
+            <button onClick={handleRefresh} className="text-blue-600 hover:text-blue-800 text-sm">
               Refresh
             </button>
           </div>
         </div>
 
-        {error && <p className="text-red-500">{error}</p>}
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
         {/* Principle 4: Deterministic Loading */}
         <DeterministicLoader

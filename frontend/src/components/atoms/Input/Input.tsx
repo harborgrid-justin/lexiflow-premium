@@ -17,11 +17,10 @@ import React, { useId } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
-
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
-import { labelStyles, getInputStyles, errorStyles } from './Input.styles';
+import { cn } from '@/lib/cn';
+import { errorStyles, getInputStyles, labelStyles } from './Input.styles';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -40,7 +39,7 @@ export const Input = ({ label, error, className = '', ...props }: InputProps) =>
   // React 18: useId generates stable, unique IDs for accessibility
   const inputId = useId();
   const errorId = useId();
-  
+
   return (
     <div className="w-full">
       {label && (

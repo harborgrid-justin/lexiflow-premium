@@ -107,8 +107,8 @@ export class BillingApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log(
-      "[BillingApiService] Initialized with Backend API (PostgreSQL)"
+    console.warn(
+      "[BillingApiService] Initialized with Backend API (PostgreSQL)",
     );
   }
 
@@ -129,11 +129,11 @@ export class BillingApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[BillingApiService.${methodName}] Invalid ${paramName} parameter`
+        `[BillingApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -145,11 +145,11 @@ export class BillingApiService {
   private validateArray(
     arr: unknown[],
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!arr || !Array.isArray(arr) || arr.length === 0) {
       throw new Error(
-        `[BillingApiService.${methodName}] Invalid ${paramName} parameter`
+        `[BillingApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -179,12 +179,12 @@ export class BillingApiService {
       // Backend has separate endpoints: /time-entries (all) and /time-entries/case/:caseId (by case)
       if (filters?.caseId) {
         const response = await apiClient.get<PaginatedResponse<TimeEntry>>(
-          `/billing/time-entries/case/${filters.caseId}`
+          `/billing/time-entries/case/${filters.caseId}`,
         );
         return Array.isArray(response) ? response : response.data || [];
       }
       const response = await apiClient.get<PaginatedResponse<TimeEntry>>(
-        "/billing/time-entries"
+        "/billing/time-entries",
       );
       return Array.isArray(response) ? response : response.data || [];
     } catch (error) {
@@ -228,7 +228,7 @@ export class BillingApiService {
    * });
    */
   async addTimeEntry(
-    entry: Omit<TimeEntry, "id" | "createdAt" | "updatedAt">
+    entry: Omit<TimeEntry, "id" | "createdAt" | "updatedAt">,
   ): Promise<TimeEntry> {
     this.validateObject(entry, "entry", "addTimeEntry");
 
@@ -269,7 +269,7 @@ export class BillingApiService {
 
       return await apiClient.post<TimeEntry>(
         "/billing/time-entries",
-        createDto
+        createDto,
       );
     } catch (error) {
       console.error("[BillingApiService.addTimeEntry] Error:", error);
@@ -285,7 +285,7 @@ export class BillingApiService {
    * @throws Error if validation fails or bulk create fails
    */
   async addBulkTimeEntries(
-    entries: Omit<TimeEntry, "id" | "createdAt" | "updatedAt">[]
+    entries: Omit<TimeEntry, "id" | "createdAt" | "updatedAt">[],
   ): Promise<TimeEntry[]> {
     this.validateArray(entries, "entries", "addBulkTimeEntries");
 
@@ -309,7 +309,7 @@ export class BillingApiService {
    */
   async updateTimeEntry(
     id: string,
-    entry: Partial<TimeEntry>
+    entry: Partial<TimeEntry>,
   ): Promise<TimeEntry> {
     this.validateId(id, "updateTimeEntry");
     this.validateObject(entry, "entry", "updateTimeEntry");
@@ -317,7 +317,7 @@ export class BillingApiService {
     try {
       return await apiClient.put<TimeEntry>(
         `/billing/time-entries/${id}`,
-        entry
+        entry,
       );
     } catch (error) {
       console.error("[BillingApiService.updateTimeEntry] Error:", error);
@@ -338,7 +338,7 @@ export class BillingApiService {
     try {
       return await apiClient.put<TimeEntry>(
         `/billing/time-entries/${id}/approve`,
-        {}
+        {},
       );
     } catch (error) {
       console.error("[BillingApiService.approveTimeEntry] Error:", error);
@@ -361,7 +361,7 @@ export class BillingApiService {
     try {
       return await apiClient.put<TimeEntry>(
         `/billing/time-entries/${id}/bill`,
-        { invoiceId }
+        { invoiceId },
       );
     } catch (error) {
       console.error("[BillingApiService.billTimeEntry] Error:", error);
@@ -381,13 +381,13 @@ export class BillingApiService {
 
     try {
       const response = await apiClient.get<PaginatedResponse<TimeEntry>>(
-        `/billing/time-entries/case/${caseId}/unbilled`
+        `/billing/time-entries/case/${caseId}/unbilled`,
       );
       return response.data;
     } catch (error) {
       console.error("[BillingApiService.getUnbilledTimeEntries] Error:", error);
       throw new Error(
-        `Failed to fetch unbilled time entries for case: ${caseId}`
+        `Failed to fetch unbilled time entries for case: ${caseId}`,
       );
     }
   }
@@ -400,7 +400,7 @@ export class BillingApiService {
    * @throws Error if caseId is invalid or fetch fails
    */
   async getTimeEntryTotals(
-    caseId: string
+    caseId: string,
   ): Promise<{ total: number; billable: number; unbilled: number }> {
     this.validateId(caseId, "getTimeEntryTotals");
 
@@ -471,9 +471,9 @@ export class BillingApiService {
         response &&
         typeof response === "object" &&
         "data" in response &&
-        Array.isArray((response).data)
+        Array.isArray(response.data)
       ) {
-        return (response).data;
+        return response.data;
       }
 
       // Handle direct array response
@@ -483,12 +483,12 @@ export class BillingApiService {
 
       console.warn(
         "[BillingApiService.getInvoices] Unexpected response format:",
-        response
+        response,
       );
       return [];
     } catch {
       console.warn(
-        "[BillingApiService.getInvoices] Invoices endpoint not available, returning empty array"
+        "[BillingApiService.getInvoices] Invoices endpoint not available, returning empty array",
       );
       return [];
     }
@@ -569,13 +569,13 @@ export class BillingApiService {
       // Backend returns array directly, not paginated
       const response = await apiClient.get<TrustAccount[]>(
         "/billing/trust-accounts",
-        { params: filters }
+        { params: filters },
       );
       return Array.isArray(response) ? response : [];
     } catch {
       // Fallback to empty array if endpoint doesn't exist yet
       console.warn(
-        "[BillingApiService.getTrustAccounts] Trust accounts endpoint not available, returning empty array"
+        "[BillingApiService.getTrustAccounts] Trust accounts endpoint not available, returning empty array",
       );
       return [];
     }
@@ -611,12 +611,12 @@ export class BillingApiService {
    */
   async updateTrustAccount(
     id: string,
-    data: UpdateTrustAccountDto
+    data: UpdateTrustAccountDto,
   ): Promise<TrustAccount> {
     this.validateId(id, "updateTrustAccount");
     return await apiClient.patch<TrustAccount>(
       `/billing/trust-accounts/${id}`,
-      data
+      data,
     );
   }
 
@@ -640,18 +640,18 @@ export class BillingApiService {
    */
   async getTrustTransactions(
     accountId: string,
-    filters?: { startDate?: string; endDate?: string; status?: string }
+    filters?: { startDate?: string; endDate?: string; status?: string },
   ): Promise<TrustTransactionEntity[]> {
     this.validateId(accountId, "getTrustTransactions");
     try {
       const response = await apiClient.get<TrustTransactionEntity[]>(
         `/billing/trust-accounts/${accountId}/transactions`,
-        { params: filters }
+        { params: filters },
       );
       return Array.isArray(response) ? response : [];
     } catch {
       console.warn(
-        "[BillingApiService.getTrustTransactions] Transactions endpoint not available, returning empty array"
+        "[BillingApiService.getTrustTransactions] Transactions endpoint not available, returning empty array",
       );
       return [];
     }
@@ -668,12 +668,12 @@ export class BillingApiService {
   async createTrustTransaction(
     accountId: string,
     data: CreateTrustTransactionDto,
-    createdBy?: string
+    createdBy?: string,
   ): Promise<TrustTransactionEntity> {
     this.validateId(accountId, "createTrustTransaction");
     return await apiClient.post<TrustTransactionEntity>(
       `/billing/trust-accounts/${accountId}/transaction`,
-      { ...data, createdBy }
+      { ...data, createdBy },
     );
   }
 
@@ -688,12 +688,12 @@ export class BillingApiService {
   async depositTrustFunds(
     accountId: string,
     data: DepositDto,
-    createdBy?: string
+    createdBy?: string,
   ): Promise<TrustTransactionEntity> {
     this.validateId(accountId, "depositTrustFunds");
     return await apiClient.post<TrustTransactionEntity>(
       `/billing/trust-accounts/${accountId}/deposit`,
-      { ...data, createdBy }
+      { ...data, createdBy },
     );
   }
 
@@ -708,12 +708,12 @@ export class BillingApiService {
   async withdrawTrustFunds(
     accountId: string,
     data: WithdrawalDto,
-    createdBy?: string
+    createdBy?: string,
   ): Promise<TrustTransactionEntity> {
     this.validateId(accountId, "withdrawTrustFunds");
     return await apiClient.post<TrustTransactionEntity>(
       `/billing/trust-accounts/${accountId}/withdraw`,
-      { ...data, createdBy }
+      { ...data, createdBy },
     );
   }
 
@@ -724,11 +724,11 @@ export class BillingApiService {
    * @returns Promise with balance and currency
    */
   async getTrustAccountBalance(
-    accountId: string
+    accountId: string,
   ): Promise<{ balance: number; currency: string }> {
     this.validateId(accountId, "getTrustAccountBalance");
     return await apiClient.get<{ balance: number; currency: string }>(
-      `/billing/trust-accounts/${accountId}/balance`
+      `/billing/trust-accounts/${accountId}/balance`,
     );
   }
 
@@ -739,16 +739,16 @@ export class BillingApiService {
    * @returns Promise<TrustAccount[]> Accounts below threshold
    */
   async getLowBalanceTrustAccounts(
-    threshold?: number
+    threshold?: number,
   ): Promise<TrustAccount[]> {
     try {
       return await apiClient.get<TrustAccount[]>(
         "/billing/trust-accounts/low-balance",
-        { params: { threshold } }
+        { params: { threshold } },
       );
     } catch {
       console.warn(
-        "[BillingApiService.getLowBalanceTrustAccounts] Endpoint not available, returning empty array"
+        "[BillingApiService.getLowBalanceTrustAccounts] Endpoint not available, returning empty array",
       );
       return [];
     }
@@ -765,7 +765,7 @@ export class BillingApiService {
       return await apiClient.get<unknown[]>("/billing/wip-stats");
     } catch {
       console.warn(
-        "[BillingApiService.getWIPStats] WIP stats endpoint not available, returning empty array"
+        "[BillingApiService.getWIPStats] WIP stats endpoint not available, returning empty array",
       );
       return [];
     }
@@ -782,7 +782,7 @@ export class BillingApiService {
       return await apiClient.get<unknown>("/billing/realization-stats");
     } catch {
       console.warn(
-        "[BillingApiService.getRealizationStats] Realization stats endpoint not available, returning default"
+        "[BillingApiService.getRealizationStats] Realization stats endpoint not available, returning default",
       );
       return [
         { name: "Billed", value: 0, color: "#10b981" },
@@ -805,7 +805,7 @@ export class BillingApiService {
       return await apiClient.get<unknown[]>(`/billing/rates/${timekeeperId}`);
     } catch {
       console.warn(
-        "[BillingApiService.getRates] Rates endpoint not available, returning empty array"
+        "[BillingApiService.getRates] Rates endpoint not available, returning empty array",
       );
       return [];
     }
@@ -830,7 +830,7 @@ export class BillingApiService {
       }>("/billing/overview-stats");
     } catch {
       console.warn(
-        "[BillingApiService.getOverviewStats] Overview stats endpoint not available, returning default"
+        "[BillingApiService.getOverviewStats] Overview stats endpoint not available, returning default",
       );
       return {
         realization: 0,
@@ -851,7 +851,7 @@ export class BillingApiService {
   async getFinancialPerformance(): Promise<FinancialPerformanceData> {
     try {
       return await apiClient.get<FinancialPerformanceData>(
-        "/billing/financial-performance"
+        "/billing/financial-performance",
       );
     } catch {
       return {
@@ -875,12 +875,12 @@ export class BillingApiService {
     try {
       const response = await apiClient.get<PaginatedResponse<unknown>>(
         "/clients",
-        { params: { sortBy: "totalBilled", sortOrder: "desc", limit: 4 } }
+        { params: { sortBy: "totalBilled", sortOrder: "desc", limit: 4 } },
       );
       return response.data;
     } catch {
       console.warn(
-        "[BillingApiService.getTopAccounts] Top accounts endpoint not available, returning empty array"
+        "[BillingApiService.getTopAccounts] Top accounts endpoint not available, returning empty array",
       );
       return [];
     }

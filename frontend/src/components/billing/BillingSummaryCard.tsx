@@ -25,6 +25,7 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
   icon = 'dollar',
   color = 'blue',
 }) => {
+  const toColor = (value: unknown) => String(value);
   const icons = {
     dollar: DollarSign,
     clock: Clock,
@@ -36,29 +37,29 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
 
   const colors = {
     blue: {
-      bg: tokens.colors.blue400 + '20',
-      icon: tokens.colors.blue500,
-      border: tokens.colors.blue400,
+      bg: `${toColor(tokens.colors.blue400)}20`,
+      icon: toColor(tokens.colors.blue500),
+      border: toColor(tokens.colors.blue400),
     },
     green: {
-      bg: tokens.colors.success + '20',
-      icon: tokens.colors.success,
-      border: tokens.colors.emerald400,
+      bg: `${toColor(tokens.colors.success)}20`,
+      icon: toColor(tokens.colors.success),
+      border: toColor(tokens.colors.emerald400),
     },
     yellow: {
-      bg: tokens.colors.warning + '20',
-      icon: tokens.colors.warning,
-      border: tokens.colors.amber400,
+      bg: `${toColor(tokens.colors.warning)}20`,
+      icon: toColor(tokens.colors.warning),
+      border: toColor(tokens.colors.amber400),
     },
     red: {
-      bg: tokens.colors.error + '20',
-      icon: tokens.colors.error,
-      border: tokens.colors.rose400,
+      bg: `${toColor(tokens.colors.error)}20`,
+      icon: toColor(tokens.colors.error),
+      border: toColor(tokens.colors.rose400),
     },
     purple: {
-      bg: tokens.colors.accent + '20',
-      icon: tokens.colors.accent,
-      border: tokens.colors.indigo400,
+      bg: `${toColor(tokens.colors.accent)}20`,
+      icon: toColor(tokens.colors.accent),
+      border: toColor(tokens.colors.indigo400),
     },
   };
 

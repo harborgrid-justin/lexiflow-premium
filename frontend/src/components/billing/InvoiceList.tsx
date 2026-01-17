@@ -19,15 +19,36 @@ interface InvoiceListProps {
 export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) => {
   const { theme, tokens } = useTheme();
   const [showFilters, setShowFilters] = useState(false);
+  const toStyleValue = (value: unknown) => String(value);
+  const filterValue = (value: unknown) => (typeof value === 'string' ? value : '');
+  const borderDefault = toStyleValue(theme.border.default);
+  const borderLight = toStyleValue(theme.border.light);
+  const surfaceBase = toStyleValue(theme.surface.base);
+  const surfaceElevated = toStyleValue(theme.surface.elevated);
+  const surfaceHover = toStyleValue(theme.surface.hover);
+  const surfaceInput = toStyleValue(theme.surface.input);
+  const surfaceMuted = toStyleValue(theme.surface.muted);
+  const textPrimary = toStyleValue(theme.text.primary);
+  const textSecondary = toStyleValue(theme.text.secondary);
+  const textMuted = toStyleValue(theme.text.muted);
+  const primaryDefault = toStyleValue(theme.primary.DEFAULT);
+  const statusSuccessBg = toStyleValue(theme.status.success.bg);
+  const statusSuccessText = toStyleValue(theme.status.success.text);
+  const statusErrorBg = toStyleValue(theme.status.error.bg);
+  const statusErrorText = toStyleValue(theme.status.error.text);
+  const statusWarningBg = toStyleValue(theme.status.warning.bg);
+  const statusWarningText = toStyleValue(theme.status.warning.text);
+  const blue400 = toStyleValue(tokens.colors.blue400);
+  const blue600 = toStyleValue(tokens.colors.blue600);
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      Draft: { bg: theme.surface.muted, text: theme.text.secondary },
-      Sent: { bg: tokens.colors.blue400 + '20', text: tokens.colors.blue600 },
-      Paid: { bg: theme.status.success.bg, text: theme.status.success.text },
-      Overdue: { bg: theme.status.error.bg, text: theme.status.error.text },
-      Cancelled: { bg: theme.surface.muted, text: theme.text.secondary },
-      'Partially Paid': { bg: theme.status.warning.bg, text: theme.status.warning.text },
+      Draft: { bg: surfaceMuted, text: textSecondary },
+      Sent: { bg: `${blue400}20`, text: blue600 },
+      Paid: { bg: statusSuccessBg, text: statusSuccessText },
+      Overdue: { bg: statusErrorBg, text: statusErrorText },
+      Cancelled: { bg: surfaceMuted, text: textSecondary },
+      'Partially Paid': { bg: statusWarningBg, text: statusWarningText },
     };
 
     const statusStyle = styles[status as keyof typeof styles] || styles.Draft;
@@ -60,17 +81,21 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
             alignItems: 'center',
             gap: '0.5rem',
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${theme.border.default}`,
-            backgroundColor: theme.surface.base,
+            border: `1px solid ${borderDefault}`,
+            backgroundColor: surfaceBase,
             padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
             fontSize: tokens.typography.fontSize.sm,
             fontWeight: tokens.typography.fontWeight.medium,
-            color: theme.text.primary,
+            color: textPrimary,
             boxShadow: tokens.shadows.sm,
           }}
           className="transition-colors"
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.base}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = surfaceHover;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = surfaceBase;
+          }}
         >
           <Filter className="h-4 w-4" />
           Filters
@@ -80,8 +105,8 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
       {showFilters && (
         <Form method="get" style={{
           borderRadius: tokens.borderRadius.lg,
-          border: `1px solid ${theme.border.default}`,
-          backgroundColor: theme.surface.elevated,
+          border: `1px solid ${borderDefault}`,
+          backgroundColor: surfaceElevated,
           padding: tokens.spacing.normal.md,
         }}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
@@ -90,22 +115,22 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
-                color: theme.text.primary,
+                color: textPrimary,
               }}>
                 Case
               </label>
               <select
                 name="caseId"
-                defaultValue={(filters?.caseId as string) || ''}
+                defaultValue={filterValue(filters?.caseId)}
                 style={{
                   marginTop: tokens.spacing.normal.xs,
                   width: '100%',
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${theme.border.default}`,
-                  backgroundColor: theme.surface.input,
+                  border: `1px solid ${borderDefault}`,
+                  backgroundColor: surfaceInput,
                   padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                   boxShadow: tokens.shadows.sm,
                 }}
                 className="focus:outline-none focus:ring-2"
@@ -121,24 +146,24 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
-                color: theme.text.primary,
+                color: textPrimary,
               }}>
                 Client
               </label>
               <input
                 type="text"
                 name="clientId"
-                defaultValue={(filters?.clientId as string) || ''}
+                defaultValue={filterValue(filters?.clientId)}
                 placeholder="Client ID or name"
                 style={{
                   marginTop: tokens.spacing.normal.xs,
                   width: '100%',
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${theme.border.default}`,
-                  backgroundColor: theme.surface.input,
+                  border: `1px solid ${borderDefault}`,
+                  backgroundColor: surfaceInput,
                   padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                   boxShadow: tokens.shadows.sm,
                 }}
                 className="focus:outline-none focus:ring-2"
@@ -150,22 +175,22 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
-                color: theme.text.primary,
+                color: textPrimary,
               }}>
                 Status
               </label>
               <select
                 name="status"
-                defaultValue={(filters?.status as string) || ''}
+                defaultValue={filterValue(filters?.status)}
                 style={{
                   marginTop: tokens.spacing.normal.xs,
                   width: '100%',
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${theme.border.default}`,
-                  backgroundColor: theme.surface.input,
+                  border: `1px solid ${borderDefault}`,
+                  backgroundColor: surfaceInput,
                   padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                   boxShadow: tokens.shadows.sm,
                 }}
                 className="focus:outline-none focus:ring-2"
@@ -185,11 +210,11 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 style={{
                   width: '100%',
                   borderRadius: tokens.borderRadius.md,
-                  backgroundColor: theme.primary.DEFAULT,
+                  backgroundColor: primaryDefault,
                   padding: `${tokens.spacing.normal.sm} ${tokens.spacing.normal.md}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: theme.surface.base,
+                  color: surfaceBase,
                   boxShadow: tokens.shadows.sm,
                 }}
                 className="focus:outline-none focus:ring-2 transition-colors"
@@ -205,13 +230,13 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
       <div style={{
         overflow: 'hidden',
         borderRadius: tokens.borderRadius.lg,
-        border: `1px solid ${theme.border.default}`,
-        backgroundColor: theme.surface.base,
+        border: `1px solid ${borderDefault}`,
+        backgroundColor: surfaceBase,
         boxShadow: tokens.shadows.sm,
       }}>
         <table className="min-w-full" style={{ borderCollapse: 'separate', borderSpacing: 0 }}>
-          <thead style={{ backgroundColor: theme.surface.elevated }}>
-            <tr style={{ borderBottom: `1px solid ${theme.border.default}` }}>
+          <thead style={{ backgroundColor: surfaceElevated }}>
+            <tr style={{ borderBottom: `1px solid ${borderDefault}` }}>
               <th style={{
                 padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                 textAlign: 'left',
@@ -219,7 +244,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Invoice #
               </th>
@@ -230,7 +255,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Client
               </th>
@@ -241,7 +266,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Matter
               </th>
@@ -252,7 +277,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Date
               </th>
@@ -263,7 +288,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Due Date
               </th>
@@ -274,7 +299,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Amount
               </th>
@@ -285,7 +310,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Balance Due
               </th>
@@ -313,11 +338,13 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
               </th>
             </tr>
           </thead>
-          <tbody style={{ backgroundColor: theme.surface.base }}>
+          <tbody style={{ backgroundColor: surfaceBase }}>
             {invoices.map((invoice) => (
-              <tr key={invoice.id} style={{ borderBottom: `1px solid ${theme.border.light}` }}
+              <tr key={invoice.id} style={{ borderBottom: `1px solid ${borderLight}` }}
                 className="transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = surfaceHover;
+                }}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <td style={{
@@ -329,7 +356,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                     style={{
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      color: theme.primary.DEFAULT,
+                      color: primaryDefault,
                     }}
                     className="transition-colors"
                   >
@@ -340,14 +367,14 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                   whiteSpace: 'nowrap',
                   padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   {invoice.clientName}
                 </td>
                 <td style={{
                   padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.secondary,
+                  color: textSecondary,
                 }}>
                   <div className="max-w-xs truncate" title={invoice.matterDescription}>
                     {invoice.matterDescription}
@@ -357,7 +384,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                   whiteSpace: 'nowrap',
                   padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   {new Date(invoice.invoiceDate).toLocaleDateString()}
                 </td>
@@ -365,7 +392,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                   whiteSpace: 'nowrap',
                   padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   {new Date(invoice.dueDate).toLocaleDateString()}
                 </td>
@@ -374,7 +401,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                   padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   ${invoice.totalAmount.toLocaleString()}
                 </td>
@@ -383,7 +410,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                   padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   ${invoice.balanceDue.toLocaleString()}
                 </td>
@@ -412,7 +439,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.25rem',
-                            color: theme.primary.DEFAULT,
+                            color: primaryDefault,
                           }}
                           className="transition-colors"
                         >
@@ -423,7 +450,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                     )}
                     <Link
                       to={`/billing/invoices/${invoice.id}`}
-                      style={{ color: theme.primary.DEFAULT }}
+                      style={{ color: primaryDefault }}
                       className="transition-colors"
                     >
                       View
@@ -444,20 +471,20 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
               margin: '0 auto',
               height: '3rem',
               width: '3rem',
-              color: theme.text.muted,
+              color: textMuted,
             }} />
             <h3 style={{
               marginTop: tokens.spacing.normal.sm,
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
-              color: theme.text.primary,
+              color: textPrimary,
             }}>
               No invoices
             </h3>
             <p style={{
               marginTop: tokens.spacing.normal.xs,
               fontSize: tokens.typography.fontSize.sm,
-              color: theme.text.muted,
+              color: textMuted,
             }}>
               Get started by creating a new invoice.
             </p>

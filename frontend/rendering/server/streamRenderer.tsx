@@ -80,12 +80,20 @@ export class StreamRenderer {
             pipe(body);
           },
           onShellError(error: unknown) {
-            reject(error);
+            const safeError =
+              error instanceof Error
+                ? error
+                : new Error("Render failed during shell");
+            reject(safeError);
           },
           onError(error: unknown) {
             responseStatusCode = 500;
             if (shellRendered) {
-              console.error("[StreamRenderer] Render error:", error);
+              const safeError =
+                error instanceof Error
+                  ? error
+                  : new Error("Stream rendering error");
+              console.error("[StreamRenderer] Render error:", safeError);
             }
           },
         }

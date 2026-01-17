@@ -143,6 +143,11 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   className,
 }) => {
   const { theme, tokens } = useTheme();
+  const toStyleValue = (value: unknown) => String(value);
+  const classToken = (value: unknown) => String(value);
+  const borderDefault = toStyleValue(theme.border.default);
+  const surfaceMuted = toStyleValue(theme.surface.muted);
+  const textTertiaryClass = classToken(theme.text.tertiary);
 
   // Filter and sort deadlines
   const filteredDeadlines = React.useMemo(() => {
@@ -174,11 +179,11 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
     return (
       <div className={cn('space-y-3', className)}>
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex gap-3 p-3 rounded-lg border animate-pulse" style={{ borderColor: theme.border.default }}>
-            <div className="w-12 h-12 rounded-lg" style={{ backgroundColor: theme.surface.muted }} />
+          <div key={i} className="flex gap-3 p-3 rounded-lg border animate-pulse" style={{ borderColor: borderDefault }}>
+            <div className="w-12 h-12 rounded-lg" style={{ backgroundColor: surfaceMuted }} />
             <div className="flex-1 space-y-2">
-              <div className="h-4 rounded w-3/4" style={{ backgroundColor: theme.surface.muted }} />
-              <div className="h-3 rounded w-1/2" style={{ backgroundColor: theme.surface.muted }} />
+              <div className="h-4 rounded w-3/4" style={{ backgroundColor: surfaceMuted }} />
+              <div className="h-3 rounded w-1/2" style={{ backgroundColor: surfaceMuted }} />
             </div>
           </div>
         ))}
@@ -189,8 +194,8 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   if (filteredDeadlines.length === 0) {
     return (
       <div className={cn('text-center py-12', className)}>
-        <Calendar className={cn('h-12 w-12 mx-auto mb-3', theme.text.tertiary)} />
-        <p className={cn('text-sm', theme.text.tertiary)}>{emptyMessage}</p>
+        <Calendar className={cn('h-12 w-12 mx-auto mb-3', textTertiaryClass)} />
+        <p className={cn('text-sm', textTertiaryClass)}>{emptyMessage}</p>
       </div>
     );
   }

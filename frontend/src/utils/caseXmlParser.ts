@@ -99,12 +99,11 @@ export const parseCaseXml = (xmlString: string): XMLParsedCaseData => {
   if (parseError) {
     // Extract more detail if possible
     const errorMsg = parseError.textContent || "Unknown XML parsing error";
-    // Log the error for debugging
-    console.error("XML Parse Failure. Error:", errorMsg);
-    console.debug(
-      "Failed XML snippet (first 500 chars):",
-      xmlString.substring(0, 500),
-    );
+    // Log the error with context for diagnostics
+    console.error("XML Parse Failure", {
+      error: errorMsg,
+      snippet: xmlString.substring(0, 500),
+    });
 
     throw new Error(`XML Parsing Error: ${errorMsg}`);
   }

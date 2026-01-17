@@ -40,16 +40,16 @@ export class MetricsApiService {
     return apiClient.get<SystemMetrics>(`${this.baseUrl}/system`);
   }
 
-  async getHistory(
+  getHistory(
     _startDate: string,
     _endDate: string,
-    _interval: "1m" | "5m" | "15m" | "1h" | "1d" = "5m"
+    _interval: "1m" | "5m" | "15m" | "1h" | "1d" = "5m",
   ): Promise<SystemMetrics[]> {
     // History endpoint not yet implemented in backend
     console.warn(
-      "Metrics history not implemented in backend - returning empty set"
+      "Metrics history not implemented in backend - returning empty set",
     );
-    return [];
+    return Promise.resolve([]);
     // return apiClient.get<SystemMetrics[]>(`${this.baseUrl}/history?start=${startDate}&end=${endDate}&interval=${interval}`);
   }
 

@@ -17,10 +17,9 @@ import React, { useId } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
-
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
+import { cn } from '@/lib/cn';
 import { labelStyles, getTextAreaStyles } from './TextArea.styles';
 
 // ============================================================================
@@ -34,7 +33,7 @@ import { labelStyles, getTextAreaStyles } from './TextArea.styles';
 export function TextArea({ label, className = '', ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string }) {
   const { theme } = useTheme();
   const textareaId = useId();
-  
+
   return (
     <div className="w-full">
       {label && <label htmlFor={textareaId} className={labelStyles(theme)}>{label}</label>}

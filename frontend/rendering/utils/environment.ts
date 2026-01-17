@@ -25,10 +25,14 @@ export const isServer = (): boolean => {
  * Checks if code is running in Node.js environment
  */
 export const isNode = (): boolean => {
+  const nodeProcess =
+    typeof process !== "undefined"
+      ? (process as { versions?: { node?: string } })
+      : undefined;
   return (
-    typeof process !== "undefined" &&
-    process.versions != null &&
-    process.versions.node != null
+    typeof nodeProcess !== "undefined" &&
+    nodeProcess.versions != null &&
+    nodeProcess.versions.node != null
   );
 };
 
@@ -38,15 +42,23 @@ export const isNode = (): boolean => {
 export const isDevelopment = (): boolean => {
   if (isBrowser()) {
     // Use process.env in test environments, import.meta.env in browser
-    if (typeof process !== "undefined" && process.env.NODE_ENV) {
-      return process.env.NODE_ENV === "development";
+    const nodeEnv =
+      typeof process !== "undefined"
+        ? (process as { env?: Record<string, string | undefined> }).env
+            ?.NODE_ENV
+        : undefined;
+    if (nodeEnv) {
+      return nodeEnv === "development";
     }
     return (
       (import.meta as unknown as { env: Record<string, boolean> }).env?.DEV ??
       false
     );
   }
-  return process.env.NODE_ENV === "development";
+  return (
+    (process as { env?: Record<string, string | undefined> }).env?.NODE_ENV ===
+    "development"
+  );
 };
 
 /**
@@ -55,15 +67,23 @@ export const isDevelopment = (): boolean => {
 export const isProduction = (): boolean => {
   if (isBrowser()) {
     // Use process.env in test environments, import.meta.env in browser
-    if (typeof process !== "undefined" && process.env.NODE_ENV) {
-      return process.env.NODE_ENV === "production";
+    const nodeEnv =
+      typeof process !== "undefined"
+        ? (process as { env?: Record<string, string | undefined> }).env
+            ?.NODE_ENV
+        : undefined;
+    if (nodeEnv) {
+      return nodeEnv === "production";
     }
     return (
       (import.meta as unknown as { env: Record<string, boolean> }).env?.PROD ??
       false
     );
   }
-  return process.env.NODE_ENV === "production";
+  return (
+    (process as { env?: Record<string, string | undefined> }).env?.NODE_ENV ===
+    "production"
+  );
 };
 
 /**

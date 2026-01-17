@@ -118,7 +118,7 @@ export class CasesApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log("[CasesApiService] Initialized with Backend API (PostgreSQL)");
+    console.warn("[CasesApiService] Initialized with Backend API (PostgreSQL)");
   }
 
   /**
@@ -138,11 +138,11 @@ export class CasesApiService {
   private validateString(
     value: string,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!value || false || value.trim() === "") {
       throw new Error(
-        `[CasesApiService.${methodName}] Invalid ${paramName} parameter`
+        `[CasesApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -154,11 +154,11 @@ export class CasesApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[CasesApiService.${methodName}] Invalid ${paramName} parameter`
+        `[CasesApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -188,7 +188,7 @@ export class CasesApiService {
     return {
       ...caseData,
       status: this.mapBackendStatusToFrontend(
-        typeof caseData.status === "string" ? caseData.status : "Active"
+        typeof caseData.status === "string" ? caseData.status : "Active",
       ) as Case["status"],
       matterType: (caseData.practiceArea || "General") as Case["matterType"],
     } as Case;
@@ -202,9 +202,9 @@ export class CasesApiService {
     sortBy?: string;
     order?: string;
   }): Promise<Case[]> {
-    const response = await apiClient.get<
-      { success?: boolean; data?: { data?: Case[]; items?: Case[] } } | Case[]
-    >("/cases", { params: filters });
+    const response = await apiClient.get<unknown>("/cases", {
+      params: filters,
+    });
 
     // Backend returns wrapped response: {success: true, data: {data: [...], total, page, limit, totalPages}, meta: {...}}
     // Handle multiple response formats:
@@ -212,27 +212,34 @@ export class CasesApiService {
     // 2. Legacy format: {items: Case[]}
     // 3. Wrapped format: {success, data: {data: Case[], total, page}}
     // 4. Inner data format: {data: Case[], total, page}
-    let casesArray: Case[];
+    let casesArray: Case[] = [];
     if (Array.isArray(response)) {
-      casesArray = response;
-    } else if (
-      response.success &&
-      response.data &&
-      "data" in response.data &&
-      Array.isArray(response.data.data)
-    ) {
-      // Wrapped response from backend interceptor: {success, data: {data: [...], total, page}}
-      casesArray = response.data.data;
-    } else if ("data" in response && Array.isArray(response.data)) {
-      casesArray = response.data;
-    } else if ("items" in response && Array.isArray(response.items)) {
-      casesArray = response.items;
+      casesArray = response as Case[];
+    } else if (response && typeof response === "object") {
+      const responseRecord = response as Record<string, unknown>;
+      const dataValue = responseRecord.data as
+        | Record<string, unknown>
+        | undefined;
+      const dataArray = dataValue?.data;
+      const itemsArray = responseRecord.items;
+
+      if (Array.isArray(dataArray)) {
+        casesArray = dataArray as Case[];
+      } else if (Array.isArray(responseRecord.data)) {
+        casesArray = responseRecord.data as Case[];
+      } else if (Array.isArray(itemsArray)) {
+        casesArray = itemsArray as Case[];
+      } else {
+        console.error(
+          "[CasesApiService.getAll] Unexpected response format:",
+          response,
+        );
+      }
     } else {
       console.error(
         "[CasesApiService.getAll] Unexpected response format:",
-        response
+        response,
       );
-      casesArray = [];
     }
 
     // Transform each case to use frontend status values and ensure all required fields
@@ -273,7 +280,7 @@ export class CasesApiService {
       // Return safe fallback if stats is undefined/null
       if (!stats) {
         console.warn(
-          "[CasesApiService.getStats] No stats returned, using defaults"
+          "[CasesApiService.getStats] No stats returned, using defaults",
         );
         return this.getDefaultStats();
       }
@@ -351,7 +358,7 @@ export class CasesApiService {
   async add(
     caseData: Partial<Omit<Case, "id" | "createdAt" | "updatedAt">> & {
       title: string;
-    }
+    },
   ): Promise<Case> {
     this.validateObject(caseData, "caseData", "add");
 
@@ -468,7 +475,11 @@ export class CasesApiService {
    */
   async parse(
     content: string,
-    options: { useAI: boolean; provider?: "gemini" | "openai"; apiKey?: string }
+    options: {
+      useAI: boolean;
+      provider?: "gemini" | "openai";
+      apiKey?: string;
+    },
   ): Promise<unknown> {
     this.validateString(content, "content", "parse");
 
@@ -496,7 +507,7 @@ export class CasesApiService {
     try {
       const backendCase = await apiClient.post<Case>(
         `/cases/${id}/archive`,
-        {}
+        {},
       );
       return this.transformCase(backendCase);
     } catch (error) {
@@ -549,14 +560,14 @@ export class CasesApiService {
       try {
         const response = await apiClient.get<PaginatedResponse<unknown>>(
           "/cases/archived",
-          { params: filters }
+          { params: filters },
         );
         return response.data.map(
-          (c) => this.transformCase(c) as unknown as ArchivedCase
+          (c) => this.transformCase(c) as unknown as ArchivedCase,
         );
       } catch {
         console.warn(
-          "[CasesApiService] Archived endpoint unavailable, falling back to status filter"
+          "[CasesApiService] Archived endpoint unavailable, falling back to status filter",
         );
         // Fallback: filter locally by status
         const allCases = await this.getAll({ status: "Closed" });

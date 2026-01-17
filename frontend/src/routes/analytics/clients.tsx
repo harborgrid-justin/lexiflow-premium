@@ -28,6 +28,19 @@ import { ChartCard, DateRangeSelector, MetricCard } from '@/routes/analytics/com
 import { createMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
+type ClientMetrics = {
+  totalClients: number;
+  activeClients: number;
+  newClients: number;
+  avgClientValue: number;
+  retentionRate: number;
+  avgLifetime: number;
+};
+
+type LoaderData = {
+  metrics: ClientMetrics;
+};
+
 export function meta() {
   return createMeta({
     title: 'Client Analytics',
@@ -35,7 +48,7 @@ export function meta() {
   });
 }
 
-export async function loader() {
+export function loader(): LoaderData {
   return {
     metrics: {
       totalClients: 148,
@@ -49,8 +62,8 @@ export async function loader() {
 }
 
 export default function ClientAnalyticsRoute() {
-  const { metrics } = useLoaderData();
-  const theme = useTheme();
+  const { metrics } = useLoaderData<LoaderData>();
+  const { theme, tokens } = useTheme();
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 365),

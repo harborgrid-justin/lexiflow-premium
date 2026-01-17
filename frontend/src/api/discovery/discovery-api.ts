@@ -27,7 +27,11 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { type DiscoveryRequest, type LegalHold, type PrivilegeLogEntry } from "@/types";
+import {
+  type DiscoveryRequest,
+  type LegalHold,
+  type PrivilegeLogEntry,
+} from "@/types";
 
 import { DiscoveryRequestsApiService } from "./discovery-requests-api";
 import { LegalHoldsApiService } from "./legal-holds-api";
@@ -77,15 +81,15 @@ export class DiscoveryApiService {
   private readonly baseUrl = "/discovery";
 
   constructor() {
-    console.log(
-      "[DiscoveryApiService] Initialized with Backend API (PostgreSQL)"
+    console.warn(
+      "[DiscoveryApiService] Initialized with Backend API (PostgreSQL)",
     );
   }
 
   private validateId(id: string, methodName: string): void {
     if (!id || id.trim() === "") {
       throw new Error(
-        `[DiscoveryApiService.${methodName}] Invalid id parameter`
+        `[DiscoveryApiService.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -93,11 +97,11 @@ export class DiscoveryApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[DiscoveryApiService.${methodName}] Invalid ${paramName} parameter`
+        `[DiscoveryApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -147,14 +151,14 @@ export class DiscoveryApiService {
 
   async update(
     id: string,
-    data: Partial<DiscoveryProcess>
+    data: Partial<DiscoveryProcess>,
   ): Promise<DiscoveryProcess> {
     this.validateId(id, "update");
     this.validateObject(data, "data", "update");
     try {
       return await apiClient.put<DiscoveryProcess>(
         `${this.baseUrl}/${id}`,
-        data
+        data,
       );
     } catch (error) {
       console.error("[DiscoveryApiService.update] Error:", error);
@@ -164,7 +168,7 @@ export class DiscoveryApiService {
 
   async updatePhase(
     id: string,
-    phase: DiscoveryProcess["phase"]
+    phase: DiscoveryProcess["phase"],
   ): Promise<DiscoveryProcess> {
     this.validateId(id, "updatePhase");
     if (!phase) {
@@ -173,12 +177,12 @@ export class DiscoveryApiService {
     try {
       return await apiClient.patch<DiscoveryProcess>(
         `${this.baseUrl}/${id}/phase`,
-        { phase }
+        { phase },
       );
     } catch (error) {
       console.error("[DiscoveryApiService.updatePhase] Error:", error);
       throw new Error(
-        `Failed to update phase for discovery process with id: ${id}`
+        `Failed to update phase for discovery process with id: ${id}`,
       );
     }
   }
@@ -190,7 +194,7 @@ export class DiscoveryApiService {
     } catch (error) {
       console.error("[DiscoveryApiService.getSummary] Error:", error);
       throw new Error(
-        `Failed to fetch summary for discovery process with id: ${id}`
+        `Failed to fetch summary for discovery process with id: ${id}`,
       );
     }
   }
@@ -251,7 +255,7 @@ export class DiscoveryApiService {
     } catch (error) {
       console.error(
         "[DiscoveryApiService.getCustodianStats] Failed to fetch stats:",
-        error
+        error,
       );
       return [];
     }
@@ -272,7 +276,7 @@ export class DiscoveryApiService {
     } catch (error) {
       console.error(
         "[DiscoveryApiService.getFunnelStats] Failed to fetch data:",
-        error
+        error,
       );
       return [];
     }

@@ -123,7 +123,7 @@ export class NotificationsApiService {
   private validateId(id: string, methodName: string): void {
     if (!id || false || id.trim() === "") {
       throw new Error(
-        `[NotificationsApiService.${methodName}] Invalid id parameter`
+        `[NotificationsApiService.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -135,11 +135,11 @@ export class NotificationsApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[NotificationsApiService.${methodName}] Invalid ${paramName} parameter`
+        `[NotificationsApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -159,7 +159,7 @@ export class NotificationsApiService {
     try {
       const response = await apiClient.get<PaginatedResponse<ApiNotification>>(
         this.baseUrl,
-        filters as Record<string, unknown>
+        filters as Record<string, unknown>,
       );
       return response.data;
     } catch (error: unknown) {
@@ -167,7 +167,7 @@ export class NotificationsApiService {
       const err = error as { status?: number };
       if (err?.status === 403 || err?.status === 401) {
         console.warn(
-          "[NotificationsApiService.getAll] Authentication required - returning empty notifications"
+          "[NotificationsApiService.getAll] Authentication required - returning empty notifications",
         );
         return [];
       }
@@ -252,7 +252,7 @@ export class NotificationsApiService {
     try {
       return await apiClient.patch<ApiNotification>(
         `${this.baseUrl}/${id}/read`,
-        { read: true }
+        { read: true },
       );
     } catch (error) {
       console.error("[NotificationsApiService.markAsRead] Error:", error);
@@ -272,7 +272,7 @@ export class NotificationsApiService {
     try {
       return await apiClient.patch<ApiNotification>(
         `${this.baseUrl}/${id}/read`,
-        { read: false }
+        { read: false },
       );
     } catch (error) {
       console.error("[NotificationsApiService.markAsUnread] Error:", error);
@@ -304,7 +304,7 @@ export class NotificationsApiService {
   async getUnreadCount(): Promise<number> {
     try {
       const response = await apiClient.get<{ count: number }>(
-        `${this.baseUrl}/unread-count`
+        `${this.baseUrl}/unread-count`,
       );
       return response.count;
     } catch (error) {
@@ -398,8 +398,8 @@ export class NotificationsApiService {
    * @returns Promise<void>
    */
   async subscribe(channel: string): Promise<void> {
-    console.log(
-      `[NotificationsApiService] subscribe(${channel}) - Not implemented (future WebSocket)`
+    console.warn(
+      `[NotificationsApiService] subscribe(${channel}) - Not implemented (future WebSocket)`,
     );
     return Promise.resolve();
   }
@@ -411,8 +411,8 @@ export class NotificationsApiService {
    * @returns Promise<void>
    */
   async unsubscribe(channel: string): Promise<void> {
-    console.log(
-      `[NotificationsApiService] unsubscribe(${channel}) - Not implemented (future WebSocket)`
+    console.warn(
+      `[NotificationsApiService] unsubscribe(${channel}) - Not implemented (future WebSocket)`,
     );
     return Promise.resolve();
   }

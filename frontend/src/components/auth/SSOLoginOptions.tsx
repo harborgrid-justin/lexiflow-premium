@@ -90,7 +90,9 @@ export function SSOLoginOptions({ providers = DEFAULT_PROVIDERS, onProviderClick
         {enabledProviders.map((provider) => (
           <button
             key={provider.id}
-            onClick={() => handleProviderClick(provider)}
+            onClick={() => {
+              void handleProviderClick(provider);
+            }}
             disabled={isLoading === provider.id}
             style={{ backgroundColor: theme.surface.raised, borderColor: theme.border.default, color: theme.text.primary }}
             className="w-full flex items-center justify-center gap-3 px-4 py-3 hover:opacity-90 disabled:opacity-50 border rounded-lg transition-all group"

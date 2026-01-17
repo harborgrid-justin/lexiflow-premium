@@ -57,6 +57,12 @@ export function DataGridToolbar({
   description,
 }: DataGridToolbarProps) {
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const surfaceDefaultClass = classToken(theme.surface.default);
+  const borderDefaultClass = classToken(theme.border.default);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const textSecondaryClass = classToken(theme.text.secondary);
+  const surfaceHighlightClass = classToken(theme.surface.highlight);
   const [showExportMenu, setShowExportMenu] = useState(false);
 
   const handleExport = useCallback((format: 'csv' | 'excel' | 'pdf') => {
@@ -73,19 +79,19 @@ export function DataGridToolbar({
     <div
       className={cn(
         "flex items-center justify-between px-4 py-3 border-b",
-        theme.surface.default,
-        theme.border.default
+        surfaceDefaultClass,
+        borderDefaultClass
       )}
     >
       {/* Left: Title and Description */}
       <div className="flex flex-col gap-1">
         {title && (
-          <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
+          <h3 className={cn("text-lg font-semibold", textPrimaryClass)}>
             {title}
           </h3>
         )}
         {description && (
-          <p className={cn("text-sm", theme.text.secondary)}>
+          <p className={cn("text-sm", textSecondaryClass)}>
             {description}
           </p>
         )}
@@ -101,7 +107,7 @@ export function DataGridToolbar({
             disabled={action.disabled}
             className={cn(
               "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded transition-colors",
-              theme.border.default,
+              borderDefaultClass,
               action.disabled && "opacity-50 cursor-not-allowed",
               !action.disabled && "hover:opacity-80",
               getActionVariantClasses(action.variant || 'secondary', theme)
@@ -119,9 +125,9 @@ export function DataGridToolbar({
               onClick={() => setShowExportMenu(!showExportMenu)}
               className={cn(
                 "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded border transition-colors",
-                theme.border.default,
-                theme.surface.default,
-                theme.text.primary,
+                borderDefaultClass,
+                surfaceDefaultClass,
+                textPrimaryClass,
                 "hover:opacity-80"
               )}
             >
@@ -143,8 +149,8 @@ export function DataGridToolbar({
                 <div
                   className={cn(
                     "absolute right-0 mt-2 w-48 rounded-lg border shadow-lg z-20",
-                    theme.surface.default,
-                    theme.border.default
+                    surfaceDefaultClass,
+                    borderDefaultClass
                   )}
                 >
                   <div className="py-1">
@@ -152,8 +158,8 @@ export function DataGridToolbar({
                       onClick={() => handleExport('csv')}
                       className={cn(
                         "w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2",
-                        theme.text.primary,
-                        `hover:${theme.surface.highlight}`
+                        textPrimaryClass,
+                        `hover:${surfaceHighlightClass}`
                       )}
                     >
                       <CsvIcon />
@@ -163,8 +169,8 @@ export function DataGridToolbar({
                       onClick={() => handleExport('excel')}
                       className={cn(
                         "w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2",
-                        theme.text.primary,
-                        `hover:${theme.surface.highlight}`
+                        textPrimaryClass,
+                        `hover:${surfaceHighlightClass}`
                       )}
                     >
                       <ExcelIcon />
@@ -174,8 +180,8 @@ export function DataGridToolbar({
                       onClick={() => handleExport('pdf')}
                       className={cn(
                         "w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2",
-                        theme.text.primary,
-                        `hover:${theme.surface.highlight}`
+                        textPrimaryClass,
+                        `hover:${surfaceHighlightClass}`
                       )}
                     >
                       <PdfIcon />
@@ -199,18 +205,25 @@ DataGridToolbar.displayName = 'DataGridToolbar';
 // ============================================================================
 
 function getActionVariantClasses(variant: 'primary' | 'secondary' | 'danger', theme: ReturnType<typeof useTheme>['theme']): string {
+  const classToken = (value: unknown) => String(value);
+  const primaryClass = classToken(theme.primary.DEFAULT);
+  const statusErrorBgClass = classToken(theme.status.error.bg);
+  const surfaceDefaultClass = classToken(theme.surface.default);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const borderDefaultClass = classToken(theme.border.default);
+
   switch (variant) {
     case 'primary':
-      return cn('text-white border transition-colors', theme.colors.primary, 'hover:opacity-90');
+      return cn('text-white border transition-colors', primaryClass, 'hover:opacity-90');
     case 'danger':
-      return cn('text-white border transition-colors', theme.status.error.background, 'hover:opacity-90');
+      return cn('text-white border transition-colors', statusErrorBgClass, 'hover:opacity-90');
     case 'secondary':
     default:
       return cn(
         'border',
-        theme.surface.default,
-        theme.text.primary,
-        theme.border.default
+        surfaceDefaultClass,
+        textPrimaryClass,
+        borderDefaultClass
       );
   }
 }

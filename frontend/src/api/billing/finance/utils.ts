@@ -17,11 +17,11 @@ export function validateId(id: string, methodName: string): void {
 export function validateObject(
   obj: unknown,
   paramName: string,
-  methodName: string
+  methodName: string,
 ): void {
   if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
     throw new Error(
-      `[BillingApiService.${methodName}] Invalid ${paramName} parameter`
+      `[BillingApiService.${methodName}] Invalid ${paramName} parameter`,
     );
   }
 }
@@ -32,11 +32,11 @@ export function validateObject(
 export function validateArray(
   arr: unknown[],
   paramName: string,
-  methodName: string
+  methodName: string,
 ): void {
   if (!arr || !Array.isArray(arr) || arr.length === 0) {
     throw new Error(
-      `[BillingApiService.${methodName}] Invalid ${paramName} parameter`
+      `[BillingApiService.${methodName}] Invalid ${paramName} parameter`,
     );
   }
 }
@@ -102,7 +102,7 @@ export function extractPaginatedData<T>(response: unknown): T[] {
 
   // Handle direct array response
   if (Array.isArray(response)) {
-    return response;
+    return response as T[];
   }
 
   return [];

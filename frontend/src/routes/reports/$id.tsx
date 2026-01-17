@@ -20,20 +20,50 @@ import {
 } from 'recharts';
 
 import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
 import { analyticsApi } from '@/lib/frontend-api';
 import { ChartCard } from '@/routes/analytics/components/enterprise';
+import type { ChartData as ApiChartData, ReportCategory, ReportType } from '@/types/analytics-enterprise';
 
 import { createMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
-interface ChartData {
+type SummaryValue = string | number | boolean | null;
+type ChartDatum = Record<string, SummaryValue>;
+type ChartType = ApiChartData["type"];
+
+interface ReportChart {
   id: string;
-  type: string;
+  type: ChartType;
   title: string;
-  data: Record<string, unknown>[];
+  data: ChartDatum[];
 }
 
-type LoaderData = Awaited<ReturnType<typeof loader>>;
+interface LoaderReport {
+  id: string;
+  name: string;
+  description: string;
+  type: ReportType;
+  category: ReportCategory;
+  generatedAt: string;
+  period: { start: string | null; end: string | null };
+  data: {
+    summary: Record<string, SummaryValue>;
+    charts: ReportChart[];
+  };
+}
+
+type LoaderData = {
+  report: LoaderReport;
+};
+
+type ReportMetadata = {
+  description?: string;
+  period?: { start: string | null; end: string | null };
+  summary?: Record<string, unknown>;
+  charts?: Array<ApiChartData & { id?: string }>;
+};
 
 export function meta({ params }: { params: { id: string } }) {
   return createMeta({
@@ -42,28 +72,72 @@ export function meta({ params }: { params: { id: string } }) {
   });
 }
 
-export async function loader({ params }: LoaderFunctionArgs) {
+const normalizeValue = (value: unknown): SummaryValue => {
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return value;
+  }
+
+  if (value == null) return null;
+
+  return String(value);
+};
+
+const normalizeSummary = (summary?: Record<string, unknown>): Record<string, SummaryValue> => {
+  if (!summary) return {};
+
+  return Object.fromEntries(
+    Object.entries(summary).map(([key, value]) => [key, normalizeValue(value)])
+  );
+};
+
+const normalizeChartDatum = (datum: unknown): ChartDatum => {
+  if (!datum || typeof datum !== 'object' || Array.isArray(datum)) return {};
+
+  return Object.fromEntries(
+    Object.entries(datum as Record<string, unknown>).map(([key, value]) => [key, normalizeValue(value)])
+  );
+};
+
+const normalizeCharts = (charts?: Array<ApiChartData & { id?: string }>): ReportChart[] => {
+  if (!charts) return [];
+
+  return charts.map((chart, index) => ({
+    id: chart.id ?? `chart-${index}`,
+    type: chart.type ?? 'bar',
+    title: chart.title ?? `Chart ${index + 1}`,
+    data: Array.isArray(chart.data) ? chart.data.map(normalizeChartDatum) : [],
+  }));
+};
+
+export async function loader({ params }: LoaderFunctionArgs): Promise<LoaderData> {
   const { id } = params;
   if (!id) throw new Error("Report ID is required");
 
   try {
     const result = await analyticsApi.getReportById(id);
     if (!result.ok) throw new Error("Report not found");
-    const report = result.data;
-    const metadata = report.metadata || {};
 
-    const mappedReport = {
-      id: report.id,
-      name: report.name,
-      description: (metadata.description as string) || '',
-      type: report.reportType,
-      category: report.reportType,
-      generatedAt: report.generatedAt || new Date().toISOString(),
-      period: (metadata.period as { start: string | null; end: string | null }) || { start: null, end: null },
+    const reportPayload = result.data;
+    const baseReport =
+      (reportPayload as { report?: Partial<LoaderReport> }).report ??
+      (reportPayload as Partial<LoaderReport>);
+    const metadata =
+      ((baseReport as { metadata?: ReportMetadata }).metadata as ReportMetadata | undefined) ??
+      ((reportPayload as { data?: ReportMetadata }).data as ReportMetadata | undefined) ??
+      {};
+
+    const mappedReport: LoaderReport = {
+      id: baseReport.id ?? id,
+      name: baseReport.name ?? `Report ${id}`,
+      description: metadata.description ?? baseReport.description ?? '',
+      type: (baseReport.type ?? (baseReport as { reportType?: ReportType }).reportType ?? 'custom') as ReportType,
+      category: (baseReport.category ?? 'operational') as ReportCategory,
+      generatedAt: baseReport.generatedAt ?? (reportPayload as { generatedAt?: string }).generatedAt ?? new Date().toISOString(),
+      period: metadata.period ?? { start: null, end: null },
       data: {
-        summary: (metadata.summary as Record<string, unknown>) || {},
-        charts: (metadata.charts as ChartData[]) || []
-      }
+        summary: normalizeSummary(metadata.summary ?? (reportPayload as { summary?: Record<string, unknown> }).summary),
+        charts: normalizeCharts(metadata.charts ?? (reportPayload as { charts?: Array<ApiChartData & { id?: string }> }).charts),
+      },
     };
 
     return { report: mappedReport };
@@ -74,7 +148,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function ReportViewerRoute() {
-  const { report } = useLoaderData();
+  const { report } = useLoaderData<LoaderData>();
+  const { theme } = useTheme();
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async (format: 'pdf' | 'excel' | 'csv') => {
@@ -269,7 +344,7 @@ export default function ReportViewerRoute() {
 
       {/* Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {report.data.charts.map((chart: ChartData) => (
+        {report.data.charts.map((chart) => (
           <ChartCard key={chart.id} title={chart.title}>
             <ResponsiveContainer width="100%" height="100%">
               {chart.type === 'line' ? (

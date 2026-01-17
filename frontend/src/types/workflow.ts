@@ -130,7 +130,7 @@ export type ApprovalChainBasic = BaseEntity & {
 export type WorkflowStage = {
   readonly id: string;
   readonly title: string;
-  readonly status: StageStatus | string;
+  readonly status: StageStatus | (string & {});
   readonly tasks: readonly WorkflowTask[];
 };
 

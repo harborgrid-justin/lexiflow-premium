@@ -5,9 +5,9 @@
  * Provides comprehensive test coverage and reporting capabilities.
  */
 
-import { defineConfig } from 'cypress';
+import { defineConfig } from "cypress";
 
-import { URLS } from './src/config/ports.config';
+import { URLS } from "./src/config/ports.config";
 
 export default defineConfig({
   e2e: {
@@ -30,8 +30,8 @@ export default defineConfig({
     videoCompression: 32,
 
     // Test file patterns
-    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
-    supportFile: 'cypress/support/e2e.ts',
+    specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    supportFile: "cypress/support/e2e.ts",
 
     // Browser settings
     chromeWebSecurity: false,
@@ -45,22 +45,32 @@ export default defineConfig({
     // Node event listeners and plugins
     setupNodeEvents(
       on: Cypress.PluginEvents,
-      config: Cypress.PluginConfigOptions
+      config: Cypress.PluginConfigOptions,
     ): Cypress.PluginConfigOptions | void {
       // Environment-specific configuration
-      const environment = config.env.ENVIRONMENT || 'development';
+      const env = config.env as Record<string, unknown>;
+      const environment =
+        typeof env.ENVIRONMENT === "string" ? env.ENVIRONMENT : "development";
+      const stagingUrl =
+        typeof env.STAGING_URL === "string"
+          ? env.STAGING_URL
+          : "https://staging.lexiflow.com";
+      const productionUrl =
+        typeof env.PRODUCTION_URL === "string"
+          ? env.PRODUCTION_URL
+          : "https://lexiflow.com";
 
       // Set environment-specific base URL
-      if (environment === 'staging') {
-        config.baseUrl = config.env.STAGING_URL || 'https://staging.lexiflow.com';
-      } else if (environment === 'production') {
-        config.baseUrl = config.env.PRODUCTION_URL || 'https://lexiflow.com';
+      if (environment === "staging") {
+        config.baseUrl = stagingUrl;
+      } else if (environment === "production") {
+        config.baseUrl = productionUrl;
       }
 
       // Register custom tasks
-      on('task', {
+      on("task", {
         log(message: string): null {
-          console.log(message);
+          console.warn(message);
           return null;
         },
       });
@@ -73,25 +83,25 @@ export default defineConfig({
   // Component testing configuration (if needed)
   component: {
     devServer: {
-      framework: 'react',
-      bundler: 'vite',
+      framework: "react",
+      bundler: "vite",
     },
-    specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}',
+    specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
   },
 
   // Environment variables
   env: {
-    ENVIRONMENT: 'development',
+    ENVIRONMENT: "development",
     API_BASE_URL: URLS.api(),
   },
 
   // File server options
-  fileServerFolder: '.',
-  fixturesFolder: 'cypress/fixtures',
-  downloadsFolder: 'cypress/downloads',
-  screenshotsFolder: 'cypress/screenshots',
-  videosFolder: 'cypress/videos',
+  fileServerFolder: ".",
+  fixturesFolder: "cypress/fixtures",
+  downloadsFolder: "cypress/downloads",
+  screenshotsFolder: "cypress/screenshots",
+  videosFolder: "cypress/videos",
 
   // Reporter configuration
-  reporter: 'spec',
+  reporter: "spec",
 });

@@ -55,7 +55,12 @@ export class HydrationService {
         hydrateRoot(document, element, {
           onRecoverableError: (error) => {
             // Only log recoverable errors in development if they're not Suspense hydration issues
-            if (process.env.NODE_ENV === "development") {
+            const nodeEnv =
+              typeof process !== "undefined"
+                ? (process as { env?: Record<string, string | undefined> }).env
+                  ?.NODE_ENV
+                : undefined;
+            if (nodeEnv === "development") {
               const errorMessage = error instanceof Error ? error.message : String(error);
               // Suppress common Suspense hydration warnings
               if (errorMessage.includes("Suspense boundary received an update before it finished hydrating")) {

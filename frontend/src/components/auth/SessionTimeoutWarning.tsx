@@ -19,16 +19,38 @@ export function SessionTimeoutWarning() {
   const [showWarning, setShowWarning] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
 
+  const handleExtend = () => {
+    void extendSession().catch((error) => {
+      console.error("Failed to extend session", error);
+    });
+    setShowWarning(false);
+  };
+
+  const handleLogout = () => {
+    void logout().catch((error) => {
+      console.error("Failed to logout", error);
+    });
+    setShowWarning(false);
+  };
+
   useEffect(() => {
-    const handleSessionWarning = (event: CustomEvent) => {
+    type SessionWarningDetail = { remainingTime?: number };
+
+    const handleSessionWarning = (event: Event) => {
+      const customEvent = event as CustomEvent<SessionWarningDetail>;
+      const remainingTime =
+        typeof customEvent.detail?.remainingTime === "number"
+          ? customEvent.detail.remainingTime
+          : 0;
+
       setShowWarning(true);
-      setRemainingSeconds(Math.floor(event.detail.remainingTime / 1000));
+      setRemainingSeconds(Math.floor(remainingTime / 1000));
     };
 
-    window.addEventListener('session-warning', handleSessionWarning as EventListener);
+    window.addEventListener('session-warning', handleSessionWarning);
 
     return () => {
-      window.removeEventListener('session-warning', handleSessionWarning as EventListener);
+      window.removeEventListener('session-warning', handleSessionWarning);
     };
   }, []);
 
@@ -47,16 +69,6 @@ export function SessionTimeoutWarning() {
 
     return () => clearInterval(interval);
   }, [showWarning, remainingSeconds]);
-
-  const handleExtend = async () => {
-    await extendSession();
-    setShowWarning(false);
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    setShowWarning(false);
-  };
 
   if (!showWarning || !session?.warningShown) {
     return null;

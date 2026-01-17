@@ -24,6 +24,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
   actionError,
 }) => {
   const { theme, tokens } = useTheme();
+  const errorBackground = String(theme.status.error.background);
+  const errorText = String(theme.status.error.text);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
 
@@ -79,8 +81,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
       <Form method="post" encType="multipart/form-data" className="space-y-6">
         {/* Error Message */}
         {actionError && (
-          <div className={cn('rounded-md p-4 border', theme.status.error.background, 'border-red-200')}>
-            <p className={cn('text-sm', theme.status.error.text)}>{actionError}</p>
+          <div className={cn('rounded-md p-4 border', errorBackground, 'border-red-200')}>
+            <p className={cn('text-sm', errorText)}>{actionError}</p>
           </div>
         )}
 

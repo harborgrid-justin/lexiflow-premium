@@ -25,7 +25,7 @@ import { Await, redirect, useLoaderData, useNavigate } from 'react-router';
 import { casesApi, documentsApi } from '@/lib/frontend-api';
 import { CaseDetail } from '@/routes/cases/_deprecated/ui/pages/CaseDetailPage';
 import { DataService } from '@/services/data/data-service.service';
-import { type Case, type LegalDocument, type Party } from '@/types';
+import { type LegalDocument, type Party } from '@/types';
 
 
 import { createCaseMeta } from '../_shared/meta-utils';

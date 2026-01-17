@@ -23,6 +23,7 @@
 import { client } from "./client";
 import { ValidationError } from "./errors";
 import { type Result, success } from "./types";
+import type { ReportData } from "@/types/analytics-enterprise";
 
 export interface DashboardMetrics {
   totalCases: number;
@@ -71,7 +72,7 @@ export async function getDashboardMetrics(): Promise<Result<DashboardMetrics>> {
  * Get analytics for a specific case
  */
 export async function getCaseAnalytics(
-  caseId: string
+  caseId: string,
 ): Promise<Result<CaseAnalytics>> {
   if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
     return {
@@ -122,7 +123,7 @@ export async function getTeamMetrics(): Promise<Result<unknown>> {
  * Get custom report
  */
 export async function getCustomReport(
-  reportId: string
+  reportId: string,
 ): Promise<Result<unknown>> {
   if (!reportId || typeof reportId !== "string" || reportId.trim() === "") {
     return {
@@ -132,6 +133,26 @@ export async function getCustomReport(
   }
 
   const result = await client.get<unknown>(`/analytics/reports/${reportId}`);
+
+  if (!result.ok) return result;
+
+  return success(result.data);
+}
+
+/**
+ * Get typed report by ID
+ */
+export async function getReportById(
+  reportId: string,
+): Promise<Result<ReportData>> {
+  if (!reportId || typeof reportId !== "string" || reportId.trim() === "") {
+    return {
+      ok: false,
+      error: new ValidationError("Valid report ID is required"),
+    };
+  }
+
+  const result = await client.get<ReportData>(`/analytics/reports/${reportId}`);
 
   if (!result.ok) return result;
 
@@ -171,7 +192,7 @@ const outcomePredictions = {
   },
   async getPredictionByCaseId(caseId: string) {
     return await client.get<unknown>(
-      `/analytics/outcome-predictions/case/${caseId}`
+      `/analytics/outcome-predictions/case/${caseId}`,
     );
   },
 };
@@ -218,6 +239,7 @@ export const analyticsApi = {
   getDashboardMetrics,
   getCaseAnalytics,
   getRevenueAnalytics,
+  getReportById,
   getTeamMetrics,
   getCustomReport,
   // Sub-modules

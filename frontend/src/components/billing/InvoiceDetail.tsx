@@ -22,6 +22,9 @@ interface InvoiceDetailProps {
 export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
   const { theme } = useTheme();
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const classToken = (value: unknown) => String(value);
+  const hoverPrimaryClass = `hover:${classToken(theme.colors.hoverPrimary)}`;
+  const hoverSurfaceClass = `hover:${classToken(theme.surface.hover)}`;
 
   const getStatusBadge = (status: string) => {
     const styles = {
@@ -50,12 +53,12 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-4">
-            <h1 className={cn("text-2xl font-bold", theme.text.primary)}>
+            <h1 className={cn("text-2xl font-bold", classToken(theme.text.primary))}>
               Invoice {invoice.invoiceNumber}
             </h1>
             {getStatusBadge(invoice.status)}
           </div>
-          <p className={cn("mt-1 text-sm", theme.text.secondary)}>
+          <p className={cn("mt-1 text-sm", classToken(theme.text.secondary))}>
             {invoice.clientName} - {invoice.matterDescription}
           </p>
         </div>
@@ -66,7 +69,11 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
               <input type="hidden" name="intent" value="send" />
               <button
                 type="submit"
-                className={cn("flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm", theme.colors.primary, `hover:${theme.colors.hoverPrimary}`)}
+                className={cn(
+                  "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm",
+                  classToken(theme.colors.primary),
+                  hoverPrimaryClass,
+                )}
               >
                 <Send className="h-4 w-4" />
                 Send Invoice
@@ -77,7 +84,13 @@ export const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoice }) => {
             <input type="hidden" name="intent" value="download-pdf" />
             <button
               type="submit"
-              className={cn("flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium shadow-sm", theme.border.default, theme.surface.default, theme.text.primary, `hover:${theme.surface.hover}`)}
+              className={cn(
+                "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium shadow-sm",
+                classToken(theme.border.default),
+                classToken(theme.surface.default),
+                classToken(theme.text.primary),
+                hoverSurfaceClass,
+              )}
             >
               <Download className="h-4 w-4" />
               Download PDF

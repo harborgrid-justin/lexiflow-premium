@@ -64,7 +64,16 @@ export const ChartCard: React.FC<ChartCardProps> = ({
   showActions = true,
   actions,
 }) => {
-  const { theme } = useTheme();
+  const { theme, tokens } = useTheme();
+  const toStyleValue = (value: unknown) => String(value);
+  const classToken = (value: unknown) => String(value);
+  const surfaceDefault = toStyleValue(theme.surface.default);
+  const borderDefault = toStyleValue(theme.border.default);
+  const borderDefaultClass = classToken(theme.border.default);
+  const surfaceHighlightClass = classToken(theme.surface.highlight);
+  const textSecondaryClass = classToken(theme.text.secondary);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const textTertiaryClass = classToken(theme.text.tertiary);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = useCallback(async () => {
@@ -78,13 +87,11 @@ export const ChartCard: React.FC<ChartCardProps> = ({
     }
   }, [onRefresh, isRefreshing]);
 
-  const { tokens } = useTheme();
-
   return (
     <div
       style={{
-        backgroundColor: theme.surface.default,
-        borderColor: theme.border.default,
+        backgroundColor: surfaceDefault,
+        borderColor: borderDefault,
         borderRadius: tokens.borderRadius.xl,
         boxShadow: tokens.shadows.sm,
         transition: tokens.transitions.smooth,
@@ -95,20 +102,20 @@ export const ChartCard: React.FC<ChartCardProps> = ({
       )}
     >
       {/* Header */}
-      <div className={cn('px-6 py-4 border-b', theme.border.default)}>
+      <div className={cn('px-6 py-4 border-b', borderDefaultClass)}>
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3 flex-1">
             {Icon && (
-              <div className={cn('p-2 rounded-lg', theme.surface.highlight)}>
-                <Icon className={cn('h-5 w-5', theme.text.secondary)} />
+              <div className={cn('p-2 rounded-lg', surfaceHighlightClass)}>
+                <Icon className={cn('h-5 w-5', textSecondaryClass)} />
               </div>
             )}
             <div className="flex-1">
-              <h3 className={cn('text-lg font-semibold', theme.text.primary)}>
+              <h3 className={cn('text-lg font-semibold', textPrimaryClass)}>
                 {title}
               </h3>
               {subtitle && (
-                <p className={cn('text-sm mt-1', theme.text.tertiary)}>
+                <p className={cn('text-sm mt-1', textTertiaryClass)}>
                   {subtitle}
                 </p>
               )}
@@ -169,7 +176,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
           <div className="flex items-center justify-center h-full">
             <div className="flex flex-col items-center gap-3">
               <div className="h-8 w-8 animate-spin rounded-full border-3 border-gray-300 border-t-blue-600" />
-              <p className={cn('text-sm', theme.text.tertiary)}>Loading chart data...</p>
+              <p className={cn('text-sm', textTertiaryClass)}>Loading chart data...</p>
             </div>
           </div>
         ) : error ? (
@@ -180,8 +187,8 @@ export const ChartCard: React.FC<ChartCardProps> = ({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <p className={cn('text-sm font-medium mb-1', theme.text.primary)}>Failed to load chart</p>
-              <p className={cn('text-xs', theme.text.tertiary)}>{error}</p>
+              <p className={cn('text-sm font-medium mb-1', textPrimaryClass)}>Failed to load chart</p>
+              <p className={cn('text-xs', textTertiaryClass)}>{error}</p>
               {onRefresh && (
                 <Button
                   variant="outline"

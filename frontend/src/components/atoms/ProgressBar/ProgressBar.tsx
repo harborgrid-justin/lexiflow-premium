@@ -16,16 +16,15 @@
 // ============================================================================
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
-
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
-import { 
-  labelContainerStyles, 
-  valueStyles, 
-  trackStyles, 
-  fillStyles, 
-  getFillStyle 
+import { cn } from '@/lib/cn';
+import {
+  fillStyles,
+  getFillStyle,
+  labelContainerStyles,
+  trackStyles,
+  valueStyles
 } from './ProgressBar.styles';
 
 // ============================================================================
@@ -45,7 +44,7 @@ export function ProgressBar({
   showValue = true
 }: ProgressBarProps) {
   const { theme } = useTheme();
-  
+
   return (
     <div>
       <div className={cn(labelContainerStyles, theme.text.secondary)}>

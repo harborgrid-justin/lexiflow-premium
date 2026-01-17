@@ -49,9 +49,14 @@ export const StatWidget: React.FC<StatWidgetProps> = ({
   onClick,
 }) => {
   const { theme, tokens } = useTheme();
+  const toStyleValue = (value: unknown) => String(value);
+  const classToken = (value: unknown) => String(value);
+  const borderDefault = toStyleValue(theme.border.default);
+  const surfaceDefault = toStyleValue(theme.surface.default);
+  const textSecondaryClass = classToken(theme.text.secondary);
 
   const variantStyles = {
-    default: { borderColor: theme.border.default, backgroundColor: theme.surface.default },
+    default: { borderColor: borderDefault, backgroundColor: surfaceDefault },
     success: { borderColor: tokens.colors.emerald400, backgroundColor: tokens.colors.success + '20' },
     warning: { borderColor: tokens.colors.amber400, backgroundColor: tokens.colors.warning + '20' },
     danger: { borderColor: tokens.colors.rose400, backgroundColor: tokens.colors.error + '20' },
@@ -59,7 +64,7 @@ export const StatWidget: React.FC<StatWidgetProps> = ({
   };
 
   const iconColors = {
-    default: theme.text.secondary,
+    default: textSecondaryClass,
     success: tokens.colors.emerald500,
     warning: tokens.colors.amber400,
     danger: tokens.colors.error,

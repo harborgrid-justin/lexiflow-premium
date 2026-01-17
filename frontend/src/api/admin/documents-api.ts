@@ -15,8 +15,8 @@ export { DOCUMENTS_QUERY_KEYS } from "./documents";
 /** Documents API Service Class */
 export class DocumentsApiService {
   constructor() {
-    console.log(
-      "[DocumentsApiService] Initialized with Backend API (PostgreSQL)"
+    console.warn(
+      "[DocumentsApiService] Initialized with Backend API (PostgreSQL)",
     );
   }
 

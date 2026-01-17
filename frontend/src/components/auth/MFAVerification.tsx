@@ -24,13 +24,23 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
   const { verifyMFA } = useAuthActions();
   const { theme, tokens } = useTheme();
   const notify = useNotify();
+  const gradientBackground = String(theme.colors.gradients.primary);
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [useBackupCode, setUseBackupCode] = useState(false);
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const publishEvent = <T extends SystemEventType>(
+    type: T,
+    payload: SystemEventPayloads[T],
+  ) => {
+    void IntegrationOrchestrator.publish(type, payload).catch((error) => {
+      console.error("Failed to publish MFA event", error);
+    });
+  };
+
+  const handleVerify = (event: React.FormEvent) => {
+    event.preventDefault();
 
     if (code.length !== 6) {
       setError('Please enter a 6-digit code');
@@ -40,48 +50,39 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
     setIsLoading(true);
     setError(null);
 
-    try {
-      const success = await verifyMFA(code);
+    void (async () => {
+      try {
+        const success = await verifyMFA(code);
 
-      if (success) {
-        // Publish enterprise event
-        const payload: SystemEventPayloads[SystemEventType.MFA_VERIFICATION_SUCCESS] = {
+        if (success) {
+          const payload: SystemEventPayloads[SystemEventType.MFA_VERIFICATION_SUCCESS] = {
+            method: useBackupCode ? 'backup_code' : 'authenticator',
+          };
+          publishEvent(SystemEventType.MFA_VERIFICATION_SUCCESS, payload);
+          notify.success('Two-factor authentication successful');
+          onSuccess?.();
+        } else {
+          setError('Invalid verification code. Please try again.');
+          notify.error('Invalid verification code');
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Verification failed';
+        setError(errorMessage);
+        notify.error(`MFA verification failed: ${errorMessage}`);
+
+        const payload: SystemEventPayloads[SystemEventType.MFA_VERIFICATION_FAILED] = {
+          error: errorMessage,
           method: useBackupCode ? 'backup_code' : 'authenticator',
         };
-
-        IntegrationOrchestrator.publish(
-          SystemEventType.MFA_VERIFICATION_SUCCESS,
-          payload
-        );
-
-        notify.success('Two-factor authentication successful');
-        onSuccess?.();
-      } else {
-        setError('Invalid verification code. Please try again.');
-        notify.error('Invalid verification code');
+        publishEvent(SystemEventType.MFA_VERIFICATION_FAILED, payload);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Verification failed';
-      setError(errorMessage);
-      notify.error(`MFA verification failed: ${errorMessage}`);
-
-      // Publish enterprise event for failed verification
-      const payload: SystemEventPayloads[SystemEventType.MFA_VERIFICATION_FAILED] = {
-        error: errorMessage,
-        method: useBackupCode ? 'backup_code' : 'authenticator',
-      };
-
-      IntegrationOrchestrator.publish(
-        SystemEventType.MFA_VERIFICATION_FAILED,
-        payload
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    })();
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.colors.gradients.primary }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: gradientBackground }}>
       <div style={{ width: '100%', maxWidth: '28rem' }}>
         {/* Logo/Branding */}
         <div style={{ textAlign: 'center', marginBottom: tokens.spacing.layout.lg }}>

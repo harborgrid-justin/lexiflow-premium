@@ -7,17 +7,35 @@
 
 // --- Enums & Appendices ---
 
-export type PacerJurisdictionType = 'ap' | 'bk' | 'cr' | 'cv' | 'mdl';
-export type PacerCaseStatus = 'O' | 'C'; // Open or Closed
-export type PacerRequestType = 'Batch' | 'Immediate';
-export type PacerRequestSource = 'Other' | 'PCL'; 
+export type PacerJurisdictionType = "ap" | "bk" | "cr" | "cv" | "mdl";
+export type PacerCaseStatus = "O" | "C"; // Open or Closed
+export type PacerRequestType = "Batch" | "Immediate";
+export type PacerRequestSource = "Other" | "PCL";
 
 // Appendix A: Partial list of Court IDs for validation (Extensible)
-export type PacerCourtId = 
-  | '01ca' | '02ca' | '03ca' | '04ca' | '05ca' | '06ca' | '07ca' | '08ca' | '09ca' | '10ca' | '11ca' | 'cafc' | 'dcca' // Appellate
-  | 'almbk' | 'cacbk' | 'debk' | 'nysbk' // Bankruptcy examples
-  | 'dcd' | 'nysd' | 'cand' | 'vaed' // District examples
-  | string; // Allow string for full coverage
+export type PacerCourtId =
+  | "01ca"
+  | "02ca"
+  | "03ca"
+  | "04ca"
+  | "05ca"
+  | "06ca"
+  | "07ca"
+  | "08ca"
+  | "09ca"
+  | "10ca"
+  | "11ca"
+  | "cafc"
+  | "dcca" // Appellate
+  | "almbk"
+  | "cacbk"
+  | "debk"
+  | "nysbk" // Bankruptcy examples
+  | "dcd"
+  | "nysd"
+  | "cand"
+  | "vaed" // District examples
+  | (string & {}); // Allow extensibility without widening known literals
 
 // --- Search Criteria Objects ---
 
@@ -31,13 +49,13 @@ export interface PacerCaseSearchCriteria {
   caseType?: string[]; // Max 6 chars per code
   caseYear?: string; // 2 or 4 digits
   courtId?: string[]; // See Appendix A
-  
+
   // Date Ranges (yyyy-MM-dd)
   dateFiledFrom?: string;
   dateFiledTo?: string;
   effectiveDateClosedFrom?: string;
   effectiveDateClosedTo?: string;
-  
+
   // Bankruptcy Specific
   federalBankruptcyChapter?: string[]; // '7', '11', '13', etc.
   dateDismissedFrom?: string;
@@ -45,15 +63,15 @@ export interface PacerCaseSearchCriteria {
   dateDischargedFrom?: string;
   dateDischargedTo?: string;
   dateReopenedFrom?: string; // Page 54
-  dateReopenedTo?: string;   // Page 54
-  
+  dateReopenedTo?: string; // Page 54
+
   // Joint Bankruptcy Specific (Page 54)
   dateDismissedJtFrom?: string;
   dateDismissedJtTo?: string;
 
   // Civil/Appellate
   natureOfSuit?: string[]; // 3 or 4 digits
-  
+
   // JPML
   jpmlNumber?: number;
 
@@ -73,7 +91,7 @@ export interface PacerPartySearchCriteria extends PacerCaseSearchCriteria {
   exactNameMatch?: boolean;
   ssn?: string; // Bankruptcy only
   ssn4?: string; // Last 4 digits
-  
+
   // Nested Case Search Object for refinement
   courtCase?: PacerCaseSearchCriteria;
 }
@@ -85,7 +103,7 @@ export interface PacerReceipt {
   billablePages: number;
   loginId: string;
   clientCode?: string; // Added based on Pg 53
-  firmId?: string;     // Added based on Pg 53
+  firmId?: string; // Added based on Pg 53
   search: string; // Description of search params
   description: string;
   csoId: number;
@@ -114,26 +132,26 @@ export interface PacerCase {
   caseYear?: number;
   courtId: string;
   jurisdictionType: PacerJurisdictionType;
-  
+
   // Dates
   dateFiled: string;
   effectiveDateClosed?: string;
   dateReopened?: string; // Pg 54
-  
+
   // Bankruptcy Specific
   dateDismissed?: string;
   dateDischarged?: string;
   federalBankruptcyChapter?: string;
   dispositionMethod?: string; // Pg 54
-  dispoMethodJt?: string;     // Pg 54 - Joint disposition method
-  dateDismissedJt?: string;   // Pg 54
-  caseJoint?: string;         // Pg 54 - Single char
+  dispoMethodJt?: string; // Pg 54 - Joint disposition method
+  dateDismissedJt?: string; // Pg 54
+  caseJoint?: string; // Pg 54 - Single char
   jointBankruptcyFlag?: string; // Implied from sortable fields Pg 55
   jointDischargedDate?: string; // Implied from sortable fields Pg 55
-  
+
   // Civil/Appellate
   natureOfSuit?: string; // Pg 51 - List[String] in criteria, usually single code in result
-  
+
   // JPML / MDL Specific (Pg 51 & 55)
   jpmlNumber?: number;
   mdlCourtId?: string;
@@ -144,7 +162,7 @@ export interface PacerCase {
   mdlDateReceived?: string;
   mdlDateOrdered?: string;
   mdlTransferee?: string;
-  
+
   // Civil Specific (Pg 55 Sortable Fields)
   civilDateInitiate?: string;
   civilDateDisposition?: string;
@@ -167,7 +185,7 @@ export interface PacerParty {
   generation?: string;
   partyType?: string;
   partyRole?: string;
-  
+
   // Context fields often flattened in Party Search results
   courtId?: string;
   caseId?: number;
@@ -192,7 +210,7 @@ export interface PacerPartySearchResponse {
 // Batch Report Info (Pg 29)
 export interface PacerReportInfo {
   reportId: number;
-  status: 'WAITING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
+  status: "WAITING" | "RUNNING" | "COMPLETED" | "FAILED";
   startTime?: string;
   endTime?: string;
   recordCount?: number;
@@ -200,5 +218,5 @@ export interface PacerReportInfo {
   downloadFee?: number;
   pages?: number;
   criteria?: PacerCaseSearchCriteria | PacerPartySearchCriteria;
-  searchType?: 'COURT_CASE' | 'PARTY';
+  searchType?: "COURT_CASE" | "PARTY";
 }

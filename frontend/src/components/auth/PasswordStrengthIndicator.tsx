@@ -21,8 +21,39 @@ interface PasswordRequirement {
   met: boolean;
 }
 
+type PasswordPolicy = {
+  minLength: number;
+  requireUppercase: boolean;
+  requireLowercase: boolean;
+  requireNumbers: boolean;
+  requireSpecialChars: boolean;
+};
+
+const getPasswordPolicy = (value: unknown): PasswordPolicy => {
+  if (!value || typeof value !== "object") {
+    return {
+      minLength: 8,
+      requireUppercase: false,
+      requireLowercase: false,
+      requireNumbers: false,
+      requireSpecialChars: false,
+    };
+  }
+
+  const record = value as Record<string, unknown>;
+  const policy = record.passwordPolicy as Record<string, unknown> | undefined;
+
+  return {
+    minLength: typeof policy?.minLength === "number" ? policy.minLength : 8,
+    requireUppercase: Boolean(policy?.requireUppercase),
+    requireLowercase: Boolean(policy?.requireLowercase),
+    requireNumbers: Boolean(policy?.requireNumbers),
+    requireSpecialChars: Boolean(policy?.requireSpecialChars),
+  };
+};
+
 export function PasswordStrengthIndicator({ password, showRequirements = true }: PasswordStrengthIndicatorProps) {
-  const { passwordPolicy } = useAuthState();
+  const passwordPolicy = getPasswordPolicy(useAuthState() as unknown);
   const { theme, tokens } = useTheme();
 
   const requirements = useMemo<PasswordRequirement[]>(() => {

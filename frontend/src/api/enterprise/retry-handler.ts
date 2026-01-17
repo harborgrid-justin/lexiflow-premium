@@ -94,13 +94,13 @@ export const DEFAULT_RETRY_CONFIG: Required<RetryConfig> = {
   onRetry: (error: unknown, attemptNumber: number, delay: number) => {
     console.warn(
       `[RetryHandler] Retrying request (attempt ${attemptNumber}) after ${delay}ms due to:`,
-      (error as { message?: string }).message
+      (error as { message?: string }).message,
     );
   },
   onMaxRetriesExceeded: (error: unknown) => {
     console.error(
       "[RetryHandler] Max retries exceeded:",
-      (error as { message?: string }).message
+      (error as { message?: string }).message,
     );
   },
 };
@@ -118,7 +118,7 @@ function sleep(ms: number): Promise<void> {
 function calculateDelay(
   attemptNumber: number,
   config: Required<RetryConfig>,
-  error?: unknown
+  error?: unknown,
 ): number {
   // Check for rate limit with retry-after
   if (error instanceof RateLimitError) {
@@ -128,7 +128,7 @@ function calculateDelay(
   // Calculate exponential backoff
   const exponentialDelay = Math.min(
     config.baseDelay * Math.pow(config.backoffFactor, attemptNumber - 1),
-    config.maxDelay
+    config.maxDelay,
   );
 
   // Add jitter if enabled
@@ -158,7 +158,7 @@ function calculateDelay(
  */
 export async function retryWithBackoff<T>(
   fn: () => Promise<T>,
-  config: RetryConfig = {}
+  config: RetryConfig = {},
 ): Promise<T> {
   const fullConfig: Required<RetryConfig> = {
     ...DEFAULT_RETRY_CONFIG,
@@ -266,7 +266,7 @@ export class RetryHandler {
         throw new NetworkError(
           "Circuit breaker is open. Service temporarily unavailable.",
           this.failureCount,
-          this.config.maxRetries
+          this.config.maxRetries,
         );
       }
       // Transition to half-open
@@ -299,7 +299,7 @@ export class RetryHandler {
     if (this.failureCount >= this.CIRCUIT_BREAKER_THRESHOLD) {
       this.circuitBreakerState = "open";
       console.warn(
-        `[RetryHandler] Circuit breaker opened after ${this.failureCount} failures`
+        `[RetryHandler] Circuit breaker opened after ${this.failureCount} failures`,
       );
     }
   }
@@ -310,7 +310,7 @@ export class RetryHandler {
   private resetCircuitBreaker(): void {
     this.circuitBreakerState = "closed";
     this.failureCount = 0;
-    console.info("[RetryHandler] Circuit breaker closed - service recovered");
+    console.warn("[RetryHandler] Circuit breaker closed - service recovered");
   }
 
   /**
@@ -340,7 +340,7 @@ export function createRetryHandler(config?: RetryConfig): RetryHandler {
  */
 export function withRetry<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
-  config?: RetryConfig
+  config?: RetryConfig,
 ): T {
   const handler = createRetryHandler(config);
   return ((...args: Parameters<T>) => {

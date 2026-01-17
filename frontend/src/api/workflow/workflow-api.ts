@@ -131,8 +131,8 @@ export class WorkflowApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log(
-      "[WorkflowApiService] Initialized with Backend API (PostgreSQL)"
+    console.warn(
+      "[WorkflowApiService] Initialized with Backend API (PostgreSQL)",
     );
   }
 
@@ -143,7 +143,7 @@ export class WorkflowApiService {
   private validateId(id: string, methodName: string): void {
     if (!id || false || id.trim() === "") {
       throw new Error(
-        `[WorkflowApiService.${methodName}] Invalid id parameter`
+        `[WorkflowApiService.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -155,11 +155,11 @@ export class WorkflowApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[WorkflowApiService.${methodName}] Invalid ${paramName} parameter`
+        `[WorkflowApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -172,7 +172,7 @@ export class WorkflowApiService {
     const validStatuses = ["active", "inactive", "draft"];
     if (!status || !validStatuses.includes(status)) {
       throw new Error(
-        `[WorkflowApiService.${methodName}] Invalid status. Must be one of: ${validStatuses.join(", ")}`
+        `[WorkflowApiService.${methodName}] Invalid status. Must be one of: ${validStatuses.join(", ")}`,
       );
     }
   }
@@ -191,7 +191,7 @@ export class WorkflowApiService {
     ];
     if (!status || !validStatuses.includes(status)) {
       throw new Error(
-        `[WorkflowApiService.${methodName}] Invalid status. Must be one of: ${validStatuses.join(", ")}`
+        `[WorkflowApiService.${methodName}] Invalid status. Must be one of: ${validStatuses.join(", ")}`,
       );
     }
   }
@@ -240,12 +240,16 @@ export class WorkflowApiService {
 
       // Handle direct array response
       if (Array.isArray(response)) {
-        return response;
+        const typedItems = response.filter(
+          (item): item is WorkflowTemplate =>
+            !!item && typeof item === "object" && "id" in item,
+        );
+        return typedItems;
       }
 
       console.warn(
         "[WorkflowApiService.getTemplates] Unexpected response format:",
-        response
+        response,
       );
       return [];
     } catch (error: unknown) {
@@ -277,7 +281,7 @@ export class WorkflowApiService {
     } catch (error) {
       console.error(
         "[WorkflowApiService.getSettings] Failed to fetch settings:",
-        error
+        error,
       );
       // Return empty array when data is unavailable or on error, handling missing backend endpoints gracefully
       return [];
@@ -285,7 +289,7 @@ export class WorkflowApiService {
   }
 
   async updateSettings(
-    settings: { label: string; enabled: boolean }[]
+    settings: { label: string; enabled: boolean }[],
   ): Promise<{ label: string; enabled: boolean }[]> {
     const response = await apiClient.put<
       Array<{ label: string; enabled: boolean }>
@@ -308,7 +312,7 @@ export class WorkflowApiService {
 
     try {
       return await apiClient.get<WorkflowTemplate>(
-        `${this.baseUrl}/templates/${id}`
+        `${this.baseUrl}/templates/${id}`,
       );
     } catch (error) {
       console.error("[WorkflowApiService.getTemplateById] Error:", error);
@@ -332,7 +336,7 @@ export class WorkflowApiService {
    * });
    */
   async createTemplate(
-    data: Partial<WorkflowTemplate>
+    data: Partial<WorkflowTemplate>,
   ): Promise<WorkflowTemplate> {
     this.validateObject(data, "data", "createTemplate");
 
@@ -341,19 +345,19 @@ export class WorkflowApiService {
     }
     if (!data.category) {
       throw new Error(
-        "[WorkflowApiService.createTemplate] Category is required"
+        "[WorkflowApiService.createTemplate] Category is required",
       );
     }
     if (!data.steps || !Array.isArray(data.steps) || data.steps.length === 0) {
       throw new Error(
-        "[WorkflowApiService.createTemplate] At least one step is required"
+        "[WorkflowApiService.createTemplate] At least one step is required",
       );
     }
 
     try {
       return await apiClient.post<WorkflowTemplate>(
         `${this.baseUrl}/templates`,
-        data
+        data,
       );
     } catch (error) {
       console.error("[WorkflowApiService.createTemplate] Error:", error);
@@ -371,7 +375,7 @@ export class WorkflowApiService {
    */
   async updateTemplate(
     id: string,
-    data: Partial<WorkflowTemplate>
+    data: Partial<WorkflowTemplate>,
   ): Promise<WorkflowTemplate> {
     this.validateId(id, "updateTemplate");
     this.validateObject(data, "data", "updateTemplate");
@@ -383,7 +387,7 @@ export class WorkflowApiService {
     try {
       return await apiClient.put<WorkflowTemplate>(
         `${this.baseUrl}/templates/${id}`,
-        data
+        data,
       );
     } catch (error) {
       console.error("[WorkflowApiService.updateTemplate] Error:", error);
@@ -491,7 +495,7 @@ export class WorkflowApiService {
 
       console.warn(
         "[WorkflowApiService.getInstances] Unexpected response format:",
-        response
+        response,
       );
       return [];
     } catch (error: unknown) {
@@ -509,7 +513,7 @@ export class WorkflowApiService {
         error instanceof Error ? error.message : String(error);
       if (errorMessage.includes("404") || errorMessage.includes("Cannot GET")) {
         console.warn(
-          "[WorkflowApiService.getInstances] Workflow instances endpoint not implemented yet, returning empty array"
+          "[WorkflowApiService.getInstances] Workflow instances endpoint not implemented yet, returning empty array",
         );
         return [];
       }
@@ -533,7 +537,7 @@ export class WorkflowApiService {
 
     try {
       return await apiClient.get<WorkflowInstance>(
-        `${this.baseUrl}/instances/${id}`
+        `${this.baseUrl}/instances/${id}`,
       );
     } catch (error) {
       console.error("[WorkflowApiService.getInstanceById] Error:", error);
@@ -557,7 +561,7 @@ export class WorkflowApiService {
    */
   async startWorkflow(
     templateId: string,
-    context: Record<string, unknown>
+    context: Record<string, unknown>,
   ): Promise<WorkflowInstance> {
     this.validateId(templateId, "startWorkflow");
     this.validateObject(context, "context", "startWorkflow");
@@ -565,7 +569,7 @@ export class WorkflowApiService {
     try {
       return await apiClient.post<WorkflowInstance>(
         `${this.baseUrl}/instances`,
-        { templateId, ...context }
+        { templateId, ...context },
       );
     } catch (error) {
       console.error("[WorkflowApiService.startWorkflow] Error:", error);
@@ -589,7 +593,7 @@ export class WorkflowApiService {
     try {
       return await apiClient.post<WorkflowInstance>(
         `${this.baseUrl}/instances/${id}/pause`,
-        {}
+        {},
       );
     } catch (error) {
       console.error("[WorkflowApiService.pauseWorkflow] Error:", error);
@@ -613,7 +617,7 @@ export class WorkflowApiService {
     try {
       return await apiClient.post<WorkflowInstance>(
         `${this.baseUrl}/instances/${id}/resume`,
-        {}
+        {},
       );
     } catch (error) {
       console.error("[WorkflowApiService.resumeWorkflow] Error:", error);
@@ -637,7 +641,7 @@ export class WorkflowApiService {
     try {
       return await apiClient.post<WorkflowInstance>(
         `${this.baseUrl}/instances/${id}/cancel`,
-        {}
+        {},
       );
     } catch (error) {
       console.error("[WorkflowApiService.cancelWorkflow] Error:", error);
@@ -664,7 +668,7 @@ export class WorkflowApiService {
     try {
       return await apiClient.post<{ success: boolean; message: string }>(
         `${this.baseUrl}/sync`,
-        {}
+        {},
       );
     } catch (error) {
       console.error("[WorkflowApiService.syncEngine] Error:", error);
@@ -676,13 +680,13 @@ export class WorkflowApiService {
    * @param scope - Scope of automation (e.g., 'all', 'case')
    */
   async runAutomation(
-    scope?: string
+    scope?: string,
   ): Promise<{ success: boolean; processed: number; actions: number }> {
     try {
       // In a real implementation, this would trigger a backend job.
       // For now, we simulate success to trigger the frontend refetch (which is the actual 'sync' effect).
-      console.log(
-        `[WorkflowApiService] Running automation${scope ? ` for scope: ${scope}` : ""}`
+      console.warn(
+        `[WorkflowApiService] Running automation${scope ? ` for scope: ${scope}` : ""}`,
       );
       await new Promise((resolve) => setTimeout(resolve, 500));
       return { success: true, processed: 0, actions: 0 };
@@ -691,7 +695,6 @@ export class WorkflowApiService {
       throw error;
     }
   }
-
 
   // =============================================================================
   // ADVANCED FEATURES (10 Elite Features)
@@ -704,12 +707,12 @@ export class WorkflowApiService {
     this.validateId(id, "getEnhanced");
     try {
       return await apiClient.get<EnhancedWorkflowInstance>(
-        `${this.baseUrl}/advanced/${id}`
+        `${this.baseUrl}/advanced/${id}`,
       );
     } catch (error) {
       console.error("[WorkflowApiService.getEnhanced] Error:", error);
       throw new Error(
-        `Failed to fetch enhanced workflow instance with id: ${id}`
+        `Failed to fetch enhanced workflow instance with id: ${id}`,
       );
     }
   }
@@ -719,12 +722,12 @@ export class WorkflowApiService {
    */
   async getAnalytics(
     id: string,
-    params: { start: string; end: string }
+    params: { start: string; end: string },
   ): Promise<WorkflowAnalytics> {
     this.validateId(id, "getAnalytics");
     try {
       return await apiClient.get<WorkflowAnalytics>(
-        `${this.baseUrl}/advanced/${id}/analytics?start=${params.start}&end=${params.end}`
+        `${this.baseUrl}/advanced/${id}/analytics?start=${params.start}&end=${params.end}`,
       );
     } catch (error) {
       console.error("[WorkflowApiService.getAnalytics] Error:", error);
@@ -739,7 +742,7 @@ export class WorkflowApiService {
     this.validateId(id, "getAISuggestions");
     try {
       return await apiClient.get<AIWorkflowSuggestion[]>(
-        `${this.baseUrl}/advanced/${id}/ai/suggestions`
+        `${this.baseUrl}/advanced/${id}/ai/suggestions`,
       );
     } catch (error) {
       console.error("[WorkflowApiService.getAISuggestions] Error:", error);
@@ -752,14 +755,14 @@ export class WorkflowApiService {
    */
   async applyAISuggestion(
     workflowId: string,
-    suggestionId: string
+    suggestionId: string,
   ): Promise<EnhancedWorkflowInstance> {
     this.validateId(workflowId, "applyAISuggestion");
     this.validateId(suggestionId, "applyAISuggestion");
     try {
       return await apiClient.post<EnhancedWorkflowInstance>(
         `${this.baseUrl}/advanced/${workflowId}/ai/suggestions/${suggestionId}/apply`,
-        {}
+        {},
       );
     } catch (error) {
       console.error("[WorkflowApiService.applyAISuggestion] Error:", error);
@@ -772,13 +775,13 @@ export class WorkflowApiService {
    */
   async createSnapshot(
     workflowId: string,
-    data: { type: string; label?: string }
+    data: { type: string; label?: string },
   ): Promise<WorkflowSnapshot> {
     this.validateId(workflowId, "createSnapshot");
     try {
       return await apiClient.post<WorkflowSnapshot>(
         `${this.baseUrl}/advanced/${workflowId}/snapshots`,
-        data
+        data,
       );
     } catch (error) {
       console.error("[WorkflowApiService.createSnapshot] Error:", error);
@@ -791,14 +794,14 @@ export class WorkflowApiService {
    */
   async rollbackToSnapshot(
     workflowId: string,
-    snapshotId: string
+    snapshotId: string,
   ): Promise<RollbackOperation> {
     this.validateId(workflowId, "rollbackToSnapshot");
     this.validateId(snapshotId, "rollbackToSnapshot");
     try {
       return await apiClient.post<RollbackOperation>(
         `${this.baseUrl}/advanced/${workflowId}/rollback`,
-        { snapshotId }
+        { snapshotId },
       );
     } catch (error) {
       console.error("[WorkflowApiService.rollbackToSnapshot] Error:", error);
@@ -813,12 +816,12 @@ export class WorkflowApiService {
     this.validateId(workflowId, "getVersions");
     try {
       return await apiClient.get<WorkflowVersion[]>(
-        `${this.baseUrl}/advanced/${workflowId}/versions`
+        `${this.baseUrl}/advanced/${workflowId}/versions`,
       );
     } catch (error) {
       console.error("[WorkflowApiService.getVersions] Error:", error);
       throw new Error(
-        `Failed to fetch workflow versions for id: ${workflowId}`
+        `Failed to fetch workflow versions for id: ${workflowId}`,
       );
     }
   }
@@ -830,12 +833,12 @@ export class WorkflowApiService {
     this.validateId(workflowId, "getSLAStatuses");
     try {
       return await apiClient.get<SLAStatus[]>(
-        `${this.baseUrl}/advanced/${workflowId}/sla/statuses`
+        `${this.baseUrl}/advanced/${workflowId}/sla/statuses`,
       );
     } catch (error) {
       console.error("[WorkflowApiService.getSLAStatuses] Error:", error);
       throw new Error(
-        `Failed to fetch SLA statuses for workflow id: ${workflowId}`
+        `Failed to fetch SLA statuses for workflow id: ${workflowId}`,
       );
     }
   }
@@ -844,17 +847,17 @@ export class WorkflowApiService {
    * Get external trigger for a workflow
    */
   async getExternalTrigger(
-    workflowId: string
+    workflowId: string,
   ): Promise<ExternalTrigger | null> {
     this.validateId(workflowId, "getExternalTrigger");
     try {
       return await apiClient.get<ExternalTrigger>(
-        `${this.baseUrl}/advanced/${workflowId}/triggers/external`
+        `${this.baseUrl}/advanced/${workflowId}/triggers/external`,
       );
     } catch {
       // Return null if not found instead of throwing
       console.warn(
-        "[WorkflowApiService.getExternalTrigger] No external trigger found"
+        "[WorkflowApiService.getExternalTrigger] No external trigger found",
       );
       return null;
     }
@@ -865,13 +868,13 @@ export class WorkflowApiService {
    */
   async createWebhookTrigger(
     workflowId: string,
-    config: { name: string; description?: string }
+    config: { name: string; description?: string },
   ): Promise<ExternalTrigger> {
     this.validateId(workflowId, "createWebhookTrigger");
     try {
       return await apiClient.post<ExternalTrigger>(
         `${this.baseUrl}/advanced/${workflowId}/triggers/webhook`,
-        config
+        config,
       );
     } catch (error) {
       console.error("[WorkflowApiService.createWebhookTrigger] Error:", error);

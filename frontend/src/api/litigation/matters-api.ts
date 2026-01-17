@@ -16,6 +16,18 @@ export interface MatterStatistics {
 export class MattersApiService {
   private readonly baseUrl = "/matters";
 
+  private formatOpposingCounsel(
+    value: Matter["opposingCounsel"],
+  ): string | undefined {
+    if (Array.isArray(value)) {
+      const safeValues = value.filter(
+        (item): item is string => typeof item === "string",
+      );
+      return safeValues.join(", ");
+    }
+    return typeof value === "string" ? value : undefined;
+  }
+
   /**
    * Get all matters
    */
@@ -49,7 +61,7 @@ export class MattersApiService {
    */
   async getById(id: MatterId): Promise<Matter> {
     const response = await apiClient.get<{ data?: Matter } | Matter>(
-      `${this.baseUrl}/${id}`
+      `${this.baseUrl}/${id}`,
     );
     if ("data" in response && response.data) {
       return response.data;
@@ -96,9 +108,7 @@ export class MattersApiService {
       tags: matter.tags,
       // Backend accepts opposingPartyName, opposingCounsel as string, opposingCounselFirm
       opposingPartyName: matter.opposingPartyName,
-      opposingCounsel: Array.isArray(matter.opposingCounsel)
-        ? matter.opposingCounsel.join(", ")
-        : matter.opposingCounsel,
+      opposingCounsel: this.formatOpposingCounsel(matter.opposingCounsel),
       opposingCounselFirm: matter.opposingCounselFirm,
       // Backend uses boolean conflictCheckCompleted and optional conflictCheckDate
       conflictCheckCompleted: matter.conflictCheckCompleted || false,
@@ -126,7 +136,7 @@ export class MattersApiService {
 
     const response = await apiClient.post<{ data?: Matter } | Matter>(
       this.baseUrl,
-      createDto
+      createDto,
     );
     // Backend returns { success, data, meta } - extract the matter from data
     if ("data" in response && response.data) {
@@ -173,9 +183,7 @@ export class MattersApiService {
       practiceArea: matter.practiceArea,
       tags: matter.tags,
       opposingPartyName: matter.opposingPartyName,
-      opposingCounsel: Array.isArray(matter.opposingCounsel)
-        ? matter.opposingCounsel.join(", ")
-        : matter.opposingCounsel,
+      opposingCounsel: this.formatOpposingCounsel(matter.opposingCounsel),
       opposingCounselFirm: matter.opposingCounselFirm,
       conflictCheckCompleted: matter.conflictCheckCompleted,
       conflictCheckDate: matter.conflictCheckDate,
@@ -194,7 +202,7 @@ export class MattersApiService {
 
     const response = await apiClient.patch<{ data?: Matter } | Matter>(
       `${this.baseUrl}/${id}`,
-      updateDto
+      updateDto,
     );
     if ("data" in response && response.data) {
       return response.data;
@@ -244,13 +252,13 @@ export class MattersApiService {
   async getCalendarEvents(
     startDate: string,
     endDate?: string,
-    matterIds?: string[]
+    matterIds?: string[],
   ): Promise<unknown> {
     const params = new URLSearchParams({ startDate });
     if (endDate) params.append("endDate", endDate);
     if (matterIds?.length) params.append("matterIds", matterIds.join(","));
     const response = await apiClient.get<unknown>(
-      `${this.baseUrl}/calendar/events?${params.toString()}`
+      `${this.baseUrl}/calendar/events?${params.toString()}`,
     );
     return (response as { data?: unknown }).data || response;
   }

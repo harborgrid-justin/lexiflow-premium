@@ -85,6 +85,21 @@ export function NotificationCenter({
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
+  const toStyleValue = (value: unknown) => String(value);
+  const toClassValue = (value: unknown) => String(value);
+  const surfaceMuted = toStyleValue(theme.surface.muted);
+  const surfaceBase = toStyleValue(theme.surface.base);
+  const surfaceElevated = toStyleValue(theme.surface.elevated);
+  const surfaceHover = toStyleValue(theme.surface.hover);
+  const borderDefault = toStyleValue(theme.border.default);
+  const textPrimary = toStyleValue(theme.text.primary);
+  const textSecondary = toStyleValue(theme.text.secondary);
+  const textMuted = toStyleValue(theme.text.muted);
+  const primaryDefault = toStyleValue(theme.primary.DEFAULT);
+  const statusErrorText = toStyleValue(theme.status.error.text);
+  const colorsInfoClass = toClassValue(theme.colors.info);
+  const borderDefaultClass = toClassValue(theme.border.default);
+  const statusErrorTextClass = toClassValue(theme.status.error.text);
 
   // Get notification icon
   const getNotificationIcon = (notification: UINotification) => {
@@ -93,15 +108,17 @@ export function NotificationCenter({
     // Check entity type
     if ('relatedEntityType' in notification) {
       const entityType = (notification as Record<string, unknown>).relatedEntityType;
-      switch (entityType) {
-        case 'case':
-          return <Briefcase className={cn(iconClass, theme.colors.info)} />;
-        case 'document':
-          return <FileText className={cn(iconClass, 'text-purple-500')} />;
-        case 'calendar':
-          return <Calendar className={cn(iconClass, 'text-orange-500')} />;
-        case 'billing':
-          return <CreditCard className={cn(iconClass, 'text-green-500')} />;
+      if (typeof entityType === 'string') {
+        switch (entityType) {
+          case 'case':
+            return <Briefcase className={cn(iconClass, colorsInfoClass)} />;
+          case 'document':
+            return <FileText className={cn(iconClass, 'text-purple-500')} />;
+          case 'calendar':
+            return <Calendar className={cn(iconClass, 'text-orange-500')} />;
+          case 'billing':
+            return <CreditCard className={cn(iconClass, 'text-green-500')} />;
+        }
       }
     }
 
@@ -114,7 +131,7 @@ export function NotificationCenter({
       case 'warning':
         return <AlertTriangle className={cn(iconClass, 'text-amber-500')} />;
       default:
-        return <Info className={cn(iconClass, theme.colors.info)} />;
+        return <Info className={cn(iconClass, colorsInfoClass)} />;
     }
   };
 
@@ -204,14 +221,14 @@ export function NotificationCenter({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        backgroundColor: theme.surface.muted,
+        backgroundColor: surfaceMuted,
       }}
       className={className}
     >
       {/* Header */}
       <div style={{
-        backgroundColor: theme.surface.base,
-        borderBottom: `1px solid ${theme.border.default}`,
+        backgroundColor: surfaceBase,
+        borderBottom: `1px solid ${borderDefault}`,
         padding: tokens.spacing.normal['2xl'],
       }}>
         <div style={{
@@ -224,7 +241,7 @@ export function NotificationCenter({
             <h1 style={{
               fontSize: tokens.typography.fontSize['2xl'],
               fontWeight: tokens.typography.fontWeight.bold,
-              color: theme.text.primary,
+              color: textPrimary,
               display: 'flex',
               alignItems: 'center',
               gap: tokens.spacing.normal.md,
@@ -234,7 +251,7 @@ export function NotificationCenter({
             </h1>
             <p style={{
               fontSize: tokens.typography.fontSize.sm,
-              color: theme.text.secondary,
+              color: textSecondary,
               marginTop: tokens.spacing.compact.xs,
             }}>
               {unreadCount} unread of {totalCount} total notifications
@@ -249,13 +266,17 @@ export function NotificationCenter({
                   padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: theme.text.secondary,
-                  backgroundColor: theme.surface.elevated,
+                  color: textSecondary,
+                  backgroundColor: surfaceElevated,
                   borderRadius: tokens.borderRadius.lg,
                 }}
                 className="transition-colors focus:outline-none focus:ring-2"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface.elevated}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = surfaceHover;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = surfaceElevated;
+                }}
               >
                 <Settings className="h-4 w-4 inline mr-2" />
                 Preferences
@@ -268,8 +289,8 @@ export function NotificationCenter({
                   padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: theme.surface.base,
-                  backgroundColor: theme.primary.DEFAULT,
+                  color: surfaceBase,
+                  backgroundColor: primaryDefault,
                   borderRadius: tokens.borderRadius.lg,
                 }}
                 className="transition-opacity focus:outline-none focus:ring-2"
@@ -286,7 +307,7 @@ export function NotificationCenter({
         {/* Search and Filters */}
         <div className="flex items-center gap-3">
           <div className="flex-1 relative">
-            <Search style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', width: '1rem', height: '1rem', color: theme.text.muted }} />
+            <Search style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', width: '1rem', height: '1rem', color: textMuted }} />
             <input
               type="text"
               placeholder="Search notifications..."
@@ -298,11 +319,11 @@ export function NotificationCenter({
                 paddingRight: '1rem',
                 paddingTop: tokens.spacing.compact.sm,
                 paddingBottom: tokens.spacing.compact.sm,
-                backgroundColor: theme.surface.elevated,
+                backgroundColor: surfaceElevated,
                 border: 'none',
                 borderRadius: tokens.borderRadius.lg,
                 fontSize: tokens.typography.fontSize.sm,
-                color: theme.text.primary
+                color: textPrimary
               }}
               className="focus:outline-none focus:ring-2"
             />
@@ -314,14 +335,18 @@ export function NotificationCenter({
                   right: '0.75rem',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: theme.text.muted,
+                  color: textMuted,
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
                   transition: 'color 0.2s'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.color = theme.text.secondary}
-                onMouseLeave={(e) => e.currentTarget.style.color = theme.text.muted}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = textSecondary;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = textMuted;
+                }}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -339,15 +364,23 @@ export function NotificationCenter({
                 display: 'flex',
                 alignItems: 'center',
                 gap: tokens.spacing.compact.xs,
-                backgroundColor: showFilters ? theme.primary.DEFAULT + '20' : theme.surface.elevated,
-                color: showFilters ? theme.primary.DEFAULT : theme.text.secondary,
+                backgroundColor: showFilters ? `${primaryDefault}20` : surfaceElevated,
+                color: showFilters ? primaryDefault : textSecondary,
                 border: 'none',
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
               className="focus:outline-none focus:ring-2"
-              onMouseEnter={(e) => !showFilters && (e.currentTarget.style.backgroundColor = theme.surface.hover)}
-              onMouseLeave={(e) => !showFilters && (e.currentTarget.style.backgroundColor = theme.surface.elevated)}
+              onMouseEnter={(e) => {
+                if (!showFilters) {
+                  e.currentTarget.style.backgroundColor = surfaceHover;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!showFilters) {
+                  e.currentTarget.style.backgroundColor = surfaceElevated;
+                }
+              }}
             >
               <Filter className="h-4 w-4" />
               Sort
@@ -364,10 +397,10 @@ export function NotificationCenter({
                   right: 0,
                   marginTop: tokens.spacing.compact.xs,
                   width: '12rem',
-                  backgroundColor: theme.surface.base,
+                  backgroundColor: surfaceBase,
                   borderRadius: tokens.borderRadius.lg,
                   boxShadow: tokens.shadows.xl,
-                  border: `1px solid ${theme.border.default}`,
+                  border: `1px solid ${borderDefault}`,
                   padding: `${tokens.spacing.compact.sm} 0`,
                   zIndex: 10
                 }}
@@ -384,14 +417,18 @@ export function NotificationCenter({
                       padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
                       textAlign: 'left',
                       fontSize: tokens.typography.fontSize.sm,
-                      backgroundColor: sortBy === option ? theme.primary.DEFAULT + '15' : 'transparent',
-                      color: sortBy === option ? theme.primary.DEFAULT : theme.text.secondary,
+                      backgroundColor: sortBy === option ? `${primaryDefault}15` : 'transparent',
+                      color: sortBy === option ? primaryDefault : textSecondary,
                       fontWeight: sortBy === option ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
                       border: 'none',
                       cursor: 'pointer',
                       transition: 'all 0.2s'
                     }}
-                    onMouseEnter={(e) => sortBy !== option && (e.currentTarget.style.backgroundColor = theme.surface.hover)}
+                    onMouseEnter={(e) => {
+                      if (sortBy !== option) {
+                        e.currentTarget.style.backgroundColor = surfaceHover;
+                      }
+                    }}
                     onMouseLeave={(e) => sortBy !== option && (e.currentTarget.style.backgroundColor = 'transparent')}
                   >
                     {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -404,7 +441,7 @@ export function NotificationCenter({
       </div>
 
       {/* Filter Tabs */}
-      <div style={{ backgroundColor: theme.surface.base, borderBottom: `1px solid ${theme.border.default}`, padding: `0 ${tokens.spacing.normal['2xl']}`, overflowX: 'auto' }}>
+      <div style={{ backgroundColor: surfaceBase, borderBottom: `1px solid ${borderDefault}`, padding: `0 ${tokens.spacing.normal['2xl']}`, overflowX: 'auto' }}>
         <div className="flex gap-1 min-w-max">
           {filterTabs.map((tab) => (
             <button
@@ -414,16 +451,24 @@ export function NotificationCenter({
                 padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal.lg}`,
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
-                color: selectedFilter === tab.id ? theme.primary.DEFAULT : theme.text.secondary,
+                color: selectedFilter === tab.id ? primaryDefault : textSecondary,
                 whiteSpace: 'nowrap',
                 background: 'none',
                 border: 'none',
-                borderBottom: `2px solid ${selectedFilter === tab.id ? theme.primary.DEFAULT : 'transparent'}`,
+                borderBottom: `2px solid ${selectedFilter === tab.id ? primaryDefault : 'transparent'}`,
                 cursor: 'pointer',
                 transition: 'color 0.2s'
               }}
-              onMouseEnter={(e) => selectedFilter !== tab.id && (e.currentTarget.style.color = theme.text.primary)}
-              onMouseLeave={(e) => selectedFilter !== tab.id && (e.currentTarget.style.color = theme.text.secondary)}
+              onMouseEnter={(e) => {
+                if (selectedFilter !== tab.id) {
+                  e.currentTarget.style.color = textPrimary;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (selectedFilter !== tab.id) {
+                  e.currentTarget.style.color = textSecondary;
+                }
+              }}
             >
               {tab.label}
               {tab.count !== undefined && (
@@ -433,8 +478,8 @@ export function NotificationCenter({
                     padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
                     fontSize: tokens.typography.fontSize.xs,
                     borderRadius: tokens.borderRadius.full,
-                    backgroundColor: selectedFilter === tab.id ? theme.primary.DEFAULT + '20' : theme.surface.elevated,
-                    color: selectedFilter === tab.id ? theme.primary.DEFAULT : theme.text.muted
+                    backgroundColor: selectedFilter === tab.id ? `${primaryDefault}20` : surfaceElevated,
+                    color: selectedFilter === tab.id ? primaryDefault : textMuted
                   }}
                 >
                   {tab.count}
@@ -453,8 +498,8 @@ export function NotificationCenter({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             style={{
-              backgroundColor: theme.primary.DEFAULT + '15',
-              borderBottom: `1px solid ${theme.primary.DEFAULT}40`,
+              backgroundColor: `${primaryDefault}15`,
+              borderBottom: `1px solid ${primaryDefault}40`,
               padding: `${tokens.spacing.normal.md} ${tokens.spacing.normal['2xl']}`,
               display: 'flex',
               alignItems: 'center',
@@ -462,12 +507,12 @@ export function NotificationCenter({
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.normal.lg }}>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.primary.DEFAULT }}>
+              <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: primaryDefault }}>
                 {selectedIds.size} selected
               </span>
               <button
                 onClick={handleBulkMarkAsRead}
-                style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.primary.DEFAULT, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}
+                style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: primaryDefault, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}
                 onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
                 onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
               >
@@ -475,7 +520,7 @@ export function NotificationCenter({
               </button>
               <button
                 onClick={handleBulkDelete}
-                style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.status.error.text, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}
+                style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: statusErrorText, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}
                 onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
                 onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
               >
@@ -484,7 +529,7 @@ export function NotificationCenter({
             </div>
             <button
               onClick={clearSelection}
-              style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: theme.primary.DEFAULT, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}
+              style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: primaryDefault, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}
               onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
               onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
             >
@@ -502,7 +547,7 @@ export function NotificationCenter({
               display: 'inline-block',
               width: '2rem',
               height: '2rem',
-              border: `4px solid ${theme.primary.DEFAULT}`,
+              border: `4px solid ${primaryDefault}`,
               borderRightColor: 'transparent',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite'
@@ -510,13 +555,13 @@ export function NotificationCenter({
           </div>
         ) : filteredAndSortedNotifications.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '5rem 0' }}>
-            <Bell style={{ width: '4rem', height: '4rem', margin: '0 auto 1rem', color: theme.text.muted }} />
-            <h3 style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: theme.text.secondary, marginBottom: tokens.spacing.compact.sm }}>
+            <Bell style={{ width: '4rem', height: '4rem', margin: '0 auto 1rem', color: textMuted }} />
+            <h3 style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: textSecondary, marginBottom: tokens.spacing.compact.sm }}>
               {searchQuery || selectedFilter !== 'all'
                 ? 'No notifications found'
                 : 'No notifications'}
             </h3>
-            <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.muted }}>
+            <p style={{ fontSize: tokens.typography.fontSize.sm, color: textMuted }}>
               {searchQuery || selectedFilter !== 'all'
                 ? 'Try adjusting your filters'
                 : "You're all caught up!"}
@@ -534,13 +579,13 @@ export function NotificationCenter({
                   exit={{ opacity: 0, x: -100 }}
                   transition={{ duration: 0.2, delay: index * 0.02 }}
                   style={{
-                    backgroundColor: theme.surface.base,
+                    backgroundColor: surfaceBase,
                     borderRadius: tokens.borderRadius.xl,
-                    border: `1px solid ${!notification.read ? theme.primary.DEFAULT + '40' : theme.border.default}`,
+                    border: `1px solid ${!notification.read ? `${primaryDefault}40` : borderDefault}`,
                     padding: tokens.spacing.normal.xl,
                     transition: 'all 0.2s',
                     boxShadow: !notification.read ? tokens.shadows.sm : 'none',
-                    outline: selectedIds.has(notification.id) ? `2px solid ${theme.primary.DEFAULT}` : 'none',
+                    outline: selectedIds.has(notification.id) ? `2px solid ${primaryDefault}` : 'none',
                     outlineOffset: '2px'
                   }}
                   className="group"
@@ -551,7 +596,7 @@ export function NotificationCenter({
                       type="checkbox"
                       checked={selectedIds.has(notification.id)}
                       onChange={() => toggleSelection(notification.id)}
-                      className={cn("mt-1 h-4 w-4 rounded cursor-pointer", theme.border.default, theme.colors.info)}
+                      className={cn("mt-1 h-4 w-4 rounded cursor-pointer", borderDefaultClass, colorsInfoClass)}
                       aria-label={`Select ${notification.title}`}
                     />
 
@@ -563,13 +608,13 @@ export function NotificationCenter({
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: tokens.spacing.normal.md, marginBottom: tokens.spacing.compact.sm }}>
-                        <h3 style={{ fontWeight: tokens.typography.fontWeight.semibold, color: theme.text.primary }}>
+                        <h3 style={{ fontWeight: tokens.typography.fontWeight.semibold, color: textPrimary }}>
                           {notification.title}
                           {!notification.read && (
-                            <span style={{ display: 'inline-block', marginLeft: tokens.spacing.compact.xs, width: '0.5rem', height: '0.5rem', backgroundColor: theme.primary.DEFAULT, borderRadius: '50%' }} />
+                            <span style={{ display: 'inline-block', marginLeft: tokens.spacing.compact.xs, width: '0.5rem', height: '0.5rem', backgroundColor: primaryDefault, borderRadius: '50%' }} />
                           )}
                         </h3>
-                        <span style={{ fontSize: tokens.typography.fontSize.xs, color: theme.text.muted, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: tokens.spacing.compact.xs }}>
+                        <span style={{ fontSize: tokens.typography.fontSize.xs, color: textMuted, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: tokens.spacing.compact.xs }}>
                           <Clock className="h-3 w-3" />
                           {formatDistanceToNow(new Date(notification.timestamp), {
                             addSuffix: true,
@@ -577,7 +622,7 @@ export function NotificationCenter({
                         </span>
                       </div>
 
-                      <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.secondary, marginBottom: tokens.spacing.normal.md }}>
+                      <p style={{ fontSize: tokens.typography.fontSize.sm, color: textSecondary, marginBottom: tokens.spacing.normal.md }}>
                         {notification.message}
                       </p>
 
@@ -638,7 +683,7 @@ export function NotificationCenter({
                       )}
                       <button
                         onClick={() => onDelete(notification.id)}
-                        className={cn("p-2 rounded-lg focus:outline-none focus:ring-2", 'hover:bg-red-100 dark:hover:bg-red-900/30', theme.status.error.text, 'focus:ring-red-500')}
+                        className={cn("p-2 rounded-lg focus:outline-none focus:ring-2", 'hover:bg-red-100 dark:hover:bg-red-900/30', statusErrorTextClass, 'focus:ring-red-500')}
                         title="Delete"
                       >
                         <Trash2 className="h-4 w-4" />

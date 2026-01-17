@@ -20,6 +20,27 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
   const { theme, tokens } = useTheme();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
+  const toStyleValue = (value: unknown) => String(value);
+  const filterValue = (value: unknown) => (typeof value === 'string' ? value : '');
+  const borderDefault = toStyleValue(theme.border.default);
+  const primaryDefault = toStyleValue(theme.primary.DEFAULT);
+  const surfaceBase = toStyleValue(theme.surface.base);
+  const surfaceElevated = toStyleValue(theme.surface.elevated);
+  const surfaceHover = toStyleValue(theme.surface.hover);
+  const surfaceInput = toStyleValue(theme.surface.input);
+  const surfaceMuted = toStyleValue(theme.surface.muted);
+  const surfaceRaised = toStyleValue(theme.surface.raised);
+  const textPrimary = toStyleValue(theme.text.primary);
+  const textSecondary = toStyleValue(theme.text.secondary);
+  const textMuted = toStyleValue(theme.text.muted);
+  const statusSuccessBg = toStyleValue(theme.status.success.bg);
+  const statusSuccessText = toStyleValue(theme.status.success.text);
+  const statusWarningBg = toStyleValue(theme.status.warning.bg);
+  const statusWarningText = toStyleValue(theme.status.warning.text);
+  const statusErrorText = toStyleValue(theme.status.error.text);
+  const blue400 = toStyleValue(tokens.colors.blue400);
+  const blue600 = toStyleValue(tokens.colors.blue600);
+  const indigo400 = toStyleValue(tokens.colors.indigo400);
 
   const toggleSelection = (id: string) => {
     setSelectedIds((prev) =>
@@ -37,11 +58,11 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      Draft: { bg: theme.surface.muted, text: theme.text.secondary },
-      Submitted: { bg: tokens.colors.blue400 + '20', text: tokens.colors.blue600 },
-      Approved: { bg: theme.status.success.bg, text: theme.status.success.text },
-      Billed: { bg: tokens.colors.indigo400 + '20', text: tokens.colors.indigo400 },
-      Unbilled: { bg: theme.status.warning.bg, text: theme.status.warning.text },
+      Draft: { bg: surfaceMuted, text: textSecondary },
+      Submitted: { bg: `${blue400}20`, text: blue600 },
+      Approved: { bg: statusSuccessBg, text: statusSuccessText },
+      Billed: { bg: `${indigo400}20`, text: indigo400 },
+      Unbilled: { bg: statusWarningBg, text: statusWarningText },
     };
 
     const statusStyle = styles[status as keyof typeof styles] || styles.Draft;
@@ -72,14 +93,14 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          style={{ backgroundColor: theme.surface.elevated, borderColor: theme.border.default, color: theme.text.primary }}
+          style={{ backgroundColor: surfaceElevated, borderColor: borderDefault, color: textPrimary }}
           className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:opacity-90 transition-all"
         >
           <Filter className="h-4 w-4" />
           Filters
         </button>
 
-        <div className="flex items-center gap-4 text-sm" style={{ color: theme.text.secondary }}>
+        <div className="flex items-center gap-4 text-sm" style={{ color: textSecondary }}>
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" />
             <span className="font-medium">{totalHours.toFixed(2)}</span> hours
@@ -92,16 +113,16 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
       </div>
 
       {showFilters && (
-        <Form method="get" className="rounded-lg border p-4" style={{ borderColor: theme.border.default, backgroundColor: theme.surface.raised }}>
+        <Form method="get" className="rounded-lg border p-4" style={{ borderColor: borderDefault, backgroundColor: surfaceRaised }}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div>
-              <label className="block text-sm font-medium" style={{ color: theme.text.primary }}>
+              <label className="block text-sm font-medium" style={{ color: textPrimary }}>
                 Case
               </label>
               <select
                 name="caseId"
-                defaultValue={(filters?.caseId as string) || ''}
-                style={{ backgroundColor: theme.surface.input, borderColor: theme.border.default, color: theme.text.primary }}
+                defaultValue={filterValue(filters?.caseId)}
+                style={{ backgroundColor: surfaceInput, borderColor: borderDefault, color: textPrimary }}
                 className="mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 transition-all"
               >
                 <option value="">All Cases</option>
@@ -111,13 +132,13 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
             </div>
 
             <div>
-              <label className="block text-sm font-medium" style={{ color: theme.text.primary }}>
+              <label className="block text-sm font-medium" style={{ color: textPrimary }}>
                 Status
               </label>
               <select
                 name="status"
-                defaultValue={(filters?.status as string) || ''}
-                style={{ backgroundColor: theme.surface.input, borderColor: theme.border.default, color: theme.text.primary }}
+                defaultValue={filterValue(filters?.status)}
+                style={{ backgroundColor: surfaceInput, borderColor: borderDefault, color: textPrimary }}
                 className="mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 transition-all"
               >
                 <option value="">All Statuses</option>
@@ -134,24 +155,24 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
-                color: theme.text.primary,
+                color: textPrimary,
               }}>
                 Billable
               </label>
               <select
                 name="billable"
-                defaultValue={(filters?.billable as string) || ''}
+                defaultValue={filterValue(filters?.billable)}
                 style={{
                   marginTop: tokens.spacing.compact.xs,
                   display: 'block',
                   width: '100%',
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${theme.border.default}`,
-                  backgroundColor: theme.surface.input,
+                  border: `1px solid ${borderDefault}`,
+                  backgroundColor: surfaceInput,
                   padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
                   fontSize: tokens.typography.fontSize.sm,
                   boxShadow: tokens.shadows.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}
                 className="focus:outline-none focus:ring-2 transition-all"
               >
@@ -167,11 +188,11 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 style={{
                   width: '100%',
                   borderRadius: tokens.borderRadius.md,
-                  backgroundColor: theme.primary.DEFAULT,
+                  backgroundColor: primaryDefault,
                   padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: theme.surface.base,
+                  color: surfaceBase,
                   boxShadow: tokens.shadows.sm,
                 }}
                 className="transition-opacity focus:outline-none focus:ring-2"
@@ -192,14 +213,14 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
           alignItems: 'center',
           justifyContent: 'space-between',
           borderRadius: tokens.borderRadius.lg,
-          border: `1px solid ${theme.primary.DEFAULT}30`,
-          backgroundColor: theme.primary.DEFAULT + '15',
+          border: `1px solid ${primaryDefault}30`,
+          backgroundColor: `${primaryDefault}15`,
           padding: tokens.spacing.normal.lg,
         }}>
           <span style={{
             fontSize: tokens.typography.fontSize.sm,
             fontWeight: tokens.typography.fontWeight.medium,
-            color: theme.primary.DEFAULT,
+            color: primaryDefault,
           }}>
             {selectedIds.length} selected
           </span>
@@ -214,11 +235,11 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 alignItems: 'center',
                 gap: tokens.spacing.normal.sm,
                 borderRadius: tokens.borderRadius.md,
-                backgroundColor: theme.status.success.text,
+                backgroundColor: statusSuccessText,
                 padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
-                color: theme.surface.base,
+                color: surfaceBase,
                 boxShadow: tokens.shadows.sm,
               }}
               className="transition-opacity"
@@ -236,15 +257,15 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
       <div style={{
         overflow: 'hidden',
         borderRadius: tokens.borderRadius.lg,
-        border: `1px solid ${theme.border.default}`,
-        backgroundColor: theme.surface.base,
+        border: `1px solid ${borderDefault}`,
+        backgroundColor: surfaceBase,
         boxShadow: tokens.shadows.sm,
       }}>
         <table
-          style={{ minWidth: '100%', borderColor: theme.border.default }}
+          style={{ minWidth: '100%', borderColor: borderDefault }}
           className="divide-y"
         >
-          <thead style={{ backgroundColor: theme.surface.elevated }}>
+          <thead style={{ backgroundColor: surfaceElevated }}>
             <tr>
               <th style={{ padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.lg}` }}>
                 <input
@@ -261,7 +282,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Date
               </th>
@@ -272,7 +293,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Case
               </th>
@@ -283,7 +304,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Description
               </th>
@@ -294,7 +315,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Hours
               </th>
@@ -305,7 +326,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Rate
               </th>
@@ -316,7 +337,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Amount
               </th>
@@ -327,7 +348,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Status
               </th>
@@ -338,20 +359,22 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: theme.text.muted,
+                color: textMuted,
               }}>
                 Actions
               </th>
             </tr>
           </thead>
           <tbody
-            style={{ backgroundColor: theme.surface.base, borderColor: theme.border.default }}
+            style={{ backgroundColor: surfaceBase, borderColor: borderDefault }}
             className="divide-y"
           >
             {entries.map((entry) => (
               <tr key={entry.id}
                 className="transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = surfaceHover;
+                }}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <td style={{ padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal.lg}` }}>
@@ -366,21 +389,21 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                   whiteSpace: 'nowrap',
                   padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   {new Date(entry.date).toLocaleDateString()}
                 </td>
                 <td style={{
                   padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   {entry.caseId}
                 </td>
                 <td style={{
                   padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.secondary,
+                  color: textSecondary,
                 }}>
                   <div className="max-w-xs truncate" title={entry.description}>
                     {entry.description}
@@ -389,7 +412,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                     <div style={{
                       marginTop: tokens.spacing.compact.xs,
                       fontSize: tokens.typography.fontSize.xs,
-                      color: theme.text.muted,
+                      color: textMuted,
                     }}>
                       LEDES: {entry.ledesCode}
                     </div>
@@ -399,7 +422,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                   whiteSpace: 'nowrap',
                   padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   {entry.duration.toFixed(2)}
                 </td>
@@ -407,7 +430,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                   whiteSpace: 'nowrap',
                   padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
                   fontSize: tokens.typography.fontSize.sm,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   ${entry.rate}
                 </td>
@@ -416,7 +439,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                   padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal['2xl']}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: theme.text.primary,
+                  color: textPrimary,
                 }}>
                   ${entry.total.toLocaleString()}
                 </td>
@@ -440,7 +463,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                         type="submit"
                         name="intent"
                         value="approve"
-                        style={{ color: theme.status.success.text }}
+                        style={{ color: statusSuccessText }}
                         className="transition-opacity"
                         onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
                         onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
@@ -450,7 +473,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                     )}
                     <Link
                       to={`/billing/time/${entry.id}/edit`}
-                      style={{ color: theme.primary.DEFAULT }}
+                      style={{ color: primaryDefault }}
                       className="transition-opacity"
                       onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
                       onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
@@ -461,7 +484,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                       type="submit"
                       name="intent"
                       value="delete"
-                      style={{ color: theme.status.error.text }}
+                      style={{ color: statusErrorText }}
                       className="transition-opacity"
                       onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
                       onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
@@ -489,20 +512,20 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
               margin: '0 auto',
               height: '3rem',
               width: '3rem',
-              color: theme.text.muted,
+              color: textMuted,
             }} />
             <h3 style={{
               marginTop: tokens.spacing.compact.sm,
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
-              color: theme.text.primary,
+              color: textPrimary,
             }}>
               No time entries
             </h3>
             <p style={{
               marginTop: tokens.spacing.compact.xs,
               fontSize: tokens.typography.fontSize.sm,
-              color: theme.text.muted,
+              color: textMuted,
             }}>
               Get started by creating a new time entry.
             </p>

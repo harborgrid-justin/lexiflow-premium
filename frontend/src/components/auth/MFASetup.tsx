@@ -17,6 +17,31 @@ interface MFASetupProps {
   onCancel?: () => void;
 }
 
+type MFASetupData = {
+  qrCode: string;
+  secret: string;
+  backupCodes: string[];
+};
+
+const toMFASetupData = (value: unknown): MFASetupData => {
+  if (!value || typeof value !== "object") {
+    return { qrCode: "", secret: "", backupCodes: [] };
+  }
+
+  const record = value as Record<string, unknown>;
+  const backupCodes = Array.isArray(record.backupCodes)
+    ? record.backupCodes.filter(
+      (code): code is string => typeof code === "string",
+    )
+    : [];
+
+  return {
+    qrCode: typeof record.qrCode === "string" ? record.qrCode : "",
+    secret: typeof record.secret === "string" ? record.secret : "",
+    backupCodes,
+  };
+};
+
 export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
   const { theme, tokens } = useTheme();
   const { enableMFA } = useAuthActions();
@@ -34,10 +59,10 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
     setError(null);
 
     try {
-      const setup = await enableMFA();
+      const setup = toMFASetupData(await enableMFA());
       setQrCode(setup.qrCode);
       setSecret(setup.secret);
-      setBackupCodes(setup.backupCodes || []);
+      setBackupCodes(setup.backupCodes);
       setStep('scan');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to enable MFA');
@@ -46,7 +71,7 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
     }
   };
 
-  const handleVerify = async () => {
+  const handleVerify = () => {
     if (verificationCode.length !== 6) {
       setError('Please enter a 6-digit code');
       return;
@@ -70,7 +95,13 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
   };
 
   const copyBackupCodes = () => {
-    navigator.clipboard.writeText(backupCodes.join('\n'));
+    void navigator.clipboard.writeText(backupCodes.join('\n')).catch((error) => {
+      console.warn("Failed to copy backup codes", error);
+    });
+  };
+
+  const handleStartSetupClick = () => {
+    void handleStartSetup();
   };
 
   if (!user) {
@@ -120,7 +151,7 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
           <div className="flex gap-3">
             <button
-              onClick={handleStartSetup}
+              onClick={handleStartSetupClick}
               disabled={isLoading}
               className="px-6 py-2 font-medium transition-colors"
               style={{
@@ -207,7 +238,11 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
                   {secret}
                 </code>
                 <button
-                  onClick={() => navigator.clipboard.writeText(secret)}
+                  onClick={() => {
+                    void navigator.clipboard.writeText(secret).catch((error) => {
+                      console.warn("Failed to copy secret", error);
+                    });
+                  }}
                   className="px-3 py-2 text-sm transition-colors"
                   style={{
                     backgroundColor: tokens.colors.primary,

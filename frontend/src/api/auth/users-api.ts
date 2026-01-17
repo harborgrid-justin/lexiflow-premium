@@ -92,7 +92,7 @@ export class UsersApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log("[UsersApiService] Initialized with Backend API (PostgreSQL)");
+    console.warn("[UsersApiService] Initialized with Backend API (PostgreSQL)");
   }
 
   /**
@@ -112,11 +112,11 @@ export class UsersApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[UsersApiService.${methodName}] Invalid ${paramName} parameter`
+        `[UsersApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -175,7 +175,7 @@ export class UsersApiService {
     this.validateId(id, "getById");
     try {
       const response = await apiClient.get<ApiResponse<User>>(
-        `${this.baseUrl}/${id}`
+        `${this.baseUrl}/${id}`,
       );
       return response.data;
     } catch (error) {
@@ -197,12 +197,12 @@ export class UsersApiService {
     this.validateEmail(data.email, "create");
     if (!data.firstName || !data.lastName) {
       throw new Error(
-        "[UsersApiService.create] firstName and lastName are required"
+        "[UsersApiService.create] firstName and lastName are required",
       );
     }
     if (!data.password || data.password.length < 8) {
       throw new Error(
-        "[UsersApiService.create] password must be at least 8 characters"
+        "[UsersApiService.create] password must be at least 8 characters",
       );
     }
     if (!data.role) {
@@ -211,7 +211,7 @@ export class UsersApiService {
     try {
       const response = await apiClient.post<ApiResponse<User>>(
         this.baseUrl,
-        data
+        data,
       );
       return response.data;
     } catch (error) {
@@ -238,7 +238,7 @@ export class UsersApiService {
     try {
       const response = await apiClient.patch<ApiResponse<User>>(
         `${this.baseUrl}/${id}`,
-        data
+        data,
       );
       return response.data;
     } catch (error) {
@@ -283,12 +283,12 @@ export class UsersApiService {
     this.validateObject(data, "data", "changePassword");
     if (!data.currentPassword || !data.newPassword) {
       throw new Error(
-        "[UsersApiService.changePassword] currentPassword and newPassword are required"
+        "[UsersApiService.changePassword] currentPassword and newPassword are required",
       );
     }
     if (data.newPassword.length < 8) {
       throw new Error(
-        "[UsersApiService.changePassword] newPassword must be at least 8 characters"
+        "[UsersApiService.changePassword] newPassword must be at least 8 characters",
       );
     }
     try {
@@ -312,7 +312,7 @@ export class UsersApiService {
     try {
       const response = await apiClient.post<ApiResponse<User>>(
         `${this.baseUrl}/${id}/activate`,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -334,7 +334,7 @@ export class UsersApiService {
     try {
       const response = await apiClient.post<ApiResponse<User>>(
         `${this.baseUrl}/${id}/deactivate`,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -397,7 +397,7 @@ export class UsersApiService {
   async getByDepartment(department: string): Promise<User[]> {
     if (!department || false) {
       throw new Error(
-        "[UsersApiService.getByDepartment] department is required"
+        "[UsersApiService.getByDepartment] department is required",
       );
     }
     return this.getAll({ department });
@@ -412,12 +412,12 @@ export class UsersApiService {
     this.validateId(userId, "getPreferences");
     try {
       return await apiClient.get<UserPreferences>(
-        `${this.baseUrl}/${userId}/preferences`
+        `${this.baseUrl}/${userId}/preferences`,
       );
     } catch (error) {
       console.error(
         `[UsersApiService] Failed to fetch preferences for user ${userId}`,
-        error
+        error,
       );
       throw error;
     }
@@ -431,18 +431,18 @@ export class UsersApiService {
    */
   async updatePreferences(
     userId: string,
-    preferences: Partial<UserPreferences>
+    preferences: Partial<UserPreferences>,
   ): Promise<UserPreferences> {
     this.validateId(userId, "updatePreferences");
     try {
       return await apiClient.put<UserPreferences>(
         `${this.baseUrl}/${userId}/preferences`,
-        preferences
+        preferences,
       );
     } catch (error) {
       console.error(
         `[UsersApiService] Failed to update preferences for user ${userId}`,
-        error
+        error,
       );
       throw error;
     }

@@ -121,7 +121,7 @@ export class RateLimiter {
 
     // Check for pattern match
     for (const [pattern, limits] of Object.entries(
-      this.config.endpointLimits
+      this.config.endpointLimits,
     )) {
       if (this.matchesPattern(endpoint, pattern)) {
         return limits;
@@ -199,14 +199,14 @@ export class RateLimiter {
         const oldestRequest = this.requests[0];
         if (oldestRequest) {
           retryAfter = Math.ceil(
-            (oldestRequest.timestamp + this.config.windowMs - now) / 1000
+            (oldestRequest.timestamp + this.config.windowMs - now) / 1000,
           );
         }
       } else if (!endpointAllowed && endpointRequests.length > 0) {
         const oldestRequest = endpointRequests[0];
         if (oldestRequest) {
           retryAfter = Math.ceil(
-            (oldestRequest.timestamp + config.windowMs - now) / 1000
+            (oldestRequest.timestamp + config.windowMs - now) / 1000,
           );
         }
       }
@@ -297,7 +297,7 @@ export class RateLimiter {
         status.retryAfter,
         this.config.maxRequests,
         0,
-        new Date(Date.now() + (status.retryAfter || 60) * 1000)
+        new Date(Date.now() + (status.retryAfter || 60) * 1000),
       );
     }
 
@@ -307,7 +307,7 @@ export class RateLimiter {
         status.retryAfter,
         this.config.maxRequests,
         0,
-        new Date(Date.now() + (status.retryAfter || 60) * 1000)
+        new Date(Date.now() + (status.retryAfter || 60) * 1000),
       );
     }
 
@@ -321,7 +321,7 @@ export class RateLimiter {
       });
 
       // Start processing queue
-      this.processQueue();
+      void this.processQueue();
     });
   }
 
@@ -383,7 +383,7 @@ export class RateLimiter {
     // Reject all queued requests
     for (const request of this.queue) {
       request.reject(
-        new RateLimitError(60, this.config.maxRequests, 0, new Date())
+        new RateLimitError(60, this.config.maxRequests, 0, new Date()),
       );
     }
     this.queue = [];

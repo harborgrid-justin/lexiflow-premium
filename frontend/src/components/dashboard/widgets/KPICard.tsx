@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import type { DesignTokens } from '@/theme/tokens';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -72,8 +73,6 @@ const calculateChange = (current: number, previous: number): { percentage: numbe
   const trend = percentage > 0 ? 'up' : percentage < 0 ? 'down' : 'neutral';
   return { percentage, trend };
 };
-
-import type { DesignTokens } from '@/theme/tokens';
 
 const getColorStyles = (tokens: DesignTokens) => ({
   blue: {

@@ -7,10 +7,50 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/cn";
 import { useData } from "@/routes/dashboard";
 
+type DashboardItem = {
+  id: string;
+  label: string;
+};
+
+type DashboardData = {
+  items: DashboardItem[];
+  refresh: () => void | Promise<void>;
+};
+
+const isDashboardItem = (value: unknown): value is DashboardItem => {
+  return !!value && typeof value === "object" && "id" in value && "label" in value;
+};
+
+const parseDashboardData = (value: unknown): DashboardData => {
+  if (!value || typeof value !== "object") {
+    return { items: [], refresh: () => undefined };
+  }
+
+  const record = value as Record<string, unknown>;
+  const rawItems = Array.isArray(record.items) ? record.items : [];
+  const items = rawItems.filter(isDashboardItem);
+
+  const refresh =
+    typeof record.refresh === "function"
+      ? (record.refresh as () => void | Promise<void>)
+      : () => undefined;
+
+  return { items, refresh };
+};
+
+const toErrorMessage = (value: unknown): string | undefined => {
+  if (!value) return undefined;
+  if (typeof value === "string") return value;
+  if (value instanceof Error) return value.message;
+  return "Unexpected error";
+};
+
 export function PublicPath() {
   const { login, isLoading: authLoading, error: authError } = useAuth();
   const { theme } = useTheme();
-  const { items, refresh } = useData();
+  const dashboardData = parseDashboardData(useData() as unknown);
+  const { items, refresh } = dashboardData;
+  const authErrorMessage = toErrorMessage(authError);
   const [email, setEmail] = useState("demo@lexiflow.ai");
   const [password, setPassword] = useState("password");
 
@@ -23,6 +63,14 @@ export function PublicPath() {
     }
   };
 
+  const handleRefresh = () => {
+    void refresh();
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    void handleLogin(event);
+  };
+
   return (
     <div className="p-8 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4">LexiFlow Public Portal</h1>
@@ -30,7 +78,7 @@ export function PublicPath() {
       <div className="mb-8">
         <h2 className="text-xl mb-2">Public Data</h2>
         <button
-          onClick={refresh}
+          onClick={handleRefresh}
           className={cn('text-white px-4 py-2 rounded', theme.colors.primary, 'hover:opacity-90')}
         >
           Load Public Data
@@ -48,12 +96,12 @@ export function PublicPath() {
 
       <div className={cn('p-6 rounded shadow', theme.surface.card)}>
         <h2 className="text-xl mb-4">Login</h2>
-        {authError && (
+        {authErrorMessage && (
           <div className={cn('p-3 rounded mb-4', theme.status.error.background, theme.status.error.text)}>
-            {authError}
+            {authErrorMessage}
           </div>
         )}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <OptimisticInput

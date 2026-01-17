@@ -103,18 +103,24 @@ export class WarRoomApiService {
 
   async updateStrategy(
     caseId: string,
-    data: UpdateStrategyDto
+    data: UpdateStrategyDto,
   ): Promise<CaseStrategy> {
     return apiClient.put<CaseStrategy>(
       `${this.baseUrl}/${caseId}/strategy`,
-      data
+      data,
     );
   }
 
   // ===
   // OPPOSITION === (Placeholder for future backend implementation)
-  async getOpposition(_caseId: string): Promise<unknown[]> {
-    // Return empty array to prevent crash until backend is implemented
-    return [];
+  async getOpposition(caseId: string): Promise<unknown[]> {
+    try {
+      return await apiClient.get<unknown[]>(
+        `${this.baseUrl}/${caseId}/opposition`,
+      );
+    } catch (error) {
+      console.error("Failed to load opposition data", error);
+      return [];
+    }
   }
 }

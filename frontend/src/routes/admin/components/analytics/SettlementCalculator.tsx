@@ -30,9 +30,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { getChartTheme } from '@/utils/chartConfig';
 
-import type { ThemeStateValue } from '@/lib/theme/types';
-
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
+import type { ThemeStateValue } from '@/lib/theme/types';
 
 // ============================================================================
 // TYPES & INTERFACES

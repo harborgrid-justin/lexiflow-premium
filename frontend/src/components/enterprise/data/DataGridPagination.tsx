@@ -63,6 +63,14 @@ export function DataGridPagination({
   showPageJumper = true,
 }: DataGridPaginationProps) {
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const surfaceDefaultClass = classToken(theme.surface.default);
+  const borderDefaultClass = classToken(theme.border.default);
+  const textSecondaryClass = classToken(theme.text.secondary);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const surfaceHighlightClass = classToken(theme.surface.highlight);
+  const textTertiaryClass = classToken(theme.text.tertiary);
+  const primaryClass = classToken(theme.primary.DEFAULT);
   const [jumpToPage, setJumpToPage] = useState('');
 
   const startRow = currentPage * pageSize + 1;
@@ -161,13 +169,13 @@ export function DataGridPagination({
     <div
       className={cn(
         "flex items-center justify-between px-4 py-3 border-t",
-        theme.surface.default,
-        theme.border.default
+        surfaceDefaultClass,
+        borderDefaultClass
       )}
     >
       {/* Left: Info */}
       <div className="flex items-center gap-4">
-        <span className={cn("text-sm", theme.text.secondary)}>
+        <span className={cn("text-sm", textSecondaryClass)}>
           Showing <span className="font-medium">{startRow}</span> to{' '}
           <span className="font-medium">{endRow}</span> of{' '}
           <span className="font-medium">{totalRows}</span> results
@@ -176,7 +184,7 @@ export function DataGridPagination({
         {/* Page Size Selector */}
         {showPageSizeSelector && onPageSizeChange && (
           <div className="flex items-center gap-2">
-            <label className={cn("text-sm", theme.text.secondary)}>
+            <label className={cn("text-sm", textSecondaryClass)}>
               Show:
             </label>
             <select
@@ -184,9 +192,9 @@ export function DataGridPagination({
               onChange={(e) => handlePageSizeChange(parseInt(e.target.value, 10))}
               className={cn(
                 "px-2 py-1 text-sm rounded border",
-                theme.surface.default,
-                theme.border.default,
-                theme.text.primary,
+                surfaceDefaultClass,
+                borderDefaultClass,
+                textPrimaryClass,
                 "focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
               )}
             >
@@ -208,10 +216,10 @@ export function DataGridPagination({
           disabled={currentPage === 0}
           className={cn(
             "px-3 py-1 text-sm rounded border transition-colors",
-            theme.border.default,
+            borderDefaultClass,
             currentPage === 0
-              ? cn("cursor-not-allowed opacity-50", theme.surface.highlight, theme.text.tertiary)
-              : cn("hover:bg-opacity-80", theme.surface.default, theme.text.primary)
+              ? cn("cursor-not-allowed opacity-50", surfaceHighlightClass, textTertiaryClass)
+              : cn("hover:bg-opacity-80", surfaceDefaultClass, textPrimaryClass)
           )}
           title="First page"
         >
@@ -224,10 +232,10 @@ export function DataGridPagination({
           disabled={currentPage === 0}
           className={cn(
             "px-3 py-1 text-sm rounded border transition-colors",
-            theme.border.default,
+            borderDefaultClass,
             currentPage === 0
-              ? cn("cursor-not-allowed opacity-50", theme.surface.highlight, theme.text.tertiary)
-              : cn("hover:bg-opacity-80", theme.surface.default, theme.text.primary)
+              ? cn("cursor-not-allowed opacity-50", surfaceHighlightClass, textTertiaryClass)
+              : cn("hover:bg-opacity-80", surfaceDefaultClass, textPrimaryClass)
           )}
           title="Previous page"
         >
@@ -240,7 +248,7 @@ export function DataGridPagination({
             return (
               <span
                 key={`ellipsis-${index}`}
-                className={cn("px-2 py-1 text-sm", theme.text.tertiary)}
+                className={cn("px-2 py-1 text-sm", textTertiaryClass)}
               >
                 ...
               </span>
@@ -256,10 +264,10 @@ export function DataGridPagination({
               onClick={() => onPageChange(pageNum)}
               className={cn(
                 "px-3 py-1 text-sm rounded border transition-colors min-w-[2.5rem]",
-                theme.border.default,
+                borderDefaultClass,
                 isActive
-                  ? cn(theme.colors.primary, "text-white font-medium")
-                  : cn("hover:bg-opacity-80", theme.surface.default, theme.text.primary)
+                  ? cn(primaryClass, "text-white font-medium")
+                  : cn("hover:bg-opacity-80", surfaceDefaultClass, textPrimaryClass)
               )}
             >
               {pageNum + 1}
@@ -273,10 +281,10 @@ export function DataGridPagination({
           disabled={currentPage >= totalPages - 1}
           className={cn(
             "px-3 py-1 text-sm rounded border transition-colors",
-            theme.border.default,
+            borderDefaultClass,
             currentPage >= totalPages - 1
-              ? cn("cursor-not-allowed opacity-50", theme.surface.highlight, theme.text.tertiary)
-              : cn("hover:bg-opacity-80", theme.surface.default, theme.text.primary)
+              ? cn("cursor-not-allowed opacity-50", surfaceHighlightClass, textTertiaryClass)
+              : cn("hover:bg-opacity-80", surfaceDefaultClass, textPrimaryClass)
           )}
           title="Next page"
         >
@@ -289,10 +297,10 @@ export function DataGridPagination({
           disabled={currentPage >= totalPages - 1}
           className={cn(
             "px-3 py-1 text-sm rounded border transition-colors",
-            theme.border.default,
+            borderDefaultClass,
             currentPage >= totalPages - 1
-              ? cn("cursor-not-allowed opacity-50", theme.surface.highlight, theme.text.tertiary)
-              : cn("hover:bg-opacity-80", theme.surface.default, theme.text.primary)
+              ? cn("cursor-not-allowed opacity-50", surfaceHighlightClass, textTertiaryClass)
+              : cn("hover:bg-opacity-80", surfaceDefaultClass, textPrimaryClass)
           )}
           title="Last page"
         >
@@ -303,7 +311,7 @@ export function DataGridPagination({
       {/* Right: Jump to Page */}
       {showPageJumper && totalPages > 1 && (
         <div className="flex items-center gap-2">
-          <label className={cn("text-sm", theme.text.secondary)}>
+          <label className={cn("text-sm", textSecondaryClass)}>
             Go to:
           </label>
           <input
@@ -316,9 +324,9 @@ export function DataGridPagination({
             placeholder="#"
             className={cn(
               "w-16 px-2 py-1 text-sm rounded border",
-              theme.surface.default,
-              theme.border.default,
-              theme.text.primary,
+              surfaceDefaultClass,
+              borderDefaultClass,
+              textPrimaryClass,
               "focus:outline-none focus:ring-2 focus:ring-blue-500"
             )}
           />
@@ -326,10 +334,10 @@ export function DataGridPagination({
             onClick={handleJumpToPage}
             className={cn(
               "px-3 py-1 text-sm rounded border transition-colors",
-              theme.border.default,
+              borderDefaultClass,
               "hover:bg-opacity-80",
-              theme.surface.default,
-              theme.text.primary
+              surfaceDefaultClass,
+              textPrimaryClass
             )}
           >
             Go

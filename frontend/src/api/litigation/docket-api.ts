@@ -74,7 +74,9 @@ export class DocketApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log("[DocketApiService] Initialized with Backend API (PostgreSQL)");
+    console.warn(
+      "[DocketApiService] Initialized with Backend API (PostgreSQL)",
+    );
   }
 
   /**
@@ -94,11 +96,11 @@ export class DocketApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[DocketApiService.${methodName}] Invalid ${paramName} parameter`
+        `[DocketApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -119,7 +121,7 @@ export class DocketApiService {
    * const caseEntries = await service.getAll({ caseId: 'case-123' });
    */
   async getAll(
-    filters: DocketFilterOptions | string = {}
+    filters: DocketFilterOptions | string = {},
   ): Promise<PaginatedResponse<DocketEntry>> {
     try {
       // Backward compatibility for string argument
@@ -202,7 +204,7 @@ export class DocketApiService {
       party?: string;
       summary?: string;
       url?: string;
-    }
+    },
   ): Promise<DocketEntry> {
     this.validateObject(entry, "entry", "add");
 

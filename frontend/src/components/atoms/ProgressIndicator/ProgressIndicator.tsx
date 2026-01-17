@@ -334,7 +334,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
         <div className="relative h-0 overflow-visible">
           <div className="absolute inset-0 pointer-events-none">
             {/* LAYOUT STABILITY: Fixed count for predictable layout */}
-            {[...Array(10)].map((_unused, i) => (
+            {Array.from({ length: 10 }, (_, index) => index).map((i) => (
               <div
                 key={`confetti-${i}`}
                 className="absolute w-2 h-2 bg-emerald-500 rounded-full animate-confetti"

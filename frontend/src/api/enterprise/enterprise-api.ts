@@ -48,7 +48,11 @@ import {
   type RateLimitConfig,
   type RateLimiter,
 } from "./rate-limiter";
-import { createRetryHandler, type RetryConfig, type RetryHandler } from "./retry-handler";
+import {
+  createRetryHandler,
+  type RetryConfig,
+  type RetryHandler,
+} from "./retry-handler";
 
 /**
  * API client configuration
@@ -218,7 +222,7 @@ export class EnterpriseApiClient {
       getAuthToken: () => this.getAuthToken(),
     });
 
-    console.log("[EnterpriseApiClient] Initialized", {
+    console.warn("[EnterpriseApiClient] Initialized", {
       baseUrl: this.getBaseUrl(),
       retry: this.config.retry,
       rateLimit: this.config.rateLimit,
@@ -280,7 +284,7 @@ export class EnterpriseApiClient {
     } catch (error) {
       console.error(
         "[EnterpriseApiClient] Failed to clear auth tokens:",
-        error
+        error,
       );
     }
   }
@@ -312,7 +316,7 @@ export class EnterpriseApiClient {
   private buildRequestConfig(
     method: string,
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): RequestConfig {
     const url = this.buildUrl(endpoint);
 
@@ -332,13 +336,28 @@ export class EnterpriseApiClient {
     };
   }
 
+  private async readJson(response: Response): Promise<unknown> {
+    try {
+      return await response.json();
+    } catch {
+      return {};
+    }
+  }
+
+  private asRecord(value: unknown): Record<string, unknown> {
+    if (value && typeof value === "object") {
+      return value as Record<string, unknown>;
+    }
+    return {};
+  }
+
   /**
    * Execute HTTP request
    */
   private async executeRequest<T>(
     config: RequestConfig,
     body?: unknown,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     // Execute request interceptors
     const processedConfig =
@@ -361,9 +380,9 @@ export class EnterpriseApiClient {
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
+          const errorData = await this.readJson(response);
           throw parseApiError({
-            ...errorData,
+            ...this.asRecord(errorData),
             statusCode: response.status,
             status: response.status,
           });
@@ -374,11 +393,14 @@ export class EnterpriseApiClient {
           return {} as T;
         }
 
-        const data = await response.json();
+        const data = await this.readJson(response);
 
         // Execute response interceptors
         const processedData =
-          await this.interceptors.executeResponseInterceptors(response, data);
+          await this.interceptors.executeResponseInterceptors(
+            response,
+            data as T,
+          );
 
         return processedData;
       } catch (error) {
@@ -412,15 +434,16 @@ export class EnterpriseApiClient {
   public async get<T>(
     endpoint: string,
     params?: Record<string, string | number | boolean | null | undefined>,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     // Build URL with query params
     let url = endpoint;
     if (params) {
       const queryString = new URLSearchParams(
-        Object.entries(params).filter(
-          ([_, value]) => value !== undefined && value !== null
-        ) as [string, string][]
+        Object.entries(params).filter((entry) => {
+          const value = entry[1];
+          return value !== undefined && value !== null;
+        }) as [string, string][],
       ).toString();
       if (queryString) {
         url = `${endpoint}?${queryString}`;
@@ -453,7 +476,7 @@ export class EnterpriseApiClient {
   public async post<T>(
     endpoint: string,
     data?: unknown,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     const config = this.buildRequestConfig("POST", endpoint, options);
     return this.executeRequest<T>(config, data, options);
@@ -465,7 +488,7 @@ export class EnterpriseApiClient {
   public async put<T>(
     endpoint: string,
     data?: unknown,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     const config = this.buildRequestConfig("PUT", endpoint, options);
     return this.executeRequest<T>(config, data, options);
@@ -477,7 +500,7 @@ export class EnterpriseApiClient {
   public async patch<T>(
     endpoint: string,
     data?: unknown,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     const config = this.buildRequestConfig("PATCH", endpoint, options);
     return this.executeRequest<T>(config, data, options);
@@ -488,7 +511,7 @@ export class EnterpriseApiClient {
    */
   public async delete<T>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     const config = this.buildRequestConfig("DELETE", endpoint, options);
     return this.executeRequest<T>(config, undefined, options);
@@ -501,14 +524,14 @@ export class EnterpriseApiClient {
     endpoint: string,
     file: File,
     additionalData?: Record<string, string | Blob>,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     const formData = new FormData();
     formData.append("file", file);
 
     if (additionalData) {
       Object.entries(additionalData).forEach(([key, value]) => {
-        formData.append(key, String(value));
+        formData.append(key, value);
       });
     }
 
@@ -531,15 +554,15 @@ export class EnterpriseApiClient {
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+      const errorData = await this.readJson(response);
       throw parseApiError({
-        ...errorData,
+        ...this.asRecord(errorData),
         statusCode: response.status,
       });
     }
 
-    const data = await response.json();
-    return data;
+    const data = await this.readJson(response);
+    return data as T;
   }
 
   // ============================================================================
@@ -651,7 +674,7 @@ export const enterpriseApi = new EnterpriseApiClient({
  * Create custom enterprise API client
  */
 export function createEnterpriseApi(
-  config?: EnterpriseApiConfig
+  config?: EnterpriseApiConfig,
 ): EnterpriseApiClient {
   return new EnterpriseApiClient(config);
 }

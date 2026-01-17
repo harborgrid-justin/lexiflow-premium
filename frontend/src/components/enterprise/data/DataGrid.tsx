@@ -31,7 +31,7 @@ import { cn } from '@/lib/cn';
 import { type ColumnDefinition } from './DataGridColumn';
 import { ColumnResizer } from './DataGridColumnResizer';
 import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';
-import { DataGridFilters, type FilterConfig, type FilterValue } from './DataGridFilters';
+import { DataGridFilters, type FilterValue } from './DataGridFilters';
 import { DataGridPagination } from './DataGridPagination';
 import { DataGridToolbar } from './DataGridToolbar';
 import { InlineEditor } from './InlineEditor';
@@ -196,6 +196,14 @@ export function DataGrid<T extends Record<string, unknown>>({
   loading = false,
 }: DataGridProps<T>) {
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const surfaceHighlightClass = classToken(theme.surface.highlight);
+  const borderDefaultClass = classToken(theme.border.default);
+  const borderSubtleClass = classToken(theme.border.subtle);
+  const textSecondaryClass = classToken(theme.text.secondary);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const textTertiaryClass = classToken(theme.text.tertiary);
+  const surfaceDefaultClass = classToken(theme.surface.default);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Internal state (when not controlled)
@@ -399,14 +407,14 @@ export function DataGrid<T extends Record<string, unknown>>({
     <div
       className={cn(
         "flex border-b sticky top-0 z-10",
-        theme.surface.highlight,
-        theme.border.default
+        surfaceHighlightClass,
+        borderDefaultClass
       )}
       style={{ minWidth: 'max-content' }}
     >
       {enableSelection && (
         <div
-          className={cn("flex items-center justify-center border-r", theme.border.default)}
+          className={cn("flex items-center justify-center border-r", borderDefaultClass)}
           style={{ width: 48, flexShrink: 0 }}
         >
           {selectionMode === 'multiple' && (
@@ -429,8 +437,8 @@ export function DataGrid<T extends Record<string, unknown>>({
             key={column.id}
             className={cn(
               "px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border-r select-none relative",
-              theme.text.secondary,
-              theme.border.default,
+              textSecondaryClass,
+              borderDefaultClass,
               enableSorting && column.sortable !== false && "cursor-pointer hover:bg-opacity-80"
             )}
             style={{
@@ -477,16 +485,16 @@ export function DataGrid<T extends Record<string, unknown>>({
         style={style}
         className={cn(
           "flex border-b transition-colors",
-          theme.border.subtle,
-          isSelected && theme.surface.highlight,
-          !isSelected && `hover:${theme.surface.highlight}`,
+          borderSubtleClass,
+          isSelected && surfaceHighlightClass,
+          !isSelected && `hover:${surfaceHighlightClass}`,
           onRowClick && "cursor-pointer"
         )}
         onClick={() => onRowClick?.(row)}
       >
         {enableSelection && (
           <div
-            className={cn("flex items-center justify-center border-r", theme.border.subtle)}
+            className={cn("flex items-center justify-center border-r", borderSubtleClass)}
             style={{ width: 48, flexShrink: 0 }}
           >
             <input
@@ -508,8 +516,8 @@ export function DataGrid<T extends Record<string, unknown>>({
               key={column.id}
               className={cn(
                 "px-4 py-3 text-sm border-r truncate",
-                theme.text.primary,
-                theme.border.subtle,
+                textPrimaryClass,
+                borderSubtleClass,
                 enableInlineEditing && column.editable && "cursor-pointer"
               )}
               style={{
@@ -584,16 +592,16 @@ export function DataGrid<T extends Record<string, unknown>>({
   if (loading) {
     return (
       <div
-        className={cn("flex items-center justify-center", theme.surface.default)}
+        className={cn("flex items-center justify-center", surfaceDefaultClass)}
         style={{ height }}
       >
-        <div className={cn("text-sm", theme.text.secondary)}>Loading...</div>
+        <div className={cn("text-sm", textSecondaryClass)}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className={cn("flex flex-col", theme.surface.default, className)} ref={containerRef}>
+    <div className={cn("flex flex-col", surfaceDefaultClass, className)} ref={containerRef}>
       {/* Toolbar */}
       {(enableFiltering || enableExport) && (
         <DataGridToolbar
@@ -613,12 +621,12 @@ export function DataGrid<T extends Record<string, unknown>>({
 
       {/* Grid */}
       <div
-        className={cn("border rounded-lg overflow-hidden", theme.border.default)}
+        className={cn("border rounded-lg overflow-hidden", borderDefaultClass)}
         style={{ height: enablePagination ? height - 60 : height }}
       >
         {displayData.length === 0 ? (
           <div
-            className={cn("flex items-center justify-center h-full", theme.text.tertiary)}
+            className={cn("flex items-center justify-center h-full", textTertiaryClass)}
           >
             {emptyMessage}
           </div>

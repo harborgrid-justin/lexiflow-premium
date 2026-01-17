@@ -36,9 +36,8 @@ export class ConnectorsApiService {
    */
   async getAll(): Promise<Connector[]> {
     try {
-      const response = await apiClient.get<PaginatedResponse<Connector>>(
-        "/connectors"
-      );
+      const response =
+        await apiClient.get<PaginatedResponse<Connector>>("/connectors");
       return response.data || [];
     } catch (error) {
       console.error("[ConnectorsApi] Error fetching connectors:", error);
@@ -49,15 +48,13 @@ export class ConnectorsApiService {
   /**
    * Create a new connector
    */
-  async create(
-    connector: Omit<Connector, "id" | "status">
-  ): Promise<Connector> {
-    console.log("[ConnectorsApi] Creating connector:", connector);
+  create(connector: Omit<Connector, "id" | "status">): Promise<Connector> {
+    console.warn("[ConnectorsApi] Creating connector:", connector);
     // Mock implementation
-    return {
+    return Promise.resolve({
       ...connector,
       id: `conn_${Date.now()}`,
       status: "Healthy",
-    };
+    });
   }
 }

@@ -49,7 +49,9 @@ export const CopyButton = React.memo<CopyButtonProps>(({ text, label = "Copy", v
   }, []);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(text);
+    void navigator.clipboard.writeText(text).catch((error) => {
+      console.warn("[CopyButton] Failed to copy text", error);
+    });
     setCopied(true);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => setCopied(false), NOTIFICATION_AUTO_DISMISS_MS);

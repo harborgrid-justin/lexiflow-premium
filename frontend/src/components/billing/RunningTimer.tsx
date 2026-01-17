@@ -25,6 +25,35 @@ interface TimerState {
 
 const STORAGE_KEY = 'lexiflow_running_timer';
 
+const parseTimerState = (
+  value: string,
+  fallbackCaseId: string,
+  fallbackDescription: string,
+): TimerState | null => {
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!parsed || typeof parsed !== "object") {
+      return null;
+    }
+
+    const record = parsed as Record<string, unknown>;
+    const isRunning = Boolean(record.isRunning);
+    const startTimeValue =
+      typeof record.startTime === "number" ? record.startTime : null;
+    const elapsedSeconds =
+      typeof record.elapsedSeconds === "number" ? record.elapsedSeconds : 0;
+    const caseId = typeof record.caseId === "string" ? record.caseId : fallbackCaseId;
+    const description =
+      typeof record.description === "string"
+        ? record.description
+        : fallbackDescription;
+
+    return { isRunning, startTime: startTimeValue, elapsedSeconds, caseId, description };
+  } catch {
+    return null;
+  }
+};
+
 export const RunningTimer: React.FC<RunningTimerProps> = ({
   onComplete,
   caseId = '',
@@ -35,9 +64,8 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
     // Load from localStorage on mount
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        // Calculate elapsed time if timer was running
+      const parsed = parseTimerState(saved, caseId, description);
+      if (parsed) {
         if (parsed.isRunning && parsed.startTime) {
           const now = Date.now();
           const additionalSeconds = Math.floor((now - parsed.startTime) / 1000);
@@ -48,8 +76,6 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
           };
         }
         return parsed;
-      } catch {
-        // Invalid saved state
       }
     }
     return {

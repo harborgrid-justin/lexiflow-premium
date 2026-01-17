@@ -10,24 +10,81 @@ import { cn } from "@/lib/cn";
 import { useEntitlements } from "@/providers/application/entitlementsprovider";
 import { useData } from "@/routes/dashboard";
 
+type DashboardItem = {
+  id: string;
+  label: string;
+  type?: string;
+  status?: string;
+};
+
+type DashboardData = {
+  items: DashboardItem[];
+  refresh: () => void | Promise<void>;
+  isLoading: boolean;
+  error?: unknown;
+};
+
+const isDashboardItem = (value: unknown): value is DashboardItem => {
+  return !!value && typeof value === "object" && "id" in value && "label" in value;
+};
+
+const parseDashboardData = (value: unknown): DashboardData => {
+  if (!value || typeof value !== "object") {
+    return { items: [], refresh: () => undefined, isLoading: false };
+  }
+
+  const record = value as Record<string, unknown>;
+  const rawItems = Array.isArray(record.items) ? record.items : [];
+  const items = rawItems.filter(isDashboardItem);
+
+  const refresh =
+    typeof record.refresh === "function"
+      ? (record.refresh as () => void | Promise<void>)
+      : () => undefined;
+
+  return {
+    items,
+    refresh,
+    isLoading: Boolean(record.isLoading),
+    error: record.error,
+  };
+};
+
+const toErrorMessage = (value: unknown): string | undefined => {
+  if (!value) return undefined;
+  if (typeof value === "string") return value;
+  if (value instanceof Error) return value.message;
+  return "Unexpected error";
+};
+
 export const AdminPath: React.FC = () => {
   const { auth, logout } = useAuth();
   const { theme } = useTheme();
   const { entitlements } = useEntitlements();
-  const { items, refresh, isLoading, error } = useData();
+  const dashboardData = parseDashboardData(useData() as unknown);
+  const { items, refresh, isLoading, error } = dashboardData;
+  const errorMessage = toErrorMessage(error);
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    refresh();
+    void refresh();
   }, [refresh]);
 
   const filteredItems = useMemo(() => {
     if (!filter) return items;
-    return items.filter(i =>
-      i.label.toLowerCase().includes(filter.toLowerCase()) ||
-      i.id.includes(filter)
+    return items.filter((item) =>
+      item.label.toLowerCase().includes(filter.toLowerCase()) ||
+      item.id.includes(filter)
     );
   }, [items, filter]);
+
+  const handleRefresh = () => {
+    void refresh();
+  };
+
+  const handleLogout = () => {
+    void logout();
+  };
 
   return (
     <div className={cn('p-8 min-h-screen', theme.surface.hover)}>
@@ -40,7 +97,7 @@ export const AdminPath: React.FC = () => {
           </div>
         </div>
         <button
-          onClick={() => logout()}
+          onClick={handleLogout}
           className={cn('border px-4 py-2 rounded', theme.surface.card, theme.border.default, `hover:${theme.surface.hover}`, theme.text.primary)}
         >
           Logout
@@ -77,13 +134,15 @@ export const AdminPath: React.FC = () => {
               className="border rounded px-2 py-1 text-sm w-64"
               metricName="AdminLogFilter"
             />
-            <button onClick={refresh} className="text-blue-600 hover:text-blue-800 text-sm">
+            <button onClick={handleRefresh} className="text-blue-600 hover:text-blue-800 text-sm">
               Refresh Data
             </button>
           </div>
         </div>
 
-        {error && <div className="p-8 text-center text-red-500">{error}</div>}
+        {errorMessage && (
+          <div className="p-8 text-center text-red-500">{errorMessage}</div>
+        )}
 
         <DeterministicLoader
           isLoading={isLoading}

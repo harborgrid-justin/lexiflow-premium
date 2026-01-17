@@ -56,15 +56,15 @@ export class PleadingsApiService {
   }
 
   private logInitialization(): void {
-    console.log(
-      "[PleadingsApiService] Initialized with Backend API (PostgreSQL)"
+    console.warn(
+      "[PleadingsApiService] Initialized with Backend API (PostgreSQL)",
     );
   }
 
   private validateId(id: string, methodName: string): void {
     if (!id || false || id.trim() === "") {
       throw new Error(
-        `[PleadingsApiService.${methodName}] Invalid id parameter`
+        `[PleadingsApiService.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -72,11 +72,11 @@ export class PleadingsApiService {
   private validateObject(
     obj: unknown,
     paramName: string,
-    methodName: string
+    methodName: string,
   ): void {
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       throw new Error(
-        `[PleadingsApiService.${methodName}] Invalid ${paramName} parameter`
+        `[PleadingsApiService.${methodName}] Invalid ${paramName} parameter`,
       );
     }
   }
@@ -100,18 +100,18 @@ export class PleadingsApiService {
         typeof response === "object" &&
         !Array.isArray(response)
       ) {
-        const paginatedResponse = response;
-        const items =
-          (paginatedResponse as unknown as Record<string, unknown>).items ||
-          (paginatedResponse as unknown as Record<string, unknown>).data;
-        if (Array.isArray(items)) {
-          return items;
+        const paginatedResponse = response as PaginatedResponse<Pleading>;
+        if (Array.isArray(paginatedResponse.items)) {
+          return paginatedResponse.items;
+        }
+        if (Array.isArray(paginatedResponse.data)) {
+          return paginatedResponse.data;
         }
       }
 
       // Handle direct array response
       if (Array.isArray(response)) {
-        return response;
+        return response as Pleading[];
       }
 
       // Fallback

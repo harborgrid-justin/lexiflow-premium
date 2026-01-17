@@ -43,7 +43,7 @@ export async function performAutoLogin(): Promise<boolean> {
     return false;
   }
 
-  console.log("[DevAutoLogin] Attempting auto-login with demo credentials...");
+  console.warn("[DevAutoLogin] Attempting auto-login with demo credentials...");
 
   try {
     const authApi = new AuthApiService();
@@ -74,7 +74,7 @@ export async function performAutoLogin(): Promise<boolean> {
     // Sync with API client
     setAuthTokens(response.accessToken, response.refreshToken);
 
-    console.log("[DevAutoLogin] Auto-login successful!");
+    console.warn("[DevAutoLogin] Auto-login successful!");
     return true;
   } catch (error) {
     console.error("[DevAutoLogin] Auto-login failed:", error);
@@ -88,13 +88,13 @@ export async function performAutoLogin(): Promise<boolean> {
  */
 export async function initializeAutoLogin(): Promise<void> {
   if (isAutoLoginEnabled() && !isAuthenticated()) {
-    console.log(
+    console.warn(
       "[DevAutoLogin] Auto-login is enabled and user is not authenticated",
     );
     try {
       const success = await performAutoLogin();
       if (success) {
-        console.log("[DevAutoLogin] Auto-login completed, reloading page...");
+        console.warn("[DevAutoLogin] Auto-login completed, reloading page...");
         // Reload to trigger authentication flow
         window.location.reload();
       }

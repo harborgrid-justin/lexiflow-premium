@@ -29,20 +29,20 @@ export class CustodiansApiService {
   }): Promise<Custodian[]> {
     const response = await apiClient.get<PaginatedResponse<Custodian>>(
       "/custodians",
-      { params: filters }
+      { params: filters },
     );
 
     // Handle direct array response
     if (Array.isArray(response)) {
-      return response;
+      return response as Custodian[];
     }
 
     // Backend returns paginated response, extract items
     const paginatedResponse =
       response as unknown as PaginatedResponse<Custodian>;
     const items =
-      (paginatedResponse as unknown as Record<string, unknown>).items ||
-      paginatedResponse.data ||
+      (paginatedResponse as unknown as { items?: Custodian[] }).items ??
+      paginatedResponse.data ??
       [];
     return Array.isArray(items) ? items : [];
   }
@@ -52,7 +52,7 @@ export class CustodiansApiService {
   }
 
   async create(
-    custodian: Omit<Custodian, "id" | "createdAt" | "updatedAt">
+    custodian: Omit<Custodian, "id" | "createdAt" | "updatedAt">,
   ): Promise<Custodian> {
     return apiClient.post<Custodian>("/custodians", custodian);
   }

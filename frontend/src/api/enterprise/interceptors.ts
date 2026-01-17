@@ -16,7 +16,7 @@
  * Request interceptor function type
  */
 export type RequestInterceptor = (
-  config: RequestConfig
+  config: RequestConfig,
 ) => RequestConfig | Promise<RequestConfig>;
 
 /**
@@ -24,13 +24,15 @@ export type RequestInterceptor = (
  */
 export type ResponseInterceptor<T = unknown> = (
   response: Response,
-  data: T
+  data: T,
 ) => T | Promise<T>;
 
 /**
  * Error interceptor function type
  */
-export type ErrorInterceptor = (error: unknown) => unknown | Promise<unknown>;
+export type Awaitable<T> = T | Promise<T>;
+
+export type ErrorInterceptor = (error: unknown) => Awaitable<unknown>;
 
 /**
  * Request configuration
@@ -98,7 +100,7 @@ export class InterceptorManager {
    * Execute request interceptors
    */
   public async executeRequestInterceptors(
-    config: RequestConfig
+    config: RequestConfig,
   ): Promise<RequestConfig> {
     let currentConfig = config;
     for (const interceptor of this.requestInterceptors) {
@@ -112,7 +114,7 @@ export class InterceptorManager {
    */
   public async executeResponseInterceptors<T>(
     response: Response,
-    data: T
+    data: T,
   ): Promise<T> {
     let currentData = data;
     for (const interceptor of this.responseInterceptors) {
@@ -150,7 +152,7 @@ export class InterceptorManager {
  * Add authentication token to requests
  */
 export function createAuthInterceptor(
-  getToken: () => string | null
+  getToken: () => string | null,
 ): RequestInterceptor {
   return (config: RequestConfig) => {
     const token = getToken();
@@ -195,7 +197,7 @@ export function createTimestampInterceptor(): RequestInterceptor {
  */
 export function createClientInfoInterceptor(
   appName: string,
-  appVersion: string
+  appVersion: string,
 ): RequestInterceptor {
   return (config: RequestConfig) => {
     config.headers["X-Client-Name"] = appName;
@@ -208,11 +210,11 @@ export function createClientInfoInterceptor(
  * Log requests for debugging
  */
 export function createRequestLoggingInterceptor(
-  enabled: boolean = true
+  enabled: boolean = true,
 ): RequestInterceptor {
   return (config: RequestConfig) => {
     if (enabled) {
-      console.log("[API Request]", {
+      console.warn("[API Request]", {
         method: config.method,
         url: config.url,
         headers: config.headers,
@@ -227,11 +229,11 @@ export function createRequestLoggingInterceptor(
  * Log responses for debugging
  */
 export function createResponseLoggingInterceptor(
-  enabled: boolean = true
+  enabled: boolean = true,
 ): ResponseInterceptor {
-  return async (response: Response, data: unknown) => {
+  return (response: Response, data: unknown) => {
     if (enabled) {
-      console.log("[API Response]", {
+      console.warn("[API Response]", {
         status: response.status,
         statusText: response.statusText,
         url: response.url,
@@ -257,7 +259,7 @@ export function createPerformanceInterceptor(): {
       };
       return config;
     },
-    response: async (response: Response, data: unknown) => {
+    response: (response: Response, data: unknown) => {
       const requestConfig = (
         response as unknown as {
           requestConfig?: { metadata?: { startTime?: number }; url?: string };
@@ -265,8 +267,8 @@ export function createPerformanceInterceptor(): {
       ).requestConfig;
       if (requestConfig?.metadata?.startTime) {
         const duration = performance.now() - requestConfig.metadata.startTime;
-        console.log(
-          `[Performance] ${requestConfig.url}: ${duration.toFixed(2)}ms`
+        console.warn(
+          `[Performance] ${requestConfig.url}: ${duration.toFixed(2)}ms`,
         );
       }
       return data;
@@ -278,13 +280,13 @@ export function createPerformanceInterceptor(): {
  * Parse rate limit headers
  */
 export function createRateLimitInterceptor(): ResponseInterceptor {
-  return async (response: Response, data: unknown) => {
+  return (response: Response, data: unknown) => {
     const limit = response.headers.get("X-RateLimit-Limit");
     const remaining = response.headers.get("X-RateLimit-Remaining");
     const reset = response.headers.get("X-RateLimit-Reset");
 
     if (limit || remaining || reset) {
-      console.debug("[Rate Limit]", {
+      console.warn("[Rate Limit]", {
         limit: limit ? parseInt(limit) : undefined,
         remaining: remaining ? parseInt(remaining) : undefined,
         reset: reset ? new Date(parseInt(reset) * 1000) : undefined,
@@ -299,7 +301,7 @@ export function createRateLimitInterceptor(): ResponseInterceptor {
  * Transform snake_case to camelCase
  */
 export function createCaseConversionInterceptor(): ResponseInterceptor {
-  return async (_response: Response, data: unknown) => {
+  return (_response: Response, data: unknown) => {
     if (typeof data !== "object" || data === null) {
       return data;
     }
@@ -313,7 +315,7 @@ export function createCaseConversionInterceptor(): ResponseInterceptor {
  */
 function transformKeys(
   obj: unknown,
-  transformer: (key: string) => string
+  transformer: (key: string) => string,
 ): unknown {
   if (Array.isArray(obj)) {
     return obj.map((item) => transformKeys(item, transformer));
@@ -327,7 +329,7 @@ function transformKeys(
         result[newKey] = transformKeys(typedObj[key], transformer);
         return result;
       },
-      {} as Record<string, unknown>
+      {} as Record<string, unknown>,
     );
   }
 
@@ -338,16 +340,18 @@ function transformKeys(
  * Convert snake_case to camelCase
  */
 function snakeToCamel(str: string): string {
-  return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+  return str.replace(/_([a-z])/g, (_: string, letter: string) =>
+    letter.toUpperCase(),
+  );
 }
 
 /**
  * Error logging interceptor
  */
 export function createErrorLoggingInterceptor(
-  enabled: boolean = true
+  enabled: boolean = true,
 ): ErrorInterceptor {
-  return async (error: unknown) => {
+  return (error: unknown) => {
     const err = error as {
       message?: string;
       statusCode?: number;
@@ -372,7 +376,7 @@ export function createErrorLoggingInterceptor(
  * Converts API errors to user-friendly messages
  */
 export function createErrorTransformInterceptor(): ErrorInterceptor {
-  return async (error: unknown) => {
+  return (error: unknown) => {
     const err = error as {
       getUserMessage?: () => string;
       userMessage?: string;
@@ -389,12 +393,12 @@ export function createErrorTransformInterceptor(): ErrorInterceptor {
  * Retry after rate limit interceptor
  */
 export function createRetryAfterInterceptor(): ErrorInterceptor {
-  return async (error: unknown) => {
+  return (error: unknown) => {
     const err = error as { statusCode?: number; retryAfter?: number };
     if (err.statusCode === 429) {
       const retryAfter = err.retryAfter || 60;
       console.warn(
-        `[Rate Limit] Request throttled. Retry after ${retryAfter} seconds.`
+        `[Rate Limit] Request throttled. Retry after ${retryAfter} seconds.`,
       );
     }
     return error;
@@ -417,7 +421,7 @@ export function setupDefaultInterceptors(
     appName?: string;
     appVersion?: string;
     getAuthToken?: () => string | null;
-  } = {}
+  } = {},
 ): void {
   const {
     enableLogging = false,
@@ -431,7 +435,7 @@ export function setupDefaultInterceptors(
   manager.addRequestInterceptor(createRequestIdInterceptor());
   manager.addRequestInterceptor(createTimestampInterceptor());
   manager.addRequestInterceptor(
-    createClientInfoInterceptor(appName, appVersion)
+    createClientInfoInterceptor(appName, appVersion),
   );
 
   if (getAuthToken) {

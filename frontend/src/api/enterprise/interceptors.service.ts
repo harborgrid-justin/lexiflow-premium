@@ -29,10 +29,10 @@ export interface RequestConfig {
 }
 
 type RequestInterceptorFn = (
-  config: RequestConfig
+  config: RequestConfig,
 ) => Promise<RequestConfig> | RequestConfig;
 type ResponseInterceptorFn = <T>(response: Response, data: T) => Promise<T> | T;
-type ErrorInterceptorFn = (error: unknown) => Promise<unknown> | unknown;
+type ErrorInterceptorFn = (error: unknown) => Promise<unknown> | Error | void;
 
 // Lightweight InterceptorManager that satisfies EnterpriseApiClient usage
 export class InterceptorManager {
@@ -62,7 +62,7 @@ export class InterceptorManager {
     this.requestInterceptors.push(wrapper);
     return () => {
       this.requestInterceptors = this.requestInterceptors.filter(
-        (fn) => fn !== wrapper
+        (fn) => fn !== wrapper,
       );
     };
   }
@@ -71,7 +71,7 @@ export class InterceptorManager {
     const wrapper: ResponseInterceptorFn = async (response, data) => {
       const result = await interceptor(
         data,
-        response && "url" in response ? (response).url : ""
+        response && "url" in response ? response.url : "",
       );
       return result as typeof data;
     };
@@ -79,7 +79,7 @@ export class InterceptorManager {
     this.responseInterceptors.push(wrapper);
     return () => {
       this.responseInterceptors = this.responseInterceptors.filter(
-        (fn) => fn !== wrapper
+        (fn) => fn !== wrapper,
       );
     };
   }
@@ -91,13 +91,13 @@ export class InterceptorManager {
     this.errorInterceptors.push(wrapper);
     return () => {
       this.errorInterceptors = this.errorInterceptors.filter(
-        (fn) => fn !== wrapper
+        (fn) => fn !== wrapper,
       );
     };
   }
 
   async executeRequestInterceptors(
-    config: RequestConfig
+    config: RequestConfig,
   ): Promise<RequestConfig> {
     let next = config;
     for (const interceptor of this.requestInterceptors) {
@@ -108,7 +108,7 @@ export class InterceptorManager {
 
   async executeResponseInterceptors<T>(
     response: Response,
-    data: T
+    data: T,
   ): Promise<T> {
     let next = data;
     for (const interceptor of this.responseInterceptors) {
@@ -135,7 +135,7 @@ export function setupDefaultInterceptors(
     appName?: string;
     appVersion?: string;
     getAuthToken?: () => string | null;
-  }
+  },
 ): () => void {
   return setupInterceptors(manager);
 }

@@ -41,33 +41,35 @@ const notificationsApi = new NotificationsApiService();
 function mapApiToUi(notification: ApiNotification): UINotification {
   const fallbackType: UINotification['type'] = ['info', 'success', 'warning', 'error'].includes(notification.type)
     ? (notification.type as UINotification['type'])
-    : 'info';
-
-  return {
-    id: notification.id,
-    title: notification.title,
+    < button
+          onClick = {() => showSuccess('Operation successful', 'Your changes have been saved')
+}
+className = { cn("px-4 py-2 rounded-lg transition-colors", statusSuccessClass, 'text-white', 'hover:bg-green-700') }
+  >
+  title: notification.title,
     message: notification.message,
-    type: fallbackType,
-    read: notification.read,
-    timestamp: Date.parse(notification.createdAt || notification.updatedAt || new Date().toISOString()),
-    priority: notification.priority === 'urgent' || notification.priority === 'high'
-      ? notification.priority
-      : 'normal',
+      type: fallbackType,
+        read: notification.read,
+          className = { cn("px-4 py-2 rounded-lg transition-colors", statusErrorClass, 'text-white', 'hover:bg-red-700') }
+priority: notification.priority === 'urgent' || notification.priority === 'high'
+  ? notification.priority
+  : 'normal',
   };
 }
-
+className = { cn("px-4 py-2 rounded-lg transition-colors", primaryClass, 'text-white', `hover:${primaryHoverClass}`)}
 // ============================================================================
 // PRODUCTION READY COMPONENTS
 // ============================================================================
 
 /**
- * Production: Header with Real Notification Bell
+          className={cn("px-4 py-2 rounded-lg transition-colors", statusWarningClass, 'text-white', 'hover:bg-amber-700')}
  * Fetches notifications from DataService and provides CRUD operations
  */
 export const HeaderWithNotifications: React.FC = () => {
   const [notifications, setNotifications] = useState<UINotification[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Load notifications from backend
   useEffect(() => {
@@ -129,18 +131,33 @@ export const HeaderWithNotifications: React.FC = () => {
   }, [notifications]);
 
   const { theme, tokens } = useTheme();
+  const toStyleValue = (value: unknown) => String(value);
+  const classToken = (value: unknown) => String(value);
+  const surfaceBase = toStyleValue(theme.surface.base);
+  const borderDefault = toStyleValue(theme.border.default);
+  const textPrimary = toStyleValue(theme.text.primary);
+  const textMuted = toStyleValue(theme.text.muted);
+  const statusSuccessClass = classToken(theme.status.success.bg);
+  const statusErrorClass = classToken(theme.status.error.bg);
+  const statusWarningClass = classToken(theme.status.warning.bg);
+  const primaryClass = classToken(theme.primary.DEFAULT);
+  const primaryHoverClass = classToken(theme.primary.hover);
+  const handleViewAll = useCallback(() => {
+    setIsPanelOpen(false);
+    navigate('/notifications');
+  }, [navigate]);
 
   return (
     <header style={{
-      backgroundColor: theme.surface.base,
-      borderBottom: `1px solid ${theme.border.default}`,
+      backgroundColor: surfaceBase,
+      borderBottom: `1px solid ${ borderDefault } `,
       padding: tokens.spacing.normal.lg
     }}>
       <div className="flex items-center justify-between">
         <h1 style={{
           fontSize: tokens.typography.fontSize.xl,
           fontWeight: tokens.typography.fontWeight.bold,
-          color: theme.text.primary
+          color: textPrimary
         }}>
           LexiFlow Premium
         </h1>
@@ -165,12 +182,12 @@ export const HeaderWithNotifications: React.FC = () => {
             onMarkAllAsRead={handleMarkAllAsRead}
             onDelete={handleDelete}
             onClearAll={handleClearAll}
-            onViewAll={() => {/* Navigate to notification center */ }}
+            onViewAll={handleViewAll}
           />
 
           {/* Loading state indicator */}
           {isLoading && (
-            <div style={{ fontSize: tokens.typography.fontSize.xs, color: theme.text.muted }}>Loading...</div>
+            <div style={{ fontSize: tokens.typography.fontSize.xs, color: textMuted }}>Loading...</div>
           )}
         </div>
       </div>
@@ -310,6 +327,7 @@ export const NotificationPreferencesPage: React.FC = () => {
     },
   });
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadPreferences = async () => {
@@ -355,7 +373,7 @@ export const NotificationPreferencesPage: React.FC = () => {
     <NotificationPreferences
       preferences={preferences}
       onSave={handleSave}
-      onCancel={() => console.log('Cancelled')}
+      onCancel={() => navigate(-1)}
     />
   );
 };
@@ -367,6 +385,12 @@ export const NotificationPreferencesPage: React.FC = () => {
 export const ToastExample: React.FC = () => {
   const { addToast } = useToastNotifications();
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const statusSuccessClass = classToken(theme.status.success.bg);
+  const statusErrorClass = classToken(theme.status.error.bg);
+  const statusWarningClass = classToken(theme.status.warning.bg);
+  const primaryClass = classToken(theme.primary.DEFAULT);
+  const primaryHoverClass = classToken(theme.primary.hover);
 
   const showSuccessToast = () => {
     addToast({
@@ -388,7 +412,15 @@ export const ToastExample: React.FC = () => {
       actions: [
         {
           label: 'Retry',
-          onClick: () => console.log('Retrying...'),
+          onClick: () => {
+            addToast({
+              title: 'Retrying',
+              message: 'Attempting to save your changes again.',
+              type: 'info',
+              priority: 'normal',
+              read: false,
+            });
+          },
           variant: 'primary',
         },
       ],
@@ -415,7 +447,15 @@ export const ToastExample: React.FC = () => {
       actions: [
         {
           label: 'Extend Session',
-          onClick: () => console.log('Extending session...'),
+          onClick: () => {
+            addToast({
+              title: 'Session Extended',
+              message: 'Your session has been extended successfully.',
+              type: 'success',
+              priority: 'normal',
+              read: false,
+            });
+          },
           variant: 'primary',
         },
       ],
@@ -428,25 +468,25 @@ export const ToastExample: React.FC = () => {
       <div className="flex gap-4">
         <button
           onClick={showSuccessToast}
-          className={cn("px-4 py-2 rounded-lg transition-colors", theme.status.success.background, 'text-white', 'hover:bg-green-700')}
+          className={cn("px-4 py-2 rounded-lg transition-colors", statusSuccessClass, 'text-white', 'hover:bg-green-700')}
         >
           Show Success Toast
         </button>
         <button
           onClick={showErrorToast}
-          className={cn("px-4 py-2 rounded-lg transition-colors", theme.status.error.background, 'text-white', 'hover:bg-red-700')}
+          className={cn("px-4 py-2 rounded-lg transition-colors", statusErrorClass, 'text-white', 'hover:bg-red-700')}
         >
           Show Error Toast
         </button>
         <button
           onClick={showInfoToast}
-          className={cn("px-4 py-2 rounded-lg transition-colors", theme.colors.primary, 'text-white', `hover:${theme.colors.hoverPrimary}`)}
+          className={cn("px-4 py-2 rounded-lg transition-colors", primaryClass, 'text-white', `hover:${primaryHoverClass}`)}
         >
           Show Info Toast
         </button>
         <button
           onClick={showWarningToast}
-          className={cn("px-4 py-2 rounded-lg transition-colors", theme.status.warning.background, 'text-white', 'hover:bg-amber-700')}
+          className={cn("px-4 py-2 rounded-lg transition-colors", statusWarningClass, 'text-white', 'hover:bg-amber-700')}
         >
           Show Warning Toast
         </button>

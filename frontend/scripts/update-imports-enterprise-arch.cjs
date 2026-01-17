@@ -9,7 +9,6 @@
  * - Old: @/hooks/useDebounce -> New: @/shared/hooks/useDebounce
  */
 
-const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
@@ -24,11 +23,11 @@ const colors = {
 };
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
-  success: (msg) => console.log(`${colors.green}✓${colors.reset} ${msg}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠${colors.reset} ${msg}`),
+  info: (msg) => console.warn(`${colors.blue}ℹ${colors.reset} ${msg}`),
+  success: (msg) => console.warn(`${colors.green}✓${colors.reset} ${msg}`),
+  warning: (msg) => console.warn(`${colors.yellow}⚠${colors.reset} ${msg}`),
   section: (msg) =>
-    console.log(`\n${colors.bright}${colors.cyan}${msg}${colors.reset}`),
+    console.warn(`\n${colors.bright}${colors.cyan}${msg}${colors.reset}`),
 };
 
 // Import path transformations
@@ -147,7 +146,7 @@ let updatedCount = 0;
 files.forEach((file, index) => {
   if ((index + 1) % 50 === 0) {
     process.stdout.write(
-      `\r${colors.cyan}Progress: ${index + 1}/${files.length}${colors.reset}`
+      `\r${colors.cyan}Progress: ${index + 1}/${files.length}${colors.reset}`,
     );
   }
 
@@ -156,7 +155,7 @@ files.forEach((file, index) => {
   }
 });
 
-console.log(""); // New line after progress
+console.warn(""); // New line after progress
 log.section("📊 Summary");
 log.success(`Updated ${updatedCount} files`);
 log.info(`Skipped ${files.length - updatedCount} files (no changes needed)`);
@@ -167,7 +166,7 @@ log.info("1. Run: npm run typecheck");
 log.info("2. Fix any remaining import errors manually");
 log.info("3. Test the application");
 log.info(
-  "4. Remove old directories: components/atoms, components/molecules, components/features"
+  "4. Remove old directories: components/atoms, components/molecules, components/features",
 );
 
 process.exit(0);

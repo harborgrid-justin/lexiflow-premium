@@ -66,6 +66,12 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
   const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const classToken = (value: unknown) => String(value);
+  const infoClass = classToken(theme.colors.info);
+  const primaryClass = classToken(theme.primary.DEFAULT);
+  const primaryHoverClass = classToken(theme.primary.hover);
+  const borderFocusedClass = classToken(theme.border.focused);
+  const statusErrorBgClass = classToken(theme.status.error.bg);
 
   // Auto-hide when connected after 3 seconds
   useEffect(() => {
@@ -93,8 +99,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
         return {
           icon: RefreshCw,
           label: 'Connecting...',
-          color: theme.colors.info,
-          bg: theme.colors.primary,
+          color: infoClass,
+          bg: primaryClass,
           bgLight: cn('bg-blue-50 dark:bg-blue-900/20'),
           borderColor: 'border-blue-500',
           pulse: true,
@@ -373,8 +379,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
           className={cn(
             'px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
             state === 'error'
-              ? cn(theme.status.error.background, 'hover:bg-rose-600', 'focus:ring-rose-500')
-              : cn(theme.colors.primary, `hover:${theme.colors.hoverPrimary}`, theme.border.focus)
+              ? cn(statusErrorBgClass, 'hover:bg-rose-600', 'focus:ring-rose-500')
+              : cn(primaryClass, `hover:${primaryHoverClass}`, borderFocusedClass)
           )}
         >
           <RefreshCw className="h-4 w-4 inline mr-2" />

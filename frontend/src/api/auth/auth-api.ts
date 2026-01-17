@@ -3,15 +3,15 @@
  * API service split from apiServices.ts
  */
 
-import { REFRESH_TOKEN_KEY } from "@/services/infrastructure/api-client/config";
 import { apiClient } from "@/services/infrastructure/api-client.service";
+import { REFRESH_TOKEN_KEY } from "@/services/infrastructure/api-client/config";
 
 import type { User } from "@/types";
 
 export class AuthApiService {
   async login(
     email: string,
-    password: string
+    password: string,
   ): Promise<{ accessToken: string; refreshToken: string; user: User }> {
     // Note: The generic logic in apiClient.post automatically unwraps the { success: true, data: ... } envelope.
     // So 'response' here will be the inner data object directly: { accessToken, refreshToken, user }
@@ -27,7 +27,7 @@ export class AuthApiService {
     const { accessToken, refreshToken, user } = data;
 
     // Store tokens
-    console.log("[AuthApiService.login] Storing tokens:", {
+    console.warn("[AuthApiService.login] Storing tokens:", {
       hasAccessToken: !!accessToken,
       hasRefreshToken: !!refreshToken,
       accessTokenLength: accessToken?.length || 0,
@@ -59,8 +59,9 @@ export class AuthApiService {
     return { accessToken, refreshToken, user };
   }
 
-  async logout(): Promise<void> {
+  logout(): Promise<void> {
     apiClient.clearAuthTokens();
+    return Promise.resolve();
   }
 
   async getCurrentUser(): Promise<User> {
@@ -70,18 +71,24 @@ export class AuthApiService {
     }
 
     const response = await apiClient.get<{ success: boolean; data: User }>(
-      "/auth/profile"
+      "/auth/profile",
     );
     return response.data;
   }
 
   async refreshToken(): Promise<{ accessToken: string; refreshToken: string }> {
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-    if (!refreshToken) {
+    const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+    if (!storedRefreshToken) {
       throw new Error("No refresh token available");
     }
+    const refreshToken = storedRefreshToken;
 
-    const response = await apiClient.post<{
+    const response: {
+      data: {
+        accessToken: string;
+        refreshToken: string;
+      };
+    } = await apiClient.post<{
       success: boolean;
       data: {
         accessToken: string;
@@ -107,7 +114,7 @@ export class AuthApiService {
 
   async resetPassword(
     token: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<{ message: string }> {
     return apiClient.post<{ message: string }>("/auth/reset-password", {
       token,
@@ -117,7 +124,7 @@ export class AuthApiService {
 
   async changePassword(
     currentPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<{ message: string }> {
     return apiClient.post<{ message: string }>("/auth/change-password", {
       currentPassword,
@@ -128,7 +135,7 @@ export class AuthApiService {
   async enableMFA(): Promise<{ qrCode: string; secret: string }> {
     return apiClient.post<{ qrCode: string; secret: string }>(
       "/auth/enable-mfa",
-      {}
+      {},
     );
   }
 

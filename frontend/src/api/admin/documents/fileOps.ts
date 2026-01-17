@@ -17,7 +17,7 @@ import type { LegalDocument } from "@/types";
 /** Upload a document file with metadata */
 export async function upload(
   file: File,
-  metadata: Record<string, unknown>
+  metadata: Record<string, unknown>,
 ): Promise<LegalDocument> {
   validateFile(file, "upload");
   validateObject(metadata, "metadata", "upload");
@@ -25,7 +25,7 @@ export async function upload(
     return await apiClient.upload<LegalDocument>(
       "/documents/upload",
       file,
-      metadata
+      metadata,
     );
   } catch (error) {
     console.error("[DocumentsApiService.upload] Error:", error);
@@ -36,7 +36,7 @@ export async function upload(
 /** Bulk upload multiple documents */
 export async function bulkUpload(
   files: File[],
-  metadata: Record<string, string>
+  metadata: Record<string, string>,
 ): Promise<LegalDocument[]> {
   validateArray(files, "files", "bulkUpload");
   validateObject(metadata, "metadata", "bulkUpload");
@@ -61,10 +61,11 @@ export async function bulkUpload(
 
     const response = await fetch(
       `${apiClient.getBaseUrl()}/documents/bulk-upload`,
-      { method: "POST", headers, body: formData }
+      { method: "POST", headers, body: formData },
     );
     if (!response.ok) throw new Error(`Bulk upload failed: ${response.status}`);
-    return await response.json();
+    const payload: LegalDocument[] = (await response.json()) as LegalDocument[];
+    return payload;
   } catch (error) {
     console.error("[DocumentsApiService.bulkUpload] Error:", error);
     throw new Error("Failed to bulk upload documents");
@@ -88,7 +89,7 @@ export async function preview(id: string): Promise<string> {
   validateId(id, "preview");
   try {
     const response = await apiClient.get<{ url: string }>(
-      `/documents/${id}/preview`
+      `/documents/${id}/preview`,
     );
     return response.url;
   } catch (error) {

@@ -10,7 +10,7 @@ import type { ClauseValidationResult, DraftingTemplate } from "./types";
  */
 export function validateVariableValues(
   template: DraftingTemplate,
-  values: Record<string, unknown>
+  values: Record<string, unknown>,
 ): { isValid: boolean; missing: string[] } {
   const missing: string[] = [];
 
@@ -36,7 +36,7 @@ export function validateClauseCompatibility(
     title?: string;
     metadata?: Record<string, unknown>;
     tags?: string[];
-  }>
+  }>,
 ): ClauseValidationResult {
   const conflicts: ClauseValidationResult["conflicts"] = [];
 
@@ -95,7 +95,7 @@ export function validateClauseCompatibility(
           clause1Tags.some((tag: string) => tag.startsWith("exclude:")) &&
           clause2Tags.some((tag: string) => {
             const excludeTag = clause1Tags.find((t: string) =>
-              t.startsWith("exclude:")
+              t.startsWith("exclude:"),
             );
             return excludeTag && tag === excludeTag.replace("exclude:", "");
           });
@@ -118,56 +118,92 @@ export function validateClauseCompatibility(
   };
 }
 
+function toTemplateString(value: unknown, fallback: string): string {
+  if (value === null || value === undefined) {
+    return fallback;
+  }
+
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    typeof value === "bigint"
+  ) {
+    return String(value);
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+
+  return JSON.stringify(value);
+}
+
 /**
  * Generate document preview with variable interpolation
  */
 export function generatePreview(
   template: DraftingTemplate,
   variableValues: Record<string, unknown>,
-  clauseContent?: Record<string, string>
+  clauseContent?: Record<string, string>,
 ): string {
   let content = template.content;
 
   // Replace variable placeholders: {{variable_name}}
-  content = content.replace(/\{\{(\w+)\}\}/g, (match, varName) => {
-    const value = variableValues[varName];
-    return value !== undefined && value !== null ? value.toString() : match;
-  });
+  content = content.replace(
+    /\{\{(\w+)\}\}/g,
+    (match: string, varName: string) => {
+      const value = variableValues[varName];
+      return toTemplateString(value, match);
+    },
+  );
 
   // Replace case data placeholders: {{case.field}}
-  content = content.replace(/\{\{case.(\w+)\}\}/g, (match, field) => {
-    const caseData = variableValues["case"] as
-      | Record<string, unknown>
-      | undefined;
-    if (caseData && caseData[field] !== undefined) {
-      return caseData[field]?.toString() || match;
-    }
-    return match;
-  });
+  content = content.replace(
+    /\{\{case.(\w+)\}\}/g,
+    (match: string, field: string) => {
+      const caseData = variableValues["case"] as
+        | Record<string, unknown>
+        | undefined;
+      if (caseData && caseData[field] !== undefined) {
+        return toTemplateString(caseData[field], match);
+      }
+      return match;
+    },
+  );
 
   // Replace party placeholders: {{party.plaintiff}}, {{party.defendant}}
-  content = content.replace(/\{\{party.(\w+)\}\}/g, (match, role) => {
-    const parties = variableValues["parties"] as
-      | Record<string, unknown>
-      | undefined;
-    if (parties && parties[role] !== undefined) {
-      return parties[role]?.toString() || match;
-    }
-    return match;
-  });
+  content = content.replace(
+    /\{\{party.(\w+)\}\}/g,
+    (match: string, role: string) => {
+      const parties = variableValues["parties"] as
+        | Record<string, unknown>
+        | undefined;
+      if (parties && parties[role] !== undefined) {
+        return toTemplateString(parties[role], match);
+      }
+      return match;
+    },
+  );
 
   // Insert clauses at designated positions: {{clause:position}}
   if (clauseContent) {
-    content = content.replace(/\{\{clause:(\d+)\}\}/g, (match, position) => {
-      const pos = parseInt(position);
-      const clauseRef = template.clauseReferences?.find(
-        (ref) => ref.position === pos
-      );
-      if (clauseRef && clauseContent[clauseRef.clauseId]) {
-        return `\n\n${clauseContent[clauseRef.clauseId]}\n\n`;
-      }
-      return match;
-    });
+    content = content.replace(
+      /\{\{clause:(\d+)\}\}/g,
+      (match: string, position: string) => {
+        const pos = Number.parseInt(position, 10);
+        const clauseRef = template.clauseReferences?.find(
+          (ref) => ref.position === pos,
+        );
+        if (clauseRef && clauseContent[clauseRef.clauseId]) {
+          return `\n\n${clauseContent[clauseRef.clauseId]}\n\n`;
+        }
+        return match;
+      },
+    );
   }
 
   return content;

@@ -57,7 +57,7 @@ export function useIsClient(): boolean {
  */
 export function useClientEffect(
   effect: () => void | (() => void),
-  deps?: React.DependencyList
+  deps?: React.DependencyList,
 ): void {
   useEffect(() => {
     if (isBrowser()) {
@@ -106,7 +106,7 @@ export function useWindowSize(): { width?: number; height?: number } {
  */
 export function useSafeLocalStorage<T>(
   key: string,
-  initialValue: T
+  initialValue: T,
 ): [T, (value: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
 
@@ -116,7 +116,8 @@ export function useSafeLocalStorage<T>(
     try {
       const item = window.localStorage.getItem(key);
       if (item) {
-        setStoredValue(JSON.parse(item));
+        const parsed: T = JSON.parse(item) as T;
+        setStoredValue(parsed);
       }
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);

@@ -76,6 +76,16 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
   isLoading = false,
 }) => {
   const { theme, tokens } = useTheme();
+  const toStyleValue = (value: unknown) => String(value);
+  const borderDefault = toStyleValue(theme.border.default);
+  const surfaceElevated = toStyleValue(theme.surface.elevated);
+  const surfaceBase = toStyleValue(theme.surface.base);
+  const surfaceHover = toStyleValue(theme.surface.hover);
+  const textPrimary = toStyleValue(theme.text.primary);
+  const textSecondary = toStyleValue(theme.text.secondary);
+  const textMuted = toStyleValue(theme.text.muted);
+  const primaryDefault = toStyleValue(theme.primary.DEFAULT);
+  const statusErrorBg = toStyleValue(theme.status.error.bg);
 
   // Calculate unread count
   const unreadCount = useMemo(
@@ -88,15 +98,17 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
     // Check for related entity type first
     if ('relatedEntityType' in notification) {
       const entityType = (notification as Record<string, unknown>).relatedEntityType;
-      switch (entityType) {
-        case 'case':
-          return <Briefcase className="h-5 w-5 text-blue-500" />;
-        case 'document':
-          return <FileText className="h-5 w-5 text-purple-500" />;
-        case 'calendar':
-          return <Calendar className="h-5 w-5 text-orange-500" />;
-        case 'billing':
-          return <CreditCard className="h-5 w-5 text-green-500" />;
+      if (typeof entityType === 'string') {
+        switch (entityType) {
+          case 'case':
+            return <Briefcase className="h-5 w-5 text-blue-500" />;
+          case 'document':
+            return <FileText className="h-5 w-5 text-purple-500" />;
+          case 'calendar':
+            return <Calendar className="h-5 w-5 text-orange-500" />;
+          case 'billing':
+            return <CreditCard className="h-5 w-5 text-green-500" />;
+        }
       }
     }
 
@@ -178,11 +190,11 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: tokens.spacing.normal.lg,
-              borderBottom: `1px solid ${theme.border.default}`,
-              backgroundColor: theme.surface.elevated
+              borderBottom: `1px solid ${borderDefault}`,
+              backgroundColor: surfaceElevated
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.compact.xs }}>
-                <h3 style={{ fontWeight: tokens.typography.fontWeight.bold, fontSize: tokens.typography.fontSize.lg, color: theme.text.primary }}>
+                <h3 style={{ fontWeight: tokens.typography.fontWeight.bold, fontSize: tokens.typography.fontSize.lg, color: textPrimary }}>
                   Notifications
                 </h3>
                 {unreadCount > 0 && (
@@ -190,8 +202,8 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                     padding: `${tokens.spacing.compact.xs} ${tokens.spacing.compact.sm}`,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.bold,
-                    backgroundColor: theme.status.error.bg,
-                    color: theme.surface.base,
+                    backgroundColor: statusErrorBg,
+                    color: surfaceBase,
                     borderRadius: tokens.borderRadius.full
                   }}>
                     {unreadCount}
@@ -206,7 +218,7 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                     style={{
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      color: theme.primary.DEFAULT,
+                      color: primaryDefault,
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
@@ -231,11 +243,13 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                     backgroundColor: 'transparent',
                     border: 'none',
                     cursor: 'pointer',
-                    color: theme.text.muted,
+                    color: textMuted,
                     transition: 'background-color 0.2s'
                   }}
                   className="focus:outline-none focus:ring-2"
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = surfaceHover;
+                  }}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                   aria-label="Close notifications panel"
                 >
@@ -252,7 +266,7 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                     display: 'inline-block',
                     width: '2rem',
                     height: '2rem',
-                    border: `4px solid ${theme.primary.DEFAULT}`,
+                    border: `4px solid ${primaryDefault}`,
                     borderRightColor: 'transparent',
                     borderRadius: '50%'
                   }} className="animate-spin" role="status">
@@ -261,11 +275,11 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                 </div>
               ) : notifications.length === 0 ? (
                 <div style={{ padding: '2rem', textAlign: 'center' }}>
-                  <Bell style={{ width: '3rem', height: '3rem', margin: '0 auto 0.75rem', color: theme.text.muted }} />
-                  <p style={{ fontSize: tokens.typography.fontSize.sm, color: theme.text.muted, fontWeight: tokens.typography.fontWeight.medium }}>
+                  <Bell style={{ width: '3rem', height: '3rem', margin: '0 auto 0.75rem', color: textMuted }} />
+                  <p style={{ fontSize: tokens.typography.fontSize.sm, color: textMuted, fontWeight: tokens.typography.fontWeight.medium }}>
                     No notifications
                   </p>
-                  <p style={{ fontSize: tokens.typography.fontSize.xs, color: theme.text.muted, marginTop: tokens.spacing.compact.xs }}>
+                  <p style={{ fontSize: tokens.typography.fontSize.xs, color: textMuted, marginTop: tokens.spacing.compact.xs }}>
                     You're all caught up!
                   </p>
                 </div>
@@ -281,12 +295,16 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                         transition={{ duration: 0.2, delay: index * 0.05 }}
                         style={{
                           padding: tokens.spacing.normal.lg,
-                          backgroundColor: !notification.read ? theme.primary.DEFAULT + '10' : theme.surface.base,
+                          backgroundColor: !notification.read ? `${primaryDefault}10` : surfaceBase,
                           transition: 'background-color 0.2s',
                           cursor: 'pointer'
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surface.hover}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = !notification.read ? theme.primary.DEFAULT + '10' : theme.surface.base}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = surfaceHover;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = !notification.read ? `${primaryDefault}10` : surfaceBase;
+                        }}
                         onClick={() => !notification.read && onMarkAsRead(notification.id)}
                         className="group"
                       >
@@ -381,8 +399,8 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
             {notifications.length > 0 && (
               <div style={{
                 padding: tokens.spacing.normal.md,
-                borderTop: `1px solid ${theme.border.default}`,
-                backgroundColor: theme.surface.elevated,
+                borderTop: `1px solid ${borderDefault}`,
+                backgroundColor: surfaceElevated,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -394,7 +412,7 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                     style={{
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      color: theme.primary.DEFAULT,
+                      color: primaryDefault,
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
@@ -414,7 +432,7 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
-                    color: theme.text.secondary,
+                    color: textSecondary,
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
@@ -423,8 +441,12 @@ const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
                     transition: 'color 0.2s'
                   }}
                   className="focus:outline-none focus:ring-2"
-                  onMouseEnter={(e) => e.currentTarget.style.color = theme.text.primary}
-                  onMouseLeave={(e) => e.currentTarget.style.color = theme.text.secondary}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = textPrimary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = textSecondary;
+                  }}
                   aria-label="Clear all notifications"
                 >
                   Clear all

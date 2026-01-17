@@ -14,8 +14,8 @@ import { DataService } from '@/services/data/data-service.service';
 import { createDetailMeta } from '../_shared/meta-utils';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
-import type { Route } from "./+types/detail";
 import type { ResearchSession } from '@/types';
+import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags

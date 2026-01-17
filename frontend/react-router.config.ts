@@ -11,7 +11,7 @@ import type { Config } from "@react-router/dev/config";
 
 export default {
   // Enable type generation for routes
-  ssr: false, // Enable SSR - required for loaders and actions
+  ssr: true, // Enable SSR - required for loaders and actions
 
   // App directory containing routes
   appDirectory: "src",

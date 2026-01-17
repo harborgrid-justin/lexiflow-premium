@@ -41,7 +41,7 @@ import { type DirectorView, EntityNavigation, getEntityFirstTab, getEntityParent
 
 import type { EntityId, LegalEntity } from '@/types';
 
-import { DataService } from '@/services/dataService';
+import { DataService } from '@/services/data/dataService';
 
 // Sub-components
 const EntityGrid = React.lazy(() => import('./EntityGrid').then(m => ({ default: m.EntityGrid })));

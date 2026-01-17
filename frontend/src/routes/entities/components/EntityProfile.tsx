@@ -40,7 +40,7 @@ import { cn } from '@/lib/cn';
 // Types
 import type { EntityRelationship, LegalEntity } from '@/types';
 
-import { DataService } from '@/services/dataService';
+import { DataService } from '@/services/data/dataService';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -59,7 +59,7 @@ import {
  * ```
  */
 export async function getAll(
-  filters?: Record<string, unknown>
+  filters?: Record<string, unknown>,
 ): Promise<Result<unknown[]>> {
   const result = await client.get<unknown[]>("/litigation", filters || {});
   if (!result.ok) {
@@ -140,7 +140,7 @@ export async function create(input: unknown): Promise<Result<unknown>> {
  */
 export async function update(
   id: string,
-  input: unknown
+  input: unknown,
 ): Promise<Result<unknown>> {
   if (!id) {
     return failure(new ValidationError("ID is required"));
@@ -178,3 +178,11 @@ export async function deleteLitigation(id: string): Promise<Result<void>> {
   }
   return success(undefined);
 }
+
+export const litigationApi = {
+  getAll,
+  getById,
+  create,
+  update,
+  delete: deleteLitigation,
+};

@@ -3,8 +3,8 @@
  * API service split from apiServices.ts
  */
 
-import { REFRESH_TOKEN_KEY } from "@/services/infrastructure/api-client/config";
 import { apiClient } from "@/services/infrastructure/api-client.service";
+import { REFRESH_TOKEN_KEY } from "@/services/infrastructure/api-client/config";
 
 import type { User } from "@/types";
 

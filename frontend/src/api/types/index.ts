@@ -18,7 +18,7 @@
  * LexiFlow uses a backend-first architecture with PostgreSQL + NestJS.
  * Frontend defaults to REST API calls. Legacy IndexedDB mode is deprecated.
  *
- * @see {@link ../../../services/dataService.ts} - Data access facade
+ * @see {@link ../../../services/data/dataService.ts} - Data access facade
  * @see {@link ../../../services/api/index.ts} - Backend API services
  * @see {@link ../../../../backend/src} - NestJS backend source
  */

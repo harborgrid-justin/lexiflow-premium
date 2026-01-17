@@ -39,30 +39,38 @@ import {
 const notificationsApi = new NotificationsApiService();
 
 function mapApiToUi(notification: ApiNotification): UINotification {
-  const fallbackType: UINotification['type'] = ['info', 'success', 'warning', 'error'].includes(notification.type)
+  const supportedTypes: UINotification['type'][] = ['info', 'success', 'warning', 'error'];
+  const fallbackType: UINotification['type'] = supportedTypes.includes(
+    notification.type as UINotification['type'],
+  )
     ? (notification.type as UINotification['type'])
-    < button
-          onClick = {() => showSuccess('Operation successful', 'Your changes have been saved')
-}
-className = { cn("px-4 py-2 rounded-lg transition-colors", statusSuccessClass, 'text-white', 'hover:bg-green-700') }
-  >
-  title: notification.title,
+    : 'info';
+
+  const priority: UINotification['priority'] =
+    notification.priority === 'urgent' || notification.priority === 'high'
+      ? notification.priority
+      : notification.priority === 'low'
+        ? 'low'
+        : 'normal';
+
+  return {
+    id: notification.id,
+    title: notification.title,
     message: notification.message,
-      type: fallbackType,
-        read: notification.read,
-          className = { cn("px-4 py-2 rounded-lg transition-colors", statusErrorClass, 'text-white', 'hover:bg-red-700') }
-priority: notification.priority === 'urgent' || notification.priority === 'high'
-  ? notification.priority
-  : 'normal',
+    type: fallbackType,
+    read: notification.read,
+    priority,
+    timestamp: notification.createdAt
+      ? new Date(notification.createdAt).getTime()
+      : Date.now(),
   };
 }
-className = { cn("px-4 py-2 rounded-lg transition-colors", primaryClass, 'text-white', `hover:${primaryHoverClass}`)}
+
 // ============================================================================
 // PRODUCTION READY COMPONENTS
 // ============================================================================
 
 /**
-          className={cn("px-4 py-2 rounded-lg transition-colors", statusWarningClass, 'text-white', 'hover:bg-amber-700')}
  * Fetches notifications from DataService and provides CRUD operations
  */
 export const HeaderWithNotifications: React.FC = () => {
@@ -150,7 +158,7 @@ export const HeaderWithNotifications: React.FC = () => {
   return (
     <header style={{
       backgroundColor: surfaceBase,
-      borderBottom: `1px solid ${ borderDefault } `,
+      borderBottom: `1px solid ${borderDefault} `,
       padding: tokens.spacing.normal.lg
     }}>
       <div className="flex items-center justify-between">

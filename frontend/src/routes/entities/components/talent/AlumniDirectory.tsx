@@ -11,7 +11,7 @@ import { queryKeys } from '@/utils/queryKeys';
 
 import type { LegalEntity } from '@/types';
 
-import { DataService } from '@/services/dataService';
+import { DataService } from '@/services/data/dataService';
 
 interface AlumniDirectoryProps { }
 

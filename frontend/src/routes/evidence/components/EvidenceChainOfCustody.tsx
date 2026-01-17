@@ -32,7 +32,7 @@ import { CustodyActionType, validateCustodyEventSafe } from '@/services/validati
 
 import type { ChainOfCustodyEvent, EvidenceItem, UserId } from '@/types';
 
-import { DataService } from '@/services/dataService';
+import { DataService } from '@/services/data/dataService';
 
 interface EvidenceChainOfCustodyProps {
   selectedItem: EvidenceItem;

@@ -16,6 +16,7 @@ import {
   Database,
   DollarSign,
   FileCheck,
+  FilePlus,
   FileQuestion,
   FileSpreadsheet,
   FileText,
@@ -127,6 +128,15 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     label: "Case Management",
     icon: Briefcase,
     category: "Case Work",
+    children: [
+      { id: PATHS.CASES_OVERVIEW, label: "Overview", icon: LayoutGrid },
+      { id: PATHS.CASES_CALENDAR, label: "Calendar", icon: Calendar },
+      { id: PATHS.CASES_ANALYTICS, label: "Analytics", icon: BarChart3 },
+      { id: PATHS.CASES_INTAKE, label: "Intake", icon: FilePlus },
+      { id: PATHS.CASES_OPERATIONS, label: "Operations", icon: GitBranch },
+      { id: PATHS.CASES_INSIGHTS, label: "Insights", icon: Search },
+      { id: PATHS.CASES_FINANCIALS, label: "Financials", icon: DollarSign },
+    ],
   },
   {
     id: PATHS.PLEADINGS,
@@ -209,6 +219,12 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     label: "Discovery Center",
     icon: FileQuestion,
     category: "Litigation Tools",
+    children: [
+      { id: PATHS.DISCOVERY_REQUESTS, label: "Requests", icon: FilePlus },
+      { id: PATHS.DISCOVERY_RESPONSES, label: "Responses", icon: FileCheck },
+      { id: PATHS.DISCOVERY_PRODUCTIONS, label: "Productions", icon: Package },
+      { id: PATHS.DISCOVERY_TIMELINE, label: "Timeline", icon: Calendar },
+    ],
   },
   {
     id: PATHS.EVIDENCE,
@@ -221,6 +237,19 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     label: "Exhibit Pro",
     icon: StickyNote,
     category: "Litigation Tools",
+  },
+  {
+    id: PATHS.TRIAL,
+    label: "Trial Management",
+    icon: Gavel,
+    category: "Litigation Tools",
+    children: [
+      { id: PATHS.TRIAL_CALENDAR, label: "Trial Calendar", icon: Calendar },
+      { id: PATHS.TRIAL_WITNESSES, label: "Witnesses", icon: Users },
+      { id: PATHS.TRIAL_EXHIBITS, label: "Trial Exhibits", icon: FileText },
+      { id: PATHS.TRIAL_MOTIONS, label: "Motions in Limine", icon: ScrollText },
+      { id: PATHS.TRIAL_NOTES, label: "Trial Notes", icon: StickyNote },
+    ],
   },
 
   // ============================================================================

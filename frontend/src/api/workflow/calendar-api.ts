@@ -217,7 +217,31 @@ export class CalendarApiService {
         params.append("completed", String(filters.completed));
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-      return await apiClient.get<CalendarEvent[]>(url);
+      const response = await apiClient.get<
+        { data: CalendarEvent[]; total: number } | CalendarEvent[]
+      >(url);
+
+      // Backend returns { data: CalendarEvent[], total: number }
+      // Extract the data array if response is an object with data property
+      if (
+        response &&
+        typeof response === "object" &&
+        "data" in response &&
+        Array.isArray(response.data)
+      ) {
+        return response.data;
+      }
+
+      // Fallback: if response is already an array, return it
+      if (Array.isArray(response)) {
+        return response;
+      }
+
+      console.warn(
+        "[CalendarApiService.getAll] Unexpected response format:",
+        typeof response,
+      );
+      return [];
     } catch (error) {
       console.error("[CalendarApiService.getAll] Error:", error);
       throw new Error("Failed to fetch calendar events");

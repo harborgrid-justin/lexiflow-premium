@@ -27,3 +27,6 @@ export async function reportsLoader() {
     recentReports: (reports || []).slice(0, 5),
   };
 }
+
+// Remix loader entry point for client bundler re-export
+export const loader = reportsLoader;

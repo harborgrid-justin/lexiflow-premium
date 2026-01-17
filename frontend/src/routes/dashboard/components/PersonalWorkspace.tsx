@@ -72,7 +72,14 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
 
     const { data: notifications = [] } = useQuery<DomainNotification[]>(
         ['notifications'],
-        () => DataService.notifications.getNotifications() as unknown as Promise<DomainNotification[]>
+        async () => {
+            try {
+                return await DataService.notifications.getNotifications() as unknown as Promise<DomainNotification[]>;
+            } catch (error) {
+                console.warn('[PersonalWorkspace] Failed to load notifications, using empty array:', error);
+                return [];
+            }
+        }
     );
 
     const handleMarkAsRead = async (id: string) => {

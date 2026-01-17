@@ -3,12 +3,18 @@
  * @description Production backend API integration for Jurisdiction Explorer
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface Jurisdiction {
   id: string;
   name: string;
-  system: 'Federal' | 'State' | 'Regulatory' | 'International' | 'Arbitration' | 'Local';
+  system:
+    | "Federal"
+    | "State"
+    | "Regulatory"
+    | "International"
+    | "Arbitration"
+    | "Local";
   type: string;
   region?: string;
   description?: string;
@@ -32,7 +38,15 @@ export interface JurisdictionRule {
   jurisdictionId: string;
   code: string;
   name: string;
-  type: 'Procedural' | 'Evidentiary' | 'Civil' | 'Criminal' | 'Administrative' | 'Local' | 'Standing Order' | 'Practice Guide';
+  type:
+    | "Procedural"
+    | "Evidentiary"
+    | "Civil"
+    | "Criminal"
+    | "Administrative"
+    | "Local"
+    | "Standing Order"
+    | "Practice Guide";
   description?: string;
   fullText?: string;
   url?: string;
@@ -46,18 +60,18 @@ export interface JurisdictionRule {
 
 export interface CreateJurisdictionDto {
   name: string;
-  system: Jurisdiction['system'];
+  system: Jurisdiction["system"];
   type: string;
   region?: string;
   description?: string;
   website?: string;
   rulesUrl?: string;
   code?: string;
-  metadata?: Jurisdiction['metadata'];
+  metadata?: Jurisdiction["metadata"];
 }
 
 export interface JurisdictionFilters {
-  system?: Jurisdiction['system'];
+  system?: Jurisdiction["system"];
   type?: string;
   region?: string;
   search?: string;
@@ -65,7 +79,7 @@ export interface JurisdictionFilters {
 
 export interface RuleFilters {
   jurisdictionId?: string;
-  type?: JurisdictionRule['type'];
+  type?: JurisdictionRule["type"];
   search?: string;
   isActive?: boolean;
 }
@@ -74,7 +88,7 @@ export interface CreateJurisdictionRuleDto {
   jurisdictionId: string;
   code: string;
   name: string;
-  type: JurisdictionRule['type'];
+  type: JurisdictionRule["type"];
   description?: string;
   fullText?: string;
   url?: string;
@@ -91,16 +105,43 @@ export const JurisdictionAPI = {
   // JURISDICTIONS
   // ============================================================================
 
-  async getAll(params?: { system?: string; search?: string }): Promise<Jurisdiction[]> {
+  async getAll(params?: {
+    system?: string;
+    search?: string;
+  }): Promise<Jurisdiction[]> {
     try {
       const queryParams = new URLSearchParams();
-      if (params?.system) queryParams.append('system', params.system);
-      if (params?.search) queryParams.append('search', params.search);
-      
-      const url = `/jurisdictions${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-      return await apiClient.get<Jurisdiction[]>(url);
+      if (params?.system) queryParams.append("system", params.system);
+      if (params?.search) queryParams.append("search", params.search);
+
+      const url = `/jurisdictions${queryParams.toString() ? "?" + queryParams.toString() : ""}`;
+      const response = await apiClient.get<
+        { data: Jurisdiction[]; total: number } | Jurisdiction[]
+      >(url);
+
+      // Backend returns { data: Jurisdiction[], total: number, page, limit, totalPages }
+      // Extract the data array if response is an object with data property
+      if (
+        response &&
+        typeof response === "object" &&
+        "data" in response &&
+        Array.isArray(response.data)
+      ) {
+        return response.data;
+      }
+
+      // Fallback: if response is already an array, return it
+      if (Array.isArray(response)) {
+        return response;
+      }
+
+      console.warn(
+        "[JurisdictionAPI.getAll] Unexpected response format:",
+        typeof response,
+      );
+      return [];
     } catch (error) {
-      console.error('Failed to fetch jurisdictions:', error);
+      console.error("Failed to fetch jurisdictions:", error);
       return [];
     }
   },
@@ -116,77 +157,82 @@ export const JurisdictionAPI = {
 
   async getFederal(): Promise<Jurisdiction[]> {
     try {
-      return await apiClient.get<Jurisdiction[]>('/jurisdictions/federal');
+      return await apiClient.get<Jurisdiction[]>("/jurisdictions/federal");
     } catch (error) {
-      console.error('Failed to fetch federal courts:', error);
+      console.error("Failed to fetch federal courts:", error);
       return [];
     }
   },
 
   async getState(): Promise<Jurisdiction[]> {
     try {
-      return await apiClient.get<Jurisdiction[]>('/jurisdictions/state');
+      return await apiClient.get<Jurisdiction[]>("/jurisdictions/state");
     } catch (error) {
-      console.error('Failed to fetch state courts:', error);
+      console.error("Failed to fetch state courts:", error);
       return [];
     }
   },
 
   async getRegulatory(): Promise<Jurisdiction[]> {
     try {
-      return await apiClient.get<Jurisdiction[]>('/jurisdictions/regulatory');
+      return await apiClient.get<Jurisdiction[]>("/jurisdictions/regulatory");
     } catch (error) {
-      console.error('Failed to fetch regulatory bodies:', error);
+      console.error("Failed to fetch regulatory bodies:", error);
       return [];
     }
   },
 
   async getInternational(): Promise<Jurisdiction[]> {
     try {
-      return await apiClient.get<Jurisdiction[]>('/jurisdictions/international');
+      return await apiClient.get<Jurisdiction[]>(
+        "/jurisdictions/international",
+      );
     } catch (error) {
-      console.error('Failed to fetch international treaties:', error);
+      console.error("Failed to fetch international treaties:", error);
       return [];
     }
   },
 
   async getArbitration(): Promise<Jurisdiction[]> {
     try {
-      return await apiClient.get<Jurisdiction[]>('/jurisdictions/arbitration');
+      return await apiClient.get<Jurisdiction[]>("/jurisdictions/arbitration");
     } catch (error) {
-      console.error('Failed to fetch arbitration providers:', error);
+      console.error("Failed to fetch arbitration providers:", error);
       return [];
     }
   },
 
   async getLocal(): Promise<Jurisdiction[]> {
     try {
-      return await apiClient.get<Jurisdiction[]>('/jurisdictions/local');
+      return await apiClient.get<Jurisdiction[]>("/jurisdictions/local");
     } catch (error) {
-      console.error('Failed to fetch local rules:', error);
+      console.error("Failed to fetch local rules:", error);
       return [];
     }
   },
 
   async getMapNodes(): Promise<unknown[]> {
     try {
-      return await apiClient.get<unknown[]>('/jurisdictions/map-nodes');
+      return await apiClient.get<unknown[]>("/jurisdictions/map-nodes");
     } catch (error) {
-      console.error('Failed to fetch jurisdiction map nodes:', error);
+      console.error("Failed to fetch jurisdiction map nodes:", error);
       return [];
     }
   },
 
   async create(data: CreateJurisdictionDto): Promise<Jurisdiction | null> {
     try {
-      return await apiClient.post<Jurisdiction>('/jurisdictions', data);
+      return await apiClient.post<Jurisdiction>("/jurisdictions", data);
     } catch (error) {
-      console.error('Failed to create jurisdiction:', error);
+      console.error("Failed to create jurisdiction:", error);
       return null;
     }
   },
 
-  async update(id: string, data: Partial<CreateJurisdictionDto>): Promise<Jurisdiction | null> {
+  async update(
+    id: string,
+    data: Partial<CreateJurisdictionDto>,
+  ): Promise<Jurisdiction | null> {
     try {
       return await apiClient.put<Jurisdiction>(`/jurisdictions/${id}`, data);
     } catch (error) {
@@ -212,48 +258,68 @@ export const JurisdictionAPI = {
   async getRules(jurisdictionId?: string): Promise<JurisdictionRule[]> {
     try {
       if (jurisdictionId) {
-        return await apiClient.get<JurisdictionRule[]>(`/jurisdictions/${jurisdictionId}/rules`);
+        return await apiClient.get<JurisdictionRule[]>(
+          `/jurisdictions/${jurisdictionId}/rules`,
+        );
       }
-      return await apiClient.get<JurisdictionRule[]>('/jurisdictions/rules');
+      return await apiClient.get<JurisdictionRule[]>("/jurisdictions/rules");
     } catch (error) {
-      console.error('Failed to fetch jurisdiction rules:', error);
+      console.error("Failed to fetch jurisdiction rules:", error);
       return [];
     }
   },
 
   async getRuleById(id: string): Promise<JurisdictionRule | null> {
     try {
-      return await apiClient.get<JurisdictionRule>(`/jurisdictions/rules/${id}`);
+      return await apiClient.get<JurisdictionRule>(
+        `/jurisdictions/rules/${id}`,
+      );
     } catch (error) {
       console.error(`Failed to fetch rule ${id}:`, error);
       return null;
     }
   },
 
-  async searchRules(query: string, jurisdictionId?: string): Promise<JurisdictionRule[]> {
+  async searchRules(
+    query: string,
+    jurisdictionId?: string,
+  ): Promise<JurisdictionRule[]> {
     try {
       const params = new URLSearchParams({ q: query });
-      if (jurisdictionId) params.append('jurisdictionId', jurisdictionId);
-      
-      return await apiClient.get<JurisdictionRule[]>(`/jurisdictions/rules/search?${params.toString()}`);
+      if (jurisdictionId) params.append("jurisdictionId", jurisdictionId);
+
+      return await apiClient.get<JurisdictionRule[]>(
+        `/jurisdictions/rules/search?${params.toString()}`,
+      );
     } catch (error) {
-      console.error('Failed to search jurisdiction rules:', error);
+      console.error("Failed to search jurisdiction rules:", error);
       return [];
     }
   },
 
-  async createRule(data: CreateJurisdictionRuleDto): Promise<JurisdictionRule | null> {
+  async createRule(
+    data: CreateJurisdictionRuleDto,
+  ): Promise<JurisdictionRule | null> {
     try {
-      return await apiClient.post<JurisdictionRule>('/jurisdictions/rules', data);
+      return await apiClient.post<JurisdictionRule>(
+        "/jurisdictions/rules",
+        data,
+      );
     } catch (error) {
-      console.error('Failed to create jurisdiction rule:', error);
+      console.error("Failed to create jurisdiction rule:", error);
       return null;
     }
   },
 
-  async updateRule(id: string, data: Partial<Omit<CreateJurisdictionRuleDto, 'jurisdictionId'>>): Promise<JurisdictionRule | null> {
+  async updateRule(
+    id: string,
+    data: Partial<Omit<CreateJurisdictionRuleDto, "jurisdictionId">>,
+  ): Promise<JurisdictionRule | null> {
     try {
-      return await apiClient.put<JurisdictionRule>(`/jurisdictions/rules/${id}`, data);
+      return await apiClient.put<JurisdictionRule>(
+        `/jurisdictions/rules/${id}`,
+        data,
+      );
     } catch (error) {
       console.error(`Failed to update rule ${id}:`, error);
       return null;

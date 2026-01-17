@@ -86,6 +86,12 @@ import { QueuesModule } from "./queues/queues.module";
 // Admin
 import { AdminModule } from "./admin/admin.module";
 
+// Newly Added Modules (Phase 2)
+import { DafModule } from "./daf/daf.module";
+import { PracticeModule } from "./practice/practice.module";
+import { RealEstateModule } from "./real-estate/real-estate.module";
+import { RulesEngineModule } from "./rules-engine/rules-engine.module";
+
 /* ------------------------------------------------------------------ */
 /* Canonical Application Module List                                   */
 import { StrategiesModule } from "./strategies/strategies.module";
@@ -179,6 +185,12 @@ export const APP_IMPORTS = [
 
   // Admin
   AdminModule,
+
+  // Newly Added Modules (Phase 2)
+  RealEstateModule,
+  RulesEngineModule,
+  DafModule,
+  PracticeModule,
 ] as const;
 
 /* ------------------------------------------------------------------ */

@@ -41,7 +41,7 @@ export default [
     // Home/Dashboard routes
     index("routes/home.tsx"),
     route("dashboard", "routes/dashboard/DashboardLayout.tsx", [
-      index("routes/dashboard/DashboardView.tsx"),
+      index("routes/dashboard/index.tsx"),
     ]),
 
     // Case Management - Primary Module

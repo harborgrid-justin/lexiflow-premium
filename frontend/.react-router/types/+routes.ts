@@ -263,8 +263,8 @@ type RouteFiles = {
     id: "routes/dashboard/DashboardLayout";
     page: "/dashboard";
   };
-  "routes/dashboard/DashboardView.tsx": {
-    id: "routes/dashboard/DashboardView";
+  "routes/dashboard/index.tsx": {
+    id: "routes/dashboard/index";
     page: "/dashboard";
   };
   "routes/cases/CaseListLayout.tsx": {
@@ -522,7 +522,7 @@ type RouteModules = {
   "routes/layout": typeof import("./src/routes/layout.tsx");
   "routes/home": typeof import("./src/routes/home.tsx");
   "routes/dashboard/DashboardLayout": typeof import("./src/routes/dashboard/DashboardLayout.tsx");
-  "routes/dashboard/DashboardView": typeof import("./src/routes/dashboard/DashboardView.tsx");
+  "routes/dashboard/index": typeof import("./src/routes/dashboard/index.tsx");
   "routes/cases/CaseListLayout": typeof import("./src/routes/cases/CaseListLayout.tsx");
   "routes/cases/CaseListView": typeof import("./src/routes/cases/CaseListView.tsx");
   "routes/cases/create": typeof import("./src/routes/cases/create.tsx");

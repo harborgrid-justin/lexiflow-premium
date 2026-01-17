@@ -1,8 +1,22 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { EvidenceItem, EvidenceType, EvidenceStatus } from './entities/evidence-item.entity';
-import { ChainOfCustodyEvent, ChainOfCustodyAction } from './entities/chain-of-custody-event.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import {
+  Between,
+  FindOptionsWhere,
+  LessThanOrEqual,
+  Like,
+  MoreThanOrEqual,
+  Repository,
+} from "typeorm";
+import {
+  ChainOfCustodyAction,
+  ChainOfCustodyEvent,
+} from "./entities/chain-of-custody-event.entity";
+import {
+  EvidenceItem,
+  EvidenceStatus,
+  EvidenceType,
+} from "./entities/evidence-item.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -50,20 +64,73 @@ export class EvidenceService {
       evidenceId: saved.id,
       action: ChainOfCustodyAction.COLLECTED,
       eventDate: new Date(),
-      handler: evidenceData.collectedBy || 'System',
+      handler: evidenceData.collectedBy || "System",
       location: evidenceData.storageLocation,
-      notes: 'Initial collection',
+      notes: "Initial collection",
     });
 
     return saved;
   }
 
-  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: EvidenceItem[]; total: number; page: number; limit: number }> {
-    const { page = 1, limit = 50 } = options || {};
+  async findAll(options?: {
+    page?: number;
+    limit?: number;
+    caseId?: string;
+    type?: EvidenceType;
+    status?: EvidenceStatus;
+    custodian?: string;
+    search?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  }): Promise<{
+    data: EvidenceItem[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const {
+      page = 1,
+      limit = 50,
+      caseId,
+      type,
+      status,
+      custodian,
+      search,
+      dateFrom,
+      dateTo,
+      sortBy = "collectionDate",
+      sortOrder = "desc",
+    } = options || {};
+
     const skip = (page - 1) * limit;
 
+    // Build where conditions
+    const where: FindOptionsWhere<EvidenceItem> = {};
+
+    if (caseId) where.caseId = caseId;
+    if (type) where.evidenceType = type;
+    if (status) where.status = status;
+    if (custodian) where.currentCustodian = custodian;
+
+    // Handle search (search in description)
+    if (search) {
+      where.description = Like(`%${search}%`);
+    }
+
+    // Handle date range filtering
+    if (dateFrom && dateTo) {
+      where.collectionDate = Between(new Date(dateFrom), new Date(dateTo));
+    } else if (dateFrom) {
+      where.collectionDate = MoreThanOrEqual(new Date(dateFrom));
+    } else if (dateTo) {
+      where.collectionDate = LessThanOrEqual(new Date(dateTo));
+    }
+
     const [evidence, total] = await this.evidenceRepository.findAndCount({
-      order: { collectionDate: 'DESC' },
+      where,
+      order: { [sortBy]: sortOrder.toUpperCase() as "ASC" | "DESC" },
       skip,
       take: limit,
     });
@@ -79,7 +146,7 @@ export class EvidenceService {
   async findOne(id: string): Promise<EvidenceItem> {
     const evidence = await this.evidenceRepository.findOne({
       where: { id },
-      relations: ['chainOfCustodyEvents'],
+      relations: ["chainOfCustodyEvents"],
     });
 
     if (!evidence) {
@@ -92,25 +159,28 @@ export class EvidenceService {
   async findByCase(caseId: string): Promise<EvidenceItem[]> {
     return this.evidenceRepository.find({
       where: { caseId },
-      order: { collectionDate: 'DESC' },
+      order: { collectionDate: "DESC" },
     });
   }
 
   async findByType(evidenceType: EvidenceType): Promise<EvidenceItem[]> {
     return this.evidenceRepository.find({
       where: { evidenceType },
-      order: { collectionDate: 'DESC' },
+      order: { collectionDate: "DESC" },
     });
   }
 
   async findByStatus(status: EvidenceStatus): Promise<EvidenceItem[]> {
     return this.evidenceRepository.find({
       where: { status },
-      order: { collectionDate: 'DESC' },
+      order: { collectionDate: "DESC" },
     });
   }
 
-  async update(id: string, updateData: Partial<EvidenceItem>): Promise<EvidenceItem> {
+  async update(
+    id: string,
+    updateData: Partial<EvidenceItem>,
+  ): Promise<EvidenceItem> {
     const evidence = await this.findOne(id);
     Object.assign(evidence, updateData);
     return this.evidenceRepository.save(evidence);
@@ -121,7 +191,9 @@ export class EvidenceService {
     await this.evidenceRepository.remove(evidence);
   }
 
-  async addChainOfCustodyEvent(eventData: Partial<ChainOfCustodyEvent>): Promise<ChainOfCustodyEvent> {
+  async addChainOfCustodyEvent(
+    eventData: Partial<ChainOfCustodyEvent>,
+  ): Promise<ChainOfCustodyEvent> {
     const event = this.chainOfCustodyRepository.create(eventData);
     return this.chainOfCustodyRepository.save(event);
   }
@@ -129,13 +201,13 @@ export class EvidenceService {
   async getChainOfCustody(evidenceId: string): Promise<ChainOfCustodyEvent[]> {
     return this.chainOfCustodyRepository.find({
       where: { evidenceId },
-      order: { eventDate: 'ASC' },
+      order: { eventDate: "ASC" },
     });
   }
 
   async transferCustody(
     evidenceId: string,
-    transferData: { 
+    transferData: {
       transferredFrom: string;
       transferredTo: string;
       handler: string;

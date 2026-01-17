@@ -34,10 +34,13 @@ export const PATHS = {
   WORKFLOWS: "workflows",
   MESSAGES: "messages",
   DISCOVERY: "discovery",
+  DISCOVERY_REQUESTS: "discovery/requests",
+  DISCOVERY_RESPONSES: "discovery/responses",
+  DISCOVERY_PRODUCTIONS: "discovery/productions",
+  DISCOVERY_TIMELINE: "discovery/timeline",
   EVIDENCE: "evidence",
   EXHIBITS: "exhibits",
   CORRESPONDENCE: "correspondence",
-  JURISDICTION: "jurisdiction",
   ANALYTICS: "analytics",
   CALENDAR: "calendar",
   BILLING: "billing",
@@ -46,17 +49,18 @@ export const PATHS = {
   CRM: "crm",
   DOCUMENTS: "documents",
   DRAFTING: "drafting",
-  LIBRARY: "library",
+  LIBRARY: "knowledge", // Backend: /knowledge
   CLAUSES: "clauses",
   RESEARCH: "research",
   CITATIONS: "citations",
   COMPLIANCE: "compliance",
   ADMIN: "admin",
   AUDIT: "audit",
-  WAR_ROOM: "war_room",
-  RULES_ENGINE: "rules_engine",
-  ENTITIES: "entities",
-  DATA_PLATFORM: "data_platform",
+  WAR_ROOM: "war-room", // Backend: /war-room (hyphen, not underscore)
+  RULES_ENGINE: "rules-engine", // Backend: TBD (not implemented yet)
+  ENTITIES: "legal-entities", // Backend: /legal-entities
+  DATA_PLATFORM: "data-catalog", // Backend: /data-catalog
+  JURISDICTION: "jurisdictions", // Backend: /jurisdictions (plural)
   PROFILE: "profile",
   SETTINGS: "settings",
   THEME: "settings/theme",
@@ -65,6 +69,14 @@ export const PATHS = {
   PLEADING_BUILDER: "pleading_builder",
   LITIGATION: "litigation",
   LITIGATION_BUILDER: "litigation_builder",
+
+  // Trial Management
+  TRIAL: "trial",
+  TRIAL_CALENDAR: "trial/calendar",
+  TRIAL_WITNESSES: "trial/witnesses",
+  TRIAL_EXHIBITS: "trial/exhibits",
+  TRIAL_MOTIONS: "trial/motions",
+  TRIAL_NOTES: "trial/notes",
 
   // Real Estate Division
   REAL_ESTATE: "real_estate",

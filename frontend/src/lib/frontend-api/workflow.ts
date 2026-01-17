@@ -98,7 +98,7 @@ export interface AssignTaskInput {
  * Get all tasks with optional filtering
  */
 export async function getAllTasks(
-  filters?: TaskFilters
+  filters?: TaskFilters,
 ): Promise<Result<PaginatedResult<Task>>> {
   const params: Record<string, string | number> = {};
 
@@ -158,7 +158,7 @@ export async function getTaskById(id: string): Promise<Result<Task>> {
  * Create task
  */
 export async function createTask(
-  input: CreateTaskInput
+  input: CreateTaskInput,
 ): Promise<Result<Task>> {
   if (!input || typeof input !== "object") {
     return failure(new ValidationError("Task input is required"));
@@ -179,7 +179,7 @@ export async function createTask(
  */
 export async function updateTask(
   id: string,
-  input: UpdateTaskInput
+  input: UpdateTaskInput,
 ): Promise<Result<Task>> {
   if (!id || typeof id !== "string" || id.trim() === "") {
     return failure(new ValidationError("Valid task ID is required"));
@@ -225,7 +225,7 @@ export async function completeTask(id: string): Promise<Result<Task>> {
  */
 export async function assignTask(
   id: string,
-  input: AssignTaskInput
+  input: AssignTaskInput,
 ): Promise<Result<Task>> {
   if (!id || typeof id !== "string" || id.trim() === "") {
     return failure(new ValidationError("Valid task ID is required"));
@@ -260,7 +260,7 @@ export async function getTasksByCase(caseId: string): Promise<Result<Task[]>> {
  * Get tasks assigned to a specific user
  */
 export async function getTasksAssignedTo(
-  userId: string
+  userId: string,
 ): Promise<Result<Task[]>> {
   if (!userId || typeof userId !== "string" || userId.trim() === "") {
     return failure(new ValidationError("Valid user ID is required"));
@@ -278,7 +278,7 @@ export async function getTasksAssignedTo(
  */
 export async function searchTasks(
   query: string,
-  options?: { limit?: number }
+  options?: { limit?: number },
 ): Promise<Result<Task[]>> {
   if (!query || typeof query !== "string" || query.trim() === "") {
     return failure(new ValidationError("Search query is required"));
@@ -299,7 +299,7 @@ export async function searchTasks(
  * Get upcoming tasks (within days)
  */
 export async function getUpcomingTasks(
-  days: number = 7
+  days: number = 7,
 ): Promise<Result<Task[]>> {
   if (typeof days !== "number" || days <= 0) {
     return failure(new ValidationError("Days must be a positive number"));
@@ -320,7 +320,7 @@ export async function getUpcomingTasks(
  */
 export async function bulkUpdateTasks(
   ids: string[],
-  updates: Partial<UpdateTaskInput>
+  updates: Partial<UpdateTaskInput>,
 ): Promise<Result<Task[]>> {
   if (!Array.isArray(ids) || ids.length === 0) {
     return failure(new ValidationError("At least one task ID is required"));
@@ -361,19 +361,10 @@ const risks = {
 };
 
 /**
- * War Room sub-module (stub implementation)
+ * War Room sub-module
  */
-const warRoom = {
-  async getSessions() {
-    return await client.get<unknown[]>("/workflow/war-room");
-  },
-  async createSession(data: unknown) {
-    return await client.post<unknown>("/workflow/war-room", data);
-  },
-  async joinSession(sessionId: string) {
-    return await client.post<void>(`/workflow/war-room/${sessionId}/join`);
-  },
-};
+import { WarRoomApiService } from "@/api/workflow/war-room-api";
+const warRoom = new WarRoomApiService();
 
 /**
  * Workflow API module

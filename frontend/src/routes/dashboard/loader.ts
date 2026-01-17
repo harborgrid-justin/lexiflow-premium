@@ -58,11 +58,21 @@ export interface DashboardLoaderData {
  */
 export async function clientLoader(args: LoaderFunctionArgs) {
   try {
+    // Set a 5-second timeout to prevent SSR hangs
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Loader timeout")), 5000),
+    );
     // Critical data (MUST be available before render)
-    const criticalData = Promise.all([
+    const criticalDataPromise = Promise.all([
       casesApi.getAll({ page: 1, limit: 1000 }),
       workflowApi.getAllTasks({ page: 1, limit: 200 }),
     ]);
+
+    // Race against timeout
+    const criticalData = (await Promise.race([
+      criticalDataPromise,
+      timeoutPromise,
+    ])) as Awaited<typeof criticalDataPromise>;
 
     // Deferred data (streams after initial render)
     const docketEntriesPromise = docketApi
@@ -78,7 +88,7 @@ export async function clientLoader(args: LoaderFunctionArgs) {
         return entries
           .filter(
             (entry) =>
-              entry?.filingDate && new Date(entry.filingDate) >= thirtyDaysAgo
+              entry?.filingDate && new Date(entry.filingDate) >= thirtyDaysAgo,
           )
           .slice(0, 10);
       });
@@ -118,7 +128,7 @@ export async function clientLoader(args: LoaderFunctionArgs) {
     // If we get here, it's a non-auth error - return empty data
     console.error(
       "[Dashboard Loader] Non-auth error, returning empty data:",
-      error
+      error,
     );
 
     return defer({

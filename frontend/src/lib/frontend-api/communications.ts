@@ -31,9 +31,9 @@ import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
 import { failure, success } from "./types";
 
-import type { PaginatedResult, Result } from "./types";
 import type { Client, Message } from "@/types";
 import type { NotificationDTO } from "@/types/notifications";
+import type { PaginatedResult, Result } from "./types";
 
 /**
  * Correspondence types
@@ -152,7 +152,7 @@ export interface CreateMessageInput {
  * Get all clients with optional filtering
  */
 export async function getAllClients(
-  filters?: ClientFilters
+  filters?: ClientFilters,
 ): Promise<Result<PaginatedResult<Client>>> {
   const params: Record<string, string | number> = {};
 
@@ -207,7 +207,7 @@ export async function getClientById(id: string): Promise<Result<Client>> {
  * Create client
  */
 export async function createClient(
-  input: CreateClientInput
+  input: CreateClientInput,
 ): Promise<Result<Client>> {
   if (!input || typeof input !== "object") {
     return failure(new ValidationError("Client input is required"));
@@ -232,7 +232,7 @@ export async function createClient(
  */
 export async function updateClient(
   id: string,
-  input: Partial<CreateClientInput>
+  input: Partial<CreateClientInput>,
 ): Promise<Result<Client>> {
   if (!id || typeof id !== "string" || id.trim() === "") {
     return failure(new ValidationError("Valid client ID is required"));
@@ -263,9 +263,10 @@ export async function deleteClient(id: string): Promise<Result<void>> {
 
 /**
  * Get all messages with optional filtering
+ * Note: Backend uses /messaging/conversations endpoint
  */
 export async function getAllMessages(
-  filters?: MessageFilters
+  filters?: MessageFilters,
 ): Promise<Result<PaginatedResult<Message>>> {
   const params: Record<string, string | number> = {};
 
@@ -279,7 +280,9 @@ export async function getAllMessages(
   if (filters?.sortBy) params.sortBy = filters.sortBy;
   if (filters?.sortOrder) params.sortOrder = filters.sortOrder;
 
-  const result = await client.get<unknown>("/messages", { params });
+  const result = await client.get<unknown>("/messaging/conversations", {
+    params,
+  });
 
   if (!result.ok) return result;
 
@@ -322,7 +325,7 @@ export async function getMessageById(id: string): Promise<Result<Message>> {
  * Send message
  */
 export async function sendMessage(
-  input: CreateMessageInput
+  input: CreateMessageInput,
 ): Promise<Result<Message>> {
   if (!input || typeof input !== "object") {
     return failure(new ValidationError("Message input is required"));
@@ -368,7 +371,7 @@ export async function getAllCorrespondence(filters?: {
 
   const result = await client.get<PaginatedResult<Correspondence>>(
     "/correspondence",
-    { params }
+    { params },
   );
 
   // Basic normalization/pass-through since we don't have a specific normalizer yet
@@ -379,7 +382,7 @@ export async function getAllCorrespondence(filters?: {
  * Create correspondence
  */
 export async function createCorrespondence(
-  input: CreateCorrespondenceInput
+  input: CreateCorrespondenceInput,
 ): Promise<Result<Correspondence>> {
   if (!input || typeof input !== "object") {
     return failure(new ValidationError("Correspondence input is required"));
@@ -410,7 +413,7 @@ export async function createCorrespondence(
  */
 export async function updateCorrespondence(
   id: string,
-  input: UpdateCorrespondenceInput
+  input: UpdateCorrespondenceInput,
 ): Promise<Result<Correspondence>> {
   if (!id || typeof id !== "string" || id.trim() === "") {
     return failure(new ValidationError("Valid correspondence ID is required"));
@@ -422,7 +425,7 @@ export async function updateCorrespondence(
 
   const result = await client.put<Correspondence>(
     `/correspondence/${id}`,
-    input
+    input,
   );
 
   return result.ok ? success(result.data) : result;
@@ -458,7 +461,7 @@ const messaging = {
   },
   async getThread(threadId: string) {
     return await client.get<unknown>(
-      `/communications/messaging/threads/${threadId}`
+      `/communications/messaging/threads/${threadId}`,
     );
   },
   async sendMessage(data: unknown) {
@@ -492,16 +495,16 @@ export const communicationsApi = {
       "/communications/notifications",
       {
         params: filters,
-      }
+      },
     );
   },
   updateNotification: async (
     id: string,
-    updates: Partial<NotificationDTO>
+    updates: Partial<NotificationDTO>,
   ): Promise<Result<NotificationDTO>> => {
     return client.put<NotificationDTO>(
       `/communications/notifications/${id}`,
-      updates
+      updates,
     );
   },
   deleteNotification: async (id: string): Promise<Result<void>> => {
@@ -514,11 +517,11 @@ export const communicationsApi = {
     return client.get<unknown>("/communications/notifications/preferences");
   },
   updateNotificationPreferences: async (
-    preferences: unknown
+    preferences: unknown,
   ): Promise<Result<unknown>> => {
     return client.put<unknown>(
       "/communications/notifications/preferences",
-      preferences
+      preferences,
     );
   },
   // Sub-modules for descriptor compatibility

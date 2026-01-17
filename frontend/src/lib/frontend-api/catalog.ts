@@ -20,16 +20,18 @@ export interface Template {
 
 export const catalogApi = {
   getAllClauses: async (
-    params?: unknown
+    params?: unknown,
   ): Promise<Result<PaginatedResult<Clause>>> => {
-    return client.get<PaginatedResult<Clause>>("/catalog/clauses", {
+    // Backend endpoint is /clauses not /catalog/clauses
+    return client.get<PaginatedResult<Clause>>("/clauses", {
       params: toRecord(params),
     });
   },
   getAllTemplates: async (
-    params?: unknown
+    params?: unknown,
   ): Promise<Result<PaginatedResult<Template>>> => {
-    return client.get<PaginatedResult<Template>>("/catalog/templates", {
+    // Backend endpoint is /templates not /catalog/templates
+    return client.get<PaginatedResult<Template>>("/templates", {
       params: toRecord(params),
     });
   },

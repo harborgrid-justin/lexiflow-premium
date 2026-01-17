@@ -24,7 +24,7 @@ export interface KnowledgeItem {
 
 export const knowledgeApi = {
   getResearchHistory: async (
-    params?: unknown
+    params?: unknown,
   ): Promise<Result<PaginatedResult<ResearchItem>>> => {
     return client.get<PaginatedResult<ResearchItem>>("/research/history", {
       params: params as Record<string, unknown>,
@@ -34,7 +34,7 @@ export const knowledgeApi = {
     return client.get<ResearchItem>(`/research/${id}`);
   },
   createResearch: async (
-    payload: Partial<ResearchItem> & Record<string, unknown>
+    payload: Partial<ResearchItem> & Record<string, unknown>,
   ): Promise<Result<ResearchItem>> => {
     return client.post<ResearchItem>("/research", payload);
   },
@@ -42,20 +42,20 @@ export const knowledgeApi = {
     return client.delete<void>(`/research/${id}`);
   },
   getAllCitations: async (
-    params?: unknown
+    params?: unknown,
   ): Promise<Result<PaginatedResult<Citation>>> => {
     return client.get<PaginatedResult<Citation>>("/citations", {
       params: params as Record<string, unknown>,
     });
   },
   createCitation: async (
-    payload: Partial<Citation> & Record<string, unknown>
+    payload: Partial<Citation> & Record<string, unknown>,
   ): Promise<Result<Citation>> => {
     return client.post<Citation>("/citations", payload);
   },
   updateCitation: async (
     id: string,
-    payload: Partial<Citation> & Record<string, unknown>
+    payload: Partial<Citation> & Record<string, unknown>,
   ): Promise<Result<Citation>> => {
     return client.patch<Citation>(`/citations/${id}`, payload);
   },
@@ -63,13 +63,38 @@ export const knowledgeApi = {
     return client.delete<void>(`/citations/${id}`);
   },
   getAllKnowledge: async (
-    params?: unknown
+    params?: unknown,
   ): Promise<Result<PaginatedResult<KnowledgeItem>>> => {
-    return client.get<PaginatedResult<KnowledgeItem>>("/knowledge", {
-      params: params as Record<string, unknown>,
-    });
+    // Backend endpoint is /knowledge/articles not /knowledge
+    const paramsObj = params as Record<string, unknown> | undefined;
+    const page = typeof paramsObj?.page === "number" ? paramsObj.page : 1;
+    const limit = typeof paramsObj?.limit === "number" ? paramsObj.limit : 50;
+
+    const result = await client.get<{ data: KnowledgeItem[]; total: number }>(
+      "/knowledge/articles",
+      {
+        params: paramsObj,
+      },
+    );
+
+    // Transform backend response to PaginatedResult format
+    if (result.ok) {
+      const { data, total } = result.data;
+      return {
+        ok: true,
+        data: {
+          data,
+          total,
+          page,
+          pageSize: limit,
+          hasMore: page * limit < total,
+        },
+      };
+    }
+
+    return result as Result<PaginatedResult<KnowledgeItem>>;
   },
   deleteKnowledge: async (id: string): Promise<Result<void>> => {
-    return client.delete<void>(`/knowledge/${id}`);
+    return client.delete<void>(`/knowledge/articles/${id}`);
   },
 };

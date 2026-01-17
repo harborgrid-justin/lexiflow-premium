@@ -5,7 +5,7 @@
 
 import { complianceApi } from "@/lib/frontend-api";
 
-export async function clientLoader() {
+export async function complianceLoader() {
   const [checksResult, conflictsResult] = await Promise.all([
     complianceApi.conflictChecks.getAll(),
     complianceApi.conflictChecks.getAll(),
@@ -17,3 +17,6 @@ export async function clientLoader() {
 
   return { checks, conflicts, deadlines };
 }
+
+// React Router loader alias for client bundle
+export const loader = complianceLoader;

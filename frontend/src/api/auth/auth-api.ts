@@ -83,7 +83,7 @@ export class AuthApiService {
     }
     const refreshToken = storedRefreshToken;
 
-    const response = (await apiClient.post<{
+    const response = await apiClient.post<{
       success: boolean;
       data: {
         accessToken: string;

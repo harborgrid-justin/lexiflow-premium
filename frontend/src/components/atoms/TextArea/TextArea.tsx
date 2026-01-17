@@ -18,9 +18,8 @@ import React, { useId } from 'react';
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 // Utils & Constants
-
 import { cn } from '@/lib/cn';
-import { labelStyles, getTextAreaStyles } from './TextArea.styles';
+import { getTextAreaStyles, labelStyles } from './TextArea.styles';
 
 // ============================================================================
 // TYPES & INTERFACES

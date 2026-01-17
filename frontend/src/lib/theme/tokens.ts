@@ -164,6 +164,7 @@ export interface DesignTokens {
     primary: string;
     primaryDark: string;
     primaryLight: string;
+    primaryForeground: string;
     secondary: string;
     accent: string;
     success: string;
@@ -171,12 +172,31 @@ export interface DesignTokens {
     error: string;
     info: string;
     background: string;
+    backgroundSecondary: string;
     surface: string;
+    surfaceRaised: string;
+    surfaceElevated: string;
+    surfaceSubtle: string;
+    surfaceInverse: string;
     surfaceHover: string;
+    overlay: string;
     border: string;
     borderLight: string;
+    borderStrong: string;
+    borderMuted: string;
+    borderInfo: string;
+    borderWarning: string;
+    borderError: string;
     text: string;
     textMuted: string;
+    textStrong: string;
+    textSubtle: string;
+    textInverse: string;
+    textOnPrimary: string;
+    textOnAccent: string;
+    focusRing: string;
+    focusGlow: string;
+    disabled: string;
     charts: {
       primary: string;
       secondary: string;
@@ -846,6 +866,7 @@ const LIGHT_COLORS = {
   primary: PALETTE.blue[600],
   primaryDark: PALETTE.blue[700],
   primaryLight: PALETTE.blue[500],
+  primaryForeground: "#ffffff",
   secondary: PALETTE.slate[700],
   accent: PALETTE.violet[500],
   success: PALETTE.emerald[500],
@@ -853,12 +874,31 @@ const LIGHT_COLORS = {
   error: PALETTE.rose[500],
   info: PALETTE.blue[500],
   background: PALETTE.slate[50],
+  backgroundSecondary: PALETTE.slate[100],
   surface: "#ffffff",
+  surfaceRaised: "#ffffff",
+  surfaceElevated: PALETTE.slate[50],
+  surfaceSubtle: PALETTE.slate[100],
+  surfaceInverse: PALETTE.slate[900],
   surfaceHover: PALETTE.slate[100],
+  overlay: "rgba(15, 23, 42, 0.55)",
   border: PALETTE.slate[200],
   borderLight: PALETTE.slate[100],
+  borderStrong: PALETTE.slate[300],
+  borderMuted: PALETTE.slate[100],
+  borderInfo: PALETTE.blue[200],
+  borderWarning: PALETTE.amber[200],
+  borderError: PALETTE.rose[200],
   text: PALETTE.slate[900],
   textMuted: PALETTE.slate[500],
+  textStrong: PALETTE.slate[950],
+  textSubtle: PALETTE.slate[600],
+  textInverse: "#ffffff",
+  textOnPrimary: "#ffffff",
+  textOnAccent: "#ffffff",
+  focusRing: PALETTE.blue[400],
+  focusGlow: "rgba(59, 130, 246, 0.35)",
+  disabled: PALETTE.slate[300],
   charts: {
     primary: PALETTE.blue[500],
     secondary: PALETTE.slate[400],
@@ -891,6 +931,7 @@ const DARK_COLORS = {
   primary: PALETTE.blue[500],
   primaryDark: PALETTE.blue[600],
   primaryLight: PALETTE.blue[400],
+  primaryForeground: "#ffffff",
   secondary: PALETTE.slate[300],
   accent: PALETTE.violet[500],
   success: PALETTE.emerald[500],
@@ -898,12 +939,31 @@ const DARK_COLORS = {
   error: PALETTE.rose[500],
   info: PALETTE.blue[400],
   background: PALETTE.slate[950],
+  backgroundSecondary: PALETTE.slate[900],
   surface: PALETTE.slate[900],
+  surfaceRaised: PALETTE.slate[900],
+  surfaceElevated: PALETTE.slate[800],
+  surfaceSubtle: PALETTE.slate[800],
+  surfaceInverse: PALETTE.slate[50],
   surfaceHover: PALETTE.slate[800],
+  overlay: "rgba(2, 6, 23, 0.72)",
   border: PALETTE.slate[700],
   borderLight: PALETTE.slate[800],
+  borderStrong: PALETTE.slate[600],
+  borderMuted: PALETTE.slate[800],
+  borderInfo: PALETTE.blue[700],
+  borderWarning: PALETTE.amber[700],
+  borderError: PALETTE.rose[700],
   text: PALETTE.slate[50],
   textMuted: PALETTE.slate[400],
+  textStrong: PALETTE.slate[50],
+  textSubtle: PALETTE.slate[400],
+  textInverse: PALETTE.slate[950],
+  textOnPrimary: "#ffffff",
+  textOnAccent: "#ffffff",
+  focusRing: PALETTE.blue[400],
+  focusGlow: "rgba(96, 165, 250, 0.35)",
+  disabled: PALETTE.slate[600],
   charts: {
     primary: PALETTE.blue[500],
     secondary: PALETTE.slate[500],

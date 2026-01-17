@@ -13,7 +13,9 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 100",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "lint:strict": "eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc -p tsconfig.prod.json --noEmit",
+    "type-check:dev": "tsc -p tsconfig.dev.json --noEmit",
+    "type-check:prod": "tsc -p tsconfig.prod.json --noEmit",
     "validate": "npm run type-check && npm run lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

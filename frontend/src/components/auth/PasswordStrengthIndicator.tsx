@@ -102,7 +102,7 @@ export function PasswordStrengthIndicator({ password, showRequirements = true }:
     gray: { bg: theme.surface.muted, text: theme.text.secondary },
     red: { bg: theme.status.error.bg, text: theme.status.error.text },
     yellow: { bg: theme.status.warning.bg, text: theme.status.warning.text },
-    blue: { bg: tokens.colors.blue500, text: tokens.colors.blue600 },
+    blue: { bg: tokens.colors.primaryLight, text: tokens.colors.primaryDark },
     green: { bg: theme.status.success.bg, text: theme.status.success.text },
   };
 

@@ -31,11 +31,11 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
   const filterValue = (value: unknown): string =>
     typeof value === "string" ? value : "";
 
-  const borderInput = resolveToken(theme.border.input);
+  const borderInput = resolveToken(theme.border.input("", "", undefined, ""));
   const surfaceDefault = resolveToken(theme.surface.default);
   const textPrimary = resolveToken(theme.text.primary);
-  const primaryClass = String(theme.colors.primary);
-  const hoverPrimaryClass = String(theme.colors.hoverPrimary);
+  const primaryColor = resolveToken(tokens.colors.primary);
+  const primaryHover = resolveToken(tokens.colors.primaryDark);
   const surfaceBase = resolveToken(tokens.colors.surface);
   const borderColor = resolveToken(tokens.colors.border);
   const textColor = resolveToken(tokens.colors.text);
@@ -194,14 +194,20 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
                 style={{
                   width: '100%',
                   borderRadius: tokens.borderRadius.md,
-                  backgroundColor: resolveToken(theme.button.primary.bg),
+                  backgroundColor: primaryColor,
                   padding: `${tokens.spacing.compact.sm} ${tokens.spacing.normal.md}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
-                  color: resolveToken(theme.button.primary.text),
+                  color: resolveToken(tokens.colors.textOnPrimary),
                   boxShadow: tokens.shadows.sm,
                 }}
-                className={cn(`hover:${hoverPrimaryClass}`, "focus:outline-none focus:ring-2 focus:ring-offset-2", primaryClass)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = primaryHover;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = primaryColor;
+                }}
+                className={cn("focus:outline-none focus:ring-2 focus:ring-offset-2")}
               >
                 Apply Filters
               </button>

@@ -78,7 +78,7 @@ export function SessionTimeoutWarning() {
   const seconds = remainingSeconds % 60;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" style={{ backgroundColor: tokens.semantic.overlay, zIndex: tokens.zIndex.modal }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" style={{ backgroundColor: tokens.colors.overlay, zIndex: tokens.zIndex.modal }}>
       <div className="max-w-md w-full mx-4 overflow-hidden" style={{ backgroundColor: theme.surface.default, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.xxl }}>
         {/* Header */}
         <div style={{ backgroundColor: tokens.colors.warning, padding: `${tokens.spacing.normal.lg} ${tokens.spacing.normal.xl}` }}>
@@ -126,11 +126,15 @@ export function SessionTimeoutWarning() {
               className="flex-1 px-4 py-2 font-medium transition-colors"
               style={{
                 backgroundColor: tokens.colors.primary,
-                color: tokens.colors.textInverse,
+                color: tokens.colors.textOnPrimary,
                 borderRadius: tokens.borderRadius.lg
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = tokens.colors.hoverPrimary}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = tokens.colors.primary}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = tokens.colors.primaryDark;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = tokens.colors.primary;
+              }}
             >
               Stay Signed In
             </button>
@@ -143,8 +147,12 @@ export function SessionTimeoutWarning() {
                 border: `1px solid ${tokens.colors.border}`,
                 borderRadius: tokens.borderRadius.lg
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = tokens.colors.surfaceHover}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = tokens.colors.surface}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = tokens.colors.surfaceHover;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = tokens.colors.surface;
+              }}
             >
               Sign Out Now
             </button>

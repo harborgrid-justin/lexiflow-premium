@@ -24,7 +24,7 @@ export function MFAVerification({ onSuccess, onCancel }: MFAVerificationProps) {
   const { verifyMFA } = useAuthActions();
   const { theme, tokens } = useTheme();
   const notify = useNotify();
-  const gradientBackground = String(theme.colors.gradients.primary);
+  const gradientBackground = String(tokens.colors.gradients.primary);
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);

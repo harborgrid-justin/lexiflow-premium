@@ -23,8 +23,8 @@ export function AccountLockedMessage({
   contactPhone = '1-800-LEXIFLOW',
 }: AccountLockedMessageProps) {
   const { theme, tokens } = useTheme();
-  const gradientBackground = String(theme.colors.gradients.primary);
-  const accentColor = String(theme.colors.blue400);
+  const gradientBackground = String(tokens.colors.gradients.primary);
+  const accentColor = String(tokens.colors.primaryLight);
 
   const getReasonText = () => {
     switch (reason) {

@@ -26,7 +26,7 @@ import type { Route } from "./+types/index";
 import type { LibraryLoaderData } from './loader';
 
 // Export loader
-export { libraryLoader as loader } from './loader';
+export { libraryLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

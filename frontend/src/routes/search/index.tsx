@@ -10,7 +10,7 @@ import { createMeta } from '../_shared/meta-utils';
 import { type searchLoader } from './loader';
 import { SearchPage } from './SearchPage';
 
-export { searchLoader as loader } from './loader';
+export { searchLoader as clientLoader } from './loader';
 
 export function meta() {
   return createMeta({

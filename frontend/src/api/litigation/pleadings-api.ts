@@ -95,23 +95,20 @@ export class PleadingsApiService {
       >(url);
 
       // Handle paginated response (support both 'items' and 'data' properties)
-      if (
-        response &&
-        typeof response === "object" &&
-        !Array.isArray(response)
-      ) {
-        const paginatedResponse = response as PaginatedResponse<Pleading>;
-        if (Array.isArray(paginatedResponse.items)) {
-          return paginatedResponse.items;
-        }
-        if (Array.isArray(paginatedResponse.data)) {
-          return paginatedResponse.data;
-        }
+      if (Array.isArray(response)) {
+        return response;
       }
 
-      // Handle direct array response
-      if (Array.isArray(response)) {
-        return response as Pleading[];
+      if (response && typeof response === "object") {
+        if ("items" in response) {
+          const items = (response as { items?: unknown }).items;
+          if (Array.isArray(items)) {
+            return items as Pleading[];
+          }
+        }
+        if (Array.isArray(response.data)) {
+          return response.data;
+        }
       }
 
       // Fallback

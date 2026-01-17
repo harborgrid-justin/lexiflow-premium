@@ -44,7 +44,7 @@ export function meta({ data }: Route.MetaArgs) {
  * Load DAF operations data using enterprise API
  * Fetches audit logs to provide operational insights
  */
-export async function loader() {
+export async function clientLoader() {
   try {
     // Use new enterprise API to get audit logs (which track system operations)
     const auditResult = await adminApi.getAuditLogs({
@@ -82,7 +82,7 @@ export async function loader() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 

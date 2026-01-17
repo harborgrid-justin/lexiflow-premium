@@ -19,8 +19,8 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 import type { ProfileLoaderData } from './loader';
 
-// Export loader from dedicated file
-export { profileLoader as loader } from './loader';
+// Export client loader for SPA mode
+export { clientLoader } from './loader';
 
 // Import Page component
 import { ProfilePage } from './ProfilePage';
@@ -41,7 +41,7 @@ export function meta() {
 // ============================================================================
 
 export default function ProfileRoute() {
-  const loaderData = useLoaderData();
+  const loaderData = useLoaderData() as ProfileLoaderData;
 
   return <ProfilePage loaderData={loaderData} />;
 }

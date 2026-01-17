@@ -6,7 +6,8 @@ import { RouteError, TableRouteSkeleton } from '../_shared/RouteSkeletons';
 import { CaseListProvider } from './CaseListProvider';
 import { clientLoader } from './loader';
 
-export { clientLoader as loader };
+// SPA mode: export clientLoader directly
+export { clientLoader };
 
 export default function CaseListLayout() {
   const data = useLoaderData<typeof clientLoader>();

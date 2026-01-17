@@ -17,7 +17,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -52,41 +52,54 @@ interface User extends Record<string, unknown> {
 }
 
 // ============================================================================
-// MOCK DATA
+// PROPS
 // ============================================================================
 
-function generateMockUsers(count: number): User[] {
-  const departments = ['Engineering', 'Sales', 'Marketing', 'HR', 'Finance'];
-  const statuses: Array<'active' | 'inactive' | 'pending'> = ['active', 'inactive', 'pending'];
-  const users: User[] = [];
-
-  // Note: Math.random() is intentional here for demo data generation (not used in render)
-  for (let i = 1; i <= count; i++) {
-    users.push({
-      id: i,
-      name: `User ${i}`,
-      email: `user${i}@example.com`,
-      age: 20 + Math.floor(Math.random() * 40),
-      salary: 40000 + Math.floor(Math.random() * 100000),
-      department: departments[Math.floor(Math.random() * departments.length)] || 'Engineering',
-      active: Math.random() > 0.3,
-      joinDate: new Date(2020 + Math.floor(Math.random() * 4), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)),
-      status: statuses[Math.floor(Math.random() * statuses.length)] as 'active' | 'inactive' | 'pending',
-    });
-  }
-
-  return users;
+export interface DataGridExampleProps {
+  users?: User[];
+  onLoadUsers?: () => Promise<User[]>;
+  onEditUser?: (user: User) => void;
+  onDeleteUser?: (user: User) => void;
 }
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
-export function DataGridExample() {
+export function DataGridExample({
+  users = [],
+  onLoadUsers,
+  onEditUser,
+  onDeleteUser,
+}: DataGridExampleProps) {
   // State
-  const [allUsers] = useState<User[]>(() => generateMockUsers(1000));
-  const [filteredUsers, setFilteredUsers] = useState<User[]>(allUsers);
+  const [allUsers, setAllUsers] = useState<User[]>(users);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
   const [selectedRows, setSelectedRows] = useState<Set<string | number>>(new Set());
+
+  useEffect(() => {
+    setAllUsers(users);
+    setFilteredUsers(users);
+  }, [users]);
+
+  useEffect(() => {
+    if (!onLoadUsers) return;
+    let cancelled = false;
+
+    const loadUsers = async () => {
+      const loadedUsers = await onLoadUsers();
+      if (!cancelled) {
+        setAllUsers(loadedUsers);
+        setFilteredUsers(loadedUsers);
+      }
+    };
+
+    void loadUsers();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [onLoadUsers]);
 
   // Define columns
   const columns = useMemo(() => createColumns<User>([
@@ -106,21 +119,22 @@ export function DataGridExample() {
       <div className="flex gap-2">
         <button
           onClick={() => {
-            // TODO: Wire to DataService for entity update
-            console.log('Edit entity:', row);
-            // Example: await DataService.documents.update(row.id, updates);
+            onEditUser?.(row);
           }}
           className="text-blue-600 hover:text-blue-800 text-sm"
         >
           Edit
         </button>
         <button
-          onClick={async () => {
-            // TODO: Wire to DataService for entity deletion with confirmation
-            if (window.confirm('Are you sure you want to delete this item?')) {
-              console.log('Delete entity:', row);
-              // Example: await DataService.documents.delete(row.id);
-            }
+          onClick={() => {
+            setAllUsers((prev) => prev.filter((user) => user.id !== row.id));
+            setFilteredUsers((prev) => prev.filter((user) => user.id !== row.id));
+            setSelectedRows((prev) => {
+              const next = new Set(prev);
+              next.delete(row.id);
+              return next;
+            });
+            onDeleteUser?.(row);
           }}
           className="text-red-600 hover:text-red-800 text-sm"
         >
@@ -128,7 +142,7 @@ export function DataGridExample() {
         </button>
       </div>
     ), { width: 150 }),
-  ]), []);
+  ]), [onEditUser, onDeleteUser, setAllUsers, setFilteredUsers, setSelectedRows]);
 
   // Handle search
   const handleSearchResults = (results: User[]) => {
@@ -137,10 +151,17 @@ export function DataGridExample() {
 
   // Handle cell edit
   const handleCellEdit = (rowId: string | number, columnId: string, value: unknown) => {
-    console.log('Cell edited:', { rowId, columnId, value });
-    // TODO: Wire to DataService for field update
-    // Example: await DataService.documents.updateField(rowId, columnId, value);
-    // In a real application, you would update the data here
+    setAllUsers((prev) =>
+      prev.map((user) => (user.id === rowId ? { ...user, [columnId]: value } as User : user))
+    );
+    setFilteredUsers((prev) =>
+      prev.map((user) => (user.id === rowId ? { ...user, [columnId]: value } as User : user))
+    );
+
+    const updatedUser = allUsers.find((user) => user.id === rowId);
+    if (updatedUser) {
+      onEditUser?.({ ...updatedUser, [columnId]: value } as User);
+    }
   };
 
   return (

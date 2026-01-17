@@ -25,7 +25,7 @@ import { EvidenceView } from './EvidenceView';
 import type { evidenceLoader } from './loader';
 
 // Export loader from dedicated file
-export { evidenceLoader as loader } from './loader';
+export { evidenceLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

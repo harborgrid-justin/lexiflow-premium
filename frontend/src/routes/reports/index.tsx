@@ -20,7 +20,7 @@ import { ReportsPage } from './ReportsPage';
 import type { ReportsLoaderData } from './loader';
 
 // Export loader from dedicated file
-export { loader } from './loader';
+export { loader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

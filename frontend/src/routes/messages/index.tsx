@@ -23,7 +23,7 @@ import { MessagesPage } from './MessagesPage';
 import type { MessagesLoaderData } from './loader';
 
 // Export loader from dedicated file
-export { messagesLoader as loader } from './loader';
+export { messagesLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

@@ -16,13 +16,20 @@ export interface ProfileLoaderData {
   profile: ExtendedUserProfile | null;
 }
 
-export async function profileLoader() {
-  const result = await authApi.getCurrentUser();
-  const profile = (
-    result.ok ? result.data : null
-  ) as ExtendedUserProfile | null;
+export async function clientLoader(): Promise<ProfileLoaderData> {
+  try {
+    const result = await authApi.getCurrentUser();
+    const profile = (
+      result.ok ? result.data : null
+    ) as ExtendedUserProfile | null;
 
-  return {
-    profile,
-  };
+    return {
+      profile,
+    };
+  } catch (error: unknown) {
+    console.error("Failed to load profile:", error);
+    return {
+      profile: null,
+    };
+  }
 }

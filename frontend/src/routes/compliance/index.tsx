@@ -23,7 +23,7 @@ import { CompliancePage } from './CompliancePage';
 import type { ComplianceLoaderData } from './loader';
 
 // Export loader
-export { complianceLoader as loader } from './loader';
+export { complianceLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

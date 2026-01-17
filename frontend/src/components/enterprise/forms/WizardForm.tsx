@@ -50,6 +50,10 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
   className,
 }: WizardFormProps<TFormData>) {
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const textSecondaryClass = classToken(theme.text.secondary);
+  const borderDefaultClass = classToken(theme.border.default);
 
   const wizard = useEnhancedWizard({
     config,
@@ -110,7 +114,7 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
               aria-label="Wizard progress"
             />
           </div>
-          <div className={cn('text-sm text-right mt-1', theme.text.secondary)}>
+          <div className={cn('text-sm text-right mt-1', textSecondaryClass)}>
             Step {currentStepIndex + 1} of {visibleSteps.length}
           </div>
         </div>
@@ -195,8 +199,8 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
                   className={cn(
                     'text-sm font-medium',
                     index === currentStepIndex
-                      ? theme.text.primary
-                      : theme.text.secondary
+                      ? textPrimaryClass
+                      : textSecondaryClass
                   )}
                 >
                   {step.title}
@@ -299,11 +303,11 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
       {/* Wizard Title */}
       {config.title && (
         <div className="mb-8 text-center">
-          <h1 className={cn('text-3xl font-bold', theme.text.primary)}>
+          <h1 className={cn('text-3xl font-bold', textPrimaryClass)}>
             {config.title}
           </h1>
           {config.description && (
-            <p className={cn('mt-2 text-lg', theme.text.secondary)}>
+            <p className={cn('mt-2 text-lg', textSecondaryClass)}>
               {config.description}
             </p>
           )}
@@ -315,17 +319,17 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
 
       {/* Step Content */}
       <form onSubmit={handleStepSubmit}>
-        <div className={cn('bg-white rounded-lg shadow-sm border p-8', theme.border.default)}>
+        <div className={cn('bg-white rounded-lg shadow-sm border p-8', borderDefaultClass)}>
           {/* Step Title */}
           <div className="mb-6">
-            <h2 className={cn('text-2xl font-semibold', theme.text.primary)}>
+            <h2 className={cn('text-2xl font-semibold', textPrimaryClass)}>
               {currentStep?.icon && (
                 <span className="mr-2">{currentStep.icon}</span>
               )}
               {currentStep?.title}
             </h2>
             {currentStep?.description && (
-              <p className={cn('mt-2', theme.text.secondary)}>
+              <p className={cn('mt-2', textSecondaryClass)}>
                 {currentStep.description}
               </p>
             )}
@@ -343,8 +347,8 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
               className={cn(
                 'px-6 py-2.5 rounded-lg font-medium transition-colors',
                 'border',
-                theme.border.default,
-                theme.text.primary,
+                borderDefaultClass,
+                textPrimaryClass,
                 'hover:bg-gray-50',
                 'disabled:opacity-50 disabled:cursor-not-allowed',
                 'focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
@@ -360,7 +364,7 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
                   onClick={config.onCancel}
                   className={cn(
                     'px-6 py-2.5 rounded-lg font-medium transition-colors',
-                    theme.text.secondary,
+                    textSecondaryClass,
                     'hover:text-red-600',
                     'focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
                   )}
@@ -388,7 +392,7 @@ export function WizardForm<TFormData extends Record<string, unknown>>({
       </form>
 
       {/* Keyboard shortcuts hint */}
-      <div className={cn('mt-4 text-center text-xs', theme.text.secondary)}>
+      <div className={cn('mt-4 text-center text-xs', textSecondaryClass)}>
         <kbd style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="px-2 py-1 rounded">←</kbd> Previous •{' '}
         <kbd style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="px-2 py-1 rounded">→</kbd> Next •{' '}
         <kbd style={{ backgroundColor: 'var(--color-surfaceHover)' }} className="px-2 py-1 rounded">Ctrl+Enter</kbd> Submit

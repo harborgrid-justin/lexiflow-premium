@@ -3,8 +3,8 @@
  * API service split from apiServices.ts
  */
 
-import { apiClient } from "@/services/infrastructure/api-client.service";
 import { REFRESH_TOKEN_KEY } from "@/services/infrastructure/api-client/config";
+import { apiClient } from "@/services/infrastructure/api-client.service";
 
 import type { User } from "@/types";
 
@@ -83,12 +83,7 @@ export class AuthApiService {
     }
     const refreshToken = storedRefreshToken;
 
-    const response: {
-      data: {
-        accessToken: string;
-        refreshToken: string;
-      };
-    } = await apiClient.post<{
+    const response = (await apiClient.post<{
       success: boolean;
       data: {
         accessToken: string;
@@ -97,9 +92,11 @@ export class AuthApiService {
     }>("/auth/refresh", { refreshToken });
 
     const tokens = response.data;
-    apiClient.setAuthTokens(tokens.accessToken, tokens.refreshToken);
+    const accessToken = String(tokens.accessToken);
+    const refreshedToken = String(tokens.refreshToken);
+    apiClient.setAuthTokens(accessToken, refreshedToken);
 
-    return tokens;
+    return { accessToken, refreshToken: refreshedToken };
   }
 
   async forgotPassword(email: string): Promise<{ message: string }> {

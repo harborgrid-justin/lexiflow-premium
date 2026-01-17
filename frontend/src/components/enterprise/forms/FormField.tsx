@@ -74,6 +74,13 @@ export const FormField: React.FC<FormFieldProps> = ({
   readOnly = false,
 }) => {
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const borderDefaultClass = classToken(theme.border.default);
+  const borderFocusedClass = classToken(theme.border.focused);
+  const surfaceDefaultClass = classToken(theme.surface.default);
+  const surfaceHoverClass = classToken(theme.surface.hover);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const textSecondaryClass = classToken(theme.text.secondary);
   const inputId = useId();
   const errorId = useId();
   const helpId = useId();
@@ -122,11 +129,11 @@ export const FormField: React.FC<FormFieldProps> = ({
       ? cn('border-red-500 focus:ring-red-500')
       : warning
         ? cn('border-amber-500 focus:ring-amber-500')
-        : cn(theme.border.default, theme.border.focus),
-    theme.surface.default,
-    theme.text.primary,
-    isDisabled && cn('opacity-50 cursor-not-allowed', theme.surface.hover),
-    isReadOnly && cn(theme.surface.hover, 'cursor-default'),
+        : cn(borderDefaultClass, borderFocusedClass),
+    surfaceDefaultClass,
+    textPrimaryClass,
+    isDisabled && cn('opacity-50 cursor-not-allowed', surfaceHoverClass),
+    isReadOnly && cn(surfaceHoverClass, 'cursor-default'),
     fieldClassName
   );
 
@@ -224,7 +231,7 @@ export const FormField: React.FC<FormFieldProps> = ({
               {...ariaAttributes}
             />
             {textField.showCharCount && textField.maxLength && (
-              <div className={cn('text-xs text-right mt-1', theme.text.secondary)}>
+              <div className={cn('text-xs text-right mt-1', textSecondaryClass)}>
                 {(value as string)?.length || 0} / {textField.maxLength}
               </div>
             )}
@@ -369,7 +376,7 @@ export const FormField: React.FC<FormFieldProps> = ({
             htmlFor={inputId}
           >
             {checkboxField.labelPosition === 'left' && (
-              <span className={theme.text.primary}>{label}</span>
+              <span className={textPrimaryClass}>{label}</span>
             )}
             <input
               id={inputId}
@@ -392,7 +399,7 @@ export const FormField: React.FC<FormFieldProps> = ({
               {...ariaAttributes}
             />
             {(!checkboxField.labelPosition || checkboxField.labelPosition === 'right') && (
-              <span className={theme.text.primary}>{label}</span>
+              <span className={textPrimaryClass}>{label}</span>
             )}
           </label>
         );
@@ -432,7 +439,7 @@ export const FormField: React.FC<FormFieldProps> = ({
                     (isDisabled || option.disabled) && 'opacity-50 cursor-not-allowed'
                   )}
                 />
-                <span className={theme.text.primary}>{option.label}</span>
+                <span className={textPrimaryClass}>{option.label}</span>
               </label>
             ))}
           </div>
@@ -461,7 +468,7 @@ export const FormField: React.FC<FormFieldProps> = ({
             multiple={fileField.multiple}
             className={cn(
               'block w-full text-sm',
-              theme.text.primary,
+              textPrimaryClass,
               'file:mr-4 file:py-2 file:px-4',
               'file:rounded-lg file:border-0',
               'file:text-sm file:font-semibold',
@@ -537,7 +544,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           htmlFor={inputId}
           className={cn(
             'block text-sm font-medium mb-1.5',
-            theme.text.primary,
+            textPrimaryClass,
             required && 'after:content-["*"] after:ml-0.5 after:text-red-500'
           )}
         >
@@ -550,7 +557,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 
       {/* Help Text */}
       {helpText && (
-        <p id={helpId} className={cn('text-xs mt-1', theme.text.secondary)}>
+        <p id={helpId} className={cn('text-xs mt-1', textSecondaryClass)}>
           {helpText}
         </p>
       )}

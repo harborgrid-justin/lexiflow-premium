@@ -59,6 +59,10 @@ export function InlineEditor({
   onCancel,
 }: CellEditorProps) {
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const surfaceDefaultClass = classToken(theme.surface.default);
+  const borderDefaultClass = classToken(theme.border.default);
+  const textPrimaryClass = classToken(theme.text.primary);
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -136,9 +140,9 @@ export function InlineEditor({
             onKeyDown={handleKeyDown}
             className={cn(
               "w-full px-2 py-1 text-sm border rounded",
-              theme.surface.default,
-              theme.border.default,
-              theme.text.primary,
+              surfaceDefaultClass,
+              borderDefaultClass,
+              textPrimaryClass,
               "focus:outline-none focus:ring-2 focus:ring-blue-500"
             )}
           />
@@ -154,9 +158,9 @@ export function InlineEditor({
             onKeyDown={handleKeyDown}
             className={cn(
               "w-full px-2 py-1 text-sm border rounded",
-              theme.surface.default,
-              theme.border.default,
-              theme.text.primary,
+              surfaceDefaultClass,
+              borderDefaultClass,
+              textPrimaryClass,
               "focus:outline-none focus:ring-2 focus:ring-blue-500"
             )}
           />
@@ -172,9 +176,9 @@ export function InlineEditor({
             onKeyDown={handleKeyDown}
             className={cn(
               "w-full px-2 py-1 text-sm border rounded",
-              theme.surface.default,
-              theme.border.default,
-              theme.text.primary,
+              surfaceDefaultClass,
+              borderDefaultClass,
+              textPrimaryClass,
               "focus:outline-none focus:ring-2 focus:ring-blue-500"
             )}
           />
@@ -189,9 +193,9 @@ export function InlineEditor({
             onKeyDown={handleKeyDown}
             className={cn(
               "w-full px-2 py-1 text-sm border rounded",
-              theme.surface.default,
-              theme.border.default,
-              theme.text.primary,
+              surfaceDefaultClass,
+              borderDefaultClass,
+              textPrimaryClass,
               "focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             )}
           >
@@ -228,9 +232,9 @@ export function InlineEditor({
             rows={3}
             className={cn(
               "w-full px-2 py-1 text-sm border rounded resize-none",
-              theme.surface.default,
-              theme.border.default,
-              theme.text.primary,
+              surfaceDefaultClass,
+              borderDefaultClass,
+              textPrimaryClass,
               "focus:outline-none focus:ring-2 focus:ring-blue-500"
             )}
           />
@@ -246,9 +250,9 @@ export function InlineEditor({
             onKeyDown={handleKeyDown}
             className={cn(
               "w-full px-2 py-1 text-sm border rounded",
-              theme.surface.default,
-              theme.border.default,
-              theme.text.primary,
+              surfaceDefaultClass,
+              borderDefaultClass,
+              textPrimaryClass,
               "focus:outline-none focus:ring-2 focus:ring-blue-500"
             )}
           />

@@ -23,7 +23,7 @@ import { DiscoveryPage } from './DiscoveryPage';
 import type { clientLoader } from './loader';
 
 // Export loader and action
-export { action, clientLoader as loader } from './loader';
+export { action, clientLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

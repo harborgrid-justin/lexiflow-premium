@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
+import { useQuery } from '@/hooks/data/useQueryHooks';
+
 import { useEnterpriseBilling } from '../../hooks/useEnterpriseBilling';
 
 interface ARAgingBucket {
@@ -55,7 +57,7 @@ export function EnterpriseBilling({ firmId, onExportData }: EnterpriseBillingPro
 
   const { data: writeOffRequests = [] } = useQuery<WriteOffRequest[]>(
     ['billing', 'writeoffs'],
-    async () => []
+    () => Promise.resolve([])
   );
 
   const getPriorityBadge = (priority: 'high' | 'medium' | 'low') => {

@@ -85,6 +85,11 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
   readOnly = false,
 }: DynamicFormBuilderProps<TFormData>) {
   const { theme } = useTheme();
+  const classToken = (value: unknown) => String(value);
+  const textPrimaryClass = classToken(theme.text.primary);
+  const textSecondaryClass = classToken(theme.text.secondary);
+  const borderDefaultClass = classToken(theme.border.default);
+  const surfaceHighlightClass = classToken(theme.surface.highlight);
   const { schema, initialValues, onSubmit, onCancel } = config;
 
   // Form validation
@@ -284,11 +289,11 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
       {/* Form Title */}
       {schema.title && (
         <div className="mb-6">
-          <h2 className={cn('text-2xl font-semibold', theme.text.primary)}>
+          <h2 className={cn('text-2xl font-semibold', textPrimaryClass)}>
             {schema.title}
           </h2>
           {schema.description && (
-            <p className={cn('mt-2 text-sm', theme.text.secondary)}>
+            <p className={cn('mt-2 text-sm', textSecondaryClass)}>
               {schema.description}
             </p>
           )}
@@ -341,7 +346,7 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
             <div style={{ backgroundColor: 'var(--color-surface)', opacity: 0.5 }} className="absolute inset-0 backdrop-blur-sm z-10 flex items-center justify-center">
               <div className="text-center">
                 <div className="animate-spin text-4xl mb-2">⟳</div>
-                <p className={theme.text.secondary}>Loading...</p>
+                <p className={textSecondaryClass}>Loading...</p>
               </div>
             </div>
           </div>
@@ -357,7 +362,7 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
           <div
             className={cn(
               'flex items-center gap-3 pt-6 border-t',
-              theme.border.default
+              borderDefaultClass
             )}
           >
             <button
@@ -380,8 +385,8 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
                 disabled={isLoading}
                 className={cn(
                   'px-6 py-2.5 rounded-lg font-medium transition-colors',
-                  theme.surface.highlight,
-                  theme.text.primary,
+                  surfaceHighlightClass,
+                  textPrimaryClass,
                   'disabled:opacity-50 disabled:cursor-not-allowed',
                   'focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
                 )}
@@ -397,7 +402,7 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
                 disabled={isLoading || !formState.isDirty}
                 className={cn(
                   'px-6 py-2.5 rounded-lg font-medium transition-colors',
-                  theme.text.secondary,
+                  textSecondaryClass,
                   'disabled:opacity-50 disabled:cursor-not-allowed',
                   'hover:text-red-600',
                   'focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'

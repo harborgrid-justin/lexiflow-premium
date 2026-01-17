@@ -189,8 +189,8 @@ export class EnterpriseApiClient {
 
   constructor(config: EnterpriseApiConfig = {}) {
     this.config = {
-      baseUrl: config.baseUrl || getApiBaseUrl(),
-      apiPrefix: config.apiPrefix || getApiPrefix(),
+      baseUrl: config.baseUrl || String(getApiBaseUrl()),
+      apiPrefix: config.apiPrefix || String(getApiPrefix()),
       timeout: config.timeout ?? 30000,
       retry: config.retry || {},
       rateLimit: config.rateLimit || {},

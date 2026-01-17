@@ -19,10 +19,17 @@ export interface PleadingsLoaderData {
   pleadings: Pleading[];
 }
 
-export async function pleadingsLoader() {
-  const pleadings = await DataService.pleadings.getAll().catch(() => []);
+export async function clientLoader(): Promise<PleadingsLoaderData> {
+  try {
+    const pleadings = await DataService.pleadings.getAll();
 
-  return {
-    pleadings: pleadings || [],
-  };
+    return {
+      pleadings: pleadings ?? [],
+    };
+  } catch (error: unknown) {
+    console.error("Failed to load pleadings:", error);
+    return {
+      pleadings: [],
+    };
+  }
 }

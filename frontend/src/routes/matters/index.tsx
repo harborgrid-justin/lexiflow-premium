@@ -13,7 +13,7 @@ import { MattersPage } from './MattersPage';
 
 import type { Route } from "./+types/index";
 
-export { mattersLoader as loader } from './loader';
+export { mattersLoader as clientLoader } from './loader';
 
 export function meta({ data }: Route.MetaArgs) {
   return createListMeta({

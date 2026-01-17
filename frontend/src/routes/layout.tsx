@@ -28,8 +28,8 @@ import { CaseProvider } from "@/routes/cases";
 import { DataSourceProvider } from "@/routes/dashboard/data/DataSourceContext";
 import { requireAuthLoader } from "@/utils/route-guards";
 
-// Export the loader for the router to use
-export const loader = requireAuthLoader;
+// SPA mode: client-side loader
+export const clientLoader = requireAuthLoader;
 
 /**
  * Layout Component (Enterprise Architecture)

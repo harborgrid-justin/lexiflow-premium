@@ -23,7 +23,7 @@ import { CalendarPage } from './CalendarPage';
 import type { CalendarLoaderData } from './loader';
 
 // Export loader
-export { calendarLoader as loader } from './loader';
+export { calendarLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

@@ -15,7 +15,7 @@ import { type draftingLoader } from './loader';
 
 import type { Route } from './+types/index';
 
-export { draftingLoader as loader } from './loader';
+export { draftingLoader as clientLoader } from './loader';
 
 export function meta(_args: Route.MetaArgs) {
   return createListMeta({

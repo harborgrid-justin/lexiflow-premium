@@ -23,7 +23,7 @@ import { AnalyticsPage } from './AnalyticsPage';
 import type { clientLoader } from './loader';
 
 // Export loader (renamed to loader for standard router usage)
-export { clientLoader as loader } from './loader';
+export { clientLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

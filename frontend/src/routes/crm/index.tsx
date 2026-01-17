@@ -41,7 +41,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function clientLoader() {
   try {
     // Fetch all clients using new enterprise API with pagination
     const result = await communicationsApi.getAllClients({ page: 1, limit: 1000 });
@@ -66,7 +66,7 @@ export async function loader() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 

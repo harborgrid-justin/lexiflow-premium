@@ -36,7 +36,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function clientLoader() {
   try {
     const rules = await DataService.rules.getAll();
     return { items: rules, totalCount: rules.length };
@@ -50,7 +50,7 @@ export async function loader() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 

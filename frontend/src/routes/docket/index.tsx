@@ -28,7 +28,7 @@ import type { clientLoader } from './loader';
 import type { CaseId } from '@/types';
 
 // Export loader
-export { clientLoader as loader } from './loader';
+export { clientLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags
@@ -46,7 +46,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 

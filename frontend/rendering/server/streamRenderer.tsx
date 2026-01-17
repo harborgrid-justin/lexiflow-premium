@@ -66,7 +66,10 @@ export class StreamRenderer {
         {
           [readyOption]() {
             shellRendered = true;
-            const body = new PassThrough();
+            const PassThroughStream = PassThrough as unknown as {
+              new(): { pipe: (destination: unknown) => unknown };
+            };
+            const body = new PassThroughStream();
             const stream = createReadableStreamFromReadable(body);
 
             responseHeaders.set("Content-Type", "text/html");

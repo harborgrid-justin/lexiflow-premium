@@ -22,7 +22,7 @@ import { WorkflowsPage } from './WorkflowsPage';
 import type { WorkflowsDeferredLoaderData } from './loader';
 
 // Export loader
-export { workflowsLoader as loader } from './loader';
+export { workflowsLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

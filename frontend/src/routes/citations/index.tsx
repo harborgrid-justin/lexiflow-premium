@@ -58,7 +58,7 @@ clientLoader.hydrate = true as const;
 // Action
 // ============================================================================
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function clientAction({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 

@@ -16,7 +16,7 @@ import { createMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Export loader from dedicated file
-export { litigationLoader as loader } from './loader';
+export { litigationLoader as clientLoader } from './loader';
 
 // Import Page component
 import { LitigationPage } from './LitigationPage';

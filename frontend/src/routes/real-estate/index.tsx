@@ -16,7 +16,7 @@ import { createMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Export loader from dedicated file
-export { realEstateLoader as loader } from './loader';
+export { realEstateLoader as clientLoader } from './loader';
 
 // Import Page component
 import { RealEstatePage } from './RealEstatePage';

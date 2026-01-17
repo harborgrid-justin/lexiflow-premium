@@ -30,7 +30,7 @@ import type { Route } from "./+types/index";
 import type { ResearchLoaderData } from './loader';
 
 // Export loader
-export { researchLoader as loader } from './loader';
+export { researchLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags
@@ -48,7 +48,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 

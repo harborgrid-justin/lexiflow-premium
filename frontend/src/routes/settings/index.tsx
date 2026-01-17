@@ -23,7 +23,7 @@ import { SettingsPage } from './SettingsPage';
 import type { SettingsLoaderData } from './loader';
 
 // Export loader from dedicated file
-export { settingsLoader as loader } from './loader';
+export { settingsLoader as clientLoader } from './loader';
 
 // ============================================================================
 // Meta Tags

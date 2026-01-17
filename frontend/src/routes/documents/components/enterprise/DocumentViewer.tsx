@@ -10,8 +10,9 @@
  * - Page thumbnails
  */
 
-import type { LegalDocument } from '@/types/documents';
 import { useEffect, useMemo, useRef, useState } from 'react';
+
+import type { LegalDocument } from '@/types/documents';
 
 interface Annotation {
   id: string;

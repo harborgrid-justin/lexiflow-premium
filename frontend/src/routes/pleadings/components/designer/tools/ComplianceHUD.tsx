@@ -1,8 +1,9 @@
-import { useTheme } from "@/hooks/useTheme";
-import { FormattingRule, PleadingSection } from '@/types';
-import { cn } from '@/lib/cn';
 import { AlertOctagon, AlertTriangle, Info, Zap } from 'lucide-react';
 import React, { useMemo } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type FormattingRule, type PleadingSection } from '@/types';
 
 interface ComplianceHUDProps {
     rules: FormattingRule;
@@ -26,7 +27,7 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScor
         const errorWeight = 10;
         const warningWeight = 5;
         const penalty = issues.reduce((acc: unknown, issue: unknown) => (acc as number) + ((issue as { type: string }).type === 'error' ? errorWeight : (issue as { type: string }).type === 'warning' ? warningWeight : 0), 0);
-        return Math.max(0, 100 - (penalty as number));
+        return Math.max(0, 100 - (penalty));
     }, [issues]);
 
     const displayScore = propScore !== 100 ? propScore : dynamicScore;

@@ -1,10 +1,10 @@
+import { ArrowRight, Database, Plus, Server, Trash2 } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { ConsistentHashRing } from '@/utils/datastructures/consistentHashRing';
-import { ArrowRight, Database, Plus, Server, Trash2 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * ShardingVisualizer - React 18 optimized with React.memo

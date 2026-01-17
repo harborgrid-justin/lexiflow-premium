@@ -11,35 +11,35 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { AlertCircle, Plus, User, Building2, Calendar } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/atoms/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
+import { type LegalHold } from '@/types';
 import { LegalHoldStatusEnum } from '@/types/enums';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { LegalHold } from '@/types';
 
 export const LegalHolds: React.FC = () => {
   const { theme } = useTheme();

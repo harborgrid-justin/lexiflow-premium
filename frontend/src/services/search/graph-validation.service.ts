@@ -7,8 +7,15 @@
  * @module services/graphValidationService
  */
 
-import { VALIDATION_MESSAGES, CANVAS_CONSTANTS } from '@/types/canvas-constants';
-import { type TypedWorkflowNode, type WorkflowConnection } from '@/types/workflow-types';
+import {
+  CANVAS_CONSTANTS,
+  VALIDATION_MESSAGES,
+} from "@/types/canvas-constants";
+
+import type {
+  TypedWorkflowNode,
+  WorkflowConnection,
+} from "@/types/workflow-types";
 
 /**
  * Validation result interface
@@ -47,7 +54,7 @@ export class GraphValidationService {
    */
   static validateGraph(
     nodes: TypedWorkflowNode[],
-    connections: WorkflowConnection[]
+    connections: WorkflowConnection[],
   ): ValidationResult {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
@@ -73,11 +80,11 @@ export class GraphValidationService {
    */
   private static validateNodeCount(
     nodes: TypedWorkflowNode[],
-    errors: ValidationError[]
+    errors: ValidationError[],
   ): void {
     if (nodes.length > CANVAS_CONSTANTS.MAX_NODES) {
       errors.push({
-        code: 'MAX_NODES_EXCEEDED',
+        code: "MAX_NODES_EXCEEDED",
         message: VALIDATION_MESSAGES.MAX_NODES_EXCEEDED,
       });
     }
@@ -88,11 +95,11 @@ export class GraphValidationService {
    */
   private static validateConnectionCount(
     connections: WorkflowConnection[],
-    errors: ValidationError[]
+    errors: ValidationError[],
   ): void {
     if (connections.length > CANVAS_CONSTANTS.MAX_CONNECTIONS) {
       errors.push({
-        code: 'MAX_CONNECTIONS_EXCEEDED',
+        code: "MAX_CONNECTIONS_EXCEEDED",
         message: VALIDATION_MESSAGES.MAX_CONNECTIONS_EXCEEDED,
       });
     }
@@ -103,21 +110,21 @@ export class GraphValidationService {
    */
   private static validateStartAndEndNodes(
     nodes: TypedWorkflowNode[],
-    errors: ValidationError[]
+    errors: ValidationError[],
   ): void {
-    const hasStart = nodes.some(n => n.type === 'Start');
-    const hasEnd = nodes.some(n => n.type === 'End');
+    const hasStart = nodes.some((n) => n.type === "Start");
+    const hasEnd = nodes.some((n) => n.type === "End");
 
     if (!hasStart) {
       errors.push({
-        code: 'NO_START_NODE',
+        code: "NO_START_NODE",
         message: VALIDATION_MESSAGES.NO_START_NODE,
       });
     }
 
     if (!hasEnd) {
       errors.push({
-        code: 'NO_END_NODE',
+        code: "NO_END_NODE",
         message: VALIDATION_MESSAGES.NO_END_NODE,
       });
     }
@@ -129,9 +136,9 @@ export class GraphValidationService {
   private static validateConnectivity(
     nodes: TypedWorkflowNode[],
     connections: WorkflowConnection[],
-    warnings: ValidationWarning[]
+    warnings: ValidationWarning[],
   ): void {
-    const startNode = nodes.find(n => n.type === 'Start');
+    const startNode = nodes.find((n) => n.type === "Start");
     if (!startNode) return; // Already flagged by validateStartAndEndNodes
 
     // Build adjacency list
@@ -162,12 +169,12 @@ export class GraphValidationService {
 
     // Check for unreachable nodes (excluding Comments which can be standalone)
     const unreachableNodes = nodes.filter(
-      n => !reachable.has(n.id) && n.type !== 'Comment' && n.type !== 'Start'
+      (n) => !reachable.has(n.id) && n.type !== "Comment" && n.type !== "Start",
     );
 
     if (unreachableNodes.length > 0) {
       warnings.push({
-        code: 'DISCONNECTED_NODES',
+        code: "DISCONNECTED_NODES",
         message: `${unreachableNodes.length} node(s) are not connected to the main workflow`,
         nodeId: unreachableNodes[0]!.id,
       });
@@ -180,7 +187,7 @@ export class GraphValidationService {
   private static validateCircularDependencies(
     nodes: TypedWorkflowNode[],
     connections: WorkflowConnection[],
-    errors: ValidationError[]
+    errors: ValidationError[],
   ): void {
     const adjacencyList = new Map<string, string[]>();
     for (const conn of connections) {
@@ -216,7 +223,7 @@ export class GraphValidationService {
       if (!visited.has(node.id)) {
         if (hasCycle(node.id)) {
           errors.push({
-            code: 'CIRCULAR_DEPENDENCY',
+            code: "CIRCULAR_DEPENDENCY",
             message: VALIDATION_MESSAGES.CIRCULAR_DEPENDENCY,
             nodeId: node.id,
           });
@@ -232,16 +239,16 @@ export class GraphValidationService {
   private static validateDecisionNodes(
     nodes: TypedWorkflowNode[],
     connections: WorkflowConnection[],
-    warnings: ValidationWarning[]
+    warnings: ValidationWarning[],
   ): void {
-    const decisionNodes = nodes.filter(n => n.type === 'Decision');
+    const decisionNodes = nodes.filter((n) => n.type === "Decision");
 
     for (const node of decisionNodes) {
-      const outgoingConnections = connections.filter(c => c.from === node.id);
+      const outgoingConnections = connections.filter((c) => c.from === node.id);
 
       if (outgoingConnections.length < 2) {
         warnings.push({
-          code: 'DECISION_MISSING_BRANCHES',
+          code: "DECISION_MISSING_BRANCHES",
           message: `Decision node "${node.label}" should have at least 2 outgoing connections`,
           nodeId: node.id,
         });
@@ -249,11 +256,13 @@ export class GraphValidationService {
 
       // Check if all ports are used
       const ports = node.config.ports || [];
-      const usedPorts = new Set(outgoingConnections.map(c => c.fromPort).filter(Boolean));
+      const usedPorts = new Set(
+        outgoingConnections.map((c) => c.fromPort).filter(Boolean),
+      );
 
       if (ports.length > 0 && usedPorts.size < ports.length) {
         warnings.push({
-          code: 'DECISION_UNUSED_PORTS',
+          code: "DECISION_UNUSED_PORTS",
           message: `Decision node "${node.label}" has unused outcome ports`,
           nodeId: node.id,
         });
@@ -266,28 +275,30 @@ export class GraphValidationService {
    */
   private static validatePhaseStructure(
     nodes: TypedWorkflowNode[],
-    warnings: ValidationWarning[]
+    warnings: ValidationWarning[],
   ): void {
-    const phaseNodes = nodes.filter(n => n.type === 'Phase');
+    const phaseNodes = nodes.filter((n) => n.type === "Phase");
 
     for (const phase of phaseNodes) {
       const childNodes = phase.config.childNodes || [];
 
       if (childNodes.length === 0) {
         warnings.push({
-          code: 'EMPTY_PHASE',
+          code: "EMPTY_PHASE",
           message: `Phase "${phase.label}" contains no child nodes`,
           nodeId: phase.id,
         });
       }
 
       // Validate child nodes exist
-      const existingNodeIds = new Set(nodes.map(n => n.id));
-      const missingChildren = childNodes.filter((id: string) => !existingNodeIds.has(id));
+      const existingNodeIds = new Set(nodes.map((n) => n.id));
+      const missingChildren = childNodes.filter(
+        (id: string) => !existingNodeIds.has(id),
+      );
 
       if (missingChildren.length > 0) {
         warnings.push({
-          code: 'PHASE_MISSING_CHILDREN',
+          code: "PHASE_MISSING_CHILDREN",
           message: `Phase "${phase.label}" references non-existent child nodes`,
           nodeId: phase.id,
         });
@@ -301,14 +312,14 @@ export class GraphValidationService {
   static validateConnection(
     connection: WorkflowConnection,
     nodes: TypedWorkflowNode[],
-    existingConnections: WorkflowConnection[]
+    existingConnections: WorkflowConnection[],
   ): ValidationError | null {
-    const fromNode = nodes.find(n => n.id === connection.from);
-    const toNode = nodes.find(n => n.id === connection.to);
+    const fromNode = nodes.find((n) => n.id === connection.from);
+    const toNode = nodes.find((n) => n.id === connection.to);
 
     if (!fromNode || !toNode) {
       return {
-        code: 'INVALID_CONNECTION',
+        code: "INVALID_CONNECTION",
         message: VALIDATION_MESSAGES.INVALID_CONNECTION,
         connectionId: connection.id,
       };
@@ -316,12 +327,15 @@ export class GraphValidationService {
 
     // Check for duplicate connections
     const duplicate = existingConnections.some(
-      c => c.from === connection.from && c.to === connection.to && c.id !== connection.id
+      (c) =>
+        c.from === connection.from &&
+        c.to === connection.to &&
+        c.id !== connection.id,
     );
 
     if (duplicate) {
       return {
-        code: 'DUPLICATE_CONNECTION',
+        code: "DUPLICATE_CONNECTION",
         message: VALIDATION_MESSAGES.DUPLICATE_CONNECTION,
         connectionId: connection.id,
       };
@@ -330,8 +344,8 @@ export class GraphValidationService {
     // Prevent self-loops
     if (connection.from === connection.to) {
       return {
-        code: 'SELF_LOOP',
-        message: 'Nodes cannot connect to themselves',
+        code: "SELF_LOOP",
+        message: "Nodes cannot connect to themselves",
         connectionId: connection.id,
       };
     }
@@ -344,7 +358,7 @@ export class GraphValidationService {
    */
   static quickValidate(
     nodes: TypedWorkflowNode[],
-    connections: WorkflowConnection[]
+    connections: WorkflowConnection[],
   ): { hasErrors: boolean; errorCount: number } {
     const result = this.validateGraph(nodes, connections);
     return {
@@ -353,4 +367,3 @@ export class GraphValidationService {
     };
   }
 }
-

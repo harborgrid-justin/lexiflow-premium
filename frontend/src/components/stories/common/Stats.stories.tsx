@@ -1,6 +1,8 @@
-import { Stats } from '@/components/molecules/Stats/Stats';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Briefcase, DollarSign, FileText, Users } from 'lucide-react';
+
+import { Stats } from '@/components/molecules/Stats/Stats';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Stats component for displaying key metrics.

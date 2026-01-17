@@ -1,10 +1,12 @@
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { FolderOpen } from 'lucide-react';
+
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { FileAttachment } from '@/components/molecules/FileAttachment/FileAttachment';
-import { Attachment } from '@/hooks/useSecureMessenger';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { type Attachment } from '@/hooks/useSecureMessenger';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { FolderOpen } from 'lucide-react';
+
 
 interface MessengerFilesProps {
   files: Attachment[];

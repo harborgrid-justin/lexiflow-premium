@@ -6,21 +6,24 @@
  */
 
 import { Copy, Plus } from 'lucide-react';
+
 // Common Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import React from "react";
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Context & Utils
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Services & Types
-import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem } from '@/types';
-import React from "react";
+import { type EvidenceItem } from '@/types';
+
 
 export const OriginalsManager: React.FC = () => {
     const { theme } = useTheme();

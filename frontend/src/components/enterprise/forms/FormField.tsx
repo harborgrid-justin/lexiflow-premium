@@ -13,9 +13,10 @@
  * - Required field indicators
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import React, { useId } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 import type {
   CheckboxFieldSchema,

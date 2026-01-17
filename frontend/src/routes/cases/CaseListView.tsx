@@ -24,11 +24,6 @@
  * @module routes/cases/CaseListView
  */
 
-import { Button } from '@/components/atoms/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
-import { Case, CaseStatus } from '@/types';
 import {
   Activity,
   Archive,
@@ -48,6 +43,13 @@ import {
 } from 'lucide-react';
 import { lazy, startTransition, Suspense, useMemo } from 'react';
 import { useNavigate, useNavigation } from 'react-router';
+
+import { Button } from '@/components/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type Case, type CaseStatus } from '@/types';
+
 import { useCases } from './CaseListProvider';
 
 // Lazy load tab contents for performance

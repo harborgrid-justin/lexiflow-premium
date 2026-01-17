@@ -1,6 +1,7 @@
 
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
+
+import { type DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
 
 interface DiscoveryMetricsProps {
     stats: {

@@ -11,10 +11,11 @@
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
+import { type Project } from '@/types';
+
 import { ProjectCard } from './ProjectCard';
 
 // Types & Interfaces
-import { Project } from '@/types';
 
 interface ProjectListProps {
   projects: Project[];

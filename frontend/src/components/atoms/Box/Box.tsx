@@ -7,7 +7,10 @@
  * abstraction over div elements with design system integration.
  */
 
+import React from "react";
+
 import { cn } from '@/lib/cn';
+
 import { 
   spacingClasses, 
   bgClasses, 
@@ -17,7 +20,6 @@ import {
   alignClasses, 
   gapClasses 
 } from './Box.styles';
-import React from "react";
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Spacing preset from design system */

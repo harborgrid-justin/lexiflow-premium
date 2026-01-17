@@ -15,8 +15,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Clock, Download, TrendingUp } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';
@@ -25,14 +25,14 @@ import { Card } from '@/components/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
-import { useCaseFinancials } from '@/routes/cases/hooks/useCaseFinancials';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+import { useCaseFinancials } from '@/routes/cases/hooks/useCaseFinancials';
 
 // Types & Interfaces
-import { BillingModel, TimeEntry } from '@/types';
+import { type BillingModel, type TimeEntry } from '@/types';
 
 interface CaseBillingProps {
     billingModel: BillingModel;
@@ -96,7 +96,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                     </TableHeader>
                     <TableBody>
                         {entries.length > 0 ? entries.map((entry) => {
-                            const e = entry as TimeEntry;
+                            const e = entry;
                             return (
                                 <TableRow key={e.id}>
                                     <TableCell className={cn("font-mono", theme.text.secondary)}>{e.date}</TableCell>

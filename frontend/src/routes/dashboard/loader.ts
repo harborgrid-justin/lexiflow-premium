@@ -21,16 +21,18 @@
  * @module routes/dashboard/loader
  */
 
+import { defer } from "@remix-run/router";
+import { type LoaderFunctionArgs } from "react-router";
+
 import {
   billingApi,
   casesApi,
   docketApi,
   workflowApi,
 } from "@/lib/frontend-api";
-import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
 import { handleLoaderAuthError } from "@/utils/loader-helpers";
-import { defer } from "@remix-run/router";
-import { type LoaderFunctionArgs } from "react-router";
+
+import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
 
 export interface DashboardLoaderData {
   // Critical data (awaited before render)

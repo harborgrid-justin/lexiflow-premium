@@ -1,4 +1,5 @@
 import { DiscoveryPlatform } from '@/routes/discovery/components/platform/DiscoveryPlatform';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

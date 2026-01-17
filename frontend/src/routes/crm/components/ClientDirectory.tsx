@@ -1,16 +1,19 @@
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { Lock, MoreVertical } from 'lucide-react';
+import { useMemo, useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Currency } from '@/components/atoms/Currency';
-import { useTheme } from "@/hooks/useTheme";
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { useClients } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
-import { Client, ClientStatus } from '@/types';
-import { Lock, MoreVertical } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { type Client, ClientStatus } from '@/types';
+
+
 import { ClientCard } from './ClientCard';
 
 interface ClientDirectoryProps {

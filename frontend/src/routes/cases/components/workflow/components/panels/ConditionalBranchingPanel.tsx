@@ -3,11 +3,12 @@
  * @description Conditional branching configuration with rule-based decision trees
  */
 
+import { AlertTriangle, CheckCircle2, GitBranch } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertTriangle, CheckCircle2, GitBranch } from 'lucide-react';
 export function ConditionalBranchingPanel() {
   const { theme } = useTheme();
 

@@ -1,12 +1,14 @@
-import { Card } from '@/components/molecules/Card';
+import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import React from "react";
+
+import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
-import { Badge } from '@/components/atoms/Badge';
-import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
-import { LegalEntity } from '@/types';
+import { Card } from '@/components/molecules/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import React from "react";
+import { type LegalEntity } from '@/types';
+
 
 interface KycManagerProps {
   entities: LegalEntity[];

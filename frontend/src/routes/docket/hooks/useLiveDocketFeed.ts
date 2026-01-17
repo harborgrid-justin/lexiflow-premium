@@ -5,13 +5,14 @@
  * and connection status monitoring
  */
 
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import {
   WS_RECONNECT_ATTEMPTS,
   WS_RECONNECT_BACKOFF_MULTIPLIER,
   WS_RECONNECT_DELAY_MS,
   getWsUrl,
 } from "@/config/network/websocket.config";
-import { useCallback, useEffect, useRef, useState } from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

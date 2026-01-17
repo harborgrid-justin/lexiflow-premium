@@ -11,23 +11,24 @@
 // External Dependencies
 import { ArrowLeft, ArrowUpRight, Calendar, CheckSquare, MapPin, MessageCircle, Users } from 'lucide-react';
 import React from 'react';
+
 // Internal Dependencies - Components
-import { ClientPortalModal } from '@/routes/crm/components/ClientPortalModal';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useWindow } from '@/providers';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { ClientPortalModal } from '@/routes/crm/components/ClientPortalModal';
+import { DataService } from '@/services/data/data-service.service';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 // Types & Interfaces
-import { Case, CaseId, ClientStatus, EntityId, PaymentTerms } from '@/types';
+import { type Case, type CaseId, ClientStatus, type EntityId, PaymentTerms } from '@/types';
 
 interface CaseDetailHeaderProps {
     id: string;

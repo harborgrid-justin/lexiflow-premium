@@ -8,11 +8,13 @@
  * - Type-safe data contracts
  */
 
-import { DataService } from "@/services/data/data-service.service";
-import type { Task, WorkflowInstance, WorkflowTemplate } from "@/types";
-import { requireAuthentication } from "@/utils/route-guards";
 import { defer } from "@remix-run/router";
 import { type LoaderFunctionArgs } from "react-router";
+
+import { DataService } from "@/services/data/data-service.service";
+import { requireAuthentication } from "@/utils/route-guards";
+
+import type { Task, WorkflowInstance, WorkflowTemplate } from "@/types";
 
 export interface WorkflowsLoaderData {
   templates: WorkflowTemplate[];

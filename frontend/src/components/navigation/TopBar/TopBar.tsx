@@ -1,6 +1,7 @@
-import { AppHeader } from '@/components/organisms/AppHeader';
-import { IntentResult } from '@/types/intelligence';
 import { memo, useState } from 'react';
+
+import { AppHeader } from '@/components/organisms/AppHeader';
+import { type IntentResult } from '@/types/intelligence';
 
 export interface TopBarProps {
   onSearch: (query: string) => void;

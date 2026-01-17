@@ -4,12 +4,14 @@ import { useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { MetricTile, SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
-import { useTheme } from '@/hooks/useTheme';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
-import { DataService } from '@/services/dataService';
 import { queryKeys } from '@/utils/queryKeys';
+
 import type { LegalEntity } from '@/types';
+
+import { DataService } from '@/services/dataService';
 
 interface AlumniDirectoryProps { }
 

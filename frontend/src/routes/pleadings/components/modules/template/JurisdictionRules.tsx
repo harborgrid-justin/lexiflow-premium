@@ -1,10 +1,11 @@
-import React from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { queryKeys } from '@/utils/queryKeys';
 import { AlertTriangle, CheckCircle, Gavel, Loader2 } from 'lucide-react';
+import React from 'react';
+
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { queryKeys } from '@/utils/queryKeys';
 interface JurisdictionRulesProps {
   jurisdiction?: string;
 }

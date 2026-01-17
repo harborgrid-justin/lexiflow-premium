@@ -66,6 +66,7 @@
  * ```
  */
 
+
 import { ValidationError } from "@/services/core/errors";
 import { IntegrationEventPublisher } from "@/services/data/integration/integration-event-publisher.service";
 import { SystemEventType } from "@/types/integration-types";
@@ -88,7 +89,7 @@ import type {
 function validateEventType(type: string, methodName: string): void {
   if (!type || false) {
     throw new ValidationError(
-      `[IntegrationOrchestrator.${methodName}] Invalid event type parameter`
+      `[IntegrationOrchestrator.${methodName}] Invalid event type parameter`,
     );
   }
 }
@@ -100,13 +101,19 @@ function validateEventType(type: string, methodName: string): void {
 function validatePayload(
   payload: unknown,
   type: string,
-  methodName: string
+  methodName: string,
 ): void {
   if (payload === undefined || payload === null) {
     throw new ValidationError(
-      `[IntegrationOrchestrator.${methodName}] Invalid payload for event: ${type}`
+      `[IntegrationOrchestrator.${methodName}] Invalid payload for event: ${type}`,
     );
   }
+}
+
+function isSystemEventPayload(
+  payload: unknown,
+): payload is SystemEventPayloads[keyof SystemEventPayloads] {
+  return typeof payload === "object" && payload !== null;
 }
 
 // =============================================================================
@@ -131,18 +138,22 @@ export class IntegrationOrchestrator {
       const unsubscribe = IntegrationEventPublisher.subscribe(
         type,
         async (payload: unknown) => {
-          await this.publish(
-            type,
-            payload as SystemEventPayloads[keyof SystemEventPayloads]
-          );
-        }
+          if (!isSystemEventPayload(payload)) {
+            console.warn(
+              "[IntegrationOrchestrator] Dropped invalid payload for event",
+              type,
+            );
+            return;
+          }
+          await this.publish(type, payload);
+        },
       );
       this.subscriptionCleanups.push(unsubscribe);
     });
 
     this.initialized = true;
-    console.log(
-      "[IntegrationOrchestrator] Initialized and subscribed to events"
+    console.warn(
+      "[IntegrationOrchestrator] Initialized and subscribed to events",
     );
   }
 
@@ -151,7 +162,7 @@ export class IntegrationOrchestrator {
    * Call this when shutting down the orchestrator to prevent memory leaks
    */
   static cleanup() {
-    console.log("[IntegrationOrchestrator] Cleaning up event subscriptions");
+    console.warn("[IntegrationOrchestrator] Cleaning up event subscriptions");
 
     this.subscriptionCleanups.forEach((unsubscribe) => {
       try {
@@ -170,21 +181,21 @@ export class IntegrationOrchestrator {
    */
   static async publish<T extends keyof SystemEventPayloads>(
     eventType: T,
-    payload: SystemEventPayloads[T]
+    payload: SystemEventPayloads[T],
   ): Promise<IntegrationResult> {
     try {
       const eventTypeStr = String(eventType);
       validateEventType(eventTypeStr, "publish");
       validatePayload(payload, eventTypeStr, "publish");
 
-      console.log(`[IntegrationOrchestrator] Received event: ${eventTypeStr}`);
+      console.warn(`[IntegrationOrchestrator] Received event: ${eventTypeStr}`);
 
       // Get handler from registry
       const handler = EventHandlerRegistry.getHandler(eventTypeStr);
 
       if (!handler) {
         console.warn(
-          `[IntegrationOrchestrator] No handler registered for event: ${eventTypeStr}`
+          `[IntegrationOrchestrator] No handler registered for event: ${eventTypeStr}`,
         );
         return {
           success: true,
@@ -196,13 +207,13 @@ export class IntegrationOrchestrator {
       // Execute handler with error isolation
       const result = await handler.execute(payload);
 
-      console.log(
+      console.warn(
         `[IntegrationOrchestrator] Event ${eventTypeStr} completed:`,
         {
           success: result.success,
           actions: result.triggeredActions.length,
           errors: result.errors?.length ?? 0,
-        }
+        },
       );
 
       return result;
@@ -210,7 +221,7 @@ export class IntegrationOrchestrator {
       const errorMsg = error instanceof Error ? error.message : String(error);
       console.error(
         `[IntegrationOrchestrator] Fatal error processing ${String(eventType)}:`,
-        errorMsg
+        errorMsg,
       );
 
       return {

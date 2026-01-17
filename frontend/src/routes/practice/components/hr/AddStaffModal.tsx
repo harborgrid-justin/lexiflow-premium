@@ -1,10 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { StaffMember } from '@/types';
-import { useState } from 'react';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type StaffMember } from '@/types';
+
 
 interface AddStaffModalProps {
   isOpen: boolean;

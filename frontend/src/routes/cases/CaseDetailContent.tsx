@@ -2,6 +2,8 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
 // Tab Content Components
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { CaseArgumentManager } from '@/routes/cases/components/detail/CaseArgumentManager';
 import { CaseBilling } from '@/routes/cases/components/detail/CaseBilling';
 import { CaseContractReview } from '@/routes/cases/components/detail/CaseContractReview';
@@ -21,14 +23,13 @@ import { CaseOverview } from '@/routes/cases/components/detail/overview/CaseOver
 import { CaseProjects } from '@/routes/cases/components/detail/projects/CaseProjects';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+import { type LegalDocument, type TimeEntry } from '@/types';
+
 import { useCaseDetailContext } from './CaseDetailContext';
 
 // Services & Utils
-import { cn } from '@/lib/cn';
 
 // Types
-import { LegalDocument, TimeEntry } from '@/types';
 
 export default function CaseDetailContent() {
   const { theme } = useTheme();

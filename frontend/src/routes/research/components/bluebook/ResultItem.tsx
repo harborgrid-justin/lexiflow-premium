@@ -1,8 +1,11 @@
-import { cn } from '@/lib/cn';
+import { AlertTriangle, CheckCircle2, Copy, Eye, EyeOff, Trash2 } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { ValidationSeverity } from '@/types/bluebook';
-import { AlertTriangle, CheckCircle2, Copy, Eye, EyeOff, Trash2 } from 'lucide-react';
+
+
 import type { FormattingResult } from './types';
 
 interface ResultItemProps {

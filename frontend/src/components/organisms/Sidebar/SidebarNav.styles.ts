@@ -4,8 +4,9 @@
  * @description Style definitions for SidebarNav component.
  */
 
-import type { ThemeObject } from '@/lib/theme/types';
 import { cn } from "@/lib/cn";
+
+import type { ThemeObject } from '@/lib/theme/types';
 
 type Theme = ThemeObject;
 

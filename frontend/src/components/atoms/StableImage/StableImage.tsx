@@ -1,5 +1,7 @@
+import { type ImgHTMLAttributes, useState } from 'react';
+
 import { cn } from '@/lib/cn';
-import { ImgHTMLAttributes, useState } from 'react';
+
 import { Skeleton } from '../Skeleton';
 
 export interface StableImageProps extends ImgHTMLAttributes<HTMLImageElement> {

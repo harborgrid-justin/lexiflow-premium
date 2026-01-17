@@ -1,4 +1,5 @@
 import { GovernanceDashboard } from '@/routes/admin/components/data/governance/GovernanceDashboard';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

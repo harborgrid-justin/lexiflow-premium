@@ -7,10 +7,12 @@
  * Citations Domain - View Component
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { BookOpen, Plus, Tag } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useCitations } from './CitationsProvider';
 
 export function CitationsView() {

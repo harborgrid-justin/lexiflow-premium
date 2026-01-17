@@ -4,24 +4,26 @@
  * Manage data collection from custodians and sources
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { AlertTriangle, CheckCircle, Clock, Database, Download, Pause, Play, Plus } from 'lucide-react';
+import { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Modal } from '@/components/molecules/Modal';
-import { useTheme } from "@/hooks/useTheme";
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import type { DataCollection } from '@/types/discovery-enhanced';
-import { CaseId } from '@/types/primitives';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertTriangle, CheckCircle, Clock, Database, Download, Pause, Play, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { DataService } from '@/services/data/data-service.service';
+import { DISCOVERY_QUERY_KEYS, type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+import { type CaseId } from '@/types/primitives';
+
+import type { DataCollection } from '@/types/discovery-enhanced';
 
 interface CollectionsProps {
   caseId?: string;

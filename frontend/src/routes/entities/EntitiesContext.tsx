@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { LegalEntity } from '@/types';
+
+import { type LegalEntity } from '@/types';
 
 interface EntitiesContextType {
   entities: LegalEntity[];

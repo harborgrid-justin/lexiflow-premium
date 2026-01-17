@@ -3,11 +3,14 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { HardDrive, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { DataSourceSelector } from './DataSourceSelector';
+
 import type { LocalStorageItem } from './types';
 
 export function LocalStorageView() {

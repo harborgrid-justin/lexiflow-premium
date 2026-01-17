@@ -3,8 +3,9 @@
  * Bank details step for trust account creation
  */
 
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { FormInput } from './FormInput';
 interface FormState {
   bankName?: string;

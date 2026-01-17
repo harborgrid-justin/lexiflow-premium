@@ -11,17 +11,17 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Target, Gavel } from "lucide-react";
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { cn } from '@/lib/cn';
 import { useTheme } from "@/providers";
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // Types
 import type { Case } from "@/types";

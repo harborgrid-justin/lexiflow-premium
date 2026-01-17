@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GlobalHotkeys } from './GlobalHotkeys';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof GlobalHotkeys> = {
   title: 'Components/Organisms/GlobalHotkeys/GlobalHotkeys',

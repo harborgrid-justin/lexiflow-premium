@@ -4,8 +4,6 @@
  * @description System health status indicator with real-time monitoring
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -20,6 +18,9 @@ import {
   XCircle,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 export type HealthStatus = 'healthy' | 'warning' | 'critical' | 'offline';
 

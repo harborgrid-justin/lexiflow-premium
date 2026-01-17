@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AutocompleteSelect } from './AutocompleteSelect';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof AutocompleteSelect> = {
   title: 'Components/Molecules/AutocompleteSelect/AutocompleteSelect',

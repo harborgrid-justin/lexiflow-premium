@@ -19,22 +19,25 @@ import { Suspense, useState, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '@/hooks/core';
 
 // Components
-import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { DocumentGenerator } from '@/routes/drafting/components/DocumentGenerator';
-import { DocumentManagerContent } from './DocumentManagerContent';
+
 
 // Utils & Config
-import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '@/config/tabs.config';
+import { DOCUMENT_MANAGER_TAB_CONFIG, type DocView } from '@/config/tabs.config';
+import { useSessionStorage } from '@/hooks/core';
 import { cn } from '@/lib/cn';
+import { DocumentGenerator } from '@/routes/drafting/components/DocumentGenerator';
 
 // Types
-import { UserRole } from '@/types';
+import { type UserRole } from '@/types';
+
+import { DocumentManagerContent } from './DocumentManagerContent';
+
 import type { GeneratedDocument } from '@/lib/frontend-api';
 
 // ============================================================================

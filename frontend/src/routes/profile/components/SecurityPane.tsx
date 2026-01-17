@@ -24,10 +24,11 @@ import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks
+import { type ExtendedUserProfile } from '@/types';
+
 import { useSecuritySettings } from '../hooks/useSecuritySettings';
 
 // Types
-import { ExtendedUserProfile } from '@/types';
 
 // ========================================
 // TYPES & INTERFACES

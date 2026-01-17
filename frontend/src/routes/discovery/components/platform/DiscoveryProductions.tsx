@@ -17,27 +17,29 @@ import { Download, FileText, Package, Plus, Share2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers';
 
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
-import { DiscoveryProduction } from './DiscoveryProduction';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { DataService } from '@/services/data/data-service.service';
 
 // Types
-import { ProductionSet } from '@/types';
-import { DiscoveryProductionsProps } from './types';
+import { type ProductionSet } from '@/types';
+
+import { DiscoveryProduction } from './DiscoveryProduction';
+import { type DiscoveryProductionsProps } from './types';
 
 // ============================================================================
 // COMPONENT

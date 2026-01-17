@@ -1,5 +1,5 @@
-import { Organization, OrganizationStatusEnum, OrganizationTypeEnum } from '@/types/system';
-import { OrgId } from '@/types/primitives';
+import { type OrgId } from '@/types/primitives';
+import { type Organization, OrganizationStatusEnum, OrganizationTypeEnum } from '@/types/system';
 
 /**
  * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY

@@ -5,6 +5,7 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+
 import type { Invoice } from '@/types';
 
 export interface InvoiceFilters {

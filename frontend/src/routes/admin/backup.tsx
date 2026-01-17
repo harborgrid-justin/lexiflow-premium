@@ -7,11 +7,13 @@
  * @module routes/admin/backup
  */
 
+import { useLoaderData, type ActionFunctionArgs } from 'react-router';
+
 import { adminApi } from '@/lib/frontend-api';
 import { BackupManager, type Backup, type BackupSchedule, type BackupStats } from '@/routes/admin/components/BackupManager';
-import { useLoaderData, type ActionFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createAdminMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Alias for compatibility
 const BackupService = adminApi.backups;
@@ -178,7 +180,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function BackupRoute() {
-  const loaderData = useLoaderData() as LoaderData;
+  const loaderData = useLoaderData();
   return <BackupManager backups={loaderData.backups} schedules={loaderData.schedules} stats={loaderData.stats} />;
 }
 

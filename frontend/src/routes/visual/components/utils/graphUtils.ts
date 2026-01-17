@@ -6,7 +6,7 @@
  * @module components/visual/utils/graphUtils
  */
 
-import { Case, EvidenceItem, NexusNodeData, Party } from "@/types";
+import { type Case, type EvidenceItem, type NexusNodeData, type Party } from "@/types";
 
 export interface GraphLink {
   sourceIndex: number;
@@ -38,7 +38,7 @@ export const transformToGraphNodes = (
 
   const partyNodes: NexusNodeData[] = parties.map((p) => ({
     id: p.id,
-    type: (p.type === "Corporation" ? "org" : "party") as "org" | "party",
+    type: (p.type === "Corporation" ? "org" : "party"),
     label: p.name,
     original: p,
   }));

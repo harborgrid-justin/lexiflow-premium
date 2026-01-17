@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { DiscoveryProvider } from './DiscoveryContext';
 import { DiscoveryView } from './DiscoveryView';
+
 import type { clientLoader } from './loader';
 
 interface DiscoveryPageProps {

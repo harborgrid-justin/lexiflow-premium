@@ -5,14 +5,6 @@
  * relationship mapping, contact management, and opportunity pipeline.
  */
 
-import { useQuery } from '@/hooks/backend';
-import { crmApi } from '@/lib/frontend-api';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { useTheme } from "@/hooks/useTheme";
-import type { Client } from "@/types";
 import {
   ArrowUpRight,
   Award,
@@ -28,6 +20,17 @@ import {
   Users
 } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { crmApi } from '@/lib/frontend-api';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
+
+import type { Client } from "@/types";
+
 
 // ============================================================================
 // COMPONENT

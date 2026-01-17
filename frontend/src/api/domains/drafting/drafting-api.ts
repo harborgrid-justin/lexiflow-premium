@@ -4,6 +4,7 @@
  */
 
 import { ApiClient } from "@/services/infrastructure/api-client.service";
+
 import * as ClauseValidator from "./clause-validator";
 import * as DashboardApi from "./dashboard-api";
 import * as DocumentGeneration from "./document-generation";
@@ -11,10 +12,10 @@ import * as DocumentWorkflow from "./document-workflow";
 import * as TemplateCrud from "./template-crud";
 import * as TemplateValidator from "./template-validator";
 import {
-  CreateTemplateDto,
-  GenerateDocumentDto,
-  UpdateGeneratedDocumentDto,
-  UpdateTemplateDto,
+  type CreateTemplateDto,
+  type GenerateDocumentDto,
+  type UpdateGeneratedDocumentDto,
+  type UpdateTemplateDto,
 } from "./types";
 import * as VariableValidator from "./variable-validator";
 

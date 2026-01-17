@@ -1,13 +1,14 @@
 /** * FinancialReports Component * Advanced financial reporting with profitability analysis, realization rates, and revenue forecasting */
 
 import {
-  FINANCIAL_REPORT_TAB_LABELS, FINANCIAL_REPORT_TABS, REPORT_PERIODS, ReportPeriod
-} from '@/config/billing.config';
-import { useFinancialHelpers, useFinancialReports } from '@/routes/billing/hooks/useFinancialReports';
-import {
   Activity, BarChart3, DollarSign, Download, Filter, PieChart, TrendingDown, TrendingUp
 } from 'lucide-react';
 import React from "react";
+
+import {
+  FINANCIAL_REPORT_TAB_LABELS, FINANCIAL_REPORT_TABS, REPORT_PERIODS, type ReportPeriod
+} from '@/config/billing.config';
+import { useFinancialHelpers, useFinancialReports } from '@/routes/billing/hooks/useFinancialReports';
 interface FinancialReportsProps {
   firmId?: string; dateRange?: { start: string; end: string }; onExport?: (reportType: string, format: 'pdf' | 'excel' | 'csv') => void;
 } export const FinancialReports: React.FC<FinancialReportsProps> = ({ dateRange, onExport,

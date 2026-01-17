@@ -10,12 +10,15 @@
  * @module routes/reports/components/ReportsCenter
  */
 
+import { Plus } from 'lucide-react';
+
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { Plus } from 'lucide-react';
+
 import { ReportFilters } from './ReportFilters';
 import { ReportStats } from './ReportStats';
 import { ReportTable } from './ReportTable';
+
 import type { Report } from './types';
 
 // ============================================================================

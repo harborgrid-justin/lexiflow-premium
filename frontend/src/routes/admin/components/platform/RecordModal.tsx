@@ -1,7 +1,8 @@
-import { Button } from '@/components/atoms/Button/Button';
-import { Modal } from '@/components/molecules/Modal/Modal';
 import { Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
 
 interface RecordModalProps {
   isOpen: boolean;

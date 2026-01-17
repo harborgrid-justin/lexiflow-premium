@@ -1,5 +1,6 @@
-import type { IService } from "../../services/core/ServiceLifecycle";
 import { ServiceRegistry } from "../../services/core/ServiceRegistry";
+
+import type { IService } from "../../services/core/ServiceLifecycle";
 
 /**
  * HOOK ADAPTER for Service Registry

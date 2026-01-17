@@ -18,8 +18,9 @@ import {
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
-import type { LegalEntity } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
+
+import type { LegalEntity } from '@/types';
 
 interface UboRegisterProps {
   entities: LegalEntity[];

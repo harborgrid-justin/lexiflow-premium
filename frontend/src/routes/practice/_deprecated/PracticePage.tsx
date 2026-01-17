@@ -4,10 +4,13 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { PracticeLoaderData } from './loader';
+
 import { PracticeProvider } from './PracticeProvider';
 import { PracticeView } from './PracticeView';
+
+import type { PracticeLoaderData } from './loader';
 
 export function PracticePage() {
   const initialData = useLoaderData() as PracticeLoaderData;

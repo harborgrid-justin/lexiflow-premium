@@ -1,4 +1,5 @@
 import { WorkflowAnalyticsDashboard } from '@/routes/cases/components/workflow/WorkflowAnalyticsDashboard';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

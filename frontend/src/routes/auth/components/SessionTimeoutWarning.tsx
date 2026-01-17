@@ -7,8 +7,9 @@
  * @module components/auth/SessionTimeoutWarning
  */
 
-import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 import { useEffect, useState } from 'react';
+
+import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 
 export function SessionTimeoutWarning() {
   const { session } = useAuthState();

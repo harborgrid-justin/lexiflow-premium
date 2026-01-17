@@ -23,21 +23,21 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
 import { Card } from '@/components/molecules/Card/Card';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

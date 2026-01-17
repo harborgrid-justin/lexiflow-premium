@@ -7,13 +7,15 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
-import type { TimeEntry } from "./types";
+
 import {
   transformTimeEntryForCreate,
   validateArray,
   validateId,
   validateObject,
 } from "./utils";
+
+import type { TimeEntry } from "./types";
 
 export class TimeEntryService {
   /**

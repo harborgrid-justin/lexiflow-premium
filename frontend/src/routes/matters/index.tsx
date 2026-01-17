@@ -4,11 +4,14 @@
  */
 
 import { useLoaderData } from 'react-router';
+
 import { createListMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import type { Route } from "./+types/index";
-import { mattersLoader } from './loader';
+
+import { type mattersLoader } from './loader';
 import { MattersPage } from './MattersPage';
+
+import type { Route } from "./+types/index";
 
 export { mattersLoader as loader } from './loader';
 

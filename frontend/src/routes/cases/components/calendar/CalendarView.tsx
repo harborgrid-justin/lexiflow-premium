@@ -22,15 +22,16 @@ import React, { lazy, Suspense } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useCalendarView } from './hooks/useCalendarView';
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Utils & Config
 import { cn } from '@/lib/cn';
+
+import { useCalendarView } from './hooks/useCalendarView';
 
 // Lazy load sub-components
 const CalendarMaster = lazy(() => import('./CalendarMaster').then(m => ({ default: m.CalendarMaster })));

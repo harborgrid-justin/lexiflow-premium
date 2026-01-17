@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ErrorBoundary } from './ErrorBoundary';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ErrorBoundary> = {
   title: 'Components/Organisms/ErrorBoundary/ErrorBoundary',

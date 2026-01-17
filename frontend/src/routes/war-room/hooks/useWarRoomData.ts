@@ -9,8 +9,9 @@
 
 import { useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
-import type { Advisor, Case, Expert, WarRoom, WarRoomData } from "@/types";
 import { queryKeys } from "@/utils/queryKeys";
+
+import type { Advisor, Case, Expert, WarRoom, WarRoomData } from "@/types";
 
 /**
  * Hook to fetch war room details by room ID (case ID)
@@ -76,7 +77,10 @@ export function useOppositionHistory(entityId: string) {
   };
   return useQuery(
     ["opposition-history", entityId],
-    () => warRoomService.getOppositionCaseHistory?.(entityId),
+    async () =>
+      warRoomService.getOppositionCaseHistory
+        ? warRoomService.getOppositionCaseHistory(entityId)
+        : [],
     { enabled: !!entityId },
   );
 }
@@ -86,7 +90,7 @@ export function useOppositionHistory(entityId: string) {
  */
 export function useDiscoverySanctions(caseId: string) {
   return useQuery(
-    queryKeys.discovery.sanctions(caseId),
+    queryKeys.sanctions.byCase(caseId),
     () => DataService.discovery.getSanctions(caseId),
     { enabled: !!caseId },
   );

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabStrip } from './TabStrip';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TabStrip> = {
   title: 'Components/Molecules/TabStrip/TabStrip',

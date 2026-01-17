@@ -2,9 +2,11 @@
  * Case Operations Sub-Route
  */
 
+import { useLoaderData } from 'react-router';
+
 import { casesApi } from '@/lib/frontend-api';
 import { CaseOperationsCenter } from '@/routes/cases/components/operations/CaseOperationsCenter';
-import { useLoaderData } from 'react-router';
+
 import type { Route } from "./+types/operations";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -22,7 +24,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseOperationsRoute() {
-  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { case: caseData } = useLoaderData();
   return <CaseOperationsCenter caseId={caseData.id} />;
 }
 

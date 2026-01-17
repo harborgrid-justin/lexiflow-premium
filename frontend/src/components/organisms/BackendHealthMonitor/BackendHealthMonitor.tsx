@@ -1,6 +1,3 @@
-import { apiClient, type ServiceHealthStatus, type SystemHealth } from '@/services/infrastructure/apiClient';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -14,6 +11,10 @@ import {
   Zap
 } from 'lucide-react';
 import React, { useEffect, useId, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { apiClient, type ServiceHealthStatus, type SystemHealth } from '@/services/infrastructure/apiClient';
 
 interface BackendHealthMonitorProps {
   isOpen: boolean;

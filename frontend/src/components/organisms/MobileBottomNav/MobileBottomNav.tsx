@@ -14,21 +14,21 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React from 'react';
 import { MoreHorizontal } from 'lucide-react';
+import React from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
 // Hooks & Context
+import { NAVIGATION_ITEMS } from '@/config/nav.config';
 import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
-import { NAVIGATION_ITEMS } from '@/config/nav.config';
 
 // Types
-import { AppView } from '@/types';
+import { type AppView } from '@/types';
 
 // ========================================
 // TYPES & INTERFACES
@@ -65,7 +65,7 @@ export const MobileBottomNav = React.memo<MobileBottomNavProps>(({ activeView, s
           return (
             <button
               key={typedItem.id}
-              onClick={() => setActiveView(typedItem.id as AppView)}
+              onClick={() => setActiveView(typedItem.id)}
               className={cn(
                 "flex flex-col items-center justify-center flex-1 h-full transition-colors rounded-lg",
                 isActive ? theme.primary.text : theme.text.secondary,

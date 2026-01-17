@@ -1,4 +1,3 @@
-import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useState } from 'react';
 // import { BookOpen, AlertCircle } from 'lucide-react';
 
@@ -7,8 +6,9 @@ import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
 // import { Badge } from '@/components/atoms/Badge';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { knowledgeApi } from '@/lib/frontend-api';
-import { Citation } from '@/types';
+import { type Citation } from '@/types';
 
 interface CitationFormModalProps {
   isOpen: boolean;

@@ -4,23 +4,24 @@
  * Track and manage data sources for collection
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, Mail, Plus, Server, Smartphone } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Modal } from '@/components/molecules/Modal';
-import { useTheme } from "@/hooks/useTheme";
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import { ESISource } from '@/types';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, Mail, Plus, Server, Smartphone } from 'lucide-react';
-import React, { useState } from 'react';
+import { DataService } from '@/services/data/data-service.service';
+import { DISCOVERY_QUERY_KEYS, type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+import { type ESISource } from '@/types';
 
 interface ESISourcesListProps {
   caseId?: string;
@@ -275,7 +276,7 @@ export function ESISourcesList({ caseId }: ESISourcesListProps) {
               title="Select source type"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.type}
-              onChange={(e) => setFormData({ ...formData, type: e.target.value as ESISource['type'] })}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
             >
               <option value="email">Email System</option>
               <option value="fileserver">File Server</option>

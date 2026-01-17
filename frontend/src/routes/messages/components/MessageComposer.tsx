@@ -4,8 +4,10 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
-import type { Message } from '@/lib/frontend-api';
+
 import { TIMEOUTS } from '@/config/ports.config';
+
+import type { Message } from '@/lib/frontend-api';
 
 export interface MessageComposerProps {
   onSend: (content: string, attachments?: File[]) => void;

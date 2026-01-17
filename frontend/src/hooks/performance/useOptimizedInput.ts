@@ -1,5 +1,5 @@
 import {
-  ChangeEvent,
+  type ChangeEvent,
   useCallback,
   useEffect,
   useRef,
@@ -49,7 +49,7 @@ export function useOptimizedInput<T = string>(
       const newValue =
         e && typeof e === "object" && "target" in e
           ? (e.target.value as unknown as T)
-          : (e as T);
+          : (e);
 
       // 1. URGENT UPDATE: Immediate React state update for the UI input
       // This ensures typing remains at 60fps/latency < 100ms

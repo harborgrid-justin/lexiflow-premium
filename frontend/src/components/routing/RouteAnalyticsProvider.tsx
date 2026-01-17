@@ -7,10 +7,11 @@
  * @module components/routing/RouteAnalyticsProvider
  */
 
-import { routeAnalytics } from '@/services/analytics/routeAnalytics';
-import { routePrefetch } from '@/services/routing/routePrefetch';
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigation } from 'react-router';
+
+import { routeAnalytics } from '@/services/analytics/routeAnalytics';
+import { routePrefetch } from '@/services/routing/routePrefetch';
 
 export interface RouteAnalyticsProviderProps {
   children: React.ReactNode;

@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useId } from 'react';
 import { X } from 'lucide-react';
+import React, { useEffect, useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

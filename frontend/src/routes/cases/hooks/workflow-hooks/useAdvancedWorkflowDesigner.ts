@@ -1,7 +1,11 @@
 import { useState, useCallback } from 'react';
+
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
+
+import { type FeatureTab } from '../components';
+
 import type {
   AIWorkflowSuggestion,
   ApprovalChain,
@@ -14,7 +18,6 @@ import type {
   WorkflowSnapshot,
   WorkflowVersion,
 } from '@/types/workflow-advanced-types';
-import { FeatureTab } from '../components';
 
 interface UseAdvancedWorkflowDesignerProps {
   workflowId?: string;

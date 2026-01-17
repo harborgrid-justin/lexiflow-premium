@@ -5,7 +5,6 @@
  * Includes icons, labels, categories, and permission requirements.
  */
 
-import { AppView, NavCategory } from "@/types";
 import {
   AlertTriangle,
   BarChart3,
@@ -28,7 +27,7 @@ import {
   LayoutDashboard,
   LayoutGrid,
   Library,
-  LucideIcon,
+  type LucideIcon,
   MapPin,
   MessageSquare,
   Milestone,
@@ -51,6 +50,9 @@ import {
   UserCog,
   Users,
 } from "lucide-react";
+
+import { type AppView, type NavCategory } from "@/types";
+
 import { PATHS } from "./paths.config";
 
 export interface NavItemConfig {

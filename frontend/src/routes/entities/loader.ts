@@ -1,5 +1,5 @@
 import { DataService } from "@/services/data/data-service.service";
-import { LegalEntity } from "@/types";
+import { type LegalEntity } from "@/types";
 
 export interface EntitiesLoaderData {
   entities: LegalEntity[];

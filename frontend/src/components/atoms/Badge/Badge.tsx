@@ -20,6 +20,7 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
 import { baseBadgeStyles, getBadgeSizeStyles, getBadgeVariantStyles } from './Badge.styles';
 
 // ============================================================================

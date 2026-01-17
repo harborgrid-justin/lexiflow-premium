@@ -12,6 +12,7 @@
  */
 
 import { useCallback, useMemo, useState, useTransition } from "react";
+
 import type { OptimizedFilterConfig, OptimizedFilterReturn } from "./types";
 
 export function useOptimizedFilter<T>(

@@ -8,8 +8,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Calendar, CheckCircle, ChevronDown, ChevronUp, Plus } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge/Badge';
@@ -21,7 +21,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Project } from '@/types';
+import { type Project } from '@/types';
 
 interface ProjectCardProps {
     project: Project;

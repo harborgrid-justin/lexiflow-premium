@@ -17,11 +17,12 @@
  * @template TCreateData - The data shape for creating new entities
  */
 
-import { EntityAutocompleteConfig, useEntityAutocomplete } from '@/hooks/useEntityAutocomplete';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { AlertCircle, Check, Loader, Plus, Search } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { type EntityAutocompleteConfig, useEntityAutocomplete } from '@/hooks/useEntityAutocomplete';
 
 export interface AutocompleteSelectProps<TEntity, TValue extends string = string, TCreateData = Partial<TEntity>>
   extends Omit<EntityAutocompleteConfig<TEntity, TCreateData>, 'debounceMs' | 'minSearchLength' | 'initialOptions'> {

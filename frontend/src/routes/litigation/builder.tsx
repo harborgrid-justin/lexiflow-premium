@@ -7,14 +7,18 @@
  * @module routes/litigation/builder
  */
 
-import { casesApi } from '@/lib/frontend-api';
-import type { Case } from '@/types';
-import { MatterType } from '@/types/enums';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { casesApi } from '@/lib/frontend-api';
+import { MatterType } from '@/types/enums';
+
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/builder";
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { StrategyBuilder, type StrategyTemplate } from './components/builder/StrategyBuilder';
+
+import type { Route } from "./+types/builder";
+import type { Case } from '@/types';
 
 // ============================================================================
 // Types
@@ -60,7 +64,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   try {
     const casesResult = await casesApi.getAll();
     if (casesResult.ok) {
-      cases = casesResult.data.data as Case[];
+      cases = casesResult.data.data;
     }
   } catch (error) {
     console.error('Failed to load cases for strategy builder:', error);
@@ -200,7 +204,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
 // ============================================================================
 
 export default function LitigationBuilderRoute() {
-  const loaderData = useLoaderData() as LoaderData;
+  const loaderData = useLoaderData();
   return <StrategyBuilder templates={loaderData.templates} caseTypes={loaderData.caseTypes} cases={loaderData.cases} />;
 }
 

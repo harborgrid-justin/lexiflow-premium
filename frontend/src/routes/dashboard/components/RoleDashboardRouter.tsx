@@ -6,14 +6,16 @@
  */
 
 import React from 'react';
-import { User } from '@/types';
+
+import { type User } from '@/types';
+
+import { EnhancedDashboardOverview } from './EnhancedDashboardOverview';
 import {
   AttorneyDashboard,
   ParalegalDashboard,
   AdminDashboard,
   PartnerDashboard,
 } from './role-dashboards';
-import { EnhancedDashboardOverview } from './EnhancedDashboardOverview';
 
 // ============================================================================
 // TYPES

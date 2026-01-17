@@ -6,14 +6,17 @@
  * and comprehensive access logs monitoring.
  */
 
-import { useNotify } from '@/hooks/useNotify';
-import { BloomFilter } from '@/utils/bloomFilter';
 import { Shield } from 'lucide-react';
 import { useState } from 'react';
+
+import { useNotify } from '@/hooks/useNotify';
+import { BloomFilter } from '@/utils/bloomFilter';
+
 import { AccessLogsTable } from './AccessLogsTable';
 import { SecurityControlsPanel } from './SecurityControlsPanel';
 import { SecurityMetrics } from './SecurityMetrics';
 import { ThreatDetectionPanel } from './ThreatDetectionPanel';
+
 import type { AccessLogEntry, SecurityControl, SecurityMetric, ThreatCheckResult } from './types';
 
 // Bloom Filter initialization

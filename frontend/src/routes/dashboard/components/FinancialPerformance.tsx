@@ -1,11 +1,13 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { Card } from '@/components/molecules/Card/Card';
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { FinancialPerformanceData } from '@/types';
 import React from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { DataService } from '@/services/data/data-service.service';
+import { type FinancialPerformanceData } from '@/types';
+
 
 export const FinancialPerformance: React.FC = () => {
     const { mode, theme: _theme } = useTheme();

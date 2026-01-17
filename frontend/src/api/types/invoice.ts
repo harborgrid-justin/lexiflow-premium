@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/billing/entities/invoice.entity.ts
  */
 
-import { Invoice } from '@/types/financial';
-import { UUID, CaseId } from '@/types/primitives';
+import { type Invoice } from '@/types/financial';
+import { type UUID, type CaseId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.billing instead

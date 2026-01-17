@@ -16,9 +16,10 @@
  * import { CentredLoader, EmptyListState } from './components/common/layout';
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // Re-export StatusBadge for compatibility (commented out - component doesn't exist)
 // export { StatusBadge } from '@/components/atoms';

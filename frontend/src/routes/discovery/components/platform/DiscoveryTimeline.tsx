@@ -3,15 +3,18 @@
  * Visual Timeline of Discovery Events and Deadlines
  */
 
+import { AlertCircle, Calendar, CheckCircle, Clock, FileText, Flag } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertCircle, Calendar, CheckCircle, Clock, FileText, Flag } from 'lucide-react';
+import { DataService } from '@/services/data/data-service.service';
+import { type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+
+import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
+
 
 
 interface DiscoveryTimelineProps {

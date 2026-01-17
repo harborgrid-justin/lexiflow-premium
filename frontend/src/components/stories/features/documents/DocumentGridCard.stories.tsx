@@ -4,11 +4,14 @@
  * Individual document card used in grid view.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentGridCard } from '../../../../features/operations/documents/DocumentGridCard';
+
 import { ThemeProvider } from "@/providers/infrastructure/ThemeProvider";
-import { LegalDocument } from '@/types';
+import { type LegalDocument } from '@/types';
+
+import { DocumentGridCard } from '../../../../features/operations/documents/DocumentGridCard';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DocumentGridCard> = {
   title: 'Documents/Document Grid Card',

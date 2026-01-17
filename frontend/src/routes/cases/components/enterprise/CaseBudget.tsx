@@ -26,6 +26,7 @@ import {
   X,
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react'; // ============================================================================
 
 import { cn } from '@/lib/cn';
 
@@ -849,7 +850,6 @@ export function CaseBudget({
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useState } from 'react'; // ============================================================================
 // Types & Interfaces
 // ============================================================================
 export interface BudgetCategory {

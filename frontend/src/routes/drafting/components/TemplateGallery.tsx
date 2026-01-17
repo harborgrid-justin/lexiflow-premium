@@ -1,6 +1,7 @@
-import React from 'react';
-import { DraftingTemplate } from '@api/domains/drafting';
 import { Edit, FileCode } from 'lucide-react';
+import React from 'react';
+
+import { type DraftingTemplate } from '@api/domains/drafting';
 interface TemplateGalleryProps {
   templates: DraftingTemplate[];
   onSelect: (template: DraftingTemplate) => void;

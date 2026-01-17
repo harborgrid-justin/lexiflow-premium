@@ -5,10 +5,11 @@
  * Provides smooth loading animations for various dashboard components
  */
 
-import React from 'react';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { motion } from 'framer-motion';
+import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 interface SkeletonProps {
   className?: string;
   variant?: 'text' | 'circular' | 'rectangular' | 'rounded';

@@ -4,15 +4,17 @@
  * @description Storybook stories for CommandPalette component
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
-import { CommandPalette } from './CommandPalette';
 import {
   Briefcase, Users, Calendar, Clock,
   Settings, Search, Home, FolderOpen
 } from 'lucide-react';
+import { useState } from 'react';
+
+import { CommandPalette } from './CommandPalette';
+
 import type { CommandItem } from './CommandPalette';
 import type { UserRole } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CommandPalette> = {
   title: 'Navigation/CommandPalette',

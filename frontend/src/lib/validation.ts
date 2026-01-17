@@ -27,7 +27,7 @@
  * - Immutable validation patterns
  */
 
-import { PleadingDocument, PleadingSection, PleadingTemplate } from "@/types";
+import { type PleadingDocument, type PleadingSection, type PleadingTemplate } from "@/types";
 
 /**
  * Validation result structure

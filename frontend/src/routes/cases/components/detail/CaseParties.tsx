@@ -9,8 +9,9 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
@@ -20,15 +21,15 @@ import { Modal } from '@/components/molecules/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
-import { GroupByOption, useCaseParties } from '@/routes/cases/hooks/useCaseParties';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+import { type GroupByOption, useCaseParties } from '@/routes/cases/hooks/useCaseParties';
 
 // Types & Interfaces
-import { Party } from '@/types';
-import { OrgId } from '@/types/primitives';
+import { type Party } from '@/types';
+import { type OrgId } from '@/types/primitives';
 
 interface CasePartiesProps {
     parties?: Party[];

@@ -15,13 +15,15 @@ import type {
   SystemEventPayloads,
 } from "@/types/integration-types";
 
+
+
 export class TaskCompletedHandler extends BaseEventHandler<
   SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]
 > {
   readonly eventType = SystemEventType.TASK_COMPLETED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]
+    payload: SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED],
   ): Promise<IntegrationResult> {
     const actions: string[] = [];
     const { task } = payload;
@@ -32,8 +34,9 @@ export class TaskCompletedHandler extends BaseEventHandler<
     }
 
     // Dynamic import to avoid circular dependency
-    const { DataService } =
-      await import("@/services/data/data-service.service");
+    const dataServiceModule =
+      (await import("@/services/data/data-service.service"));
+    const { DataService } = dataServiceModule;
     const { getTodayString } = await import("@/lib/dateUtils");
 
     const draftTimeEntry: TimeEntry = {
@@ -49,7 +52,10 @@ export class TaskCompletedHandler extends BaseEventHandler<
       billable: true,
     };
 
-    await DataService.billing.addTimeEntry(draftTimeEntry);
+    const { billing } = DataService as {
+      billing: { addTimeEntry: (entry: TimeEntry) => Promise<void> };
+    };
+    await billing.addTimeEntry(draftTimeEntry);
     actions.push("Created Draft Billable Entry from Task");
 
     return this.createSuccess(actions);
@@ -59,14 +65,14 @@ export class TaskCompletedHandler extends BaseEventHandler<
    * Business rules for determining if a task should generate a time entry
    */
   private isBillable(
-    task: SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]["task"]
+    task: SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]["task"],
   ): boolean {
     // Check if task description/title suggests non-billable work
     const nonBillableKeywords = ["administrative", "internal", "training"];
     const titleLower = task.title.toLowerCase();
     const descLower = task.description?.toLowerCase() || "";
     const isBillableCategory = !nonBillableKeywords.some(
-      (keyword) => titleLower.includes(keyword) || descLower.includes(keyword)
+      (keyword) => titleLower.includes(keyword) || descLower.includes(keyword),
     );
 
     const hasValidCase = !!(task.caseId && task.caseId !== "General");

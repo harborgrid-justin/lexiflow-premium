@@ -1,6 +1,7 @@
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { UploadCloud } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 interface DocumentDragOverlayProps {
   onDrop?: (e: React.DragEvent) => void;

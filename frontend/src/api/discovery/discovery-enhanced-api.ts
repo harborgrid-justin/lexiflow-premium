@@ -12,8 +12,8 @@ export * from './timeline-api';
 
 import { collectionsApi } from './collections-api';
 import { processingApi } from './processing-api';
-import { reviewApi } from './review-api';
 import { productionSetsApi } from './production-sets-api';
+import { reviewApi } from './review-api';
 import { timelineApi } from './timeline-api';
 
 /**

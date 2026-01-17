@@ -1,7 +1,9 @@
+import { AlertTriangle, CheckSquare, Plus } from 'lucide-react';
 import React from 'react';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 /**
  * RequestForAdmission.tsx
  * Request for admission builder and tracker
@@ -12,12 +14,11 @@ import { Button } from '@/components/atoms/Button';
  * - G28: Pure function of context
  */
 
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DiscoveryRequest } from '@/types';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertTriangle, CheckSquare, Plus } from 'lucide-react';
+import { DataService } from '@/services/data/data-service.service';
+import { type DiscoveryRequest } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const RequestForAdmission: React.FC = () => {

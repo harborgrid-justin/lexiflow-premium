@@ -1,11 +1,13 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useWindow } from '@/providers';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 import { Layers, Map, Navigation, RefreshCw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { DataService } from '@/services/data/data-service.service';
+
 import {
-  MapNode,
+  type MapNode,
   findClickedNode,
   initializeNodeVelocity,
   renderJurisdictionMap,

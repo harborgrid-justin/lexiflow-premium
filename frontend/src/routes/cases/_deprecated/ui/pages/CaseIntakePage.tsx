@@ -9,9 +9,10 @@
  * @description New case intake and onboarding page - form-based case creation
  */
 
+import React from 'react';
+
 import { CenteredLayout } from '@/layouts/CenteredLayout/CenteredLayout';
 import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
-import React from 'react';
 
 interface CaseIntakePageProps {
   onComplete?: (caseId: string) => void;

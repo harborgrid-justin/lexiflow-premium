@@ -2,7 +2,9 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useState } from 'react'; // ============================================================================
+import { useState } from 'react'; // ============================================================================
+
+import type React from 'react';
 // Types & Interfaces
 // ============================================================================
 export type TeamMemberRole = | 'Lead Attorney' | 'Co-Counsel' | 'Associate' | 'Paralegal' | 'Legal Assistant' | 'Expert Witness' | 'External Counsel' | 'Consultant'; export type Permission = | 'view' | 'edit' | 'delete' | 'manage_team' | 'manage_documents' | 'manage_billing' | 'manage_calendar' | 'communicate_with_client'; export interface TeamMember {

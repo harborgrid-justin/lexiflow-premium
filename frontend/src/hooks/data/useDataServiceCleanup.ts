@@ -10,12 +10,13 @@
  * - Optional periodic memory stats logging
  */
 
+import { useEffect } from "react";
+
 import { DATA_SERVICE_MEMORY_REFRESH_INTERVAL_MS } from "@/config/features/hooks.config";
 import {
   cleanupDataService,
   logDataServiceMemory,
 } from "@/services/data/data-service.service";
-import { useEffect } from "react";
 
 interface UseDataServiceCleanupOptions {
   /**

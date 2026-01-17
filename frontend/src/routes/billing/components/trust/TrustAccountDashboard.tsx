@@ -16,16 +16,16 @@
  * 5. Memoized computed values prevent expensive recalculations on re-render
  */
 
+import { AlertCircle, Clock, FileText, Landmark, TrendingUp, Users } from 'lucide-react';
+import React, { useCallback, useMemo } from 'react';
+
 import { Card } from '@/components/molecules/Card/Card';
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import type { TrustAccount } from '@/types/trust-accounts';
 import { TrustAccountStatus } from '@/types/trust-accounts';
 import { Formatters } from '@/utils/formatters';
-import { AlertCircle, Clock, FileText, Landmark, TrendingUp, Users } from 'lucide-react';
-import React, { useCallback, useMemo } from 'react';
 
 /**
  * Dashboard Statistics Card Props
@@ -312,6 +312,8 @@ const AccountListItem = React.memo<AccountListItemProps>(({ account, onClick }) 
 AccountListItem.displayName = 'AccountListItem';
 
 import { useTrustDashboard } from '../../hooks/useTrustDashboard';
+
+import type { TrustAccount } from '@/types/trust-accounts';
 
 /**
  * Main Dashboard Component

@@ -1,7 +1,8 @@
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { AlertTriangle, ArrowRight, Database, FileText, Layers } from 'lucide-react';
 import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 interface DependencyNode {
     id: string;

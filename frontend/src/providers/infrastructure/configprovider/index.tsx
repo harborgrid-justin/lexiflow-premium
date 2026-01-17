@@ -34,9 +34,11 @@
  * @module providers/infrastructure/configprovider
  */
 
-import { ConfigActionsContext, ConfigStateContext } from '@/lib/config/contexts';
-import type { AppConfig, ConfigActionsValue, ConfigProviderProps, ConfigStateValue } from '@/lib/config/types';
 import { startTransition, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
+import { ConfigActionsContext, ConfigStateContext } from '@/lib/config/contexts';
+
+import type { AppConfig, ConfigActionsValue, ConfigProviderProps, ConfigStateValue } from '@/lib/config/types';
 
 const DEFAULT_CONFIG: AppConfig = {
   apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',

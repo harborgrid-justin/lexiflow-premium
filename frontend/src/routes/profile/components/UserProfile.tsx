@@ -8,10 +8,12 @@
  * Enterprise React Architecture
  */
 
+import { Suspense } from 'react';
+
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { USER_PROFILE_TAB_CONFIG } from '@/config/tabs.config';
-import { Suspense } from 'react';
+
 import { AccessMatrixEditor } from './AccessMatrixEditor';
 import { PreferencePane } from './PreferencePane';
 import { useProfile } from './ProfileContext';

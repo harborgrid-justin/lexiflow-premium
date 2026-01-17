@@ -4,20 +4,23 @@
  * @description Enterprise Bluebook citation formatter with batch processing, validation, and export
  */
 
+import { BookOpen } from 'lucide-react';
+import { useCallback, useDeferredValue, useState } from 'react';
+
 import { useNotify } from '@/hooks/useNotify';
 import { BluebookFormatter as Formatter } from '@/services/features/bluebook/bluebookFormatter';
 import { BluebookParser } from '@/services/features/bluebook/bluebookParser';
 import { CitationFormat, ExportFormat } from '@/types/bluebook';
-import { BookOpen } from 'lucide-react';
-import { useCallback, useDeferredValue, useState } from 'react';
+
 import { exportToHTML, exportToJSON, exportToText, generateTableOfAuthorities } from './exportUtils';
 import { HelpSection } from './HelpSection';
 import { InputSection } from './InputSection';
 import { ResultsSection } from './ResultsSection';
 import { StatsBar } from './StatsBar';
-import type { FilterOptions, FormatOptions, FormattingResult } from './types';
 import { useFilteredResults } from './useFilteredResults';
 import { useFormattingStats } from './useFormattingStats';
+
+import type { FilterOptions, FormatOptions, FormattingResult } from './types';
 
 const SAMPLE_CITATIONS = `Brown v. Board of Education, 347 U.S. 483 (1954)
 42 U.S.C. § 1983 (2018)

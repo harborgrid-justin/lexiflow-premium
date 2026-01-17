@@ -9,13 +9,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { ClausesProvider } from './ClausesProvider';
 import { ClausesView } from './ClausesView';
+
 import type { ClausesLoaderData } from './loader';
 
 export function ClausesPage() {
-  const initialData = useLoaderData() as ClausesLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Clauses" />}>

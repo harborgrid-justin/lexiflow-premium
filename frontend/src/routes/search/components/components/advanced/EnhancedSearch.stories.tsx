@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EnhancedSearch } from './EnhancedSearch';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof EnhancedSearch> = {
   title: 'Components/Organisms/search/EnhancedSearch',

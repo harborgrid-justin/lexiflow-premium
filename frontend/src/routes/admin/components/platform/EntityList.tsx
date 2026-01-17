@@ -1,9 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { Edit2, Trash2 } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { Edit2, Trash2 } from 'lucide-react';
-import { Category } from './EntitySidebar';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+
+import { type Category } from './EntitySidebar';
 
 // Generic interface to cover the varying shapes of entities in the list
 interface GenericRecord {

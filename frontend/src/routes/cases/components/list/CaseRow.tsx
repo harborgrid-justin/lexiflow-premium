@@ -11,7 +11,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
 import { Eye, User } from 'lucide-react';
 import { memo } from 'react';
 
@@ -21,6 +20,7 @@ import { memo } from 'react';
 // Components
 import { Currency } from '@/components/atoms/Currency/Currency';
 import { StatusBadge } from '@/components/atoms/StatusBadge/StatusBadge';
+import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -31,7 +31,7 @@ import { cn } from '@/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '@/types';
+import { type Case } from '@/types';
 
 interface CaseRowProps {
     caseData: Case;

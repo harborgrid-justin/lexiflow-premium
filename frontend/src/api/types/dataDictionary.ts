@@ -6,7 +6,7 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { DataDictionaryItem } from '@/types/data-infrastructure';
+import { type DataDictionaryItem } from '@/types/data-infrastructure';
 
 /**
  * @deprecated MOCK DATA - Use DataService.admin instead

@@ -4,12 +4,16 @@
  * @description List of pitch activities with header
  */
 
+import { Plus } from 'lucide-react';
+import React from "react";
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Plus } from 'lucide-react';
-import { Pitch } from '../../types';
+
+import { type Pitch } from '../../types';
+
 import { PitchCard } from './PitchCard';
-import React from "react";
+
 
 interface PitchesListProps {
   pitches: Pitch[];

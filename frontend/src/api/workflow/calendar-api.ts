@@ -28,6 +28,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { CalendarEventType } from '@/types';
 
 // DTOs matching backend calendar/dto/calendar.dto.ts

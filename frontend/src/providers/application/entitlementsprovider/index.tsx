@@ -17,7 +17,12 @@
  * @module providers/application/entitlementsprovider
  */
 
+import { type ReactNode, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from 'react';
+
 import { EntitlementsActionsContext, EntitlementsStateContext } from '@/lib/entitlements/contexts';
+import { useAuthState } from '@/providers/application/authprovider';
+import { EntitlementsService } from '@/services/domain/entitlements.service';
+
 import type {
   Entitlements,
   EntitlementsAction,
@@ -25,10 +30,7 @@ import type {
   EntitlementsState,
   EntitlementsStateValue,
 } from '@/lib/entitlements/types';
-import { useAuthState } from '@/providers/application/authprovider';
-import { EntitlementsService } from '@/services/domain/entitlements.service';
 import type { User } from '@/types';
-import { ReactNode, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from 'react';
 
 // ============================================================================
 // STATE SHAPE (DEFAULTS)

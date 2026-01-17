@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { EthicalWall, EthicalWallFilters } from '@/types';
 
 export class EthicalWallsApiService {

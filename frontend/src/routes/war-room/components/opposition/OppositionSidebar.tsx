@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Users, Briefcase, Gavel, Microscope, AlertTriangle } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

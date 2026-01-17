@@ -1,6 +1,8 @@
+import { FileText, Grid, List } from 'lucide-react';
+
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { FileText, Grid, List } from 'lucide-react';
+
 import { useDocuments } from './DocumentsProvider';
 
 export function DocumentsView() {

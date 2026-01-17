@@ -1,3 +1,6 @@
+import { Edit, Mail, Plus, Search, Shield, Trash2, Users } from 'lucide-react';
+import { useDeferredValue, useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
@@ -10,8 +13,6 @@ import { useSelection } from '@/hooks/useSelectionState';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
-import { Edit, Mail, Plus, Search, Shield, Trash2, Users } from 'lucide-react';
-import { useDeferredValue, useState } from 'react';
 
 interface UserData {
   id: string;

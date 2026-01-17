@@ -30,15 +30,17 @@ import { useNavigate } from 'react-router';
 // ============================================================================
 // INTERNAL DEPENDENCIES - COMPONENTS
 // ============================================================================
-import { CaseDetailHeader } from '@/routes/cases/components/detail/CaseDetailHeader';
-import { CaseDetailMobileMenu } from '@/routes/cases/components/detail/CaseDetailMobileMenu';
-import { CaseDetailNavigation } from '@/routes/cases/components/detail/layout/CaseDetailNavigation';
-import { MobileTimelineOverlay } from '@/routes/cases/components/detail/MobileTimelineOverlay';
-
-// Tab Content Components
+import { useCaseDetail } from '@/hooks/useCaseDetail';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { CaseArgumentManager } from '@/routes/cases/components/detail/CaseArgumentManager';
 import { CaseBilling } from '@/routes/cases/components/detail/CaseBilling';
 import { CaseContractReview } from '@/routes/cases/components/detail/CaseContractReview';
+import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
+import { CaseDetailHeader } from '@/routes/cases/components/detail/CaseDetailHeader';
+import { CaseDetailMobileMenu } from '@/routes/cases/components/detail/CaseDetailMobileMenu';
+
+// Tab Content Components
 import { CaseDiscovery } from '@/routes/cases/components/detail/CaseDiscovery';
 import { CaseDocuments } from '@/routes/cases/components/detail/CaseDocuments';
 import { CaseDrafting } from '@/routes/cases/components/detail/CaseDrafting';
@@ -50,6 +52,8 @@ import { CaseStrategy } from '@/routes/cases/components/detail/CaseStrategy';
 import { CaseTimeline } from '@/routes/cases/components/detail/CaseTimeline';
 import { CaseWorkflow } from '@/routes/cases/components/detail/CaseWorkflow';
 import { CaseCollaboration } from '@/routes/cases/components/detail/collaboration/CaseCollaboration';
+import { CaseDetailNavigation } from '@/routes/cases/components/detail/layout/CaseDetailNavigation';
+import { MobileTimelineOverlay } from '@/routes/cases/components/detail/MobileTimelineOverlay';
 import { CaseMotions } from '@/routes/cases/components/detail/motions/CaseMotions';
 import { CaseOverview } from '@/routes/cases/components/detail/overview/CaseOverview';
 import { CaseProjects } from '@/routes/cases/components/detail/projects/CaseProjects';
@@ -57,22 +61,18 @@ import { CaseProjects } from '@/routes/cases/components/detail/projects/CaseProj
 // ============================================================================
 // INTERNAL DEPENDENCIES - HOOKS & CONTEXT
 // ============================================================================
-import { useCaseDetail } from '@/hooks/useCaseDetail';
-import { useTheme } from "@/hooks/useTheme";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - SERVICES & UTILS
 // ============================================================================
-import { cn } from '@/lib/cn';
-import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Party } from '@/types';
-import { Case } from '@/types/case';
-import { LegalDocument } from '@/types/documents';
-import { TimeEntry } from '@/types/financial';
+import { type Party } from '@/types';
+import { type Case } from '@/types/case';
+import { type LegalDocument } from '@/types/documents';
+import { type TimeEntry } from '@/types/financial';
 
 interface CaseDetailProps {
   caseData: Case;

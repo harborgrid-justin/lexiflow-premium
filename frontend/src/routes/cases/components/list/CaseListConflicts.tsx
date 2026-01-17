@@ -31,14 +31,14 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, ConflictCheck } from '@/types';
+import { type Case, type ConflictCheck } from '@/types';
 
 interface CaseListConflictsProps {
   onSelectCase?: (c: Case) => void;

@@ -11,6 +11,7 @@
 
 import { CaseStatus, type Case } from '@/types';
 import { cn } from '@/lib/cn';
+
 import {
   Archive,
   Download,
@@ -760,8 +761,8 @@ export function EnterpriseCaseList({
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Case, CaseStatus } from '@/types';
 import React from 'react'; // ============================================================================
+
 // Types & Interfaces
 // ============================================================================
 export interface FilterCriteria {

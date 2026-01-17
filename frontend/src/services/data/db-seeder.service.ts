@@ -49,32 +49,33 @@ import {
 } from "@/api/types/mockKnowledge";
 import { MOCK_MOTIONS } from "@/api/types/motion";
 import { MOCK_COUNSEL } from "@/api/types/opposingCounselProfile";
+import { MOCK_OPPOSITION } from "@/api/types/opposition";
 import { MOCK_ORGS } from "@/api/types/organization";
 import { PLEADING_TEMPLATES } from "@/api/types/pleadingTemplate";
 import { MOCK_PRIVILEGE_LOG } from "@/api/types/privilegeLogEntry";
+import { MOCK_REPORTERS } from "@/api/types/reporters";
+import { MOCK_RFPS } from "@/api/types/rfp";
 import { MALWARE_SIGNATURES } from "@/api/types/security";
 import { MOCK_STAFF } from "@/api/types/staffMember";
 import { MOCK_STIPULATIONS } from "@/api/types/stipulationRequest";
 import { MOCK_OKRS } from "@/api/types/strategy";
 import { MOCK_USERS } from "@/api/types/user";
+import { MOCK_VENDOR_CONTRACTS } from "@/api/types/vendorContract";
+import { MOCK_VENDOR_DIRECTORY } from "@/api/types/vendorDirectory";
 import { MOCK_TASKS } from "@/api/types/workflowTask";
 import { TEMPLATE_LIBRARY } from "@/api/types/workflowTemplates";
 import {
-  CaseId,
-  CasePhase,
-  EntityId,
-  ExtendedUserProfile,
-  GranularPermission,
-  LegalEntity,
+  type CaseId,
+  type CasePhase,
+  type EntityId,
+  type ExtendedUserProfile,
+  type GranularPermission,
+  type LegalEntity,
 } from "@/types";
-import { DatabaseManager, STORES } from "./db";
+
+import { type DatabaseManager, STORES } from "./db";
 
 // New mock data imports
-import { MOCK_OPPOSITION } from "@/api/types/opposition";
-import { MOCK_REPORTERS } from "@/api/types/reporters";
-import { MOCK_RFPS } from "@/api/types/rfp";
-import { MOCK_VENDOR_CONTRACTS } from "@/api/types/vendorContract";
-import { MOCK_VENDOR_DIRECTORY } from "@/api/types/vendorDirectory";
 
 const MOCK_PHASES: CasePhase[] = [
   {

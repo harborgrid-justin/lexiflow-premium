@@ -1,6 +1,8 @@
-import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
+
+import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * CopyButton component for copying text to clipboard.

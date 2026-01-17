@@ -1,15 +1,17 @@
-import { useTheme } from "@/hooks/useTheme";
-import { queryClient, useMutation } from '@/hooks/backend';
-import { useNotify } from '@/hooks/core';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { AlertOctagon, Check, CheckCircle2, RefreshCw } from 'lucide-react';
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 import { VirtualList } from '@/components/organisms/VirtualList';
-import { DataAnomaly, QualityMetricHistory } from '@/types';
+import { queryClient, useMutation } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type DataAnomaly, type QualityMetricHistory } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { AlertOctagon, Check, CheckCircle2, RefreshCw } from 'lucide-react';
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
 
 interface QualityDashboardProps {
     anomalies: DataAnomaly[];

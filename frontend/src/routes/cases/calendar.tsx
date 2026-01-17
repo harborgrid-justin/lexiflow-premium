@@ -4,9 +4,11 @@
  * Displays calendar view for a specific case
  */
 
+import { useLoaderData } from 'react-router';
+
 import { casesApi } from '@/lib/frontend-api';
 import { CaseCalendar } from '@/routes/cases/components/calendar/CaseCalendar';
-import { useLoaderData } from 'react-router';
+
 import type { Route } from "./+types/calendar";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -26,7 +28,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseCalendarRoute() {
-  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { case: caseData } = useLoaderData();
   return <CaseCalendar caseId={caseData.id} />;
 }
 

@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { DiscoveryRequest } from '@/types';
-import { Card } from '@/components/molecules/Card/Card';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
+
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
 /**
  * MotionToCompelBuilder.tsx
  * Automated motion to compel discovery builder
@@ -14,12 +14,13 @@ import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } fr
  * - G28: Pure function of props and context
  */
 
+import { useMultiSelection } from '@/hooks/useMultiSelection';
+import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { useNotify } from '@/hooks/useNotify';
-import { useMultiSelection } from '@/hooks/useMultiSelection';
+import { type DiscoveryRequest } from '@/types';
 
 interface MotionToCompelBuilderProps {
   requests: DiscoveryRequest[];

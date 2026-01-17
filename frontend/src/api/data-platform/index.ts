@@ -61,15 +61,15 @@ export type { Connector } from "./connectors-api";
 export { ConnectorsApiService } from "./connectors-api";
 
 // Import service classes for the unified API instance
-import { SchemaManagementApiService } from "./schema-management-api";
-import { QueryWorkbenchApiService } from "./query-workbench-api";
-import { PipelinesApiService } from "./pipelines-api";
-import { SyncApiService } from "./sync-api";
-import { BackupsApiService } from "./backups-api";
-import { MonitoringApiService } from "./monitoring-api";
 import { AiOpsApiService } from "./ai-ops-api";
-import { VersioningApiService } from "./versioning-api";
+import { BackupsApiService } from "./backups-api";
 import { ConnectorsApiService } from "./connectors-api";
+import { MonitoringApiService } from "./monitoring-api";
+import { PipelinesApiService } from "./pipelines-api";
+import { QueryWorkbenchApiService } from "./query-workbench-api";
+import { SchemaManagementApiService } from "./schema-management-api";
+import { SyncApiService } from "./sync-api";
+import { VersioningApiService } from "./versioning-api";
 
 /**
  * Unified data platform API instance

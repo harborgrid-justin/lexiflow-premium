@@ -1,11 +1,13 @@
-import { AccessRequest } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { CheckCircle, Clock, Loader2, User, XCircle } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { CheckCircle, Clock, Loader2, User, XCircle } from 'lucide-react';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type AccessRequest } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
+
 export function AccessRequestManager() {
     const { theme } = useTheme();
 

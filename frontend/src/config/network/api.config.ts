@@ -4,6 +4,7 @@
 // Backend API connection and request settings
 
 import { isBrowser } from "@rendering/utils";
+
 import { URLS, HOSTS, PORTS } from "../ports.config";
 
 // Lazy getters to avoid accessing import.meta.env before Vite initialization

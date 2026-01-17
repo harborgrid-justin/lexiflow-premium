@@ -3,9 +3,10 @@
  */
 
 import React from 'react';
+
 import { FormField } from '../components/FormField';
 import { FormSelect } from '../components/FormSelect';
-import { FormData } from '../types/newCaseTypes';
+import { type FormData } from '../types/newCaseTypes';
 
 export interface CourtTabProps {
   formData: FormData;

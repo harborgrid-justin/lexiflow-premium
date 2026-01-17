@@ -7,14 +7,18 @@
  * @module routes/real-estate/inventory
  */
 
-import { InventoryList } from '@/routes/real-estate/inventory/InventoryList';
-import type { InventoryLoaderData } from '@/routes/real-estate/inventory/types';
-import { DataService } from '@/services/data/data-service.service';
-import type { PropertyStatus, RealEstateProperty } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/inventory";
+import type { InventoryLoaderData } from '@/routes/real-estate/inventory/types';
+import type { PropertyStatus, RealEstateProperty } from '@/services/domain/RealEstateDomain';
+
+import { InventoryList } from '@/routes/real-estate/inventory/InventoryList';
 
 // ============================================================================
 // Meta Tags

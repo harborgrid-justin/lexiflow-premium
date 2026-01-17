@@ -8,11 +8,12 @@
  * React v18 Pattern: Guideline 34
  */
 
+import { useContext } from "react";
+
 import {
   ThemeContext,
-  ThemeContextType,
+  type ThemeContextType,
 } from "@/providers/infrastructure/ThemeProvider";
-import { useContext } from "react";
 
 /**
  * Hook to access theme context

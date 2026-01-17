@@ -1,5 +1,6 @@
 import { Activity, GitMerge, FileSearch, Settings, Wand2 } from 'lucide-react';
-import { QualityRule } from '@/routes/admin/components/data/quality/RuleBuilder';
+
+import { type QualityRule } from '@/routes/admin/components/data/quality/RuleBuilder';
 
 export const QUALITY_TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: Activity },

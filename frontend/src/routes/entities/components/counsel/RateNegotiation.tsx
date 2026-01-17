@@ -1,10 +1,11 @@
-import React from 'react';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { Button } from '@/components/atoms/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { LegalEntity } from '@/types';
-import { cn } from '@/lib/cn';
 import { CheckCircle, Clock, Plus, TrendingDown } from 'lucide-react';
+import React from 'react';
+
+import { Button } from '@/components/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type LegalEntity } from '@/types';
 interface Rate {
     firm: string;
     role: string;

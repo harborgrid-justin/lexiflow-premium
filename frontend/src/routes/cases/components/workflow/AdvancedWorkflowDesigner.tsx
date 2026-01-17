@@ -13,9 +13,6 @@
  * - Guideline 24: Workflow analytics computations are memoized (useMemo)
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';
 import {
   Boxes,
   Clock,
@@ -29,6 +26,10 @@ import {
   Webhook,
 } from 'lucide-react';
 import { useMemo } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import {
   AISuggestionsPanel,
   AnalyticsPanel,
@@ -45,6 +46,8 @@ import {
   WorkflowFeatureTabs,
 } from './components';
 import { useAdvancedWorkflowDesigner } from './hooks/useAdvancedWorkflowDesigner';
+
+import type { EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';
 
 interface AdvancedWorkflowDesignerProps {
   workflowId?: string;

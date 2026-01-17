@@ -2,7 +2,7 @@
  * TypeScript types and interfaces for NewCase component
  */
 
-import { CaseStatus, MatterPriority, MatterStatus, MatterType, PracticeArea, User } from '@/types';
+import { type CaseStatus, type MatterPriority, type MatterStatus, type MatterType, type PracticeArea, type User } from '@/types';
 
 /**
  * Federal Case Type enum

@@ -4,8 +4,6 @@
  * @description Team productivity metrics and performance widget
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { AnimatePresence, motion } from 'framer-motion';
 import { Award, BarChart3, Clock, Target, TrendingUp, Users } from 'lucide-react';
 import React, { useState } from 'react';
@@ -23,6 +21,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 export interface TeamMember {
   id: string;

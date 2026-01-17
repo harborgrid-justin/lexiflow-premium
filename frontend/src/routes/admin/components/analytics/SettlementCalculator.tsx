@@ -18,19 +18,21 @@ import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Too
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { getChartTheme } from '@/utils/chartConfig';
 // Components
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
-import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
-import type { ThemeStateValue } from '@/lib/theme/types';
 import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Services
 import { cn } from '@/lib/cn';
+import { getChartTheme } from '@/utils/chartConfig';
+
+import type { ThemeStateValue } from '@/lib/theme/types';
+
+import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -239,7 +241,7 @@ const SimulationResultsChart = ({
  */
 export function SettlementCalculator() {
   const { theme, mode } = useTheme();
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartTheme = getChartTheme(mode);
 
   const {
     params,

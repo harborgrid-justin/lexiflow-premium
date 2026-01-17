@@ -2,8 +2,9 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import type { LegalDocument } from '@/types/documents';
 import { useState } from 'react';
+
+import type { LegalDocument } from '@/types/documents';
 interface DocumentNode {
   id: string; name: string; type: 'folder' | 'document'; children?: DocumentNode[]; document?: LegalDocument; isExpanded?: boolean;
 } interface CheckoutStatus {

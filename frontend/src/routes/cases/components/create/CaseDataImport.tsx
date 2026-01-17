@@ -4,16 +4,18 @@
  * @description AI-powered case data import with intelligent field mapping for XML, docket sheets, and structured data
  */
 
+import { ArrowRight, CheckCircle, FileCode, FileText, Loader2, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
 import { GeminiService } from '@/services/features/research/geminiService';
+
 import type { Case, DocketEntry, Party } from '@/types';
-import { cn } from '@/lib/cn';
-import { ArrowRight, CheckCircle, FileCode, FileText, Loader2, Sparkles } from 'lucide-react';
-import React, { useState } from 'react';
 
 interface ParsedCaseData {
   caseInfo?: Partial<Case>;

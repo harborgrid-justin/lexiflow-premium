@@ -1,6 +1,7 @@
-import { useThemeCustomizer } from '@/hooks/useThemeCustomizer';
-import { ThemeDensity } from '@/lib/theme/tokens';
 import React, { useState } from 'react';
+
+import { useThemeCustomizer } from '@/hooks/useThemeCustomizer';
+import { type ThemeDensity } from '@/lib/theme/tokens';
 
 export const ThemeCustomizer: React.FC = () => {
   const [
@@ -161,7 +162,7 @@ export const ThemeCustomizer: React.FC = () => {
                     <ColorInput
                       key={key}
                       label={`Chart ${formatKey(key)}`}
-                      value={val as string}
+                      value={val}
                       onChange={(v) => updateValue(['colors', 'charts', key], v)}
                     />
                   ))}
@@ -174,7 +175,7 @@ export const ThemeCustomizer: React.FC = () => {
                     <ColorInput
                       key={key}
                       label={`Note ${formatKey(key)}`}
-                      value={val as string}
+                      value={val}
                       onChange={(v) => updateValue(['colors', 'annotations', key], v)}
                     />
                   ))}
@@ -218,7 +219,7 @@ export const ThemeCustomizer: React.FC = () => {
                     <TextInput
                       key={key}
                       label={key.toUpperCase()}
-                      value={val as string}
+                      value={val}
                       onChange={(v) => updateValue(['typography', 'sizes', key], v)}
                     />
                   ))}
@@ -236,7 +237,7 @@ export const ThemeCustomizer: React.FC = () => {
                     <TextInput
                       key={key}
                       label={formatKey(key)}
-                      value={val as string}
+                      value={val}
                       onChange={(v) => updateValue(['spacing', density, key], v)}
                     />
                   ))}
@@ -249,7 +250,7 @@ export const ThemeCustomizer: React.FC = () => {
                     <TextInput
                       key={key}
                       label={key.toUpperCase()}
-                      value={val as string}
+                      value={val}
                       onChange={(v) => updateValue(['borderRadius', key], v)}
                     />
                   ))}
@@ -281,7 +282,7 @@ export const ThemeCustomizer: React.FC = () => {
                     <TextInput
                       key={key}
                       label={key.toUpperCase()}
-                      value={val as string}
+                      value={val}
                       onChange={(v) => updateValue(['shadows', key], v)}
                     />
                   ))}
@@ -294,7 +295,7 @@ export const ThemeCustomizer: React.FC = () => {
                     <TextInput
                       key={key}
                       label={formatKey(key)}
-                      value={val as string}
+                      value={val}
                       onChange={(v) => updateValue(['transitions', key], v)}
                     />
                   ))}

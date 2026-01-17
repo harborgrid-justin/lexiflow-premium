@@ -4,11 +4,11 @@
  * @description Dashboard for managing Data Access Framework (DAF) operations
  */
 
+import { Database, Key, Lock, ShieldCheck } from 'lucide-react';
 import { memo } from 'react';
 
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Database, Key, Lock, ShieldCheck } from 'lucide-react';
 
 interface DafDashboardProps {
   stats?: {

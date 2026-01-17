@@ -13,11 +13,13 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Import Page component
 import { CalendarPage } from './CalendarPage';
+
 import type { CalendarLoaderData } from './loader';
 
 // Export loader
@@ -39,7 +41,7 @@ export function meta() {
 // ============================================================================
 
 export default function CalendarIndexRoute() {
-  const loaderData = useLoaderData() as CalendarLoaderData;
+  const loaderData = useLoaderData();
 
   return <CalendarPage loaderData={loaderData} />;
 }

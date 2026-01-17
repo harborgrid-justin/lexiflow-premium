@@ -1,13 +1,16 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { Command, Search, X } from 'lucide-react';
 import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useTheme } from "@/hooks/useTheme";
+
 import * as styles from './EnhancedSearch.styles';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
 import { useKeyboardNav, useSearchHandlers } from './hooks';
 import { getRecentSearches, parseSearchSyntax } from './storage';
-import type { EnhancedSearchProps, SearchCategory, SearchResult } from './types';
 import { filterSuggestions, highlightMatch } from './utils';
+
+import type { EnhancedSearchProps, SearchCategory, SearchResult } from './types';
 
 /**
  * EnhancedSearch - React 18 optimized with useId

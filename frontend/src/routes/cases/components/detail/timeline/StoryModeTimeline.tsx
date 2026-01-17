@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Calendar, Flag, Gavel, FileText, ArrowRight } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 
@@ -21,7 +21,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { TimelineEvent } from '@/types';
+import { type TimelineEvent } from '@/types';
 
 interface StoryModeTimelineProps {
   events: TimelineEvent[];

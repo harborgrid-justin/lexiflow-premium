@@ -9,25 +9,25 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Send, Paperclip, Lock, Shield, FileText, Loader2 } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 
 // Types & Interfaces
-import { Case, Conversation, Message, User } from '@/types';
+import { type Case, type Conversation, type Message, type User } from '@/types';
 
 interface CaseMessagesProps {
   caseData: Case;

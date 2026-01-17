@@ -21,7 +21,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 interface EvidenceAdmissibilityProps {
   selectedItem: EvidenceItem;

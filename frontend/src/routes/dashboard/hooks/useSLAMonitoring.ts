@@ -24,11 +24,13 @@
  * ```
  */
 
+import { useCallback, useEffect, useState } from "react";
+
 import { useQuery } from "@/hooks/useQueryHooks";
 import { workflowApi } from "@/lib/frontend-api";
-import { Task } from "@/types";
+import { type Task } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
-import { useCallback, useEffect, useState } from "react";
+
 import { useInterval } from "./useInterval";
 
 // ============================================================================
@@ -130,7 +132,7 @@ export function useSLAMonitoring(
 
   // Initialize SLAs from tasks
   useEffect(() => {
-    const taskList = (tasks || []) as Task[];
+    const taskList = (tasks || []);
     if (taskList.length > 0) {
       const items = taskList
         .filter((t: Task) => t.dueDate && t.status !== "Completed")

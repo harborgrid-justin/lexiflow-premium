@@ -1,10 +1,11 @@
+import { useCallback, useRef, useState } from "react";
+
 import { useNotify } from "@/hooks/useNotify";
 import { queryClient, useMutation } from "@/hooks/useQueryHooks";
 import { useWindow } from "@/providers";
 import { DataService } from "@/services/data/data-service.service";
-import { LegalDocument, WorkflowTask } from "@/types";
+import { type LegalDocument, type WorkflowTask } from "@/types";
 import { queryKeys } from "@/utils/queryKeys";
-import { useCallback, useRef, useState } from "react";
 
 export function useCaseDocuments(
   documents: LegalDocument[],

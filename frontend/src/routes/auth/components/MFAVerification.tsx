@@ -6,8 +6,9 @@
  * @module components/auth/MFAVerification
  */
 
-import { useAuthActions } from '@/providers/application/authprovider';
 import { useState } from 'react';
+
+import { useAuthActions } from '@/providers/application/authprovider';
 
 interface MFAVerificationProps {
   onSuccess?: () => void;

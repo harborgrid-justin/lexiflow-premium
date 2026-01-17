@@ -1,7 +1,8 @@
+import { Book, FileCode, FileText, Flag, Scale } from 'lucide-react';
+
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { Book, FileCode, FileText, Flag, Scale } from 'lucide-react';
 export function HelpSection() {
   const { theme } = useTheme();
 

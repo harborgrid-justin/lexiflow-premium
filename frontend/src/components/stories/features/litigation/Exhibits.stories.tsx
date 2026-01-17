@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ExhibitManager } from '../../../../features/litigation/exhibits/ExhibitManager';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Exhibit components provide tools for managing trial exhibits including

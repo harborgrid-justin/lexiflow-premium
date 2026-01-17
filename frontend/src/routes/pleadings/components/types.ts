@@ -1,5 +1,7 @@
-import { Case, PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection } from '@/types';
-import React from "react";
+import { type Case, type PleadingDocument, type PleadingTemplate, type FormattingRule, type PleadingSection } from '@/types';
+
+import type React from "react";
+
 
 export type ViewMode = 'write' | 'logic' | 'preview';
 

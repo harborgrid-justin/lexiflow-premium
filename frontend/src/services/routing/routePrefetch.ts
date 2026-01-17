@@ -37,6 +37,10 @@ class RoutePrefetchService {
   private readonly HOVER_DELAY = 300; // ms
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+  private static isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === "object" && value !== null;
+  }
+
   constructor() {
     this.initIntersectionObserver();
     this.loadMetadata();
@@ -55,7 +59,9 @@ class RoutePrefetchService {
             const target = entry.target as HTMLElement;
             const path = target.getAttribute("data-prefetch-path");
             if (path) {
-              void this.prefetchRoute(path, "viewport");
+              this.prefetchRoute(path, "viewport").catch((error) => {
+                console.warn("[RoutePrefetch] Prefetch failed", error);
+              });
             }
           }
         });
@@ -84,7 +90,8 @@ class RoutePrefetchService {
 
     try {
       await prefetchPromise;
-    } catch {
+    } catch (error) {
+      console.warn("[RoutePrefetch] Prefetch failed", error);
     } finally {
       // Clean up after TTL
       setTimeout(() => {
@@ -97,7 +104,7 @@ class RoutePrefetchService {
    * Execute prefetch operation
    */
   private async executePrefetch(
-    path: string,
+    _path: string,
     _priority: "high" | "medium" | "low",
   ): Promise<void> {
     // Simulate network delay for demo
@@ -128,7 +135,9 @@ class RoutePrefetchService {
 
     // Set new timer
     const timer = window.setTimeout(() => {
-      void this.prefetchRoute(path, "hover");
+      this.prefetchRoute(path, "hover").catch((error) => {
+        console.warn("[RoutePrefetch] Prefetch failed", error);
+      });
       this.hoverTimers.delete(path);
     }, this.HOVER_DELAY);
 
@@ -227,7 +236,9 @@ class RoutePrefetchService {
     const predicted = this.getPredictedRoutes(currentPath);
     predicted.forEach((path, index) => {
       const priority = index === 0 ? "high" : index === 1 ? "medium" : "low";
-      void this.prefetchRoute(path, "predictive", priority);
+      this.prefetchRoute(path, "predictive", priority).catch((error) => {
+        console.warn("[RoutePrefetch] Prefetch failed", error);
+      });
     });
   }
 
@@ -243,7 +254,9 @@ class RoutePrefetchService {
     ];
 
     highPriorityRoutes.forEach((path) => {
-      void this.prefetchRoute(path, "priority", "high");
+      this.prefetchRoute(path, "priority", "high").catch((error) => {
+        console.warn("[RoutePrefetch] Prefetch failed", error);
+      });
     });
   }
 
@@ -254,18 +267,40 @@ class RoutePrefetchService {
     try {
       const stored = localStorage.getItem("route_prefetch_metadata");
       if (stored) {
-        const data = JSON.parse(stored) as Record<string, unknown>;
-        Object.entries(data).forEach(([path, meta]) => {
-          const m = meta as Omit<RouteMetadata, "transitionsFrom"> & {
-            transitionsFrom?: Record<string, number>;
-          };
+        const parsed: unknown = JSON.parse(stored);
+        if (!RoutePrefetchService.isRecord(parsed)) {
+          return;
+        }
+
+        Object.entries(parsed).forEach(([path, meta]) => {
+          if (!RoutePrefetchService.isRecord(meta)) {
+            return;
+          }
+
+          const transitionsRaw = RoutePrefetchService.isRecord(
+            meta.transitionsFrom,
+          )
+            ? meta.transitionsFrom
+            : {};
+
+          const transitions = new Map(
+            Object.entries(transitionsRaw).filter(
+              (entry): entry is [string, number] =>
+                typeof entry[1] === "number",
+            ),
+          );
+
           this.routeMetadata.set(path, {
-            ...m,
-            transitionsFrom: new Map(Object.entries(m.transitionsFrom || {})),
+            path,
+            visits: typeof meta.visits === "number" ? meta.visits : 0,
+            lastVisit: typeof meta.lastVisit === "number" ? meta.lastVisit : 0,
+            transitionsFrom: transitions,
           });
         });
       }
-    } catch {}
+    } catch (error) {
+      console.warn("[RoutePrefetch] Failed to load metadata", error);
+    }
   }
 
   /**
@@ -281,8 +316,8 @@ class RoutePrefetchService {
         };
       });
       localStorage.setItem("route_prefetch_metadata", JSON.stringify(data));
-    } catch {
-      // Ignore storage errors
+    } catch (error) {
+      console.warn("[RoutePrefetch] Failed to save metadata", error);
     }
   }
 

@@ -3,9 +3,11 @@
  */
 
 import { Card } from '@/components/molecules/Card/Card';
-import type { ThemeObject } from '@/lib/theme/types';
+
 import { SatisfactionCard } from './SatisfactionCard';
+
 import type { ClientSatisfaction } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface ChartTheme {
   grid: string;

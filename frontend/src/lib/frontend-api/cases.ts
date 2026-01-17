@@ -38,16 +38,19 @@
  * ```
  */
 
-import type { Case } from "@/types";
 import {
   denormalizeCase,
   normalizeCase,
   normalizeCases,
 } from "../normalization/case";
+
 import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
+import { toRecord } from "./guards";
 import { validate, validators } from "./schemas";
 import { type PaginatedResult, type Result, success } from "./types";
+
+import type { Case } from "@/types";
 
 /**
  * Query parameters for case listing
@@ -138,7 +141,7 @@ export async function getAll(
   }
 
   // Normalize response
-  const response = result.data as Record<string, unknown>;
+  const response = toRecord(result.data);
   const items = Array.isArray(response.data) ? response.data : [];
   const total =
     typeof response.total === "number" ? response.total : items.length;

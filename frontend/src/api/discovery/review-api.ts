@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { ReviewDocument, ReviewQueue, AdvancedSearchQuery, DocumentCoding } from '@/types/discovery-enhanced';
 
 export class ReviewApiService {

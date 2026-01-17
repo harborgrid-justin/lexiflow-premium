@@ -21,8 +21,9 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
-import { SimulationEngine } from '@/utils/simulationEngine';
+
 import { Scheduler } from '@/utils/scheduler';
+import { SimulationEngine } from '@/utils/simulationEngine';
 
 // ============================================================================
 // TYPES

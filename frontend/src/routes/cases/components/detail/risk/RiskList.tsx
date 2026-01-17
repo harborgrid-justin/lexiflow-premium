@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Shield, DollarSign, Zap, Eye } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';
@@ -22,7 +22,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Risk } from '@/types';
+import { type Risk } from '@/types';
 
 interface RiskListProps {
   risks: Risk[];

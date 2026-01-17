@@ -5,6 +5,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { WorkflowTemplate } from "@/types/workflow-advanced-types";
 
 export class TemplateLibraryService {

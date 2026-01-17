@@ -1,13 +1,15 @@
-import { TabbedPageLayout } from '@/components/layouts';
-import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Suspense, useMemo } from 'react';
-import { useDashboard } from './hooks/useDashboard';
+
+import { TabbedPageLayout } from '@/components/layouts';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
+
 
 // Components
 import { DashboardAnalytics } from './components/DashboardAnalytics';
 import { DashboardOverview } from './components/DashboardOverview';
 import { PersonalWorkspace } from './components/PersonalWorkspace';
+import { useDashboard } from './hooks/useDashboard';
 
 /**
  * DashboardView - Main Presentation Layout

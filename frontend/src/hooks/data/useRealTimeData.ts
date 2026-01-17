@@ -1,5 +1,7 @@
-import { TIMEOUTS } from '@/config/ports.config';
 import { useEffect, useState, useCallback, useRef } from 'react';
+
+import { TIMEOUTS } from '@/config/ports.config';
+
 import { useWebSocket } from './useWebSocket';
 
 /**

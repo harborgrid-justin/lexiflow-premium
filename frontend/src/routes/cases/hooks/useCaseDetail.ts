@@ -19,23 +19,24 @@
  * ```
  */
 
+import { useEffect, useMemo, useState } from "react";
+
 import { useNotify } from "@/hooks/useNotify";
 import { queryClient, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import {
-  Case,
-  DocketEntry,
-  LegalDocument,
-  Motion,
-  Party,
-  Project,
-  TimeEntry,
-  TimelineEvent,
-  WorkflowStage,
-  WorkflowTask,
+  type Case,
+  type DocketEntry,
+  type LegalDocument,
+  type Motion,
+  type Party,
+  type Project,
+  type TimeEntry,
+  type TimelineEvent,
+  type WorkflowStage,
+  type WorkflowTask,
 } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
-import { useEffect, useMemo, useState } from "react";
 
 // ============================================================================
 // TYPES

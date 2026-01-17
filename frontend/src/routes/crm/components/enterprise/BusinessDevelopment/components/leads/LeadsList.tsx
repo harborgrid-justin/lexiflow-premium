@@ -4,12 +4,16 @@
  * @description List container for leads with filtering
  */
 
-import type { LeadsByStatus } from '@/types/crm';
-import { Lead } from '../../types';
+import React from "react";
+
+import { type Lead } from '../../types';
+
 import { LeadCard } from './LeadCard';
 import { LeadFilters } from './LeadFilters';
 import { LeadPipelineChart } from './LeadPipelineChart';
-import React from "react";
+
+import type { LeadsByStatus } from '@/types/crm';
+
 
 interface LeadsListProps {
   leads: Lead[];

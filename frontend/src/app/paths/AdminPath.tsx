@@ -1,13 +1,14 @@
 // src/app/paths/AdminPath.tsx
+import React, { useEffect, useMemo, useState } from "react";
+
 import { DeterministicLoader } from "@/components/performance/DeterministicLoader";
 import { OptimisticInput } from "@/components/performance/OptimisticInput";
 import { ZeroClsWrapper } from "@/components/performance/ZeroClsWrapper";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/cn";
 import { useEntitlements } from "@/providers/application/entitlementsprovider";
 import { useData } from "@/routes/dashboard";
-import { cn } from "@/lib/cn";
-import React, { useEffect, useMemo, useState } from "react";
 
 export const AdminPath: React.FC = () => {
   const { auth, logout } = useAuth();

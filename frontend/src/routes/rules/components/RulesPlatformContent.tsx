@@ -1,5 +1,6 @@
-import { RulesView } from '@/config/tabs.config';
 import { lazy } from 'react';
+
+import { type RulesView } from '@/config/tabs.config';
 
 // Sub-components
 const RulesDashboard = lazy(() => import('./RulesDashboard').then(m => ({ default: m.RulesDashboard })));

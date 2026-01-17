@@ -1,6 +1,7 @@
-import type { BackupSnapshot } from '@/types';
 import { useState } from 'react';
 import { Link, useFetcher } from 'react-router'; // Extend BackupSnapshot to include UI-specific fields if needed, or map them
+
+import type { BackupSnapshot } from '@/types';
 export interface Backup extends BackupSnapshot { retentionDays: number; storageLocation: 'local' | 's3' | 'azure' | 'gcs'; createdAt: string; // Mapped from created
 } export interface BackupSchedule { id: string; name: string; frequency: 'hourly' | 'daily' | 'weekly' | 'monthly'; type: 'full' | 'incremental'; enabled: boolean; nextRun: string; lastRun?: string; retentionDays: number;
 } export interface BackupStats { totalBackups: number; totalSize: number; lastBackup: string | null; nextScheduled: string | null;

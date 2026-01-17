@@ -28,12 +28,13 @@
  * @module providers/infrastructure/themeprovider
  */
 
+import React, { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
+
 import { FEATURES_CONFIG } from '@/config/features/features.config';
 import { UI_CONFIG } from '@/config/features/ui.config';
-import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from '@/lib/theme/tokens';
-import { ThemeObject } from '@/lib/theme/types';
+import { DEFAULT_TOKENS, type DesignTokens, getTokens, type ThemeDensity } from '@/lib/theme/tokens';
+import { type ThemeObject } from '@/lib/theme/types';
 import { ProfileDomain } from '@/services/domain/profile.service';
-import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
 
 export type { ThemeObject } from '@/lib/theme/types';
 
@@ -611,18 +612,18 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (typeof val === 'object' && val !== null) {
         // Nested objects like charts, annotations, gradients
         Object.entries(val).forEach(([subKey, subVal]) => {
-          root.style.setProperty(`--color-${key}-${subKey}`, subVal as string);
+          root.style.setProperty(`--color-${key}-${subKey}`, subVal);
           cleanupCallbacks.push(() => root.style.removeProperty(`--color-${key}-${subKey}`));
         });
       } else {
-        root.style.setProperty(`--color-${key}`, val as string);
+        root.style.setProperty(`--color-${key}`, val);
         cleanupCallbacks.push(() => root.style.removeProperty(`--color-${key}`));
       }
     });
 
     // Inject Spacing (16 properties per density)
     Object.entries(currentSpacing).forEach(([key, val]) => {
-      root.style.setProperty(`--spacing-${key}`, val as string);
+      root.style.setProperty(`--spacing-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--spacing-${key}`));
     });
 
@@ -647,36 +648,36 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     // Typography sizes (12)
     Object.entries(typography.sizes).forEach(([key, val]) => {
-      root.style.setProperty(`--size-${key}`, val as string);
+      root.style.setProperty(`--size-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--size-${key}`));
     });
 
     // Line heights (5)
     Object.entries(typography.lineHeight).forEach(([key, val]) => {
-      root.style.setProperty(`--line-height-${key}`, val as string);
+      root.style.setProperty(`--line-height-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--line-height-${key}`));
     });
 
     // Letter spacing (5)
     Object.entries(typography.letterSpacing).forEach(([key, val]) => {
-      root.style.setProperty(`--letter-spacing-${key}`, val as string);
+      root.style.setProperty(`--letter-spacing-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--letter-spacing-${key}`));
     });
 
     // Inject Borders & Shadows
     Object.entries(borderRadius).forEach(([key, val]) => {
-      root.style.setProperty(`--radius-${key}`, val as string);
+      root.style.setProperty(`--radius-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--radius-${key}`));
     });
 
     Object.entries(shadows).forEach(([key, val]) => {
-      root.style.setProperty(`--shadow-${key}`, val as string);
+      root.style.setProperty(`--shadow-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--shadow-${key}`));
     });
 
     // Inject Transitions (8)
     Object.entries(transitions).forEach(([key, val]) => {
-      root.style.setProperty(`--transition-${key}`, val as string);
+      root.style.setProperty(`--transition-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--transition-${key}`));
     });
 
@@ -695,44 +696,44 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // Inject Animations
     // Animation durations (4)
     Object.entries(animations.duration).forEach(([key, val]) => {
-      root.style.setProperty(`--animation-duration-${key}`, val as string);
+      root.style.setProperty(`--animation-duration-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--animation-duration-${key}`));
     });
 
     // Animation easing (6)
     Object.entries(animations.easing).forEach(([key, val]) => {
-      root.style.setProperty(`--animation-easing-${key}`, val as string);
+      root.style.setProperty(`--animation-easing-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--animation-easing-${key}`));
     });
 
     // Animation keyframes (6)
     Object.entries(animations.keyframes).forEach(([key, val]) => {
-      root.style.setProperty(`--animation-keyframe-${key}`, val as string);
+      root.style.setProperty(`--animation-keyframe-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--animation-keyframe-${key}`));
     });
 
     // Inject Effects
     // Blur (4)
     Object.entries(effects.blur).forEach(([key, val]) => {
-      root.style.setProperty(`--effect-blur-${key}`, val as string);
+      root.style.setProperty(`--effect-blur-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--effect-blur-${key}`));
     });
 
     // Opacity (4)
     Object.entries(effects.opacity).forEach(([key, val]) => {
-      root.style.setProperty(`--effect-opacity-${key}`, val as string);
+      root.style.setProperty(`--effect-opacity-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--effect-opacity-${key}`));
     });
 
     // Backdrop (4)
     Object.entries(effects.backdrop).forEach(([key, val]) => {
-      root.style.setProperty(`--effect-backdrop-${key}`, val as string);
+      root.style.setProperty(`--effect-backdrop-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--effect-backdrop-${key}`));
     });
 
     // Inject Semantic (7)
     Object.entries(semantic).forEach(([key, val]) => {
-      root.style.setProperty(`--semantic-${key}`, val as string);
+      root.style.setProperty(`--semantic-${key}`, val);
       cleanupCallbacks.push(() => root.style.removeProperty(`--semantic-${key}`));
     });
 

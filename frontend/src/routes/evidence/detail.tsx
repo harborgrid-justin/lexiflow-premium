@@ -6,12 +6,15 @@
  * @module routes/evidence/detail
  */
 
-import { DataService } from '@/services/data/data-service.service';
-import type { EvidenceItem } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/detail";
+import type { EvidenceItem } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -106,7 +109,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 export default function EvidenceDetailRoute() {
   const navigate = useNavigate();
-  const { item } = useLoaderData() as { item: EvidenceItem };
+  const { item } = useLoaderData();
 
   return (
     <div className="p-8">

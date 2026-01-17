@@ -9,9 +9,10 @@
  * @description Case operations and task management page - operational view of case activities
  */
 
+import React from 'react';
+
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import { CaseOperationsCenter } from '@/routes/cases/components/operations/CaseOperationsCenter';
-import React from 'react';
 
 interface CaseOperationsPageProps {
   caseId: string;

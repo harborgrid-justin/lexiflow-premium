@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NotificationPanel } from './NotificationPanel';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof NotificationPanel> = {
   title: 'Components/Organisms/NotificationPanel/NotificationPanel',

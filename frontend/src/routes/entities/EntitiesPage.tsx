@@ -14,8 +14,9 @@
  * @see routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { EntitiesProvider } from './EntitiesContext';
 import { EntityDirector } from './components/EntityDirector';
+import { EntitiesProvider } from './EntitiesContext';
+
 import type { clientLoader } from './loader';
 
 interface EntitiesPageProps {

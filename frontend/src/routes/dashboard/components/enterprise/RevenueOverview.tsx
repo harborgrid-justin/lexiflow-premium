@@ -4,11 +4,9 @@
  * @description Revenue and billing overview widget with charts
  */
 
-import React, { useState } from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';
 import { Calendar, DollarSign, TrendingUp } from 'lucide-react';
+import React, { useState } from 'react';
 import {
   Area,
   AreaChart,
@@ -20,6 +18,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 export interface RevenueDataPoint {
   period: string;

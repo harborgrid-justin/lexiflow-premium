@@ -32,7 +32,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // ============================================================================
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { EditorOption, EditorType } from './DataGridColumn';
+
+import { type EditorOption, type EditorType } from './DataGridColumn';
 
 // ============================================================================
 // TYPES & INTERFACES

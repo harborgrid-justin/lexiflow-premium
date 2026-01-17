@@ -9,13 +9,16 @@
 import { AlertCircle, Sparkles, Wand2 } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { useNotify } from '@/hooks/useNotify';
-import { GeminiService } from '@/services/features/research/geminiService';
-import { AIValidationService } from '@/services/infrastructure/aiValidation';
-import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button';
+import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
-import { AICommandBarProps } from './types';
+import { cn } from '@/lib/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
+
+import { type AICommandBarProps } from './types';
+
+import { AIValidationService } from '@/services/infrastructure/aiValidation';
+
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
     const { theme } = useTheme();
@@ -37,7 +40,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
 
         setIsLoading(true);
         try {
-            const result = await GeminiService.generateStrategyFromPrompt(promptValidation.sanitizedPrompt!);
+            const result = await GeminiService.generateStrategyFromPrompt(promptValidation.sanitizedPrompt);
 
             // Validate AI response
             const responseValidation = AIValidationService.validateAIResponse(result);

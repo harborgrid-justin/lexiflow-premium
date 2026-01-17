@@ -9,8 +9,9 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Wand2 } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { TextArea } from '@/components/atoms/TextArea';
@@ -22,7 +23,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { LegalArgument } from '@/types';
+import { type LegalArgument } from '@/types';
 
 interface ArgumentCoreInfoProps {
     argument: LegalArgument;

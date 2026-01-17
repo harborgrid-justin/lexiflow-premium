@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import { SEARCH_CONFIG } from "@/config/search.config";
+
 import {
   useKeyboardNav,
   useSearchHandlers,
@@ -17,16 +18,17 @@ import {
   getRecentSearches,
   parseSearchSyntax,
 } from "../components/components/advanced/storage";
+import {
+  filterSuggestions,
+  highlightMatch,
+} from "../components/components/advanced/utils";
+
 import type {
   EnhancedSearchProps,
   SearchCategory,
   SearchResult,
   SearchSuggestion,
 } from "../components/components/advanced/types";
-import {
-  filterSuggestions,
-  highlightMatch,
-} from "../components/components/advanced/utils";
 
 export const useEnhancedSearch = ({
   onSearch,
@@ -97,8 +99,9 @@ export const useEnhancedSearch = ({
 
       // Parse syntax (e.g., "case:12345")
       const parsed = parseSearchSyntax(value);
-      if (parsed.filters.category && parsed.filters.category !== category) {
-        setCategory(parsed.filters.category as SearchCategory);
+      const parsedCategory = parsed.filters["category"];
+      if (parsedCategory && parsedCategory !== category) {
+        setCategory(parsedCategory as SearchCategory);
       }
 
       performSearch(value, category);

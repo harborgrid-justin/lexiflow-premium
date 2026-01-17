@@ -1,6 +1,7 @@
-import { Sidebar } from '@/components/organisms/Sidebar';
-import { AppView, User, UserRole } from '@/types';
 import { memo } from 'react';
+
+import { Sidebar } from '@/components/organisms/Sidebar';
+import { type AppView, type User, type UserRole } from '@/types';
 
 export interface AppSidebarProps {
   isOpen: boolean;
@@ -43,7 +44,7 @@ export const AppSidebar = memo<AppSidebarProps>(({
       setActiveView={(view) => {
         // If onNavigate is provided, use it. logic implies view is string.
         if (onNavigate) {
-          onNavigate(view as string);
+          onNavigate(view);
         }
       }}
       isOpen={isOpen}

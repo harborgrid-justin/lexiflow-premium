@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressIndicator } from './ProgressIndicator';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ProgressIndicator> = {
   title: 'Components/Atoms/ProgressIndicator/ProgressIndicator',

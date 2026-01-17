@@ -20,28 +20,30 @@
 // ============================================================================
 import { Download, Plus } from 'lucide-react';
 import React, { Suspense, useTransition } from 'react';
-import { CaseListContent } from './CaseListContent';
+
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Hooks
+import { CASE_LIST_TAB_CONFIG } from '@/config/tabs.config';
 import { useCaseList } from '@/hooks/useCaseList';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils & Config
-import { CASE_LIST_TAB_CONFIG } from '@/config/tabs.config';
 import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { AppView, Case } from '@/types';
+import { type AppView, type Case } from '@/types';
+
+import { CaseListContent } from './CaseListContent';
 
 export type CaseListView = 'active' | 'intake' | 'docket' | 'tasks' | 'conflicts' | 'resources' | 'trust' | 'closing' | 'archived';
 

@@ -1,18 +1,19 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { Examination } from '@/types';
-import { cn } from '@/lib/cn';
 import { Calendar, Plus, Stethoscope, User } from 'lucide-react';
 import { useState } from 'react';
+
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 // ✅ Migrated to backend API (2025-12-21)
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useModalState } from '@/hooks/core';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type Examination } from '@/types';
 
 interface ExaminationsProps {
     caseId?: string;
@@ -51,7 +52,7 @@ export function Examinations({ caseId }: ExaminationsProps) {
             id: crypto.randomUUID(),
             caseId: caseId || 'General',
             examinee: newExam.examinee,
-            type: newExam.type as 'Physical' | 'Mental',
+            type: newExam.type,
             doctorName: newExam.doctorName || 'Pending Selection',
             date: newExam.date || '',
             status: 'Scheduled',

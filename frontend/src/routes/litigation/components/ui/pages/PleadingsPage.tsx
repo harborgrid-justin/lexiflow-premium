@@ -4,10 +4,13 @@
  * @description Pleadings management page - automated legal document drafting
  */
 
-import { PleadingDashboard } from '@/routes/pleadings/components/PleadingDashboard';
-import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
-import type { PleadingDocument } from '@/types';
 import React from "react";
+
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+import { PleadingDashboard } from '@/routes/pleadings/components/PleadingDashboard';
+
+import type { PleadingDocument } from '@/types';
+
 
 interface PleadingsPageProps {
   onCreate: (newDoc: PleadingDocument) => void;

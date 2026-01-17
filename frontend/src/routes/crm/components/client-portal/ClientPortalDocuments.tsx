@@ -1,6 +1,7 @@
+import { FileText } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { FileText } from 'lucide-react';
 
 export function ClientPortalDocuments() {
     const { theme } = useTheme();

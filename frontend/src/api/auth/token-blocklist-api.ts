@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { BlacklistedToken } from '@/types';
 
 export class TokenBlacklistAdminApiService {

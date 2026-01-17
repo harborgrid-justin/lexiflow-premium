@@ -3,7 +3,8 @@
  * Generate and manage generated documents
  */
 
-import { ApiClient } from "@/services/infrastructure/api-client.service";
+import { type ApiClient } from "@/services/infrastructure/api-client.service";
+
 import type {
   GeneratedDocument,
   GenerateDocumentDto,

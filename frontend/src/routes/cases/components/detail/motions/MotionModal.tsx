@@ -9,13 +9,13 @@
  */
 
 // External Dependencies
-import React, { useState, useEffect } from 'react';
 import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/molecules/Modal/Modal';
-import { Input } from '@/components/atoms/Input';
 import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { RuleSelector } from '@/components/molecules/RuleSelector/RuleSelector';
 
 // Internal Dependencies - Hooks & Context
@@ -25,7 +25,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Motion, MotionType, LegalDocument, DocumentId } from '@/types';
+import { type Motion, type MotionType, type LegalDocument, type DocumentId } from '@/types';
 
 interface MotionModalProps {
   isOpen: boolean;

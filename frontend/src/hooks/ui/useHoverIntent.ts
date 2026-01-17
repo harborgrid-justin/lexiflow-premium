@@ -25,6 +25,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { useRef, useCallback, useEffect } from 'react';
+
 import { TOOLTIP_DELAY_MS } from '@/config/features/ui.config';
 
 // ========================================

@@ -5,10 +5,12 @@
  * Features tabbed navigation across overview, tasks, and notifications.
  */
 
+import { expect, fn, userEvent, within } from 'storybook/test';
+
 import { Dashboard } from '@/routes/dashboard/components/Dashboard';
+
 import type { User, UserId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
 
 const meta: Meta<typeof Dashboard> = {
   title: 'Pages/Dashboard',

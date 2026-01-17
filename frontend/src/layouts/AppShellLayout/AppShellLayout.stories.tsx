@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppShellLayout } from './AppShellLayout';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof AppShellLayout> = {
   title: 'Components/Layouts/AppShellLayout/AppShellLayout',

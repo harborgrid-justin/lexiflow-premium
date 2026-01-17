@@ -5,8 +5,9 @@
 
 import { useTheme } from "@/hooks/useTheme";
 import { formatDate } from '@/utils/formatters';
+
 import { useDocumentAnnotations } from '../hooks/useDocumentAnnotations';
-import { DocumentAnnotationsProps } from '../types/DocumentAnnotationsProps';
+import { type DocumentAnnotationsProps } from '../types/DocumentAnnotationsProps';
 
 export function DocumentAnnotations({
   documentId,

@@ -10,7 +10,6 @@
  * - Nested relations flattened when appropriate
  */
 
-import type { Case } from "@/types";
 import {
   normalizeArray,
   normalizeDate,
@@ -19,6 +18,8 @@ import {
   normalizeString,
   type Normalizer,
 } from "./core";
+
+import type { Case } from "@/types";
 
 /**
  * Backend case status mapping

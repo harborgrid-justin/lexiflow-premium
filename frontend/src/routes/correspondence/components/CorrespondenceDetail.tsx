@@ -1,3 +1,6 @@
+import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
@@ -6,10 +9,8 @@ import { cn } from '@/lib/cn';
 import { communicationsApi, discoveryApi, docketApi, documentsApi, serviceJobsApi, workflowApi } from '@/lib/frontend-api';
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
-import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
+import { CaseId, type CommunicationItem, type DocketEntry, type DocketId, type DocumentId, type EvidenceId, type EvidenceItem, type LegalDocument, type ServiceJob, type UUID, type WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
-import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';
-import { useState } from 'react';
 
 // Discriminated union type for correspondence items
 type CorrespondenceItem =
@@ -133,7 +134,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         const commItem = correspondenceItem.item;
         const doc: LegalDocument = {
             id: `doc-${Date.now()}` as DocumentId,
-            caseId: commItem.caseId as CaseId,
+            caseId: commItem.caseId,
             title: `Correspondence: ${commItem.subject}`,
             type: 'Correspondence',
             content: commItem.preview,

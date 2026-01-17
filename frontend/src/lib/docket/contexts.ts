@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { DocketActionsValue, DocketStateValue } from "./types";
 
 export const DocketStateContext = createContext<DocketStateValue | null>(null);

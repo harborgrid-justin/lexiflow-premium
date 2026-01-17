@@ -8,14 +8,15 @@
  * @category Case Management - Timeline & Events
  */
 
-import React from 'react';
 import { BookOpen, Filter, List } from 'lucide-react';
+import React from 'react';
 
-import { useCaseTimeline } from '@/routes/cases/hooks/useCaseTimeline';
-import { cn } from '@/lib/cn';
 import { TimelineItem } from '@/components/molecules/TimelineItem/TimelineItem';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { TimelineEvent } from '@/types';
+import { cn } from '@/lib/cn';
+import { useCaseTimeline } from '@/routes/cases/hooks/useCaseTimeline';
+import { type TimelineEvent } from '@/types';
+
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
 
 interface CaseTimelineProps {

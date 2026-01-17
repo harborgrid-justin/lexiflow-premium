@@ -1,7 +1,8 @@
+import { Loader2, Save } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Loader2, Save } from 'lucide-react';
 
 interface Step3DraftReviewProps {
   result: string;

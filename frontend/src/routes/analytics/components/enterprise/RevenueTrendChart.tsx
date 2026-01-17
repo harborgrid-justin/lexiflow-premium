@@ -27,7 +27,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  TooltipProps
+  type TooltipProps
 } from 'recharts';
 
 // ============================================================================

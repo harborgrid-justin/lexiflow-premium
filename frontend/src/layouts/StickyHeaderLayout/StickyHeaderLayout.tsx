@@ -5,9 +5,10 @@
  * Ideal for long-form content with persistent navigation.
  */
 
+import React from "react";
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import React from "react";
 
 interface StickyHeaderLayoutProps {
   header: React.ReactNode;

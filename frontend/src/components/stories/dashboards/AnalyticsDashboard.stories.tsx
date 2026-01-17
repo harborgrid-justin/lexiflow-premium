@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AnalyticsDashboard } from '@/routes/admin/components/analytics/AnalyticsDashboard';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * AnalyticsDashboard provides comprehensive business intelligence and performance

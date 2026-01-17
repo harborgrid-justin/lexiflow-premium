@@ -1,11 +1,13 @@
-import { EditorToolbar } from '@/routes/discovery/components/EditorToolbar/EditorToolbar';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { RotateCcw, Wand2 } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
 import { useToggle } from '@/hooks/useToggle';
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';
-import { useTheme } from "@/hooks/useTheme";
-import { RotateCcw, Wand2 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { EditorToolbar } from '@/routes/discovery/components/EditorToolbar/EditorToolbar';
+import { GeminiService } from '@/services/features/research/geminiService';
+
 
 interface AdvancedEditorProps {
   initialContent: string;

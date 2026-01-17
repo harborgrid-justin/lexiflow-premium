@@ -10,12 +10,15 @@
  * - Guideline 33: Uses isPendingThemeChange for list transitions
  */
 
-import { cn } from '@/lib/cn';
+import { CheckCircle, ChevronRight, Clock, GitBranch, Search, Settings, Users } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
-import { Case, WorkflowTask } from '@/types';
-import { CheckCircle, ChevronRight, Clock, GitBranch, Search, Settings, Users } from 'lucide-react';
+import { cn } from '@/lib/cn';
+import { type Case, type WorkflowTask } from '@/types';
+
+
 import { getCaseProgress, getNextTask } from './utils';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
 

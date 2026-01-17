@@ -1,3 +1,6 @@
+import { FileWarning, Gavel, Plus } from 'lucide-react';
+import { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
@@ -15,15 +18,13 @@ import { Modal } from '@/components/molecules/Modal';
  * - G33: Explicit loading states
  */
 
-import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { SanctionMotion } from '@/types';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type SanctionMotion } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { FileWarning, Gavel, Plus } from 'lucide-react';
-import { useState } from 'react';
 
 
 interface MotionForSanctionsProps {

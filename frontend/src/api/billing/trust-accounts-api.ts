@@ -10,6 +10,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type {
   TrustAccount,
   TrustTransactionEntity,

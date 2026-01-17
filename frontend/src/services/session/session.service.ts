@@ -72,7 +72,7 @@ export class BrowserSessionService
     window.addEventListener("storage", this.storageHandler);
   }
 
-  override stop(): void {
+  override async stop(): Promise<void> {
     if (this.visibilityHandler) {
       document.removeEventListener("visibilitychange", this.visibilityHandler);
     }

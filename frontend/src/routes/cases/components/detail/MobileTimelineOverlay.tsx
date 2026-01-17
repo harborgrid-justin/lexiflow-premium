@@ -9,11 +9,10 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { X } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
-import { CaseTimeline } from './CaseTimeline';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -22,7 +21,9 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { TimelineEvent } from '@/types';
+import { type TimelineEvent } from '@/types';
+
+import { CaseTimeline } from './CaseTimeline';
 
 interface MobileTimelineOverlayProps {
     isOpen: boolean;

@@ -15,10 +15,11 @@
 
 import React, {useRef, useState} from 'react';
 import {z} from 'zod';
-import {UsersApiService} from '@/lib/frontend-api';
-import {AuthApiService} from '@/lib/frontend-api';
-import type {UpdateUserDto, User} from '@/types';
+
 import {USER_AUTH_PROFILE_TABS} from '@/config/tabs.config';
+import {UsersApiService,AuthApiService} from '@/lib/frontend-api';
+
+import type {UpdateUserDto, User} from '@/types';
 
 const profileSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(100),

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
 
 /**

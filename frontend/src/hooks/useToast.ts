@@ -5,9 +5,11 @@
  * Location: /hooks/ (hook layer)
  */
 
-import type { ToastActionsValue, ToastStateValue } from "@/lib/toast/context";
-import { ToastActionsContext, ToastStateContext } from "@/lib/toast/context";
 import { useContext } from "react";
+
+import { ToastActionsContext, ToastStateContext } from "@/lib/toast/context";
+
+import type { ToastActionsValue, ToastStateValue } from "@/lib/toast/context";
 
 /**
  * Hook to access toast state

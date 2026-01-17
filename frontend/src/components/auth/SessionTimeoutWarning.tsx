@@ -7,9 +7,10 @@
  * @module components/auth/SessionTimeoutWarning
  */
 
-import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
-import { useTheme } from "@/hooks/useTheme";
 import { useEffect, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 
 export function SessionTimeoutWarning() {
   const { theme, tokens } = useTheme();

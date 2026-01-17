@@ -12,16 +12,20 @@
  * @module routes/docket/index
  */
 
-import { docketApi } from '@/lib/frontend-api';
-import type { CaseId } from '@/types';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { docketApi } from '@/lib/frontend-api';
+
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 
 // Import Page component
 import { DocketPage } from './DocketPage';
+
+import type { Route } from "./+types/index";
 import type { clientLoader } from './loader';
+import type { CaseId } from '@/types';
 
 // Export loader
 export { clientLoader as loader } from './loader';
@@ -100,7 +104,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function DocketIndexRoute() {
-  const loaderData = useLoaderData() as ReturnType<typeof clientLoader>;
+  const loaderData = useLoaderData();
 
   return <DocketPage loaderData={loaderData} />;
 }

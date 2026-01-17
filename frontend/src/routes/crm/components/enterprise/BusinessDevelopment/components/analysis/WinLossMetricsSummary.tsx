@@ -4,11 +4,14 @@
  * @description Key metrics summary card for win/loss analysis
  */
 
+import React from "react";
+
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { WinLossAnalysis } from '../../types';
-import React from "react";
+
+import { type WinLossAnalysis } from '../../types';
+
 
 interface WinLossMetricsSummaryProps {
   winLossData: WinLossAnalysis[];

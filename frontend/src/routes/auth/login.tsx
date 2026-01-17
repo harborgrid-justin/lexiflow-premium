@@ -4,9 +4,10 @@
  * Handles user authentication with email/password
  */
 
-import { useAuthActions } from '@/providers/application/authprovider';
-import { FormEvent, useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
+
+import { useAuthActions } from '@/providers/application/authprovider';
 
 export default function LoginPage() {
   const navigate = useNavigate();

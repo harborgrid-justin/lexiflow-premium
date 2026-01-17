@@ -21,8 +21,7 @@ import React, { useState } from 'react';
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { ArgumentDetail } from './arguments/ArgumentDetail';
-import { ArgumentList } from './arguments/ArgumentList';
+
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -31,7 +30,10 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Case, EvidenceItem, LegalArgument } from '@/types';
+import { type Case, type EvidenceItem, type LegalArgument } from '@/types';
+
+import { ArgumentDetail } from './arguments/ArgumentDetail';
+import { ArgumentList } from './arguments/ArgumentList';
 
 interface CaseArgumentManagerProps {
   caseData: Case;

@@ -16,6 +16,7 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+
 import { CASE_DETAIL_TABS } from '../CaseDetailConfig';
 
 interface CaseDetailNavigationProps {

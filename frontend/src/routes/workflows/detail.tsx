@@ -6,10 +6,13 @@
  * @module routes/workflows/detail
  */
 
-import { api } from '@/services/api';
-import { useTheme } from "@/hooks/useTheme";
-import { requireAuthentication } from '@/utils/route-guards';
 import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
+import { api } from '@/services/api';
+import { requireAuthentication } from '@/utils/route-guards';
+
+
 import { createDetailMeta } from '../_shared/meta-utils';
 
 // ============================================================================
@@ -114,7 +117,7 @@ export async function action({
 // ============================================================================
 
 export default function WorkflowDetailRoute() {
-  const { template } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { template } = useLoaderData();
   const navigate = useNavigate();
   const { theme } = useTheme();
   const navigation = useNavigation();

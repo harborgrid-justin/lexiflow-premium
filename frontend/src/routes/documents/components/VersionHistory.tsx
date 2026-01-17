@@ -3,8 +3,9 @@
  * Display and manage document version history
  */
 
-import type { DocumentVersion } from '@/types/documents';
 import { formatDate } from '@/utils/formatters';
+
+import type { DocumentVersion } from '@/types/documents';
 
 interface VersionHistoryProps {
   versions: readonly DocumentVersion[];

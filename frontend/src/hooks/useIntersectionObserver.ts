@@ -52,7 +52,9 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+
+import type React from 'react';
 
 // ========================================
 // TYPES & INTERFACES

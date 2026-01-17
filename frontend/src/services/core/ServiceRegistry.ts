@@ -96,7 +96,7 @@ class ServiceRegistryClass {
     if (this.services.has(service.name)) {
       throw new ServiceError(
         service.name,
-        "Service already registered. Use unregister() first."
+        "Service already registered. Use unregister() first.",
       );
     }
 
@@ -106,7 +106,7 @@ class ServiceRegistryClass {
         if (!this.services.has(dep)) {
           throw new ServiceError(
             service.name,
-            `Dependency '${dep}' not registered`
+            `Dependency '${dep}' not registered`,
           );
         }
       }
@@ -119,7 +119,7 @@ class ServiceRegistryClass {
       this.start(service.name).catch((err) => {
         console.error(
           `[ServiceRegistry] Failed to auto-start '${service.name}':`,
-          err
+          err,
         );
       });
     }
@@ -142,7 +142,7 @@ class ServiceRegistryClass {
     if (dependents.length > 0) {
       throw new ServiceError(
         name,
-        `Cannot unregister: services depend on it: ${dependents.join(", ")}`
+        `Cannot unregister: services depend on it: ${dependents.join(", ")}`,
       );
     }
 
@@ -292,14 +292,22 @@ class ServiceRegistryClass {
       const startTime = this.startTimes.get(name);
       const uptime = startTime ? Date.now() - startTime : undefined;
 
-      return {
+      const status: ServiceHealthStatus = {
         name,
         state: service.state,
         healthy: service.isHealthy(),
         dependencies,
-        startTime,
-        uptime,
       };
+
+      if (startTime !== undefined) {
+        status.startTime = startTime;
+      }
+
+      if (uptime !== undefined) {
+        status.uptime = uptime;
+      }
+
+      return status;
     });
   }
 
@@ -336,7 +344,7 @@ class ServiceRegistryClass {
       if (visiting.has(name)) {
         throw new ServiceError(
           "ServiceRegistry",
-          `Circular dependency detected: ${name}`
+          `Circular dependency detected: ${name}`,
         );
       }
 
@@ -411,7 +419,7 @@ export async function registerService<T extends IService>(
     dependencies?: string[];
     autoStart?: boolean;
     config?: Parameters<T["configure"]>[0];
-  } = {}
+  } = {},
 ): Promise<T> {
   // Configure if config provided
   if (options.config) {
@@ -422,8 +430,10 @@ export async function registerService<T extends IService>(
   ServiceRegistry.register({
     service,
     lifecycle: options.lifecycle ?? "singleton",
-    dependencies: options.dependencies,
-    autoStart: options.autoStart,
+    ...(options.dependencies ? { dependencies: options.dependencies } : {}),
+    ...(options.autoStart !== undefined
+      ? { autoStart: options.autoStart }
+      : {}),
   });
 
   return service;
@@ -440,7 +450,7 @@ export function getOrCreateService<T extends IService>(
     lifecycle?: "singleton" | "factory";
     dependencies?: string[];
     autoStart?: boolean;
-  } = {}
+  } = {},
 ): T {
   if (ServiceRegistry.has(name)) {
     return ServiceRegistry.get<T>(name);
@@ -451,8 +461,10 @@ export function getOrCreateService<T extends IService>(
   ServiceRegistry.register({
     service,
     lifecycle: options.lifecycle ?? "singleton",
-    dependencies: options.dependencies,
-    autoStart: options.autoStart,
+    ...(options.dependencies ? { dependencies: options.dependencies } : {}),
+    ...(options.autoStart !== undefined
+      ? { autoStart: options.autoStart }
+      : {}),
   });
 
   return service;

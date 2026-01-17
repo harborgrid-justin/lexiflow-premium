@@ -3,9 +3,11 @@
  * Card-based display for documents in grid view
  */
 
-import type { LegalDocument } from '@/types/documents';
-import { formatDate } from '@/utils/formatters';
 import { Link } from 'react-router';
+
+import { formatDate } from '@/utils/formatters';
+
+import type { LegalDocument } from '@/types/documents';
 
 interface DocumentCardProps {
   document: LegalDocument;

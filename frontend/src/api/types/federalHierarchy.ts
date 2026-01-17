@@ -110,7 +110,7 @@ const stateNames: Record<string, string> = {
 };
 
 export const STATE_JURISDICTIONS: Record<string, StateJurisdiction> = stateCourts.reduce((acc: Record<string, StateJurisdiction>, court: typeof MOCK_JURISDICTIONS[number]) => {
-    const stateId = court.region as string;
+    const stateId = court.region;
     if (!acc[stateId]) {
         acc[stateId] = {
             id: stateId,

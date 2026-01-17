@@ -8,15 +8,17 @@
  * Enterprise React Architecture
  */
 
+import { Suspense } from 'react';
+
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { USER_PROFILE_TAB_CONFIG } from '@/config/tabs.config';
-import { Suspense } from 'react';
-import { useProfile } from './ProfileProvider';
+
 import { AccessMatrixEditor } from './components/AccessMatrixEditor';
 import { PreferencePane } from './components/PreferencePane';
 import { ProfileOverview } from './components/ProfileOverview';
 import { SecurityPane } from './components/SecurityPane';
+import { useProfile } from './ProfileProvider';
 
 export function ProfileView() {
   const { profile, activeTab, setActiveTab } = useProfile();

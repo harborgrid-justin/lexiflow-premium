@@ -16,6 +16,7 @@ import { MessageCircle, ThumbsUp } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Button } from '@/components/atoms/Button/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
@@ -23,13 +24,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Button } from '@/components/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { QAItem } from '@/types';
+import { type QAItem } from '@/types';
 
 // ============================================================================
 // COMPONENT

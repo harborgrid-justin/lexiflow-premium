@@ -11,8 +11,9 @@
  * - Type-safe validation rules
  */
 
-import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -295,7 +296,7 @@ export function useFormValidation<T extends Record<string, unknown>>({
       const field = fieldKey as keyof T;
       const validator = debouncedValidators.current.get(field);
       if (validator) {
-        validator(newValues[field]!);
+        validator(newValues[field]);
       }
     });
   }, []);

@@ -5,9 +5,6 @@
  * intake form builder, engagement letter automation, and fee agreement tracking.
  */
 
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -27,6 +24,10 @@ import {
   XCircle
 } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES

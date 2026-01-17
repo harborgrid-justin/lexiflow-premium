@@ -8,6 +8,7 @@
  */
 
 import { HydratedRouter } from "react-router/dom";
+
 import { hydrationService } from "./hydrationService.tsx";
 
 /**

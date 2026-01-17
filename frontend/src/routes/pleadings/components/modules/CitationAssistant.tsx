@@ -1,13 +1,15 @@
-import React from 'react';
 import { BookOpen, Search, Plus, ExternalLink } from 'lucide-react';
+import React from 'react';
+
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
-import { SignalChecker } from './research/SignalChecker';
 import { DataService } from '@/services/data/data-service.service';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { type Citation } from '@/types';
+
+import { SignalChecker } from './research/SignalChecker';
 // ✅ Migrated to backend API (2025-12-21)
-import { Citation } from '@/types';
 
 interface CitationAssistantProps {
   onInsertCitation: (citation: string) => void;

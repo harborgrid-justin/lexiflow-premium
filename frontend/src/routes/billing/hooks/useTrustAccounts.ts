@@ -13,8 +13,12 @@
  */
 
 export * from "./useTrustAccounts/index";
+import { useCallback, useMemo, useState } from "react";
+
 import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
+import { PaymentMethod, TrustAccountStatus } from "@/types";
+
 import type {
   CreateTrustAccountDto,
   DepositDto,
@@ -25,8 +29,6 @@ import type {
   TrustTransactionEntity,
   WithdrawalDto,
 } from "@/types";
-import { PaymentMethod, TrustAccountStatus } from "@/types";
-import { useCallback, useMemo, useState } from "react";
 
 /**
  * Query key factory pattern for cache management
@@ -113,7 +115,7 @@ export function useTrustAccounts(
   const error: TrustAccountError | null = useMemo(() => {
     if (!queryError) return null;
 
-    const err = queryError as Error;
+    const err = queryError;
     return {
       code: "API_ERROR",
       message: err.message || "Failed to load trust accounts",
@@ -302,7 +304,7 @@ export function useTrustAccountDetail(
 
     return {
       code: "API_ERROR",
-      message: (err as Error).message || "Failed to load account details",
+      message: (err).message || "Failed to load account details",
     };
   }, [accountQueryError, transactionsQueryError]);
 

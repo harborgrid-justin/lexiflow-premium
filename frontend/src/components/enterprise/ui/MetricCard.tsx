@@ -8,7 +8,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { motion } from 'framer-motion';
-import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';
+import { type LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================

@@ -5,9 +5,6 @@
  * Displays case updates, document uploads, tasks completed, and system events.
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from '@/hooks/useTheme';
-import { Activity } from '@/types/dashboard';
 import { formatDistanceToNow } from 'date-fns';
 import {
   AlertTriangle,
@@ -21,6 +18,10 @@ import {
   UserPlus,
 } from 'lucide-react';
 import React from 'react';
+
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
+import { type Activity } from '@/types/dashboard';
 
 export interface ActivityFeedProps {
   /** Activity items */

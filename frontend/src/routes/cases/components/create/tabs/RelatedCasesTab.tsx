@@ -2,10 +2,12 @@
  * Related cases tab component
  */
 
-import React from 'react';
-import { Button } from '@/components/atoms/Button';
 import { Link2, X } from 'lucide-react';
-import { RelatedCase } from '../hooks/useRelatedCases';
+import React from 'react';
+
+import { Button } from '@/components/atoms/Button';
+
+import { type RelatedCase } from '../hooks/useRelatedCases';
 
 export interface RelatedCasesTabProps {
   relatedCases: RelatedCase[];

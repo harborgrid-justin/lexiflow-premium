@@ -13,22 +13,23 @@
 // ============================================================================
 import { Activity, FileText, Gavel, Loader2, Scale, X } from 'lucide-react';
 import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/dataService';
 
 // Types
 import type { OppositionEntity } from './OppositionList';

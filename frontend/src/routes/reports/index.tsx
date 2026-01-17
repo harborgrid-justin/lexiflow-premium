@@ -11,9 +11,12 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { ReportsPage } from './ReportsPage';
+
 import type { ReportsLoaderData } from './loader';
 
 // Export loader from dedicated file
@@ -36,7 +39,7 @@ export function meta() {
 // ============================================================================
 
 export default function ReportsRoute() {
-  const loaderData = useLoaderData() as ReportsLoaderData;
+  const loaderData = useLoaderData();
 
   return <ReportsPage loaderData={loaderData} />;
 }

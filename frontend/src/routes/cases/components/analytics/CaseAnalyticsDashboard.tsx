@@ -23,10 +23,6 @@
  * - Custom report generation
  */
 
-import { Button } from '@/components/atoms/Button/Button';
-import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import {
   ArrowDown,
   ArrowUp,
@@ -39,6 +35,12 @@ import {
   Users
 } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { useCaseAnalytics, type DateRange } from '../../hooks/useCaseAnalytics';
 
 export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {

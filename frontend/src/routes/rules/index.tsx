@@ -14,8 +14,10 @@
 
 import { RulesPlatform } from '@/routes/rules/components/RulesPlatform';
 import { DataService } from '@/services/data/data-service.service';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/index";
 
 // ============================================================================
@@ -56,7 +58,7 @@ export async function action({ request }: Route.ActionArgs) {
     switch (intent) {
       case "create": {
         const data = Object.fromEntries(formData);
-        delete data.intent;
+        delete data["intent"];
         await DataService.rules.add(data);
         return { success: true, message: "Rule created" };
       }

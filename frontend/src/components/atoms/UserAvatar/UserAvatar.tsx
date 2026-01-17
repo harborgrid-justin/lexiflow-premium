@@ -22,7 +22,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types
-import { User } from '@/types';
+import { type User } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

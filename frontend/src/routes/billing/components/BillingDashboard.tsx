@@ -18,26 +18,29 @@ import { Suspense } from 'react';
 // ============================================================================
 
 // Hooks (feature-scoped)
-import { useBillingDashboard } from '../../billing/hooks/useBillingDashboard';
 
 // Components - Atoms
 import { Button } from '@/components/atoms/Button';
 
 // Components - Molecules
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { PeriodSelector } from '@/components/molecules/PeriodSelector';
 
 // Components - Layouts
-import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
 
 // Feature Components
+import { BILLING_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/lib/cn';
 import { ExportMenu } from '@/routes/discovery/components/ExportMenu/ExportMenu';
+
+import { useBillingDashboard } from '../../billing/hooks/useBillingDashboard';
+
 import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
-import { BILLING_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/lib/cn';
+
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -75,7 +78,7 @@ function BillingDashboardInternal({ navigateTo, initialTab }: BillingDashboardPr
           <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials()} isLoading={isSyncing}>Sync</Button>
         </div>
       }
-      tabConfig={BILLING_TAB_CONFIG as TabConfigItem[]}
+      tabConfig={BILLING_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

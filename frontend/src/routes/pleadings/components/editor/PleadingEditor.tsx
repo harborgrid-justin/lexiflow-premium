@@ -1,15 +1,16 @@
-import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { useNotify } from '@/hooks/useNotify';
-import { queryClient, useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { PleadingComment, PleadingDocument, PleadingSection, PleadingVariable } from '@/types';
-import { cn } from '@/lib/cn';
 import jsPDF from 'jspdf';
 import { ArrowLeft, BookOpen, Download, FileText, LayoutTemplate, Link, MessageSquare, Save, UploadCloud } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
-import { DocumentCanvas } from './DocumentCanvas';
-import { PropertyPanel } from './PropertyPanel';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type PleadingComment, type PleadingDocument, type PleadingSection, type PleadingVariable } from '@/types';
+
+
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 
@@ -19,6 +20,9 @@ import { FactIntegrator } from '../modules/FactIntegrator';
 import { FilingCenter } from '../modules/FilingCenter';
 import { ReviewPanel } from '../modules/ReviewPanel';
 import { TemplateArchitect } from '../modules/TemplateArchitect';
+
+import { DocumentCanvas } from './DocumentCanvas';
+import { PropertyPanel } from './PropertyPanel';
 
 interface PleadingEditorProps {
     document: PleadingDocument;

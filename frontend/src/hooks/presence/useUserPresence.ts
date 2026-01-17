@@ -5,6 +5,7 @@
  */
 
 import { useEffect } from 'react';
+
 import { PresenceStatus } from './types';
 import { usePresence } from './usePresence';
 

@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
 import { Briefcase, CheckSquare, Shield, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,9 +20,9 @@ import { Briefcase, CheckSquare, Shield, AlertCircle } from 'lucide-react';
 import { useCalendarView } from '@/hooks/useCalendarView';
 
 // Components
-import { CalendarToolbar } from '@/routes/calendar/components/CalendarToolbar/CalendarToolbar';
-import { CalendarGrid } from '@/routes/calendar/components/CalendarGrid/CalendarGrid';
 import { CalendarEvent } from '@/routes/calendar/components/CalendarEvent/CalendarEvent';
+import { CalendarGrid } from '@/routes/calendar/components/CalendarGrid/CalendarGrid';
+import { CalendarToolbar } from '@/routes/calendar/components/CalendarToolbar/CalendarToolbar';
 
 // ============================================================================
 // COMPONENT

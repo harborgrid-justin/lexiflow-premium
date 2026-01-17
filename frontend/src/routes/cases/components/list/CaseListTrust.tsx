@@ -11,8 +11,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { CheckSquare, Loader2 } from 'lucide-react';
+import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
@@ -20,16 +21,16 @@ import { CheckSquare, Loader2 } from 'lucide-react';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { TrustAccount } from '@/types';
+import { type TrustAccount } from '@/types';
 
 // ============================================================================
 // MAIN COMPONENT

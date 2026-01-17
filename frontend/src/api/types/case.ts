@@ -9,9 +9,9 @@
  * Shared types: packages/shared-types/src/entities/case.entity.ts
  */
 
-import { Case } from '@/types/case';
+import { type Case } from '@/types/case';
 import { CaseStatus, MatterType } from '@/types/enums';
-import { CaseId, UserId, EntityId, OrgId, PartyId } from '@/types/primitives';
+import { type CaseId, type UserId, type EntityId, type OrgId, type PartyId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.cases instead

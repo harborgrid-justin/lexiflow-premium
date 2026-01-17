@@ -28,6 +28,8 @@
  * ✗ Throwing exceptions
  */
 
+import { toArray, toRecord } from "./guards";
+
 import {
   client,
   failure,
@@ -140,7 +142,7 @@ export async function getEnterpriseOverview(): Promise<
   const result = await client.get<unknown>("/enterprise/overview");
   if (!result.ok) return result;
 
-  const data = result.data as Record<string, unknown>;
+  const data = toRecord(result.data);
   return success({
     totalUsers: typeof data.totalUsers === "number" ? data.totalUsers : 0,
     activeUsers: typeof data.activeUsers === "number" ? data.activeUsers : 0,
@@ -164,16 +166,16 @@ export async function getEnterpriseSettings(): Promise<
   const result = await client.get<unknown>("/enterprise/settings");
   if (!result.ok) return result;
 
-  const data = result.data as Record<string, unknown>;
+  const data = toRecord(result.data);
   return success({
     id: data.id as string,
     name: data.name as string,
     description: data.description as string | undefined,
     logo: data.logo as string | undefined,
-    theme: (data.theme as Record<string, unknown>) || {},
-    notifications: (data.notifications as Record<string, unknown>) || {},
-    integrations: (data.integrations as Record<string, unknown>) || {},
-    security: (data.security as Record<string, unknown>) || {},
+    theme: toRecord(data.theme),
+    notifications: toRecord(data.notifications),
+    integrations: toRecord(data.integrations),
+    security: toRecord(data.security),
     updatedAt: data.updatedAt as string,
   });
 }
@@ -193,16 +195,16 @@ export async function updateEnterpriseSettings(
   const result = await client.patch<unknown>("/enterprise/settings", input);
   if (!result.ok) return result;
 
-  const data = result.data as Record<string, unknown>;
+  const data = toRecord(result.data);
   return success({
     id: data.id as string,
     name: data.name as string,
     description: data.description as string | undefined,
     logo: data.logo as string | undefined,
-    theme: (data.theme as Record<string, unknown>) || {},
-    notifications: (data.notifications as Record<string, unknown>) || {},
-    integrations: (data.integrations as Record<string, unknown>) || {},
-    security: (data.security as Record<string, unknown>) || {},
+    theme: toRecord(data.theme),
+    notifications: toRecord(data.notifications),
+    integrations: toRecord(data.integrations),
+    security: toRecord(data.security),
     updatedAt: data.updatedAt as string,
   });
 }
@@ -240,7 +242,7 @@ export async function getEnterpriseOrganizations(
   });
   if (!result.ok) return result;
 
-  const data = result.data as Record<string, unknown>;
+  const data = toRecord(result.data);
   const items = Array.isArray(data.data) ? data.data : [];
   const total = typeof data.total === "number" ? data.total : 0;
   const page = typeof data.page === "number" ? data.page : 1;
@@ -286,7 +288,7 @@ export async function getEnterpriseUsers(
   const result = await client.get<unknown>("/enterprise/users", { params });
   if (!result.ok) return result;
 
-  const data = result.data as Record<string, unknown>;
+  const data = toRecord(result.data);
   const items = Array.isArray(data.data) ? data.data : [];
   const total = typeof data.total === "number" ? data.total : 0;
   const page = typeof data.page === "number" ? data.page : 1;
@@ -321,7 +323,7 @@ export async function getEnterpriseUsageStats(): Promise<
   const result = await client.get<unknown>("/enterprise/usage");
   if (!result.ok) return result;
 
-  return success(result.data as Record<string, unknown>);
+  return success(toRecord(result.data));
 }
 
 /**
@@ -335,7 +337,7 @@ export async function getEnterpriseAuditLogs(
   });
   if (!result.ok) return result;
   return success(
-    ((result.data as Record<string, unknown>)?.data as unknown[]) || []
+    toArray(toRecord(result.data).data)
   );
 }
 
@@ -348,7 +350,7 @@ export async function getEnterpriseSecurityReport(): Promise<
   const result = await client.get<unknown>("/enterprise/security/report");
   if (!result.ok) return result;
 
-  return success(result.data as Record<string, unknown>);
+  return success(toRecord(result.data));
 }
 
 /**

@@ -13,20 +13,22 @@ import { Briefcase, Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/atoms/Button';
-import { ProjectList } from './ProjectList';
-import { ProjectModal } from './ProjectModal';
+
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { DataService } from '@/services/data/data-service.service';
 
 // Types & Interfaces
-import { CaseId, Project, ProjectId, WorkflowTask } from '@/types';
+import { type CaseId, type Project, type ProjectId, type WorkflowTask } from '@/types';
+
+import { ProjectList } from './ProjectList';
+import { ProjectModal } from './ProjectModal';
 
 interface CaseProjectsProps {
   projects: Project[]; // These come from parent initially, but we will fetch internal as well
@@ -69,8 +71,8 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
       caseId: (initialProjects[0]?.caseId || 'General') as CaseId,
       name: newProjectData.name,
       description: newProjectData.description,
-      status: (newProjectData.status || 'Not Started') as 'Not Started' | 'In Progress' | 'On Hold' | 'Completed' | 'Cancelled',
-      priority: (newProjectData.priority || 'Medium') as 'Low' | 'Medium' | 'High' | 'Urgent',
+      status: (newProjectData.status || 'Not Started'),
+      priority: (newProjectData.priority || 'Medium'),
       completionPercentage: 0,
       startDate: newProjectData.startDate,
       dueDate: newProjectData.dueDate,

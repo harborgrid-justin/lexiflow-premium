@@ -16,6 +16,8 @@
  * @module routes/layout
  */
 
+import { Outlet, useRouteError } from "react-router";
+
 import { AppShell } from "@/components/layouts/AppShell";
 import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
@@ -25,7 +27,6 @@ import { RouteErrorBoundary } from "@/routes/_shared/RouteErrorBoundary";
 import { CaseProvider } from "@/routes/cases";
 import { DataSourceProvider } from "@/routes/dashboard/data/DataSourceContext";
 import { requireAuthLoader } from "@/utils/route-guards";
-import { Outlet, useRouteError } from "react-router";
 
 // Export the loader for the router to use
 export const loader = requireAuthLoader;

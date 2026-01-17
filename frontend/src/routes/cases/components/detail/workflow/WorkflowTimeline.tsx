@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { UserAvatar } from '@/components/atoms/UserAvatar';
@@ -22,7 +22,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { WorkflowStage, TaskStatusBackend } from '@/types';
+import { type WorkflowStage, TaskStatusBackend } from '@/types';
 
 interface WorkflowTimelineProps {
   stages: WorkflowStage[];

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LoadingState } from './LoadingState';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof LoadingState> = {
   title: 'Components/Molecules/LoadingState/LoadingState',

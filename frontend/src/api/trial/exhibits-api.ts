@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { TrialExhibit } from "@/types";
 
 // Alias for backward compatibility

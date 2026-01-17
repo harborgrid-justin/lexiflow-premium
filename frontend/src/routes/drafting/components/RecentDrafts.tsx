@@ -1,8 +1,10 @@
-import React from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { GeneratedDocument } from '@api/domains/drafting';
 import { formatDistanceToNow } from 'date-fns';
 import { Clock, FileText } from 'lucide-react';
+import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { type GeneratedDocument } from '@api/domains/drafting';
+
 import * as styles from './DraftingDashboard.styles';
 
 interface RecentDraftsProps {

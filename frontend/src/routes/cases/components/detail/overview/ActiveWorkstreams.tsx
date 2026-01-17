@@ -8,8 +8,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Briefcase } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -18,7 +18,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Project } from '@/types';
+import { type Project } from '@/types';
 
 interface ActiveWorkstreamsProps {
   activeProjects: Project[];

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MarketingDashboard } from '@/routes/practice/components/MarketingDashboard';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * MarketingDashboard provides firm marketing and business development tools

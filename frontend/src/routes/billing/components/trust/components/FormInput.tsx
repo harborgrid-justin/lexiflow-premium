@@ -3,9 +3,10 @@
  * Reusable form input with validation and error display
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { AlertCircle } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 interface FormInputProps {
   label: string;
   field: string;

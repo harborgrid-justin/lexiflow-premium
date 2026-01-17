@@ -3,14 +3,16 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
+import { validateContent, validateId, validateObject } from "./utils";
+
+import type { CreateTaskDto } from "./types";
 import type {
   TaskAttachment,
   TaskComment,
   TaskHistory,
   WorkflowTask,
 } from "@/types";
-import type { CreateTaskDto } from "./types";
-import { validateContent, validateId, validateObject } from "./utils";
 
 export class TaskRelationsService {
   private readonly baseUrl = "/tasks";

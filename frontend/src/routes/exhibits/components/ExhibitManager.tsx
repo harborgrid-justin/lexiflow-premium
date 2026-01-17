@@ -31,20 +31,21 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { ErrorState } from '@/components/molecules/ErrorState';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { useToggle } from '@/hooks/useToggle';
+import { cn } from '@/lib/cn';
+import { getTodayString } from '@/lib/dateUtils';
+import { type CaseId, type TrialExhibit } from '@/types';
+
 import { ExhibitStats } from './ExhibitStats';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 
 // Context & Utils
-import { useTheme } from "@/hooks/useTheme";
-import { useToggle } from '@/hooks/useToggle';
-import { cn } from '@/lib/cn';
 
 // Data & Types
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { CaseId, TrialExhibit } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
-import { getTodayString } from '@/lib/dateUtils';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';

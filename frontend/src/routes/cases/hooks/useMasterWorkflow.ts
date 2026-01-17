@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect, useMemo, useTransition } from 'react';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+
 import { useNotify } from '@/hooks/useNotify';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { getTodayString } from '@/lib/dateUtils';
-import { TaskStatusBackend, WorkflowTask, WorkflowTemplateData, Case } from '@/types';
-import { Process, WorkflowView } from '../components/workflow/types';
+import { DataService } from '@/services/data/data-service.service';
+import { TaskStatusBackend, type WorkflowTask, type WorkflowTemplateData, type Case } from '@/types';
+
+import { type Process, type WorkflowView } from '../components/workflow/types';
 import { WORKFLOW_TABS } from '../components/workflow/WorkflowTabs';
 
 export interface WorkflowMetrics {
@@ -194,7 +196,7 @@ export function useMasterWorkflow(initialTab?: WorkflowView) {
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = WORKFLOW_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab((parent.subTabs![0]?.id || '') as WorkflowView);
+      setActiveTab((parent.subTabs[0]?.id || '') as WorkflowView);
     }
   }, [setActiveTab]);
 

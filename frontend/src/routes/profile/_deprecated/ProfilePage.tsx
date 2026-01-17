@@ -9,10 +9,13 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { ProfileLoaderData } from './loader';
+
 import { ProfileProvider } from './ProfileProvider';
 import { ProfileView } from './ProfileView';
+
+import type { ProfileLoaderData } from './loader';
 
 export function ProfilePage() {
   const initialData = useLoaderData() as ProfileLoaderData;

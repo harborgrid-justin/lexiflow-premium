@@ -1,9 +1,11 @@
-import { cn } from '@/lib/cn';
+import { Wand2 } from 'lucide-react';
+
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Card } from '@/components/molecules/Card';
 import { useTheme } from "@/hooks/useTheme";
-import { Wand2 } from 'lucide-react';
+import { cn } from '@/lib/cn';
+
 
 export function DefinitionCard({
   formData,

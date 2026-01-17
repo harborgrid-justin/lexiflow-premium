@@ -17,20 +17,20 @@ import { Bar, BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Toolti
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { knowledgeApi } from '@/lib/frontend-api';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { knowledgeApi } from '@/lib/frontend-api';
 
 // ============================================================================
 // TYPES

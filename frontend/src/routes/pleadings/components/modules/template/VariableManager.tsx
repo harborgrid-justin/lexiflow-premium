@@ -1,8 +1,9 @@
-import React from 'react';
 import { Variable, Database, RefreshCw } from 'lucide-react';
-import { PleadingVariable } from '@/types';
+import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { type PleadingVariable } from '@/types';
 
 interface VariableManagerProps {
   variables: PleadingVariable[];

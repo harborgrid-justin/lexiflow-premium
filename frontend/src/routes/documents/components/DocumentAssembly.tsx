@@ -1,17 +1,20 @@
 // components/DocumentAssembly.tsx
+import { Minus, Wand2, X } from 'lucide-react';
+import { useState } from 'react';
+
 import { queryClient, useMutation } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { getTodayString } from '@/lib/dateUtils';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { CaseId, DocumentId, LegalDocument } from '@/types';
-import { Minus, Wand2, X } from 'lucide-react';
-import { useState } from 'react';
+import { type CaseId, type DocumentId, type LegalDocument } from '@/types';
+
 // ✅ Migrated to backend API (2025-12-21)
-import { useTheme } from "@/hooks/useTheme";
-import { useNotify } from '@/hooks/core';
-import { cn } from '@/lib/cn';
-import { getTodayString } from '@/lib/dateUtils';
 import { queryKeys } from '@/utils/queryKeys';
+
 import { Step1TemplateSelection, Step2FormConfiguration, Step3DraftReview } from './assembly';
 
 interface DocumentAssemblyProps {

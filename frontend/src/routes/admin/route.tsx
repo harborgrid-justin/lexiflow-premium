@@ -3,10 +3,10 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { adminLoader } from "./loader";
-import { AdminLayout } from "./AdminLayout";
 import { AdminDashboardView } from "./AdminDashboardView";
+import { AdminLayout } from "./AdminLayout";
 import { ErrorBoundary } from "./errors";
+import { adminLoader } from "./loader";
 
 /**
  * Admin Route Configuration

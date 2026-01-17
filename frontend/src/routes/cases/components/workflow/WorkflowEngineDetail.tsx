@@ -1,21 +1,23 @@
-import { useState } from 'react';
 import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2} from 'lucide-react';
+import { useState } from 'react';
+
+import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
-import { Badge } from '@/components/atoms/Badge';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { TaskDependencyManager } from './TaskDependencyManager';
-import { ParallelTasksManager } from './ParallelTasksManager';
-import { SLAMonitor } from './SLAMonitor';
-import { AuditTrailViewer } from './AuditTrailViewer';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/data-service.service';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+
+import { AuditTrailViewer } from './AuditTrailViewer';
+import { ParallelTasksManager } from './ParallelTasksManager';
+import { SLAMonitor } from './SLAMonitor';
+import { TaskDependencyManager } from './TaskDependencyManager';
 
 interface EngineDetails {
   id: string;

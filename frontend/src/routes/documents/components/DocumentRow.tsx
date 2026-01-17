@@ -3,9 +3,11 @@
  * Table row display for documents in list view
  */
 
-import type { LegalDocument } from '@/types/documents';
-import { formatDate } from '@/utils/formatters';
 import { Link } from 'react-router';
+
+import { formatDate } from '@/utils/formatters';
+
+import type { LegalDocument } from '@/types/documents';
 
 interface DocumentRowProps {
   document: LegalDocument;

@@ -1,6 +1,7 @@
+import { Book, Briefcase, Building, Database, FileText, Users } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Book, Briefcase, Building, Database, FileText, Users } from 'lucide-react';
 
 export type Category = 'users' | 'cases' | 'clients' | 'clauses' | 'documents';
 

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GovernanceConsole } from '@/routes/admin/components/data/GovernanceConsole';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * GovernanceConsole provides data governance tools including data classification,

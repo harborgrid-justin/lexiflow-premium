@@ -15,6 +15,7 @@
 
 import { client } from "./client";
 import { ValidationError } from "./errors";
+import { toArray, toRecord } from "./guards";
 import { failure, type PaginatedResult, type Result, success } from "./types";
 
 /**
@@ -79,7 +80,7 @@ export interface Exhibit {
  * Get all exhibits with pagination and filters
  */
 export async function getAllExhibits(
-  filters?: ExhibitFilters
+  filters?: ExhibitFilters,
 ): Promise<Result<PaginatedResult<Exhibit>>> {
   // Validation
   if (filters?.page !== undefined && filters.page < 1) {
@@ -122,14 +123,14 @@ export async function getAllExhibits(
 
   if (!result.ok) return result;
 
-  const data = result.data as Record<string, unknown>;
-  const items = Array.isArray(data.data) ? data.data : [];
+  const data = toRecord(result.data);
+  const items = toArray<Exhibit>(data.data);
   const total = typeof data.total === "number" ? data.total : 0;
   const page = typeof data.page === "number" ? data.page : 1;
   const limit = typeof data.limit === "number" ? data.limit : 50;
 
   return success({
-    data: items as Exhibit[],
+    data: items,
     total,
     page,
     pageSize: limit,
@@ -155,7 +156,7 @@ export async function getExhibitById(id: string): Promise<Result<Exhibit>> {
  * Create exhibit
  */
 export async function createExhibit(
-  input: CreateExhibitInput
+  input: CreateExhibitInput,
 ): Promise<Result<Exhibit>> {
   // Validation
   if (
@@ -198,7 +199,7 @@ export async function createExhibit(
  */
 export async function updateExhibit(
   id: string,
-  input: UpdateExhibitInput
+  input: UpdateExhibitInput,
 ): Promise<Result<Exhibit>> {
   if (!id || typeof id !== "string" || id.trim() === "") {
     return failure(new ValidationError("Exhibit ID is required"));
@@ -228,7 +229,7 @@ export async function deleteExhibit(id: string): Promise<Result<void>> {
  */
 export async function getExhibitsByCase(
   caseId: string,
-  filters?: Omit<ExhibitFilters, "caseId">
+  filters?: Omit<ExhibitFilters, "caseId">,
 ): Promise<Result<PaginatedResult<Exhibit>>> {
   if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
     return failure(new ValidationError("Case ID is required"));

@@ -5,9 +5,10 @@
  * @module routes/billing/hooks/useEnterpriseBilling
  */
 
+import { useMemo } from "react";
+
 import { useQuery } from "@/hooks/useQueryHooks";
 import { billingApi } from "@/lib/frontend-api";
-import { useMemo } from "react";
 
 export interface BillingSummaryMetrics {
   totalOutstanding: number;

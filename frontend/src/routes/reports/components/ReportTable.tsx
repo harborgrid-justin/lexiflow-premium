@@ -11,6 +11,7 @@
  */
 
 import { ReportRow } from './ReportRow';
+
 import type { Report } from './types';
 
 interface ReportTableProps {

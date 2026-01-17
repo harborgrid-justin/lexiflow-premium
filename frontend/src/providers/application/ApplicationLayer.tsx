@@ -106,16 +106,17 @@
  * @module providers/application
  */
 
+import { type ReactNode } from "react";
+
 import { AuthProvider } from "@/providers/application/authprovider";
 import { EntitlementsProvider } from "@/providers/application/entitlementsprovider";
 import { ApplicationErrorProvider } from "@/providers/application/errorprovider";
-import { FlagsProvider, FlagsProviderProps } from "@/providers/application/flagsprovider";
+import { FlagsProvider, type FlagsProviderProps } from "@/providers/application/flagsprovider";
 import { LayoutProvider } from "@/providers/application/layoutprovider";
 import { RoleProvider } from "@/providers/application/roleprovider";
 import { ServiceProvider } from "@/providers/application/serviceprovider";
 import { StateProvider } from "@/providers/application/stateprovider";
 import { UserProvider } from "@/providers/application/userprovider";
-import { ReactNode } from "react";
 
 export interface ApplicationLayerProps {
   children: ReactNode;

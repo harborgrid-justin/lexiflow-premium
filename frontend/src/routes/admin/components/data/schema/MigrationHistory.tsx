@@ -1,10 +1,11 @@
+import { CheckCircle, Clock, FileCode, Loader2, RotateCcw, XCircle } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Migration } from '@/lib/frontend-api';
-import { CheckCircle, Clock, FileCode, Loader2, RotateCcw, XCircle } from 'lucide-react';
-import React from 'react';
+import { type Migration } from '@/lib/frontend-api';
 /**
  * MigrationHistory - React 18 optimized with React.memo
  */

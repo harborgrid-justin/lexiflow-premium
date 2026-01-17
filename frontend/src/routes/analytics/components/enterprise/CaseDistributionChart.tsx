@@ -24,7 +24,7 @@ import {
   PieChart,
   ResponsiveContainer,
   Tooltip,
-  TooltipProps
+  type TooltipProps
 } from 'recharts';
 
 // ============================================================================

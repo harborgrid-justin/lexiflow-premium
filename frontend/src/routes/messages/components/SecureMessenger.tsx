@@ -17,18 +17,20 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useSecureMessenger } from '@/hooks/domain';
+import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+
+import { cn } from '@/lib/cn';
+
 import { MessengerArchived } from './MessengerArchived';
 import { MessengerContacts } from './MessengerContacts';
 import { MessengerFiles } from './MessengerFiles';
 import { MessengerInbox } from './MessengerInbox';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

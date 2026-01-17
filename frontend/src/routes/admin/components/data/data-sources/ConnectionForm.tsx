@@ -1,7 +1,9 @@
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { motion } from 'framer-motion';
 import { Cloud, Database, HardDrive } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import type { CloudProvider } from './types';
 
 // interface ConnectionFormProps {

@@ -1,3 +1,6 @@
+import { Copy, Eye, EyeOff, Key, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
@@ -8,8 +11,6 @@ import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Copy, Eye, EyeOff, Key, Plus, RefreshCw, Trash2 } from 'lucide-react';
-import { useState } from 'react';
 
 interface ApiKey {
   id: string;

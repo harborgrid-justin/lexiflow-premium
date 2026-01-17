@@ -9,6 +9,7 @@
  */
 
 import { DataService } from "@/services/data/data-service.service";
+
 import type { Citation, ResearchQuery } from "@/types";
 
 export interface ResearchLoaderData {

@@ -13,11 +13,13 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Import Page component
 import { SettingsPage } from './SettingsPage';
+
 import type { SettingsLoaderData } from './loader';
 
 // Export loader from dedicated file
@@ -39,7 +41,7 @@ export function meta() {
 // ============================================================================
 
 export default function SettingsIndexRoute() {
-  const loaderData = useLoaderData() as SettingsLoaderData;
+  const loaderData = useLoaderData();
 
   return <SettingsPage loaderData={loaderData} />;
 }

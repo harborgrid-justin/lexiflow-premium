@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { UtilityValue } from "./types";
 
 export const UtilityContext = createContext<UtilityValue | null>(null);

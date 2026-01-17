@@ -17,14 +17,14 @@ import { TagInput } from '@/components/molecules/TagInput/TagInput';
 // Context & Utils
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from "@/hooks/useTheme";
 import { useWizard } from '@/hooks/useWizard';
 import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 
 // Services & Types
 import { DocumentService } from '@/services/features/documents/documents';
 import { validateEvidenceItemSafe } from '@/services/validation/evidenceSchemas';
-import { CaseId, EvidenceId, EvidenceItem, EvidenceType, UUID } from '@/types';
+import { type CaseId, type EvidenceId, type EvidenceItem, type EvidenceType, type UUID } from '@/types';
 import { AdmissibilityStatusEnum } from '@/types/enums';
 
 interface EvidenceIntakeProps {

@@ -7,6 +7,7 @@
  * ALIGNED WITH BACKEND: backend/src/risks/risks.controller.ts
  */
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type {
   Risk,
   RiskImpact,

@@ -9,13 +9,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { LitigationProvider } from './LitigationContext';
 import { LitigationView } from './LitigationView';
+
 import type { LitigationLoaderData } from './loader';
 
 export function LitigationPage() {
-  const initialData = useLoaderData() as LitigationLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Litigation" />}>

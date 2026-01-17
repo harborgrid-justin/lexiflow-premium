@@ -10,23 +10,25 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Clock, FileText, Loader2 } from 'lucide-react';
+import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { PleadingDocument } from '@/types';
-import { PleadingDraftsProps } from './types';
+import { type PleadingDocument } from '@/types';
+
+import { type PleadingDraftsProps } from './types';
 
 // ============================================================================
 // COMPONENT

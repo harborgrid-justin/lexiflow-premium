@@ -3,7 +3,8 @@
  * Dashboard-specific endpoints for drafting module
  */
 
-import { ApiClient } from "@/services/infrastructure/api-client.service";
+import { type ApiClient } from "@/services/infrastructure/api-client.service";
+
 import type { GeneratedDocument, DraftingTemplate, DraftingStats } from "./types";
 
 /**

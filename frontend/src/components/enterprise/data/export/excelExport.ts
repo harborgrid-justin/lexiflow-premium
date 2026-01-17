@@ -3,9 +3,10 @@
  * @module components/enterprise/data/export/excelExport
  */
 
+import { escapeXML, getCellClass, getColumnValue, formatValueForExport, downloadBlob } from './utils';
+
 import type { ColumnDefinition } from '../DataGridColumn';
 import type { ExcelExportOptions } from './types';
-import { escapeXML, getCellClass, getColumnValue, formatValueForExport, downloadBlob } from './utils';
 
 /** Exports data to Excel format (XLSX) */
 export function exportToExcel<T extends Record<string, unknown>>(

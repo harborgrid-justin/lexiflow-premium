@@ -1,6 +1,7 @@
+import { SidebarFooter } from './SidebarFooter';
+
 import type { UserId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SidebarFooter } from './SidebarFooter';
 
 const meta: Meta<typeof SidebarFooter> = {
   title: 'Components/Organisms/Sidebar/SidebarFooter',

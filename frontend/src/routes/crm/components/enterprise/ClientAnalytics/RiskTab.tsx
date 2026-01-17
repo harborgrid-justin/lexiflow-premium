@@ -3,9 +3,11 @@
  */
 
 import { Card } from '@/components/molecules/Card/Card';
-import type { ThemeObject } from '@/lib/theme/types';
+
 import { RiskCard } from './RiskCard';
+
 import type { ClientRiskAssessment } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface RiskTabProps {
   riskData: ClientRiskAssessment[];

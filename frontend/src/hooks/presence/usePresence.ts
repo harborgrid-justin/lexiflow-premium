@@ -4,8 +4,10 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import { useWebSocket } from "../data/useWebSocket";
-import { PresenceOptions, PresenceStatus, UserPresence } from "./types";
+
+import { type PresenceOptions, PresenceStatus, type UserPresence } from "./types";
 import { usePresenceActions } from "./usePresenceActions";
 
 export function usePresence(options: PresenceOptions = {}) {

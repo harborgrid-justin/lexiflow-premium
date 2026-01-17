@@ -66,18 +66,18 @@ import { useCallback, useMemo, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
+import { type Case } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 
 // Hooks
-import { useDebounce } from "@/hooks/useDebounce";
 
 // Types
-import { Case } from "@/types";
 
 // Config
-import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
 
 // ============================================================================
 // QUERY KEYS FOR REACT QUERY INTEGRATION

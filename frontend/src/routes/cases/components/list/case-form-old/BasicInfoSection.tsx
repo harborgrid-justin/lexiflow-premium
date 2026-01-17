@@ -1,7 +1,10 @@
-import React from 'react';
 import { FileText } from 'lucide-react';
-import type { MatterFormData, FormErrors } from './types';
+import React from 'react';
+
 import { PracticeArea, MatterType, MatterStatus, MatterPriority } from '@/types';
+
+import type { MatterFormData, FormErrors } from './types';
+
 
 // Define arrays locally from the type unions
 const MATTER_TYPES: MatterType[] = [MatterType.LITIGATION, MatterType.ADVISORY, MatterType.COMPLIANCE];

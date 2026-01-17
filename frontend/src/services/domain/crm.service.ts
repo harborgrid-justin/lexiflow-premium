@@ -84,7 +84,6 @@
  * - Analytics calculated from backend data
  */
 
-
 // Backend API Services
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
@@ -96,7 +95,6 @@ import {
   type Client,
   ClientStatus,
   ClientType,
-  EntityId,
   type Matter,
   MatterType,
   PaymentTerms,

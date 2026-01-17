@@ -23,19 +23,21 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
+import { useNotify } from "@/hooks/useNotify";
 import { useMutation } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import { queryClient } from "@/services/infrastructure/query-client.service";
 import { queryKeys } from "@/utils/query-keys.service";
 
+import type React from "react";
+
 // Hooks & Context
-import { useNotify } from "@/hooks/useNotify";
 
 // Types
 

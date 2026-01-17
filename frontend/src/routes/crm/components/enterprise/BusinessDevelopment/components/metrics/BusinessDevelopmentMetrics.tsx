@@ -4,7 +4,7 @@
  * @description Calculates and returns business development metrics
  */
 
-import { Lead } from '../../types';
+import { type Lead } from '../../types';
 
 export interface BusinessDevelopmentMetrics {
   pipelineValue: number;

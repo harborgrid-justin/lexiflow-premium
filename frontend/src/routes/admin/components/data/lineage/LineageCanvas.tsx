@@ -1,10 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { cn } from '@/lib/cn';
-import { LineageLink, LineageNode } from '@/types';
-import { NODE_STRIDE, SimulationNode } from '@/utils/nexusPhysics';
 import { Pause, Play, RefreshCw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+
+import { useNexusGraph } from '@/hooks/useNexusGraph';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type LineageLink, type LineageNode } from '@/types';
+import { NODE_STRIDE, type SimulationNode } from '@/utils/nexusPhysics';
+
 
 interface LineageCanvasProps {
     data?: { nodes: LineageNode[], links: LineageLink[] };

@@ -3,10 +3,11 @@
  * Enterprise-grade API layer for CRM leads, opportunities, and relationships
  */
 
-import type { ClientRelationship, Lead, Opportunity } from "@/types/crm";
 import { client } from "./client";
 import { ValidationError } from "./errors";
 import { failure, type Result } from "./types";
+
+import type { ClientRelationship, Lead, Opportunity } from "@/types/crm";
 
 export async function getLeads(): Promise<Result<Lead[]>> {
   return client.get<Lead[]>("/crm/leads");

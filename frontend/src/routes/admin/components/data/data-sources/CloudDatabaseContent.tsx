@@ -1,13 +1,16 @@
+import { AnimatePresence } from 'framer-motion';
+import { Database, Plus, RefreshCw, X } from 'lucide-react';
+import { useState } from 'react';
+
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { DataSource } from '@/lib/frontend-api';
-import { AnimatePresence } from 'framer-motion';
-import { Database, Plus, RefreshCw, X } from 'lucide-react';
-import { useState } from 'react';
+import { type DataSource } from '@/lib/frontend-api';
+
 import { ConnectionCard } from './ConnectionCard';
 import { ConnectionForm } from './ConnectionForm';
+
 import type { ConnectionFormData, ConnectionStatus, DataConnection } from './types';
 
 interface SyncConnectionResult {

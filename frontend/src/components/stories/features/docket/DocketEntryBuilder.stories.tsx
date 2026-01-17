@@ -1,8 +1,10 @@
+import { expect, fn, userEvent, within } from 'storybook/test';
+
 import { DocketEntryBuilder } from '@/routes/cases/components/docket/DocketEntryBuilder';
-import { DocketEntry, DocketEntryType } from '@/types';
+import { type DocketEntry, type DocketEntryType } from '@/types';
+
 import type { DocketId } from '@/types/primitives';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
 
 /**
  * DocketEntryBuilder provides a comprehensive form for creating and editing

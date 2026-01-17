@@ -4,10 +4,12 @@
  * @description Hook to generate breadcrumb navigation based on current route path.
  */
 
-import { ModuleRegistry } from "@/services/infrastructure/module-registry.service";
-import type { BreadcrumbItem } from "@/components/molecules/Breadcrumbs";
 import { useMemo } from "react";
 import { useLocation, useParams } from "react-router";
+
+import { ModuleRegistry } from "@/services/infrastructure/module-registry.service";
+
+import type { BreadcrumbItem } from "@/components/molecules/Breadcrumbs";
 
 /**
  * Generate breadcrumb items from current route

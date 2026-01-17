@@ -7,8 +7,9 @@
  * @module rendering/server/requestHandler
  */
 
-import type { AppLoadContext, EntryContext } from "react-router";
 import { streamRenderer } from "./streamRenderer.tsx";
+
+import type { AppLoadContext, EntryContext } from "react-router";
 
 export const DEFAULT_STREAM_TIMEOUT = 5000;
 

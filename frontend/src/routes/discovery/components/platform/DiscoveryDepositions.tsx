@@ -17,7 +17,6 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
@@ -26,18 +25,19 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 
 // Hooks & Context
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useWindow } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 
 // Services & Utils
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { CaseId, Deposition, UUID } from '@/types';
+import { type CaseId, type Deposition, type UUID } from '@/types';
 
 interface DiscoveryDepositionsProps {
     caseId?: string;

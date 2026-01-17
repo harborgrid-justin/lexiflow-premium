@@ -22,10 +22,12 @@
  * @module routes/cases/loader
  */
 
+import { redirect } from "react-router";
+
 import { billingApi, casesApi } from "@/lib/frontend-api";
+
 import type { Case } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
-import { redirect } from "react-router";
 
 /**
  * Case List Loader

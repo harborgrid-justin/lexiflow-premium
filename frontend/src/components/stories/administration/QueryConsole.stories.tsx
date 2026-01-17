@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QueryConsole } from '@/routes/admin/components/data/QueryConsole';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * QueryConsole provides advanced database query interface for administrators

@@ -4,11 +4,12 @@
  * @description Content router for Case Management module tabs
  */
 
-import { api } from '@/api';
-import { MatterView } from '@/config/tabs.config';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { Case } from '@/types';
 import React, { lazy, useState } from 'react';
+
+import { api } from '@/api';
+import { type MatterView } from '@/config/tabs.config';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { type Case } from '@/types';
 
 // Lazy load tab content components - from Case Management Suite
 const CaseOverviewDashboard = lazy(() => import('../overview/CaseOverviewDashboard').then(m => ({ default: m.CaseOverviewDashboard })));

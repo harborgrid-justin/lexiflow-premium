@@ -14,12 +14,15 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
+import React from "react";
+
+import { cn } from '@/lib/cn';
+import { StatusRegistry } from '@/utils/statusRegistry';
+
 import { Badge } from '../Badge/Badge';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
-import { StatusRegistry } from '@/utils/statusRegistry';
-import React from "react";
+
 
 // ============================================================================
 // TYPES & INTERFACES

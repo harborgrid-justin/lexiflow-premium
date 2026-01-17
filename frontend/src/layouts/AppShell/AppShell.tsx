@@ -21,7 +21,7 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { BreadcrumbItem, Breadcrumbs } from '@/components/molecules/Breadcrumbs';
+import { type BreadcrumbItem, Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";

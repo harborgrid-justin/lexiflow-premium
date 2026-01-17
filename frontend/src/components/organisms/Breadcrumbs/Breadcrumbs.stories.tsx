@@ -4,10 +4,12 @@
  * @description Storybook stories for Breadcrumbs component
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Breadcrumbs } from './Breadcrumbs';
 import { Folder, FileText, Users, Briefcase, Building } from 'lucide-react';
+
+import { Breadcrumbs } from './Breadcrumbs';
+
 import type { BreadcrumbItem } from './Breadcrumbs';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Breadcrumbs> = {
   title: 'Navigation/Breadcrumbs',

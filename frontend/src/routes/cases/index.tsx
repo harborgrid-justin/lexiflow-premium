@@ -12,10 +12,12 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 import { CasesPage } from './CasesPage';
+
 import type { CaseListLoaderData } from './loader';
 
 // Export loader from dedicated file
@@ -46,7 +48,7 @@ export function meta() {
 // ============================================================================
 
 export default function CasesRoute() {
-  const loaderData = useLoaderData() as CaseListLoaderData;
+  const loaderData = useLoaderData();
 
   return <CasesPage loaderData={loaderData} />;
 }

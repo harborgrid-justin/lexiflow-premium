@@ -17,12 +17,12 @@ import { lazy, Suspense } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Sub-components
 const HRManager = lazy(() => import('./hr/HRManager').then(m => ({ default: m.HRManager })));

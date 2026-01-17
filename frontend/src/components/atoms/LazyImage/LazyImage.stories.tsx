@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LazyImage } from './LazyImage';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof LazyImage> = {
   title: 'Components/Atoms/LazyImage/LazyImage',

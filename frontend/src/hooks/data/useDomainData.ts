@@ -11,30 +11,31 @@
 // ============================================================================
 // Services & Data
 import { DataService } from "@/services/data/data-service.service";
+import {
+  type Case,
+  type Client,
+  type Connector,
+  type Conversation,
+  type DataDictionaryItem,
+  type DocketEntry,
+  type EvidenceItem,
+  type LegalDocument,
+  type PipelineJob,
+  type Project,
+  type ResearchSession,
+  type SchemaTable,
+  type TrialExhibit,
+  type User,
+  type WorkflowTask,
+} from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
 
 // CRITICAL FIX: Import useQuery from the Hooks layer, not the Infrastructure layer
-import type { QueryState } from "@/services/infrastructure/queryTypes";
 import { useQuery } from "./useQueryHooks";
 
+import type { QueryState } from "@/services/infrastructure/queryTypes";
+
 // Types
-import {
-  Case,
-  Client,
-  Connector,
-  Conversation,
-  DataDictionaryItem,
-  DocketEntry,
-  EvidenceItem,
-  LegalDocument,
-  PipelineJob,
-  Project,
-  ResearchSession,
-  SchemaTable,
-  TrialExhibit,
-  User,
-  WorkflowTask,
-} from "@/types";
 
 // ============================================================================
 // TYPES

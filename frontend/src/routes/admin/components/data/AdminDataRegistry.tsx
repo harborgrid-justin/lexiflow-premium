@@ -1,9 +1,11 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { HardDrive, Loader2, Server } from 'lucide-react';
+
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+
 interface DataFile {
   name: string;
   type: string;

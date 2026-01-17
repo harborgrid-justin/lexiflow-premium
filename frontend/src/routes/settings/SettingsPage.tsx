@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { SettingsProvider } from './SettingsProvider';
 import { SettingsView } from './SettingsView';
+
 import type { SettingsLoaderData } from './loader';
 
 interface SettingsPageProps {

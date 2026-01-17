@@ -14,19 +14,20 @@
  * - G34: Query reads side-effect free
  */
 
+import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
 import React, { useCallback, useMemo, useState, useTransition } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
-import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
-import { useCallback, useMemo, useState, useTransition } from 'react';
+import { DataService } from '@/services/data/data-service.service';
+import { type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+
+import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
 
 interface ReviewProps {
   caseId?: string;

@@ -3,12 +3,15 @@
  * Detailed analytics for case outcomes, types, and trends
  */
 
-import { casesApi } from '@/lib/frontend-api';
-import { CaseAnalytics } from '@/routes/analytics/cases/CaseAnalytics';
-import { CaseStatus } from '@/types/enums';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { casesApi } from '@/lib/frontend-api';
+import { CaseStatus } from '@/types/enums';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { CaseAnalytics } from '@/routes/analytics/cases/CaseAnalytics';
 
 export function meta() {
   return createMeta({
@@ -54,8 +57,8 @@ export async function loader() {
     const durations = closedCases
       .filter(c => c.filingDate && c.closeDate)
       .map(c => {
-        const start = new Date(c.filingDate!).getTime();
-        const end = new Date(c.closeDate!).getTime();
+        const start = new Date(c.filingDate).getTime();
+        const end = new Date(c.closeDate).getTime();
         return Math.floor((end - start) / (1000 * 60 * 60 * 24));
       });
 
@@ -97,7 +100,7 @@ export async function loader() {
 }
 
 export default function CaseAnalyticsRoute() {
-  const data = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const data = useLoaderData();
   return <CaseAnalytics {...data} />;
 }
 

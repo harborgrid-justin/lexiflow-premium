@@ -8,11 +8,13 @@
  */
 
 import { PassThrough } from "node:stream";
-import { renderToPipeableStream } from "react-dom/server";
-import type { EntryContext } from "react-router";
-import { ServerRouter } from "react-router";
+
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { isbot } from "isbot";
+import { renderToPipeableStream } from "react-dom/server";
+import { ServerRouter } from "react-router";
+
+import type { EntryContext } from "react-router";
 
 export interface StreamRendererConfig {
   /** Timeout in milliseconds for stream rendering */

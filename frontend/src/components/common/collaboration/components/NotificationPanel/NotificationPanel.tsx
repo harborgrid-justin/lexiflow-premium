@@ -4,15 +4,16 @@
  * @description Persistent notification panel with action buttons and grouping.
  */
 
-import React from 'react';
-import { useModalState } from '@/hooks/core';
-import { NotificationService } from '@/services/domain/notification.service';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { NotificationGroup, UINotification } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { AlertCircle, AlertTriangle, Bell, CheckCircle, Clock, Info, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { useModalState } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { NotificationService } from '@/services/domain/notification.service';
+
+import type { NotificationGroup, UINotification } from '@/types';
 
 // Use the Notification type from NotificationDomain service
 interface Notification {
@@ -57,7 +58,7 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
             ...notification,
             timestamp: notification.timestamp ? new Date(notification.timestamp).getTime() : new Date(notification.createdAt).getTime(),
             priority: (notification.priority as 'low' | 'normal' | 'high' | 'urgent') || 'normal',
-            type: notification.type as 'info' | 'success' | 'warning' | 'error'
+            type: notification.type
           };
           existing.notifications.push(uiNotification);
           existing.count++;
@@ -75,13 +76,13 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
             ...single,
             timestamp: single.timestamp ? new Date(single.timestamp).getTime() : new Date(single.createdAt).getTime(),
             priority: (single.priority as 'low' | 'normal' | 'high' | 'urgent') || 'normal',
-            type: single.type as 'info' | 'success' | 'warning' | 'error'
+            type: single.type
           };
           const notificationUI: UINotification = {
             ...notification,
             timestamp: notification.timestamp ? new Date(notification.timestamp).getTime() : new Date(notification.createdAt).getTime(),
             priority: (notification.priority as 'low' | 'normal' | 'high' | 'urgent') || 'normal',
-            type: notification.type as 'info' | 'success' | 'warning' | 'error'
+            type: notification.type
           };
           const newGroup: NotificationGroup = {
             groupKey: notification.title,

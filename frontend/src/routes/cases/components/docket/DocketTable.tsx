@@ -17,10 +17,10 @@ import React, { useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
+import { Badge } from '@/components/atoms/Badge';
 import { InfiniteScrollTrigger } from '@/components/organisms/InfiniteScrollTrigger';
 import { VirtualList } from '@/components/organisms/VirtualList';
-import { Badge } from '@/components/atoms/Badge';
-import { DocketRow } from './DocketRow';
+
 
 // Internal Dependencies - Hooks & Context
 import { useListNavigation } from '@/hooks/useListNavigation';
@@ -30,7 +30,9 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { DocketEntry, DocketEntryType } from '@/types';
+import { type DocketEntry, type DocketEntryType } from '@/types';
+
+import { DocketRow } from './DocketRow';
 
 interface DocketTableProps {
     entries: DocketEntry[];

@@ -9,9 +9,10 @@
  * @description Case overview dashboard page - comprehensive case insights and status
  */
 
+import React from 'react';
+
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
-import React from 'react';
 
 interface CaseOverviewPageProps {
   caseId?: string;

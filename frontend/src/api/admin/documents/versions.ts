@@ -7,8 +7,10 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
-import type { DocumentVersion, LegalDocument } from "@/types";
+
 import { validateArray, validateId } from "./validation";
+
+import type { DocumentVersion, LegalDocument } from "@/types";
 
 /** Redact document regions */
 export async function redact(

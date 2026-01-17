@@ -9,6 +9,7 @@
  */
 
 import { authApi } from "@/lib/frontend-api";
+
 import type { ExtendedUserProfile } from "@/types/system";
 
 export interface ProfileLoaderData {

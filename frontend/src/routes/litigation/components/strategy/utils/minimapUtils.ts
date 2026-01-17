@@ -6,7 +6,7 @@
  * @module components/litigation/utils/minimapUtils
  */
 
-import { WorkflowNode } from '@/types/workflow-types';
+import { type WorkflowNode } from '@/types/workflow-types';
 
 export interface MinimapBounds {
   minX: number;

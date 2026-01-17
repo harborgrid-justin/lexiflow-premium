@@ -9,28 +9,29 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
 import { Plus, RefreshCw } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { DataService } from '@/services/data/data-service.service';
+import { type Motion, type MotionStatus, type MotionType, type LegalDocument, type MotionId, type CaseId } from '@/types';
+
 import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '@/types';
 
 interface CaseMotionsProps {
   caseId: string;

@@ -24,13 +24,14 @@ import { Bell, Monitor, Moon, Sun } from 'lucide-react';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks
-import { useProfilePreferences } from '../hooks/useProfilePreferences';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { ExtendedUserProfile } from '@/types';
+import { type ExtendedUserProfile } from '@/types';
+
+import { useProfilePreferences } from '../hooks/useProfilePreferences';
 
 
 // ========================================

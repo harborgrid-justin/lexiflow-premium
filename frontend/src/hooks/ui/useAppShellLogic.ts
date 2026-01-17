@@ -1,12 +1,15 @@
-import { useAuthState } from '@/providers/application/AuthProvider';
+import { useCallback } from "react";
+import { useNavigate, useParams } from "react-router";
+
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAutoTimeCapture } from "@/hooks/useAutoTimeCapture";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGlobalQueryStatus } from "@/hooks/useGlobalQueryStatus";
+import { useAuthState } from '@/providers/application/AuthProvider';
+
 import type { GlobalSearchResult } from "@/services/search/search.service";
 import type { IntentResult } from "@/types/intelligence";
-import { useCallback } from "react";
-import { useNavigate, useParams } from "react-router";
+
 
 /**
  * Controller hook for the main AppShell layout.

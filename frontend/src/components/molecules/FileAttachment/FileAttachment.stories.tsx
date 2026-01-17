@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileAttachment } from './FileAttachment';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof FileAttachment> = {
   title: 'Components/Molecules/FileAttachment/FileAttachment',

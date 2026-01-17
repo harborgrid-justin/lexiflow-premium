@@ -9,9 +9,10 @@
  * @description Case analytics and reporting page - data-driven case insights
  */
 
+import React from 'react';
+
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
-import React from 'react';
 
 interface CaseAnalyticsPageProps {
   caseId?: string;

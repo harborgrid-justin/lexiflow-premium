@@ -5,10 +5,6 @@
  * Displays recent activities, events, and notifications in real-time
  */
 
-import React from 'react';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { Activity as ActivityType, ActivityType as ActivityTypeEnum, BaseDashboardProps } from '@/types/dashboard';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -19,14 +15,19 @@ import {
   DollarSign,
   FileText,
   Filter,
-  LucideIcon,
+  type LucideIcon,
   MessageSquare,
   RefreshCw,
   TrendingUp,
   Upload,
   UserPlus,
 } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { Activity as ActivityType, ActivityType as ActivityTypeEnum, BaseDashboardProps } from '@/types/dashboard';
 
 export interface RealTimeActivityFeedProps extends BaseDashboardProps {
   activities: ActivityType[];

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TimelineItem } from './TimelineItem';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TimelineItem> = {
   title: 'Components/Molecules/TimelineItem/TimelineItem',

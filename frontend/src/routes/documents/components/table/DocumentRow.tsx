@@ -1,10 +1,11 @@
+import { Book, CheckSquare, Clock, Download, Eye, MoreVertical, Tag } from 'lucide-react';
 import React from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { TagList } from '@/components/molecules/TagList/TagList';
-import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
-import { Book, CheckSquare, Clock, Download, Eye, MoreVertical, Tag } from 'lucide-react';
+import { type LegalDocument } from '@/types';
 interface DocumentRowProps {
     doc: LegalDocument;
     isSelected: boolean;

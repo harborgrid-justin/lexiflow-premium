@@ -32,9 +32,11 @@
  * @module providers/infrastructure/sessionprovider
  */
 
-import { SessionActionsContext, SessionStateContext } from '@/lib/session/contexts';
-import type { Session, SessionActionsValue, SessionProviderProps, SessionStateValue } from '@/lib/session/types';
 import { startTransition, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
+import { SessionActionsContext, SessionStateContext } from '@/lib/session/contexts';
+
+import type { Session, SessionActionsValue, SessionProviderProps, SessionStateValue } from '@/lib/session/types';
 
 export function SessionProvider({
   children,

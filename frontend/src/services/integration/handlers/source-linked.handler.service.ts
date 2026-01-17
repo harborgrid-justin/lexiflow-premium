@@ -5,6 +5,7 @@
  * Integration: Opp #11 from architecture docs
  */
 
+
 import { db } from "@/services/data/db.service";
 import { SystemEventType } from "@/types/integration-types";
 
@@ -19,7 +20,7 @@ export class SourceLinkedHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.DATA_SOURCE_CONNECTED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.DATA_SOURCE_CONNECTED]
+    payload: SystemEventPayloads[typeof SystemEventType.DATA_SOURCE_CONNECTED],
   ) {
     const actions: string[] = [];
     const { provider, name, connectionId } = payload;

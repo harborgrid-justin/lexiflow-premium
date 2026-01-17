@@ -1,8 +1,9 @@
 // components/discovery/layout/DiscoveryNavigation.tsx
+import { DISCOVERY_TAB_CONFIG } from '@/config/tabs.config';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
-import { DISCOVERY_TAB_CONFIG } from '@/config/tabs.config';
 
 
 interface DiscoveryNavigationProps {

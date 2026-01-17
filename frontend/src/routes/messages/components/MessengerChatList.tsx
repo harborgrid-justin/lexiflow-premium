@@ -1,11 +1,13 @@
+import { MoreVertical } from 'lucide-react';
+
+import { Button } from '@/components/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { Button } from '@/components/atoms/Button/Button';
+import { type Conversation } from '@/hooks/useSecureMessenger';
 import { useTheme } from "@/hooks/useTheme";
-import { Conversation } from '@/hooks/useSecureMessenger';
-import { useWindow } from '@/providers';
 import { cn } from '@/lib/cn';
-import { MoreVertical } from 'lucide-react';
+import { useWindow } from '@/providers';
+
 import { ConversationRow } from './ConversationRow';
 import { PopoutChatWindow } from './PopoutChatWindow';
 

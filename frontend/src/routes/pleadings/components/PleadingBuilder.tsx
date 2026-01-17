@@ -17,16 +17,9 @@ import React, { Suspense, lazy, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API with queryKeys (2025-12-21)
 
 // Hooks & Context
-import { useModalState } from '@/hooks/core';
-import { useNotify } from '@/hooks/useNotify';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
@@ -37,11 +30,18 @@ import { Modal } from '@/components/molecules/Modal/Modal';
 
 // Utils & Config
 import { PLEADING_BUILDER_TAB_CONFIG } from '@/config/tabs.config';
+import { useModalState } from '@/hooks/core';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { validateTemplate } from '@/lib/validation';
+import { DataService } from '@/services/data/data-service.service';
 
 // Types
-import { Case, PleadingDocument, PleadingTemplate } from '@/types';
+import { type Case, type PleadingDocument, type PleadingTemplate } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Lazy imports with named export handling
 const PleadingDesigner = lazy(() => import('./PleadingDesigner')); // Export default exists
@@ -51,7 +51,7 @@ const ClauseLibrary = lazy(() => import('@/routes/clauses/components/ClauseLibra
 const PleadingFilingQueue = lazy(() => import('./PleadingFilingQueue').then(m => ({ default: m.PleadingFilingQueue })));
 const PleadingAnalytics = lazy(() => import('./PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
 
-import { PleadingBuilderProps } from './types';
+import { type PleadingBuilderProps } from './types';
 
 export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ caseId }) => {
     const { theme } = useTheme();

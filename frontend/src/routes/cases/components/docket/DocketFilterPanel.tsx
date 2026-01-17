@@ -8,8 +8,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Filter } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
@@ -21,7 +21,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Case } from '@/types';
+import { type Case } from '@/types';
 
 interface DocketFilterPanelProps {
   searchTerm: string;

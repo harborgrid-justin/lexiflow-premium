@@ -4,10 +4,12 @@
  * @description Evidence vault page - secure evidence management and chain of custody
  */
 
-import { EvidenceDashboard } from '@/routes/evidence/components/EvidenceDashboard';
-import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
-import { ViewMode } from '@/hooks/useEvidenceManager';
 import React from "react";
+
+import { type ViewMode } from '@/hooks/useEvidenceManager';
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+import { EvidenceDashboard } from '@/routes/evidence/components/EvidenceDashboard';
+
 
 interface EvidencePageProps {
   onNavigate: (view: ViewMode) => void;

@@ -3,10 +3,10 @@
  * @description Client risk assessment card component
  */
 
-import { cn } from '@/lib/cn';
-import type { ThemeObject } from '@/lib/theme/types';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
-import type { ClientRiskAssessment } from './types';
+
+import { cn } from '@/lib/cn';
+
 import {
   formatCurrency,
   formatFactorName,
@@ -14,6 +14,10 @@ import {
   getRiskBarColor,
   getRiskColor
 } from './utils';
+
+import type { ClientRiskAssessment } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
+
 
 interface RiskCardProps {
   client: ClientRiskAssessment;

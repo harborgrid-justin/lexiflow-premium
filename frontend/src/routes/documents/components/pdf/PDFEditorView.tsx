@@ -17,10 +17,10 @@ import { queryKeys } from '@/utils/queryKeys';
 import { AcrobatToolbar } from '../preview/AcrobatToolbar';
 import { InteractiveOverlay } from '../preview/InteractiveOverlay';
 
-import type { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
-import type { LegalDocument } from '@/types';
 import type { PDFTool } from '../preview/AcrobatToolbar';
 import type { Field } from '../preview/InteractiveOverlay';
+import type { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
+import type { LegalDocument } from '@/types';
 
 export function PDFEditorView() {
     const { theme } = useTheme();

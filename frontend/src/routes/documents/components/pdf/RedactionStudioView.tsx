@@ -1,16 +1,19 @@
+import { Eraser, Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
 import { DataService } from '@/services/data/data-service.service';
 import { DocumentService } from '@/services/features/documents/documents';
 import { BlobManager } from '@/services/infrastructure/blob-manager.service';
-import { cn } from '@/lib/cn';
-import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
-import { useTheme } from "@/hooks/useTheme";
-import { LegalDocument } from '@/types';
+import { type LegalDocument } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { Eraser, Loader2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+
+
 import { PIIPanel } from '../preview/PIIPanel';
 
 export function RedactionStudioView() {

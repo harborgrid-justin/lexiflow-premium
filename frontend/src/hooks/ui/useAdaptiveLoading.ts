@@ -4,12 +4,13 @@
  * @description Smart loading state management with stale-while-revalidate pattern.
  */
 
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import { QUERY_CACHE_STALE_TIME_MS } from "@/config/database/cache.config";
 import {
   API_RETRY_ATTEMPTS,
   API_RETRY_DELAY_MS,
 } from "@/config/network/api.config";
-import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Loading state

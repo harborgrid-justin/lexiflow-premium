@@ -11,15 +11,18 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, Search } from 'lucide-react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
-import { useSearchToolbar } from '../hooks/useSearchToolbar';
+import { cn } from '@/lib/cn';
+
+import { useSearchToolbar } from '../../hooks/useSearchToolbar';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
+import type { ChangeEvent, ReactNode } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -28,7 +31,7 @@ interface SearchToolbarProps {
   value: string;
   onChange: (val: string) => void;
   placeholder?: string;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
   className?: string;
 }
 
@@ -62,7 +65,7 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
           )}
           placeholder={placeholder}
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
           onFocus={handleFocus}
           onKeyUp={handleKeyUp}
         />

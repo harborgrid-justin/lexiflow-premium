@@ -1,4 +1,5 @@
 import { KnowledgeCenter } from '@/routes/practice/components/KnowledgeCenter';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

@@ -4,7 +4,8 @@
  */
 
 import { useCallback, useRef } from 'react';
-import { PresenceStatus } from './types';
+
+import { type PresenceStatus } from './types';
 
 interface PresenceActionsConfig {
   socket: unknown;

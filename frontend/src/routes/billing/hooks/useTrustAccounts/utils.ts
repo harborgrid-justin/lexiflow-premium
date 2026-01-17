@@ -3,10 +3,13 @@
  * @module hooks/useTrustAccounts/utils
  */
 
-import type { TrustAccount, TrustTransactionEntity } from "@/types";
+
 import { TrustAccountStatus } from "@/types";
+
 import { COMPLIANCE_THRESHOLDS } from "./constants";
-import type { ComplianceIssue } from "./types";
+
+import type { ComplianceIssue , TrustAccountError } from "./types";
+import type { TrustAccount, TrustTransactionEntity } from "@/types";
 
 /**
  * Calculate total balance across all accounts
@@ -166,7 +169,6 @@ export function findLastReconciliationDate(
   );
 }
 
-import type { TrustAccountError } from "./types";
 
 /**
  * Transform query error to structured error

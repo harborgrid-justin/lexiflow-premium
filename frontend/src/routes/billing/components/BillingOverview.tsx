@@ -18,22 +18,23 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, Tooltip, XAx
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useBillingOverviewData } from '../hooks/useBillingOverviewData';
 
 // Hooks & Context
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Currency } from '@/components/atoms/Currency';
 import { Card } from '@/components/molecules/Card';
 import { MetricCard } from '@/components/molecules/MetricCard';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { Client } from '@/types';
+import { type Client } from '@/types';
+
+import { useBillingOverviewData } from '../hooks/useBillingOverviewData';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -16,20 +16,20 @@ import { Mail, MapPin, Phone, Scale, ShieldCheck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // Components
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { Card } from '@/components/molecules/Card/Card';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // Utils & Constants
 
 // Types
-import { ExtendedUserProfile } from '@/types';
+import { type ExtendedUserProfile } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

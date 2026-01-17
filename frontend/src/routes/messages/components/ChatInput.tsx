@@ -18,11 +18,12 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, FileText, Loader2, Paperclip, Send, Sparkles, X } from 'lucide-react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { Attachment } from '@/hooks/useSecureMessenger';
+import { type Attachment } from '@/hooks/useSecureMessenger';
 import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants

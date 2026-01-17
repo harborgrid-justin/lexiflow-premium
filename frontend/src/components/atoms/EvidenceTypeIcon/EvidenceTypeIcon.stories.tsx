@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EvidenceTypeIcon } from './EvidenceTypeIcon';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof EvidenceTypeIcon> = {
   title: 'Components/Atoms/EvidenceTypeIcon/EvidenceTypeIcon',

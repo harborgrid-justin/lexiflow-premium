@@ -2,10 +2,12 @@
  * Exhibits Domain - View Component
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { CheckCircle, Clock, FileText, Image, Mic, Package, Plus, Video } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useExhibits } from './ExhibitsProvider';
 
 export function ExhibitsView() {

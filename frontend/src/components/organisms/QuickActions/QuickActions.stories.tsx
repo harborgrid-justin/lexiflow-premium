@@ -4,13 +4,15 @@
  * @description Storybook stories for QuickActions component
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { QuickActions } from './QuickActions';
 import {
   Clock, FileText, UserPlus, Briefcase, Calendar,
   Settings, Bell, Check
 } from 'lucide-react';
+
+import { QuickActions } from './QuickActions';
+
 import type { QuickActionGroup } from './QuickActions';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof QuickActions> = {
   title: 'Navigation/QuickActions',

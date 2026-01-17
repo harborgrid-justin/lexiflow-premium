@@ -1,12 +1,15 @@
 /** * Real Estate: Utilization Route * * Tracks and analyzes the utilization rates of real estate assets, * including occupancy levels, space efficiency, and usage patterns. * * @module routes/real-estate/utilization */
 
-import { DataService } from '@/services/data/data-service.service';
-import type { RealEstateUtilization } from '@/services/domain/RealEstateDomain';
 import { Activity, AlertTriangle, BarChart3, TrendingUp } from 'lucide-react';
 import { Link, useLoaderData, useNavigate } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/utilization"; // ============================================================================
+import type { RealEstateUtilization } from '@/services/domain/RealEstateDomain';
 // Types
 // ============================================================================
 interface LoaderData {

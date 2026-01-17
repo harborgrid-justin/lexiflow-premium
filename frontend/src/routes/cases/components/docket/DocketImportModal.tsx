@@ -16,17 +16,19 @@ import React, { useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Modal } from '@/components/molecules/Modal';
 import { Stepper } from '@/components/molecules/Stepper';
-import { ParsedDocketPreview } from './ParsedDocketPreview';
+
 
 // Internal Dependencies - Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
+import { cn } from '@/lib/cn';
 import { FallbackDocketParser } from '@/services/features/discovery/fallbackDocketParser';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/lib/cn';
+
+import { ParsedDocketPreview } from './ParsedDocketPreview';
 
 interface DocketImportModalProps {
   isOpen: boolean;

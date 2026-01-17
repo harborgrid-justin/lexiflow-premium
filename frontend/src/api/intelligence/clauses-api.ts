@@ -80,7 +80,7 @@ export class ClausesApiService {
     if (response && "data" in response) {
       return (response as { data: Clause }).data;
     }
-    return response as Clause;
+    return response;
   }
 
   async create(data: CreateClauseDto): Promise<Clause> {
@@ -91,7 +91,7 @@ export class ClausesApiService {
     if (response && "data" in response) {
       return (response as { data: Clause }).data;
     }
-    return response as Clause;
+    return response;
   }
 
   async update(id: string, data: UpdateClauseDto): Promise<Clause> {
@@ -102,7 +102,7 @@ export class ClausesApiService {
     if (response && "data" in response) {
       return (response as { data: Clause }).data;
     }
-    return response as Clause;
+    return response;
   }
 
   async render(

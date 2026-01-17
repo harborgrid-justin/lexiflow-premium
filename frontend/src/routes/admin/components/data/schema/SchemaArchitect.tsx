@@ -1,19 +1,22 @@
-import { useQuery } from '@/hooks/backend';
-import { useModalState } from '@/hooks/core';
-import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
-import { cn } from '@/lib/cn';
+import { useEffect, useMemo, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { Modal } from '@/components/molecules/Modal';
+import { useQuery } from '@/hooks/backend';
+import { useModalState } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
-import { useEffect, useMemo, useState } from 'react';
+import { cn } from '@/lib/cn';
+import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
+
+
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { SchemaSnapshots } from './SchemaSnapshots';
 import { SchemaToolbar } from './SchemaToolbar';
-import { TableColumn, TableData } from './schemaTypes';
+import { type TableColumn, type TableData } from './schemaTypes';
 import { SchemaVisualizer } from './SchemaVisualizer';
 
 interface SchemaArchitectProps {

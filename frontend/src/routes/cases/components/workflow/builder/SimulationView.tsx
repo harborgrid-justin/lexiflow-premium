@@ -3,8 +3,9 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { Button } from '@/components/atoms/Button';
 import { PlayCircle, Terminal } from 'lucide-react';
+
+import { Button } from '@/components/atoms/Button';
 export function SimulationView() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-slate-400">

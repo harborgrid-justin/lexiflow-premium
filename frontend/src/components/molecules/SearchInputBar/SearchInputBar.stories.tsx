@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SearchInputBar } from './SearchInputBar';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof SearchInputBar> = {
   title: 'Components/Molecules/SearchInputBar/SearchInputBar',

@@ -1,10 +1,12 @@
-import { BackupSnapshot } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { Archive, Clock, Database, Download } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button';
 import { StatusBadge } from '@/components/atoms/StatusBadge';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
-import { Archive, Clock, Database, Download } from 'lucide-react';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type BackupSnapshot } from '@/lib/frontend-api';
+
 interface SnapshotListProps {
     snapshots: BackupSnapshot[];
     isLoading: boolean;

@@ -24,28 +24,29 @@ import { useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { casesApi, knowledgeApi } from '@/lib/frontend-api';
 import { useWindow } from '@/providers';
 
 // Services & Utils
-import { casesApi, knowledgeApi } from '@/lib/frontend-api';
-import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
+import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
+import { AnalysisEngine, type ConflictResult } from '@/services/features/analysis/analysisEngine';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, Citation } from '@/types';
-import { BriefCritique } from '@/types/intelligence';
+import { type Case, type Citation } from '@/types';
+import { type BriefCritique } from '@/types/intelligence';
+
 import { sanitizeHtml } from './utils';
 
 export function BriefAnalyzer() {

@@ -10,24 +10,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useMemo } from 'react';
 import { MapPin, Truck, User } from 'lucide-react';
+import React, { useCallback, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Badge } from '@/components/atoms/Badge/Badge';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
-import { ServiceStatus } from '@/types/enums';
 import { cn } from '@/lib/cn';
 
 // Types
-import { ServiceJob } from '@/types';
+import { type ServiceJob } from '@/types';
+import { ServiceStatus } from '@/types/enums';
 
 // ============================================================================
 // TYPES & INTERFACES

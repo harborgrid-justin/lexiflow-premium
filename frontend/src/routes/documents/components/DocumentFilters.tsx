@@ -1,7 +1,3 @@
-import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import {
     AlertOctagon, CheckCircle2,
     Clock,
@@ -14,6 +10,11 @@ import {
     Star,
     Video
 } from 'lucide-react';
+
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 
 interface DocumentFiltersProps {
     currentFolder: string;

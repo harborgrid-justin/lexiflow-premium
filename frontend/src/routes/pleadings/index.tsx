@@ -7,8 +7,8 @@
  * @module routes/pleadings/index
  */
 
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Export loader from dedicated file
 export { pleadingsLoader as loader } from './loader';

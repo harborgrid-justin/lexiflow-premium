@@ -11,17 +11,22 @@
  * - Guideline 33: Uses isPendingThemeChange for workflow transitions
  */
 
+import { AlertTriangle, Loader2, Play, Plus, RefreshCw } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { AlertTriangle, Loader2, Play, Plus, RefreshCw } from 'lucide-react';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import { useMasterWorkflow } from '../../hooks/useMasterWorkflow';
 
 import { CaseWorkflowList } from './CaseWorkflowList';
 import { EnhancedWorkflowPanel } from './EnhancedWorkflowPanel';
 import { FirmProcessDetail } from './FirmProcessDetail';
 import { FirmProcessList } from './FirmProcessList';
-import { WorkflowView } from './types';
+import { type WorkflowView } from './types';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { WorkflowConfig } from './WorkflowConfig';
 import { WorkflowEngineDetail } from './WorkflowEngineDetail';
@@ -29,9 +34,7 @@ import { WorkflowLibrary } from './WorkflowLibrary';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
-import { useMasterWorkflow } from '../../hooks/useMasterWorkflow';
+
 
 interface MasterWorkflowProps {
   onSelectCase: (caseId: string) => void;

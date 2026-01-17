@@ -9,18 +9,18 @@ import { Download, Filter, Search } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 // Common Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/atoms/Button/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Context & Utils
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Services & Types
-import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 interface EvidenceCustodyLogProps {
   items?: EvidenceItem[];
@@ -41,7 +41,7 @@ export const EvidenceCustodyLog: React.FC<EvidenceCustodyLogProps> = ({ items })
   const evidence = useMemo(() => {
     if (items) return items;
     if (!data) return [];
-    if (Array.isArray(data)) return data as EvidenceItem[];
+    if (Array.isArray(data)) return data;
     // Handle paginated response with data property (backend pagination)
     if (typeof data === 'object' && 'data' in data && Array.isArray((data as Record<string, unknown>).data)) {
       return (data as Record<string, unknown>).data as EvidenceItem[];

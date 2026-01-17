@@ -47,7 +47,7 @@ export const TableContainer = memo(function TableContainer({ children, className
         });
 
         const newBody = React.cloneElement(
-            body as React.ReactElement,
+            body,
             {},
             React.Children.map((body as React.ReactElement<{ children: React.ReactNode }>).props.children, (row: React.ReactNode) => {
                 if (!React.isValidElement(row)) return row;

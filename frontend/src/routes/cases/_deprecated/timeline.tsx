@@ -10,12 +10,15 @@
  * @module routes/cases/timeline
  */
 
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
+
 import { casesApi, docketApi, documentsApi } from '@/lib/frontend-api';
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
 import { CaseTimeline, type TimelineEvent } from '@/routes/cases/ui/components/CaseTimeline';
-import type { Case } from '@/types';
-import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
+
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { Case } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -112,7 +115,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // ============================================================================
 
 export default function CaseTimelineRoute() {
-  const { caseData, events } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { caseData, events } = useLoaderData();
 
   return (
     <div style={{ backgroundColor: 'var(--color-background)' }} className="min-h-full">

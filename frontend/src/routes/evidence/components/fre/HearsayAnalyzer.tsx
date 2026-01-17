@@ -5,21 +5,22 @@
  * Suggests applicable exceptions under FRE 803/804.
  */
 
-import React from 'react';
 import { AlertTriangle, CheckCircle, FileText, Wand2 } from 'lucide-react';
+import React from 'react';
+
 // Common Components
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Context & Utils
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Services & Types
-import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 export const HearsayAnalyzer: React.FC = () => {
     const { theme } = useTheme();

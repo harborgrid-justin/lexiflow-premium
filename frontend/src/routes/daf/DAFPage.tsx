@@ -9,13 +9,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { DAFProvider } from './DAFProvider';
 import { DAFView } from './DAFView';
+
 import type { DAFLoaderData } from './loader';
 
 export function DAFPage() {
-  const initialData = useLoaderData() as DAFLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading DAF" />}>

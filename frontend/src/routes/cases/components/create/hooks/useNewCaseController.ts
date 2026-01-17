@@ -1,17 +1,22 @@
 import { useState, useCallback } from 'react';
+
+import { PATHS } from '@/config/paths.config'; // Added
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
+import { type Matter, type Case, type User } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { Matter, Case, User } from '@/types';
-import { TabId } from '../types/newCaseTypes';
-import { PATHS } from '@/config/paths.config'; // Added
+
+import { type TabId } from '../types/newCaseTypes';
+
+import { useConflictCheck } from './useConflictCheck';
+import { useFormValidation } from './useFormValidation';
 import { useNewCaseForm } from './useNewCaseForm';
 import { useNewCaseMutations } from './useNewCaseMutations';
-import { useConflictCheck } from './useConflictCheck';
 import { useRelatedCases } from './useRelatedCases';
+
 import type { RelatedCase } from './useRelatedCases';
-import { useFormValidation } from './useFormValidation';
+
 
 interface UseNewCaseControllerProps {
   id?: string;

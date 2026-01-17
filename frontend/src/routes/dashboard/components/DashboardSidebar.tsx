@@ -11,16 +11,14 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, ArrowRight, FileText, TrendingUp } from 'lucide-react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useBillingStats } from '../hooks/useDashboardData';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
-import { PATHS } from '@/config/paths.config';
 import { useNavigate } from 'react-router-dom';
 
 // Components
@@ -28,9 +26,13 @@ import { Button } from '@/components/atoms/Button/Button';
 import { DateText } from '@/components/atoms/DateText/DateText';
 import { Card } from '@/components/molecules/Card/Card';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { PATHS } from '@/config/paths.config';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
+import { useBillingStats } from '../hooks/useDashboardData';
 
 // ============================================================================
 // TYPES & INTERFACES

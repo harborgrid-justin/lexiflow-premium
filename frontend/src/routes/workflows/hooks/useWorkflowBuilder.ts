@@ -32,15 +32,15 @@ import { useCallback, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
+import { type WorkflowTemplateData } from "@/types";
 import {
   LITIGATION_PORTS,
-  NodeType,
-  WorkflowConnection,
-  WorkflowNode,
+  type NodeType,
+  type WorkflowConnection,
+  type WorkflowNode,
 } from "@/types/workflow-types";
 
 // Types
-import { WorkflowTemplateData } from "@/types";
 
 // ============================================================================
 // TYPES

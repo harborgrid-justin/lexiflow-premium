@@ -3,9 +3,11 @@
  * @module hooks/useTrustAccounts/validation
  */
 
-import type { TrustAccountValidationResult } from "@/types";
 import { PaymentMethod } from "@/types";
+
 import { COMPLIANCE_THRESHOLDS } from "./constants";
+
+import type { TrustAccountValidationResult } from "@/types";
 
 /**
  * Validate account title compliance

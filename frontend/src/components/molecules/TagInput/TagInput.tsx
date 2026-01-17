@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useId } from 'react';
 import { X, Plus } from 'lucide-react';
+import React, { useState, useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

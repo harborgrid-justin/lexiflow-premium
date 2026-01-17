@@ -11,9 +11,10 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
 import React, { useState } from 'react';
 import { z } from 'zod';
+
+import { AuthApiService } from '@/lib/frontend-api';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),

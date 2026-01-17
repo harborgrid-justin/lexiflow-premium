@@ -59,6 +59,8 @@
  * @module providers/application/authprovider
  */
 
+import { startTransition, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+
 import {
   AUTH_REFRESH_TOKEN_STORAGE_KEY,
   AUTH_TOKEN_STORAGE_KEY,
@@ -66,10 +68,11 @@ import {
   SESSION_WARNING_MS
 } from '@/config/security/security.config';
 import { AuthActionsContext, AuthStateContext } from '@/lib/auth/contexts';
-import type { AuthActionsValue, AuthEvent, AuthLoginResult, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from '@/lib/auth/types';
-import { apiClient } from '@/services/infrastructure/api-client.service';
 import { clearAuthTokens, setAuthTokens } from '@/services/infrastructure/api-client/auth-manager';
-import { startTransition, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { apiClient } from '@/services/infrastructure/api-client.service';
+
+import type { AuthActionsValue, AuthEvent, AuthLoginResult, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from '@/lib/auth/types';
+
 
 interface LoginUserResponse {
   id: string;
@@ -394,7 +397,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
         id: response.user.id,
         email: response.user.email,
         name: (response.user.firstName ? `${response.user.firstName} ${response.user.lastName}`.trim() : response.user.email.split('@')[0]) || 'Unknown User',
-        role: ((response.user.role as AuthUser['role']) || 'attorney') as AuthUser['role'],
+        role: ((response.user.role as AuthUser['role']) || 'attorney'),
         avatarUrl: response.user.avatarUrl,
         permissions: userResponse.permissions || [],
         mfaEnabled: userResponse.mfaEnabled,
@@ -501,7 +504,7 @@ export function AuthProvider({ children, initialAuth }: AuthProviderProps) {
         setAuthTokens(response.accessToken, response.refreshToken);
 
         setRequiresMFA(false);
-        setUser(response.user as AuthUser);
+        setUser(response.user);
         startSession();
 
         // Start automatic token refresh

@@ -3,10 +3,11 @@
  */
 
 import React from 'react';
+
 import { FormField } from '../components/FormField';
 import { FormSelect } from '../components/FormSelect';
 import { FormTextarea } from '../components/FormTextarea';
-import { FormData } from '../types/newCaseTypes';
+import { type FormData } from '../types/newCaseTypes';
 
 export interface PartiesTabProps {
   formData: FormData;

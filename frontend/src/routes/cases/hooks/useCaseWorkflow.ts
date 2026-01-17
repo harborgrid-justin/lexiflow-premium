@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
-import { WorkflowStage, StageStatus, TaskStatusBackend } from '@/types';
+
+import { type WorkflowStage, type StageStatus, TaskStatusBackend } from '@/types';
 
 export function useCaseWorkflow(initialStages: WorkflowStage[]) {
   const [stages, setStages] = useState<WorkflowStage[]>(initialStages);

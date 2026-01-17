@@ -6,15 +6,15 @@
  * - ApiGateway: Data-fetching view (uses query hook, renders only)
  * - All browser interactions delegated to callbacks
  */
+import { ChevronRight, Loader2, Server } from 'lucide-react';
 import { useState } from 'react';
 
-import { ChevronRight, Loader2, Server } from 'lucide-react';
 
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { encodeHtmlEntities } from '@/lib/sanitize';
-import { ApiMethod, ApiServiceSpec } from '@/types';
+import { type ApiMethod, type ApiServiceSpec } from '@/types';
 
 // Internal CodeBlock component for syntax highlighting
 function CodeBlock({ code }: { code: string }): React.JSX.Element {

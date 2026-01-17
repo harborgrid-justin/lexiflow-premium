@@ -7,9 +7,10 @@
  * Profile Domain - State Provider
  */
 
-import type { ExtendedUserProfile } from '@/types/system';
 import React, { createContext, useContext, useMemo, useState } from 'react';
+
 import type { ProfileLoaderData } from './loader';
+import type { ExtendedUserProfile } from '@/types/system';
 
 export type ProfileTab = 'overview' | 'settings' | 'security' | 'access';
 

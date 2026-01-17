@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
-
 import { Loader2 } from 'lucide-react';
-import { JSX } from 'react/jsx-runtime';
+import { useEffect, useState } from 'react';
+import { type JSX } from 'react/jsx-runtime';
 
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { LineageLink, LineageNode } from '@/types';
+import { type LineageLink, type LineageNode } from '@/types';
 
 import { ImpactAnalysis } from './lineage/ImpactAnalysis';
 import { LineageCanvas } from './lineage/LineageCanvas';

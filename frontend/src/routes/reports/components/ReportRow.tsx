@@ -11,6 +11,7 @@
  */
 
 import { Calendar } from 'lucide-react';
+
 import type { Report } from './types';
 
 interface ReportRowProps {

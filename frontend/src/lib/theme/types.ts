@@ -7,8 +7,9 @@
  * @module lib/theme/types
  */
 
+import { type ThemeMode } from "./tokens";
+
 import type { ReactNode } from "react";
-import { ThemeMode } from "./tokens";
 
 // Theme type for the actual theme object returned by useTheme
 export interface ThemeObject {

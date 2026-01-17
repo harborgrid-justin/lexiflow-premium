@@ -3,8 +3,9 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import type { BillingRate, Invoice, TimeEntry, Transaction } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
+
+import type { BillingRate, Invoice, TimeEntry, Transaction } from '@/types';
 /**
  * Billing Domain State
  */

@@ -5,23 +5,24 @@
  * Provides a risk meter and argument builder for admissibility hearings.
  */
 
-import React from 'react';
 import { Filter, Scale, Wand2 } from 'lucide-react';
+import React from 'react';
+
 // Common Components
-import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 
 // Context & Utils
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Services & Types
-import { useQuery } from '@/hooks/useQueryHooks';
+import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 export const RelevanceAnalysis: React.FC = () => {
     const { theme } = useTheme();

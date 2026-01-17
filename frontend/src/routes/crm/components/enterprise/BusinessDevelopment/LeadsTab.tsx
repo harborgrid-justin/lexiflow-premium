@@ -3,9 +3,6 @@
  * @description Leads tab view component
  */
 
-import { Card } from '@/components/molecules/Card/Card';
-import type { ThemeObject } from '@/lib/theme/types';
-import { cn } from '@/lib/cn';
 import { Plus, Search } from 'lucide-react';
 import {
   Bar,
@@ -17,8 +14,14 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+
 import { LeadCard } from './LeadCard';
+
 import type { Lead } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface LeadsByStatusData {
   status: string;

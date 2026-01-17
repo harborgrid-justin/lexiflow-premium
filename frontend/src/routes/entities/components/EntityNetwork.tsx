@@ -23,24 +23,25 @@ import { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '@/hooks/useTheme';
-import { DataService } from '@/services/dataService';
 
 // Components
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/components/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
 import { NexusGraph } from '@/routes/visual/components/NexusGraph';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 import { DisjointSet } from '@/utils/datastructures/disjointSet';
 
 // Types
 import type { Case, EntityRelationship, LegalEntity, Party } from '@/types';
+
+import { DataService } from '@/services/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

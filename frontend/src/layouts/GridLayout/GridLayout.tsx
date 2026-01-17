@@ -5,8 +5,9 @@
  * Automatically adjusts columns based on screen size.
  */
 
-import { cn } from '@/lib/cn';
 import React from "react";
+
+import { cn } from '@/lib/cn';
 
 interface GridLayoutProps {
   children: React.ReactNode;

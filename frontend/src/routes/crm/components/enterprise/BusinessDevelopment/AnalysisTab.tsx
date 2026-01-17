@@ -3,9 +3,6 @@
  * @description Win/Loss analysis tab view component
  */
 
-import { Card } from '@/components/molecules/Card/Card';
-import type { ThemeObject } from '@/lib/theme/types';
-import { cn } from '@/lib/cn';
 import {
   CartesianGrid,
   Cell,
@@ -19,9 +16,15 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
-import { WinLossCard } from './WinLossCard';
-import type { WinLossAnalysis } from './types';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+
 import { formatCurrencyMillions } from './utils';
+import { WinLossCard } from './WinLossCard';
+
+import type { WinLossAnalysis } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface ConversionTrendData {
   month: string;

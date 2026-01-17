@@ -51,18 +51,8 @@
  * @module providers/application/roleprovider
  */
 
-import { RoleActionsContext, RoleStateContext } from '@/lib/role/contexts';
-import type {
-  Role,
-  RoleActionsValue,
-  RoleEvent,
-  RoleHierarchy,
-  RoleStateValue,
-  SystemRole,
-} from '@/lib/role/types';
-import { apiClient } from '@/services/infrastructure/api-client.service';
 import {
-  ReactNode,
+  type ReactNode,
   startTransition,
   useCallback,
   useContext,
@@ -71,6 +61,18 @@ import {
   useRef,
   useState,
 } from 'react';
+
+import { RoleActionsContext, RoleStateContext } from '@/lib/role/contexts';
+import { apiClient } from '@/services/infrastructure/api-client.service';
+
+import type {
+  Role,
+  RoleActionsValue,
+  RoleEvent,
+  RoleHierarchy,
+  RoleStateValue,
+  SystemRole,
+} from '@/lib/role/types';
 
 // ============================================================================
 // Constants

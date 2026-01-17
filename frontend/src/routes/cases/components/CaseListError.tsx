@@ -10,9 +10,10 @@
  * @module routes/cases/components/CaseListError
  */
 
-import { Button } from '@/components/atoms/Button';
 import { AlertCircle, Home, RefreshCw } from 'lucide-react';
 import { Link, useAsyncError } from 'react-router';
+
+import { Button } from '@/components/atoms/Button';
 
 export function CaseListError() {
   const error = useAsyncError();

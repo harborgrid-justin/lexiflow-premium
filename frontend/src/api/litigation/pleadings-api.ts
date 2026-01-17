@@ -30,6 +30,7 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
+
 import type { Pleading, PleadingFilters } from "@/types";
 
 /**
@@ -99,7 +100,7 @@ export class PleadingsApiService {
         typeof response === "object" &&
         !Array.isArray(response)
       ) {
-        const paginatedResponse = response as PaginatedResponse<Pleading>;
+        const paginatedResponse = response;
         const items =
           (paginatedResponse as unknown as Record<string, unknown>).items ||
           (paginatedResponse as unknown as Record<string, unknown>).data;

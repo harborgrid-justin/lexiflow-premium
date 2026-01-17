@@ -10,16 +10,16 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
 import { Wifi, CloudOff, RefreshCw, AlertTriangle, Activity } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { useInterval } from '@/hooks/useInterval';
 import { useSync } from '@/hooks/useSync';
 import { useTheme } from "@/hooks/useTheme";
-import { useInterval } from '@/hooks/useInterval';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

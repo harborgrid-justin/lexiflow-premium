@@ -30,6 +30,8 @@
  * - Composable: Can be used with other hooks
  */
 
+import { useMemo } from 'react';
+
 import { useAuthState } from '@/providers/application/AuthProvider';
 import {
   hasPermission,
@@ -47,7 +49,6 @@ import {
   type Permission,
   type UserRole,
 } from '@/utils/permissions';
-import { useMemo } from 'react';
 
 /**
  * Hook for permission checking

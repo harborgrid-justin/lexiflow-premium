@@ -1,9 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { Bookmark, BookOpen, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
+
 import { TypewriterText } from '@/components/atoms/TypewriterText';
 import { Card } from '@/components/molecules/Card/Card';
-import { ResearchSession } from '@/types';
-import { Bookmark, BookOpen, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type ResearchSession } from '@/types';
+
+
 import { ResearchResultCard } from './ResearchResultCard';
 
 interface ResearchResultsProps {

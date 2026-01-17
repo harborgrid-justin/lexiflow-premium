@@ -3,9 +3,10 @@
  * Navigation buttons for multi-step form
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 interface FormNavigationProps {
   currentStep: number;
   totalSteps: number;

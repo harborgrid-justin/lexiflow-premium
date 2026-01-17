@@ -1,12 +1,14 @@
-import { useMutation, useQuery } from '@/hooks/backend';
-import { useNotify } from '@/hooks/core';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { CleansingRule } from '@/types';
 import { Calendar, CheckCircle, Loader2, Phone, Play, Plus, Type, Wand2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button';
+import { useMutation, useQuery } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type CleansingRule } from '@/types';
+
 
 /**
  * StandardizationConsole - React 18 optimized with React.memo

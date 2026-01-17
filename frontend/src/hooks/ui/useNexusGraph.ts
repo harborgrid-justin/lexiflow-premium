@@ -17,7 +17,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -33,11 +33,13 @@ import {
 } from "@/config/features/hooks.config";
 import {
   NODE_STRIDE,
-  NexusLink,
+  type NexusLink,
   NexusPhysics,
-  SerializedNode,
-  SimulationNode,
+  type SerializedNode,
+  type SimulationNode,
 } from "@/utils/nexusPhysics";
+
+import type React from "react";
 
 // ============================================================================
 // HELPER FUNCTIONS

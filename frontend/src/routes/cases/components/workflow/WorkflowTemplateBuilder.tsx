@@ -1,11 +1,14 @@
+import { ArrowLeft, Loader2, Rocket, Save } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { WorkflowTemplateData } from '@/types';
-import { ArrowLeft, Loader2, Rocket, Save } from 'lucide-react';
+import { type WorkflowTemplateData } from '@/types';
+
 import { useWorkflowDesigner } from '../../hooks/useWorkflowDesigner';
+
 import { BuilderCanvas } from './builder/BuilderCanvas';
 import { BuilderPalette } from './builder/BuilderPalette';
 import { BuilderProperties } from './builder/BuilderProperties';

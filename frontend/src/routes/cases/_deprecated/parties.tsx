@@ -10,12 +10,15 @@
  * @module routes/cases/parties
  */
 
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
+
 import { casesApi } from '@/lib/frontend-api';
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
 import { PartiesTable } from '@/routes/cases/ui/components/PartiesTable';
-import type { Case } from '@/types';
-import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
+
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { Case } from '@/types';
 // import type { Route } from "./+types/parties";
 
 // ============================================================================
@@ -62,7 +65,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // ============================================================================
 
 export default function CasePartiesRoute() {
-  const { caseData, parties } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { caseData, parties } = useLoaderData();
 
   // Count parties by type
   interface Party { type: string }

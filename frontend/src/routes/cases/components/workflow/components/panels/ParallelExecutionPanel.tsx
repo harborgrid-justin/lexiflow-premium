@@ -3,10 +3,11 @@
  * @description Parallel execution configuration with join strategies
  */
 
+import { Boxes } from 'lucide-react';
+
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Boxes } from 'lucide-react';
 export function ParallelExecutionPanel() {
   const { theme } = useTheme();
 

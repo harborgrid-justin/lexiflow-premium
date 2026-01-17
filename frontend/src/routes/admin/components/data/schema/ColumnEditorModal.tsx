@@ -1,8 +1,8 @@
-import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 interface ColumnData {
     name?: string;
     type?: string;

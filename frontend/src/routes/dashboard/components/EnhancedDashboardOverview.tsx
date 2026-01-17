@@ -5,9 +5,6 @@
  * Displays real-time metrics, activity feeds, deadlines, and analytics
  */
 
-import { CHART_COLORS } from '@/config/dashboard.config';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import {
   AlertCircle,
   Briefcase,
@@ -31,10 +28,16 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { CHART_COLORS } from '@/config/dashboard.config';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { useDashboardOverview } from '../hooks/useDashboardOverview';
 
 // Components
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+
 import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '../widgets';
 
 // ============================================================================

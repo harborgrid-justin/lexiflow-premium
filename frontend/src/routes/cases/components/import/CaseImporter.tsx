@@ -12,6 +12,9 @@
  * - Validation against CreateCaseDto requirements
  */
 
+import { AlertCircle, CheckCircle, Edit2, FileText, Loader, Plus, Settings, Sparkles, Upload, Users, X } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { api } from '@/api';
 import { Button } from '@/components/atoms/Button';
 import { AI_CONFIG } from '@/config/features/ai.config';
@@ -19,13 +22,11 @@ import { TIMEOUTS } from '@/config/ports.config';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { PartyTypeBackend } from '@/lib/frontend-api';
+import { type PartyTypeBackend } from '@/lib/frontend-api';
 import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';
-import { CaseStatus, MatterType } from '@/types/enums';
-import { MetadataRecord, UserId } from '@/types/primitives';
+import { type CaseStatus, type MatterType } from '@/types/enums';
+import { type MetadataRecord, type UserId } from '@/types/primitives';
 import { parseCaseXml, type XMLParsedCaseData } from '@/utils/caseXmlParser';
-import { AlertCircle, CheckCircle, Edit2, FileText, Loader, Plus, Settings, Sparkles, Upload, Users, X } from 'lucide-react';
-import React, { useState } from 'react';
 
 interface ParsedCaseData {
   title?: string;
@@ -199,10 +200,10 @@ export const CaseImporter: React.FC = () => {
         judge: parsedData.judge,
         referredJudge: parsedData.referredJudge,
         magistrateJudge: parsedData.magistrateJudge,
-        filingDate: (parsedData.filingDate ? new Date(parsedData.filingDate).toISOString() : new Date().toISOString()) as string,
-        trialDate: (parsedData.trialDate ? new Date(parsedData.trialDate).toISOString() : undefined) as string | undefined,
-        closeDate: (parsedData.closeDate ? new Date(parsedData.closeDate).toISOString() : undefined) as string | undefined,
-        dateTerminated: (parsedData.dateTerminated ? new Date(parsedData.dateTerminated).toISOString() : undefined) as string | undefined,
+        filingDate: (parsedData.filingDate ? new Date(parsedData.filingDate).toISOString() : new Date().toISOString()),
+        trialDate: (parsedData.trialDate ? new Date(parsedData.trialDate).toISOString() : undefined),
+        closeDate: (parsedData.closeDate ? new Date(parsedData.closeDate).toISOString() : undefined),
+        dateTerminated: (parsedData.dateTerminated ? new Date(parsedData.dateTerminated).toISOString() : undefined),
         juryDemand: parsedData.juryDemand,
         causeOfAction: parsedData.causeOfAction,
         natureOfSuit: parsedData.natureOfSuit,

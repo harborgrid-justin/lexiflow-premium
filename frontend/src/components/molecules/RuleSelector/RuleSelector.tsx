@@ -17,19 +17,19 @@ import React, { useId, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { RuleService } from '@/services/features/rules/rules';
 
 // Hooks & Context
-import { useDebounce } from '@/hooks/useDebounce';
 import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
-import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { cn } from '@/lib/cn';
+import { RuleService } from '@/services/features/rules/rules';
 
 // Types
-import { LegalRule } from '@/types';
+import { type LegalRule } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

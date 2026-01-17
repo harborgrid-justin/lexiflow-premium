@@ -1,6 +1,6 @@
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { Citation, Defense, LegalArgument } from '@/types';
+import { type Citation, type Defense, type LegalArgument } from '@/types';
 
 interface StrategyData {
     arguments: LegalArgument[];

@@ -10,19 +10,19 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { Button } from '@/components/atoms/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { UserAvatar } from '@/components/atoms/UserAvatar';
-import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

@@ -20,6 +20,7 @@ import { cn } from '@/lib/cn';
 import { useToast } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { draftingApi } from '@api/domains/drafting';
+
 import type {
   DraftingTemplate,
   GeneratedDocument,

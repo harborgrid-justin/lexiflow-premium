@@ -1,8 +1,10 @@
-import type { Case } from '@/types';
 import React from 'react';
+
 import { CaseDetailProvider } from './CaseDetailContext';
 import { CaseDetailShell } from './CaseDetailShell';
 import { useCaseDetail } from './hooks/useCaseDetail';
+
+import type { Case } from '@/types';
 
 interface CaseDetailViewProps {
   caseData: Case;

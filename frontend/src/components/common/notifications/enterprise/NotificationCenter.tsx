@@ -4,9 +4,6 @@
  * @description Full-featured notification center page with filtering, search, and bulk actions
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
-import type { UINotification } from '@/types/notifications';
 import { formatDistanceToNow } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -30,6 +27,11 @@ import {
   X,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { UINotification } from '@/types/notifications';
 
 // ============================================================================
 // TYPES & INTERFACES

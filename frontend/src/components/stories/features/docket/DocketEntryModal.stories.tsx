@@ -1,7 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
 import { DocketEntryModal } from '@/routes/cases/components/docket/DocketEntryModal';
-import { DocketEntry, DocketEntryType, DocketId, CaseId, DocumentId } from '@/types';
+import { type DocketEntry, type DocketEntryType, type DocketId, type CaseId, type DocumentId } from '@/types';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * DocketEntryModal displays detailed information about a docket entry

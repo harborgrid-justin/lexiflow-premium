@@ -15,12 +15,14 @@
  * @architecture Uses NotificationsApiService for notifications and frontend communications API for preferences
  */
 
-import { NotificationsApiService, type ApiNotification } from '@/api/communications';
-import { communicationsApi } from '@/lib/frontend-api';
-import { cn } from '@/lib/utils';
-import { useTheme } from "@/hooks/useTheme";
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { NotificationsApiService, type ApiNotification } from '@/api/communications';
+import { useTheme } from "@/hooks/useTheme";
+import { communicationsApi } from '@/lib/frontend-api';
+import { cn } from '@/lib/utils';
+
 import {
   ConnectionStatus,
   NotificationBell,

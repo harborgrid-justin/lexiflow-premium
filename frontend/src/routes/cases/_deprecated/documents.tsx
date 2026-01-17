@@ -11,9 +11,12 @@
  */
 
 import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
+
 import type { Case, LegalDocument } from '@/types';
+
 import { useState } from 'react';
 import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
+
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
@@ -62,7 +65,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // ============================================================================
 
 export default function CaseDocumentsRoute() {
-  const { caseData, documents } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { caseData, documents } = useLoaderData();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');

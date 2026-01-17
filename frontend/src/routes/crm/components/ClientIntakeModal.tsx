@@ -1,13 +1,15 @@
-import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
-import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
-import { useDebounce } from '@/hooks/useDebounce';
-import { cn } from '@/lib/cn';
+import { AlertTriangle, Loader2, Plus, ShieldCheck, UserPlus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Modal } from '@/components/molecules/Modal';
-import { AlertTriangle, Loader2, Plus, ShieldCheck, UserPlus } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+
 
 interface ClientIntakeModalProps {
   onClose: () => void;

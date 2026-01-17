@@ -7,9 +7,11 @@
  * @module components/features/cases/PartiesTable
  */
 
-import { cn } from '@/lib/utils';
-import type { Party } from '@/types';
 import { useState } from 'react';
+
+import { cn } from '@/lib/utils';
+
+import type { Party } from '@/types';
 
 export interface PartiesTableProps {
   /** Array of parties to display */

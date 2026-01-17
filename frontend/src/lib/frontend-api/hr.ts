@@ -20,11 +20,13 @@
  * - Training and development
  */
 
-import type { Employee } from "@/types";
 import { normalizeEmployee, normalizeEmployees } from "../normalization/hr";
+
 import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
 import { failure, type PaginatedResult, type Result, success } from "./types";
+
+import type { Employee } from "@/types";
 
 /**
  * Employee query filters

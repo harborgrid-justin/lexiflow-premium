@@ -3,11 +3,13 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
+import { Activity, ArrowRight, Server, Settings, Shield, Users } from 'lucide-react';
+import { Link } from 'react-router';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { useService } from '@/providers/application/serviceprovider';
-import { Activity, ArrowRight, Server, Settings, Shield, Users } from 'lucide-react';
-import { Link } from 'react-router';
+
 import { AdminNavLink } from './components/AdminNavLink';
 import { AuditLogRow } from './components/AuditLogRow';
 import { ServiceStatusBadge } from './components/ServiceStatusBadge';

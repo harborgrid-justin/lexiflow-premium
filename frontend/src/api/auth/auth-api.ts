@@ -5,6 +5,7 @@
 
 import { REFRESH_TOKEN_KEY } from "@/services/infrastructure/api-client/config";
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { User } from "@/types";
 
 export class AuthApiService {

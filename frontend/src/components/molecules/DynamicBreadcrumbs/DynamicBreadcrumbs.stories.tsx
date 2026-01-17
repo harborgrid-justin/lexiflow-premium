@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DynamicBreadcrumbs } from './DynamicBreadcrumbs';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DynamicBreadcrumbs> = {
   title: 'Components/Molecules/DynamicBreadcrumbs/DynamicBreadcrumbs',

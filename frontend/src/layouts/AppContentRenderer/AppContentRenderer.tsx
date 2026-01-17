@@ -23,13 +23,13 @@ import React, { Suspense, lazy } from 'react';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Services & Data
+import { PATHS } from '@/config/paths.config';
 import { ModuleRegistry } from '@/services/infrastructure/module-registry.service';
 
 // Utils & Constants
-import { PATHS } from '@/config/paths.config';
 
 // Types
-import { AppView, Case, User } from '@/types';
+import { type AppView, type Case, type User } from '@/types';
 
 // ========================================
 // LAZY LOADED COMPONENTS
@@ -125,7 +125,7 @@ export const AppContentRenderer = ({
     }
 
     if (activeView === PATHS.BILLING) {
-      dynamicProps.navigateTo = (v: string) => setActiveView(v as AppView);
+      dynamicProps.navigateTo = (v: string) => setActiveView(v);
     }
 
     if (activeView === PATHS.CREATE_CASE) {

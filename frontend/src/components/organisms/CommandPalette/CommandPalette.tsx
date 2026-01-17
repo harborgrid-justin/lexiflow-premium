@@ -15,8 +15,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
-import type { LucideIcon } from 'lucide-react';
 import {
   ArrowRight,
   Clock,
@@ -26,22 +24,24 @@ import {
   Sparkles,
   X
 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useDebounce } from '@/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
 import * as styles from './CommandPalette.styles';
 
 // Types
 import type { UserRole } from '@/types';
+import type { LucideIcon } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES

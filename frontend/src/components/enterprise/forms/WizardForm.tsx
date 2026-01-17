@@ -12,13 +12,17 @@
  * - Keyboard shortcuts
  */
 
-import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { WizardConfig } from '@/types/forms';
 import React from "react";
+
+import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+
 import { FormField } from './FormField';
 import { FormSectionComponent } from './FormSection';
+
+import type { WizardConfig } from '@/types/forms';
 
 // ============================================================================
 // TYPES

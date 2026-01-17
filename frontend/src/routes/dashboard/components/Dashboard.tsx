@@ -18,18 +18,20 @@ import React, { Suspense, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/atoms/Button/Button';
 import { TabbedPageLayout } from '@/layouts/TabbedPageLayout/TabbedPageLayout';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { cn } from '@/lib/cn';
+
 import { DashboardProvider } from '../DashboardProvider';
+
 import { DashboardContent } from './DashboardContent';
 
 // Utils & Config
-import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/lib/cn';
 
 // Types
 import type { User } from '@/types';

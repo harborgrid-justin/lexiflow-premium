@@ -17,23 +17,24 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-
-// Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-
-// Components
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+
+// Hooks & Context
+
+// Components
+
 import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';
 import { PrecedentsView } from '../base/PrecedentsView';
 import { QAView } from '../base/QAView';
 import { WikiView } from '../base/WikiView';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

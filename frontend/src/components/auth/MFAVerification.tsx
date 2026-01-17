@@ -6,13 +6,14 @@
  * @module components/auth/MFAVerification
  */
 
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { useNotify } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
 import { useAuthActions } from '@/providers/application/authprovider';
 import { IntegrationOrchestrator } from '@/services/integration/integration-orchestrator.service';
-import { SystemEventPayloads, SystemEventType } from '@/types/integration-types';
-import React, { useState } from 'react';
+import { type SystemEventPayloads, SystemEventType } from '@/types/integration-types';
 
 interface MFAVerificationProps {
   onSuccess?: () => void;

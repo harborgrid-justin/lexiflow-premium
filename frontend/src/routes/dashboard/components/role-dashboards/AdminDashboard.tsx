@@ -4,15 +4,19 @@
  * @description Admin-specific dashboard focused on firm-wide metrics, user activity, and system health
  */
 
-import React from 'react';
-import { type AdminDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { ChartCard, KPICard, StatWidget } from '../../widgets';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/lib/cn';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Activity, AlertCircle, Server, Users } from 'lucide-react';
+import React from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type AdminDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
+
+import { ChartCard, KPICard, StatWidget } from '../../widgets';
+
+
 
 export const AdminDashboard: React.FC = () => {
   const { theme, mode } = useTheme();

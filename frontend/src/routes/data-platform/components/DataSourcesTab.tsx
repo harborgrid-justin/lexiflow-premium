@@ -1,8 +1,12 @@
-import { Button } from '@/components/organisms/_legacy/Button';
 import { CheckCircle, Database, Plus, XCircle } from 'lucide-react';
 import React from 'react';
-import type { DataSource } from '../DataPlatformContext';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+
 import { useDataPlatform } from '../hooks/useDataPlatform';
+
+import type { DataSource } from '../DataPlatformContext';
+
 
 export function DataSourcesTab() {
   const { sources, typeFilter, setTypeFilter, metrics } = useDataPlatform();

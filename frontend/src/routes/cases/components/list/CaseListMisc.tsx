@@ -17,23 +17,23 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useNotify } from '@/hooks/useNotify';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Components
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 
 // Types
-import { Case } from '@/types';
+import { type Case } from '@/types';
 
 // ============================================================================
 // COMPONENT

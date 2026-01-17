@@ -1,13 +1,14 @@
 // src/app/paths/MemberPath.tsx
+import React, { useEffect, useMemo, useState } from "react";
+
 import { DeterministicLoader } from "@/components/performance/DeterministicLoader";
 import { OptimisticInput } from "@/components/performance/OptimisticInput";
 import { ZeroClsWrapper } from "@/components/performance/ZeroClsWrapper";
+import { usePredictivePreload } from "@/hooks/performance/usePredictivePreload";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/hooks/useTheme";
-import { usePredictivePreload } from "@/hooks/performance/usePredictivePreload";
-import { useData } from "@/routes/dashboard";
 import { cn } from "@/lib/cn";
-import React, { useEffect, useMemo, useState } from "react";
+import { useData } from "@/routes/dashboard";
 
 export const MemberPath: React.FC<{ enableNewDashboard?: boolean }> = ({ enableNewDashboard = false }) => {
   const { auth, logout } = useAuth();

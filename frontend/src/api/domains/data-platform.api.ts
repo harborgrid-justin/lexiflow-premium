@@ -4,9 +4,9 @@
  */
 
 import { DataSourcesApiService } from '../data-platform/data-sources-api';
+import { QueryWorkbenchApiService } from '../data-platform/query-workbench-api';
 import { RLSPoliciesApiService } from '../data-platform/rls-policies-api';
 import { SchemaManagementApiService } from '../data-platform/schema-management-api';
-import { QueryWorkbenchApiService } from '../data-platform/query-workbench-api';
 
 // Export service classes
 export {

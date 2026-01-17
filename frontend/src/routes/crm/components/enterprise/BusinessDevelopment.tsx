@@ -6,14 +6,6 @@
  * RFP response tracking, and win / loss analysis.
  */
 
-import React, { useState } from 'react';
-
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { getChartTheme } from '@/utils/chartConfig';
 import {
   Award,
   BarChart3,
@@ -28,6 +20,7 @@ import {
   Users,
   XCircle
 } from 'lucide-react';
+import React, { useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -43,6 +36,14 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { getChartTheme } from '@/utils/chartConfig';
+
 
 // ============================================================================
 // TYPES
@@ -132,8 +133,8 @@ interface WinLossAnalysis {
 
 export const BusinessDevelopment: React.FC = () => {
   const { theme, mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
   const [activeTab, setActiveTab] = useState<'leads' | 'pitches' | 'rfps' | 'analysis'>('leads');
 
   // Mock data

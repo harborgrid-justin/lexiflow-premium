@@ -1,5 +1,7 @@
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { Gavel } from 'lucide-react';
+
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useDocket } from './DocketProvider';
 
 export function DocketView() {

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ConnectionStatus } from './ConnectionStatus';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ConnectionStatus> = {
   title: 'Components/Organisms/ConnectionStatus/ConnectionStatus',

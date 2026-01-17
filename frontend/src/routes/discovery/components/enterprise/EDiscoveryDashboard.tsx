@@ -5,13 +5,6 @@
  * collection tracking, processing status, and review metrics
  */
 
-import React from 'react';
-import { analyticsApi } from '@/lib/frontend-api';
-import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from "@/hooks/useTheme";
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -28,7 +21,14 @@ import {
   Upload,
   Users
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { analyticsApi } from '@/lib/frontend-api';
+import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
+import { DataService } from '@/services/data/data-service.service';
 
 // ============================================================================
 // TYPES

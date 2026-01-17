@@ -32,8 +32,9 @@
  * @module routes/cases/index
  */
 
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/index";
 
 // Import loader and action from dedicated file (ENTERPRISE PATTERN)

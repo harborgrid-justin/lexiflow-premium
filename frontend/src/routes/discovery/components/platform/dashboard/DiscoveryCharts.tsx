@@ -1,13 +1,15 @@
+import { Loader2 } from 'lucide-react';
 import React from 'react';
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
 import { Card } from '@/components/molecules/Card/Card';
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
-import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { DataService } from '@/services/data/data-service.service';
+
 // ✅ Migrated to backend API (2025-12-21)
-import { Loader2 } from 'lucide-react';
 
 interface FunnelDataItem {
     name: string;
@@ -23,7 +25,7 @@ interface CustodianDataItem {
 const DiscoveryCharts: React.FC = () => {
     const { mode } = useTheme();
     const chartTheme = useChartTheme();
-    const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
+    const chartColors = ChartColorService.getPalette(mode);
 
     const { data: funnelData = [], isLoading: funnelLoading } = useQuery<FunnelDataItem[]>(
         ['discovery-funnel-stats', 'main'],

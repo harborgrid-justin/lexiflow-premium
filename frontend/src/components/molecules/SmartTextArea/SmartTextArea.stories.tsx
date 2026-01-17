@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SmartTextArea } from './SmartTextArea';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof SmartTextArea> = {
   title: 'Components/Molecules/SmartTextArea/SmartTextArea',

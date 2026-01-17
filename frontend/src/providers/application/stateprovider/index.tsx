@@ -36,9 +36,11 @@
  * @module providers/application/stateprovider
  */
 
-import { GlobalStateActionsContext, GlobalStateContext } from '@/lib/state/contexts';
-import type { AppPreferences, StateActionsValue, StateProviderProps, StateValue } from '@/lib/state/types';
 import { useCallback, useContext, useEffect, useMemo, useState, useTransition } from 'react';
+
+import { GlobalStateActionsContext, GlobalStateContext } from '@/lib/state/contexts';
+
+import type { AppPreferences, StateActionsValue, StateProviderProps, StateValue } from '@/lib/state/types';
 
 const DEFAULT_PREFERENCES: AppPreferences = {
   theme: 'system',

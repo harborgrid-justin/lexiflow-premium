@@ -3,11 +3,14 @@
  * @description Individual pitch card component
  */
 
-import type { ThemeObject } from '@/lib/theme/types';
-import { cn } from '@/lib/cn';
 import { Calendar } from 'lucide-react';
-import type { Pitch } from './types';
+
+import { cn } from '@/lib/cn';
+
 import { formatCurrency, getStatusColor } from './utils';
+
+import type { Pitch } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface PitchCardProps {
   pitch: Pitch;

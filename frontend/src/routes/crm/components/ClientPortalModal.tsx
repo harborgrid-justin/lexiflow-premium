@@ -1,9 +1,10 @@
+import { Activity, FileText, Lock, MessageSquare, Shield, UploadCloud, X } from 'lucide-react';
+import { Suspense, lazy, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { Tabs } from '@/components/molecules/Tabs';
-import { Client } from '@/types';
-import { Activity, FileText, Lock, MessageSquare, Shield, UploadCloud, X } from 'lucide-react';
-import { Suspense, lazy, useState } from 'react';
+import { type Client } from '@/types';
 
 // Lazy load dedicated components for each tab
 const ClientPortalDocuments = lazy(() => import('./client-portal/ClientPortalDocuments').then(m => ({ default: m.ClientPortalDocuments })));

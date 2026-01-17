@@ -12,7 +12,8 @@ import React, { useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { StrategyToolbarProps } from './types';
+
+import { type StrategyToolbarProps } from './types';
 
 export const StrategyToolbar: React.FC<StrategyToolbarProps> = ({
   scale, setScale, onToggleSidebar, onZoomToFit, onExport

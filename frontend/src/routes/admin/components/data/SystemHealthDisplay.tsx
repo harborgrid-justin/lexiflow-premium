@@ -5,11 +5,13 @@
  * are using the backend vs IndexedDB.
  */
 
+import { Activity } from 'lucide-react';
+import { useState } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { useDataSource } from '@/routes/dashboard/data/DataSourceContext';
-import { Activity } from 'lucide-react';
-import { useState } from 'react';
+
 import { BACKEND_ENABLED_SERVICES } from './constants';
 import { calculateCoverage } from './utils';
 

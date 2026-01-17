@@ -17,22 +17,22 @@ import React, { useCallback, useMemo, useState, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Badge } from '@/components/atoms/Badge/Badge';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { WikiArticle } from '@/types';
+import { type WikiArticle } from '@/types';
 
 // ============================================================================
 // HELPER FUNCTIONS

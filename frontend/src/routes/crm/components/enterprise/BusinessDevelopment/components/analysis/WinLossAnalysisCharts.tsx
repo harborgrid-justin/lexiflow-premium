@@ -4,11 +4,7 @@
  * @description Conversion trend and source distribution charts
  */
 
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { Card } from '@/components/molecules/Card/Card';
-import type { ConversionTrend, LeadsBySource } from '@/types/crm';
-import { getChartTheme } from '@/utils/chartConfig';
+import React from "react";
 import {
   CartesianGrid,
   Cell,
@@ -22,7 +18,14 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
-import React from "react";
+
+import { Card } from '@/components/molecules/Card/Card';
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { getChartTheme } from '@/utils/chartConfig';
+
+import type { ConversionTrend, LeadsBySource } from '@/types/crm';
+
 
 interface WinLossAnalysisChartsProps {
   conversionTrend: ConversionTrend[];
@@ -34,8 +37,8 @@ export const WinLossAnalysisCharts: React.FC<WinLossAnalysisChartsProps> = ({
   leadsBySource
 }) => {
   const { mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
 
   return (
     <>

@@ -3,10 +3,13 @@
  * Displays invoice management list with filtering
  */
 
-import { InvoicesApiService } from '@/lib/frontend-api';
 import { Link, useActionData, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { InvoicesApiService } from '@/lib/frontend-api';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { InvoiceList } from './components/InvoiceList';
 
 // ============================================================================

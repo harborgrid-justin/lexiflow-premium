@@ -1,12 +1,15 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { JurisdictionGeoMap } from '@/routes/jurisdiction/components/JurisdictionGeoMap';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from "@/hooks/useTheme";
 import { Book, Loader2, MapPin } from 'lucide-react';
 import { useMemo } from 'react';
-import { CourtLevel, groupJurisdictionsByState, Jurisdiction, StateGroup } from './localRulesMap.utils';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { JurisdictionGeoMap } from '@/routes/jurisdiction/components/JurisdictionGeoMap';
+import { DataService } from '@/services/data/data-service.service';
+
+
+import { type CourtLevel, groupJurisdictionsByState, type Jurisdiction, type StateGroup } from './localRulesMap.utils';
 // ✅ Migrated to backend API (2025-12-21)
 
 export function LocalRulesMap() {

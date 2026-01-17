@@ -5,9 +5,11 @@
 
 import { Suspense } from 'react';
 import { Outlet, useLoaderData } from 'react-router';
+
 import { RouteSkeleton } from '../_shared/RouteSkeletons';
-import { PleadingsProvider } from './PleadingsContext';
+
 import { pleadingsLoader } from './loader';
+import { PleadingsProvider } from './PleadingsContext';
 
 export { pleadingsLoader as loader };
 

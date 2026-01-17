@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { CalendarProvider } from './CalendarProvider';
 import { CalendarView } from './CalendarView';
+
 import type { CalendarLoaderData } from './loader';
 
 interface CalendarPageProps {

@@ -12,35 +12,36 @@
 // ============================================================================
 import { CheckCircle, Database, HardDrive, Loader2, Mail, Play, Plus, Server, Shield } from 'lucide-react';
 import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { EvidenceCustodyLog } from '@/routes/evidence/components/EvidenceCustodyLog';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { ProgressBar } from '@/components/atoms/ProgressBar';
 import { Card } from '@/components/molecules/Card';
 
 // Hooks & Context
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useWindow } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 
 // Config
-import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';
 
 // Services & Utils
+import { EvidenceCustodyLog } from '@/routes/evidence/components/EvidenceCustodyLog';
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
-import { ESISource } from '@/types';
+import { type ESISource } from '@/types';
 import { ESICollectionStatusEnum } from '@/types/enums';
 
 /**

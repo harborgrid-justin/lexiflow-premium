@@ -1,10 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useWindow } from '@/providers';
-import { cn } from '@/lib/cn';
 import { Loader2, Maximize2, Menu, X } from 'lucide-react';
 import { Suspense, lazy, useEffect, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+
 import { DataPlatformSidebar } from './DataPlatformSidebar';
-import { PlatformView } from './types';
+import { type PlatformView } from './types';
 
 // Lazy Load All Sub-Modules
 const PlatformOverview = lazy(() => import('./PlatformOverview').then(m => ({ default: m.PlatformOverview })));

@@ -3,8 +3,6 @@
  * @description Profitability analysis tab view
  */
 
-import { Card } from '@/components/molecules/Card/Card';
-import type { ThemeObject } from '@/lib/theme/types';
 import {
   Bar,
   BarChart,
@@ -20,8 +18,13 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
+
+import { Card } from '@/components/molecules/Card/Card';
+
 import { ProfitabilityCard } from './ProfitabilityCard';
+
 import type { ClientProfitability, ClientSegment } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface RevenueTrendData {
   month: string;

@@ -13,23 +13,24 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Loader2 } from 'lucide-react';
-import React, { useMemo, useTransition } from 'react';
+import { useMemo, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
-import { useWindow } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 
 // Components
 import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+
 import { WallItemCard } from './cards/WallItemCard';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // Types
 import type { EvidenceItem, LegalDocument, Motion, WarRoomData } from '@/types';
@@ -147,7 +148,7 @@ export function EvidenceWall({ warRoomData }: EvidenceWallProps) {
                 typeof item.original === 'object' &&
                 'content' in item.original &&
                 'versions' in item.original
-                ? (item.original as LegalDocument)
+                ? (item.original)
                 : null;
         openWindow(
             winId,

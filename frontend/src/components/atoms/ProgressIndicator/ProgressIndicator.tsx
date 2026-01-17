@@ -11,11 +11,12 @@
  * - Success celebration animation
  */
 
+import { CheckCircle, Loader2, X, XCircle } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { CheckCircle, Loader2, X, XCircle } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

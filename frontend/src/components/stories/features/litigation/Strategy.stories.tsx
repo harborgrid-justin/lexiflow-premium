@@ -1,7 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
-import type { NodeType, WorkflowConnection, WorkflowNode } from '../../../../features/cases/components/workflow/builder/types';
+
 import { StrategyCanvas } from '../../../../features/litigation/strategy/StrategyCanvas';
+
+import type { NodeType, WorkflowConnection, WorkflowNode } from '../../../../features/cases/components/workflow/builder/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Litigation Strategy components provide visual strategy planning tools including

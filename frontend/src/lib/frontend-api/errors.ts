@@ -30,7 +30,7 @@
 
 import {
   ErrorType,
-  DomainError as IDomainError,
+  type DomainError as IDomainError,
   type FieldError,
 } from "./types";
 

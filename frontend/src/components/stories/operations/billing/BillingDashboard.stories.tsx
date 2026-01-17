@@ -5,9 +5,11 @@
  * Provides financial tracking, time entry management, and revenue analytics.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
 import BillingDashboard from '../../../../features/operations/billing/BillingDashboard';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof BillingDashboard> = {
   title: 'Pages/Billing Dashboard',

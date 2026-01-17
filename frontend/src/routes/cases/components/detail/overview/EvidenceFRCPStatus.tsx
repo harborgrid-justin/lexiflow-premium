@@ -8,8 +8,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { CheckCircle } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { Card } from '@/components/molecules/Card';

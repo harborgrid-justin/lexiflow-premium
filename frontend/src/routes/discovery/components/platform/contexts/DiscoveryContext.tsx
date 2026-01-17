@@ -10,14 +10,16 @@
  * - Guideline 38: Concurrent-safe defaults
  */
 
+import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
+
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { DiscoveryRequest } from '@/types/discovery';
-import { DiscoveryView } from '@/utils/discoveryNavigation';
+import { type DiscoveryRequest } from '@/types/discovery';
+import { type DiscoveryView } from '@/utils/discoveryNavigation';
 import { queryKeys } from '@/utils/queryKeys';
-import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
+
 import { getFirstTabOfParent, getParentTabForView } from '../layout/DiscoveryNavigation';
 
 // ============================================================================

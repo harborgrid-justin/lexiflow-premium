@@ -16,24 +16,25 @@ import { Search, Shield, Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/data-service.service';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type WorkflowTemplateData } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from './TemplatePreview';
-import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // Types
-import { WorkflowTemplateData } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

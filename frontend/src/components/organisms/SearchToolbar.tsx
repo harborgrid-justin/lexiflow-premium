@@ -17,14 +17,14 @@ import React, { useId, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { SearchService } from '@/services/search/search.service';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { SearchService } from '@/services/search/search.service';
 
 // ============================================================================
 // TYPES & INTERFACES

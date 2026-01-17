@@ -7,11 +7,14 @@
  * @module components/features/cases/CaseHeader
  */
 
-import { cn } from '@/lib/utils';
-import type { Case } from '@/types';
 import { Link } from 'react-router';
+
+import { cn } from '@/lib/utils';
+
 import { CaseQuickActions } from '../CaseQuickActions';
 import { CaseStatusBadge } from '../CaseStatusBadge';
+
+import type { Case } from '@/types';
 
 export interface CaseHeaderProps {
   /** The case data to display */

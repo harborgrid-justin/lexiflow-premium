@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { CheckCircle, FileText, PieChart as PieIcon, XCircle } from 'lucide-react';
+import React from 'react';
 import {
   Bar,
   BarChart,
@@ -32,7 +32,7 @@ import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Types
-import { TrialExhibit } from '@/types';
+import { type TrialExhibit } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

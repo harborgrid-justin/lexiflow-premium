@@ -1,9 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
-import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
-import { useToggle } from '@/hooks/useToggle';
-import { DataService } from '@/services/data/data-service.service';
+
 import { useNotify } from '@/hooks/useNotify';
-import { WorkflowTemplateData, WorkflowTemplateId, NodeType } from '@/types';
+import { useToggle } from '@/hooks/useToggle';
+import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
+import { DataService } from '@/services/data/data-service.service';
+import { type WorkflowTemplateData, type WorkflowTemplateId, type NodeType } from '@/types';
 
 export function useWorkflowDesigner(initialTemplate?: WorkflowTemplateData | null) {
   const notify = useNotify();

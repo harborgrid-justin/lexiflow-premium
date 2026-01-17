@@ -4,9 +4,10 @@
  * Provides graceful error handling and prevents financial data corruption
  */
 
-import { Button } from '@/components/atoms/Button/Button';
 import { AlertTriangle, DollarSign, Home, RefreshCw } from 'lucide-react';
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
 
 const getAppEnv = () => process.env.NODE_ENV;
 

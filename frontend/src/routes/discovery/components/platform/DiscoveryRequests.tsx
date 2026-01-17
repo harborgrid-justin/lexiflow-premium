@@ -19,33 +19,34 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback } from 'react';
 import { CheckSquare, Upload, Wand2 } from 'lucide-react';
+import React, { useCallback } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useTheme } from "@/hooks/useTheme";
 import { useToggle } from '@/hooks/useToggle';
-import { useWindow } from '@/providers';
 
 // Utils
-import { DiscoveryRequestStatusEnum } from '@/types/enums';
 import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { DiscoveryRequest } from '@/types';
-import { DiscoveryRequestsProps } from './types';
+import { type DiscoveryRequest } from '@/types';
+import { DiscoveryRequestStatusEnum } from '@/types/enums';
+
+import { type DiscoveryRequestsProps } from './types';
 
 const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNavigate, items = [] }) => {
     // G22 & G28: Immutable context read - pure function of context

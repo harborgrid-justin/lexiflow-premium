@@ -8,6 +8,7 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/apiClient";
+
 import type { FirmExpense } from "@/types";
 
 export interface ExpenseFilters {

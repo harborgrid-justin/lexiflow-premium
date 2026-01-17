@@ -27,9 +27,11 @@
  * ================================================================================
  */
 
-import { DataService } from '@/services/data/dataService';
-import type { Case } from '@/types/case';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
+
+import { DataService } from '@/services/data/dataService';
+
+import type { Case } from '@/types/case';
 
 // ============================================================================
 // TYPES

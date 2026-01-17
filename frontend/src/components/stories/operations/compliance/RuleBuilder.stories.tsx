@@ -1,4 +1,5 @@
 import { RuleBuilder } from '@/routes/admin/components/data/quality/RuleBuilder';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

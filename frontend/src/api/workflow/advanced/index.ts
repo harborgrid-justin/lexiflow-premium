@@ -5,6 +5,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import { AISuggestionsService } from "./ai-suggestions.service";
 import { AnalyticsService } from "./analytics.service";
 import { ApprovalChainsService } from "./approval-chains.service";

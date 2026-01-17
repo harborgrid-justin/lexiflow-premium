@@ -3,9 +3,6 @@
  * View and export individual reports
  */
 
-import { analyticsApi } from '@/lib/frontend-api';
-import { ChartCard } from '@/routes/analytics/components/enterprise';
-import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
 import { jsPDF } from 'jspdf';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';
@@ -21,8 +18,13 @@ import {
   Tooltip,
   XAxis, YAxis
 } from 'recharts';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
+import { analyticsApi } from '@/lib/frontend-api';
+import { ChartCard } from '@/routes/analytics/components/enterprise';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 interface ChartData {
   id: string;
@@ -72,7 +74,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function ReportViewerRoute() {
-  const { report } = useLoaderData() as LoaderData;
+  const { report } = useLoaderData();
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async (format: 'pdf' | 'excel' | 'csv') => {

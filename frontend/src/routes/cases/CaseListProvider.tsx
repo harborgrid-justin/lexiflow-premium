@@ -24,15 +24,19 @@
  * @module routes/cases/CaseListProvider
  */
 
-import type { Case, Invoice } from '@/types';
+
+import React, { useCallback, useMemo, useState, useTransition , useContext } from 'react';
+
 import { CaseStatus } from '@/types';
-import React, { useCallback, useMemo, useState, useTransition } from 'react';
+
 import {
   CaseListContext,
-  CaseListContextValue,
-  CaseListFilters,
-  CaseMetrics
+  type CaseListContextValue,
+  type CaseListFilters,
+  type CaseMetrics
 } from './CaseListContext';
+
+import type { Case, Invoice } from '@/types';
 
 /**
  * Provider props
@@ -220,7 +224,6 @@ export function CaseListProvider({
   );
 }
 
-import { useContext } from 'react';
 
 /**
  * Hook to consume CaseListContext

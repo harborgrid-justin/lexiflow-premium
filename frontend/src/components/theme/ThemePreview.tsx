@@ -4,8 +4,9 @@
  * Demonstrates all theme properties in real-time as they are updated.
  * Shows colors, typography, spacing, shadows, and effects.
  */
-import { useTheme } from "@/hooks/useTheme";
 import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
 
 export const ThemePreview: React.FC = () => {
   const { tokens, theme } = useTheme();
@@ -86,7 +87,7 @@ export const ThemePreview: React.FC = () => {
             <div key={key} className="flex items-center gap-2">
               <div
                 className="bg-blue-500 h-4"
-                style={{ width: val as string }}
+                style={{ width: val }}
               />
               <span className="text-xs text-slate-600 dark:text-slate-400">{key}: {val}</span>
             </div>

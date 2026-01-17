@@ -2,9 +2,11 @@
  * Case Insights Sub-Route
  */
 
+import { useLoaderData } from 'react-router';
+
 import { casesApi } from '@/lib/frontend-api';
 import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
-import { useLoaderData } from 'react-router';
+
 import type { Route } from "./+types/insights";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -22,7 +24,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseInsightsRoute() {
-  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { case: caseData } = useLoaderData();
   return <CaseInsightsDashboard caseId={caseData.id} />;
 }
 

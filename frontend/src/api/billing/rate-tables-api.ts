@@ -4,6 +4,7 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+
 import type { RateTable } from '@/types/financial';
 
 export class RateTablesApiService {

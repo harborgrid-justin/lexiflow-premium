@@ -1,6 +1,8 @@
 import { useCallback } from "react";
-import type { IService } from "../../services/core/ServiceLifecycle";
+
 import { ServiceRegistry } from "../../services/core/ServiceRegistry";
+
+import type { IService } from "../../services/core/ServiceLifecycle";
 import type { CryptoService } from "../../services/crypto/CryptoService";
 
 /**

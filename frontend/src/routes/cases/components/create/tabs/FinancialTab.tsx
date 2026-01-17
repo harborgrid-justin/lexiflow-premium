@@ -3,11 +3,12 @@
  */
 
 import React from 'react';
+
+import { CurrencyInput } from '../components/CurrencyInput';
 import { FormField } from '../components/FormField';
 import { FormSelect } from '../components/FormSelect';
 import { FormTextarea } from '../components/FormTextarea';
-import { CurrencyInput } from '../components/CurrencyInput';
-import { FormData } from '../types/newCaseTypes';
+import { type FormData } from '../types/newCaseTypes';
 
 export interface FinancialTabProps {
   formData: FormData;

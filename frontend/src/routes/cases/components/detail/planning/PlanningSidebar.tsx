@@ -9,8 +9,9 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { AlertCircle, ChevronDown, ChevronRight, GripVertical, Plus } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';
 
@@ -21,7 +22,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { CasePhase, WorkflowTask } from '@/types';
+import { type CasePhase, type WorkflowTask } from '@/types';
 
 interface PlanningSidebarProps {
     phases: CasePhase[];

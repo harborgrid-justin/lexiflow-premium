@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { type LucideIcon } from 'lucide-react';
 import React, { useId } from 'react';
-import { LucideIcon } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

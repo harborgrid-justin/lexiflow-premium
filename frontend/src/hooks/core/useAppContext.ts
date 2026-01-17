@@ -32,22 +32,23 @@ import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { PATHS } from "@/config/paths.config";
 import { isBackendApiEnabled } from '@/lib/frontend-api';
+import { useToast } from "@/providers";
+import { useAuthState } from '@/providers/application/AuthProvider';
 import { DataService } from "@/services/data/data-service.service";
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { UserId, UserRole } from "@/types";
+import { type AppView, type Case, type User , type UserId, type UserRole } from "@/types";
+
+import { useUsers } from "./useDomainData";
 
 // Hooks & Context
-import { useAuthState } from '@/providers/application/AuthProvider';
-import { useToast } from "@/providers";
-import { useUsers } from "./useDomainData";
+
 import { useSessionStorage } from "./useSessionStorage";
 
 // Utils & Constants
-import { PATHS } from "@/config/paths.config";
 
 // Types
-import { AppView, Case, User } from "@/types";
 
 // ============================================================================
 // TYPES
@@ -152,7 +153,7 @@ export function useAppContext(): UseAppControllerReturn {
         lastName: authUser.name?.split(" ").slice(1).join(" ") || "",
         role: authUser.role as UserRole,
         avatarUrl: authUser.avatarUrl,
-        permissions: (authUser.permissions || []) as string[],
+        permissions: (authUser.permissions || []),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       } as User)

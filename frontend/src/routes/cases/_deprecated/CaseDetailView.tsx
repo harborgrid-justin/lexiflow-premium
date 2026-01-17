@@ -3,15 +3,16 @@ import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 // Components
-import { CaseDetailHeader } from '@/routes/cases/components/detail/CaseDetailHeader';
-import { CaseDetailMobileMenu } from '@/routes/cases/components/detail/CaseDetailMobileMenu';
-import { CaseDetailNavigation } from '@/routes/cases/components/detail/layout/CaseDetailNavigation';
-import { MobileTimelineOverlay } from '@/routes/cases/components/detail/MobileTimelineOverlay';
-
-// Tab Content Components
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { CaseArgumentManager } from '@/routes/cases/components/detail/CaseArgumentManager';
 import { CaseBilling } from '@/routes/cases/components/detail/CaseBilling';
 import { CaseContractReview } from '@/routes/cases/components/detail/CaseContractReview';
+import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
+import { CaseDetailHeader } from '@/routes/cases/components/detail/CaseDetailHeader';
+import { CaseDetailMobileMenu } from '@/routes/cases/components/detail/CaseDetailMobileMenu';
+
+// Tab Content Components
 import { CaseDiscovery } from '@/routes/cases/components/detail/CaseDiscovery';
 import { CaseDocuments } from '@/routes/cases/components/detail/CaseDocuments';
 import { CaseDrafting } from '@/routes/cases/components/detail/CaseDrafting';
@@ -23,20 +24,21 @@ import { CaseStrategy } from '@/routes/cases/components/detail/CaseStrategy';
 import { CaseTimeline } from '@/routes/cases/components/detail/CaseTimeline';
 import { CaseWorkflow } from '@/routes/cases/components/detail/CaseWorkflow';
 import { CaseCollaboration } from '@/routes/cases/components/detail/collaboration/CaseCollaboration';
+import { CaseDetailNavigation } from '@/routes/cases/components/detail/layout/CaseDetailNavigation';
+import { MobileTimelineOverlay } from '@/routes/cases/components/detail/MobileTimelineOverlay';
 import { CaseMotions } from '@/routes/cases/components/detail/motions/CaseMotions';
 import { CaseOverview } from '@/routes/cases/components/detail/overview/CaseOverview';
 import { CaseProjects } from '@/routes/cases/components/detail/projects/CaseProjects';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
+
+import { type Case, type LegalDocument, type TimeEntry } from '@/types';
+
 import { useCaseDetailContext } from './CaseDetailContext';
 
 // Services & Utils
-import { cn } from '@/lib/cn';
-import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
 
 // Types
-import { Case, LegalDocument, TimeEntry } from '@/types';
 
 interface CaseDetailViewProps {
   caseData: Case;

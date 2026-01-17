@@ -1,11 +1,13 @@
-import { Card } from '@/components/molecules/Card/Card';
-import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
-import { Badge } from '@/components/atoms/Badge';
 import { Star, DollarSign, Scale} from 'lucide-react';
-import { LegalEntity } from '@/types';
+import React from "react";
+
+import { Badge } from '@/components/atoms/Badge';
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import React from "react";
+import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
+import { type LegalEntity } from '@/types';
+
 
 interface PerformanceScorecardsProps {
   entities: LegalEntity[];

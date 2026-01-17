@@ -4,14 +4,16 @@
  * @description Storybook stories for MegaMenu component
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MegaMenu } from './MegaMenu';
 import {
   Briefcase, FileText, Users, Calendar, Clock,
   FolderOpen, CheckSquare, MessageSquare, Settings,
   Scale, Book, GraduationCap, Shield, TrendingUp
 } from 'lucide-react';
+
+import { MegaMenu } from './MegaMenu';
+
 import type { MegaMenuSection } from './MegaMenu';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MegaMenu> = {
   title: 'Navigation/MegaMenu',

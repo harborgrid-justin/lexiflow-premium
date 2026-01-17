@@ -14,11 +14,14 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
+import { createMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { createMeta } from '../_shared/meta-utils';
+
 import { EvidenceProvider } from './EvidenceContext';
 import { EvidenceView } from './EvidenceView';
+
 import type { evidenceLoader } from './loader';
 
 // Export loader from dedicated file

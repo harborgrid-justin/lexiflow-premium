@@ -4,11 +4,13 @@
  * @description Individual pitch activity card
  */
 
+import { Calendar } from 'lucide-react';
 import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Calendar } from 'lucide-react';
-import { Pitch } from '../../types';
+
+import { type Pitch } from '../../types';
 
 interface PitchCardProps {
   pitch: Pitch;

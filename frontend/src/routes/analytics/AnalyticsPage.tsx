@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { AnalyticsProvider } from './AnalyticsProvider';
 import { AnalyticsView } from './AnalyticsView';
+
 import type { clientLoader } from './loader';
 
 interface AnalyticsPageProps {

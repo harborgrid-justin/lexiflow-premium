@@ -1,10 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { Building, Lock, PieChart } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Currency } from '@/components/atoms/Currency/Currency';
-import { Client, ClientStatus } from '@/types';
-import { Building, Lock, PieChart } from 'lucide-react';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type Client, ClientStatus } from '@/types';
+
 interface ClientCardProps {
     client: Client;
     onGenerateToken: (id: string) => void;

@@ -6,11 +6,14 @@
  * @module routes/exhibits/detail
  */
 
-import { trialApi } from '@/lib/frontend-api';
-import type { TrialExhibit } from '@/types';
 import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { trialApi } from '@/lib/frontend-api';
+
 import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { TrialExhibit } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -108,7 +111,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
 export default function ExhibitDetailRoute() {
   const navigate = useNavigate();
-  const { item } = useLoaderData() as { item: TrialExhibit };
+  const { item } = useLoaderData();
 
   return (
     <div className="p-8">

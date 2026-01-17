@@ -20,18 +20,18 @@ import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useToast } from '@/providers';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { getTodayString } from '@/lib/dateUtils';
+import { useToast } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { CaseId, ConferralMethod, ConferralResult, ConferralSession, UUID } from '@/types';
+import { type CaseId, type ConferralMethod, type ConferralResult, type ConferralSession, type UUID } from '@/types';
 
 interface ConferralLogProps {
   caseId: string;
@@ -97,7 +97,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
       method: newSession.method as ConferralMethod,
       participants: newSession.participants || [],
       notes: newSession.notes || '',
-      result: (newSession.result || 'Pending') as ConferralResult,
+      result: (newSession.result || 'Pending'),
       nextSteps: newSession.nextSteps
     };
     addSession(session);

@@ -19,15 +19,18 @@
  * @module routes/cases/case-detail
  */
 
-import { DataService } from '@/services/data/data-service.service';
+import { Suspense, useCallback } from 'react';
+import { Await, redirect, useLoaderData, useNavigate } from 'react-router';
 
 import { casesApi, documentsApi } from '@/lib/frontend-api';
 import { CaseDetail } from '@/routes/cases/_deprecated/ui/pages/CaseDetailPage';
-import { Case, LegalDocument, Party } from '@/types';
-import { Suspense, useCallback } from 'react';
-import { Await, redirect, useLoaderData, useNavigate } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { DataService } from '@/services/data/data-service.service';
+import { type Case, type LegalDocument, type Party } from '@/types';
+
+
 import { createCaseMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/case-detail";
 
 function CardSkeleton() {
@@ -273,11 +276,7 @@ function StreamedDataLoading({ label }: { label: string }) {
 // ============================================================================
 
 export default function CaseDetailRoute() {
-  const { caseData, documents, parties } = useLoaderData() as unknown as {
-    caseData: Case;
-    documents: Promise<LegalDocument[]>;
-    parties: Promise<Party[]>;
-  };
+  const { caseData, documents, parties } = useLoaderData();
   const navigate = useNavigate();
 
   // Memoized navigation handlers

@@ -1,12 +1,14 @@
-import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { TenantConfig } from '@/types';
 import { ChevronDown, ChevronRight, Server } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { PlatformView } from './types';
+
+import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type TenantConfig } from '@/types';
+
+import { type PlatformView } from './types';
 
 interface DataPlatformSidebarProps {
   activeView: PlatformView;
@@ -105,7 +107,7 @@ export function DataPlatformSidebar({ activeView, onChange }: DataPlatformSideba
                   {item.children.map((sub: MenuItem) => (
                     <button
                       key={sub.id}
-                      onClick={() => onChange(sub.id as PlatformView)}
+                      onClick={() => onChange(sub.id)}
                       className={cn(
                         "w-full flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
                         activeView === sub.id

@@ -7,6 +7,7 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/apiClient";
+
 import type { FeeAgreement } from "@/types/financial";
 
 export class FeeAgreementsApiService {

@@ -12,9 +12,10 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
 import React, { useEffect, useState } from 'react';
 import { z } from 'zod';
+
+import { AuthApiService } from '@/lib/frontend-api';
 
 const verificationSchema = z.object({
   code: z.string().length(6, 'Verification code must be 6 digits').regex(/^\d+$/, 'Code must contain only numbers'),

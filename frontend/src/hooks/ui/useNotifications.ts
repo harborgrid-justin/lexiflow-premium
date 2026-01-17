@@ -41,13 +41,14 @@
  * @module useNotifications
  */
 
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import { NotificationsApiService } from "@/api/communications";
 import { showToast } from "@/components/organisms/notifications/Toast";
 import {
   useNotificationWebSocket,
-  WebSocketNotification,
+  type WebSocketNotification,
 } from "@/hooks/data/useNotificationWebSocket";
-import { useCallback, useEffect, useMemo, useState } from "react";
 
 /**
  * Notification type (matches backend)
@@ -212,7 +213,7 @@ export const useNotifications = (
         title: n.title,
         message: n.message,
         read: n.read,
-        priority: (n.priority || "medium") as Notification["priority"],
+        priority: (n.priority || "medium"),
         timestamp: new Date(n.createdAt).getTime(),
         actionUrl: n.actionUrl,
         actionLabel: n.actionLabel,

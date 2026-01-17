@@ -23,25 +23,25 @@
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
+import { DollarSign, FileText, Link2, Save, Scale, Trash2, Users } from 'lucide-react';
 import React from 'react';
-import { cn } from '@/lib/cn';
+
 import { Button } from '@/components/atoms/Button';
 import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from "@/hooks/useTheme";
-import { DollarSign, FileText, Link2, Save, Scale, Trash2, Users } from 'lucide-react';
+import { cn } from '@/lib/cn';
 
 // Types
-import { NewMatterProps, TabId } from './types/newCaseTypes';
 
 // Hooks
-import { useNewCaseController } from './hooks/useNewCaseController';
 
 // Components
 import { ConflictWarning } from './components/ConflictWarning';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { GlobalErrors } from './components/GlobalErrors';
 import { TabBar } from './components/TabBar';
+import { useNewCaseController } from './hooks/useNewCaseController';
 
 // Tab Components
 import { CourtTab } from './tabs/CourtTab';
@@ -49,6 +49,7 @@ import { FinancialTab } from './tabs/FinancialTab';
 import { IntakeTab } from './tabs/IntakeTab';
 import { PartiesTab } from './tabs/PartiesTab';
 import { RelatedCasesTab } from './tabs/RelatedCasesTab';
+import { type NewMatterProps, type TabId } from './types/newCaseTypes';
 
 const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser }) => {
   // Guideline 34: Side-effect free context read

@@ -1,15 +1,17 @@
+import { Wand2 } from 'lucide-react';
+import { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Modal } from '@/components/molecules/Modal';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { DiscoveryRequest } from '@/types';
-import { cn } from '@/lib/cn';
-import { Wand2 } from 'lucide-react';
-import { useState } from 'react';
+import { type DiscoveryRequest } from '@/types';
+
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 

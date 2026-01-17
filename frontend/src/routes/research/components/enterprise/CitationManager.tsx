@@ -2,7 +2,9 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import type React from 'react';
 // Types & Interfaces
 // ============================================================================
 export type CitationFormat = 'bluebook' | 'alwd' | 'apa' | 'chicago';

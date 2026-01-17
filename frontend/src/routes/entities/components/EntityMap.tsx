@@ -14,17 +14,18 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import React from "react";
+
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
+import { cn } from '@/lib/cn';
 import { JurisdictionGeoMap } from '@/routes/jurisdiction/components/JurisdictionGeoMap';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // Types
-import { LegalEntity } from '@/types';
-import React from "react";
+import { type LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

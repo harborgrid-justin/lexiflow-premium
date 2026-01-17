@@ -1,6 +1,9 @@
-import React, { useCallback, useRef, useEffect } from 'react';
-import type { SearchCategory, SearchResult } from './types';
+import { useCallback, useRef, useEffect } from 'react';
+
 import { addRecentSearch, getRecentSearches } from './storage';
+
+import type { SearchCategory, SearchResult } from './types';
+import type React from 'react';
 
 export function useSearchHandlers(
   onSearch: (query: string, category?: SearchCategory) => void,

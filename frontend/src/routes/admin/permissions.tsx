@@ -4,10 +4,12 @@
  * Enterprise permission management with granular access control.
  */
 
-import { SYSTEM_PERMISSIONS, type PermissionDefinition } from '@/config/permissions';
-import { authApi } from '@/lib/frontend-api';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
+
+import { SYSTEM_PERMISSIONS, type PermissionDefinition } from '@/config/permissions';
+import { authApi } from '@/lib/frontend-api';
+
 import type { Route } from './+types/permissions';
 
 interface Permission extends PermissionDefinition {
@@ -41,7 +43,7 @@ export async function loader(_args: Route.LoaderArgs) {
 }
 
 export default function AdminPermissionsPage() {
-  const { permissions } = useLoaderData() as { permissions: Permission[] };
+  const { permissions } = useLoaderData();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
@@ -159,7 +161,7 @@ export default function AdminPermissionsPage() {
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{category}</h2>
             </div>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {(perms as Permission[]).map((perm) => (
+              {(perms).map((perm) => (
                 <div key={perm.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">

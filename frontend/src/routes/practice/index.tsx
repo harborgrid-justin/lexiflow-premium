@@ -11,8 +11,9 @@
  */
 
 import { hrApi, workflowApi } from '@/lib/frontend-api';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
 // Meta Tags

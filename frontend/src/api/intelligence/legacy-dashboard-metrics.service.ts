@@ -4,8 +4,9 @@
  * @description Dashboard metrics API service for fetching KPIs, analytics, and dashboard data (Enterprise Legacy)
  */
 
-import type { Deadline } from "@/routes/dashboard/widgets";
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
+import type { Deadline } from "@/routes/dashboard/widgets";
 import type { Activity } from "@/types/dashboard";
 
 // ============================================================================

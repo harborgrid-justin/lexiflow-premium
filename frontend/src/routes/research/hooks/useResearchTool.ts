@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { queryKeys } from '@/utils/queryKeys';
+
 import { useSingleSelection } from '@/hooks/useMultiSelection';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { Clause, JudgeProfile } from '@/types';
+import { DataService } from '@/services/data/data-service.service';
+import { type Clause, type JudgeProfile } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
 
 export function useResearchTool(initialTab?: string, caseId?: string) {
     const storageKey = caseId ? `research_active_view_${caseId}` : 'research_active_view';

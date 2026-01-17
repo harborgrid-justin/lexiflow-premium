@@ -1,15 +1,17 @@
-import { useState } from 'react';
 import { ArrowLeft, Play, Loader2} from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
-import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+
+import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
+import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 
 interface ProcessDetails {
   id: string;

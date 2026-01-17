@@ -13,20 +13,23 @@
  * - Accessibility features
  */
 
+import React, { useCallback, useMemo } from 'react';
+
 import { useEnhancedAutoSave } from '@/hooks/useEnhancedAutoSave';
 import { useEnhancedFormValidation } from '@/hooks/useEnhancedFormValidation';
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+
+// Import field components (to be created)
+import { FormField } from './FormField';
+import { FormSectionComponent } from './FormSection';
+
 import type {
   FieldSchema,
   FormConfig,
   FormSection,
 } from '@/types/forms';
-import React, { useCallback, useMemo } from 'react';
-
-// Import field components (to be created)
-import { FormField } from './FormField';
-import { FormSectionComponent } from './FormSection';
 
 // ============================================================================
 // TYPES
@@ -132,7 +135,7 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
       }
 
       try {
-        await onSubmit(formState.data as TFormData);
+        await onSubmit(formState.data);
         config.onSuccess?.();
       } catch (error) {
         config.onError?.(error as Error);

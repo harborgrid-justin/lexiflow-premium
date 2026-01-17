@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, TableRouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { DocketProvider } from './DocketProvider';
 import { DocketView } from './DocketView';
+
 import type { clientLoader } from './loader';
 
 interface DocketPageProps {

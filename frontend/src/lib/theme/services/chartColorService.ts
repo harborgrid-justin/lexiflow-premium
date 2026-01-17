@@ -8,7 +8,7 @@
  * @module features/theme/services/chartColorService
  */
 
-import { ThemeMode, getTokens } from "../tokens";
+import { type ThemeMode, getTokens } from "../tokens";
 
 export class ChartColorService {
   /**

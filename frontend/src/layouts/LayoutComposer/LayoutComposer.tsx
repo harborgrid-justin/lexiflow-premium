@@ -16,9 +16,10 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { cn } from '@/lib/cn';
+import React, { type ReactNode, createContext, useContext, useMemo } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
-import React, { ReactNode, createContext, useContext, useMemo } from 'react';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

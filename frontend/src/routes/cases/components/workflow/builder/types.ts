@@ -5,10 +5,11 @@
 export * from '@/types/workflow-types';
 
 // Legacy export for backward compatibility
-import { getNodeIcon as _getNodeIcon, NodeType } from '@/types/workflow-types';
-import React from 'react';
 import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Milestone, MessageSquare } from 'lucide-react';
+import React from 'react';
+
 import { cn } from '@/lib/cn';
+import { getNodeIcon as _getNodeIcon, type NodeType } from '@/types/workflow-types';
 
 export const getNodeIcon = _getNodeIcon;
 

@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
 
 import { Activity, ArrowLeft, Cloud, Database, FileText, GitMerge, Loader2, Play, Plus, RefreshCw, Server, Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-import { useMutation, useQuery } from '@/hooks/backend';
-import type { Pipeline } from '@/lib/frontend-api';
-import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
-import { cn } from '@/lib/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';
 import { PipelineList } from './pipeline/PipelineList';
+
+import type { Pipeline } from '@/lib/frontend-api';
 
 
 interface PipelineMonitorProps {

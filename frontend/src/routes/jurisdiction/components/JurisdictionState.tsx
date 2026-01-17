@@ -16,19 +16,20 @@ import { useCallback, useMemo, useState, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
 import { filterStates } from './utils';
 
 interface StateJurisdiction {
@@ -53,7 +54,7 @@ export function JurisdictionState() {
     () => {
       const states = Array.isArray(rawStates) ? rawStates : [];
       if (!states) return [];
-      return filterStates(states as StateJurisdiction[], filter);
+      return filterStates(states, filter);
     },
     [filter, rawStates]
   );

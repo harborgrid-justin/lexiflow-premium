@@ -29,14 +29,16 @@
  * ✗ Throwing exceptions
  */
 
-import type { EvidenceItem } from "@/types";
 import {
   normalizeEvidence,
   normalizeEvidenceArray,
 } from "../normalization/discovery";
+
 import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
 import { failure, type PaginatedResult, type Result, success } from "./types";
+
+import type { EvidenceItem } from "@/types";
 
 /**
  * Evidence query filters

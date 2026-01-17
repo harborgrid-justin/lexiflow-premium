@@ -1,5 +1,5 @@
-import { ResearchSession, UserId } from '@/types';
 import { GeminiService } from '@/services/features/research/geminiService';
+import { type ResearchSession, type UserId } from '@/types';
 
 export const performSearch = async (query: string, history: ResearchSession[]): Promise<{ newSession: ResearchSession, updatedHistory: ResearchSession[] }> => {
     if (!query.trim()) {

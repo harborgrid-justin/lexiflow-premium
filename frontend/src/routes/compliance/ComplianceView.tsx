@@ -3,8 +3,10 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { AlertCircle, Calendar, Shield } from 'lucide-react';
+
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useCompliance } from './ComplianceProvider';
 
 export function ComplianceView() {

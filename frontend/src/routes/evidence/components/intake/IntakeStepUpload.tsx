@@ -5,14 +5,15 @@
  * Handles file selection, drag-and-drop, and displays processing status.
  */
 
-import React from 'react';
 import { CheckCircle, Link, Loader2, ShieldCheck, UploadCloud } from 'lucide-react';
+import React from 'react';
+
 // Common Components
 import { Button } from '@/components/atoms/Button/Button';
 
 // Context & Utils
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // Services
 import { DocumentService } from '@/services/features/documents/documents';

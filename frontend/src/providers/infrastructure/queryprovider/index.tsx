@@ -31,7 +31,7 @@
  * @module providers/infrastructure/queryprovider
  */
 
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 /**
  * Query Client Provider Component

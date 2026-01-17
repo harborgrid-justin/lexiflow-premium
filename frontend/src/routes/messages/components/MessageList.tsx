@@ -16,12 +16,12 @@ import { memo, useEffect, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
 import { ChatBubble } from '@/components/molecules/ChatBubble/ChatBubble';
 import { FileAttachment } from '@/components/molecules/FileAttachment/FileAttachment';
+import { type Conversation } from '@/hooks/useSecureMessenger';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
@@ -64,7 +64,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
               <div key={`msg-${msg.id}-att-${att.name}-${i}`} className="mt-2 w-full max-w-sm">
                 <FileAttachment
                   name={att.name}
-                  size={(typeof att.size === 'number' ? String(att.size) : att.size) as string | undefined}
+                  size={(typeof att.size === 'number' ? String(att.size) : att.size)}
                   type={att.type}
                   className={cn(isMe ? cn(theme.primary.light, "text-current border-blue-500/30") : theme.surface.default)}
                   variant="card"

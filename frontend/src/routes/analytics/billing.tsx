@@ -8,10 +8,13 @@
  * - Graceful error handling with fallbacks
  */
 
-import { billingApi } from '@/lib/frontend-api';
-import { BillingAnalytics } from '@/routes/analytics/billing/BillingAnalytics';
 import { useLoaderData } from 'react-router';
+
+import { billingApi } from '@/lib/frontend-api';
+
 import { createMeta } from '../_shared/meta-utils';
+
+import { BillingAnalytics } from '@/routes/analytics/billing/BillingAnalytics';
 
 export function meta() {
   return createMeta({
@@ -93,7 +96,7 @@ export async function loader() {
 }
 
 export default function BillingAnalyticsRoute() {
-  const data = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const data = useLoaderData();
   return <BillingAnalytics {...data} />;
 }
 

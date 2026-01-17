@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/clients/entities/client.entity.ts
  */
 
-import { Client, ClientStatus, PaymentTerms } from '@/types/financial';
-import { EntityId, CaseId } from '@/types/primitives';
+import { type Client, ClientStatus, PaymentTerms } from '@/types/financial';
+import { type EntityId, type CaseId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.crm instead

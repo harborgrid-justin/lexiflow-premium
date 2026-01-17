@@ -29,8 +29,9 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { Client } from "@/types";
 import { ClientStatus } from "@/types/financial";
+
+import type { Client } from "@/types";
 
 /**
  * Query keys for React Query integration

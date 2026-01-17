@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ManagerLayout } from './ManagerLayout';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ManagerLayout> = {
   title: 'Components/Layouts/ManagerLayout/ManagerLayout',

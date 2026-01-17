@@ -1,14 +1,17 @@
-import { RulesView } from '@/config/tabs.config';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { AlertTriangle, ArrowRight, BookOpen, Clock, Gavel, MapPin, Scale } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { type RulesView } from '@/config/tabs.config';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+
 import type { JudgeProfile } from '@/types';
-import { AlertTriangle, ArrowRight, BookOpen, Clock, Gavel, MapPin, Scale } from 'lucide-react';
+
 interface RulesDashboardProps {
     onNavigate: (view: RulesView) => void;
 }

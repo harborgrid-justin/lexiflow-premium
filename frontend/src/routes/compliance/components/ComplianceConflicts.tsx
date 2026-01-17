@@ -17,17 +17,18 @@ import { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useComplianceConflicts } from '../hooks/useComplianceConflicts';
 
 // Components
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
+import { useComplianceConflicts } from '../hooks/useComplianceConflicts';
 
 // ============================================================================
 // COMPONENT

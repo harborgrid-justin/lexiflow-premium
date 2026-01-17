@@ -10,14 +10,14 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useId } from 'react';
 import { Search } from 'lucide-react';
+import { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Input, InputProps } from '@/components/atoms/Input';
+import { Input, type InputProps } from '@/components/atoms/Input';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";

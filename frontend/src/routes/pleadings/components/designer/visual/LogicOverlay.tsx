@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { PleadingDocument, PleadingSection } from '@/types';
+
 import { useTheme } from "@/hooks/useTheme";
+import { type PleadingDocument, type PleadingSection } from '@/types';
 
 interface LogicOverlayProps {
     document: PleadingDocument;

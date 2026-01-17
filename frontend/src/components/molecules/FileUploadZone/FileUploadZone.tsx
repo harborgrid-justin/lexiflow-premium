@@ -17,16 +17,16 @@ import React, { useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DocumentService } from '@/services/features/documents/documents';
 
 // Hooks & Context
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { DocumentService } from '@/services/features/documents/documents';
 
 // ============================================================================
 // TYPES & INTERFACES

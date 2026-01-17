@@ -1,7 +1,3 @@
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/components/atoms/Button/Button';
-import { cn } from '@/lib/cn';
-import type { Meta, StoryObj } from '@storybook/react';
 import {
   BarChart2,
   Calendar,
@@ -17,6 +13,13 @@ import {
   Users
 } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
+import { cn } from '@/lib/cn';
+
+import type { Meta, StoryObj } from '@storybook/react';
+
 
 /**
  * Exhibit Pro demonstrates the complete trial exhibit management interface.

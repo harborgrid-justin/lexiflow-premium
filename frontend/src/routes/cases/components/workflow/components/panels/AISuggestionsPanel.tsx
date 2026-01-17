@@ -3,11 +3,13 @@
  * @description AI-powered workflow optimization suggestions
  */
 
+import { Sparkles } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Sparkles } from 'lucide-react';
+
 import type { AIWorkflowSuggestion } from '@/types/workflow-advanced-types';
 
 interface AISuggestionsPanelProps {

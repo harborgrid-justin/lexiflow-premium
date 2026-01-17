@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Users, Briefcase, Stethoscope, Microscope, BrainCircuit, Gavel } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

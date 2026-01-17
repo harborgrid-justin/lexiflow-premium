@@ -1,3 +1,6 @@
+import { Clock, FileText, LayoutTemplate, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
@@ -8,9 +11,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
-import { Case, CaseId, DocumentId, PleadingDocument, PleadingSection, PleadingSectionType, UserId } from '@/types';
-import { Clock, FileText, LayoutTemplate, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { type Case, type CaseId, type DocumentId, type PleadingDocument, type PleadingSection, type PleadingSectionType, type UserId } from '@/types';
+
 import { usePleadingData } from '../hooks/usePleadingData';
 
 interface PleadingDashboardProps {

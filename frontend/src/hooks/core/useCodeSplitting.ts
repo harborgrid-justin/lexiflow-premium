@@ -23,13 +23,14 @@
  */
 
 import {
-  ComponentType,
+  type ComponentType,
   lazy,
-  LazyExoticComponent,
+  type LazyExoticComponent,
   useCallback,
   useEffect,
   useState,
 } from 'react';
+
 import { CODE_SPLIT_RETRY_DELAY_MS } from '@/config/features/hooks.config';
 
 /**

@@ -40,25 +40,25 @@ import { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
 
 // Services & Utils
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Vendor } from '@/types';
+import { type Vendor } from '@/types';
 
 // ============================================================================
 // CONSTANTS

@@ -18,8 +18,12 @@
  * @module providers/application/flagsprovider
  */
 
+import { type ReactNode, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from 'react';
+
 import { FEATURES_CONFIG } from '@/config/features/features.config';
 import { FlagsActionsContext, FlagsStateContext } from '@/lib/flags/contexts';
+import { FeatureFlagsService } from '@/services/domain/feature-flags.service';
+
 import type {
   Flags,
   FlagsAction,
@@ -27,8 +31,6 @@ import type {
   FlagsState,
   FlagsStateValue,
 } from '@/lib/flags/types';
-import { FeatureFlagsService } from '@/services/domain/feature-flags.service';
-import { ReactNode, useCallback, useContext, useEffect, useMemo, useReducer, useTransition } from 'react';
 
 // ============================================================================
 // STATE SHAPE (DEFAULTS)

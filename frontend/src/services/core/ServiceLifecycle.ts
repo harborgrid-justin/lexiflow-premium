@@ -162,7 +162,7 @@ export abstract class BaseService<
 > implements IService<TConfig> {
   public readonly name: string;
   protected _state: ServiceState = ServiceState.CREATED;
-  protected _config?: TConfig;
+  protected _config: TConfig | undefined;
   protected _debug: boolean = false;
 
   constructor(name: string) {
@@ -179,7 +179,7 @@ export abstract class BaseService<
     if (!config.name || config.name !== this.name) {
       throw new ServiceError(
         this.name,
-        `Configuration name mismatch: expected '${this.name}', got '${config.name}'`
+        `Configuration name mismatch: expected '${this.name}', got '${config.name}'`,
       );
     }
 
@@ -309,7 +309,7 @@ export abstract class BaseService<
     if (this._state !== expected) {
       throw new ServiceError(
         this.name,
-        `Cannot ${operation}: expected state '${expected}', current state '${this._state}'`
+        `Cannot ${operation}: expected state '${expected}', current state '${this._state}'`,
       );
     }
   }
@@ -323,7 +323,7 @@ export abstract class BaseService<
     if (this._state !== ServiceState.RUNNING) {
       throw new ServiceError(
         this.name,
-        `Service not running (current state: '${this._state}')`
+        `Service not running (current state: '${this._state}')`,
       );
     }
   }
@@ -367,7 +367,7 @@ export abstract class BaseService<
 export class ServiceError extends Error {
   constructor(
     public readonly serviceName: string,
-    message: string
+    message: string,
   ) {
     super(`[${serviceName}] ${message}`);
     this.name = "ServiceError";

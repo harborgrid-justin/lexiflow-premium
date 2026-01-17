@@ -1,10 +1,13 @@
-import { cn } from '@/lib/cn';
+import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
+import React from "react";
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
-import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
-import React from "react";
+import { cn } from '@/lib/cn';
+
 import { FormatOptionsCard } from './FormatOptionsCard';
+
 import type { FormatOptions } from './types';
 
 interface InputSectionProps {

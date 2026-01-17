@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { ReportsCenter } from './components/ReportsCenter';
 import { ReportsProvider } from './context';
+
 import type { ReportsLoaderData } from './loader';
 
 interface ReportsPageProps {

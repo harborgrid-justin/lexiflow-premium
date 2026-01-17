@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { SessionActionsValue, SessionStateValue } from "./types";
 
 export const SessionStateContext = createContext<SessionStateValue | null>(

@@ -1,4 +1,4 @@
-import { TimeEntry } from '@/types';
+import { type TimeEntry } from '@/types';
 
 export const calculateUnbilledTotal = (entries: TimeEntry[]): number => {
   return entries

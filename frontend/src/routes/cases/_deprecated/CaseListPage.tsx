@@ -20,7 +20,9 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData, useRevalidator } from 'react-router';
+
 import { RouteError, TableRouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { CaseListProvider } from './CaseListProvider';
 import { CaseListView } from './CaseListView';
 

@@ -9,23 +9,23 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { ExternalLink, BookOpen, CheckCircle, Box, AlertTriangle, X } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/molecules/Card';
 import { Badge } from '@/components/atoms/Badge';
-import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
 
 // Types & Interfaces
-import { LegalArgument, Defense, Citation, EvidenceItem } from '@/types';
+import { type LegalArgument, type Defense, type Citation, type EvidenceItem } from '@/types';
 
 interface StrategySectionProps {
   title: string;

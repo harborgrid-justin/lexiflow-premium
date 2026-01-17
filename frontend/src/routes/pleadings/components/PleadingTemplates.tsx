@@ -10,23 +10,25 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { ArrowRight, LayoutTemplate, Loader2 } from 'lucide-react';
+import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { PleadingTemplate } from '@/types';
-import { PleadingTemplatesProps } from './types';
+import { type PleadingTemplate } from '@/types';
+
+import { type PleadingTemplatesProps } from './types';
 
 // ============================================================================
 // COMPONENT

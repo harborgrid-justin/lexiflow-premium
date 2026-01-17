@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { CaseTeamMember, CaseTeamFilters } from '@/types';
 
 export class CaseTeamsApiService {

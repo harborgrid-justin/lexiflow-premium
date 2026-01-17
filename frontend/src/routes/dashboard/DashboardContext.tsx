@@ -1,5 +1,6 @@
-import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
 import { createContext } from 'react';
+
+import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
 
 export interface DashboardMetrics {
   totalCases: number;

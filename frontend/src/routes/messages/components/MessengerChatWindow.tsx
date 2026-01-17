@@ -17,24 +17,25 @@ import { useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { FileAttachment } from '@/components/molecules/FileAttachment/FileAttachment';
+import { TIMEOUTS } from '@/config/ports.config';
+import { useInterval } from '@/hooks/useInterval';
+import { useNotify } from '@/hooks/useNotify';
+import { type Attachment, type Conversation } from '@/hooks/useSecureMessenger';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useInterval } from '@/hooks/useInterval';
-import { useNotify } from '@/hooks/useNotify';
-import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
-import { useWindow } from '@/providers';
-import { TIMEOUTS } from '@/config/ports.config';
 
 // Components
-import { FileAttachment } from '@/components/molecules/FileAttachment/FileAttachment';
+
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SplitViewLayout } from './SplitViewLayout';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof SplitViewLayout> = {
   title: 'Components/Layouts/SplitViewLayout/SplitViewLayout',

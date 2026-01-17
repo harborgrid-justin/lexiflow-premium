@@ -8,7 +8,8 @@
  */
 
 import { memo } from 'react';
-import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
+
+import { type TypedWorkflowNode, type WorkflowConnection } from '@/types/workflow-types';
 
 interface MemoizedNodeProps {
   node: TypedWorkflowNode;

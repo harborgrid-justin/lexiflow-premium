@@ -9,16 +9,17 @@
  * - Error handling
  */
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router';
+
 import { AuthApiService } from '@/lib/frontend-api';
 import {
   registerSchema,
   validatePasswordStrength,
   type RegisterFormData,
 } from '@/services/validation/authSchemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router';
 
 export default function RegisterPage() {
   const navigate = useNavigate();

@@ -1,11 +1,13 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { Link as LinkIcon, Loader2, RefreshCw, Settings } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
-import { Link as LinkIcon, Loader2, RefreshCw, Settings } from 'lucide-react';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+
 interface Integration {
     id: string;
     name: string;

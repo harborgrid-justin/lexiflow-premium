@@ -10,17 +10,17 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Download, Eye } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { FileIcon } from '@/components/atoms/FileIcon';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { FileIcon } from '@/components/atoms/FileIcon';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

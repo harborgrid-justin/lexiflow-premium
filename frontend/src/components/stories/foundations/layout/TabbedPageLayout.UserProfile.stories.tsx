@@ -1,7 +1,9 @@
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Activity, Settings, Shield, Sliders, UserCircle } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * TabbedPageLayout - User Profile pattern

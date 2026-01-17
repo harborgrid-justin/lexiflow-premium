@@ -18,20 +18,22 @@ import { useMemo } from 'react';
 // ============================================================================
 // Services/Data
 // ✅ Migrated to backend API (2025-12-21)
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '@/hooks/useTheme';
-import { DataService } from '@/services/dataService';
+
 
 // Components
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
 import type { LegalEntity } from '@/types';
+
+import { DataService } from '@/services/dataService';
 
 // ============================================================================
 // TYPES & INTERFACES

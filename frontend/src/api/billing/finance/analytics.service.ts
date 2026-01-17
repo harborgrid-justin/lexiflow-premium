@@ -7,12 +7,14 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
-import type { FinancialPerformanceData } from "./types";
+
 import {
   getDefaultOverviewStats,
   getDefaultRealizationStats,
   validateId,
 } from "./utils";
+
+import type { FinancialPerformanceData } from "./types";
 
 export class AnalyticsService {
   /**

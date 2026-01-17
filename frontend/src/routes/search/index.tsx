@@ -4,8 +4,10 @@
  */
 
 import { useLoaderData } from "react-router";
+
 import { createMeta } from '../_shared/meta-utils';
-import { searchLoader } from './loader';
+
+import { type searchLoader } from './loader';
 import { SearchPage } from './SearchPage';
 
 export { searchLoader as loader } from './loader';

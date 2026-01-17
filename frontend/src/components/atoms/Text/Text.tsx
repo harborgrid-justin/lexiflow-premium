@@ -7,7 +7,9 @@
  */
 
 import React from 'react';
+
 import { cn } from '@/lib/cn';
+
 import { sizeClasses, weightClasses, colorClasses, alignClasses, variantClasses } from './Text.styles';
 
 export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {

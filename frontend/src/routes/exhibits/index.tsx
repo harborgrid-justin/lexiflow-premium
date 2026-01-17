@@ -12,12 +12,14 @@
  * @module routes/exhibits/index
  */
 
-import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
 
+import { DataService } from '@/services/data/data-service.service';
+
+import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { Route } from "./+types/index";
 import type { ExhibitsLoaderData } from './loader';
 
 // Export loader from dedicated file
@@ -74,7 +76,7 @@ export async function action({ request }: Route.ActionArgs) {
 import { ExhibitsPage } from './ExhibitsPage';
 
 export default function ExhibitsIndexRoute() {
-  const loaderData = useLoaderData() as ExhibitsLoaderData;
+  const loaderData = useLoaderData();
   return <ExhibitsPage loaderData={loaderData} />;
 }
 

@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { ConditionalBranchingConfig } from "@/types/workflow-advanced-types";
 
 const BASE_URL = "/workflow/advanced";

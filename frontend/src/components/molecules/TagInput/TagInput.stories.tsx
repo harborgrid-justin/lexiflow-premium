@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TagInput } from './TagInput';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TagInput> = {
   title: 'Components/Molecules/TagInput/TagInput',

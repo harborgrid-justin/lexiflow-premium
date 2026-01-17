@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { ProfileProvider } from './components/ProfileContext';
 import { UserProfile } from './components/UserProfile';
+
 import type { ProfileLoaderData } from './loader';
 
 interface ProfilePageProps {

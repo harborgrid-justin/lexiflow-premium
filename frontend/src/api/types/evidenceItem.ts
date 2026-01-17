@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/evidence/entities/evidence.entity.ts
  */
 
-import { EvidenceItem } from '@/types/evidence';
-import { EvidenceId, UUID, CaseId } from '@/types/primitives';
+import { type EvidenceItem } from '@/types/evidence';
+import { type EvidenceId, type UUID, type CaseId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.evidence instead

@@ -1,8 +1,10 @@
-import { Button } from '@/components/atoms/Button/Button';
-import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileText, Inbox, Search } from 'lucide-react';
 import React from "react";
+
+import { Button } from '@/components/atoms/Button/Button';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * EmptyState component displays helpful messages when there's no content.

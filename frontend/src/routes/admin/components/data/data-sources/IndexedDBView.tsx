@@ -3,16 +3,19 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
+import { Database, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
+
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { db } from '@/services/data/db';
-import { Database, RefreshCw } from 'lucide-react';
-import { useState } from 'react';
+
 import { DataSourceSelector } from './DataSourceSelector';
 import { IndexedDBDataTable } from './IndexedDBDataTable';
 import { IndexedDBStoreList } from './IndexedDBStoreList';
 import { SystemHealthDisplay } from './SystemHealthDisplay';
+
 import type { StoreInfo, StoreRecord } from './types';
 
 export function IndexedDBView() {

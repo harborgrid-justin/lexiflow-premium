@@ -14,15 +14,19 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
+
 import { intelligenceApi, knowledgeApi } from '@/lib/frontend-api';
-import type { Route } from "./+types/index";
+
+import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 
 // Import standard components
 import { ResearchProvider } from './ResearchProvider';
 import { ResearchView } from './ResearchView';
+
+import type { Route } from "./+types/index";
 import type { ResearchLoaderData } from './loader';
 
 // Export loader
@@ -95,7 +99,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function ResearchIndexRoute() {
-  const initialData = useLoaderData() as ResearchLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Research" />}>

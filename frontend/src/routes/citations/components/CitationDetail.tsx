@@ -21,21 +21,22 @@ import { useState } from 'react';
 import { Button } from '@/components/atoms/Button/Button';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
-import { casesApi } from '@/lib/frontend-api';
-import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
+import { casesApi } from '@/lib/frontend-api';
 import { sanitizeHtml } from '@/lib/sanitize';
+import { GeminiService } from '@/services/features/research/geminiService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '@/types';
-import { CitationDetailProps } from './types';
+import { type Case } from '@/types';
+
+import { type CitationDetailProps } from './types';
 
 export function CitationDetail({ citation, onClose }: CitationDetailProps) {
     const { theme } = useTheme();

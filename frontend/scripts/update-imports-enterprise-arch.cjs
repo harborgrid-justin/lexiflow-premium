@@ -9,9 +9,9 @@
  * - Old: @/hooks/useDebounce -> New: @/shared/hooks/useDebounce
  */
 
+const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
 
 // Color output helpers
 const colors = {

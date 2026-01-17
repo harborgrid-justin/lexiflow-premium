@@ -71,12 +71,17 @@ export class EntityRepository extends Repository<LegalEntity> {
     return {
       ...entityAny,
       id: entity.id as EntityId,
-      name: (entityAny.name as string) || "Unknown Entity",
+      name: (entityAny["name"] as string) || "Unknown Entity",
       type: this.mapEntityType(entity.entityType || "other"),
-      roles: (entityAny.roles as EntityRole[]) || [],
-      riskScore: (entityAny.riskScore as number) || 0,
-      tags: (entityAny.tags as string[]) || [],
-      status: ((entity.status as string) || "Active") as "Prospect" | "Active" | "Inactive" | "Blacklisted" | "Deceased",
+      roles: (entityAny["roles"] as EntityRole[]) || [],
+      riskScore: (entityAny["riskScore"] as number) || 0,
+      tags: (entityAny["tags"] as string[]) || [],
+      status: ((entity.status as string) || "Active") as
+        | "Prospect"
+        | "Active"
+        | "Inactive"
+        | "Blacklisted"
+        | "Deceased",
       createdAt: entity.createdAt || new Date().toISOString(),
       updatedAt: entity.updatedAt || new Date().toISOString(),
       // Mapped to available fields
@@ -127,12 +132,12 @@ export class EntityRepository extends Repository<LegalEntity> {
           SystemEventType.ENTITY_CREATED,
           {
             entity: result,
-          }
+          },
         );
       } catch (eventError) {
         console.warn(
           "[EntityRepository] Failed to publish entity creation event",
-          eventError
+          eventError,
         );
       }
       return result;
@@ -144,7 +149,7 @@ export class EntityRepository extends Repository<LegalEntity> {
 
   override async update(
     id: string,
-    updates: Partial<LegalEntity>
+    updates: Partial<LegalEntity>,
   ): Promise<LegalEntity> {
     this.validateId(id, "update");
     try {
@@ -182,12 +187,12 @@ export class EntityRepository extends Repository<LegalEntity> {
       (e) =>
         e.name?.toLowerCase().includes(lowerQuery) ||
         (
-          (e as unknown as Record<string, unknown>).legalName as
+          (e as unknown as Record<string, unknown>)["legalName"] as
             | string
             | undefined
         )
           ?.toLowerCase()
-          .includes(lowerQuery)
+          .includes(lowerQuery),
     );
   }
 }

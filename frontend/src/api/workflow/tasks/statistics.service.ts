@@ -3,8 +3,9 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { TaskStatistics } from "@/types";
+
 import type { TaskFilters } from "./types";
+import type { TaskStatistics } from "@/types";
 
 export class TaskStatisticsService {
   private readonly baseUrl = "/tasks";

@@ -8,10 +8,12 @@
  * Enterprise React Architecture Pattern
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { Calendar as CalendarIcon, Clock, Plus } from 'lucide-react';
 import React, { useCallback } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useCalendar } from './CalendarProvider';
 import { CalendarEvent } from './components/CalendarEvent/CalendarEvent';
 import { CalendarGrid } from './components/CalendarGrid/CalendarGrid';

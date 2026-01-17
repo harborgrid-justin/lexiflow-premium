@@ -10,24 +10,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo } from 'react';
 import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
+import React, { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Card } from '@/components/molecules/Card/Card';
-import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { LegalEntity } from '@/types';
+import { type LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -1,4 +1,5 @@
-import { Correspondence } from "@/api/communications/correspondence-api";
+import { type Correspondence } from "@/api/communications/correspondence-api";
+
 import type { DraftingTemplate } from "@/api/domains/drafting";
 
 export interface Recipient {

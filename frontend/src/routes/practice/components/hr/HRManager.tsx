@@ -1,21 +1,23 @@
+import { AlertCircle, Award, Loader2, MoreHorizontal, Plus, Trash2, TrendingUp, User, Users } from 'lucide-react';
+import React from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useModalState } from '@/hooks/core';
+import { useStaff } from '@/hooks/useDomainData';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { StaffMember, UserId } from '@/types';
-import { AlertCircle, Award, Loader2, MoreHorizontal, Plus, Trash2, TrendingUp, User, Users } from 'lucide-react';
-import React from 'react';
+import { type StaffMember, UserId } from '@/types';
+
 import { AddStaffModal } from './AddStaffModal';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
 // ✅ Migrated to backend API (2025-12-21)
-import { useModalState } from '@/hooks/core';
-import { useStaff } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
 import { getTodayString } from '@/lib/dateUtils';
 import { IdGenerator } from '@/lib/idGenerator';
@@ -122,7 +124,7 @@ export function HRManager() {
 
     const staff: StaffMember = {
       id: IdGenerator.staff(),
-      userId: IdGenerator.user() as UserId,
+      userId: IdGenerator.user(),
       name: newStaff.name.trim(),
       email: newStaff.email.trim().toLowerCase(),
       role: (newStaff.role as StaffRole) || 'Associate',

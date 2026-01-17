@@ -24,11 +24,13 @@
  * ```
  */
 
+import { useCallback, useEffect, useState } from "react";
+
 import { useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/dataService";
-import { Task } from "@/types";
+import { type Task } from "@/types";
 import { queryKeys } from "@/utils/queryKeys";
-import { useCallback, useEffect, useState } from "react";
+
 import { useInterval } from "./useInterval";
 
 // ============================================================================

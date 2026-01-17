@@ -45,7 +45,7 @@ export class CitationRepository extends Repository<Citation> {
   private validateId(id: string, methodName: string): void {
     if (!id || typeof id !== "string" || id.trim() === "") {
       throw new Error(
-        `[CitationRepository.${methodName}] Invalid id parameter`
+        `[CitationRepository.${methodName}] Invalid id parameter`,
       );
     }
   }
@@ -75,7 +75,7 @@ export class CitationRepository extends Repository<Citation> {
   override async add(item: Citation): Promise<Citation> {
     if (!item || typeof item !== "object") {
       throw new ValidationError(
-        "[CitationRepository.add] Invalid citation data"
+        "[CitationRepository.add] Invalid citation data",
       );
     }
 
@@ -83,7 +83,7 @@ export class CitationRepository extends Repository<Citation> {
     try {
       // Cast item to unknown then Record to satisfy API signature if needed
       result = (await this.citationsApi.create(
-        item as unknown as Record<string, unknown>
+        item as unknown as Record<string, unknown>,
       )) as unknown as Citation;
     } catch (error) {
       console.error("[CitationRepository] Backend API error", error);
@@ -94,12 +94,13 @@ export class CitationRepository extends Repository<Citation> {
     try {
       await IntegrationEventPublisher.publish(SystemEventType.CITATION_SAVED, {
         citation: result,
-        queryContext: (item.caseContext as string) || "",
+        queryContext:
+          ((item as Record<string, unknown>)["caseContext"] as string) || "",
       });
     } catch (eventError) {
       console.warn(
         "[CitationRepository] Failed to publish integration event",
-        eventError
+        eventError,
       );
     }
 
@@ -108,13 +109,13 @@ export class CitationRepository extends Repository<Citation> {
 
   override async update(
     id: string,
-    updates: Partial<Citation>
+    updates: Partial<Citation>,
   ): Promise<Citation> {
     this.validateId(id, "update");
     try {
       const result = await this.citationsApi.update(
         id,
-        updates as unknown as Record<string, unknown>
+        updates as unknown as Record<string, unknown>,
       );
       return result as unknown as Citation;
     } catch (error) {
@@ -143,11 +144,11 @@ export class CitationRepository extends Repository<Citation> {
   }
 
   async validate(
-    citationText: string
+    citationText: string,
   ): Promise<{ valid: boolean; formatted?: string; errors?: string[] }> {
     if (!citationText) {
       throw new ValidationError(
-        "[CitationRepository.validate] Invalid citationText"
+        "[CitationRepository.validate] Invalid citationText",
       );
     }
     try {
@@ -185,7 +186,7 @@ export class CitationRepository extends Repository<Citation> {
         filtered = filtered.filter((c) => c["caseId"] === criteria.caseId);
       if (criteria.documentId)
         filtered = filtered.filter(
-          (c) => c["documentId"] === criteria.documentId
+          (c) => c["documentId"] === criteria.documentId,
         );
       if (criteria.type)
         filtered = filtered.filter((c) => c["type"] === criteria.type);

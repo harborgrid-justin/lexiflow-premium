@@ -1,11 +1,13 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { Check, Code, Shield } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Modal } from '@/components/molecules/Modal';
-import { RLSPolicy, SqlCmd } from '@/types';
-import { Check, Code, Shield } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type RLSPolicy, type SqlCmd } from '@/types';
+
 
 interface PolicyEditorModalProps {
     isOpen: boolean;

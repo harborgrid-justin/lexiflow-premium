@@ -1,16 +1,19 @@
-import { useQuery } from '@/hooks/backend';
-import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
-import { cn } from '@/lib/cn';
+import { AlignLeft, Bot, Download, Play } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { dataPlatformApi } from '@/lib/frontend-api/data-platform';
 import { SqlHelpers } from '@/utils/sqlHelpers';
-import { AlignLeft, Bot, Download, Play } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
+
 import { QuerySidebar } from './query/QuerySidebar';
 
 interface QueryConsoleProps {

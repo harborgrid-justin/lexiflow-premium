@@ -7,11 +7,13 @@
  * @module routes/admin/settings
  */
 
+import { useLoaderData, type ActionFunctionArgs } from 'react-router';
+
 import { adminApi } from '@/lib/frontend-api';
 import { SystemSettings, type SystemFeatures, type SystemSettingsData } from '@/routes/admin/components/SystemSettings';
-import { useLoaderData, type ActionFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createAdminMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
 // Types
@@ -225,7 +227,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function SystemSettingsRoute() {
-  const loaderData = useLoaderData() as LoaderData;
+  const loaderData = useLoaderData();
   return <SystemSettings settings={loaderData.settings} features={loaderData.features} />;
 }
 

@@ -16,13 +16,14 @@
 // External Dependencies
 // Internal Dependencies - Hooks & Context
 import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { RiskLevel } from '@/types';
+import { type RiskLevel } from '@/types';
 
 interface RiskMatrixProps {
     probability: RiskLevel;

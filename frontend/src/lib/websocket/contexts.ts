@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { WebSocketActionsValue, WebSocketStateValue } from "./types";
 
 export const WebSocketStateContext = createContext<WebSocketStateValue | null>(

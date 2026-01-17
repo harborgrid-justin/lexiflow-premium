@@ -7,6 +7,7 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
+
 import type { Examination } from "@/types/discovery";
 
 export class ExaminationsApiService {

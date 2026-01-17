@@ -17,13 +17,13 @@ import React, { useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '../Button/Button';
 
 // Utils & Constants
-import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
 import { getSuccessStyles } from './CopyButton.styles';
 
 // ============================================================================

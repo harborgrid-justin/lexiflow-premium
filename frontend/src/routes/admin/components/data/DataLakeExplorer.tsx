@@ -1,6 +1,6 @@
+import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader2, MoreHorizontal, UploadCloud } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader2, MoreHorizontal, UploadCloud } from 'lucide-react';
 
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
@@ -10,7 +10,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { useWindow } from '@/providers';
 import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
-import { DataLakeItem } from '@/types';
+import { type DataLakeItem } from '@/types';
 
 export function DataLakeExplorer(): React.ReactElement {
     const { theme } = useTheme();

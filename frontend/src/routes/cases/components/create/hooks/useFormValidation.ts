@@ -3,7 +3,8 @@
  */
 
 import { useState, useCallback } from 'react';
-import { ConflictStatus } from './useConflictCheck';
+
+import { type ConflictStatus } from './useConflictCheck';
 
 export interface UseFormValidationResult {
   errors: Record<string, string>;

@@ -4,9 +4,10 @@
  * Handles password reset with token from email
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
-import { FormEvent, useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
+
+import { AuthApiService } from '@/lib/frontend-api';
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();

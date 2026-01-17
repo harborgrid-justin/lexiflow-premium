@@ -36,12 +36,14 @@
  * @module providers/application/serviceprovider
  */
 
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
 import { HealthApiService, SyncApiService } from '@/api/admin';
 import { adminApi } from '@/lib/frontend-api/admin';
 import { ServiceActionsContext, ServiceStateContext } from '@/lib/service/contexts';
-import type { ServiceActionsValue, ServiceHealth, ServiceProviderProps, ServiceStateValue } from '@/lib/service/types';
 import { getServiceHealth } from '@/services/bootstrap';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
+import type { ServiceActionsValue, ServiceHealth, ServiceProviderProps, ServiceStateValue } from '@/lib/service/types';
 
 const healthApi = new HealthApiService();
 const syncApi = new SyncApiService();

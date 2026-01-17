@@ -3,9 +3,10 @@
  * @module components/enterprise/data/export/csvExport
  */
 
+import { escapeCSVValue, getColumnValue, formatValueForExport, downloadBlob } from './utils';
+
 import type { ColumnDefinition } from '../DataGridColumn';
 import type { CSVExportOptions } from './types';
-import { escapeCSVValue, getColumnValue, formatValueForExport, downloadBlob } from './utils';
 
 /** Exports data to CSV format */
 export function exportToCSV<T extends Record<string, unknown>>(

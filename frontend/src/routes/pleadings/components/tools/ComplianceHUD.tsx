@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
 import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Ruler } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { FormattingRule, PleadingSection } from '@/types';
+import { type FormattingRule, type PleadingSection } from '@/types';
 
 interface ComplianceHUDProps {
   rules: FormattingRule;

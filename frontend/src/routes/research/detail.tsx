@@ -6,13 +6,16 @@
  * @module routes/research/detail
  */
 
+import { useNavigate } from 'react-router';
+
 import { knowledgeApi } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
-import type { ResearchSession } from '@/types';
-import { useNavigate } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/detail";
+import type { ResearchSession } from '@/types';
 
 // ============================================================================
 // Meta Tags

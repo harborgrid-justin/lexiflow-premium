@@ -1,9 +1,11 @@
-import React from 'react';
 import { FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
+import React from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { TaskStatusBackend } from '@/types';
+
 import type { TaskRowProps } from './types';
 
 const getModuleIcon = (module?: string, theme?: ReturnType<typeof useTheme>['theme']) => {

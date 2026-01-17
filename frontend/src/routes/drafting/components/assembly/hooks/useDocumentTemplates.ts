@@ -1,9 +1,11 @@
+import { FileText } from "lucide-react";
+
 import { DocumentsApiService } from "@/api/admin/documents-api";
 import { useQuery } from "@/hooks/useQueryHooks";
 import { queryKeys } from "@/utils/queryKeys";
-import { FileText } from "lucide-react";
+
 import { DOCUMENT_TEMPLATES } from "../config/templates.config";
-import { DocumentTemplate } from "../types";
+import { type DocumentTemplate } from "../types";
 
 const documentsApi = new DocumentsApiService();
 
@@ -38,7 +40,7 @@ export function useDocumentTemplates() {
   );
 
   const templates = (backendTemplates ||
-    DOCUMENT_TEMPLATES) as DocumentTemplate[];
+    DOCUMENT_TEMPLATES);
 
   return {
     templates,

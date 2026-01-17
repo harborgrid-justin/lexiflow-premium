@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AsyncBoundary } from './AsyncBoundary';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof AsyncBoundary> = {
   title: 'Components/Layouts/AsyncBoundary/AsyncBoundary',

@@ -7,10 +7,12 @@
  * Litigation Domain - View Component
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { AlertTriangle, Gavel, Plus, TrendingUp } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useLitigation } from './hooks/useLitigation';
 
 export function LitigationView() {

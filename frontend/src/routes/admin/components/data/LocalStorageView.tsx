@@ -10,10 +10,12 @@
  * Provides functionality to view, delete individual items, or clear all storage.
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { HardDrive, Trash2 } from 'lucide-react';
 import React, { useEffect } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { DataSourceSelector } from './DataSourceSelector';
 import { useLocalStorageFiles } from './hooks';
 

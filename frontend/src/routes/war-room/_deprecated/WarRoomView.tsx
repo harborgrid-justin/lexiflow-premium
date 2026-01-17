@@ -7,10 +7,12 @@
  * War Room Domain - View Component
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { Calendar, MapPin, Plus, Users } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useWarRoom } from './WarRoomProvider';
 
 export function WarRoomView() {

@@ -12,8 +12,9 @@
  * - Budget utilization metrics
  */
 
-import type { Case } from '@/types';
 import React, { createContext, useContext, useMemo, useState } from 'react';
+
+import type { Case } from '@/types';
 
 export type CaseBillingTimeEntry = {
   id: string;

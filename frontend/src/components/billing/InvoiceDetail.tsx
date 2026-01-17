@@ -3,13 +3,16 @@
  * Display invoice details with payment tracking and PDF preview
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from "@/lib/cn";
-import type { Invoice } from '@/types/financial';
 import { CreditCard, Download, Send } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/cn";
+
 import { InvoicePreview } from './InvoicePreview';
+
+import type { Invoice } from '@/types/financial';
 
 interface InvoiceDetailProps {
   invoice: Invoice;

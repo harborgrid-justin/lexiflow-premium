@@ -8,7 +8,9 @@
  */
 
 import React, { useMemo, useState } from 'react';
-import { DataPlatformContext, DataPlatformContextValue, DataPlatformMetrics } from './DataPlatformContext';
+
+import { DataPlatformContext, type DataPlatformContextValue, type DataPlatformMetrics } from './DataPlatformContext';
+
 import type { DataPlatformLoaderData } from './loader';
 
 export interface DataPlatformProviderProps {

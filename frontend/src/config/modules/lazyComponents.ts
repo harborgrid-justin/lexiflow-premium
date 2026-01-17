@@ -1,5 +1,7 @@
-import React from "react";
 import { lazyWithPreload } from "./lazyWithPreload";
+
+import type React from "react";
+
 
 // Dashboard & Core
 export const Dashboard = lazyWithPreload(

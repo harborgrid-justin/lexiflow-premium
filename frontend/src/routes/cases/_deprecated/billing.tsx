@@ -7,11 +7,15 @@
  * - View owns rendering and UI event wiring
  */
 
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
+
+import { DataService } from '@/services/data/data-service.service';
+
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { CaseBillingProvider, type CaseBillingLoaderData } from '@/routes/cases/_billing/CaseBillingProvider';
 import { CaseBillingView } from '@/routes/cases/_billing/CaseBillingView';
-import { DataService } from '@/services/data/data-service.service';
-import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 // ============================================================================
 // Meta Tags
 // ============================================================================

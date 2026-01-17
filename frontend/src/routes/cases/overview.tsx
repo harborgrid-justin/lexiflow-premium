@@ -9,8 +9,10 @@
  * - Throws on error for proper error boundary handling
  */
 
-import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
 import { useLoaderData } from 'react-router';
+
+import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
+
 import type { Route } from "./+types/overview";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -34,7 +36,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseOverviewRoute() {
-  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { case: caseData } = useLoaderData();
   return <CaseOverviewDashboard caseId={caseData.id} />;
 }
 

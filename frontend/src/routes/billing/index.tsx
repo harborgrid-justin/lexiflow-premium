@@ -14,14 +14,17 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData, useRevalidator } from 'react-router';
-import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 
 // Import standard components
 import { BillingProvider } from './BillingProvider';
 import { BillingView } from './BillingView';
+
+import type { Route } from "./+types/index";
 import type { clientLoader } from './loader';
 
 // Export loader and action

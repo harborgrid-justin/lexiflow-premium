@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
-import type { FormattingResult, FormatStats } from './types';
+
 import { ValidationSeverity } from '@/types/bluebook';
+
+import type { FormattingResult, FormatStats } from './types';
 
 export const useFormattingStats = (results: FormattingResult[]): FormatStats => {
   return useMemo<FormatStats>(() => {

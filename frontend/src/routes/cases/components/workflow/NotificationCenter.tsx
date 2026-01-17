@@ -1,10 +1,11 @@
 import { Bell, Check, X, BellOff } from 'lucide-react';
-import { DataService } from '@/services/data/data-service.service';
+
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
-import { SystemNotification } from '@/types';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/data-service.service';
+import { type SystemNotification } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 

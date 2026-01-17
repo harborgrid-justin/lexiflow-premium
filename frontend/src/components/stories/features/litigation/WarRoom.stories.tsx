@@ -1,15 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, WarRoomData } from '@/types';
+import { ToastProvider } from '@/providers';
+import { ThemeProvider } from "@/providers/infrastructure/ThemeProvider";
 import { CaseStatus, MatterType } from '@/types';
-import { WarRoom } from '../../../../features/litigation/war-room/WarRoom';
+
+
+import { AdvisoryBoard } from '../../../../features/litigation/war-room/AdvisoryBoard';
 import { CommandCenter } from '../../../../features/litigation/war-room/CommandCenter';
 import { EvidenceWall } from '../../../../features/litigation/war-room/EvidenceWall';
-import { AdvisoryBoard } from '../../../../features/litigation/war-room/AdvisoryBoard';
 import { OppositionManager } from '../../../../features/litigation/war-room/OppositionManager';
-import { WitnessPrep } from '../../../../features/litigation/war-room/WitnessPrep';
 import { TrialBinder } from '../../../../features/litigation/war-room/TrialBinder';
-import { ThemeProvider } from "@/providers/infrastructure/ThemeProvider";
-import { ToastProvider } from '@/providers';
+import { WarRoom } from '../../../../features/litigation/war-room/WarRoom';
+import { WitnessPrep } from '../../../../features/litigation/war-room/WitnessPrep';
+
+import type { CaseId, WarRoomData } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 
 // ============================================================================
 // MOCK DATA

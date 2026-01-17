@@ -7,18 +7,20 @@ import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
 import { useToast } from '@/providers';
 import { draftingApi } from '@api/domains/drafting';
-import type {
-  DraftingStats as StatsType,
-  DraftingTemplate,
-  GeneratedDocument,
-} from '@api/domains/drafting';
-import type { DraftingLoaderData } from '../loader';
+
 import { ApprovalQueue } from './ApprovalQueue';
 import { DocumentGenerator } from './DocumentGenerator';
 import { DraftingStats } from './DraftingStats';
 import { RecentDrafts } from './RecentDrafts';
 import { TemplateEditor } from './TemplateEditor';
 import { TemplateGallery } from './TemplateGallery';
+
+import type { DraftingLoaderData } from '../loader';
+import type {
+  DraftingStats as StatsType,
+  DraftingTemplate,
+  GeneratedDocument,
+} from '@api/domains/drafting';
 
 type View = 'overview' | 'recent' | 'templates' | 'approvals';
 type EditorView = 'template-editor' | 'document-generator' | null;

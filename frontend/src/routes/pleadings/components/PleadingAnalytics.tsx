@@ -18,13 +18,13 @@ import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, Res
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
 
 // Components
-import { Card } from '@/components/molecules/Card/Card';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Services & Utils
 import { usePleadingData } from '../hooks/usePleadingData';
@@ -68,7 +68,7 @@ export const PleadingAnalytics: React.FC = () => {
         if (completedPleadings.length > 0) {
             const totalDays = completedPleadings.reduce((acc: number, p) => {
                 const start = new Date(p.createdAt!).getTime();
-                const end = new Date(p.filedDate!).getTime();
+                const end = new Date(p.filedDate).getTime();
                 // Ensure positive duration
                 const duration = Math.max(0, end - start);
                 return acc + duration / (1000 * 60 * 60 * 24);

@@ -1,4 +1,4 @@
-import { DocketEntry } from "@/types";
+import { type DocketEntry } from "@/types";
 import { cacheRegistry } from "@/utils/cacheManager";
 
 // Initialize caches with 10-minute TTL

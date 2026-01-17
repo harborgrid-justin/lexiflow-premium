@@ -27,9 +27,9 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
+import { cn } from '@/lib/cn';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { validateProductionConfigSafe } from '@/services/validation/discoverySchemas';
-import { cn } from '@/lib/cn';
 
 // Lazy load DocumentService for bundle optimization
 const loadDocumentService = async () => {
@@ -40,7 +40,7 @@ const loadDocumentService = async () => {
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { DiscoveryProductionProps } from './types';
+import { type DiscoveryProductionProps } from './types';
 
 export function DiscoveryProduction({ request, onBack }: DiscoveryProductionProps) {
     const { theme } = useTheme();
@@ -94,7 +94,7 @@ export function DiscoveryProduction({ request, onBack }: DiscoveryProductionProp
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setUploading(true);
-            const files = Array.from(e.target.files) as File[];
+            const files = Array.from(e.target.files);
 
             // Lazy load DocumentService
             const DocumentService = await loadDocumentService();

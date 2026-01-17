@@ -1,8 +1,9 @@
 /** * FilingsTable Component * * Displays court filings with deadlines and status tracking. * Supports sorting, filtering, and deadline warnings. * * @module components/features/cases/FilingsTable */
 
-import { cn } from '@/lib/utils';
 import { differenceInDays, format, isBefore } from 'date-fns';
 import { useState } from 'react';
+
+import { cn } from '@/lib/utils';
 export interface Filing {
   id: string; title: string; type: string; filingDate: string; deadline?: string; status: 'draft' | 'pending' | 'filed' | 'rejected' | 'withdrawn'; filedBy?: string; docketNumber?: string; documentUrl?: string; notes?: string;
 } export interface FilingsTableProps { /** Array of filings to display */ filings: Filing[]; /** Optional click handler for filing selection */ onSelectFiling?: (filing: Filing) => void; /** Show actions column */ showActions?: boolean; /** Optional additional CSS classes */ className?: string;

@@ -5,8 +5,9 @@
  * @status PRODUCTION READY
  */
 
-import type { WizardConfig, WizardStep } from "@/types/forms";
 import { useCallback, useMemo, useState } from "react";
+
+import type { WizardConfig, WizardStep } from "@/types/forms";
 export type { WizardStep } from "@/types/forms";
 
 type WizardHookOptions<T extends Record<string, unknown>> = {
@@ -25,26 +26,26 @@ export const useEnhancedWizard = <T extends Record<string, unknown>>(
   const isArrayInput = Array.isArray(stepsOrOptions);
 
   const steps = isArrayInput
-    ? (stepsOrOptions as WizardStep<T>[])
-    : (stepsOrOptions as WizardHookOptions<T>).config.steps;
+    ? (stepsOrOptions)
+    : (stepsOrOptions).config.steps;
 
   const initialData = isArrayInput
     ? legacyInitialData
-    : (stepsOrOptions as WizardHookOptions<T>).initialData;
+    : (stepsOrOptions).initialData;
 
   const validateStep = isArrayInput
     ? undefined
-    : (stepsOrOptions as WizardHookOptions<T>).validateStep;
+    : (stepsOrOptions).validateStep;
 
   const allowStepNavigation = isArrayInput
     ? true
     : Boolean(
-        (stepsOrOptions as WizardHookOptions<T>).config.allowStepNavigation
+        (stepsOrOptions).config.allowStepNavigation
       );
 
   const onSubmit = isArrayInput
     ? undefined
-    : (stepsOrOptions as WizardHookOptions<T>).config.onSubmit;
+    : (stepsOrOptions).config.onSubmit;
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [formData, setFormData] = useState<Partial<T>>(initialData);

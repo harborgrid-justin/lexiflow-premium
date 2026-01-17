@@ -3,18 +3,18 @@ import { useCallback, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 
 // Components
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
 import { CaseDetailHeader } from '@/routes/cases/components/detail/CaseDetailHeader';
 import { CaseDetailMobileMenu } from '@/routes/cases/components/detail/CaseDetailMobileMenu';
 import { CaseDetailNavigation } from '@/routes/cases/components/detail/layout/CaseDetailNavigation';
 import { MobileTimelineOverlay } from '@/routes/cases/components/detail/MobileTimelineOverlay';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useCaseDetailContext } from './CaseDetailContext';
 
 // Services & Utils
-import { cn } from '@/lib/cn';
-import { CASE_DETAIL_TABS } from '@/routes/cases/components/detail/CaseDetailConfig';
 
 export function CaseDetailShell() {
   const { theme } = useTheme();

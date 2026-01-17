@@ -1,14 +1,20 @@
-import React from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { useClickOutside } from '@/hooks/useClickOutside'; // Assuming shared hook
+
 import { Command, Search, X } from 'lucide-react';
+
+import { SEARCH_CATEGORIES } from '@/config/search.config';
+import { useClickOutside } from '@/hooks/useClickOutside'; // Assuming shared hook
+import { useTheme } from "@/hooks/useTheme";
+
+import { useEnhancedSearch } from '../../../hooks/useEnhancedSearch';
+
 import * as styles from './EnhancedSearch.styles';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
-import type { EnhancedSearchProps } from './types';
+
+import type { EnhancedSearchProps, SearchResult } from './types';
 
 // New Imports
-import { SEARCH_CATEGORIES } from '@/config/search.config';
-import { useEnhancedSearch } from '../../hooks/useEnhancedSearch';
+
+import type { RefObject } from 'react';
 
 /**
  * EnhancedSearch - React 18 optimized with useId
@@ -44,12 +50,12 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     handleKeyDown
   } = useEnhancedSearch({
     onSearch,
-    onSuggestionSelect,
     suggestions,
-    debounceDelay
+    debounceDelay,
+    ...(onSuggestionSelect ? { onSuggestionSelect } : {}),
   });
 
-  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
+  useClickOutside(containerRef as RefObject<HTMLElement>, () => setIsOpen(false));
 
   return (
     <div ref={containerRef} className={styles.searchContainer(className)}>
@@ -109,7 +115,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
           className={styles.getDropdownContainer(theme)}
         >
           <div className={styles.dropdownScrollContainer}>
-            {displayItems.map((item, idx) => (
+            {displayItems.map((item: SearchResult, idx: number) => (
               <button
                 key={item.id}
                 onClick={() => handleSuggestionClick(item)}
@@ -126,7 +132,11 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                   />
                   {'metadata' in item && item.metadata && (
                     <p className={styles.getSuggestionMetadata(theme, selectedIndex === idx)}>
-                      {String(item.metadata.description || '')}
+                      {String(
+                        (item.metadata)[
+                        "description"
+                        ] || ""
+                      )}
                     </p>
                   )}
                 </div>

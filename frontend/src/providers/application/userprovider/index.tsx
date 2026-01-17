@@ -26,10 +26,12 @@
  * @module providers/application/userprovider
  */
 
-import { UserActionsContext, UserStateContext } from '@/lib/user/contexts';
-import type { UserActionsValue, UserProfile, UserProviderProps, UserStateValue } from '@/lib/user/types';
-import { DataService } from '@/services/data/dataService';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
+import { UserActionsContext, UserStateContext } from '@/lib/user/contexts';
+import { DataService } from '@/services/data/dataService';
+
+import type { UserActionsValue, UserProfile, UserProviderProps, UserStateValue } from '@/lib/user/types';
 
 interface EnhancedUserProviderProps extends Omit<UserProviderProps, 'initialUser'> {
   /**

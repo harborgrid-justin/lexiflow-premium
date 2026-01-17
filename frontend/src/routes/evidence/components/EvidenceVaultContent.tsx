@@ -8,8 +8,8 @@
 import { lazy } from 'react';
 
 // Types
-import { EvidenceFilters, ViewMode } from '@/hooks/useEvidenceManager';
-import { EvidenceItem } from '@/types';
+import { type EvidenceFilters, type ViewMode } from '@/hooks/useEvidenceManager';
+import { type EvidenceItem } from '@/types';
 
 // Lazy Loaded Components
 const EvidenceDashboard = lazy(() => import('./EvidenceDashboard').then(m => ({ default: m.EvidenceDashboard })));

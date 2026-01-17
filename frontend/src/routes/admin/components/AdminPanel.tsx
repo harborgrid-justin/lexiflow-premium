@@ -16,16 +16,18 @@ import { Suspense, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '@/hooks/core';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { AdminPanelContent } from './AdminPanelContent';
+
 
 // Utils & Config
 import { ADMIN_TAB_CONFIG } from '@/config/tabs.config';
+import { useSessionStorage } from '@/hooks/core';
 import { cn } from '@/lib/cn';
+
+import { AdminPanelContent } from './AdminPanelContent';
 
 // ============================================================================
 // TYPES & INTERFACES

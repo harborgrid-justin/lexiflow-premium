@@ -4,6 +4,7 @@
  */
 
 import { communicationsApi } from "@/lib/frontend-api";
+
 import type { LoaderFunctionArgs } from "react-router";
 // LoaderFunctionArgs provides type safety even if we don't use all properties
 export async function clientLoader(_args: LoaderFunctionArgs) {

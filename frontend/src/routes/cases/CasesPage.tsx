@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { CaseListProvider } from './CaseListProvider';
 import CaseListView from './CaseListView';
+
 import type { CaseListLoaderData } from './loader';
 
 interface CasesPageProps {

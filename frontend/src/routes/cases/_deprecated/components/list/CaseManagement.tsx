@@ -18,21 +18,23 @@
  * - Backend API integration via DataService
  */
 
+import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
+import React, { Suspense, useMemo, useTransition } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { api } from '@/api';
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { PATHS } from '@/config/paths.config';
-import { MatterView } from '@/config/tabs.config';
+import { type MatterView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { CaseStatus, type Case, type Invoice } from '@/types';
-import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
-import React, { Suspense, useMemo, useTransition } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { CaseManagerContent } from './CaseManagerContent';
 
 // Two-level tab configuration
@@ -123,7 +125,7 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
   const handleParentTabChange = (parentId: string) => {
     const parent = CASE_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs![0]?.id || '');
+      setActiveTab(parent.subTabs[0]?.id || '');
     }
   };
 

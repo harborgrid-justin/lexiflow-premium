@@ -14,10 +14,13 @@
 
 import { casesApi } from '@/lib/frontend-api';
 import { CaseStatus } from '@/types';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { WarRoom } from './components/WarRoom';
+
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 // ============================================================================
 // Types
@@ -78,7 +81,7 @@ export async function action({ request }: ActionFunctionArgs) {
             title,
             status: CaseStatus.Trial,
             description: 'Created from War Room',
-            client: 'Unknown', // Should be provided
+            clientId: 'Unknown', // Should be provided
             practiceArea: 'Litigation'
           });
           if (!result.ok) {

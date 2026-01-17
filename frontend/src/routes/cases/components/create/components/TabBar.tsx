@@ -2,9 +2,10 @@
  * Tab navigation component
  */
 
+import { type LucideIcon } from 'lucide-react';
 import React from 'react';
+
 import { cn } from '@/lib/cn';
-import { LucideIcon } from 'lucide-react';
 
 export interface Tab {
   id: string;

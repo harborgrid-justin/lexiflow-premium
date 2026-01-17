@@ -17,7 +17,6 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Responsi
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { getChartTheme } from '@/utils/chartConfig';
 // Components
 import { Card } from '@/components/molecules/Card/Card';
 
@@ -26,6 +25,7 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Utils
 import { cn } from '@/lib/cn';
+import { getChartTheme } from '@/utils/chartConfig';
 
 // Types
 import type { OutcomePredictionData } from '@/types';
@@ -55,7 +55,7 @@ export function CasePrediction({ outcomeData }: CasePredictionProps) {
   // HOOKS - Context
   // ==========================================================================
   const { theme, mode } = useTheme();
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartTheme = getChartTheme(mode);
 
   // ==========================================================================
   // MAIN RENDER

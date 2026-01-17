@@ -1,6 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
 import { DocketToolbar } from '@/routes/cases/components/docket/DocketToolbar';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * DocketToolbar is a sticky toolbar component for the docket sheet that

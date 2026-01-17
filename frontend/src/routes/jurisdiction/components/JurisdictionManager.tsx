@@ -17,16 +17,17 @@ import React, { Suspense, useState, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
-import { JURISDICTION_TABS, JurisdictionView } from './utils';
+
+import { JURISDICTION_TABS, type JurisdictionView } from './utils';
 
 const JurisdictionFederal = React.lazy(() => import('./JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));
 const JurisdictionState = React.lazy(() => import('./JurisdictionState').then(m => ({ default: m.JurisdictionState })));
@@ -73,7 +74,7 @@ export function JurisdictionManager() {
             {JURISDICTION_TABS.map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as JurisdictionView)}
+                onClick={() => setActiveTab(tab.id)}
                 className={cn(
                   "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center",
                   activeTab === tab.id

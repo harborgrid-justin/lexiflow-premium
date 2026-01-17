@@ -7,6 +7,11 @@
  * @module hooks/useStrategyCanvas
  */
 
+import { useCallback, useRef, useState } from "react";
+
+import { type ContextMenuItem } from "@/components/molecules/ContextMenu/ContextMenu";
+import { useCommandHistory } from "@/hooks/core/useCommandHistory";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import {
   calculateCanvasMousePosition,
   calculateDropPosition,
@@ -21,17 +26,16 @@ import {
   MoveNodeCommand,
   UpdateNodeCommand,
 } from "@/services/infrastructure/command-history.service";
-import { ContextMenuItem } from "@/components/molecules/ContextMenu/ContextMenu";
 import { CANVAS_CONSTANTS } from "@/types/canvas-constants";
 import {
   createTypedNode,
-  NodeType,
-  TypedWorkflowNode,
-  WorkflowConnection,
+  type NodeType,
+  type TypedWorkflowNode,
+  type WorkflowConnection,
 } from "@/types/workflow-types";
-import React, { useCallback, useRef, useState } from "react";
-import { useCommandHistory } from "@/hooks/core/useCommandHistory";
-import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+
+import type React from "react";
+
 
 export interface UseStrategyCanvasProps {
   initialNodes?: TypedWorkflowNode[];
@@ -208,7 +212,7 @@ export function useStrategyCanvas({
             (prev) =>
               prev.map((n) =>
                 n.id === nodeId ? ({ ...n, ...upd } as TypedWorkflowNode) : n,
-              ) as TypedWorkflowNode[],
+              ),
           ),
       );
 
@@ -319,7 +323,7 @@ export function useStrategyCanvas({
         pan,
         scale,
       );
-      const finalType: NodeType = (type || "Task") as NodeType;
+      const finalType: NodeType = (type || "Task");
       const id = addNode(finalType, x, y, litType || finalType);
 
       setSelectedNodeId(id);
@@ -383,7 +387,7 @@ export function useStrategyCanvas({
               (prev) =>
                 prev.map((n) =>
                   n.id === id ? ({ ...n, ...updates } as TypedWorkflowNode) : n,
-                ) as TypedWorkflowNode[],
+                ),
             ),
         );
         execute(command);

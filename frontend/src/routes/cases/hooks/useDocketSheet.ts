@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
-import { useToggle } from '@/hooks/useToggle';
+
 import { useModalState } from '@/hooks/core';
+import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { useToggle } from '@/hooks/useToggle';
 import { IdGenerator } from '@/lib/idGenerator';
-import { Case, CaseId, DocketEntry } from '@/types';
+import { DataService } from '@/services/data/data-service.service';
+import { type Case, type CaseId, type DocketEntry } from '@/types';
 
 type FilterType = 'all' | 'filings' | 'orders';
 

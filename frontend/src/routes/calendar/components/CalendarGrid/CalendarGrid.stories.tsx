@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CalendarGrid } from './CalendarGrid';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CalendarGrid> = {
   title: 'Components/Organisms/CalendarGrid/CalendarGrid',

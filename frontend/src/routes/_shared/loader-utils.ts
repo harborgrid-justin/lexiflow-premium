@@ -233,7 +233,7 @@ export async function fetchParallel<
 
   return results.reduce(
     (acc, result) => {
-      acc[result.key as keyof T] = {
+      acc[result.key] = {
         data: result.data as Awaited<ReturnType<T[keyof T]>> | null,
         error: result.error,
       };

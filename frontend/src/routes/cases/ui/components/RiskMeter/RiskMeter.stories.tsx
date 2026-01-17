@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RiskMeter } from './RiskMeter';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof RiskMeter> = {
   title: 'Components/Organisms/RiskMeter/RiskMeter',

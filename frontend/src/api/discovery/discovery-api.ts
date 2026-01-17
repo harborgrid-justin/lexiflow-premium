@@ -27,11 +27,12 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import { DiscoveryRequest, LegalHold, PrivilegeLogEntry } from "@/types";
+import { type DiscoveryRequest, type LegalHold, type PrivilegeLogEntry } from "@/types";
+
 import { DiscoveryRequestsApiService } from "./discovery-requests-api";
 import { LegalHoldsApiService } from "./legal-holds-api";
 import { PrivilegeLogApiService } from "./privilege-log-api";
-import { Production, ProductionsApiService } from "./productions-api";
+import { type Production, ProductionsApiService } from "./productions-api";
 
 export interface DiscoveryProcess {
   id: string;

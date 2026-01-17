@@ -46,6 +46,7 @@
  */
 
 import { useEffect, useCallback } from 'react';
+
 import { KEYBOARD_SHORTCUTS } from '@/types/canvas-constants';
 
 // ============================================================================

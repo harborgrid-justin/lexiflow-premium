@@ -1,5 +1,6 @@
-import { AccessEffect, GranularPermission } from "@/types";
 import { useCallback, useEffect, useState } from "react";
+
+import { AccessEffect, type GranularPermission } from "@/types";
 
 // ============================================================================
 // Types
@@ -32,9 +33,9 @@ const createPermissionObject = (
   return {
     id: `perm-${Date.now()}`,
     resource: draft.resource,
-    action: draft.action as GranularPermission["action"],
-    effect: (draft.effect || "Allow") as AccessEffect,
-    scope: (draft.scope || "Global") as GranularPermission["scope"],
+    action: draft.action,
+    effect: (draft.effect || "Allow"),
+    scope: (draft.scope || "Global"),
     expiration: draft.expiration,
     conditions: [],
   };

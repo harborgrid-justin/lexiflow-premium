@@ -8,12 +8,14 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { motion } from 'framer-motion';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+import React from "react";
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

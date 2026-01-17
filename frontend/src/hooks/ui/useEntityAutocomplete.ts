@@ -17,9 +17,10 @@
  * ```
  */
 
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import { useDebounce } from "@/hooks/useDebounce";
 import { queryClient } from "@/services/infrastructure/queryClient";
-import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Configuration for entity autocomplete

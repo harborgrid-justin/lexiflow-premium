@@ -4,14 +4,8 @@
  * @description Partner-specific dashboard focused on revenue, client acquisition, and case outcomes
  */
 
-import React from 'react';
-import { type PartnerDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { ChartCard, KPICard, StatWidget } from '../../widgets';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/lib/cn';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Award, DollarSign, Target, TrendingUp, Users } from 'lucide-react';
+import React from 'react';
 import {
   Bar,
   BarChart,
@@ -24,6 +18,16 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type PartnerDashboardData, dashboardMetricsService } from '@/lib/frontend-api';
+
+import { ChartCard, KPICard, StatWidget } from '../../widgets';
+
+
 
 export const PartnerDashboard: React.FC = () => {
   const { theme, mode } = useTheme();

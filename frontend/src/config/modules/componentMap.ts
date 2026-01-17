@@ -1,6 +1,9 @@
-import React from "react";
+
 import { PATHS } from "../paths.config";
+
 import * as Components from "./lazyComponents";
+
+import type React from "react";
 
 export const COMPONENT_MAP: Record<
   string,

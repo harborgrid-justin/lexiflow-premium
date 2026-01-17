@@ -16,16 +16,17 @@ import React, { useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { PREFETCH_MAP } from '@/config/prefetchConfig';
+import { useHoverIntent } from '@/hooks/useHoverIntent';
 import { queryClient } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 import { ModuleRegistry } from '@/services/infrastructure/module-registry.service';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useHoverIntent } from '@/hooks/useHoverIntent';
 
 // Utils & Constants
-import { PREFETCH_MAP } from '@/config/prefetchConfig';
 import { Scheduler } from '@/utils/scheduler';
+
 import * as styles from './SidebarNav.styles';
 
 // Types

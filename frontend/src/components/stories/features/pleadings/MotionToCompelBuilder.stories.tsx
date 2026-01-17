@@ -1,5 +1,6 @@
 import { MotionToCompelBuilder } from '@/routes/discovery/components/platform/MotionToCompelBuilder';
-import { CaseId } from '@/types';
+import { type CaseId } from '@/types';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

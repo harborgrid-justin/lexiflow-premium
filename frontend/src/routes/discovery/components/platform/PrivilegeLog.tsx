@@ -11,16 +11,17 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Mail, Plus, Shield, Wand2 } from 'lucide-react';
+import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -29,14 +30,14 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
+import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { PrivilegeLogEntry } from '@/types';
+import { type PrivilegeLogEntry } from '@/types';
 
 export const PrivilegeLog: React.FC = () => {
   const { theme } = useTheme();

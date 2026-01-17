@@ -1,14 +1,14 @@
+import { Clock, GitBranch, History, Plus, Tag, User } from 'lucide-react';
 import React, { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
-import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/lib/cn';
-import { Clock, GitBranch, History, Plus, Tag, User } from 'lucide-react';
-import { useState } from 'react';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 interface HistoryEntry {
   id: string;

@@ -9,13 +9,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../../_shared/RouteSkeletons';
-import type { WarRoomLoaderData } from '../loader';
+
 import { WarRoomProvider } from './WarRoomProvider';
 import { WarRoomView } from './WarRoomView';
 
+import type { WarRoomLoaderData } from '../loader';
+
 export function WarRoomPage() {
-  const initialData = useLoaderData() as WarRoomLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading War Room" />}>

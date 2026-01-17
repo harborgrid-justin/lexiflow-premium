@@ -32,31 +32,33 @@ import { useCallback, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { useNotify } from "@/hooks/useNotify";
 import { useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import * as DateCalculationService from "@/services/infrastructure/dateCalculationService";
 import { GraphValidationService } from "@/services/search/graph-validation.service";
-import { queryKeys } from "@/utils/query-keys.service";
 
 // Hooks & Context
-import { useAutoSave } from "@/hooks/useAutoSave";
-import { useNotify } from "@/hooks/useNotify";
 
 // Utils & Constants
 import {
   CANVAS_CONSTANTS,
   VALIDATION_MESSAGES,
 } from "@/types/canvas-constants";
-import { Playbook } from "@/types/playbook";
+import { type Playbook } from "@/types/playbook";
+import { TaskPriorityBackend, TaskStatusBackend } from "@/types/workflow";
 import {
   LITIGATION_PORTS,
-  NodeType,
-  TypedWorkflowNode,
-  WorkflowConnection,
-  WorkflowNode,
+  type NodeType,
+  type TypedWorkflowNode,
+  type WorkflowConnection,
+  type WorkflowNode,
 } from "@/types/workflow-types";
 
 // Types - Direct imports to avoid barrel export overhead
+import { queryKeys } from "@/utils/query-keys.service";
+
 import type {
   Case,
   CaseId,
@@ -64,7 +66,7 @@ import type {
   TaskId,
   WorkflowTask,
 } from "@/types/models";
-import { TaskPriorityBackend, TaskStatusBackend } from "@/types/workflow";
+
 
 // ============================================================================
 // TYPES & INTERFACES

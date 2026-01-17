@@ -29,7 +29,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { Clause } from '@/types';
+import { type Clause } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

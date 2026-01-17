@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/conflicts/entities/conflict-check.entity.ts
  */
 
-import { ConflictCheck } from '@/types/compliance-risk';
-import { UUID, UserId } from '@/types/primitives';
+import { type ConflictCheck } from '@/types/compliance-risk';
+import { type UUID, type UserId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.compliance instead

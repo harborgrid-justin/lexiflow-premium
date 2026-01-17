@@ -6,7 +6,7 @@
  * @module components/jurisdiction/utils/jurisdictionConfig
  */
 
-import { Globe, Scale, Building2, Shield, Users, Map as MapIcon, Gavel, LucideIcon } from 'lucide-react';
+import { Globe, Scale, Building2, Shield, Users, Map as MapIcon, Gavel, type LucideIcon } from 'lucide-react';
 
 export type JurisdictionView = 'federal' | 'state' | 'regulatory' | 'international' | 'arbitration' | 'local' | 'map';
 

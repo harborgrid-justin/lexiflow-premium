@@ -4,11 +4,7 @@
  * @description Pipeline visualization chart by status
  */
 
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { Card } from '@/components/molecules/Card/Card';
-import type { LeadsByStatus } from '@/types/crm';
-import { getChartTheme } from '@/utils/chartConfig';
+import React from "react";
 import {
   Bar,
   BarChart,
@@ -19,7 +15,14 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
-import React from "react";
+
+import { Card } from '@/components/molecules/Card/Card';
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { getChartTheme } from '@/utils/chartConfig';
+
+import type { LeadsByStatus } from '@/types/crm';
+
 
 interface LeadPipelineChartProps {
   data: LeadsByStatus[];
@@ -27,8 +30,8 @@ interface LeadPipelineChartProps {
 
 export const LeadPipelineChart: React.FC<LeadPipelineChartProps> = ({ data }) => {
   const { mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
 
   return (
     <Card title="Pipeline by Status">

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ConfirmDialog } from './ConfirmDialog';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ConfirmDialog> = {
   title: 'Components/Molecules/ConfirmDialog/ConfirmDialog',

@@ -8,12 +8,16 @@
  * Enterprise React Architecture Pattern
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
-import type { Citation, ResearchQuery } from '@/types';
 import { BookOpen, History, Scale, Search } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useResearch } from './ResearchProvider';
+
+import type { Citation, ResearchQuery } from '@/types';
+
 
 export function ResearchView() {
   const {

@@ -1,8 +1,10 @@
+import { useState } from "react";
+
 import { DocumentsApiService } from "@/api/admin/documents-api";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { queryKeys } from "@/utils/queryKeys";
-import { useState } from "react";
-import { Annotation } from "../types/DocumentAnnotationsProps";
+
+import { type Annotation } from "../types/DocumentAnnotationsProps";
 
 const documentsApi = new DocumentsApiService();
 

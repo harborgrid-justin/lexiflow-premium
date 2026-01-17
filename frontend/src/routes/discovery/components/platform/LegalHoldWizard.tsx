@@ -1,3 +1,4 @@
+import { Save, X } from 'lucide-react';
 import React, { useState } from 'react';
 /**
  * LegalHoldWizard.tsx
@@ -12,17 +13,16 @@ import React, { useState } from 'react';
  * - G33: Explicit loading states
  */
 
-import { useTheme } from "@/hooks/useTheme";
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
-import { DataService } from '@/services/data/data-service.service';
 import { useNotify } from '@/hooks/useNotify';
-import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import { LegalHoldEnhanced } from '@/types/discovery-enhanced';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { Save, X } from 'lucide-react';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+import { type LegalHoldEnhanced } from '@/types/discovery-enhanced';
 
 interface LegalHoldWizardProps {
     caseId?: string;

@@ -2,14 +2,18 @@
  * Intake tab component with basic matter information
  */
 
+import { CheckCircle, AlertCircle } from 'lucide-react';
 import React from 'react';
+
+import { MatterStatus, MatterPriority, PracticeArea } from '@/types';
+
 import { FormField } from '../components/FormField';
 import { FormSelect } from '../components/FormSelect';
 import { FormTextarea } from '../components/FormTextarea';
-import { CheckCircle, AlertCircle } from 'lucide-react';
-import { FormData, CaseType } from '../types/newCaseTypes';
-import { MatterStatus, MatterPriority, PracticeArea } from '@/types';
-import { ConflictStatus } from '../hooks/useConflictCheck';
+import { type ConflictStatus } from '../hooks/useConflictCheck';
+import { type FormData, CaseType } from '../types/newCaseTypes';
+
+
 
 export interface IntakeTabProps {
   formData: FormData;

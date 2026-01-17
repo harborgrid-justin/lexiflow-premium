@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import type { FormattingResult, FilterOptions } from './types';
 
 export const useFilteredResults = (

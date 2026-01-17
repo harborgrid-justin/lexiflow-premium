@@ -1,10 +1,11 @@
+import { useCallback, useEffect, useState } from "react";
+
 import { useModalState } from "@/hooks/core";
 import { useNotify } from "@/hooks/useNotify";
 import { useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
-import { CaseId, Organization, Party, PartyId } from "@/types";
+import { type CaseId, type Organization, type Party, type PartyId } from "@/types";
 import { Scheduler } from "@/utils/scheduler";
-import { useCallback, useEffect, useState } from "react";
 
 export type GroupByOption = "none" | "role" | "group";
 
@@ -89,8 +90,8 @@ export function useCaseParties(
       const caseId = (parties.length > 0 ? parties[0]?.caseId : "") as CaseId;
       const newParty: Party = {
         id: `p-${Date.now()}` as PartyId,
-        name: currentParty.name!,
-        role: currentParty.role!,
+        name: currentParty.name,
+        role: currentParty.role,
         partyGroup: currentParty.partyGroup,
         contact: currentParty.contact || "",
         type: currentParty.type || "Individual",

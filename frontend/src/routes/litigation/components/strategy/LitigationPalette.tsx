@@ -7,8 +7,8 @@
  * @module components/litigation/LitigationPalette
  */
 
-import React from 'react';
 import { X, GripVertical } from 'lucide-react';
+import React from 'react';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -17,8 +17,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Constants
-import { LitigationPaletteProps } from './types';
 import { PALETTE_SECTIONS } from './constants';
+import { type LitigationPaletteProps } from './types';
 
 export const LitigationPalette: React.FC<LitigationPaletteProps> = ({ isOpen, onClose }) => {
   const { theme } = useTheme();

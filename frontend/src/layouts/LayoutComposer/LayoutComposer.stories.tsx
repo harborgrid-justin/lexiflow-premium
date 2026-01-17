@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LayoutComposer } from './LayoutComposer';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof LayoutComposer> = {
   title: 'Components/Layouts/LayoutComposer/LayoutComposer',

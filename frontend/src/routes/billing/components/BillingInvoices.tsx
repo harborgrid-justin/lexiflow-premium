@@ -19,22 +19,24 @@ import React from 'react';
 // Removed unused DataService
 
 // Hooks & Context
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useNotify } from '@/hooks/useNotify';
-import { useThemeContext } from "@/hooks/useTheme";
-import { useBillingInvoices } from '../hooks/useBillingInvoices';
-import { getInvoiceBadgeVariant } from './utils/invoiceUtils';
 
 // Components
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useNotify } from '@/hooks/useNotify';
+import { useThemeContext } from "@/hooks/useTheme";
 
 // Utils & Constants
 // Removed unused billingQueryKeys and InvoiceStatusEnum
 import { cn } from '@/lib/cn';
 import { Formatters } from '@/utils/formatters';
+
+import { useBillingInvoices } from '../hooks/useBillingInvoices';
+
+import { getInvoiceBadgeVariant } from './utils/invoiceUtils';
 
 // Types
 // Removed unused Invoice import

@@ -1,9 +1,11 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { FileText, Landmark } from 'lucide-react';
+
 import { Card } from '@/components/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { Formatters } from '@/utils/formatters';
-import { FileText, Landmark } from 'lucide-react';
+
 interface TrustLedgerAccount {
     client: string;
     matterId: string;

@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Zap, Clock, Plus } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";

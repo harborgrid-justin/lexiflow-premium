@@ -1,13 +1,14 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Clock, Eye, FolderOpen, Loader2 } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
-import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
-import { Clock, Eye, FolderOpen, Loader2 } from 'lucide-react';
+import { DataService } from '@/services/data/data-service.service';
+import { type LegalDocument } from '@/types';
 
 export function RecentFiles() {
     const { theme } = useTheme();

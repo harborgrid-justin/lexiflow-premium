@@ -1,13 +1,16 @@
 /** * Real Estate: Audit Readiness Route * * Provides audit preparation and compliance tracking for real estate assets, * including documentation verification, compliance status, and audit trail management. * * @module routes/real-estate/audit-readiness */
 
-import { DataService } from '@/services/data/data-service.service';
-import type { RealEstateAuditItem } from '@/services/domain/RealEstateDomain';
 import { AlertTriangle, CheckCircle, ClipboardCheck, FileSearch, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/audit-readiness"; // ============================================================================
+import type { RealEstateAuditItem } from '@/services/domain/RealEstateDomain';
 // Types
 // ============================================================================
 interface LoaderData {

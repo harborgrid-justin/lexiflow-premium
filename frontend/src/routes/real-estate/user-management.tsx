@@ -1,11 +1,14 @@
 /** * Real Estate: User Management Route * * Manages user access, roles, and permissions for the real estate module, * including team assignments and authorization controls. * * @module routes/real-estate/user-management */
 
-import { DataService } from '@/services/data/data-service.service';
 import { Plus, Shield, UserCheck, Users } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/user-management"; // ============================================================================
 // Types
 // ============================================================================

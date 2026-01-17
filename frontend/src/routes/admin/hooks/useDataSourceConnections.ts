@@ -3,10 +3,11 @@
  * Provides CRUD operations and query state for data source connections.
  */
 
-import { DataSource } from "@/api/data-platform/data-sources-api";
+import { type DataSource } from "@/api/data-platform/data-sources-api";
 import { useNotify } from "@/hooks/useNotify";
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
+
 import type {
   // ConnectionTestResult,
   ConnectionStatus,

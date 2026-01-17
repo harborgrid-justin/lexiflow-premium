@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabbedView } from './TabbedView';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TabbedView> = {
   title: 'Components/Organisms/TabbedView/TabbedView',

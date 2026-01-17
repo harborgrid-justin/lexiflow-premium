@@ -4,9 +4,11 @@
  * Displays analytics dashboard for a specific case
  */
 
+import { useLoaderData } from 'react-router';
+
 import { analyticsApi, casesApi } from '@/lib/frontend-api';
 import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
-import { useLoaderData } from 'react-router';
+
 import type { Route } from "./+types/analytics";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -32,7 +34,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseAnalyticsRoute() {
-  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { case: caseData } = useLoaderData();
   return <CaseAnalyticsDashboard caseId={caseData.id} />;
 }
 

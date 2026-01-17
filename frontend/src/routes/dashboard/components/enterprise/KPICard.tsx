@@ -4,11 +4,12 @@
  * @description Animated KPI card component with counter animation
  */
 
+import { motion } from 'framer-motion';
+import { type LucideIcon, TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { motion } from 'framer-motion';
-import { LucideIcon, TrendingDown, TrendingUp } from 'lucide-react';
 
 export interface KPICardProps {
   title: string;

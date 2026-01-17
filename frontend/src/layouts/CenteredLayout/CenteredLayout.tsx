@@ -4,8 +4,9 @@
  * @description Centered content layout for auth pages, empty states, and focused content.
  */
 
-import { cn } from '@/lib/cn';
 import React from "react";
+
+import { cn } from '@/lib/cn';
 
 interface CenteredLayoutProps {
   children: React.ReactNode;

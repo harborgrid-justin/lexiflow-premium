@@ -1,14 +1,17 @@
-import { DOCUMENTS_QUERY_KEYS } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { LegalDocument } from '@/types/documents';
 import { ArrowLeft, Download, FileText, Printer, Tag, ZoomIn, ZoomOut } from 'lucide-react';
 import React, { useState } from 'react';
-import { DiscoveryDocumentViewerProps } from './types';
+
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DOCUMENTS_QUERY_KEYS } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
+import { type LegalDocument } from '@/types/documents';
+
+
+import { type DiscoveryDocumentViewerProps } from './types';
 import { CodingPanel } from './viewer/CodingPanel';
 
 export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = ({ docId, onBack }) => {

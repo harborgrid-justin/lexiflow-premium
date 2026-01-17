@@ -19,13 +19,13 @@ import { useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useModalState } from '@/hooks/core';
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
 import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { Card } from '@/components/molecules/Card/Card';
+import { useModalState } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

@@ -5,9 +5,10 @@
  * Provides centralized DMS, version control, and automated drafting capabilities.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import DocumentManager from '../../../../features/operations/documents/DocumentManager';
+
 import type { UserRole } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DocumentManager> = {
   title: 'Pages/Document Manager',

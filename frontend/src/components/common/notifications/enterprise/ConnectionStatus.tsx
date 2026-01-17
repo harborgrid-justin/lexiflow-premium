@@ -4,8 +4,6 @@
  * @description Real-time WebSocket connection status indicator with animations
  */
 
-import { useTheme } from '@/hooks/useTheme';
-import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -16,6 +14,9 @@ import {
   WifiOff,
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

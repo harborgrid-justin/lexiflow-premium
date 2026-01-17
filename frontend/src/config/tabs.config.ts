@@ -3,8 +3,6 @@
  * All tab configurations for various modules in one reusable file
  */
 
-import { PlatformView } from "@/routes/admin/components/data/types";
-import type { TabConfigItem } from "@/types/layout";
 import {
   Activity,
   AlertOctagon,
@@ -48,7 +46,7 @@ import {
   Lightbulb,
   Link,
   Lock,
-  LucideIcon,
+  type LucideIcon,
   Map,
   Network,
   PieChart,
@@ -72,6 +70,10 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+
+import { type PlatformView } from "@/routes/admin/components/data/types";
+
+import type { TabConfigItem } from "@/types/layout";
 
 // =============================================================================
 // TYPE DEFINITIONS

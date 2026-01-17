@@ -1,9 +1,11 @@
+import { useCallback } from "react";
+
 import { useNotify } from "@/hooks/useNotify";
 import { useMutation } from "@/hooks/useQueryHooks";
 import { useWindow } from "@/providers";
 import { DataService } from "@/services/data/data-service.service";
-import { useCallback } from "react";
-import { TransactionData } from "../components/TransactionForm";
+
+import { type TransactionData } from "../components/TransactionForm";
 
 export type LedgerTransactionStatus =
   | "idle"

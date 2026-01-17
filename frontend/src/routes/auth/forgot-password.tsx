@@ -4,9 +4,10 @@
  * Handles password reset request
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
-import { FormEvent, useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { Link } from 'react-router';
+
+import { AuthApiService } from '@/lib/frontend-api';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');

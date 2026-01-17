@@ -1,5 +1,6 @@
 import { FileText, Mail, FileSignature, Scale, Building2, Users, BookOpen, Gavel } from 'lucide-react';
-import { DocumentTemplate } from '../types';
+
+import { type DocumentTemplate } from '../types';
 
 export const DOCUMENT_TEMPLATES: DocumentTemplate[] = [
   {

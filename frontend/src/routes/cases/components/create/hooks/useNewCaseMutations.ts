@@ -3,13 +3,14 @@
  */
 
 import { useCallback } from 'react';
+
+import { PATHS } from '@/config/paths.config';
+import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/services/infrastructure/queryClient';
-import { useNotify } from '@/hooks/useNotify';
+import { type Matter, type Case } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { PATHS } from '@/config/paths.config';
-import { Matter, Case } from '@/types';
 
 export interface UseNewCaseMutationsResult {
   createMatter: (data: Matter | Case) => Promise<void>;

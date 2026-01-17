@@ -4,11 +4,12 @@
  * @description Real-time metrics widget with live updates
  */
 
+import { AnimatePresence, motion } from 'framer-motion';
+import { AlertCircle, type LucideIcon, RefreshCw } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, LucideIcon, RefreshCw } from 'lucide-react';
 
 export interface MetricItem {
   id: string;

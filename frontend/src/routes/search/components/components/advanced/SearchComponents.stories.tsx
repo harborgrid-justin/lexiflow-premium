@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CategoryFilter } from './SearchComponents';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CategoryFilter> = {
   title: 'Components/Organisms/SearchComponents/SearchComponents',
@@ -15,7 +16,6 @@ type Story = StoryObj<typeof CategoryFilter>;
 
 export const Default: Story = {
   args: {
-    "activeCategory": undefined,
     onCategoryChange: () => { },
     "theme": { text: { secondary: '', primary: '' }, surface: { highlight: '' } }
   },

@@ -1,5 +1,5 @@
 import { client } from "./client";
-import { PaginatedResult, Result } from "./types";
+import { type PaginatedResult, type Result } from "./types";
 
 export interface ResearchItem {
   id: string;

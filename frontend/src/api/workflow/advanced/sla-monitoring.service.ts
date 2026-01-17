@@ -5,6 +5,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { SLAConfig, SLAStatus } from "@/types/workflow-advanced-types";
 
 export class SLAMonitoringService {

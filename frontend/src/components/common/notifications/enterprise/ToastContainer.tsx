@@ -4,9 +4,6 @@
  * @description Enterprise toast notification system with sound, animations, and priority handling
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { UINotification } from '@/types/notifications';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -18,6 +15,11 @@ import {
   X,
 } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { UINotification } from '@/types/notifications';
 
 // ============================================================================
 // TYPES & INTERFACES

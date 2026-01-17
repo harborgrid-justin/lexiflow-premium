@@ -9,23 +9,25 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { BookOpen, Cpu, Sparkles } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
-import { WorkflowAutomations } from './workflow/WorkflowAutomations';
-import { WorkflowTimeline } from './workflow/WorkflowTimeline';
+
 
 // Internal Dependencies - Hooks & Context
-import { useCaseWorkflow } from '@/routes/cases/hooks/useCaseWorkflow';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+import { useCaseWorkflow } from '@/routes/cases/hooks/useCaseWorkflow';
 
 // Types & Interfaces
-import { WorkflowStage } from '@/types';
+import { type WorkflowStage } from '@/types';
+
+import { WorkflowAutomations } from './workflow/WorkflowAutomations';
+import { WorkflowTimeline } from './workflow/WorkflowTimeline';
 
 interface CaseWorkflowProps {
   stages: WorkflowStage[];

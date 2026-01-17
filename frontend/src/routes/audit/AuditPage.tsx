@@ -9,13 +9,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { AuditProvider } from './AuditProvider';
 import { AuditView } from './AuditView';
+
 import type { AuditLoaderData } from './loader';
 
 export function AuditPage() {
-  const initialData = useLoaderData() as AuditLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Audit" />}>

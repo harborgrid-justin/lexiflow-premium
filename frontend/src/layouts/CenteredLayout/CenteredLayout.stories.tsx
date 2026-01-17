@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CenteredLayout } from './CenteredLayout';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CenteredLayout> = {
   title: 'Components/Layouts/CenteredLayout/CenteredLayout',

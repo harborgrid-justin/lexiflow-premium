@@ -4,10 +4,6 @@
  * @description Trial exhibit organization with exhibit lists and presentation mode
  */
 
-import React from 'react';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from "@/hooks/useTheme";
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -33,7 +29,11 @@ import {
   Trash2,
   Video
 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES

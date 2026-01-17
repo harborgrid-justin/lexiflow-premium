@@ -1,10 +1,11 @@
-import { BillingView } from "@/config/tabs.config";
+import { useCallback, useState, useTransition } from "react";
+
+import { type BillingView } from "@/config/tabs.config";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useNotify } from "@/hooks/useNotify";
 import { useMutation } from "@/hooks/useQueryHooks";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { DataService } from "@/services/data/data-service.service";
-import { useCallback, useState, useTransition } from "react";
 
 // ============================================================================
 // Types

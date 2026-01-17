@@ -10,26 +10,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useState } from 'react';
 import { Building2, User, Gavel, Briefcase, Loader2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Components
 import { Badge } from '@/components/atoms/Badge';
 import { SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useTheme } from "@/hooks/useTheme";
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { LegalEntity } from '@/types';
+import { type LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

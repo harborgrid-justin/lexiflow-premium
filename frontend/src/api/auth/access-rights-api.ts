@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { Permission, RolePermissions } from '@/types';
 
 export class PermissionsApiService {

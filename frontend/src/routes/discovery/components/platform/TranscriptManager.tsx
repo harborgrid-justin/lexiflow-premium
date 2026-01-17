@@ -1,5 +1,3 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { Button } from '@/components/atoms/Button';
 /**
  * TranscriptManager.tsx
  * Deposition transcript management and search
@@ -10,17 +8,20 @@ import { Button } from '@/components/atoms/Button';
  * - G28: Pure function of context
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { Transcript } from '@/types';
-import { cn } from '@/lib/cn';
 import { CheckCircle, Clock, FileText, Search, Upload } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button';
 // ✅ Migrated to backend API (2025-12-21)
 import { Input } from '@/components/atoms/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useModalState } from '@/hooks/core';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type Transcript } from '@/types';
 
 export const TranscriptManager: React.FC = () => {
     const { theme } = useTheme();

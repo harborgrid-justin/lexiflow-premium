@@ -1,6 +1,6 @@
+import { CheckCircle, Loader2, Power, ShieldAlert } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { CheckCircle, Loader2, Power, ShieldAlert } from 'lucide-react';
 
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';

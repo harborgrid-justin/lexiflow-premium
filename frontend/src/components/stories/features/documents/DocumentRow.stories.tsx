@@ -4,10 +4,13 @@
  * Individual document row for table view with actions.
  */
 
-import { CaseId, DocumentId, LegalDocument, UserId } from '@/types';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
+import { type CaseId, type DocumentId, type LegalDocument, type UserId } from '@/types';
+
 import { DocumentRow } from '../../../../features/operations/documents/table/DocumentRow';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // Wrapper to provide theme to DocumentRow
 const DocumentRowWrapper = (props: React.ComponentProps<typeof DocumentRow>) => {

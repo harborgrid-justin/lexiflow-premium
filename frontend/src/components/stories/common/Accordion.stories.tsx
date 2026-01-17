@@ -1,6 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Accordion, AccordionItem } from '@/components/molecules/Accordion/Accordion';
 import React from "react";
+
+import { Accordion, AccordionItem } from '@/components/molecules/Accordion/Accordion';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Accordion component for expandable content sections.

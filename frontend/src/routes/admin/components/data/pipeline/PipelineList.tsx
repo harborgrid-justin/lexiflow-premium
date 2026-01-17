@@ -1,7 +1,9 @@
-import { Pipeline } from '@/lib/frontend-api';
+import { Activity, ChevronRight, Clock, GitMerge, XCircle } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Activity, ChevronRight, Clock, GitMerge, XCircle } from 'lucide-react';
+import { type Pipeline } from '@/lib/frontend-api';
+
 
 interface PipelineListProps {
     pipelines: Pipeline[];

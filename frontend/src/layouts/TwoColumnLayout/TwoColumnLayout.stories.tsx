@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TwoColumnLayout } from './TwoColumnLayout';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TwoColumnLayout> = {
   title: 'Components/Layouts/TwoColumnLayout/TwoColumnLayout',

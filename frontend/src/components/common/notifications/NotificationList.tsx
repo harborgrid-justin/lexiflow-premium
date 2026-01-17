@@ -3,11 +3,13 @@
  * Displays a list of notifications with filtering and grouping
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from "@/lib/cn";
-import type { ApiNotification } from '@/lib/frontend-api';
 import { formatDistanceToNow } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/cn";
+
+import type { ApiNotification } from '@/lib/frontend-api';
 
 export interface NotificationListProps {
   notifications: ApiNotification[];

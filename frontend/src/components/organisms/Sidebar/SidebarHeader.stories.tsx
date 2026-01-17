@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SidebarHeader } from './SidebarHeader';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof SidebarHeader> = {
   title: 'Components/Organisms/Sidebar/SidebarHeader',

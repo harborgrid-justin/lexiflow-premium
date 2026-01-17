@@ -1,7 +1,9 @@
 import { X, GripVertical} from 'lucide-react';
-import { NodeType, getNodeIcon } from './types';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+
+import { type NodeType, getNodeIcon } from './types';
 
 interface BuilderPaletteProps {
   isOpen: boolean;

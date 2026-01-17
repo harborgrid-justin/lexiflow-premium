@@ -8,10 +8,12 @@
  * Enterprise React Architecture Pattern
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { FileCheck, FilePenLine, FileText, Plus } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { usePleadings } from './hooks/usePleadings';
 
 export function PleadingsView() {

@@ -1,6 +1,7 @@
+import { AppHeader } from './AppHeader';
+
 import type { UserId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AppHeader } from './AppHeader';
 
 const meta: Meta<typeof AppHeader> = {
   title: 'Components/Organisms/AppHeader/AppHeader',

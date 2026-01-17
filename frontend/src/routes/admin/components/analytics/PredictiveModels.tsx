@@ -12,6 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, BrainCircuit, Target, TrendingUp } from 'lucide-react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
@@ -19,6 +20,7 @@ import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+
 import type { OutcomePrediction } from '@/lib/frontend-api';
 
 // ============================================================================

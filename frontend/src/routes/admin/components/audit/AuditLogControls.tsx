@@ -1,9 +1,10 @@
+import { Download, GitCommit, LayoutList, Loader2, RefreshCw, Shield, ShieldCheck, Skull } from 'lucide-react';
 import React from 'react';
-import { IntegrityReport } from '@/services/infrastructure/chainService';
-import { cn } from '@/lib/cn';
+
 import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";
-import { Download, GitCommit, LayoutList, Loader2, RefreshCw, Shield, ShieldCheck, Skull } from 'lucide-react';
+import { cn } from '@/lib/cn';
+import { type IntegrityReport } from '@/services/infrastructure/chainService';
 interface AuditLogControlsProps {
     viewMode: 'table' | 'visual';
     setViewMode: (mode: 'table' | 'visual') => void;

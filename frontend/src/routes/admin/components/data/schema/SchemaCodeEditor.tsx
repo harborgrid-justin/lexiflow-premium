@@ -1,8 +1,9 @@
+import React from "react";
+
 import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { encodeHtmlEntities } from '@/lib/sanitize';
-import React from "react";
 interface SchemaCodeEditorProps {
     ddl: string;
 }

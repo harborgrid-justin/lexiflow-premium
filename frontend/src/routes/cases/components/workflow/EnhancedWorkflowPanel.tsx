@@ -11,10 +11,13 @@
  * - Guideline 33: Uses isPendingThemeChange for panel transitions
  */
 
-import { cn } from '@/lib/cn';
+import { useState } from 'react';
+
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { useTheme } from "@/hooks/useTheme";
-import { useState } from 'react';
+import { cn } from '@/lib/cn';
+
+
 import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { AuditTrailViewer } from './AuditTrailViewer';
 import { ENHANCED_WORKFLOW_TABS, type EnhancedWorkflowTab } from './constants';

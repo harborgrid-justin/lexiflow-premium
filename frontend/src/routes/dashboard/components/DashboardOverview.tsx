@@ -16,6 +16,9 @@ import React, { useDeferredValue, useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { TaskStatusBackend } from '@/types';
+
 import {
   useDashboardAlerts,
   useDashboardCharts,
@@ -24,14 +27,13 @@ import {
 } from '../hooks/useDashboardData';
 
 // Components
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardSidebar } from './DashboardSidebar';
 
 // Types
 import type { WorkflowTask } from '@/types';
-import { TaskStatusBackend } from '@/types';
+
 
 // ============================================================================
 // TYPES & INTERFACES

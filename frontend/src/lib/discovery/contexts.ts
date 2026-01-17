@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { DiscoveryActionsValue, DiscoveryStateValue } from "./types";
 
 export const DiscoveryStateContext = createContext<DiscoveryStateValue | null>(

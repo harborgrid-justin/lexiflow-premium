@@ -20,16 +20,18 @@ import { Suspense, useState, useTransition } from 'react';
 import { Button } from '@/components/atoms/Button/Button';
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
+
 
 // Hooks & Context
+import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Services
 
 // Utils & Config
-import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';
 import { cn } from '@/lib/cn';
+
+import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // ============================================================================
 // MAIN COMPONENT

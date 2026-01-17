@@ -13,14 +13,14 @@ import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Context & Utils
+import { queryClient } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Services & Types
-import { queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 // Verification queue to prevent overwhelming blockchain RPC endpoints
 interface VerificationJob {

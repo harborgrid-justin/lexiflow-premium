@@ -7,8 +7,10 @@
  * Data Platform Domain - View Component
  */
 
-import { PageHeader } from '@/components/organisms/PageHeader';
 import React, { useState } from 'react';
+
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { DataSourcesTab } from './components/DataSourcesTab';
 import { QueryWorkbenchTab } from './components/QueryWorkbenchTab';
 import { RLSPoliciesTab } from './components/RLSPoliciesTab';

@@ -1,11 +1,13 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { CheckCircle } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/components/molecules/Card/Card';
-import { CheckCircle } from 'lucide-react';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+
 export function JurisdictionArbitration() {
   const { theme } = useTheme();
 

@@ -36,9 +36,11 @@
  * @module providers/infrastructure/utilityprovider
  */
 
-import { UtilityContext } from '@/lib/utility/contexts';
-import type { UtilityProviderProps, UtilityValue } from '@/lib/utility/types';
 import { useContext, useMemo } from 'react';
+
+import { UtilityContext } from '@/lib/utility/contexts';
+
+import type { UtilityProviderProps, UtilityValue } from '@/lib/utility/types';
 
 export function UtilityProvider({ children }: UtilityProviderProps) {
   const utilityValue = useMemo<UtilityValue>(() => ({

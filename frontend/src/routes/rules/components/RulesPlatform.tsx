@@ -23,17 +23,19 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { RulesPlatformContent } from './RulesPlatformContent';
+
 
 // Utils & Config
-import { RULES_PLATFORM_TABS, RulesView } from '@/config/tabs.config';
+import { RULES_PLATFORM_TABS, type RulesView } from '@/config/tabs.config';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+
+import { RulesPlatformContent } from './RulesPlatformContent';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -62,7 +64,7 @@ export function RulesPlatform({ initialTab }: RulesPlatformProps) {
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = RULES_PLATFORM_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs![0]!.id as RulesView);
+      setActiveTab(parent.subTabs[0]!.id as RulesView);
     }
   }, []);
 

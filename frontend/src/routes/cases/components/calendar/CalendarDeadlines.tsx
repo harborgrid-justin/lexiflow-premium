@@ -10,23 +10,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { AlertCircle } from 'lucide-react';
+import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { DateText } from '@/components/atoms/DateText/DateText';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { Badge } from '@/components/atoms/Badge/Badge';
-import { DateText } from '@/components/atoms/DateText/DateText';
 
 // Types
-import { CalendarEventItem } from '@/types';
+import { type CalendarEventItem } from '@/types';
 
 // ============================================================================
 // COMPONENT

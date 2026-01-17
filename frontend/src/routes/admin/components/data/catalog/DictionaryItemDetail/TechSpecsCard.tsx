@@ -1,8 +1,8 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { Badge } from '@/components/atoms/Badge';
 import { Card } from '@/components/molecules/Card';
-import { DataDictionaryItem } from '@/types';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type DataDictionaryItem } from '@/types';
 interface TechSpecsCardProps {
   formData: DataDictionaryItem;
 }

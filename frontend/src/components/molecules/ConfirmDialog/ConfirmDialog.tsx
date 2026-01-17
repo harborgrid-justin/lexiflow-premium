@@ -20,11 +20,12 @@ import React from 'react';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
+import { cn } from '@/lib/cn';
+
 import { Button } from '../../atoms/Button/Button';
 import { Modal } from '../Modal/Modal';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

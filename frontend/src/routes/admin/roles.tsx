@@ -4,11 +4,13 @@
  * Enterprise role management with permission templates and hierarchy.
  */
 
-import type { Role } from '@/lib/frontend-api';
-import { authApi } from '@/lib/frontend-api';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
+
+import { authApi } from '@/lib/frontend-api';
+
 import type { Route } from './+types/roles';
+import type { Role } from '@/lib/frontend-api';
 
 export async function loader(_args: Route.LoaderArgs) {
   try {

@@ -1,8 +1,10 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Cloud, Database, HardDrive } from 'lucide-react';
 import { useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { CloudDatabaseContent } from './data-sources/CloudDatabaseContent';
 import { IndexedDBView } from './data-sources/IndexedDBView';
 import { LocalStorageView } from './data-sources/LocalStorageView';

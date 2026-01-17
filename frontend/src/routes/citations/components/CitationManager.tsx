@@ -17,8 +17,8 @@ import React, { lazy, Suspense, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // Hooks
@@ -31,9 +31,10 @@ import { cn } from '@/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation } from '@/types';
+import { type Citation } from '@/types';
+
 import { CitationFormModal } from './CitationFormModal';
-import { CitationManagerProps } from './types';
+import { type CitationManagerProps } from './types';
 
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));

@@ -4,10 +4,12 @@
  * Sortable table view for document listing with selection and actions.
  */
 
-import { DocumentTable } from '@/routes/documents/components/table/DocumentTable';
-import { CaseId, DocumentId, LegalDocument, UserId } from '@/types';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
+import { DocumentTable } from '@/routes/documents/components/table/DocumentTable';
+import { type CaseId, type DocumentId, type LegalDocument, type UserId } from '@/types';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DocumentTable> = {
   title: 'Documents/Document Table',
@@ -203,7 +205,7 @@ export const LargeDataset: Story = {
       id: `doc-${i}` as DocumentId,
       title: `Document ${i + 1}.pdf`,
       type: ['Pleading', 'Discovery', 'Evidence', 'Contract'][i % 4] as LegalDocument['type'],
-      status: ['Signed', 'Draft', 'Active'][i % 3] as LegalDocument['status'],
+      status: ['Signed', 'Draft', 'Active'][i % 3],
       sourceModule: ['Pleadings', 'Discovery', 'Evidence', 'Documents'][i % 4],
       fileSize: `${Math.floor(Math.random() * 1000)}KB`,
       lastModified: `2024-12-${String(20 - (i % 20)).padStart(2, '0')}`,

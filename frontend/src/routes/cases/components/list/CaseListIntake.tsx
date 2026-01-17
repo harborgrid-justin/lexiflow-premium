@@ -29,7 +29,6 @@ import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Modal } from '@/components/molecules/Modal';
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/useModalState';
@@ -39,6 +38,7 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
 import { cn } from '@/lib/cn';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/routes/cases/ui/components/Kanban/Kanban';
 import { DataService } from '@/services/data/data-service.service';
 
 export function CaseListIntake() {

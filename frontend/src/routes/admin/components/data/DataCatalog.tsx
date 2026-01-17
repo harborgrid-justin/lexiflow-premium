@@ -1,14 +1,18 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/backend';
-import { useWindow } from '@/providers';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { ArrowLeft, ChevronRight, Database, Loader2, Maximize2, Tag } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { DataService } from '@/services/data/data-service.service';
+
+
 import { AccessRequestManager } from './catalog/AccessRequestManager';
 import { DataDictionary } from './catalog/DataDictionary';
+
 import type { DataCatalogProps, DataDomain } from './DataCatalog.types';
 
 export function DataCatalog({ initialTab = 'browse', isOrbital = false }: DataCatalogProps) {
@@ -62,7 +66,7 @@ export function DataCatalog({ initialTab = 'browse', isOrbital = false }: DataCa
                 <Tabs
                     tabs={['browse', 'dictionary', 'requests']}
                     activeTab={activeTab}
-                    onChange={(t) => setActiveTab(t as string)}
+                    onChange={(t) => setActiveTab(t)}
                 />
             </div>
 

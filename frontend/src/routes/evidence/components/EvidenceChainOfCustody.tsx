@@ -13,23 +13,26 @@ import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal';
-import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 
 // Context & Utils
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
 import { getTodayString } from '@/lib/dateUtils';
 
 // Services & Types
-import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 import { ChainService } from '@/services/infrastructure/chainService';
+
 // ✅ Migrated to backend API (2025-12-21)
-import { DataService } from '@/services/dataService';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { CustodyActionType, validateCustodyEventSafe } from '@/services/validation/evidenceSchemas';
+
 import type { ChainOfCustodyEvent, EvidenceItem, UserId } from '@/types';
+
+import { DataService } from '@/services/dataService';
 
 interface EvidenceChainOfCustodyProps {
   selectedItem: EvidenceItem;

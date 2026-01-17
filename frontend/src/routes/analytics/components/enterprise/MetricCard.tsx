@@ -3,8 +3,9 @@
  * Displays a single metric with optional trend indicator
  */
 
-import type { MetricCardData } from '@/types/analytics-enterprise';
 import { Minus, TrendingDown, TrendingUp } from 'lucide-react';
+
+import type { MetricCardData } from '@/types/analytics-enterprise';
 
 export interface MetricCardProps {
   data: MetricCardData;

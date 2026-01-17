@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { WorkflowFilters, WorkflowTemplate } from "./types";
 
 export class WorkflowTemplateService {

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // Wrapper component for stories
 const HelpersDemo = () => {

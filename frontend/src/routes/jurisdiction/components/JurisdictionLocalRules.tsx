@@ -1,8 +1,6 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useModalState } from '@/hooks/core';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { Book, Edit2, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
@@ -11,9 +9,14 @@ import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialo
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { LegalRule } from '@/types';
-import { Book, Edit2, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useModalState } from '@/hooks/core';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type LegalRule } from '@/types';
+
+
 import { filterRules } from './utils';
 
 export function JurisdictionLocalRules() {

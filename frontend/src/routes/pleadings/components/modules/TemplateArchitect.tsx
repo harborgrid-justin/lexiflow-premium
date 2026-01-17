@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
 import { LayoutTemplate, Settings, Sliders } from 'lucide-react';
-import { VariableManager } from './template/VariableManager';
-import { JurisdictionRules } from './template/JurisdictionRules';
-import { PleadingVariable } from '@/types';
+import React, { useState } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { type PleadingVariable } from '@/types';
+
+import { JurisdictionRules } from './template/JurisdictionRules';
+import { VariableManager } from './template/VariableManager';
 
 interface TemplateArchitectProps {
   variables?: PleadingVariable[];

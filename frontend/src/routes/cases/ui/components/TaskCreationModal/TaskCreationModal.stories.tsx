@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TaskCreationModal } from './TaskCreationModal';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TaskCreationModal> = {
   title: 'Components/Organisms/TaskCreationModal/TaskCreationModal',

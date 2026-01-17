@@ -3,15 +3,18 @@
  * @module hooks/useDocumentManager/useDocumentFilters
  */
 
-import { useWorkerSearch } from "@/hooks/useWorkerSearch";
-import type { LegalDocument } from "@/types";
 import { useMemo } from "react";
+
+import { useWorkerSearch } from "@/hooks/useWorkerSearch";
+
 import { SEARCH_FIELDS } from "./constants";
 import {
   applyContextFilters,
   computeDocumentStats,
   extractAllTags,
 } from "./utils";
+
+import type { LegalDocument } from "@/types";
 
 interface UseDocumentFiltersParams {
   documents: LegalDocument[];

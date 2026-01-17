@@ -27,10 +27,11 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 // ============================================================================
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { ColumnDefinition } from './DataGridColumn';
+
+import { type ColumnDefinition } from './DataGridColumn';
 import { ColumnResizer } from './DataGridColumnResizer';
 import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';
-import { DataGridFilters, FilterConfig, FilterValue } from './DataGridFilters';
+import { DataGridFilters, type FilterConfig, type FilterValue } from './DataGridFilters';
 import { DataGridPagination } from './DataGridPagination';
 import { DataGridToolbar } from './DataGridToolbar';
 import { InlineEditor } from './InlineEditor';
@@ -234,7 +235,7 @@ export function DataGrid<T extends Record<string, unknown>>({
 
         // Handle different filter types
         if (typeof filterValue === 'object' && 'type' in filterValue) {
-          const filter = filterValue as FilterConfig;
+          const filter = filterValue;
 
           switch (filter.type) {
             case 'text':
@@ -529,7 +530,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                 />
               ) : (
                 <span className="truncate">
-                  {column.cell ? column.cell({ value: cellValue, row: row as T }) : String(cellValue ?? '')}
+                  {column.cell ? column.cell({ value: cellValue, row: row }) : String(cellValue ?? '')}
                 </span>
               )}
             </div>

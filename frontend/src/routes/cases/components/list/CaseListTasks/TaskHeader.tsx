@@ -1,7 +1,9 @@
-import React from 'react';
 import { Plus } from 'lucide-react';
+import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+
 import type { TaskHeaderProps } from './types';
 
 export const TaskHeader: React.FC<TaskHeaderProps> = ({ filter, onFilterChange, onAddTask }) => {

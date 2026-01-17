@@ -11,10 +11,10 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { SplitView } from '@/components/organisms/SplitView';
 import { useSecureMessenger } from '@/hooks/useSecureMessenger';
 
 // Components
-import { SplitView } from '@/components/organisms/SplitView';
 import { MessengerChatList } from './MessengerChatList';
 import { MessengerChatWindow } from './MessengerChatWindow';
 

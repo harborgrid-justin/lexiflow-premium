@@ -12,15 +12,18 @@
  * @module routes/correspondence/compose
  */
 
-import type { DraftingTemplate } from '@/lib/frontend-api';
-import { Correspondence } from '@/lib/frontend-api';
-import type { ComposeActionData, ComposeLoaderData, Recipient } from '@/routes/correspondence/compose/types';
-import { DataService } from '@/services/data/data-service.service';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { type Correspondence , type DraftingTemplate } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/compose";
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { ComposeCorrespondence } from './components/ComposeCorrespondence';
+
+import type { Route } from "./+types/compose";
+import type { ComposeActionData, ComposeLoaderData, Recipient } from '@/routes/correspondence/compose/types';
 
 // ============================================================================
 // Meta Tags

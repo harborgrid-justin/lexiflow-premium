@@ -3,6 +3,7 @@
  * @module services/search/core/engine
  */
 
+
 import { SearchWorker } from "../searchWorker";
 
 import { hydrateSearchIndex } from "./hydration";
@@ -27,7 +28,7 @@ export class GlobalSearchEngine {
       if (worker) {
         this.worker = worker;
         this.worker.onmessage = this.handleWorkerMessage.bind(this);
-        console.log("[GlobalSearchEngine] Worker initialized");
+        console.warn("[GlobalSearchEngine] Worker initialized");
       }
     } else {
       // Worker API not available (often happens in dev/test/SSR)
@@ -58,7 +59,7 @@ export class GlobalSearchEngine {
 
       if (!this.worker) {
         console.warn(
-          "[GlobalSearchEngine] Worker not available, skipping indexing"
+          "[GlobalSearchEngine] Worker not available, skipping indexing",
         );
         this.isHydrated = true;
         return;
@@ -68,8 +69,8 @@ export class GlobalSearchEngine {
         type: "UPDATE",
         payload: { items: searchItems, fields: ["title", "subtitle", "type"] },
       });
-      console.log(
-        `[GlobalSearchEngine] Hydration complete: ${searchItems.length} items in ${(performance.now() - startTime).toFixed(2)}ms`
+      console.warn(
+        `[GlobalSearchEngine] Hydration complete: ${searchItems.length} items in ${(performance.now() - startTime).toFixed(2)}ms`,
       );
       this.isHydrated = true;
     })();

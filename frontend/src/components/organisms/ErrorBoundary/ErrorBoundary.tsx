@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

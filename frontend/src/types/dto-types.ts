@@ -557,9 +557,11 @@ export function validateDTO<T extends Record<string, unknown>>(
 
     if (result !== true) {
       errors.push({
-        field,
+        field: String(field),
         message:
-          typeof result === "string" ? result : `Invalid value for ${field}`,
+          typeof result === "string"
+            ? result
+            : `Invalid value for ${String(field)}`,
       });
     }
   }

@@ -3,8 +3,10 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { BarChart3, Clock, DollarSign, TrendingUp } from 'lucide-react';
+
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useAnalytics } from './AnalyticsProvider';
 
 export function AnalyticsView() {

@@ -4,7 +4,8 @@
  */
 
 import { useDocumentUpload } from '../hooks/useDocumentUpload';
-import { DocumentUploaderProps } from './types/DocumentUploaderProps';
+
+import { type DocumentUploaderProps } from './types/DocumentUploaderProps';
 
 export function DocumentUploader({
   caseId,

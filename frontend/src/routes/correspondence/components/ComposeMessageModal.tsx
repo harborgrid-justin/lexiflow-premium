@@ -1,3 +1,6 @@
+import { Paperclip, Send, Wand2, X } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Modal } from '@/components/molecules/Modal/Modal';
@@ -10,11 +13,9 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { casesApi } from '@/lib/frontend-api';
 import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
-import { CommunicationItem, CommunicationType, UserId } from '@/types';
+import { type CommunicationItem, type CommunicationType, type UserId } from '@/types';
 import { CommunicationStatus } from '@/types/enums';
 import { queryKeys } from '@/utils/queryKeys';
-import { Paperclip, Send, Wand2, X } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
 
 interface ComposeMessageModalProps {
     isOpen: boolean;

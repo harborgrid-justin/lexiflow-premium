@@ -1,8 +1,10 @@
 import React from 'react';
-import { useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
-import { EvidenceVaultContent } from './EvidenceVaultContent';
-import { EvidenceDetail } from './EvidenceDetail';
+
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner/LoadingSpinner';
+import { useEvidenceManager, type ViewMode } from '@/hooks/useEvidenceManager';
+
+import { EvidenceDetail } from './EvidenceDetail';
+import { EvidenceVaultContent } from './EvidenceVaultContent';
 
 export default function EvidenceVault() {
   const {

@@ -1,5 +1,6 @@
 import { client } from "./client";
-import { PaginatedResult, Result } from "./types";
+import { toRecord } from "./guards";
+import { type PaginatedResult, type Result } from "./types";
 
 export interface Clause {
   id: string;
@@ -22,14 +23,14 @@ export const catalogApi = {
     params?: unknown
   ): Promise<Result<PaginatedResult<Clause>>> => {
     return client.get<PaginatedResult<Clause>>("/catalog/clauses", {
-      params: params as Record<string, unknown>,
+      params: toRecord(params),
     });
   },
   getAllTemplates: async (
     params?: unknown
   ): Promise<Result<PaginatedResult<Template>>> => {
     return client.get<PaginatedResult<Template>>("/catalog/templates", {
-      params: params as Record<string, unknown>,
+      params: toRecord(params),
     });
   },
 };

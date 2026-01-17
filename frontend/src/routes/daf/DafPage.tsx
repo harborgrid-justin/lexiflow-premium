@@ -18,6 +18,7 @@
  */
 
 import { DafDashboard } from './components/DafDashboard';
+
 import type { loader } from './index';
 
 interface DafPageProps {

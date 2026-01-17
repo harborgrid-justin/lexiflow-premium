@@ -1,7 +1,9 @@
-import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileText, Settings, Users } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Tabs - Underline variant

@@ -3,9 +3,11 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
+import { FileText, Layout, Mail } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { FileText, Layout, Mail } from 'lucide-react';
+
 import { useCorrespondence } from './CorrespondenceProvider';
 
 export function CorrespondenceView() {

@@ -1,7 +1,9 @@
+import { Clock, Globe, Lock, Smartphone } from 'lucide-react';
+
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { Clock, Globe, Lock, Smartphone } from 'lucide-react';
+
 import type { SecurityControl } from './types';
 
 interface SecurityControlsPanelProps {

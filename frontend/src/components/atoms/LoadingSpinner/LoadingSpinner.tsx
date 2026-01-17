@@ -5,8 +5,9 @@
  */
 
 import { Loader2 } from 'lucide-react';
-import { containerStyles, getSpinnerClass, textStyles } from './LoadingSpinner.styles';
 import React from "react";
+
+import { containerStyles, getSpinnerClass, textStyles } from './LoadingSpinner.styles';
 
 export interface LoadingSpinnerProps {
   text?: string;

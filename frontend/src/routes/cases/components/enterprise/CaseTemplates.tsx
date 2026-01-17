@@ -10,6 +10,7 @@
 
 import { CaseStatus, MatterType, type Case } from '@/types';
 import { cn } from '@/lib/cn';
+
 import {
   Building,
   Copy,
@@ -280,7 +281,7 @@ export function CaseTemplates({
             <button
               key={area}
               type="button"
-              onClick={() => setSelectedPracticeArea(area as PracticeArea | 'All')}
+              onClick={() => setSelectedPracticeArea(area)}
               className={cn(
                 'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
                 selectedPracticeArea === area
@@ -288,7 +289,7 @@ export function CaseTemplates({
                   : 'bg-[var(--color-surfaceRaised)] text-[var(--color-text)] hover:bg-[var(--color-backgroundTertiary)] dark:hover:bg-gray-700'
               )}
             >
-              {area !== 'All' && React.createElement(PRACTICE_AREA_ICONS[area as PracticeArea], { className: 'h-4 w-4' })}
+              {area !== 'All' && React.createElement(PRACTICE_AREA_ICONS[area], { className: 'h-4 w-4' })}
               {area}
             </button>
           ))}
@@ -478,15 +479,8 @@ export function CaseTemplates({
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Case, CaseStatus, MatterType } from '@/types';
-import {
-  Building,
-  FileText, Heart, Home,
-  Scale,
-  Shield,
-  Users
-} from 'lucide-react';
 import React, { useState } from 'react'; // ============================================================================
+
 // Types & Interfaces
 // ============================================================================
 export interface CaseTemplate {

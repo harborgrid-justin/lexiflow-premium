@@ -1,8 +1,9 @@
 import { queryClient, useMutation, useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
 import { queryKeys } from "@/utils/query-keys.service";
+
 // ✅ Migrated to backend API (2025-12-21)
-import { Category } from "./EntitySidebar";
+import { type Category } from "./EntitySidebar";
 
 export const useAdminData = (activeCategory: Category) => {
   // Independent Queries

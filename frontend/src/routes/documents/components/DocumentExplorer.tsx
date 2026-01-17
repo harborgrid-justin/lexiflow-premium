@@ -1,22 +1,24 @@
+import { useState } from 'react';
+
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 import { useDocumentManager } from '@/hooks/useDocumentManager';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelection';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { LegalDocument, UserRole } from '@/types';
-import { useState } from 'react';
+import { type LegalDocument, type UserRole } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
+
 import { DocumentDragOverlay } from './DocumentDragOverlay';
 import { DocumentFilters } from './DocumentFilters';
+import { DocumentGridCard } from './DocumentGridCard';
 import { DocumentToolbar } from './DocumentToolbar';
 import { DocumentVersions } from './DocumentVersions';
 import { DocumentTable } from './table/DocumentTable';
 import { TagManagementModal } from './TagManagementModal';
 import { DocumentPreviewPanel } from './viewer/DocumentPreviewPanel';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
-import { queryKeys } from '@/utils/queryKeys';
-import { DocumentGridCard } from './DocumentGridCard';
 
 interface DocumentExplorerProps {
     currentUserRole?: UserRole;

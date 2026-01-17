@@ -168,7 +168,9 @@ export class WorkerPool {
         const worker = this.factory();
         this.workers.push(worker);
         this.available.push(worker);
-      } catch (error) {}
+      } catch (error) {
+        console.warn("[WorkerPool] Worker creation failed", error);
+      }
     }
 
     if (this.workers.length === 0) {
@@ -416,7 +418,7 @@ export class WorkerPool {
       }
     });
 
-    console.log(
+    console.warn(
       `[WorkerPool] Terminated ${terminatedCount}/${this.workers.length} workers`,
     );
 
@@ -538,7 +540,7 @@ class WorkerPoolManager {
         const activePools = Object.entries(stats).filter(([, s]) => s.size > 0);
 
         if (activePools.length > 0) {
-          console.debug("[WorkerPool] Active pools:", stats);
+          console.warn("[WorkerPool] Active pools:", stats);
         }
       }, 60 * 1000);
     }

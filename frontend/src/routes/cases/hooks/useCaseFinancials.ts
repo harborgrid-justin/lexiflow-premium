@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { TimeEntry } from '@/types';
+
+import { type TimeEntry } from '@/types';
+
 import {
   calculateUnbilledTotal,
   calculateBilledTotal,

@@ -13,20 +13,20 @@
  * - G34: Query reads side-effect free
  */
 
+import { Check, CheckCircle, ChevronLeft, ChevronRight, FileText, Package, Settings } from 'lucide-react';
 import React, { useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
-import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import { ProductionSet } from '@/types';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Check, CheckCircle, ChevronLeft, ChevronRight, FileText, Package, Settings } from 'lucide-react';
-import { useState } from 'react';
+import { DataService } from '@/services/data/data-service.service';
+import { DISCOVERY_QUERY_KEYS, type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+import { type ProductionSet } from '@/types';
 
 interface ProductionWizardProps {
   caseId?: string;

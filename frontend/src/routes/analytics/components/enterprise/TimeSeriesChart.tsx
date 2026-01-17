@@ -31,7 +31,7 @@ import {
   ReferenceLine,
   ReferenceArea,
   Brush,
-  TooltipProps
+  type TooltipProps
 } from 'recharts';
 
 // ============================================================================

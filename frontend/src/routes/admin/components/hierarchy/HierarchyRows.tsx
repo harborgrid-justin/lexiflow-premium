@@ -1,8 +1,10 @@
+import { Building2, Globe, MoreVertical, Shield } from 'lucide-react';
+
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
-import { Group, Organization, User as UserType } from '@/types';
-import { Building2, Globe, MoreVertical, Shield } from 'lucide-react';
+import { type Group, type Organization, type User as UserType } from '@/types';
+
 interface OrgListItemProps {
     org: Organization;
     isSelected: boolean;

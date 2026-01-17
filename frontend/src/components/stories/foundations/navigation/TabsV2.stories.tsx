@@ -1,10 +1,12 @@
-import type { Meta } from '@storybook/react-vite';
-import { TabsV2, ParentTabItem } from '@/components/molecules/TabsV2/TabsV2';
-import React, { useState } from 'react';
 import {
   Briefcase, Folder, Activity, Plus, Settings, Clock, DollarSign,
   Users, BarChart3, TrendingUp, Eye, Lightbulb, FileText
 } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { TabsV2, type ParentTabItem } from '@/components/molecules/TabsV2/TabsV2';
+
+import type { Meta } from '@storybook/react-vite';
 
 /**
  * TabsV2 - Two-Level Tab Navigation

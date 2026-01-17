@@ -16,16 +16,16 @@ import { ArrowRight, BarChart, Clock, ShieldCheck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { Badge } from '@/components/atoms/Badge';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Badge } from '@/components/atoms/Badge';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { WorkflowTemplateData } from '@/types';
+import { type WorkflowTemplateData } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

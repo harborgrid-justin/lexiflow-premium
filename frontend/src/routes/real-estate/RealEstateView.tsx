@@ -7,10 +7,12 @@
  * Real Estate Domain - View Component
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { Building2, FileText, MapPin, Plus } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useRealEstate } from './RealEstateProvider';
 
 export function RealEstateView() {

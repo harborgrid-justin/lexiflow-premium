@@ -16,8 +16,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { type ComponentType, Profiler, type ProfilerOnRenderCallback } from 'react';
+
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
-import React, { ComponentType, Profiler, ProfilerOnRenderCallback } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

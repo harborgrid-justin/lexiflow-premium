@@ -1,4 +1,4 @@
-import { DataDictionaryItem } from '@/types';
+import { type DataDictionaryItem } from '@/types';
 
 export interface DictionaryItemDetailProps {
   item: DataDictionaryItem;

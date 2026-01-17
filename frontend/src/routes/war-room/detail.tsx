@@ -6,12 +6,16 @@
  * @module routes/war-room/detail
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import type { Advisor, Case, Expert, WarRoom } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createDetailMeta } from '../_shared/meta-utils';
+
+import { useTheme } from "@/hooks/useTheme";
 import { DataService } from "@/services/data/dataService";
+
+import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { Advisor, Case, Expert, WarRoom } from '@/types';
+
 
 // ============================================================================
 // Meta Tags
@@ -119,7 +123,7 @@ export async function action({
 export default function WarRoomDetailRoute() {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { item, advisors, experts } = useLoaderData() as { item: Case, advisors: Advisor[], experts: Expert[] };
+  const { item, advisors, experts } = useLoaderData();
 
   return (
     <div className="p-8">
@@ -186,7 +190,7 @@ export default function WarRoomDetailRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   // Handle 404 specifically
   if (error instanceof Response && error.status === 404) {
     return (

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CalendarPage } from './CalendarPage';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CalendarPage> = {
   title: 'Components/Pages/collaboration/CalendarPage',

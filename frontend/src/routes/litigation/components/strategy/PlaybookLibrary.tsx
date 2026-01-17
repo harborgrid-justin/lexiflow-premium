@@ -17,22 +17,24 @@ import React, { useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { VirtualGrid } from '@/components/organisms/VirtualGrid';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';
+import { type Playbook } from '@/types/playbook';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useWindow } from '@/providers';
-import { useTheme } from "@/hooks/useTheme";
+
 import { useLitigationActions } from '../contexts/LitigationContext';
 
 // Components
-import { VirtualGrid } from '@/components/organisms/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
-import { Playbook } from '@/types/playbook';
+
 import { extractCategories, filterPlaybooks, getDifficultyBorderColor, getDifficultyColor } from './utils';
 
 // ============================================================================

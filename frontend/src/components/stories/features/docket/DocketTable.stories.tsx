@@ -1,7 +1,9 @@
-import { DocketTable } from '@/routes/cases/components/docket/DocketTable';
-import { CaseId, DocketEntry, DocketEntryType, DocketId, DocumentId } from '@/types';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
+import { DocketTable } from '@/routes/cases/components/docket/DocketTable';
+import { type CaseId, type DocketEntry, type DocketEntryType, type DocketId, type DocumentId } from '@/types';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * DocketTable provides a virtualized table view for displaying docket entries

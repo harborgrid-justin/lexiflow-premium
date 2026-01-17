@@ -5,10 +5,10 @@
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
 import {
-  BatchFormatRequest,
-  BatchFormatResult,
-  CitationFormat,
-  FormattedCitation,
+  type BatchFormatRequest,
+  type BatchFormatResult,
+  type CitationFormat,
+  type FormattedCitation,
 } from "@/types/bluebook";
 
 export interface CitationValidation {

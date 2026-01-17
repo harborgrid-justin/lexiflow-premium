@@ -5,11 +5,13 @@
  */
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import type { ScheduleTask, TaskDependency, UseScheduleDependenciesReturn } from './types';
-import { validateDependency, hasCircularDependency } from './validation';
+
 import { calculateCriticalPath } from './criticalPath';
 import { getDependentTasks, getPredecessorTasks, cascadeTaskUpdate } from './dependencies';
+import { validateDependency, hasCircularDependency } from './validation';
 import { getDependencyPath, getDependencyColor } from './visualization';
+
+import type { ScheduleTask, TaskDependency, UseScheduleDependenciesReturn } from './types';
 
 export * from './types';
 

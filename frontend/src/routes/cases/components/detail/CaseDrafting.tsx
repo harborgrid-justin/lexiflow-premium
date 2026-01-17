@@ -13,19 +13,19 @@ import { AlertTriangle, Cpu, Wand2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { ClauseList as ClausePanel } from '@/routes/clauses/components/ClauseList';
 import { AdvancedEditor } from '@/routes/documents/components/AdvancedEditor';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Clause } from '@/types';
+import { type Clause } from '@/types';
 
 interface CaseDraftingProps {
   caseTitle: string;

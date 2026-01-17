@@ -1,10 +1,12 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { Card } from '@/components/molecules/Card';
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
-import { useTheme } from "@/hooks/useTheme";
 import { useEffect, useRef, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
+
+import { Card } from '@/components/molecules/Card';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { DataService } from '@/services/data/data-service.service';
+
 
 export function ClientAnalytics() {
   const { mode } = useTheme();

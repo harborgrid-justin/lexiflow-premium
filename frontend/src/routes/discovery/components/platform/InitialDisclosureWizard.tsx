@@ -1,15 +1,17 @@
+import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
-import { Card } from '@/components/molecules/Card/Card';
+
 import { Button } from '@/components/atoms/Button';
-import { Stepper } from '@/components/molecules/Stepper/Stepper';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
-import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { Card } from '@/components/molecules/Card/Card';
+import { Stepper } from '@/components/molecules/Stepper/Stepper';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from "@/hooks/useTheme";
 import { useWizard } from '@/hooks/useWizard';
-import { InitialDisclosureWizardProps } from './types';
+import { cn } from '@/lib/cn';
+
+import { type InitialDisclosureWizardProps } from './types';
 
 export function InitialDisclosureWizard({ onComplete }: InitialDisclosureWizardProps) {
   const { theme } = useTheme();
@@ -38,7 +40,7 @@ export function InitialDisclosureWizard({ onComplete }: InitialDisclosureWizardP
       const newList = [...list];
       const currentItem = newList[index];
       newList[index] = currentItem && typeof currentItem === 'object' ? { ...currentItem, [field]: value } : { [field]: value } as T;
-      setter(newList as T[]);
+      setter(newList);
   };
 
   return (

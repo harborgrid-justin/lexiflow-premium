@@ -13,11 +13,13 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Import Page component
 import { DiscoveryPage } from './DiscoveryPage';
+
 import type { clientLoader } from './loader';
 
 // Export loader and action
@@ -39,7 +41,7 @@ export function meta() {
 // ============================================================================
 
 export default function DiscoveryIndexRoute() {
-  const loaderData = useLoaderData() as ReturnType<typeof clientLoader>;
+  const loaderData = useLoaderData();
 
   return <DiscoveryPage loaderData={loaderData} />;
 }

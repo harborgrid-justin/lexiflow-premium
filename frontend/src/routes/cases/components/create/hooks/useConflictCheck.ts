@@ -3,7 +3,8 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Matter, MatterStatus } from '@/types';
+
+import { type Matter, MatterStatus } from '@/types';
 
 export type ConflictStatus = 'pending' | 'clear' | 'conflict';
 

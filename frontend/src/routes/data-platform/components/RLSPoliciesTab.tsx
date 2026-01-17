@@ -1,4 +1,5 @@
 import { Shield } from 'lucide-react';
+
 import { useDataPlatform } from '../hooks/useDataPlatform';
 
 export function RLSPoliciesTab() {

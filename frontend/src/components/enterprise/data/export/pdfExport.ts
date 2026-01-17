@@ -4,10 +4,12 @@
  */
 
 import jsPDF from 'jspdf';
+
 import 'jspdf-autotable';
+import { getColumnValue, formatValueForExport } from './utils';
+
 import type { ColumnDefinition } from '../DataGridColumn';
 import type { PDFExportOptions } from './types';
-import { getColumnValue, formatValueForExport } from './utils';
 
 /** Exports data to PDF format */
 export function exportToPDF<T extends Record<string, unknown>>(

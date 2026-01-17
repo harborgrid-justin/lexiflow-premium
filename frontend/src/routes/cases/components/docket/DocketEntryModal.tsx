@@ -9,14 +9,14 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 import { CopyButton } from '@/components/atoms/CopyButton/CopyButton';
+import { Modal } from '@/components/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -25,7 +25,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { DocketEntry } from '@/types';
+import { type DocketEntry } from '@/types';
 
 interface DocketEntryModalProps {
   entry: DocketEntry | null;

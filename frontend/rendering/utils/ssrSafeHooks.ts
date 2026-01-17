@@ -7,8 +7,11 @@
  * @module rendering/utils/ssrSafeHooks
  */
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 import { isBrowser } from "./environment";
+
+import type React from "react";
 
 /**
  * Hook that returns true only when running in the browser

@@ -6,12 +6,15 @@
  * @module routes/docket/detail
  */
 
+import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+
 import { docketApi } from '@/lib/frontend-api';
 import { DocketDetail } from '@/routes/cases/components/docket/DocketDetail';
-import type { CaseId } from '@/types';
-import { useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+
 import { createDetailMeta } from '../_shared/meta-utils';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { CaseId } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -133,7 +136,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function DocketDetailRoute() {
-  const { item } = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
+  const { item } = useLoaderData();
 
   // Pass the item to the feature component
   // The Feature component handles the View and Interactive logic (optimistic UI, tabs, etc)

@@ -6,7 +6,7 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { PleadingTemplate } from "@/types";
+import { type PleadingTemplate } from "@/types";
 
 /**
  * @deprecated MOCK DATA - Use DataService.pleadings instead

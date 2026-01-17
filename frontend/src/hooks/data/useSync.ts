@@ -17,8 +17,9 @@
  * ```
  */
 
-import { SyncContext, SyncContextType } from "@/routes/_shared";
 import { useContext } from "react";
+
+import { SyncContext, type SyncContextType } from "@/routes/_shared";
 
 /**
  * Accesses synchronization context.

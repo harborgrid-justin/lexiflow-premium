@@ -7,14 +7,18 @@
  * @module routes/real-estate/outgrants
  */
 
-import { OutgrantsList } from '@/routes/real-estate/outgrants/OutgrantsList';
-import type { OutgrantsLoaderData } from '@/routes/real-estate/outgrants/types';
-import { DataService } from '@/services/data/data-service.service';
-import type { RealEstateOutgrant } from '@/services/domain/RealEstateDomain';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/outgrants";
+import type { OutgrantsLoaderData } from '@/routes/real-estate/outgrants/types';
+import type { RealEstateOutgrant } from '@/services/domain/RealEstateDomain';
+
+import { OutgrantsList } from '@/routes/real-estate/outgrants/OutgrantsList';
 
 // ============================================================================
 // Meta Tags

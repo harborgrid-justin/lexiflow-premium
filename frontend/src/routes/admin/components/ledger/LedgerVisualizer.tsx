@@ -1,8 +1,9 @@
-import { useTheme } from "@/hooks/useTheme";
-import { ChainedLogEntry, IntegrityReport } from '@/services/infrastructure/chainService';
-import { cn } from '@/lib/cn';
 import { AlertOctagon, ArrowRight, Box, Link, ShieldCheck, Terminal, X } from 'lucide-react';
 import { useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type ChainedLogEntry, type IntegrityReport } from '@/services/infrastructure/chainService';
 
 interface LedgerVisualizerProps {
     chain: ChainedLogEntry[];

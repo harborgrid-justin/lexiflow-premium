@@ -3,9 +3,10 @@
  * @module hooks/useDocumentManager/utils
  */
 
-import type { LegalDocument } from "@/types";
 import { FILE_UPLOAD_CONFIG, TAG_VALIDATION } from "./constants";
+
 import type { DocumentStats } from "./types";
+import type { LegalDocument } from "@/types";
 
 /**
  * Validate document ID parameter

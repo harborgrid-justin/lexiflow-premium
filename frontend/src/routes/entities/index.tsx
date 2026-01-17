@@ -4,11 +4,15 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from './+types/index';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+
 import { EntitiesPage } from './EntitiesPage';
-import { clientLoader } from './loader';
+import { type clientLoader } from './loader';
+
+import type { Route } from './+types/index';
 
 export { clientLoader } from './loader';
 

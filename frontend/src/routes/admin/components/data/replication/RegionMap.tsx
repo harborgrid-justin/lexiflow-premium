@@ -1,5 +1,6 @@
-import React from 'react';
 import { Globe, Server, Wifi } from 'lucide-react';
+import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 

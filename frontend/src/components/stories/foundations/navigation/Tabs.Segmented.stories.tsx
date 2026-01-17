@@ -1,6 +1,8 @@
-import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
+
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Tabs - Segmented variant

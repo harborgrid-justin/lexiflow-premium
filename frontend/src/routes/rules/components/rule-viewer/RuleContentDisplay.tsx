@@ -1,6 +1,7 @@
-import { cn } from '@/lib/cn';
-import { LegalRule } from '@/types';
 import { History } from 'lucide-react';
+
+import { cn } from '@/lib/cn';
+import { type LegalRule } from '@/types';
 
 interface ThemeType {
   mode?: string;

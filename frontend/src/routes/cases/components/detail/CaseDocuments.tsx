@@ -20,18 +20,19 @@ import { Loader2, Plus, ShieldCheck, Wand2 } from 'lucide-react';
 import React, { lazy, Suspense } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
-import { useCaseDocuments } from '@/routes/cases/hooks/useCaseDocuments';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+import { useCaseDocuments } from '@/routes/cases/hooks/useCaseDocuments';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 
 // Types & Interfaces
-import { LegalDocument } from '@/types';
+import { type LegalDocument } from '@/types';
+
+import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 const DocumentAssembly = lazy(() => import('@/routes/documents/components/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 

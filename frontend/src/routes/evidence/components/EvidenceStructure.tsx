@@ -5,18 +5,19 @@
  * Shows individual chunks/pages with their hashes and content previews.
  */
 
-import React from 'react';
 import { FileText, Link, Split } from 'lucide-react';
+import React from 'react';
+
 // Common Components
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 
 // Context & Utils
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // Types
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 interface EvidenceStructureProps {
   selectedItem: EvidenceItem;

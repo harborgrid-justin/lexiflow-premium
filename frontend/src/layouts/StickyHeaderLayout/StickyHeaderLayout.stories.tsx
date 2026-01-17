@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StickyHeaderLayout } from './StickyHeaderLayout';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof StickyHeaderLayout> = {
   title: 'Components/Layouts/StickyHeaderLayout/StickyHeaderLayout',

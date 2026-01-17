@@ -1,9 +1,10 @@
+import { Wand2 } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Wand2 } from 'lucide-react';
 
 interface FormData {
   recipient: string;

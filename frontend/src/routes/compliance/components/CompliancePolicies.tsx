@@ -1,3 +1,6 @@
+import { Calendar, FileText, ShieldAlert } from 'lucide-react';
+import { memo } from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
@@ -6,9 +9,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { useWindow } from '@/providers';
 import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
-import { CaseId, DocumentId } from '@/types';
-import { Calendar, FileText, ShieldAlert } from 'lucide-react';
-import { memo } from 'react';
+import { type CaseId, type DocumentId } from '@/types';
+
 import { type PolicyItem, useCompliancePolicies } from '../hooks/useCompliancePolicies';
 
 export const CompliancePolicies = memo(() => {

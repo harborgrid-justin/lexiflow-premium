@@ -1,5 +1,5 @@
-import { DiscoveryRequest } from "@/types";
-import { DiscoveryView } from "@/utils/discoveryNavigation";
+import { type DiscoveryRequest } from "@/types";
+import { type DiscoveryView } from "@/utils/discoveryNavigation";
 
 export type { DiscoveryView };
 

@@ -4,11 +4,13 @@
  * @description Individual win/loss analysis card
  */
 
+import { CheckCircle2, XCircle } from 'lucide-react';
 import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { CheckCircle2, XCircle } from 'lucide-react';
-import { WinLossAnalysis } from '../../types';
+
+import { type WinLossAnalysis } from '../../types';
 
 interface WinLossAnalysisCardProps {
   analysis: WinLossAnalysis;

@@ -51,7 +51,7 @@
  * ```
  */
 
-import { DependencyList, useCallback, useRef } from "react";
+import { type DependencyList, useCallback, useRef } from "react";
 
 /**
  * Configuration options for memoization
@@ -269,7 +269,7 @@ export function useDeepMemo<T>(factory: () => T, deps: DependencyList): T {
     valueRef.current = factory();
   }
 
-  return valueRef.current as T;
+  return valueRef.current;
 }
 
 /**
@@ -445,7 +445,7 @@ export function useMemoWithStats<T>(
   const totalAccesses = stats.cacheHits + stats.cacheMisses;
 
   return [
-    valueRef.current as T,
+    valueRef.current,
     {
       computations: stats.computations,
       cacheHits: stats.cacheHits,

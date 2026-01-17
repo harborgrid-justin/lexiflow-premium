@@ -13,9 +13,10 @@
  */
 
 import React, { memo } from 'react';
-import { useTheme } from "@/hooks/useTheme";
+
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 interface AppShellLayoutProps {

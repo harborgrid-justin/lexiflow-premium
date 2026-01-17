@@ -1,13 +1,15 @@
 import { GitMerge, MoreHorizontal, User, ListTodo } from 'lucide-react';
-import { TaskWorkflowBadges } from './TaskWorkflowBadges';
-import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
-import { WorkflowTask, TaskStatusBackend } from '@/types';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { type WorkflowTask, TaskStatusBackend } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
+
+import { TaskWorkflowBadges } from './TaskWorkflowBadges';
 
 export const ParallelTasksManager = () => {
   const { theme } = useTheme();

@@ -11,11 +11,12 @@
  * - theme.surface.highlight - Sub-tab background
  */
 
+import React, { type ReactNode, useCallback, useMemo } from 'react';
+
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from "@/hooks/useTheme";
-import { TabConfigItem } from '@/types/layout';
 import { cn } from '@/lib/cn';
-import React, { ReactNode, useCallback, useMemo } from 'react';
+import { type TabConfigItem } from '@/types/layout';
 
 export type { TabConfigItem };
 
@@ -48,7 +49,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = tabConfig.find(p => p.id === parentId);
     if (parent && parent.subTabs && parent.subTabs.length > 0) {
-      const newTabId = parent.subTabs![0]?.id;
+      const newTabId = parent.subTabs[0]?.id;
       if (newTabId) {
         onTabChange(newTabId);
       }

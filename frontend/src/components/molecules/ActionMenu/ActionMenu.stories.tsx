@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ActionMenu } from './ActionMenu';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ActionMenu> = {
   title: 'Components/Molecules/ActionMenu/ActionMenu',

@@ -14,6 +14,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+
 import { useEnterpriseBilling } from '../../hooks/useEnterpriseBilling';
 
 interface ARAgingBucket {

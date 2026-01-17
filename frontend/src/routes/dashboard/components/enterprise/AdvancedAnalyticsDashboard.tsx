@@ -5,9 +5,6 @@
  * Provides comprehensive data visualization and analysis capabilities
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import type { BaseDashboardProps, ChartDataPoint } from '@/types/dashboard';
-import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -45,6 +42,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { BaseDashboardProps, ChartDataPoint } from '@/types/dashboard';
 
 interface ChartConfig {
   type: 'line' | 'area' | 'bar' | 'pie' | 'radar' | 'scatter' | 'composed';

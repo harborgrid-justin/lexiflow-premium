@@ -2,11 +2,16 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React from 'react';
-import { showToast } from '@/components/organisms/notifications/Toast';
-import { WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod'; // === Validation Schemas ===
+
+import { showToast } from '@/components/organisms/notifications/Toast';
+
+import type React from 'react';
+
+
+import { type WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
+
 const ClientSchema = z.object({
   clientName: z.string().min(2, "Client name is required"), clientEmail: z.string().email("Invalid email address").optional(), clientPhone: z.string().optional(), clientType: z.enum(['individual', 'corporate', 'government']), conflictCheckStatus: z.enum(['passed', 'conditional', 'failed']).refine(val => val !== 'failed', { message: "Cannot proceed with active conflicts" })
 }); const MatterSchema = z.object({

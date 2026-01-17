@@ -12,18 +12,20 @@
  * - G34: Query reads side-effect free, can be repeated
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { useNotify } from '@/hooks/useNotify';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import type { PrivilegeLogEntryEnhanced } from '@/types/discovery-enhanced';
-import { cn } from '@/lib/cn';
 import { Download, Edit, Eye, FileText, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
+
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+
+import type { PrivilegeLogEntryEnhanced } from '@/types/discovery-enhanced';
 
 interface PrivilegeLogEnhancedProps {
   caseId?: string;

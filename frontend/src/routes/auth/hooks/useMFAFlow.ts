@@ -1,5 +1,7 @@
-import { useAuthActions } from '@/providers/application/AuthProvider';
 import { useState } from 'react';
+
+import { useAuthActions } from '@/providers/application/AuthProvider';
+
 import { cleanVerificationCode } from '../utils/authFormatters';
 
 export type MFAStep = 'initial' | 'scan' | 'verify' | 'complete';

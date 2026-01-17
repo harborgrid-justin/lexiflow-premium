@@ -16,7 +16,7 @@
  * ```
  */
 
-import { useEffect, useState, RefObject } from 'react';
+import { useEffect, useState, type RefObject } from 'react';
 
 /**
  * Dimensions interface

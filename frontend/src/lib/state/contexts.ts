@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { StateActionsValue, StateValue } from "./types";
 
 export const GlobalStateContext = createContext<StateValue | null>(null);

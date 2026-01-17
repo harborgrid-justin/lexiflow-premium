@@ -3,9 +3,10 @@
  * Account information step for trust account creation
  */
 
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { TrustAccountType } from '@/types/trust-accounts';
+
 import { FormInput } from './FormInput';
 interface FormState {
   accountNumber?: string;

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SplitView } from './SplitView';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof SplitView> = {
   title: 'Components/Organisms/SplitView/SplitView',

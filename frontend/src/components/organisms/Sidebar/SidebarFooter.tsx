@@ -17,9 +17,10 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useWindow } from '@/providers';
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+
 import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusIndicator';
 
 // Components
@@ -35,6 +36,7 @@ const UserAvatar = ({ user, className }: { user?: { name?: string;[key: string]:
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';
+
 import * as styles from './SidebarFooter.styles';
 
 // Types

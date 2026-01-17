@@ -32,21 +32,21 @@ import { useEffect, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { useSync } from "@/hooks/useSync";
 import { DataService } from "@/services/data/data-service.service";
 
 // Hooks & Context
-import { useSync } from "@/hooks/useSync";
 
 // Types
 import {
-  Case,
-  CaseId,
+  type Case,
+  type CaseId,
   CaseStatus,
   MatterType,
-  TimeEntry,
-  TimeEntryPayload,
-  UserId,
-  UUID,
+  type TimeEntry,
+  type TimeEntryPayload,
+  type UserId,
+  type UUID,
 } from "@/types";
 
 // ============================================================================

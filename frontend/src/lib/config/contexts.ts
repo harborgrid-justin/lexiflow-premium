@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { ConfigActionsValue, ConfigStateValue } from "./types";
 
 export const ConfigStateContext = createContext<ConfigStateValue | null>(null);

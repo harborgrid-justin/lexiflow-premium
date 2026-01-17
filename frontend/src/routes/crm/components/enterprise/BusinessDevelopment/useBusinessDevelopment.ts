@@ -3,13 +3,15 @@
  * @description Headless hook for Business Development state management
  */
 
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
+import { useState } from "react";
+
 import { useQuery } from "@/hooks/backend";
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 import { DataService } from "@/services/data/data-service.service";
 import { getChartTheme } from "@/utils/chartConfig";
-import { useState } from "react";
-import type { TabType } from "./types";
+
+
 import {
   calculateActiveLeads,
   calculateAverageSalesCycle,
@@ -18,10 +20,12 @@ import {
   calculateWonValue,
 } from "./utils";
 
+import type { TabType } from "./types";
+
 export function useBusinessDevelopment() {
   const { theme, mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode as "light" | "dark");
-  const chartTheme = getChartTheme(mode as "light" | "dark");
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
   const [activeTab, setActiveTab] = useState<TabType>("leads");
   const [selectedLead, setSelectedLead] = useState<string | null>(null);
 

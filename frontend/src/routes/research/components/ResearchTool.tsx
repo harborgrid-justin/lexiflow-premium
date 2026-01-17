@@ -22,16 +22,18 @@ import { Suspense, lazy } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useResearchTool } from '../hooks/useResearchTool';
 
 // Hooks & Context
-import { useThemeContext } from "@/hooks/useTheme";
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
+import { useThemeContext } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+
+import { useResearchTool } from '../hooks/useResearchTool';
+
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Types

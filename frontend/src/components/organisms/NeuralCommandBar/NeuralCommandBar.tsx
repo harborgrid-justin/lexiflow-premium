@@ -17,22 +17,22 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { GeminiService, IntentResult } from '@/services/features/research/geminiService';
-import { HolographicRouting } from '@/services/infrastructure/holographic-routing.service';
-import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
-
-// Hooks & Context
-import { useListNavigation } from '@/hooks/useListNavigation';
+import { HighlightedText } from '@/components/atoms/HighlightedText/HighlightedText';
+import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '@/config/features/search.config';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useListNavigation } from '@/hooks/useListNavigation';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { GeminiService, type IntentResult } from '@/services/features/research/geminiService';
+import { HolographicRouting } from '@/services/infrastructure/holographic-routing.service';
+import { type GlobalSearchResult, SearchService } from '@/services/search/searchService';
+
+// Hooks & Context
 
 // Components
-import { HighlightedText } from '@/components/atoms/HighlightedText/HighlightedText';
 
 // Utils & Constants
-import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '@/config/features/search.config';
-import { cn } from '@/lib/cn';
 
 interface NeuralCommandBarProps {
     globalSearch: string;

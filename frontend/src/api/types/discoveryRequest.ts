@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/discovery/entities/discovery-request.entity.ts
  */
 
-import { DiscoveryRequest } from '@/types/discovery';
-import { UUID, CaseId } from '@/types/primitives';
+import { type DiscoveryRequest } from '@/types/discovery';
+import { type UUID, type CaseId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.discovery instead

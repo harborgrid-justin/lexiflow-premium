@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { UserActionsValue, UserStateValue } from "./types";
 
 export const UserStateContext = createContext<UserStateValue | null>(null);

@@ -6,11 +6,11 @@
  * @module components/litigation/types
  */
 
-import { Playbook } from "@/types/playbook";
+import { type Playbook } from "@/types/playbook";
 import {
-  NodeType,
-  WorkflowConnection,
-  WorkflowNode,
+  type NodeType,
+  type WorkflowConnection,
+  type WorkflowNode,
 } from "@/types/workflow-types";
 
 export type ZoomLevel = "Quarter" | "Month" | "Week" | "Day";

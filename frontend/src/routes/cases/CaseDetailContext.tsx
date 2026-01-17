@@ -1,6 +1,8 @@
 import React, { createContext, useContext } from 'react';
+
+import { type UseCaseDetailReturn } from './hooks/useCaseDetail';
+
 import type { Case } from '@/types';
-import { UseCaseDetailReturn } from './hooks/useCaseDetail';
 
 interface CaseDetailContextValue extends UseCaseDetailReturn {
   caseData: Case;

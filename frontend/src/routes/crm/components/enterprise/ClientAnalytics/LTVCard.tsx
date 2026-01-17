@@ -3,9 +3,10 @@
  * @description Client lifetime value card component
  */
 
-import type { ThemeObject } from '@/lib/theme/types';
 import { cn } from '@/lib/cn';
+
 import type { ClientLifetimeValue } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface LTVCardProps {
   client: ClientLifetimeValue;

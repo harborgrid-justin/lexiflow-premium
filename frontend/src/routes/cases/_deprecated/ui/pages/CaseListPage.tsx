@@ -9,9 +9,11 @@
  * @description Case list and management page - standardized list view for case management
  */
 
-import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
-import { CaseManagement } from '@/routes/cases/components/list/CaseManagement';
 import React from 'react';
+
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+
+import { CaseManagement } from '@/routes/cases/components/list/CaseManagement';
 
 interface CaseListPageProps {
   onSelectCase?: (caseId: string) => void;

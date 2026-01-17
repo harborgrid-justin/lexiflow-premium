@@ -1,7 +1,8 @@
+import { useCallback, useState } from "react";
+
 import { useTheme } from "@/hooks/useTheme";
 import { authApi } from "@/lib/frontend-api";
-import { ExtendedUserProfile } from "@/types";
-import { useCallback, useState } from "react";
+import { type ExtendedUserProfile } from "@/types";
 
 // ============================================================================
 // Types

@@ -4,6 +4,7 @@
 // Real-time communication settings for WebSocket connections
 
 import { isBrowser } from "@rendering/utils";
+
 import { TIMEOUTS } from '../ports.config';
 
 export const WS_ENABLED = false; // Set to true when backend WebSocket is ready

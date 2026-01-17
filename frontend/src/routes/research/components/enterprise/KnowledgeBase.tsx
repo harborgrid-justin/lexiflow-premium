@@ -36,9 +36,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 // ============================================================================
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
-import type { WikiArticle } from '@/types/legal-research';
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+
+import type { WikiArticle } from '@/types/legal-research';
 
 // ============================================================================
 // Types & Interfaces

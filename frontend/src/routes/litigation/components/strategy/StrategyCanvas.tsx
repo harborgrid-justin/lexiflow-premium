@@ -10,18 +10,21 @@
 import React, { useCallback, useRef, useState } from 'react';
 
 // Internal Components
-import { BuilderCanvas, BuilderToolbar } from '@/routes/cases/components/workflow/builder';
 import { ContextMenu, type ContextMenuItem } from '@/components/molecules/ContextMenu';
-import { LitigationPalette } from './LitigationPalette';
-import { LitigationProperties } from './LitigationProperties';
+
 
 // Hooks & Context
 import { useToggle } from '@/hooks/useToggle';
+import { BuilderCanvas, BuilderToolbar } from '@/routes/cases/components/workflow/builder';
+import { type NodeType } from '@/types/workflow-types';
+
 import { useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Types
-import { NodeType } from '@/types/workflow-types';
+
 import { LITIGATION_DESCRIPTIONS } from './constants';
+import { LitigationPalette } from './LitigationPalette';
+import { LitigationProperties } from './LitigationProperties';
 import {
   calculateCanvasMousePosition,
   calculateDropPosition,
@@ -59,7 +62,7 @@ export const StrategyCanvas: React.FC = () => {
 
     const { x, y } = calculateDropPosition(event, canvasRef.current, pan, scale);
 
-    const finalType: NodeType = (type || 'Task') as NodeType;
+    const finalType: NodeType = (type || 'Task');
     const id = addNode(finalType, x, y, litType);
 
     if (litType) {

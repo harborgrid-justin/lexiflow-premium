@@ -9,13 +9,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { RealEstateLoaderData } from './loader';
+
 import { RealEstateProvider } from './RealEstateProvider';
 import { RealEstateView } from './RealEstateView';
 
+import type { RealEstateLoaderData } from './loader';
+
 export function RealEstatePage() {
-  const initialData = useLoaderData() as RealEstateLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Real Estate" />}>

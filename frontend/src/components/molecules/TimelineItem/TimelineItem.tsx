@@ -16,10 +16,10 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { DateText } from '@/components/atoms/DateText';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { DateText } from '@/components/atoms/DateText';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

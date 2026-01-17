@@ -13,11 +13,14 @@
  * - GDPR-compliant data collection
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
-import type { User } from '@/types';
 import React, { memo, useState } from 'react';
 import { z } from 'zod';
+
+import { AuthApiService } from '@/lib/frontend-api';
+
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
+
+import type { User } from '@/types';
 
 // Validation schemas
 const registerSchema = z.object({

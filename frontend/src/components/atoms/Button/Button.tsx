@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Loader2 } from 'lucide-react';
+import React from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
@@ -20,6 +20,7 @@ import { Loader2 } from 'lucide-react';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
 import { baseStyles, getVariants, sizes } from './Button.styles';
 
 // ============================================================================

@@ -5,8 +5,9 @@
  * intake pipeline, and resource coordination.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MatterManagement } from '../../../../features/matters/components/list/MatterManagement';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MatterManagement> = {
   title: 'Pages/Matter Management',

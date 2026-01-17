@@ -1,7 +1,8 @@
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { motion } from 'framer-motion';
 import { Activity, AlertTriangle, Cloud, Database, RefreshCw, Server, ShieldCheck, Trash2, X } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 // interface ConnectionCardProps {
 //   connection: DataConnection;

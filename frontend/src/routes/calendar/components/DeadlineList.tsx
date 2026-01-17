@@ -3,9 +3,10 @@
  * Displays upcoming deadlines with priority indicators and court-specific features
  */
 
-import type { CalendarEvent } from '@/lib/frontend-api';
 import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
+
+import type { CalendarEvent } from '@/lib/frontend-api';
 
 export interface DeadlineListProps {
   events: CalendarEvent[];

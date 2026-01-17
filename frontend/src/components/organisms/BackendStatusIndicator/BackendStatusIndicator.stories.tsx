@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BackendStatusIndicator } from './BackendStatusIndicator';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof BackendStatusIndicator> = {
   title: 'Components/Organisms/BackendStatusIndicator/BackendStatusIndicator',

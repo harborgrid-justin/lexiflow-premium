@@ -2,9 +2,10 @@
  * Delete confirmation modal component
  */
 
-import React from 'react';
-import { Button } from '@/components/atoms/Button';
 import { Trash2 } from 'lucide-react';
+import React from 'react';
+
+import { Button } from '@/components/atoms/Button';
 
 export interface DeleteConfirmModalProps {
   isOpen: boolean;

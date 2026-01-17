@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LitigationBuilder } from '@/routes/litigation/components/strategy/LitigationBuilder';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * LitigationBuilder provides comprehensive litigation strategy planning tools

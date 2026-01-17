@@ -9,6 +9,7 @@
 
 import { initializeModules } from "@/config/modules/initializeModules";
 import handleRequest from "@rendering/server";
+
 import type { AppLoadContext, EntryContext } from "react-router";
 
 // Initialize modules for SSR

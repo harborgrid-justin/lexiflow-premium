@@ -4,11 +4,6 @@
  * @description Production set management with Bates numbering, redaction tracking, and production history
  */
 
-import { Production as APIProduction } from '@/lib/frontend-api';
-import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';
 import {
   Archive,
@@ -29,6 +24,12 @@ import {
   Send
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type Production as APIProduction } from '@/lib/frontend-api';
+import { DataService } from '@/services/data/data-service.service';
 
 // ============================================================================
 // TYPES

@@ -3,7 +3,6 @@
  * Attorney utilization, billable hours, and efficiency metrics
  */
 
-import { ChartCard, DateRangeSelector, MetricCard } from '@/routes/analytics/components/enterprise';
 import { format, subDays, subMonths } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -21,8 +20,11 @@ import {
   Tooltip,
   XAxis, YAxis
 } from 'recharts';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { ChartCard, DateRangeSelector, MetricCard } from '@/routes/analytics/components/enterprise';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 export function meta() {
   return createMeta({

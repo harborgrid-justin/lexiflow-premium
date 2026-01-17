@@ -7,7 +7,7 @@ import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers'
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { CostForecast, InfrastructureCostMetric } from '@/types';
+import { type CostForecast, type InfrastructureCostMetric } from '@/types';
 
 export function CostFinOps() {
     const { theme } = useTheme();

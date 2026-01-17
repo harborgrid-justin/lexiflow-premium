@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Modal } from '@/components/molecules/Modal/Modal';
+
+import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
-import { Button } from '@/components/atoms/Button';
-import { CustodianInterview } from '@/types';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { type CustodianInterview } from '@/types';
 
 interface InterviewModalProps {
   isOpen: boolean;

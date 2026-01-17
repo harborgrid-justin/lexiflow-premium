@@ -18,10 +18,8 @@ import { Suspense } from 'react';
 // ============================================================================
 
 // Types
-import type { TabConfigItem } from '@/types/layout';
 
 // Hooks (feature-scoped)
-import { type ComplianceView, useComplianceDashboard } from '../../compliance/hooks/useComplianceDashboard';
 
 // Components - Atoms
 import { Button } from '@/components/atoms/Button';
@@ -30,14 +28,19 @@ import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Components - Layouts
-import { TabbedPageLayout } from '@/layouts';
 
 // Feature Components
-import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config
 import { COMPLIANCE_TAB_CONFIG } from '@/config/tabs.config';
+import { TabbedPageLayout } from '@/layouts';
 import { cn } from '@/lib/cn';
+
+import { type ComplianceView, useComplianceDashboard } from '../../compliance/hooks/useComplianceDashboard';
+
+import { ComplianceDashboardContent } from './ComplianceDashboardContent';
+
+import type { TabConfigItem } from '@/types/layout';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -64,7 +67,7 @@ export function ComplianceDashboard({ initialTab }: ComplianceDashboardProps) {
       pageTitle="Risk & Compliance Center"
       pageSubtitle="Conflicts, Ethical Walls, and Regulatory Monitoring."
       pageActions={<Button variant="secondary" icon={Download}>Audit Report</Button>}
-      tabConfig={COMPLIANCE_TAB_CONFIG as TabConfigItem[]}
+      tabConfig={COMPLIANCE_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={(id) => setActiveTab(id as ComplianceView)}
     >

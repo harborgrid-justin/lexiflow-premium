@@ -4,8 +4,9 @@
  * @description Style definitions for MegaMenu component.
  */
 
-import type { ThemeObject } from '@/lib/theme/types';
 import { cn } from "@/lib/cn";
+
+import type { ThemeObject } from '@/lib/theme/types';
 
 // Define type locally to avoid circular dependency
 export type MegaMenuLayout = "single" | "double" | "triple" | "quad";

@@ -14,11 +14,12 @@
  * ```
  */
 
+import { useEffect, useState } from "react";
+
 import {
   backendDiscovery,
   type BackendStatus,
 } from "@/services/integration/backend-discovery.service";
-import { useEffect, useState } from "react";
 
 /**
  * @deprecated Use useBackendHealth instead

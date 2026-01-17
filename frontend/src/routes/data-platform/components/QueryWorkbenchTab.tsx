@@ -1,5 +1,7 @@
-import { Button } from '@/components/organisms/_legacy/Button';
 import { Play, Save } from 'lucide-react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+
 import { useDataPlatform } from '../hooks/useDataPlatform';
 
 export function QueryWorkbenchTab() {

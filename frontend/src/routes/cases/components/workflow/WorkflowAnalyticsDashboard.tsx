@@ -16,28 +16,27 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveCo
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { getChartTheme } from '@/utils/chartConfig';
-import { queryKeys } from '@/utils/queryKeys';
-
-// Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
-
-// Components
 import { Card } from '@/components/molecules/Card/Card';
 import { LoadingState } from '@/components/molecules/LoadingState/LoadingState';
-
-// Utils & Constants
-import {
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { DataService } from '@/services/data/data-service.service';
+import { getChartTheme ,
   DEFAULT_MARGINS,
   getAxisConfig,
   getGridConfig,
   getTooltipConfig
 } from '@/utils/chartConfig';
+import { queryKeys } from '@/utils/queryKeys';
+
+// Hooks & Context
+
+// Components
+
+// Utils & Constants
 
 // Types
-import { WorkflowAnalyticsData } from './types';
+import { type WorkflowAnalyticsData } from './types';
 
 // ============================================================================
 // COMPONENT
@@ -52,7 +51,7 @@ export function WorkflowAnalyticsDashboard() {
     () => DataService.workflow.getAnalytics()
   );
 
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartTheme = getChartTheme(mode);
   const axisConfig = getAxisConfig(chartTheme);
   const gridConfig = getGridConfig(chartTheme);
   const tooltipConfig = getTooltipConfig(chartTheme);

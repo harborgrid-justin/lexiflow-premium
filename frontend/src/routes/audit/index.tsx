@@ -8,15 +8,18 @@
  * Complete audit log viewer with filtering and search
  */
 
-import { adminApi } from '@/lib/frontend-api';
-import { DateRangeSelector } from '@/routes/analytics/components/enterprise';
-import type { AuditLog } from '@/types/analytics-enterprise';
 import { subDays } from 'date-fns';
 import { AlertCircle, Download, Search, Shield, User } from 'lucide-react';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { adminApi } from '@/lib/frontend-api';
+import { DateRangeSelector } from '@/routes/analytics/components/enterprise';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { AuditLog } from '@/types/analytics-enterprise';
 
 export function meta() {
   return createMeta({

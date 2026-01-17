@@ -3,9 +3,10 @@
  * Review and summary step before form submission
  */
 
+import { AlertCircle } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertCircle } from 'lucide-react';
 interface FormState {
   accountNumber?: string;
   accountName?: string;

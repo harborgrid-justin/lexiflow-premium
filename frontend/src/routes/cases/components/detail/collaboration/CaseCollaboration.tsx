@@ -9,26 +9,27 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
 import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { ConferralLog } from './ConferralLog';
-import { DiscoveryPlanBuilder } from './DiscoveryPlanBuilder';
-import { Card } from '@/components/molecules/Card';
 import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
+import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { StipulationRequest } from '@/types';
+import { type StipulationRequest } from '@/types';
+
+import { ConferralLog } from './ConferralLog';
+import { DiscoveryPlanBuilder } from './DiscoveryPlanBuilder';
 
 interface CaseCollaborationProps {
   caseId: string;

@@ -53,9 +53,7 @@ export function validate<T>(value: unknown, schema: Schema<T>): Result<T> {
 
   const data = value as Record<string, unknown>;
 
-  for (const [fieldName, fieldSchema] of Object.entries(schema) as Array<
-    [string, FieldValidator]
-  >) {
+  for (const [fieldName, fieldSchema] of Object.entries(schema)) {
     const fieldValue = data[fieldName];
 
     // Check required

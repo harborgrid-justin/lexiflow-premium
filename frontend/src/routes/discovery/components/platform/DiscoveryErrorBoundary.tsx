@@ -3,9 +3,10 @@
  * @description Error boundary for graceful degradation in discovery center
  * Catches React errors and provides fallback UI with recovery options
  */
-import { Button } from '@/components/atoms/Button';
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, type ErrorInfo, type ReactNode } from 'react';
+
+import { Button } from '@/components/atoms/Button';
 
 interface Props {
     children: ReactNode;

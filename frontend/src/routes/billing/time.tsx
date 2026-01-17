@@ -3,10 +3,13 @@
  * Displays time entries list with filtering and search
  */
 
-import { TimeEntriesApiService } from '@/lib/frontend-api';
 import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { TimeEntriesApiService } from '@/lib/frontend-api';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { TimeEntryList } from './components/TimeEntryList';
 
 interface ActionData {
@@ -117,7 +120,7 @@ interface ActionData {
 }
 
 export default function TimeEntriesRoute({ actionData }: { actionData: ActionData }) {
-  const { entries, filters } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { entries, filters } = useLoaderData();
 
   return (
     <div className="p-8">

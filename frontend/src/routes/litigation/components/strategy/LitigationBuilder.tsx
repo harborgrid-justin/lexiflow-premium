@@ -11,21 +11,22 @@ import { Loader2, Rocket, Save } from 'lucide-react';
 import React, { Suspense, lazy } from 'react';
 
 // Internal Components
-import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { LitigationProvider, useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
 
 // Utils
-import { cn } from '@/lib/cn';
 
 // Constants & Types
 import { LITIGATION_TABS } from './constants';
-import { LitigationBuilderProps } from './types';
+import { type LitigationBuilderProps } from './types';
 
 // Lazy Load sub-components
 const StrategyCanvas = lazy(() => import('./StrategyCanvas').then(m => ({ default: m.StrategyCanvas })));

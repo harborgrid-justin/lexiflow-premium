@@ -9,22 +9,22 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
-import { TimeEntryModal } from '@/routes/cases/ui/components/TimeEntryModal/TimeEntryModal';
-import { Modal } from '@/components/molecules/Modal';
 import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+import { TimeEntryModal } from '@/routes/cases/ui/components/TimeEntryModal/TimeEntryModal';
 
 // Types & Interfaces
-import { Case, TimeEntryPayload } from '@/types';
+import { type Case, type TimeEntryPayload } from '@/types';
 
 interface CaseOverviewModalsProps {
   caseData: Case;

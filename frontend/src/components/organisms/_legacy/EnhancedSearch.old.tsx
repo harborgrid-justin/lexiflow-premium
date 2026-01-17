@@ -13,13 +13,14 @@
  * - Recent searches history
  */
 
-import masterConfig from '@/config/master.config';
-import { useTheme } from "@/hooks/useTheme";
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { cn } from '@/lib/cn';
-import { sanitizeHtml } from '@/lib/sanitize';
 import { Calendar, Clock, Command, Hash, Search, Tag, TrendingUp, X } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import masterConfig from '@/config/master.config';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 const SEARCH_DEBOUNCE_MS = (masterConfig as { SEARCH_DEBOUNCE_MS?: number }).SEARCH_DEBOUNCE_MS || 300;
 

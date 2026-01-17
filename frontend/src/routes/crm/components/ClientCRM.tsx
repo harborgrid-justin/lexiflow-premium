@@ -1,14 +1,16 @@
+import { UserPlus } from 'lucide-react';
+import { Suspense, useState, useTransition } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { CRM_TAB_CONFIG, CRMView } from '@/config/tabs.config';
+import { CRM_TAB_CONFIG, type CRMView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
-import { Client, ClientStatus, EntityId, PaymentTerms } from '@/types';
-import { UserPlus } from 'lucide-react';
-import { Suspense, useState, useTransition } from 'react';
+import { type Client, ClientStatus, type EntityId, PaymentTerms } from '@/types';
+
 import { ClientCRMContent } from './ClientCRMContent';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';

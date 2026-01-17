@@ -35,19 +35,20 @@
  */
 
 import { getApiBaseUrl, getApiPrefix } from "@/config/network/api.config";
+
 import { parseApiError, ValidationError } from "./errors";
 import {
   InterceptorManager,
-  RequestConfig,
+  type RequestConfig,
   setupDefaultInterceptors,
 } from "./interceptors.service";
 import {
   createRateLimiter,
   globalRateLimiter,
-  RateLimitConfig,
-  RateLimiter,
+  type RateLimitConfig,
+  type RateLimiter,
 } from "./rate-limiter";
-import { createRetryHandler, RetryConfig, RetryHandler } from "./retry-handler";
+import { createRetryHandler, type RetryConfig, type RetryHandler } from "./retry-handler";
 
 /**
  * API client configuration

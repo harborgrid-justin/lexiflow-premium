@@ -4,11 +4,14 @@
  * Includes LEDES code support and validation
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import type { TimeEntry } from '@/types/financial';
 import React, { useState } from 'react';
 import { Form } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
+
 import { RunningTimer } from './RunningTimer';
+
+import type { TimeEntry } from '@/types/financial';
 
 interface TimeEntryFormProps {
   entry?: Partial<TimeEntry>;

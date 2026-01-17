@@ -6,8 +6,8 @@
  * Use appropriate DataService methods instead.
  */
 
-import { MOCK_ORGS } from './organization';
 import { MOCK_GROUPS } from './group';
+import { MOCK_ORGS } from './organization';
 import { HIERARCHY_USERS } from './user';
 
 export { MOCK_ORGS, MOCK_GROUPS, HIERARCHY_USERS };

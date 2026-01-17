@@ -32,11 +32,13 @@
  * ```
  */
 
-import type { Task } from "@/types";
 import { normalizeTask, normalizeTasks } from "../normalization/workflow";
+
 import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
 import { failure, type PaginatedResult, type Result, success } from "./types";
+
+import type { Task } from "@/types";
 
 /**
  * Task query filters

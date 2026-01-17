@@ -7,18 +7,19 @@
  */
 
 import {
-  WorkflowConnection,
-  WorkflowNode,
+  type WorkflowConnection,
+  type WorkflowNode,
 } from "@/routes/cases/components/workflow/builder/types";
 import * as DateCalculationService from "@/services/infrastructure/dateCalculationService";
 import {
-  CaseId,
-  CasePhase,
-  TaskId,
+  type CaseId,
+  type CasePhase,
+  type TaskId,
   TaskPriorityBackend,
   TaskStatusBackend,
-  WorkflowTask,
+  type WorkflowTask,
 } from "@/types";
+
 import {
   CANVAS_CONSTANTS,
   GANTT_ZOOM_SCALE,

@@ -1,7 +1,9 @@
-import { LoadingState } from '@/components/molecules/LoadingState/LoadingState';
-import { Case, LegalDocument, Party } from '@/types';
 import { Suspense, useCallback } from 'react';
 import { Await, useLoaderData, useNavigate, useParams, type NavigateFunction } from 'react-router';
+
+import { LoadingState } from '@/components/molecules/LoadingState/LoadingState';
+import { type Case, type LegalDocument, type Party } from '@/types';
+
 import { CaseDetailProvider } from './CaseDetailContext';
 import { CaseDetailShell } from './CaseDetailShell';
 import { caseDetailLoader } from './detail-loader';
@@ -10,11 +12,7 @@ import { useCaseDetail } from './hooks/useCaseDetail';
 export { caseDetailLoader as loader };
 
 export default function CaseDetailLayout() {
-  const { caseData, documents, parties } = useLoaderData() as {
-    caseData: Case;
-    documents: Promise<LegalDocument[]>;
-    parties: Promise<Party[]>;
-  };
+  const { caseData, documents, parties } = useLoaderData();
   const { tab } = useParams();
   const navigate = useNavigate();
 

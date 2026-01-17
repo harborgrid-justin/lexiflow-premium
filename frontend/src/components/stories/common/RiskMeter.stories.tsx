@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RiskMeter } from '@/routes/cases/ui/components/RiskMeter/RiskMeter';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * RiskMeter component for displaying risk levels.

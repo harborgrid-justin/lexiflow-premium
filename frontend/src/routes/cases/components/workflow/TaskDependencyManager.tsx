@@ -1,11 +1,13 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
-import { useTheme } from "@/hooks/useTheme";
-import { queryKeys } from '@/utils/queryKeys';
 import { CheckSquare, Lock } from 'lucide-react';
 import React from 'react';
+
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { queryKeys } from '@/utils/queryKeys';
+
 // ✅ Migrated to backend API (2025-12-21)
 
 export const TaskDependencyManager = () => {

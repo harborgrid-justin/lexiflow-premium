@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MobileBottomNav } from './MobileBottomNav';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MobileBottomNav> = {
   title: 'Components/Organisms/MobileBottomNav/MobileBottomNav',

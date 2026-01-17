@@ -14,11 +14,15 @@
  * @see routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
-import { PageFrame } from "@/layouts/PageFrame";
 import { Suspense } from "react";
 import { Await } from "react-router";
+
+import { PageFrame } from "@/layouts/PageFrame";
+
 import { RouteSkeleton } from "../_shared/RouteSkeletons";
+
 import { EnhancedSearch } from './components/components/advanced/EnhancedSearch';
+
 import type { searchLoader } from './loader';
 
 interface SearchPageProps {

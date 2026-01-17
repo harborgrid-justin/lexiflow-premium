@@ -3,12 +3,15 @@
  * @module hooks/useEvidenceManager/useEvidenceData
  */
 
+import { useMemo } from "react";
+
 import { useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
-import type { EvidenceItem } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
-import { useMemo } from "react";
+
 import { filterByCaseId, normalizeEvidenceResponse } from "./utils";
+
+import type { EvidenceItem } from "@/types";
 
 /**
  * Hook for fetching and managing evidence data

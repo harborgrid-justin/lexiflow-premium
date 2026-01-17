@@ -4,13 +4,15 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { LegalDocument } from "@/types";
+
 import {
   validateArray,
   validateFile,
   validateId,
   validateObject,
 } from "./validation";
+
+import type { LegalDocument } from "@/types";
 
 /** Upload a document file with metadata */
 export async function upload(

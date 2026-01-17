@@ -1,7 +1,8 @@
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 import { Calendar, CheckSquare, Clock, Flag, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 
 interface PlanningSidebarProps {
   className?: string;

@@ -2,17 +2,18 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import {
+  Clock,
+  MapPin
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import {
-  Clock,
-  MapPin
-} from 'lucide-react';
-import React, { useMemo, useState } from 'react';
 type CalendarView = 'month' | 'week' | 'day' | 'agenda'; interface CalendarEvent {
   id: string; matterId: string; matterTitle: string; title: string; type: 'hearing' | 'deadline' | 'meeting' | 'filing' | 'trial' | 'other'; startTime: string; endTime?: string; location?: string; attendees?: string[]; description?: string; priority: 'high' | 'medium' | 'low'; status: 'scheduled' | 'confirmed' | 'completed' | 'cancelled'; reminder?: number; // minutes before recurring?: { frequency: 'daily' | 'weekly' | 'monthly'; until?: string; };
 } export function CaseCalendar({ caseId }: { caseId?: string }) {

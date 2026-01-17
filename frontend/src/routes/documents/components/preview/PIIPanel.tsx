@@ -1,9 +1,11 @@
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { yieldToMain } from '@/utils/apiUtils';
 import { AlertTriangle, Eye, EyeOff, ShieldAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { yieldToMain } from '@/utils/apiUtils';
+
 
 interface PIIPanelProps {
     content: string;

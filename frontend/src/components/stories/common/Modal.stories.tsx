@@ -1,7 +1,9 @@
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Modal } from '@/components/molecules/Modal/Modal';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React, { useState } from 'react';
 
 /**
  * Modal component for dialogs and overlays.

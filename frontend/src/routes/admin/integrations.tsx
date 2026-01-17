@@ -15,11 +15,13 @@
  * @module routes/admin/integrations
  */
 
+import { useLoaderData, type ActionFunctionArgs } from 'react-router';
+
 import { integrationsApi } from '@/lib/frontend-api';
 import { IntegrationsManager } from '@/routes/admin/integrations/IntegrationsManager';
-import { useLoaderData, type ActionFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createAdminMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
 // Meta Tags

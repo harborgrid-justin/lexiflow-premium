@@ -5,9 +5,6 @@
  * invoice viewing/payment, secure messaging, and appointment scheduling.
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import type { Client } from '@/types';
-import { cn } from '@/lib/cn';
 import {
   AlertCircle,
   Briefcase,
@@ -28,6 +25,11 @@ import {
   Video
 } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { Client } from '@/types';
 
 // ============================================================================
 // TYPES

@@ -25,13 +25,15 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
 // Types
-import { WorkflowTask } from "@/types";
+import { type WorkflowTask } from "@/types";
+
+import type React from "react";
 
 // ========================================
 // TYPES & INTERFACES

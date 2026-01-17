@@ -19,9 +19,11 @@ import {
   normalizeTimeEntries,
   normalizeTimeEntry,
 } from "../normalization/billing";
+
 import { client } from "./client";
 import { ValidationError } from "./errors";
 import { failure, type Result, success } from "./types";
+
 import type { BillingRate, FeeAgreement, RateTable } from "@/types";
 
 export interface TimeEntryFilters {

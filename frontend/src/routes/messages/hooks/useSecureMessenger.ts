@@ -26,9 +26,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, {
-  Dispatch,
-  SetStateAction,
+import {type Dispatch, type SetStateAction} from "react";
+import {
   useEffect,
   useMemo,
   useState,
@@ -41,10 +40,12 @@ import React, {
 import { DataService } from "@/services/data/data-service.service";
 
 // Utils & Constants
+import { type Attachment, type Conversation, type Message } from "@/types";
 import { Scheduler } from "@/utils/scheduler";
 
+import type React from "react";
+
 // Types
-import { Attachment, Conversation, Message } from "@/types";
 
 interface Contact {
   id: string;

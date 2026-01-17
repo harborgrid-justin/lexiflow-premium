@@ -7,10 +7,12 @@
  * Drafting Domain - View Component
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { Eye, FileCheck, FileEdit, PenTool, Plus } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useDrafting } from './DraftingProvider';
 
 export function DraftingView() {

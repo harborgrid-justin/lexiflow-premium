@@ -159,7 +159,7 @@ export const calculatePasswordStrength = (
 
   return {
     score: score as 0 | 1 | 2 | 3 | 4,
-    label: strength.label!,
+    label: strength.label,
     color: strength.color,
     percentage: strength.percentage,
     feedback,

@@ -19,28 +19,29 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services/data/dataService';
-// ✅ Migrated to backend API (2025-12-21)
-
-// Hooks & Context
-import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
-import { useSelection } from '@/hooks/useSelectionState';
-import { useTheme } from "@/hooks/useTheme";
-import { useToggle } from '@/hooks/useToggle';
-
-// Components
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useSelection } from '@/hooks/useSelectionState';
+import { useTheme } from "@/hooks/useTheme";
+import { useToggle } from '@/hooks/useToggle';
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
+// ✅ Migrated to backend API (2025-12-21)
+
+// Hooks & Context
+
+// Components
+
 import { AdvisorDetail } from './advisory/AdvisorDetail';
-import { Advisor, AdvisorList } from './advisory/AdvisorList';
+import { type Advisor, AdvisorList } from './advisory/AdvisorList';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

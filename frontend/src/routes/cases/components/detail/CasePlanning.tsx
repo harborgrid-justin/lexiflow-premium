@@ -13,23 +13,25 @@ import { Layers, Plus, TrendingUp } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/atoms/Button';
-import { PlanningSidebar } from './planning/PlanningSidebar';
-import { ScheduleTimeline } from './planning/ScheduleTimeline';
+
 
 // Internal Dependencies - Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { useCasePlanning } from '@/routes/cases/hooks/useCasePlanning';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
-import { Pathfinding } from '@/utils/pathfinding';
+import { useCasePlanning } from '@/routes/cases/hooks/useCasePlanning';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 
 // Types & Interfaces
-import { Case } from '@/types';
+import { type Case } from '@/types';
+import { Pathfinding } from '@/utils/pathfinding';
+
+import { PlanningSidebar } from './planning/PlanningSidebar';
+import { ScheduleTimeline } from './planning/ScheduleTimeline';
 
 interface CasePlanningProps {
     caseData: Case;

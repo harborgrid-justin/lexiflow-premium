@@ -20,7 +20,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import { useEffect, RefObject, useRef } from 'react';
+import { useEffect, type RefObject, useRef } from 'react';
 
 // ========================================
 // HOOK

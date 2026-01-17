@@ -1,6 +1,6 @@
+import { Database, Edit2, Key, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
 import { useMemo, useState, type MouseEvent, type WheelEvent } from 'react';
 
-import { Database, Edit2, Key, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
 
 import { ContextMenu } from '@/components/molecules/ContextMenu/ContextMenu';
 import { useCanvasDrag } from '@/hooks/ui';

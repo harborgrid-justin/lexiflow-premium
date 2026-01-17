@@ -30,10 +30,10 @@ import { useCallback, useState } from "react";
 // Services & Data
 import { useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
+import { type CalendarEventItem } from "@/types";
 import { queryKeys } from "@/utils/queryKeys";
 
 // Types
-import { CalendarEventItem } from "@/types";
 
 // ============================================================================
 // TYPES

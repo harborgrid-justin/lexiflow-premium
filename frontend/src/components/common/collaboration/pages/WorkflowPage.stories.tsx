@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WorkflowPage } from './WorkflowPage';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof WorkflowPage> = {
   title: 'Components/Pages/collaboration/WorkflowPage',

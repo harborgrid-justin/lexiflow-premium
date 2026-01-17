@@ -3,11 +3,13 @@
  * @module hooks/useDocumentManager/useDocumentMutations
  */
 
+import { useCallback } from "react";
+
 import { DocumentsApiService } from "@/api/admin/documents-api";
 import { queryClient, useMutation } from "@/hooks/useQueryHooks";
-import type { LegalDocument } from "@/types";
 import { queryKeys } from "@/utils/query-keys.service";
-import { useCallback } from "react";
+
+import type { LegalDocument } from "@/types";
 
 const documentsApi = new DocumentsApiService();
 

@@ -4,12 +4,16 @@
  * @description RFP tracker list with header
  */
 
+import { Plus } from 'lucide-react';
+import React from "react";
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Plus } from 'lucide-react';
-import { RFP } from '../../types';
+
+import { type RFP } from '../../types';
+
 import { RFPCard } from './RFPCard';
-import React from "react";
+
 
 interface RFPsListProps {
   rfps: RFP[];

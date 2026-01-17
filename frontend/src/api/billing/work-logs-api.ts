@@ -5,6 +5,7 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+
 import type { TimeEntry } from '@/types';
 
 export interface TimeEntryFilters {

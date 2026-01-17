@@ -4,8 +4,10 @@
  */
 
 import { useTheme } from "@/hooks/useTheme";
-import type { LegalDocument } from '@/types/documents';
+
 import { useDocumentViewer } from '../hooks/useDocumentViewer';
+
+import type { LegalDocument } from '@/types/documents';
 
 interface DocumentViewerProps {
   document: LegalDocument;

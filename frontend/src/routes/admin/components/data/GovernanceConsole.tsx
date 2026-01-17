@@ -1,18 +1,21 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { FileText, Plus } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Modal } from '@/components/molecules/Modal';
 import { ModalFooter } from '@/components/molecules/ModalFooter';
 import { Tabs } from '@/components/molecules/Tabs';
-import { GovernancePolicy } from '@/types';
-import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';
-import { FileText, Plus } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type GovernancePolicy } from '@/types';
+
 import { AccessGovernance } from './governance/AccessGovernance';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
+
+import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';
 
 // Local type to match both the API response and component expectations
 interface GovernanceRule {
@@ -96,7 +99,7 @@ export function GovernanceConsole({ initialTab = 'overview' }: GovernanceConsole
                 <Tabs
                     tabs={['overview', 'policies', 'access']}
                     activeTab={activeTab}
-                    onChange={(t) => setActiveTab(t as string)}
+                    onChange={(t) => setActiveTab(t)}
                 />
             </div>
 

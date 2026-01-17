@@ -1,14 +1,7 @@
-import {
-  ChartCard,
-  DateRangeSelector,
-  FilterPanel,
-  MetricCard,
-} from '@/routes/analytics/components/enterprise';
 import { format, subDays, subMonths } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
-import type { PieLabelRenderProps } from 'recharts';
 import {
   Bar,
   BarChart,
@@ -24,7 +17,16 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import {
+  ChartCard,
+  DateRangeSelector,
+  FilterPanel,
+  MetricCard,
+} from '@/routes/analytics/components/enterprise';
+
 import type { CaseAnalyticsLoaderData } from './types';
+import type { PieLabelRenderProps } from 'recharts';
 
 export function CaseAnalytics({ metrics }: CaseAnalyticsLoaderData) {
   const [dateRange, setDateRange] = useState({

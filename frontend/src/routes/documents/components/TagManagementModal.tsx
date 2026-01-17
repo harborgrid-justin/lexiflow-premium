@@ -1,10 +1,11 @@
+import { Plus, X } from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from "@/hooks/useTheme";
-import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
-import { Plus, X } from 'lucide-react';
-import { useState } from 'react';
+import { type LegalDocument } from '@/types';
 
 interface TagManagementModalProps {
     document: LegalDocument;

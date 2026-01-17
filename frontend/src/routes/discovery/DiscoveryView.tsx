@@ -3,11 +3,14 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
+import { CheckCircle, FileText, Tag } from 'lucide-react';
+
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import type { DiscoveryRequest } from '@/types';
-import { CheckCircle, FileText, Tag } from 'lucide-react';
+
 import { useDiscovery } from './hooks/useDiscovery';
+
+import type { DiscoveryRequest } from '@/types';
 
 type Evidence = {
   id: string;

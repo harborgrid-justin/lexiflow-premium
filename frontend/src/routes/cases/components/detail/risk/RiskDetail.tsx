@@ -9,24 +9,26 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
-import { RiskMatrix } from './RiskMatrix';
+
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 // Types & Interfaces
-import { Risk, RiskLevel, RiskCategory, RiskStatusEnum, RiskProbability, RiskImpact } from '@/types';
+import { type Risk, type RiskLevel, type RiskCategory, RiskStatusEnum, RiskProbability, RiskImpact } from '@/types';
+
+import { RiskMatrix } from './RiskMatrix';
 
 interface RiskDetailProps {
   risk: Risk;

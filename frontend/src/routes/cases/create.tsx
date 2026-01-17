@@ -10,14 +10,16 @@
  * @module routes/cases/create
  */
 
+import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+
 import { catalogApi, jurisdictionApi } from '@/lib/frontend-api';
 import NewCase from '@/routes/cases/components/create/NewCase';
 import { DataService } from '@/services/data/data-service.service';
-import { CaseStatus } from '@/types';
+import { type CaseStatus } from '@/types';
 import { requireAuthentication } from '@/utils/route-guards';
-import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
 // Types
@@ -114,7 +116,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function CreateCaseRoute({ actionData }: RouteComponentProps) {
-  const error = actionData && 'error' in actionData ? (actionData.error as string) : null;
+  const error = actionData && 'error' in actionData ? (actionData.error) : null;
 
   return (
     <div className="container mx-auto p-6">

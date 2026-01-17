@@ -3,7 +3,8 @@
  * Workflow operations for document review and approval
  */
 
-import { ApiClient } from "@/services/infrastructure/api-client.service";
+import { type ApiClient } from "@/services/infrastructure/api-client.service";
+
 import type { GeneratedDocument } from "./types";
 
 /**

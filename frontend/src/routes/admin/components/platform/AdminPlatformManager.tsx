@@ -1,14 +1,17 @@
+import { Plus, Search } from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Plus, Search } from 'lucide-react';
-import { useState } from 'react';
+
 import { useAdminData } from '../../hooks/useAdminData';
+
 import { EMPTY_TEMPLATES } from './AdminConfig';
 import { EntityList } from './EntityList';
-import { Category, EntitySidebar } from './EntitySidebar';
+import { type Category, EntitySidebar } from './EntitySidebar';
 import { RecordModal } from './RecordModal';
 
 export function AdminPlatformManager() {

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
@@ -8,9 +10,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { casesApi, documentsApi } from '@/lib/frontend-api';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
-import { CaseId, ServiceJob, UserId } from '@/types';
+import { type CaseId, type ServiceJob, type UserId } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { useState } from 'react';
 
 interface CreateServiceJobModalProps {
     isOpen: boolean;

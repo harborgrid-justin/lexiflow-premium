@@ -1,12 +1,13 @@
-import React from 'react';
 import { Target, GripVertical, ArrowRight } from 'lucide-react';
+import React from 'react';
+
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
-import { Case, LegalArgument } from '@/types';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+// ✅ Migrated to backend API (2025-12-21)
+import { type Case, type LegalArgument } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
 
 interface ArgumentSelectorProps {
   caseId: string;

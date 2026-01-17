@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import { Await, Outlet, useLoaderData, useRevalidator } from 'react-router';
+
 import { RouteError, TableRouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { CaseListProvider } from './CaseListProvider';
 import { clientLoader } from './loader';
 

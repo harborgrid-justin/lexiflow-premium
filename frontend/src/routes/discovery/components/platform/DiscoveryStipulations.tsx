@@ -26,35 +26,36 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { AlertCircle, CheckCircle, FileQuestion, FileText, Loader2, Plus, XCircle } from 'lucide-react';
+import React from 'react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 
 // Services & Utils
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { IdGenerator } from '@/lib/idGenerator';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { CaseId, StipulationRequest } from '@/types';
+import { type CaseId, type StipulationRequest } from '@/types';
 
 interface DiscoveryStipulationsProps {
   /** Optional case ID to filter stipulations */

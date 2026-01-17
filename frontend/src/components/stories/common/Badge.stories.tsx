@@ -1,6 +1,8 @@
-import { Badge } from '@/components/atoms/Badge/Badge';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
+
+import { Badge } from '@/components/atoms/Badge/Badge';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Badge component displays status indicators with semantic colors.

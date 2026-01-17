@@ -9,10 +9,12 @@
  * @module routes/admin/theme-settings
  */
 
-import { useTheme } from "@/hooks/useTheme";
 import { Link, type ActionFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { useTheme } from "@/hooks/useTheme";
+
 import { createAdminMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
 // Meta Tags

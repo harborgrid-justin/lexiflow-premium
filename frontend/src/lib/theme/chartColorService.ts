@@ -10,7 +10,7 @@
  * @module lib/theme/chartColorService
  */
 
-import { ThemeMode, getTokens } from "./tokens";
+import { type ThemeMode, getTokens } from "./tokens";
 
 export class ChartColorService {
   /**

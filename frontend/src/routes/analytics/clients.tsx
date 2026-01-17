@@ -3,7 +3,6 @@
  * Client profitability, engagement, and retention metrics
  */
 
-import { ChartCard, DateRangeSelector, MetricCard } from '@/routes/analytics/components/enterprise';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useState } from 'react';
@@ -22,9 +21,12 @@ import {
   Tooltip,
   XAxis, YAxis
 } from 'recharts';
+
 import { useTheme } from '@/hooks/useTheme';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { ChartCard, DateRangeSelector, MetricCard } from '@/routes/analytics/components/enterprise';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 export function meta() {
   return createMeta({
@@ -47,7 +49,7 @@ export async function loader() {
 }
 
 export default function ClientAnalyticsRoute() {
-  const { metrics } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { metrics } = useLoaderData();
   const theme = useTheme();
 
   const [dateRange, setDateRange] = useState({

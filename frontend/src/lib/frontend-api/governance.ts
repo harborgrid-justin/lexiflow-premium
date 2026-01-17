@@ -26,6 +26,7 @@
  * [ ] Is revalidation guaranteed?
  */
 
+import { toRecord } from "./guards";
 import type { Result } from "./types";
 
 /**
@@ -65,7 +66,7 @@ export function assertNoReactImports(module: unknown): void {
   for (const pattern of forbiddenPatterns) {
     if (pattern.test(moduleString)) {
       throw new Error(
-        `Frontend API module contains forbidden React import: ${pattern}`
+        `Frontend API module contains forbidden React import: ${pattern}`,
       );
     }
   }
@@ -77,7 +78,7 @@ export function assertNoReactImports(module: unknown): void {
  */
 export async function assertPure<TArgs extends unknown[], TData>(
   fn: ApiFunction<TArgs, TData>,
-  args: TArgs
+  args: TArgs,
 ): Promise<void> {
   const result1 = await fn(...args);
   const result2 = await fn(...args);
@@ -85,7 +86,7 @@ export async function assertPure<TArgs extends unknown[], TData>(
   // Results should be structurally equal
   if (JSON.stringify(result1) !== JSON.stringify(result2)) {
     throw new Error(
-      `Function is not pure - multiple calls with same args produced different results`
+      `Function is not pure - multiple calls with same args produced different results`,
     );
   }
 }
@@ -94,13 +95,13 @@ export async function assertPure<TArgs extends unknown[], TData>(
  * Runtime check: ensure return type is Result<T>
  */
 export function assertReturnsResult<T>(
-  value: unknown
+  value: unknown,
 ): asserts value is Result<T> {
   if (typeof value !== "object" || value === null) {
     throw new Error("API function must return Result<T>");
   }
 
-  const result = value as Record<string, unknown>;
+  const result = toRecord(value);
 
   if (!("ok" in result) || typeof result.ok !== "boolean") {
     throw new Error("Result must have boolean 'ok' property");
@@ -167,7 +168,7 @@ export const ESLINT_CONFIG = {
  */
 export async function validateApiModule<T extends Record<string, unknown>>(
   module: T,
-  moduleName: string
+  moduleName: string,
 ): Promise<void> {
   const errors: string[] = [];
 
@@ -190,7 +191,7 @@ export async function validateApiModule<T extends Record<string, unknown>>(
 
   if (errors.length > 0) {
     throw new Error(
-      `Frontend API validation failed for ${moduleName}:\n${errors.join("\n")}`
+      `Frontend API validation failed for ${moduleName}:\n${errors.join("\n")}`,
     );
   }
 }

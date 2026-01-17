@@ -1,9 +1,10 @@
-import { AuditLog } from '@/lib/frontend-api';
-import { adminApi } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/lib/cn';
 import { Loader2 } from 'lucide-react';
+
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type AuditLog , adminApi } from '@/lib/frontend-api';
+
 export function SystemLogs() {
   const { theme } = useTheme();
 

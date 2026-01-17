@@ -1,15 +1,17 @@
-import { queryClient, useMutation, useQuery } from '@/hooks/backend';
-import { useNotify } from '@/hooks/core';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { ArrowRight, CheckCircle, GitMerge, Layers } from 'lucide-react';
+import React from 'react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
-import { DedupeCluster } from '@/types';
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type DedupeCluster } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { ArrowRight, CheckCircle, GitMerge, Layers } from 'lucide-react';
-import React from 'react';
+
 /**
  * DeduplicationManager - React 18 optimized with React.memo
  */

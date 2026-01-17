@@ -1,11 +1,13 @@
-import { Card } from '@/components/molecules/Card/Card';
+import { MoreHorizontal, Play, Search } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
-import { MoreHorizontal, Play, Search } from 'lucide-react';
+import { Card } from '@/components/molecules/Card/Card';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
-import { Process } from './types';
+
+import { type Process } from './types';
 import { getProcessIcon } from './utils';
 
 interface FirmProcessListProps {

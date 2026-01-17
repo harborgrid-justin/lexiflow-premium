@@ -8,7 +8,7 @@
 
 // data/mockApiSpec.ts
 import { API_PREFIX } from "@/config/network/api.config";
-import { ApiServiceSpec } from "@/types/system";
+import { type ApiServiceSpec } from "@/types/system";
 
 /**
  * @deprecated MOCK DATA - For documentation purposes only

@@ -25,9 +25,9 @@ import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
 
 // Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 export const CaseListClosing: React.FC = () => {
   const { theme } = useTheme();

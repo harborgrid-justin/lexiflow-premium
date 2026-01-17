@@ -11,8 +11,10 @@
  * @module routes/_shared/RouteErrorBoundary
  */
 
-import { useTheme } from "@/hooks/useTheme";
 import { Link, isRouteErrorResponse } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
+
 import type { RouteErrorBoundaryProps } from './types';
 
 // ============================================================================

@@ -1,11 +1,12 @@
+import { CheckCircle, Info, Lock, Shield, XCircle } from 'lucide-react';
+import React from 'react';
+
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { RLSPermissionLevel as PermissionLevel, RolePermission } from '@/types/data-quality';
+import { type RLSPermissionLevel as PermissionLevel, type RolePermission } from '@/types/data-quality';
 import { queryKeys } from '@/utils/queryKeys';
-import { CheckCircle, Info, Lock, Shield, XCircle } from 'lucide-react';
-import React from 'react';
 
 /**
  * AccessMatrix - React 18 optimized with React.memo

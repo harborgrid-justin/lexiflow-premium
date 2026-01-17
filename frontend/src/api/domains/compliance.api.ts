@@ -4,9 +4,9 @@
  */
 
 import { ComplianceApiService } from '../compliance/compliance-api';
+import { ComplianceReportingApiService } from '../compliance/compliance-reporting-api';
 import { ConflictChecksApiService } from '../compliance/conflict-checks-api';
 import { ReportsApiService } from '../compliance/reports-api';
-import { ComplianceReportingApiService } from '../compliance/compliance-reporting-api';
 
 // Export singleton instances
 export const complianceApi = {

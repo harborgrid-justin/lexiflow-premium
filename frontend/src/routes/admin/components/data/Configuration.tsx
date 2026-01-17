@@ -1,14 +1,16 @@
-import { TIMEOUTS } from '@/config/ports.config';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/backend';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/lib/cn';
+import { CheckCircle, Code, Download, FileSearch, Save, Settings, Upload } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { Card } from '@/components/molecules/Card/Card';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import { CheckCircle, Code, Download, FileSearch, Save, Settings, Upload } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { TIMEOUTS } from '@/config/ports.config';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
+
 
 interface ConfigurationProps {
   initialTab?: string;

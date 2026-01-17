@@ -4,6 +4,9 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
+import { validateId } from "./utils";
+
 import type {
   CreateTrustAccountDto,
   CreateTrustTransactionDto,
@@ -14,7 +17,6 @@ import type {
   UpdateTrustAccountDto,
   WithdrawalDto,
 } from "./types";
-import { validateId } from "./utils";
 
 export class TrustAccountService {
   /**

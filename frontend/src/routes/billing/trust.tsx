@@ -3,11 +3,14 @@
  * Displays IOLTA trust accounts with compliance features
  */
 
-import { TrustAccountsApiService } from '@/lib/frontend-api';
-import { TrustAccountStatus } from '@/types/trust-accounts';
 import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { TrustAccountsApiService } from '@/lib/frontend-api';
+import { type TrustAccountStatus } from '@/types/trust-accounts';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { TrustAccountDashboard } from './components/TrustAccountDashboard';
 
 // ============================================================================
@@ -142,7 +145,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function TrustAccountsRoute({ actionData }: RouteComponentProps) {
-  const { accounts: _accounts, filters: _filters } = useLoaderData() as LoaderData;
+  const { accounts: _accounts, filters: _filters } = useLoaderData();
 
   return (
     <div className="p-8">

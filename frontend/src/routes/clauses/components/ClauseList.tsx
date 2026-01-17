@@ -1,17 +1,21 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { Clause } from '@/types';
 import { BookOpen, Check, Copy, History, Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { filterClauses } from './clauseList.utils';
-// ✅ Migrated to backend API (2025-12-21)
-import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
+
+import { Button } from '@/components/atoms/Button';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type Clause } from '@/types';
+
+
+import { filterClauses } from './clauseList.utils';
+
+// ✅ Migrated to backend API (2025-12-21)
 
 interface ClauseListProps {
     onSelectClause: (clause: Clause) => void;

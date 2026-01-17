@@ -17,20 +17,23 @@ import React, { Suspense, useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Button } from '@/components/atoms/Button/Button';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { useModalState } from '@/hooks/core';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useSelection } from '@/hooks/useSelectionState';
+import { useTheme } from "@/hooks/useTheme";
+import { useToggle } from '@/hooks/useToggle';
+import { cn } from '@/lib/cn';
 import { communicationsApi, serviceJobsApi } from '@/lib/frontend-api';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
-import { useModalState } from '@/hooks/core';
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useSelection } from '@/hooks/useSelectionState';
-import { useTheme } from "@/hooks/useTheme";
-import { useToggle } from '@/hooks/useToggle';
 
 // Components
-import { Button } from '@/components/atoms/Button/Button';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { type CaseId, type CommunicationItem, type ServiceJob, type UserId } from '@/types';
+
 import { CommunicationLog } from './CommunicationLog';
 import { ComposeMessageModal } from './ComposeMessageModal';
 import { CorrespondenceDetail } from './CorrespondenceDetail';
@@ -40,10 +43,8 @@ import { CreateServiceJobModal } from './CreateServiceJobModal';
 import { ServiceTracker } from './ServiceTracker';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // Types
-import { CaseId, CommunicationItem, ServiceJob, UserId } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

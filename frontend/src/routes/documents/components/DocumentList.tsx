@@ -4,11 +4,14 @@
  */
 
 import { DOCUMENT_LIST_COLUMNS } from '@/config/documents.config';
-import type { LegalDocument } from '@/types/documents';
+
 import { useDocumentList } from '../hooks/useDocumentList';
 import { type SortField } from '../utils/documentUtils';
+
 import { DocumentCard } from './DocumentCard';
 import { DocumentRow } from './DocumentRow';
+
+import type { LegalDocument } from '@/types/documents';
 
 export type ViewMode = 'grid' | 'list';
 // Exporting types from utils now to avoid duplication if needed elsewhere,

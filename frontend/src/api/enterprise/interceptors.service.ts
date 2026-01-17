@@ -5,6 +5,7 @@
  */
 
 import { setupInterceptors } from "../../services/infrastructure/interceptors.service";
+
 import type {
   ErrorInterceptor,
   RequestInterceptor,
@@ -70,7 +71,7 @@ export class InterceptorManager {
     const wrapper: ResponseInterceptorFn = async (response, data) => {
       const result = await interceptor(
         data,
-        response && "url" in response ? (response as Response).url : ""
+        response && "url" in response ? (response).url : ""
       );
       return result as typeof data;
     };

@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
 
 export class TimelineApiService {

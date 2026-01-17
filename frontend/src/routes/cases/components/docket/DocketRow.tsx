@@ -21,7 +21,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { DocketEntry, DocketEntryType } from '@/types';
+import { type DocketEntry, type DocketEntryType } from '@/types';
 
 interface DocketRowProps {
     entry: DocketEntry;

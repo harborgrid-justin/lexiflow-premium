@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { ConflictCheck } from "@/types";
 
 export class ConflictChecksApiService {

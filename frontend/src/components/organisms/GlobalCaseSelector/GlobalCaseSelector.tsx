@@ -1,9 +1,10 @@
+import { Briefcase } from 'lucide-react';
+import { useCallback } from 'react';
+
 import { AutocompleteSelect } from '@/components/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useCaseContext } from '@/routes/cases/context-exports';
 import { DataService } from '@/services/data/data-service.service';
-import { Case } from '@/types/case';
-import { Briefcase } from 'lucide-react';
-import { useCallback } from 'react';
+import { type Case } from '@/types/case';
 
 export function GlobalCaseSelector() {
   const { selectedCaseId, selectCase } = useCaseContext();

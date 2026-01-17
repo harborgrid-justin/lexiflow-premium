@@ -3,9 +3,10 @@
  * Displays a list of conversations with search and filtering
  */
 
-import type { Conversation } from '@/lib/frontend-api';
 import { formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
+
+import type { Conversation } from '@/lib/frontend-api';
 
 export interface ConversationSidebarProps {
   conversations: Conversation[];

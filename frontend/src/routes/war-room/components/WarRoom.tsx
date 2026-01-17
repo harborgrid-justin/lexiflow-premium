@@ -13,7 +13,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { queryKeys } from '@/utils/queryKeys';
 import {
   CheckCircle,
   ChevronDown,
@@ -35,11 +34,8 @@ import {
 // ============================================================================
 
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from "@/providers";
 
 // Components
 import { Button } from '@/components/atoms/Button';
@@ -47,7 +43,11 @@ import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Utils & Constants
 import { WAR_ROOM_TAB_CONFIG } from '@/config/tabs.config';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/lib/cn';
+import { useTheme } from "@/providers";
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Types
 import type { Case, WarRoomData } from "@/types";

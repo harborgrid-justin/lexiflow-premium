@@ -7,8 +7,9 @@
  * @module components/guards/PermissionGuard
  */
 
-import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 import React, { type ReactNode } from 'react';
+
+import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 
 interface PermissionGuardProps {
   /** Child components to render if permission check passes */

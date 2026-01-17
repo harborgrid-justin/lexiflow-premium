@@ -10,25 +10,25 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo } from 'react';
 import { Building2, Calendar, FileCheck } from 'lucide-react';
+import React, { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Types
-import { LegalEntity } from '@/types';
+import { type LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

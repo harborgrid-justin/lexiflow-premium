@@ -2,13 +2,6 @@
  * Matter Financials Center - Comprehensive Financial Management
  */
 
-import { Badge } from '@/components/atoms/Badge/Badge';
-import { Button } from '@/components/atoms/Button/Button';
-import { Card } from '@/components/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/hooks/useTheme';
-import { cn } from '@/lib/cn';
-import { api } from '@/services/api';
 import { Clock, DollarSign, Download, TrendingUp, Wallet } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
@@ -21,6 +14,14 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
+import { api } from '@/services/api';
 
 interface Invoice {
   id: string;

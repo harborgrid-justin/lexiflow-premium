@@ -1,7 +1,9 @@
-import { TabNavigation } from '@/components/organisms/TabNavigation';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BarChart3, Calendar, FileText, Users } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { TabNavigation } from '@/components/organisms/TabNavigation';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * TabNavigation - Basic single-level navigation

@@ -4,10 +4,11 @@
  * Can be placed in header or sidebar
  */
 
-import { useBackendHealth } from '@/hooks/useBackendHealth';
-import { useDataSource } from '@/routes/dashboard/data/DataSourceHooks';
 import { Database, HardDrive, Server } from 'lucide-react';
 import React from 'react';
+
+import { useBackendHealth } from '@/hooks/useBackendHealth';
+import { useDataSource } from '@/routes/dashboard/data/DataSourceHooks';
 
 interface BackendStatusIndicatorProps {
   showLabel?: boolean;

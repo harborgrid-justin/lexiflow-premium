@@ -9,12 +9,6 @@
  * - theme.border.default - Card and input borders
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { useNotify } from '@/hooks/core';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Input } from '@/components/atoms/Input/Input';
-import { Card } from '@/components/molecules/Card/Card';
 import {
   AlertCircle,
   Briefcase,
@@ -27,6 +21,14 @@ import {
   Users
 } from 'lucide-react';
 import { useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { Card } from '@/components/molecules/Card/Card';
+import { useNotify } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 
 interface FirmDetails {
   name: string;

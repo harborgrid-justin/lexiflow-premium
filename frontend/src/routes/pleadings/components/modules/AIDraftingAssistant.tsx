@@ -1,11 +1,13 @@
-import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/lib/cn';
+import { AlertCircle, FileText, RefreshCw, Sparkles, Wand2, WifiOff } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { RetryError, retryWithBackoff } from '@/utils/retryWithBackoff';
-import { AlertCircle, FileText, RefreshCw, Sparkles, Wand2, WifiOff } from 'lucide-react';
-import React, { useState } from 'react';
+
 
 interface AIDraftingAssistantProps {
     onInsert: (text: string) => void;

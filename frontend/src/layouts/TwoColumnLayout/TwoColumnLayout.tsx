@@ -5,9 +5,10 @@
  * Ideal for comparisons, editing workflows, and dual-panel interfaces.
  */
 
+import React from "react";
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import React from "react";
 
 interface TwoColumnLayoutProps {
   leftColumn: React.ReactNode;

@@ -4,10 +4,11 @@
  * @description Filter and search UI for leads
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { Search, Plus } from 'lucide-react';
 import React from "react";
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
 interface LeadFiltersProps {
   onAddLead?: () => void;

@@ -16,10 +16,11 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertTriangle, CheckCircle } from 'lucide-react';
+import React, { type ReactNode, useEffect, useRef, useState } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertTriangle, CheckCircle } from 'lucide-react';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

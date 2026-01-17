@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useFetcher } from 'react-router';
+
 import type { Integration } from './types'; // ============================================================================
 // Integration Card Component
 // ============================================================================

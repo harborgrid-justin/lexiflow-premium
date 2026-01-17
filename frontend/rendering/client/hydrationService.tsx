@@ -9,6 +9,7 @@
 
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
+
 import type { ReactElement } from "react";
 
 export interface HydrationConfig {

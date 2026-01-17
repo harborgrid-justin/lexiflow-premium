@@ -1,7 +1,9 @@
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import { DocumentVersion, LegalDocument, UserRole } from '@/types';
 import { AlertTriangle, History, RotateCcw, X } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type DocumentVersion, type LegalDocument, type UserRole } from '@/types';
+
 
 interface DocumentVersionsProps {
   document: LegalDocument;

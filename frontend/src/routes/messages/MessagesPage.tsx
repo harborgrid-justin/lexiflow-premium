@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { MessagesProvider } from './MessagesProvider';
 import { MessagesView } from './MessagesView';
+
 import type { MessagesLoaderData } from './loader';
 
 interface MessagesPageProps {

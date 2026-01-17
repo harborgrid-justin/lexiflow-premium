@@ -1,13 +1,15 @@
-import { useTheme } from "@/hooks/useTheme";
+import React, { useCallback } from 'react';
+
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useSort } from '@/hooks/useSort';
-import { DataService } from '@/services/data/data-service.service';
+import { useTheme } from "@/hooks/useTheme";
 import { useToggle } from '@/hooks/useToggle';
-import { Case } from '@/types';
+import { DataService } from '@/services/data/data-service.service';
+import { type Case } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import React, { useCallback } from 'react';
+
 
 export const useCaseListActive = (filteredCases: Case[]) => {
     const { theme } = useTheme();

@@ -2,6 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { format, formatDistanceToNow, isFuture, isPast, isToday } from 'date-fns';
 import {
   AlertTriangle,
   Calendar,
@@ -24,9 +25,11 @@ import {
   Users,
   XCircle
 } from 'lucide-react';
+import { useMemo, useState } from 'react'; // ============================================================================
+
 import { cn } from '@/lib/cn';
-import { format, formatDistanceToNow, isFuture, isPast, isToday } from 'date-fns';
-import React, { useMemo, useState } from 'react'; // ============================================================================
+
+import type React from 'react';
 // Types & Interfaces
 // ============================================================================
 export type EventType = | 'filing' | 'hearing' | 'deadline' | 'document' | 'motion' | 'order' | 'discovery' | 'deposition' | 'conference' | 'trial' | 'settlement' | 'note' | 'milestone' | 'other'; export type EventStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'missed'; export interface TimelineEvent {

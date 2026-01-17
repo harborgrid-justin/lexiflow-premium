@@ -16,21 +16,21 @@ import { Download, FileText } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Button } from '@/components/atoms/Button/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { knowledgeApi } from '@/lib/frontend-api';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Button } from '@/components/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { knowledgeApi } from '@/lib/frontend-api';
 
 // Types
-import { Precedent } from '@/types';
+import { type Precedent } from '@/types';
 
 // ============================================================================
 // COMPONENT

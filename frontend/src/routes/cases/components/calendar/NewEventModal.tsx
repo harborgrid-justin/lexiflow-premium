@@ -4,13 +4,15 @@
  * @description Modal for creating new calendar events with validation.
  */
 
+import { Calendar, Clock, FileText, MapPin, Tag } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
+
 import type { CalendarEventType } from '@/types';
-import { Calendar, Clock, FileText, MapPin, Tag } from 'lucide-react';
-import React, { useState } from 'react';
 
 interface NewEventModalProps {
   isOpen: boolean;

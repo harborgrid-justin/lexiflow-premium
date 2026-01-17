@@ -9,16 +9,17 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { CheckCircle, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useWindow } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 
 interface CaseOverviewStatsProps {
     caseId?: string;

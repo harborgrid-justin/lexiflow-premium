@@ -9,12 +9,13 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Calendar, FileText, Gavel, GitBranch, MessageSquare, Users } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { Badge, BadgeProps } from '@/components/atoms/Badge';
+import { Badge, type BadgeProps } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -23,7 +24,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Motion } from '@/types';
+import { type Motion } from '@/types';
 
 interface MotionListProps {
   motions: Motion[];

@@ -16,12 +16,12 @@
  * 5. Controlled components ensure React owns state (single source of truth)
  */
 
-import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
-import { Card } from '@/components/molecules/Card/Card';
-import type { CreateTrustAccountDto, TrustAccountStatus } from '@/types/trust-accounts';
-import { TrustAccountType as AccountType } from '@/types/trust-accounts';
 import { Building, CheckCircle, Landmark, Shield, Users } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { TrustAccountType as AccountType } from '@/types/trust-accounts';
+
 import { AccountInfoStep } from './components/AccountInfoStep';
 import { BankDetailsStep } from './components/BankDetailsStep';
 import { ComplianceStep } from './components/ComplianceStep';
@@ -29,6 +29,10 @@ import { FormNavigation } from './components/FormNavigation';
 import { ReviewStep } from './components/ReviewStep';
 import { SignatoriesStep } from './components/SignatoriesStep';
 import { StepIndicator, type Step } from './components/StepIndicator';
+
+import type { CreateTrustAccountDto, TrustAccountStatus } from '@/types/trust-accounts';
+
+import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
 
 /**
  * Form Steps Enum

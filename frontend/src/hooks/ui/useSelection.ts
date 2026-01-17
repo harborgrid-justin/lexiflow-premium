@@ -96,7 +96,9 @@
 // =============================================================================
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
+
+import type React from "react";
 
 // =============================================================================
 // TYPES

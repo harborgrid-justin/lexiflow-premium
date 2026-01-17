@@ -105,7 +105,8 @@
  * @module providers/RootProviders
  */
 
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
+
 import { ApplicationLayer } from './application/ApplicationLayer';
 import { InfrastructureLayer } from './infrastructure/InfrastructureLayer';
 

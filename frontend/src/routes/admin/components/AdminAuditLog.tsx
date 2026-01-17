@@ -1,15 +1,18 @@
-import { useQuery } from '@/hooks/backend';
-import { useToast, useWindow } from '@/providers';
-import { DataService } from '@/services/data/data-service.service';
-import { ChainedLogEntry, ChainService, IntegrityReport } from '@/services/infrastructure/chainService';
-import { cn } from '@/lib/cn';
+import { AlertOctagon, Link, Loader2, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
-import { AuditLogEntry } from '@/types';
-import { AlertOctagon, Link, Loader2, User } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { cn } from '@/lib/cn';
+import { useToast, useWindow } from '@/providers';
+import { DataService } from '@/services/data/data-service.service';
+import { type ChainedLogEntry, ChainService, type IntegrityReport } from '@/services/infrastructure/chainService';
+import { type AuditLogEntry } from '@/types';
+
+
 import { AuditLogControls } from './audit/AuditLogControls';
 import { LedgerVisualizer } from './ledger/LedgerVisualizer';
 

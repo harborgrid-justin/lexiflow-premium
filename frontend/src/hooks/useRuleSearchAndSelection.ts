@@ -18,13 +18,14 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
+import { type LegalRule } from "@/types";
+
 import { useDebounce } from "./useDebounce";
 
 // Types
-import { LegalRule } from "@/types";
 
 // Config
-import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
 
 // ============================================================================
 // TYPES & INTERFACES

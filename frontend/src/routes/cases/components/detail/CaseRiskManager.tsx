@@ -9,24 +9,27 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { AlertTriangle, Loader2, Plus, ShieldAlert, TrendingUp } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { RiskDetail } from './risk/RiskDetail';
-import { RiskList } from './risk/RiskList';
+
 
 // Internal Dependencies - Hooks & Context
-import { useWindow } from '@/providers';
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { useCaseRisks } from '@/routes/cases/hooks/useCaseRisks';
-import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Case, Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '@/types';
+import { type Case, type Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '@/types';
+
+import { RiskDetail } from './risk/RiskDetail';
+import { RiskList } from './risk/RiskList';
 
 interface CaseRiskManagerProps {
     caseData: Case;

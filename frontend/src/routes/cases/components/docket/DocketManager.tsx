@@ -28,18 +28,19 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { DocketAnalytics } from './DocketAnalytics';
 import { DocketCalendar } from './DocketCalendar';
 import { DocketSettings } from './DocketSettings';
 import { DocketSheet } from './DocketSheet';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/lib/cn';
 
 type DocketView = 'all' | 'filings' | 'orders' | 'calendar' | 'upcoming' | 'stats' | 'sync';
 
@@ -93,7 +94,7 @@ export const DocketManager: React.FC<DocketManagerProps> = ({ initialTab }) => {
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = PARENT_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs![0]!.id as DocketView);
+      setActiveTab(parent.subTabs[0]!.id as DocketView);
     }
   }, []);
 

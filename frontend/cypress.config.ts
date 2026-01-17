@@ -6,6 +6,7 @@
  */
 
 import { defineConfig } from 'cypress';
+
 import { URLS } from './src/config/ports.config';
 
 export default defineConfig({

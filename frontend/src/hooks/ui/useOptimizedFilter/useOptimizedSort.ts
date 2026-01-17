@@ -4,6 +4,7 @@
  */
 
 import { useCallback, useMemo, useState, useTransition } from "react";
+
 import type { OptimizedSortReturn } from "./types";
 
 export function useOptimizedSort<T>(

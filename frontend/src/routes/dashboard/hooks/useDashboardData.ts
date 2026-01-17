@@ -1,12 +1,12 @@
 import { useQuery } from "@/hooks/useQueryHooks";
 import {
-  BillingStats,
-  DashboardAlert,
+  type BillingStats,
+  type DashboardAlert,
   dashboardService,
-  DashboardStats,
+  type DashboardStats,
 } from "@/services/domain/dashboard.service";
-import { WorkflowTask } from "@/types";
-import { ChartDataPoint } from "@/types/dashboard";
+import { type WorkflowTask } from "@/types";
+import { type ChartDataPoint } from "@/types/dashboard";
 
 /**
  * Hook to fetch dashboard statistics

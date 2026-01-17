@@ -5,8 +5,6 @@
  * metrics, and action buttons.
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -19,6 +17,10 @@ import {
   Trash2,
   X
 } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import { formatLastSync, getStatusColor, getStatusLabel } from './utils';
 
 // interface ConnectionCardProps {

@@ -5,11 +5,12 @@
  * Displays court dates, filing deadlines, and important milestones
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { format, formatDistanceToNow, isPast, isThisWeek, isToday, isTomorrow } from 'date-fns';
 import { AlertCircle, Calendar, CheckCircle2, Clock, Flag } from 'lucide-react';
 import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================

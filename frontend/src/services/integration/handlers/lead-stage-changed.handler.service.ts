@@ -18,13 +18,18 @@ export class LeadStageChangedHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.LEAD_STAGE_CHANGED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]
+    payload: SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED],
   ) {
     const actions: string[] = [];
 
     // Only trigger conflict checks for specific stages
     if (payload.stage === "Engagement" || payload.stage === "Conflict Check") {
-      await DataService.compliance.runConflictCheck(payload.clientName);
+      const { compliance } = DataService as {
+        compliance: {
+          runConflictCheck: (clientName: string) => Promise<void>;
+        };
+      };
+      await compliance.runConflictCheck(payload.clientName);
       actions.push("Triggered Automated Conflict Check");
     }
 

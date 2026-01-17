@@ -24,21 +24,22 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
-import { useTheme } from "@/hooks/useTheme";
 import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { useResizeObserver } from '@/hooks/useResizeObserver';
+import { useTheme } from "@/hooks/useTheme";
 import { useViewportTransform } from '@/hooks/useViewportTransform';
 
 // Components
-import { GraphOverlay } from './GraphOverlay';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { type Case, type EvidenceItem, type NexusNodeData, type Party } from '@/types';
 import { NODE_STRIDE } from '@/utils/nexusPhysics';
+
+import { GraphOverlay } from './GraphOverlay';
 import { buildGraphData, getNodeLabelYOffset, getNodeRadius, getNodeStrokeColor } from './utils/graphData';
 
 // Types
-import { Case, EvidenceItem, NexusNodeData, Party } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -138,9 +139,9 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
           state.buffer[idxT] !== undefined &&
           state.buffer[idxT + 1] !== undefined
         ) {
-          line.setAttribute('x1', state.buffer[idxS]!.toString());
+          line.setAttribute('x1', state.buffer[idxS].toString());
           line.setAttribute('y1', state.buffer[idxS + 1]!.toString());
-          line.setAttribute('x2', state.buffer[idxT]!.toString());
+          line.setAttribute('x2', state.buffer[idxT].toString());
           line.setAttribute('y2', state.buffer[idxT + 1]!.toString());
         }
       }

@@ -1,6 +1,7 @@
+import { MessageSquare } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { MessageSquare } from 'lucide-react';
 
 export function ClientPortalMessages() {
     const { theme } = useTheme();

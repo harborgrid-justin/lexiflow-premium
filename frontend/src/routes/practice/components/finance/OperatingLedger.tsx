@@ -1,13 +1,15 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Card } from '@/components/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { FirmExpense, OperatingSummary } from '@/types';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type FirmExpense, type OperatingSummary } from '@/types';
 import { Formatters } from '@/utils/formatters';
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
+
 interface OperatingLedgerProps {
   expenses: FirmExpense[];
 }

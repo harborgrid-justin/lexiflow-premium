@@ -1,5 +1,6 @@
-import { useMinDisplayTime } from '@/hooks/performance/useMinDisplayTime';
 import React from 'react';
+
+import { useMinDisplayTime } from '@/hooks/performance/useMinDisplayTime';
 
 interface DeterministicLoaderProps {
   isLoading: boolean;

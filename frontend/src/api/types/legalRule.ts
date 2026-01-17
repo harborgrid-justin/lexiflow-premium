@@ -6,7 +6,7 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { LegalRule } from '@/types/legal-research';
+import { type LegalRule } from '@/types/legal-research';
 
 /**
  * @deprecated MOCK DATA - Use DataService.knowledge instead

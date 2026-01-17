@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CentredLoader } from './CentredLoader';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CentredLoader> = {
   title: 'Components/Atoms/CentredLoader/CentredLoader',

@@ -9,8 +9,9 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { AlertCircle, BookOpen, Briefcase, Calendar, DollarSign, Gavel, Globe, Scale } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
 import { Card } from '@/components/molecules/Card';
 
@@ -21,7 +22,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Case } from '@/types';
+import { type Case } from '@/types';
 
 interface MatterInfoProps {
   caseData: Case;

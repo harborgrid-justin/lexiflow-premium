@@ -4,11 +4,13 @@
  * @description Individual lead display card
  */
 
+import { Clock } from 'lucide-react';
 import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Clock } from 'lucide-react';
-import { Lead } from '../../types';
+
+import { type Lead } from '../../types';
 
 interface LeadCardProps {
   lead: Lead;

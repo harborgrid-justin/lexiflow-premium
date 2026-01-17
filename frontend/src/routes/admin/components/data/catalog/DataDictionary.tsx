@@ -1,16 +1,17 @@
+import { Eye, Filter, Loader2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { DataDictionaryItem } from '@/types';
-import { Eye, Filter, Loader2 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type DataDictionaryItem } from '@/types';
+
 import { DictionaryItemDetail } from './DictionaryItemDetail';
 
 export function DataDictionary() {

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RuleSelector } from './RuleSelector';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof RuleSelector> = {
   title: 'Components/Molecules/RuleSelector/RuleSelector',

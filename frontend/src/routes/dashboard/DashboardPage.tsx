@@ -12,20 +12,24 @@
  * @module routes/dashboard/DashboardPage
  */
 
-import { PageFrame } from "@/layouts/PageFrame";
-import type { DocketEntry, TimeEntry } from '@/types';
 import { Suspense } from 'react';
 import { Await, useRevalidator } from 'react-router';
+
+import { PageFrame } from "@/layouts/PageFrame";
+
 import { RouteSkeleton } from '../_shared/RouteSkeletons';
-import { DashboardProvider } from './DashboardProvider';
-import DashboardView from './DashboardView';
+
 import {
   DashboardRecentDocket,
   DashboardRecentTime,
   DeferredDataError,
   DeferredDataSkeleton
 } from './components/RecentActivityWidgets';
+import { DashboardProvider } from './DashboardProvider';
+import DashboardView from './DashboardView';
+
 import type { DashboardLoaderData } from './loader';
+import type { DocketEntry, TimeEntry } from '@/types';
 
 interface DashboardPageProps {
   loaderData: DashboardLoaderData;

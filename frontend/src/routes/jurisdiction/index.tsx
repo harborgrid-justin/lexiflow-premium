@@ -12,11 +12,14 @@
  * @module routes/jurisdiction/index
  */
 
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+
 import JurisdictionPage from './JurisdictionPage';
 import { jurisdictionLoader } from './loader';
+
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags

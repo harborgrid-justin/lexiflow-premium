@@ -3,14 +3,15 @@
  * @description Headless hook for Client Analytics state management
  */
 
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from "@/hooks/backend";
-import { DataService } from "@/services/data/data-service.service";
-import { QUERY_KEYS } from "@/services/data/query-keys.service";
-import { getChartTheme } from "@/utils/chartConfig";
 import { useState } from "react";
-import type { TabType } from "./types";
+
+import { useQuery } from "@/hooks/backend";
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { DataService } from "@/services/data/data-service.service";
+import { type CRMAnalytics } from "@/types/crm";
+import { getChartTheme } from "@/utils/chartConfig";
+
 import {
   calculateAvgNPS,
   calculateAvgProfitMargin,
@@ -19,12 +20,17 @@ import {
   countHighRiskClients,
 } from "./utils";
 
-import { CRMAnalytics } from "@/types/crm";
+import type { TabType } from "./types";
+
+import { QUERY_KEYS } from "@/services/data/query-keys.service";
+
+
+
 
 export function useClientAnalytics() {
   const { theme, mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode as "light" | "dark");
-  const chartTheme = getChartTheme(mode as "light" | "dark");
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
   const [activeTab, setActiveTab] = useState<TabType>("profitability");
 
   // Data queries

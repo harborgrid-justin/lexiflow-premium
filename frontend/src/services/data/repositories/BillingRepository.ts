@@ -82,7 +82,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getTimeEntries(
     filters?:
       | { caseId?: string; userId?: string; page?: number; limit?: number }
-      | string
+      | string,
   ) {
     try {
       if (typeof filters === "string") {
@@ -108,19 +108,19 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getWIPStats(): Promise<WIPStat[]> {
     try {
       const [clientsResponse, entriesResponse] = await Promise.all([
-        this.clientsApi.getAll(),
-        this.timeApi.getAll(),
+        this.clientsApi.getAll() as Promise<unknown>,
+        this.timeApi.getAll() as Promise<unknown>,
       ]);
 
       // Handle paginated response format
       const clients = Array.isArray(clientsResponse)
         ? clientsResponse
-        : clientsResponse?.data || [];
+        : (clientsResponse as { data?: Client[] }).data || [];
 
       // Handle entries response format
       const entries = Array.isArray(entriesResponse)
         ? entriesResponse
-        : (entriesResponse as { data?: unknown[] })?.data || [];
+        : (entriesResponse as { data?: TimeEntry[] }).data || [];
 
       // Aggregate WIP by Client
       const caseToClientMap: Record<string, string> = {};
@@ -133,7 +133,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       }
       const wipMap: Record<string, number> = {};
       if (Array.isArray(entries)) {
-        entries.forEach((e: TimeEntry) => {
+        (entries as TimeEntry[]).forEach((e) => {
           if (e.status === "Unbilled") {
             const clientId = caseToClientMap[e.caseId];
             if (clientId) {
@@ -175,7 +175,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   }
 
   async getRealizationStats(
-    mode: "light" | "dark" = "light"
+    mode: "light" | "dark" = "light",
   ): Promise<unknown> {
     try {
       const invoices = await this.getInvoices();
@@ -198,7 +198,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     } catch (error) {
       console.error(
         "[BillingRepository] Failed to get realization stats",
-        error
+        error,
       );
       return [];
     }
@@ -219,7 +219,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async createInvoice(
     clientName: string,
     caseId: string,
-    entries: TimeEntry[]
+    entries: TimeEntry[],
   ): Promise<Invoice> {
     try {
       const entriesSum = entries.reduce((sum, e) => sum + e.total, 0);
@@ -268,7 +268,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       if (updates.status) {
         await IntegrationEventPublisher.publish(
           SystemEventType.INVOICE_STATUS_CHANGED,
-          { invoice: updated }
+          { invoice: updated },
         );
       }
       return updated;
@@ -308,7 +308,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     } catch (_error) {
       console.error(
         "[BillingRepository] Failed to get trust transactions",
-        _error
+        _error,
       );
       return [];
     }
@@ -325,11 +325,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async getTopAccounts(): Promise<Client[]> {
     try {
-      const clientsResponse = await this.clientsApi.getAll();
+      const clientsResponse = (await this.clientsApi.getAll()) as unknown;
       // Handle paginated response format
       const clients = Array.isArray(clientsResponse)
         ? clientsResponse
-        : clientsResponse?.data || [];
+        : (clientsResponse as { data?: Client[] }).data || [];
 
       if (!Array.isArray(clients)) {
         return [];
@@ -349,7 +349,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       start.setDate(1); // Start of current month
       return await this.analyticsApi.getOverview(
         start.toISOString(),
-        end.toISOString()
+        end.toISOString(),
       );
     } catch (error) {
       console.error("[BillingRepository] Failed to get overview stats", error);
@@ -377,16 +377,16 @@ export class BillingRepository extends Repository<TimeEntry> {
       // Use invoices API to get overdue/pending invoices
       const invoices = await this.invoicesApi.getAll({ status: "Overdue" });
       return invoices.map((inv: Record<string, unknown>) => ({
-        id: inv.id,
+        id: inv["id"],
         clientName: "Client Name", // Should resolve client
-        invoiceNumber: inv.invoiceNumber,
-        amount: inv.total,
+        invoiceNumber: inv["invoiceNumber"],
+        amount: inv["total"],
         daysOverdue: Math.floor(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (new Date().getTime() - new Date(inv.dueDate as any).getTime()) /
-            (1000 * 60 * 60 * 24)
+          (new Date().getTime() - new Date(inv["dueDate"] as any).getTime()) /
+            (1000 * 60 * 60 * 24),
         ),
-        status: inv.status,
+        status: inv["status"],
       }));
     } catch (error) {
       console.error("[BillingRepository] Failed to get collections", error);
@@ -418,7 +418,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     } catch (error) {
       console.error(
         "[BillingRepository] Failed to get financial performance",
-        error
+        error,
       );
       return {
         period: "YTD",

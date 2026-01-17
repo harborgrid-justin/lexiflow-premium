@@ -17,20 +17,22 @@ import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
-import { StrategySection } from './strategy/StrategySection';
+
 
 // Internal Dependencies - Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { useCaseStrategy } from '@/routes/cases/hooks/useCaseStrategy';
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
+import { useCaseStrategy } from '@/routes/cases/hooks/useCaseStrategy';
 // import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
-import { Citation, Defense, EvidenceItem, LegalArgument } from '@/types';
+import { type Citation, type Defense, type EvidenceItem, type LegalArgument } from '@/types';
+
+import { StrategySection } from './strategy/StrategySection';
 
 interface CaseStrategyProps {
   caseId: string;
@@ -93,7 +95,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
       if (editingItem) {
         setCitations(citations.map(c => c.id === id ? itemToSave as Citation : c));
       } else {
-        setCitations([...citations, itemToSave as Citation]);
+        setCitations([...citations, itemToSave]);
       }
     } else if (modalType === 'Argument') {
       const argItem = newItem as Partial<LegalArgument>;
@@ -113,7 +115,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
       if (editingItem) {
         setArgs(args.map(a => a.id === id ? itemToSave as LegalArgument : a));
       } else {
-        setArgs([...args, itemToSave as LegalArgument]);
+        setArgs([...args, itemToSave]);
       }
     } else {
       const defenseItem = newItem as Partial<Defense>;
@@ -131,7 +133,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
       if (editingItem) {
         setDefenses(defenses.map(d => d.id === id ? itemToSave as Defense : d));
       } else {
-        setDefenses([...defenses, itemToSave as Defense]);
+        setDefenses([...defenses, itemToSave]);
       }
     }
 

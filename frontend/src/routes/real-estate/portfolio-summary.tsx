@@ -1,12 +1,15 @@
 /** * Real Estate: Portfolio Summary Route * * Provides a comprehensive overview of the organization's real estate portfolio, * including property counts, total acreage, value assessments, and key metrics. * * @module routes/real-estate/portfolio-summary */
 
-import { DataService } from '@/services/data/data-service.service';
-import type { PortfolioStats } from '@/services/domain/RealEstateDomain';
 import { Building2, DollarSign, Landmark, MapPin, PieChart, TrendingUp } from 'lucide-react';
 import { Link, useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/portfolio-summary"; // ============================================================================
+import type { PortfolioStats } from '@/services/domain/RealEstateDomain';
 // Types
 // ============================================================================
 interface LoaderData {

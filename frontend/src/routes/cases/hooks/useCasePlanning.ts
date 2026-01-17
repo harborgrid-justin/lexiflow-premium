@@ -1,6 +1,6 @@
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/data-service.service';
-import { CasePhase, WorkflowTask } from '@/types';
+import { type CasePhase, type WorkflowTask } from '@/types';
 
 export const useCasePlanning = (caseId: string) => {
     const { data: phases = [] } = useQuery<CasePhase[]>(

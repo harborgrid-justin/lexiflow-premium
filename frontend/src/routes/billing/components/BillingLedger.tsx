@@ -1,12 +1,15 @@
+import { Plus } from 'lucide-react';
+import { memo, useCallback, useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
 import { OperatingLedger, TrustLedger } from '@/routes/practice/components/finance';
-import { Plus } from 'lucide-react';
-import { memo, useCallback, useState } from 'react';
+
 import { useLedgerTransactions } from '../hooks/useLedgerTransactions';
+
 import { LedgerTabs } from './LedgerTabs';
-import { TransactionData, TransactionForm } from './TransactionForm';
+import { type TransactionData, TransactionForm } from './TransactionForm';
 
 function BillingLedgerComponent() {
   const { openWindow } = useWindow();

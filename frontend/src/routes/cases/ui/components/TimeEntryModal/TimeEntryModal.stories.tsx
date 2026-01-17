@@ -1,6 +1,8 @@
-import { CaseId } from '@/types';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { type CaseId } from '@/types';
+
 import { TimeEntryModal } from './TimeEntryModal';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TimeEntryModal> = {
   title: 'Components/Organisms/TimeEntryModal/TimeEntryModal',

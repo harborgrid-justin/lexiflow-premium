@@ -3,11 +3,13 @@
  * Display and filter time entries with bulk operations
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import type { TimeEntry } from '@/types/financial';
 import { Check, Clock, DollarSign, Filter } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
+
+import type { TimeEntry } from '@/types/financial';
 
 interface TimeEntryListProps {
   entries: TimeEntry[];

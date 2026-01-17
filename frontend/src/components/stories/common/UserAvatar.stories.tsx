@@ -1,6 +1,8 @@
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
+
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * UserAvatar component displays user profile pictures or initials.

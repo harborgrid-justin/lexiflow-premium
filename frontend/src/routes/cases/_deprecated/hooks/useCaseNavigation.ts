@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react';
-import { isValidUUID, getRouteMatterId, navigateTo } from '../utils/navigationUtils';
+
 import { PATHS } from '@/config/paths.config';
+
+import { isValidUUID, getRouteMatterId, navigateTo } from '../utils/navigationUtils';
 
 export function useCaseNavigation() {
   const matterId = useMemo(() => getRouteMatterId(window.location.hash), []);

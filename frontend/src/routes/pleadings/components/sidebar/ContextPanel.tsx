@@ -1,17 +1,18 @@
-import { Button } from '@/components/atoms/Button/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 import { BookOpen, ChevronRight, FileText, Loader2, Plus, Scale, Search, Users } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
 // ✅ Migrated to backend API (2025-12-21)
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useDebounce } from '@/hooks/useDebounce';
-import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
-import { CaseRepository } from '@/services/domain/case.service';
-import { DocketRepository } from '@/services/domain/docket.service';
-import { DocketEntry } from '@/types';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
+import { type CaseRepository } from '@/services/domain/case.service';
+import { type DocketRepository } from '@/services/domain/docket.service';
+import { type DocketEntry } from '@/types';
 
 interface ContextPanelProps {
   caseId: string;
@@ -68,7 +69,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
 
     // Add docket entries as facts
     docketEntries.forEach((entry) => {
-      const docketEntry = entry as DocketEntry;
+      const docketEntry = entry;
       allFacts.push({
         id: docketEntry.id,
         content: `${docketEntry.title || docketEntry.description || 'Docket Entry'} - Filed on ${docketEntry.dateFiled ? new Date(docketEntry.dateFiled).toLocaleDateString() : 'N/A'}`,

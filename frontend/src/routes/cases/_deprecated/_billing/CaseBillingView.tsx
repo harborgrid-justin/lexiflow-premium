@@ -11,8 +11,10 @@
  * - Handles UI events (navigation)
  */
 
-import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
 import { useNavigate } from 'react-router';
+
+import { CaseHeader } from '@/routes/cases/ui/components/CaseHeader';
+
 import { useCaseBilling } from './CaseBillingProvider';
 
 function formatCurrency(amount: number): string {

@@ -6,7 +6,7 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { Playbook } from "@/types/playbook";
+import { type Playbook } from "@/types/playbook";
 
 /**
  * @deprecated MOCK DATA - Use DataService.knowledge instead

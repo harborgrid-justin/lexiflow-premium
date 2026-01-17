@@ -4,7 +4,9 @@
  * @description Context-sensitive toolbar that adapts based on selection and user behavior.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+import type React from "react";
 
 /**
  * Icon type - can be any React component

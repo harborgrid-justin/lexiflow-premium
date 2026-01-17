@@ -17,31 +17,32 @@ import { Bar, BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Toolti
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Card } from '@/components/molecules/Card/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { ChartColorService } from "@/lib/theme/chartColorService";
 
 // Components
-import { Card } from '@/components/molecules/Card/Card';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
+import { type DocketEntry } from '@/types';
+
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Types & Interfaces
-import { DocketEntry } from '@/types';
 
 export const DocketAnalytics: React.FC = () => {
   const { theme, mode } = useTheme();
 
   // Get chart theme colors
-  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
-  const chartTheme = ChartColorService.getChartTheme(mode as 'light' | 'dark');
-  const tooltipStyle = ChartColorService.getTooltipStyle(mode as 'light' | 'dark');
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = ChartColorService.getChartTheme(mode);
+  const tooltipStyle = ChartColorService.getTooltipStyle(mode);
 
   // Enterprise Data Access
   const { data: entries } = useQuery<DocketEntry[]>(

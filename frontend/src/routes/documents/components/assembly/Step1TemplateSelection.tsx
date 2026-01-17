@@ -1,9 +1,10 @@
-import React from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
 import { Briefcase, File, FileText, Loader2, Scale } from 'lucide-react';
+import React from 'react';
+
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 interface Step1TemplateSelectionProps {
   onSelectTemplate: (templateName: string) => void;
 }

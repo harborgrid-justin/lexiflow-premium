@@ -20,18 +20,20 @@
  * - Templates
  */
 
-import type { Client, Message } from "@/types";
-import type { NotificationDTO } from "@/types/notifications";
 import {
   normalizeClient,
   normalizeClients,
   normalizeMessage,
   normalizeMessages,
 } from "../normalization/communications";
+
 import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
-import type { PaginatedResult, Result } from "./types";
 import { failure, success } from "./types";
+
+import type { PaginatedResult, Result } from "./types";
+import type { Client, Message } from "@/types";
+import type { NotificationDTO } from "@/types/notifications";
 
 /**
  * Correspondence types

@@ -8,14 +8,16 @@
  * @description Main view component (~90 LOC target) - Pure JSX presentation layer
  */
 
+import { AlertTriangle, Award, DollarSign, Star, TrendingUp } from 'lucide-react';
+
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { cn } from '@/lib/cn';
-import { AlertTriangle, Award, DollarSign, Star, TrendingUp } from 'lucide-react';
+
+import { TABS } from './constants';
 import { LTVTab } from './LTVTab';
 import { ProfitabilityTab } from './ProfitabilityTab';
 import { RiskTab } from './RiskTab';
 import { SatisfactionTab } from './SatisfactionTab';
-import { TABS } from './constants';
 import { useClientAnalytics } from './useClientAnalytics';
 import { formatCurrency, formatCurrencyMillions } from './utils';
 

@@ -9,15 +9,15 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { FolderOpen, Loader2 } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
-import { EvidenceInventory } from '@/routes/evidence/components/EvidenceInventory';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useEvidenceManager } from '@/hooks/useEvidenceManager';
+import { EvidenceInventory } from '@/routes/evidence/components/EvidenceInventory';
 
 interface CaseEvidenceProps {
   caseId: string;

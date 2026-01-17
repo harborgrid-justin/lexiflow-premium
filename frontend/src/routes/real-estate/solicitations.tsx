@@ -1,13 +1,16 @@
 /** * Real Estate: Solicitations Route * * Manages real estate solicitations including requests for proposals (RFPs), * bid invitations, and procurement activities for property acquisitions or leases. * * @module routes/real-estate/solicitations */
 
-import { DataService } from '@/services/data/data-service.service';
-import type { RealEstateSolicitation } from '@/services/domain/RealEstateDomain';
 import { Award, Clock, FileText, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router-dom';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/solicitations";
+import type { RealEstateSolicitation } from '@/services/domain/RealEstateDomain';
 type SolicitationStatus = 'Draft' | 'Open' | 'Closed' | 'Awarded' | 'Cancelled'; // ============================================================================
 // Types
 // ============================================================================

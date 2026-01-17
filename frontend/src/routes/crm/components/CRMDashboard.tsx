@@ -17,21 +17,21 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContaine
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { ChartColorService } from "@/lib/theme/chartColorService";
 import { DataService } from '@/services/data/data-service.service';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { ClientStatus } from '@/types/financial';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Card } from '@/components/molecules/Card/Card';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
-import { ChartColorService } from "@/lib/theme/chartColorService";
 import { getChartTheme } from '@/utils/chartConfig';
 
 // Types
@@ -42,8 +42,8 @@ import type { CRMAnalytics, CRMLead } from '@/types';
 // ============================================================================
 export function CRMDashboard() {
   const { theme, mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
 
   // Enterprise Data Access
   const { data: analyticsData } = useQuery<CRMAnalytics>(

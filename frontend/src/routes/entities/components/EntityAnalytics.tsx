@@ -18,15 +18,15 @@ import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
 
 // Types
-import { LegalEntity } from '@/types';
+import { type LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -42,7 +42,7 @@ interface EntityAnalyticsProps {
 
 export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) => {
     const { theme, mode } = useTheme();
-    const colors = ChartColorService.getCategoryColors(mode as 'light' | 'dark');
+    const colors = ChartColorService.getCategoryColors(mode);
 
     // Memoize Stats Calculation
     const { typeStats, riskStats, jurisdictionCount, topHighRisk } = useMemo(() => {

@@ -3,8 +3,10 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { TaskBulkOperationResult } from "@/types";
+
 import { validateArray, validateId } from "./utils";
+
+import type { TaskBulkOperationResult } from "@/types";
 
 export class TaskBulkService {
   private readonly baseUrl = "/tasks";

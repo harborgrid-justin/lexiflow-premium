@@ -7,9 +7,11 @@
  * Rules Domain - View Component
  */
 
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { Scale } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useRules } from './RulesProvider';
 
 export function RulesView() {

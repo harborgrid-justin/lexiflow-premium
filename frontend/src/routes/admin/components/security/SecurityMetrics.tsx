@@ -1,7 +1,9 @@
+import { Activity, TrendingUp } from 'lucide-react';
+
+import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { Activity, TrendingUp } from 'lucide-react';
+
 import type { SecurityMetric } from './types';
 
 interface SecurityMetricsProps {

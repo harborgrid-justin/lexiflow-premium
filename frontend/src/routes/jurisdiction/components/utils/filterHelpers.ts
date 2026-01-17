@@ -6,7 +6,7 @@
  * @module components/jurisdiction/utils/filterHelpers
  */
 
-import { LegalRule } from '@/types';
+import { type LegalRule } from '@/types';
 
 /**
  * Filters states by search term matching name or region

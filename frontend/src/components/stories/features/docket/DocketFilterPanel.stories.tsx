@@ -1,7 +1,9 @@
-import { DocketFilterPanel } from '@/routes/cases/components/docket/DocketFilterPanel';
-import { Case, CaseId, CaseStatus, MatterType, PartyId } from '@/types';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
+import { DocketFilterPanel } from '@/routes/cases/components/docket/DocketFilterPanel';
+import { type Case, type CaseId, CaseStatus, MatterType, type PartyId } from '@/types';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * DocketFilterPanel provides a sidebar filter panel for docket entries

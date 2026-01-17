@@ -9,13 +9,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { JurisdictionProvider } from './JurisdictionProvider';
 import { JurisdictionView } from './JurisdictionView';
+
 import type { JurisdictionLoaderData } from './loader';
 
 export function JurisdictionPage() {
-  const initialData = useLoaderData() as JurisdictionLoaderData;
+  const initialData = useLoaderData();
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Jurisdiction" />}>
       <Await resolve={initialData} errorElement={<RouteError title="Failed to load Jurisdiction" />}>

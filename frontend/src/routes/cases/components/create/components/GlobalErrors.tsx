@@ -2,8 +2,8 @@
  * Global error display component
  */
 
-import React from 'react';
 import { AlertCircle } from 'lucide-react';
+import React from 'react';
 
 export interface GlobalErrorsProps {
   errors: Record<string, string>;

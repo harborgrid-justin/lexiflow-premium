@@ -7,8 +7,8 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { WikiArticle, Precedent, QAItem } from '@/types/legal-research';
-import { DocumentId } from '@/types/primitives';
+import { type WikiArticle, type Precedent, type QAItem } from '@/types/legal-research';
+import { type DocumentId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.knowledge instead

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import type { LegalDocument } from '@/types/documents';
 
 interface UseDocumentViewerProps {

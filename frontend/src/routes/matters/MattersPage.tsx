@@ -15,8 +15,11 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { MatterManagement } from './components/list/MatterManagement';
+
 import type { mattersLoader } from './loader';
 
 interface MattersPageProps {

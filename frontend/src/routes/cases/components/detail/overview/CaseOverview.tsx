@@ -15,11 +15,19 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Users } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useCaseOverview } from '@/hooks/useCaseOverview';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type Case, type Party, type TimeEntry } from '@/types';
+
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { CaseOverviewModals } from './CaseOverviewModals';
 import { CaseOverviewStats } from './CaseOverviewStats';
@@ -27,17 +35,11 @@ import { MatterInfo } from './MatterInfo';
 import { OverviewSidebar } from './OverviewSidebar';
 
 // Internal Dependencies - Hooks & Context
-import { useCaseOverview } from '@/hooks/useCaseOverview';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Case, Party, TimeEntry } from '@/types';
 
 interface CaseOverviewProps {
   caseData: Case;

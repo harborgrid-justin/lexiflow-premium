@@ -4,8 +4,9 @@
  * Core document browsing interface with list/grid views, filters, search, and preview.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocumentExplorer } from '../../../../features/operations/documents/DocumentExplorer';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DocumentExplorer> = {
   title: 'Documents/Document Explorer',

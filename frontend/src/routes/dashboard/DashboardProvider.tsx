@@ -1,7 +1,10 @@
-import { useAuth } from "@/hooks/useAuth";
-import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
 import React, { useCallback, useMemo, useState } from 'react';
-import { DashboardContext, DashboardContextValue, DashboardMetrics } from './DashboardContext';
+
+import { useAuth } from "@/hooks/useAuth";
+
+import { DashboardContext, type DashboardContextValue, type DashboardMetrics } from './DashboardContext';
+
+import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
 
 interface DashboardProviderProps {
   children: React.ReactNode;

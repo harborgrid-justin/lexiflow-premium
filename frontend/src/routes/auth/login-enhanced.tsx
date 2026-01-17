@@ -12,16 +12,17 @@
  * - Loading states
  */
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { type FormEvent, useState } from 'react';
+import { useForm, type Resolver } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router';
+
 import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
 import {
   loginSchema,
   mfaCodeSchema,
   type LoginFormData,
 } from '@/services/validation/authSchemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormEvent, useState } from 'react';
-import { useForm, type Resolver } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router';
 
 export default function LoginPage() {
   const navigate = useNavigate();

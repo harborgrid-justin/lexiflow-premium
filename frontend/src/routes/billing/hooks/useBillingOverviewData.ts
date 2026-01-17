@@ -1,8 +1,10 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery, useQueryClient } from "@/hooks/useQueryHooks";
-import { DataService } from "@/services/data/data-service.service";
-import { Client, Invoice, WIPStat } from "@/types";
 import { useCallback } from "react";
+
+import { useQuery, useQueryClient } from "@/hooks/useQueryHooks";
+import { useTheme } from "@/hooks/useTheme";
+import { DataService } from "@/services/data/data-service.service";
+import { type Client, type Invoice, type WIPStat } from "@/types";
+
 
 // ============================================================================
 // Types

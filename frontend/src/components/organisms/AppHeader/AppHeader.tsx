@@ -24,25 +24,27 @@ import React, { useState } from 'react';
 // Components
 import { NotificationCenter } from '@/components/molecules/NotificationCenter';
 import { UserAvatar } from '@/components/molecules/UserAvatar';
-import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
-import { ConnectivityHUD } from '../ConnectivityHUD/ConnectivityHUD';
-import { NeuralCommandBar } from '../NeuralCommandBar/NeuralCommandBar';
-import { GlobalCaseSelector } from '../GlobalCaseSelector/GlobalCaseSelector';
+
 
 // Services & Data
-import { IntentResult } from '@/services/features/research/geminiService';
-import { GlobalSearchResult } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useInterval } from '@/hooks/useInterval';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { type IntentResult } from '@/services/features/research/geminiService';
+import { type GlobalSearchResult } from '@/services/search/searchService';
 
 // Types
-import { User as UserType } from '@/types';
+import { type User as UserType } from '@/types';
+
+import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
+import { ConnectivityHUD } from '../ConnectivityHUD/ConnectivityHUD';
+import { GlobalCaseSelector } from '../GlobalCaseSelector/GlobalCaseSelector';
+import { NeuralCommandBar } from '../NeuralCommandBar/NeuralCommandBar';
 
 // ========================================
 // TYPES & INTERFACES

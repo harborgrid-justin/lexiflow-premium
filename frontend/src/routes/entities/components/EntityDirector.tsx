@@ -17,26 +17,31 @@ import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'reac
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useEntities } from '../hooks/useEntities';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '@/hooks/useTheme';
-import { useWindow } from '@/providers';
-import { DataService } from '@/services/dataService';
 
 // Components
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { DirectorView, EntityNavigation, getEntityFirstTab, getEntityParentTab } from './layout/EntityNavigation';
+import { useTheme } from '@/hooks/useTheme';
+
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
 
 // Types
+import { type EntityType } from '@/types/enums';
+
+import { useEntities } from '../hooks/useEntities';
+
+import { type DirectorView, EntityNavigation, getEntityFirstTab, getEntityParentTab } from './layout/EntityNavigation';
+
 import type { EntityId, LegalEntity } from '@/types';
-import { EntityType } from '@/types/enums';
+
+import { DataService } from '@/services/dataService';
 
 // Sub-components
 const EntityGrid = React.lazy(() => import('./EntityGrid').then(m => ({ default: m.EntityGrid })));

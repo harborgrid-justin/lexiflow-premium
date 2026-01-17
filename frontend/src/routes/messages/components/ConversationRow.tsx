@@ -1,8 +1,9 @@
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
-import { useTheme } from "@/hooks/useTheme";
-import { Conversation } from '@/hooks/useSecureMessenger';
-import { cn } from '@/lib/cn';
 import { Briefcase, ExternalLink } from 'lucide-react';
+
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { type Conversation } from '@/hooks/useSecureMessenger';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 interface ConversationRowProps {
   conv: Conversation;
   isActive: boolean;

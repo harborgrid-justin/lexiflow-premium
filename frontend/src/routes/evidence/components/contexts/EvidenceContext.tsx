@@ -10,9 +10,10 @@
  * - Guideline 38: Concurrent-safe defaults
  */
 
-import { DetailTab, useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
-import { EvidenceItem } from '@/types/evidence'; // Assumed type
 import React, { createContext, useContext, useMemo, useTransition } from 'react';
+
+import { type DetailTab, useEvidenceManager, type ViewMode } from '@/hooks/useEvidenceManager';
+import { type EvidenceItem } from '@/types/evidence'; // Assumed type
 
 // ============================================================================
 // TYPES & INTERFACES

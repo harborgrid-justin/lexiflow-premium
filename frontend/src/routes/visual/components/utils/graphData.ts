@@ -9,7 +9,7 @@
  * - Clear module boundaries (Practice #10)
  */
 
-import { Case, Party, EvidenceItem, NexusNodeData } from '@/types';
+import { type Case, type Party, type EvidenceItem, type NexusNodeData } from '@/types';
 
 export interface GraphNode {
   id: string;

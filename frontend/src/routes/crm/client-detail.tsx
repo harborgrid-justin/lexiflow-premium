@@ -6,13 +6,16 @@
  * @module routes/crm/client-detail
  */
 
+import { redirect, useLoaderData, useNavigate } from 'react-router';
+
 import { useTheme } from "@/hooks/useTheme";
 import { DataService } from '@/services/data/data-service.service';
-import type { Client } from '@/types';
-import { redirect, useLoaderData, useNavigate } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/client-detail";
+import type { Client } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -94,7 +97,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 export default function ClientDetailRoute() {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { item } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { item } = useLoaderData();
 
   return (
     <div className="p-8">

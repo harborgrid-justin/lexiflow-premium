@@ -34,11 +34,12 @@
  * @module hooks/useCommandHistory
  */
 
+import { useCallback, useRef, useState } from "react";
+
 import {
-  Command,
+  type Command,
   CommandHistory,
 } from "@/services/infrastructure/command-history.service";
-import { useCallback, useRef, useState } from "react";
 
 export interface UseCommandHistoryReturn {
   execute: (command: Command) => void;

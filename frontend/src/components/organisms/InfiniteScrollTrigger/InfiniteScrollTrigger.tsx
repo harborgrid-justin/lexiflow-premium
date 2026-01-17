@@ -10,15 +10,15 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

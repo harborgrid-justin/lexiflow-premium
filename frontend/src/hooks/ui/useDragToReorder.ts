@@ -22,14 +22,15 @@
  * ```
  */
 
-import React, {
-  DragEvent,
-  KeyboardEvent,
+import {type DragEvent, type KeyboardEvent} from "react";
+import {
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
+
+import type React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

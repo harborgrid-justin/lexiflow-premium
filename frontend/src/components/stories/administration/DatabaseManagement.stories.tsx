@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DatabaseManagement } from '@/routes/admin/components/data/DatabaseManagement';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Pages/Database Management',

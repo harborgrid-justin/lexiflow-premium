@@ -9,15 +9,15 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
 import { ShieldAlert, Upload, FileText, Cpu, AlertTriangle } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 export const CaseContractReview: React.FC = () => {
   const { theme } = useTheme();

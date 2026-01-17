@@ -17,7 +17,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import React, { useCallback } from 'react';
 
@@ -27,7 +26,8 @@ import React, { useCallback } from 'react';
 // Components
 import { EmptyListState } from '@/components/molecules/EmptyListState/EmptyListState';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { CaseRow } from './CaseRow';
+import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
+
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -38,7 +38,9 @@ import { cn } from '@/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '@/types';
+import { type Case } from '@/types';
+
+import { CaseRow } from './CaseRow';
 
 interface ActiveCaseTableProps {
   filteredCases: Case[];

@@ -24,20 +24,20 @@ import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
+import { Card } from '@/components/molecules/Card/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { ChartColorService } from "@/lib/theme/chartColorService";
 
 // Components
-import { Card } from '@/components/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // Types
-import { MarketingCampaign, MarketingMetric } from '@/types';
+import { type MarketingCampaign, type MarketingMetric } from '@/types';
 
 // ============================================================================
 // COMPONENT
@@ -75,7 +75,7 @@ export function MarketingDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-indigo-100 text-xs font-bold uppercase">Pipeline Value</p>
-              <p className="text-3xl font-bold mt-1">${((totalPipelineValue as number) / 1000).toFixed(1)}M</p>
+              <p className="text-3xl font-bold mt-1">${((totalPipelineValue) / 1000).toFixed(1)}M</p>
             </div>
             <Target className="h-8 w-8 text-white opacity-20" />
           </div>

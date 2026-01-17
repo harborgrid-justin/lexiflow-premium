@@ -1,13 +1,16 @@
 /** * Real Estate: Encroachment Route * * Manages encroachment cases involving unauthorized use or occupation of * government-owned real property, including investigation and resolution tracking. * * @module routes/real-estate/encroachment */
 
-import { DataService } from '@/services/data/data-service.service';
-import type { EncroachmentStatus, RealEstateEncroachment } from '@/services/domain/RealEstateDomain';
 import { AlertTriangle, CheckCircle, FileText, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router-dom';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/encroachment"; // ============================================================================
+import type { EncroachmentStatus, RealEstateEncroachment } from '@/services/domain/RealEstateDomain';
 // Types
 // ============================================================================
 interface LoaderData {

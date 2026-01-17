@@ -17,12 +17,8 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { queryClient, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useNotify } from '@/hooks/useNotify';
 
 // Components
 import { Button } from '@/components/atoms/Button/Button';
@@ -31,9 +27,13 @@ import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { RuleSelector } from '@/components/molecules/RuleSelector/RuleSelector';
 import { UserSelect } from '@/components/molecules/UserSelect/UserSelect';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/data-service.service';
 
 // Types
-import { CaseId, ProjectId, TaskId, TaskPriorityBackend, TaskStatusBackend, User, WorkflowTask } from '@/types';
+import { type CaseId, type ProjectId, type TaskId, TaskPriorityBackend, TaskStatusBackend, type User, type WorkflowTask } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -91,11 +91,11 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     // DETERMINISTIC RENDERING: Use proper ID generation (backend will assign final ID)
     const newTask: WorkflowTask = {
       id: `t-${crypto.randomUUID ? crypto.randomUUID() : `temp-${Math.random()}`}` as TaskId,
-      title: task.title!,
+      title: task.title,
       status: TaskStatusBackend.TODO,
       assignee: task.assignee || 'Unassigned',
       dueDate: task.dueDate || '',
-      priority: (task.priority || TaskPriorityBackend.MEDIUM) as TaskPriorityBackend,
+      priority: (task.priority || TaskPriorityBackend.MEDIUM),
       description: task.description,
       relatedModule: relatedModule,
       relatedItemId: relatedItemId,

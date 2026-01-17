@@ -7,8 +7,10 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
-import type { LegalDocument } from "@/types";
+
 import { validateId, validateObject } from "./validation";
+
+import type { LegalDocument } from "@/types";
 
 /** Get all documents with optional filters */
 export async function getAll(filters?: {
@@ -28,9 +30,9 @@ export async function getAll(filters?: {
       response &&
       typeof response === "object" &&
       "data" in response &&
-      Array.isArray((response as PaginatedResponse<LegalDocument>).data)
+      Array.isArray((response).data)
     ) {
-      return (response as PaginatedResponse<LegalDocument>).data;
+      return (response).data;
     }
 
     // Handle wrapped paginated response (e.g. { success: true, data: { data: [], ... } })
@@ -56,7 +58,7 @@ export async function getAll(filters?: {
 
     // Handle direct array response
     if (Array.isArray(response)) {
-      return response as LegalDocument[];
+      return response;
     }
 
     console.warn(

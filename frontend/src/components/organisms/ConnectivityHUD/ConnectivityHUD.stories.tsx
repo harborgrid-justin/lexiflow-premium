@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ConnectivityHUD } from './ConnectivityHUD';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ConnectivityHUD> = {
   title: 'Components/Organisms/ConnectivityHUD/ConnectivityHUD',

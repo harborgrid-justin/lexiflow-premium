@@ -1,9 +1,11 @@
+import { useEffect, useRef, useState } from "react";
+
 import { QUALITY_RULES_DEFAULT } from "@/config/quality.config";
 import { useQuery } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/data-service.service";
-import { DataAnomaly, QualityMetricHistory } from "@/types";
-import { useEffect, useRef, useState } from "react";
-import { QualityRule } from "../components/data/quality/RuleBuilder";
+import { type DataAnomaly, type QualityMetricHistory } from "@/types";
+
+import { type QualityRule } from "../components/data/quality/RuleBuilder";
 
 export const useDataQualityStudio = (initialTab: string = "dashboard") => {
   const [activeTab, setActiveTab] = useState(initialTab);

@@ -11,13 +11,15 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Box, Activity, FileText, Fingerprint } from 'lucide-react';
+
+import { type EvidenceType } from '@/types';
+
 import { getIconClass } from './EvidenceTypeIcon.styles';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { EvidenceType } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

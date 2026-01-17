@@ -17,22 +17,22 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 // Types
-import { CaseId, TimeEntryPayload } from '@/types';
+import { type CaseId, type TimeEntryPayload } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -1,10 +1,11 @@
+import { ArrowRight, FileText, Wand2 } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
-import { ArrowRight, FileText, Wand2 } from 'lucide-react';
+import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
 
 interface Template {

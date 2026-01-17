@@ -12,9 +12,11 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
 import React, { memo, useEffect, useState } from 'react';
 import { z } from 'zod';
+
+import { AuthApiService } from '@/lib/frontend-api';
+
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
 
 const resetPasswordSchema = z.object({

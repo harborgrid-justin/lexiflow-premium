@@ -4,10 +4,13 @@
  * Modal for viewing and restoring document version history.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+
+import { type LegalDocument, type DocumentId, type UserId, type CaseId } from '@/types';
+
 import { DocumentVersions } from '../../../../features/operations/documents/DocumentVersions';
-import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DocumentVersions> = {
   title: 'Documents/Document Versions',

@@ -3,8 +3,10 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
-import { Case, Matter, MatterPriority, MatterStatus, PracticeArea } from '@/types';
-import { FormData, CaseType } from '../types/newCaseTypes';
+
+import { type Case, type Matter, MatterPriority, MatterStatus, PracticeArea } from '@/types';
+
+import { type FormData, CaseType } from '../types/newCaseTypes';
 
 export interface UseNewCaseFormResult {
   formData: FormData;

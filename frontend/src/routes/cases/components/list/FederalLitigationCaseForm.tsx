@@ -2,8 +2,9 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Case, CaseStatus, CaseType } from '@/types';
 import React, { useReducer, useState } from 'react'; // CreateCaseDto interface matching backend API expectations
+
+import { type Case, CaseStatus, CaseType } from '@/types';
 interface CreateCaseDto {
   title: string; caseNumber?: string; description?: string; type?: string; status?: string; practiceArea?: string; jurisdiction?: string; court?: string; judge?: string | null; referredJudge?: string | null; magistrateJudge?: string | null; causeOfAction?: string; natureOfSuit?: string; natureOfSuitCode?: string; juryDemand?: string; filingDate?: Date; trialDate?: Date; dateTerminated?: Date; relatedCases?: Array<{ court: string; caseNumber: string; relationship?: string }>; clientId?: string | null; leadAttorneyId?: string | null;
 } /** * Form state with discriminated union for type safety */

@@ -28,6 +28,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+
 import type { Route } from "./+types/root";
 
 // Import global styles
@@ -35,8 +36,8 @@ import "./index.css";
 
 // Import providers
 import { RootProviders } from "@/providers";
-
 import { APP_DESCRIPTION, APP_NAME } from '@/config/app.config';
+
 import React from "react";
 
 // ============================================================================

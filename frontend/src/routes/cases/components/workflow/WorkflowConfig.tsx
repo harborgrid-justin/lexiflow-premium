@@ -1,11 +1,12 @@
+import { Loader2, Settings, ToggleLeft, ToggleRight } from 'lucide-react';
+
 import { Card } from '@/components/molecules/Card/Card';
-import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
-import { Loader2, Settings, ToggleLeft, ToggleRight } from 'lucide-react';
 
 interface WorkflowSetting {
   label: string;

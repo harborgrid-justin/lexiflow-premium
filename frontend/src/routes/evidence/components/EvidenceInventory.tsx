@@ -10,31 +10,31 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useState } from 'react';
 import { CheckSquare, Filter, Loader2, Plus } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { FilterPanel } from '@/components/organisms/FilterPanel';
-import { VirtualList } from '@/components/organisms/VirtualList';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon';
+import { FilterPanel } from '@/components/organisms/FilterPanel';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Context & Utils
-import { EvidenceFilters } from '@/hooks/useEvidenceManager';
+import { type EvidenceFilters } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useTheme } from "@/hooks/useTheme";
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from "@/hooks/useTheme";
-import { AdmissibilityStatusEnum } from '@/types/enums';
 import { cn } from '@/lib/cn';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 
 // Types
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
+import { AdmissibilityStatusEnum } from '@/types/enums';
 
 interface EvidenceInventoryProps {
   items: EvidenceItem[];

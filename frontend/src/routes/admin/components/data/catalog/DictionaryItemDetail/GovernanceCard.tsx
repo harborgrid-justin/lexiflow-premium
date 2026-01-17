@@ -1,9 +1,12 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
+import { Shield } from 'lucide-react';
+
 import { Input } from '@/components/atoms/Input';
 import { Card } from '@/components/molecules/Card';
-import { Shield } from 'lucide-react';
-import { CardSectionProps } from './types';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+
+import { type CardSectionProps } from './types';
 
 const CLASSIFICATIONS = ['Public', 'Internal', 'Confidential', 'Restricted'] as const;
 

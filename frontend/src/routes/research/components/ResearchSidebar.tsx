@@ -1,6 +1,6 @@
-import { cn } from '@/lib/cn';
 import { useTheme } from "@/hooks/useTheme";
-import { ResearchSession } from '@/types';
+import { cn } from '@/lib/cn';
+import { type ResearchSession } from '@/types';
 
 interface ResearchSidebarProps {
     history: ResearchSession[];

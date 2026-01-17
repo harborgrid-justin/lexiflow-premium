@@ -1,14 +1,17 @@
-import { useTheme } from "@/hooks/useTheme";
-import { queryClient, useMutation, useQuery } from '@/hooks/backend';
-import { useNotify } from '@/hooks/core';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
-import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
-import { RLSPolicy } from '@/types';
-import { queryKeys } from '@/utils/queryKeys';
 import { Edit2, Pause, Play, Plus, Shield, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+
+import { Button } from '@/components/atoms/Button';
+import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type RLSPolicy } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
+
+
 import { PolicyEditorModal } from './PolicyEditorModal';
 
 export function RLSPolicyManager() {

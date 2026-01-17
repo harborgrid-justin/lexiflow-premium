@@ -12,18 +12,22 @@
  * @module routes/correspondence/index
  */
 
-import { communicationsApi } from '@/lib/frontend-api';
 import { Suspense } from 'react';
-import type { LoaderFunctionArgs } from "react-router";
 import { Await, useLoaderData } from 'react-router';
+
+import { communicationsApi } from '@/lib/frontend-api';
+
+import { createListMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+
 
 // Import standard components
 import { CorrespondenceProvider } from './CorrespondenceProvider';
 import { CorrespondenceView } from './CorrespondenceView';
+
+import type { Route } from "./+types/index";
+import type { LoaderFunctionArgs } from "react-router";
 
 // ============================================================================
 // Meta Tags
@@ -171,7 +175,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function CorrespondenceIndexRoute() {
-  const initialData = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Correspondence" />}>

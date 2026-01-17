@@ -3,9 +3,12 @@
  * Form to create a new time entry with timer
  */
 
-import { TimeEntriesApiService } from '@/lib/frontend-api';
 import { useNavigate, type ActionFunctionArgs } from 'react-router';
+
+import { TimeEntriesApiService } from '@/lib/frontend-api';
+
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { TimeEntryForm } from './components/TimeEntryForm';
 
 // ============================================================================

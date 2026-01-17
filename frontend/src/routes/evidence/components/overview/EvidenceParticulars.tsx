@@ -5,13 +5,13 @@
  * Features AI-powered analysis and blockchain verification display.
  */
 
-import React, { useState } from 'react';
 import { User, Activity, Link, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Common Components
-import { Card } from '@/components/molecules/Card';
 import { Badge } from '@/components/atoms/Badge';
 import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
+import { Card } from '@/components/molecules/Card';
 
 // Context & Utils
 import { useTheme } from "@/hooks/useTheme";
@@ -21,7 +21,7 @@ import { cn } from '@/lib/cn';
 import { GeminiService } from '@/services/features/research/geminiService';
 
 // Types
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 interface EvidenceParticularsProps {
   selectedItem: EvidenceItem;

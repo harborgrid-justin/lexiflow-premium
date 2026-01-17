@@ -31,17 +31,18 @@
  * @module layouts/AppShellLayout
  */
 
+import {
+  Outlet,
+  useRouteError,
+  type LoaderFunctionArgs,
+} from "react-router";
+
 import { AppShell } from "@/components/layouts/AppShell";
 import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
 import { TopBar } from "@/components/navigation/TopBar/TopBar";
 import { useAppShellLogic } from "@/hooks/useAppShellLogic";
 import { useLayout } from '@/providers/application/layoutprovider';
 import { requireAuthLoader } from "@/utils/route-guards";
-import {
-  Outlet,
-  useRouteError,
-  type LoaderFunctionArgs,
-} from "react-router";
 
 // ============================================================================
 // LOADER

@@ -9,9 +9,10 @@
  * @description Case financial management page - budgets, billing, and cost tracking
  */
 
+import React from 'react';
+
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import { CaseFinancialsCenter } from '@/routes/cases/components/financials/CaseFinancialsCenter';
-import React from 'react';
 
 interface CaseFinancialsPageProps {
   caseId: string;

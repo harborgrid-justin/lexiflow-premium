@@ -11,10 +11,10 @@
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/molecules/Modal/Modal';
+import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
-import { Button } from '@/components/atoms/Button/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -23,7 +23,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Project } from '@/types';
+import { type Project } from '@/types';
 
 interface ProjectModalProps {
   isOpen: boolean;

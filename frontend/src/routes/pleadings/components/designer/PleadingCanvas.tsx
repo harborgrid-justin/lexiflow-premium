@@ -1,9 +1,11 @@
-import React, { useMemo, useCallback } from 'react';
-import { PleadingDocument, FormattingRule, PleadingSection, Case, Party } from '@/types';
 import { GripVertical } from 'lucide-react';
+import React, { useMemo, useCallback } from 'react';
+
 import { cn } from '@/lib/cn';
 import { sanitizeHtml } from '@/lib/sanitize';
-import { ViewMode } from '../types';
+import { type PleadingDocument, type FormattingRule, type PleadingSection, type Case, type Party } from '@/types';
+
+import { type ViewMode } from '../types';
 
 interface PleadingCanvasProps {
     document: PleadingDocument;

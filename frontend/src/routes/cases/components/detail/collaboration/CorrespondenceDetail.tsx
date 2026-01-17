@@ -13,26 +13,26 @@ import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, Ma
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
+import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { DataService } from '@/services/data/data-service.service';
 
 // Types & Interfaces
-import { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
-import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
-import { TaskRepository } from '@/services/data/repositories/TaskRepository';
-import { CorrespondenceService } from '@/services/domain/communication.service';
-import { DocketRepository } from '@/services/domain/docket.service';
-import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UserId, UUID, WorkflowTask } from '@/types';
-import { ServiceStatus } from '@/types/enums';
+import { type DocumentRepository } from '@/services/data/repositories/DocumentRepository';
+import { type EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
+import { type TaskRepository } from '@/services/data/repositories/TaskRepository';
+import { type CorrespondenceService } from '@/services/domain/communication.service';
+import { type DocketRepository } from '@/services/domain/docket.service';
+import { type CaseId, type CommunicationItem, type DocketEntry, type DocketId, type DocumentId, type EvidenceId, type EvidenceItem, type LegalDocument, type ServiceJob, type UserId, type UUID, type WorkflowTask } from '@/types';
+import { type ServiceStatus } from '@/types/enums';
 
 interface CorrespondenceDetailProps {
     item: CommunicationItem | ServiceJob;
@@ -86,7 +86,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
 
         const doc: LegalDocument = {
             id: `doc-${Date.now()}` as DocumentId,
-            caseId: commItem.caseId as CaseId,
+            caseId: commItem.caseId,
             title: `Correspondence: ${commItem.subject}`,
             type: 'Correspondence',
             content: commItem.preview,
@@ -138,7 +138,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
     const handleUpdateServiceStatus = async () => {
         if (!isService()) return;
         const serviceItem = item as ServiceJob;
-        (serviceItem.status as keyof typeof ServiceStatus) = newStatus as keyof typeof ServiceStatus;
+        (serviceItem.status) = newStatus as keyof typeof ServiceStatus;
         serviceItem.signerName = signerName;
         serviceItem.servedDate = deliveryDate;
         notify.success('Service status updated.');

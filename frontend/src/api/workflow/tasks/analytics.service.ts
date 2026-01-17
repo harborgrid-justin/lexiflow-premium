@@ -3,6 +3,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { TaskStatistics, WorkflowTask } from "./types";
 
 export class TaskAnalyticsService {

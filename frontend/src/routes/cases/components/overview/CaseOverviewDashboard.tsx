@@ -2,10 +2,6 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React from 'react';
-import { Card } from '@/components/molecules/Card/Card';
-import { cn } from '@/lib/cn';
-import { CaseStatus } from '@/types';
 import {
   Activity, AlertCircle,
   CheckCircle,
@@ -13,6 +9,11 @@ import {
   Plus,
   XCircle
 } from 'lucide-react';
+import React from 'react';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { cn } from '@/lib/cn';
+import { CaseStatus } from '@/types';
 interface IntakePipelineStage {
   stage: string; count: number; value: number; avgDaysInStage: number; conversionRate: number;
 } interface ResourceUtilization {

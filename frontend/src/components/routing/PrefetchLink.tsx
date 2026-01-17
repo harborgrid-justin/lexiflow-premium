@@ -7,10 +7,11 @@
  * @module components/routing/PrefetchLink
  */
 
+import { useEffect, useRef } from 'react';
+import { Link, type LinkProps } from 'react-router';
+
 import { routeAnalytics } from '@/services/analytics/routeAnalytics';
 import { useRoutePrefetch } from '@/services/routing/routePrefetch';
-import { useEffect, useRef } from 'react';
-import { Link, LinkProps } from 'react-router';
 
 export interface PrefetchLinkProps extends Omit<LinkProps, 'prefetch'> {
   prefetch?: 'hover' | 'viewport' | 'both' | 'none';

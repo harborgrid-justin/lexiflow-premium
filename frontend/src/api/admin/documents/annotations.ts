@@ -3,9 +3,11 @@
  * @module api/admin/documents/annotations
  */
 
-import type { Annotation } from "@/routes/documents/types/DocumentAnnotationsProps";
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import { validateId, validateObject } from "./validation";
+
+import type { Annotation } from "@/routes/documents/types/DocumentAnnotationsProps";
 
 /** Get annotations for a document */
 export async function getAnnotations(

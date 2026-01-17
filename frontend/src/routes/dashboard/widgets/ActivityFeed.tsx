@@ -5,10 +5,6 @@
  * Displays case updates, document uploads, tasks completed, and system events
  */
 
-import React from 'react';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import { Activity, ActivityType } from '@/types/dashboard';
 import { formatDistanceToNow } from 'date-fns';
 import {
   AlertTriangle,
@@ -17,11 +13,16 @@ import {
   Clock,
   DollarSign,
   FileText,
-  LucideIcon,
+  type LucideIcon,
   MessageSquare,
   Upload,
   UserPlus,
 } from 'lucide-react';
+import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { type Activity, type ActivityType } from '@/types/dashboard';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================

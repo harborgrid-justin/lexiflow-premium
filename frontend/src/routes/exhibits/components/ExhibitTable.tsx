@@ -12,25 +12,26 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Eye } from 'lucide-react';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useWindow } from '@/providers';
-import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
 import { Button } from '@/components/atoms/Button';
 import { FileIcon } from '@/components/atoms/FileIcon';
 import { EmptyListState, StatusBadge } from '@/components/organisms/_legacy/RefactoredCommon';
 import { VirtualList } from '@/components/organisms/VirtualList';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
 
 // Types
-import { TrialExhibit } from '@/types';
+import { type TrialExhibit } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -62,7 +63,7 @@ export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
             <div className={cn("h-full", theme.surface.default)}>
                 <DocumentPreviewPanel
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    document={{ id: ex.id as string } as any}
+                    document={{ id: ex.id } as any}
                     onViewHistory={() => { }}
                 />
             </div>

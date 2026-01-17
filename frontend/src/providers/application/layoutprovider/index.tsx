@@ -41,9 +41,11 @@
  * @module providers/application/layoutprovider
  */
 
+import { type ReactNode, useCallback, useContext, useEffect, useMemo, useState, startTransition } from 'react';
+
 import { LayoutContext } from '@/lib/layout/contexts';
+
 import type { LayoutContextValue, LayoutStateValue } from '@/lib/layout/types';
-import { ReactNode, useCallback, useContext, useEffect, useMemo, useState, startTransition } from 'react';
 
 // ============================================================================
 // Constants

@@ -9,15 +9,15 @@
 import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Shield, Target } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { useWindow } from '@/providers';
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-
-import { ResearchTool } from '@/routes/research/components/ResearchTool';
-import { WarRoom } from '@/routes/war-room/components/WarRoom';
 import { Button } from '@/components/atoms/Button';
 import { Tabs } from '@/components/molecules/Tabs';
-import { PlaybookDetailProps } from './types';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { ResearchTool } from '@/routes/research/components/ResearchTool';
+import { WarRoom } from '@/routes/war-room/components/WarRoom';
+
+import { type PlaybookDetailProps } from './types';
 
 export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onApply }) => {
     const { theme } = useTheme();

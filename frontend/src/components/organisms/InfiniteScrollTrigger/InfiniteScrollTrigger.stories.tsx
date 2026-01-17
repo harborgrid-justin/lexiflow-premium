@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { InfiniteScrollTrigger } from './InfiniteScrollTrigger';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof InfiniteScrollTrigger> = {
   title: 'Components/Organisms/InfiniteScrollTrigger/InfiniteScrollTrigger',

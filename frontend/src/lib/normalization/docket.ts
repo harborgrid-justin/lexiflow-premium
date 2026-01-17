@@ -3,7 +3,6 @@
  * Transform backend docket data to frontend format
  */
 
-import type { DocketEntry } from "@/types";
 import {
   normalizeArray,
   normalizeDate,
@@ -12,6 +11,8 @@ import {
   normalizeString,
   type Normalizer,
 } from "./core";
+
+import type { DocketEntry } from "@/types";
 
 interface BackendDocketEntry {
   id: string | number;

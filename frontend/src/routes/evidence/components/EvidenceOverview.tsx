@@ -14,13 +14,16 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { EvidenceParticulars } from './overview/EvidenceParticulars';
-import { EvidenceLocation } from './overview/EvidenceLocation';
+import React from "react";
+
+import { type EvidenceItem } from '@/types';
+
 import { EvidenceFRCPStatus } from './overview/EvidenceFRCPStatus';
+import { EvidenceLocation } from './overview/EvidenceLocation';
+import { EvidenceParticulars } from './overview/EvidenceParticulars';
 
 // Types
-import { EvidenceItem } from '@/types';
-import React from "react";
+
 
 // ============================================================================
 // TYPES & INTERFACES

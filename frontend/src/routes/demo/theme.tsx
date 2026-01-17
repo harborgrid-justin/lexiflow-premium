@@ -3,8 +3,9 @@
  *
  * Showcases the 150+ theme customization options in action
  */
-import { useTheme } from "@/hooks/useTheme";
 import { Info, Layout, Palette, Sparkles, Type } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
 
 export default function ThemeDemo() {
   const { tokens, theme, density, mode } = useTheme();

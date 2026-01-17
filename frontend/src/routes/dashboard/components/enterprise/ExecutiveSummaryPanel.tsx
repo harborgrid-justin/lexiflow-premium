@@ -5,14 +5,15 @@
  * Displays high-level metrics for executive decision-making
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { BaseDashboardProps, ExecutiveSummary } from '@/types/dashboard';
 import { motion } from 'framer-motion';
+export import { AlertCircle, Calendar, Clock, DollarSign, TrendingUp, Users } from 'lucide-react';
 import React, { useMemo } from 'react';
 
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 
-export import { AlertCircle, Calendar, Clock, DollarSign, TrendingUp, Users } from 'lucide-react';
+import type { BaseDashboardProps, ExecutiveSummary } from '@/types/dashboard';
+
 
 interface ExecutiveSummaryPanelProps extends BaseDashboardProps {
   summary: ExecutiveSummary;

@@ -1,17 +1,22 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
-import { LegalRule } from '@/types';
-import { queryKeys } from '@/utils/queryKeys';
-import { useMemo, useState } from 'react';
-// ✅ Migrated to backend API (2025-12-21)
-import { useTheme } from "@/hooks/useTheme";
-import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
-import { useWindow } from '@/providers';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Tabs } from '@/components/molecules/Tabs/Tabs';
 import { Bookmark, BookOpen, ExternalLink, FileText, History, Loader2, Scale, Search, Share2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { DataService } from '@/services/data/data-service.service';
+import { type LegalRule } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
+
+
+// ✅ Migrated to backend API (2025-12-21)
+
+
 import { RuleContentDisplay } from './rule-viewer/RuleContentDisplay';
 import { RuleTreeViewer } from './rule-viewer/RuleTreeViewer';
 
@@ -122,7 +127,7 @@ export function RuleBookViewer({ type, isOrbital }: RuleBookViewerProps) {
                                             { id: 'notes', label: 'Advisory Committee Notes', icon: FileText }
                                         ]}
                                         activeTab={activeTab}
-                                        onChange={(t) => setActiveTab(t as string)}
+                                        onChange={(t) => setActiveTab(t)}
                                     />
                                 </div>
                                 <div className="flex-1 overflow-y-auto p-8">

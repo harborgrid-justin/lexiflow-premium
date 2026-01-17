@@ -4,15 +4,18 @@
  */
 
 import React from 'react';
+
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModal/TaskCreationModal';
+
 import { TaskHeader } from './TaskHeader';
 import { TaskRow } from './TaskRow';
-import type { CaseListTasksProps } from './types';
 import { useCaseListTasks } from './useCaseListTasks';
+
+import type { CaseListTasksProps } from './types';
 
 export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) => {
   const { theme } = useTheme();

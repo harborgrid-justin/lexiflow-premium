@@ -15,16 +15,16 @@ import React, { useRef } from 'react';
 import { Badge } from '@/components/atoms/Badge/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useScheduleController } from '@/hooks/useScheduleController';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/lib/cn';
+import { type CasePhase, TaskStatusBackend, type WorkflowTask } from '@/types';
 import { ScheduleHelpers } from '@/utils/scheduleHelpers';
 
 // Types & Interfaces
-import { CasePhase, TaskStatusBackend, WorkflowTask } from '@/types';
 
 interface ScheduleTimelineProps {
     phases: CasePhase[];

@@ -1,12 +1,15 @@
-import { useTheme } from "@/hooks/useTheme";
+import { useState } from 'react';
+
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/services/infrastructure/queryClient';
-import { cn } from '@/lib/cn';
-import { ResearchSession } from '@/types';
+import { type ResearchSession } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { useState } from 'react';
+
+
 import { performSearch } from './research.utils';
 import { ResearchInput } from './ResearchInput';
 import { ResearchResults } from './ResearchResults';

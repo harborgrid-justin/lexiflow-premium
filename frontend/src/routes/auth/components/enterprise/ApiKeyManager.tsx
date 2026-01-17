@@ -14,10 +14,12 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { ApiKeysApiService } from '@/lib/frontend-api';
-import type { ApiKey } from '@/types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { z } from 'zod';
+
+import { ApiKeysApiService } from '@/lib/frontend-api';
+
+import type { ApiKey } from '@/types';
 
 const apiKeySchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),

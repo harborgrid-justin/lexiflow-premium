@@ -23,14 +23,9 @@ import { useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useModalState } from '@/hooks/core';
-import { useTheme } from "@/hooks/useTheme";
-import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { getTodayString } from '@/lib/dateUtils';
 
 // Components
 import { Badge } from '@/components/atoms/Badge/Badge';
@@ -40,12 +35,17 @@ import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialo
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useModalState } from '@/hooks/core';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { getTodayString } from '@/lib/dateUtils';
 
 // Types
-import { FirmAsset } from '@/types';
+import { type FirmAsset } from '@/types';
 
 // ============================================================================
 // COMPONENT
@@ -210,7 +210,7 @@ export function AssetManager() {
                                 title="Select asset type"
                                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                 value={newAsset.type}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, type: e.target.value as FirmAsset['type'] })}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, type: e.target.value })}
                             >
                                 <option value="Hardware">Hardware</option>
                                 <option value="Software">Software</option>

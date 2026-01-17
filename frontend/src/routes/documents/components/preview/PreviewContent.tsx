@@ -1,14 +1,17 @@
-import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
-import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { FileIcon } from '@/components/atoms/FileIcon/FileIcon';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { useTheme } from "@/hooks/useTheme";
-import { LegalDocument } from '@/types';
 import { cn } from '@/lib/cn';
-import { useState } from 'react';
-import { AcrobatToolbar, PDFTool } from './AcrobatToolbar';
-import { Field, InteractiveOverlay } from './InteractiveOverlay';
+import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
+import { type LegalDocument } from '@/types';
+
+
+import { AcrobatToolbar, type PDFTool } from './AcrobatToolbar';
+import { type Field, InteractiveOverlay } from './InteractiveOverlay';
 
 interface PreviewContentProps {
     document: LegalDocument;

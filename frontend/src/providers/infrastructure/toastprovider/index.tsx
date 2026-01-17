@@ -32,12 +32,16 @@
  * @module providers/infrastructure/toastprovider
  */
 
+import { useCallback, useContext, useMemo, useState } from 'react';
+
 import {
   toastError as showErrorToast,
   toastInfo as showInfoToast,
   toastSuccess as showSuccessToast,
   toastWarning as showWarningToast,
 } from '@/components/organisms/notifications/Toast';
+import { ToastActionsContext, ToastStateContext } from '@/lib/toast/context';
+
 import type {
   Toast,
   ToastActionsValue,
@@ -45,8 +49,6 @@ import type {
   ToastStateValue,
   ToastType,
 } from '@/lib/toast/context';
-import { ToastActionsContext, ToastStateContext } from '@/lib/toast/context';
-import { useCallback, useContext, useMemo, useState } from 'react';
 
 // Priority mapping
 const PRIORITY_MAP: Record<ToastType, number> = {

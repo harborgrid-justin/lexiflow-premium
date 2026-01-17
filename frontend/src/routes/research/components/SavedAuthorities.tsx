@@ -1,15 +1,17 @@
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
+import { Bookmark, BookmarkMinus, FileText, Scale } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader/AdaptiveLoader';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { Citation } from '@/types';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type Citation } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { Bookmark, BookmarkMinus, FileText, Scale } from 'lucide-react';
+
 export function SavedAuthorities() {
     const { theme } = useTheme();
 

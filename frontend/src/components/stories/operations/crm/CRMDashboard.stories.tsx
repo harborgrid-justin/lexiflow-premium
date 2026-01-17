@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { CRMDashboard } from '@/features/operations/crm/CRMDashboard';
 
 /**

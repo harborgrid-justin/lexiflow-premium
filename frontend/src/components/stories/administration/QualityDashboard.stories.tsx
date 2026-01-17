@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QualityDashboard } from '@/routes/admin/components/data/quality/QualityDashboard';
+
 import type { DataAnomaly, QualityMetricHistory } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // Mock data
 const mockAnomalies: DataAnomaly[] = [];

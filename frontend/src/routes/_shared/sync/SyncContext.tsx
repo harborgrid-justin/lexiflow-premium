@@ -1,7 +1,9 @@
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+
+import { SYNC_MAX_RETRIES, SYNC_BASE_DELAY_MS } from '@/config/features/contexts.config';
 import { DataService } from '@/services/data/data-service.service';
 import { SyncEngine } from '@/services/data/syncEngine';
-import { SYNC_MAX_RETRIES, SYNC_BASE_DELAY_MS } from '@/config/features/contexts.config';
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+
 import type {
   SyncActionsValue,
   SyncProviderProps,
@@ -117,18 +119,18 @@ type MutationHandler = (payload: unknown) => Promise<unknown>;
 // BP13: Registry of handlers to replay mutations
 // Maps mutation types to their corresponding DataService methods
 const MUTATION_HANDLERS: Record<string, MutationHandler> = {
-  'CASE_CREATE': (p) => DataService.cases.add(p as Parameters<typeof DataService.cases.add>[0]),
+  'CASE_CREATE': (p) => DataService.cases.add(p),
   'CASE_UPDATE': (p) => {
     const payload = p as { id: string; data: Record<string, unknown> };
     return DataService.cases.update(payload.id, payload.data);
   },
-  'TASK_ADD': (p) => DataService.tasks.add(p as Parameters<typeof DataService.tasks.add>[0]),
+  'TASK_ADD': (p) => DataService.tasks.add(p),
   'TASK_UPDATE': (p) => {
     const payload = p as { id: string; data: Record<string, unknown> };
     return DataService.tasks.update(payload.id, payload.data);
   },
-  'DOC_UPLOAD': (p) => DataService.documents.add(p as Parameters<typeof DataService.documents.add>[0]),
-  'BILLING_LOG': (p) => DataService.billing.addTimeEntry(p as Parameters<typeof DataService.billing.addTimeEntry>[0]),
+  'DOC_UPLOAD': (p) => DataService.documents.add(p),
+  'BILLING_LOG': (p) => DataService.billing.addTimeEntry(p),
   // Default fallback handler for unknown mutation types
   'DEFAULT': async () => {
     console.warn('[SyncContext] Unknown mutation type encountered, using default handler');

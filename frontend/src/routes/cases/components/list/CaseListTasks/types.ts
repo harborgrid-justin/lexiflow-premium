@@ -1,4 +1,4 @@
-import { WorkflowTask, Case } from '@/types';
+import { type WorkflowTask, type Case } from '@/types';
 
 export interface CaseListTasksProps {
   onSelectCase?: (c: Case) => void;

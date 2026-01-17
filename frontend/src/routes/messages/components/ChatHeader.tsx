@@ -16,12 +16,12 @@ import { AlertTriangle, ArrowLeft, Info, Lock, Phone, Video } from 'lucide-react
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { Conversation } from '@/hooks/useSecureMessenger';
+import { Button } from '@/components/atoms/Button/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { type Conversation } from '@/hooks/useSecureMessenger';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Button } from '@/components/atoms/Button/Button';
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

@@ -15,9 +15,8 @@ import React from 'react';
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useRef, useState } from 'react';
-import type { LucideIcon } from 'lucide-react';
 import { PlusCircle, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -28,10 +27,12 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
 import * as styles from './QuickActions.styles';
 
 // Types
 import type { UserRole } from '@/types';
+import type { LucideIcon } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES

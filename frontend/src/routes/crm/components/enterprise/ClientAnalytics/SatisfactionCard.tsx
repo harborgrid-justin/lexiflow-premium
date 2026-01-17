@@ -3,8 +3,6 @@
  * @description Client satisfaction metrics card component
  */
 
-import { cn } from '@/lib/cn';
-import type { ThemeObject } from '@/lib/theme/types';
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -13,7 +11,11 @@ import {
   RadarChart,
   ResponsiveContainer
 } from 'recharts';
+
+import { cn } from '@/lib/cn';
+
 import type { ClientSatisfaction } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface ChartTheme {
   grid: string;

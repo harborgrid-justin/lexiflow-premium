@@ -1,5 +1,7 @@
 import type { Preview } from "@storybook/react-vite";
+
 import React from "react";
+
 import "../index.css"; // Import Tailwind CSS
 import { ThemeProvider } from "../src/features/theme";
 import { ToastProvider } from "../src/providers";

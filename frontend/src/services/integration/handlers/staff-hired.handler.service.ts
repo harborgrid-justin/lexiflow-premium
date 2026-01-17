@@ -5,6 +5,7 @@
  * Integration: Opp #9 from architecture docs
  */
 
+
 import { SystemEventType } from "@/types/integration-types";
 
 import { BaseEventHandler } from "./base-event.handler.service";
@@ -17,7 +18,7 @@ export class StaffHiredHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.STAFF_HIRED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]
+    payload: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED],
   ) {
     const actions: string[] = [];
     const errors: string[] = [];
@@ -30,11 +31,15 @@ export class StaffHiredHandler extends BaseEventHandler<
       return this.createError(errors);
     }
 
-    const { DataService } =
-      await import("@/services/data/data-service.service");
+    const dataServiceModule =
+      (await import("@/services/data/data-service.service"));
+    const { DataService } = dataServiceModule;
 
     // Verify user service is available
-    if (!DataService.users || typeof DataService.users.add !== "function") {
+    const { users } = DataService as {
+      users?: { add: (payload: typeof newUser) => Promise<void> };
+    };
+    if (!users || typeof users.add !== "function") {
       errors.push("User provisioning service not available");
       return this.createError(errors);
     }
@@ -52,14 +57,14 @@ export class StaffHiredHandler extends BaseEventHandler<
       updatedAt: new Date().toISOString(),
     };
 
-    await DataService.users.add(newUser);
+    await users.add(newUser);
     actions.push(`Provisioned User Account for ${staff.name} (${staff.email})`);
 
     return this.createSuccess(actions);
   }
 
   private validateStaff(
-    staff: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]["staff"]
+    staff: SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]["staff"],
   ): string | null {
     // Validate required fields
     if (!staff.userId || !staff.name || !staff.email || !staff.role) {

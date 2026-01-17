@@ -13,13 +13,16 @@
  * @module routes/home
  */
 
+import { Suspense } from 'react';
+import { useLoaderData, useNavigate } from 'react-router';
+
 import { useAppController } from '@/hooks/core';
 import { casesApi, workflowApi } from '@/lib/frontend-api';
 import Dashboard from '@/routes/dashboard/components/Dashboard';
-import { Suspense } from 'react';
-import { useLoaderData, useNavigate } from 'react-router';
-import type { Route } from "./+types/home";
+
 import { createMeta } from './_shared/meta-utils';
+
+import type { Route } from "./+types/home";
 
 interface DashboardCase {
   id?: string;

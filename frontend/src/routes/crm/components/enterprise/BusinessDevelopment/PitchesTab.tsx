@@ -3,11 +3,14 @@
  * @description Pitches tab view component
  */
 
-import type { ThemeObject } from '@/lib/theme/types';
-import { cn } from '@/lib/cn';
 import { Plus } from 'lucide-react';
+
+import { cn } from '@/lib/cn';
+
 import { PitchCard } from './PitchCard';
+
 import type { Pitch } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface PitchesTabProps {
   pitches: Pitch[];

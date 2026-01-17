@@ -3,11 +3,11 @@
  * @module services/search/core/history
  */
 
-import { StorageUtils } from '@/utils/storage';
+import { StorageUtils } from "@/utils/storage";
 
-import { validateHistoryTerm } from './validation';
+import { validateHistoryTerm } from "./validation";
 
-const HISTORY_KEY = 'lexiflow_search_history';
+const HISTORY_KEY = "lexiflow_search_history";
 const MAX_HISTORY_SIZE = 10;
 
 /** Save search term to history - maintains last 10 unique searches */
@@ -16,11 +16,14 @@ export function saveHistory(term: string): void {
 
   try {
     const history = StorageUtils.get<string[]>(HISTORY_KEY, []);
-    const newHistory = [term, ...history.filter((h) => h !== term)].slice(0, MAX_HISTORY_SIZE);
+    const newHistory = [term, ...history.filter((h) => h !== term)].slice(
+      0,
+      MAX_HISTORY_SIZE,
+    );
     StorageUtils.set(HISTORY_KEY, newHistory);
-    console.debug(`[SearchService] Saved to history: "${term}"`);
+    console.warn(`[SearchService] Saved to history: "${term}"`);
   } catch (error) {
-    console.error('[SearchService.saveHistory] Error:', error);
+    console.error("[SearchService.saveHistory] Error:", error);
   }
 }
 
@@ -29,7 +32,7 @@ export function getHistory(): string[] {
   try {
     return StorageUtils.get<string[]>(HISTORY_KEY, []);
   } catch (error) {
-    console.error('[SearchService.getHistory] Error:', error);
+    console.error("[SearchService.getHistory] Error:", error);
     return [];
   }
 }

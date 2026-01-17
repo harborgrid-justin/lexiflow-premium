@@ -6,6 +6,7 @@
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { Formatters } from '@/utils/formatters';
+
 import { currencyStyles } from './Currency.styles';
 
 export interface CurrencyProps {

@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -19,7 +19,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { Case } from '@/types';
+import { type Case } from '@/types';
 
 interface OverviewSidebarProps {
   caseData: Case;

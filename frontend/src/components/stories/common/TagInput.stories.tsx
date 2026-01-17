@@ -1,6 +1,8 @@
-import { TagInput } from '@/components/molecules/TagInput/TagInput';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
+
+import { TagInput } from '@/components/molecules/TagInput/TagInput';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * TagInput component for adding and removing tags.

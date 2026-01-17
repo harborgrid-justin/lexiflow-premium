@@ -1,4 +1,4 @@
-import { AppView, Case } from "@/types";
+import { type AppView, type Case } from "@/types";
 
 export type CaseListView =
   | "active"

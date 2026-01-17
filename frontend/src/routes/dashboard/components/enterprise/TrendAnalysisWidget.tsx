@@ -5,9 +5,6 @@
  * Displays historical trends with AI-powered predictions
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import type { BaseDashboardProps, TimeSeriesDataPoint, TrendData } from '@/types/dashboard';
-import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -32,6 +29,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { BaseDashboardProps, TimeSeriesDataPoint, TrendData } from '@/types/dashboard';
 
 export interface TrendAnalysisWidgetProps extends BaseDashboardProps {
   title: string;

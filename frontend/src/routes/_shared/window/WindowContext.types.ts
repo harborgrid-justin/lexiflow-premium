@@ -2,7 +2,7 @@
  * WindowContext Type Definitions
  */
 
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 export interface WindowInstance {
   id: string;

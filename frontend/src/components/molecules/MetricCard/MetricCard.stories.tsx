@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MetricCard } from './MetricCard';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MetricCard> = {
   title: 'Components/Molecules/MetricCard/MetricCard',

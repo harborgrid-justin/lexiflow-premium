@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LazyLoader } from './LazyLoader';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof LazyLoader> = {
   title: 'Components/Molecules/LazyLoader/LazyLoader',

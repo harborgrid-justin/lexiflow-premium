@@ -10,10 +10,11 @@
  * - Guideline 38: Concurrent-safe defaults
  */
 
-import { UseLitigationBuilderReturn, useLitigationBuilder } from '@/hooks/useLitigationBuilder';
-import { Case } from '@/types/models';
-import { WorkflowConnection, WorkflowNode } from '@/types/workflow-types';
 import React, { createContext, useContext, useMemo, useState, useTransition } from 'react';
+
+import { type UseLitigationBuilderReturn, useLitigationBuilder } from '@/hooks/useLitigationBuilder';
+import { type Case } from '@/types/models';
+import { type WorkflowConnection, type WorkflowNode } from '@/types/workflow-types';
 
 // ============================================================================
 // TYPES & INTERFACES

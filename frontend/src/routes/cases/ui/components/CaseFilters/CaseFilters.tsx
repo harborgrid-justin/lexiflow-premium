@@ -1,7 +1,9 @@
 /** * CaseFilters Component * * Advanced filtering panel for case list with multiple filter criteria. * Supports status, type, court, date range, and custom filters. * * @module components/features/cases/CaseFilters */
 
-import { cn } from '@/lib/utils';
 import { useState } from 'react';
+
+import { cn } from '@/lib/utils';
+
 import { getAllStatuses } from '../CaseStatusBadge';
 export interface CaseFilterValues {
   status?: string[]; matterType?: string[]; practiceArea?: string[]; court?: string[]; jurisdiction?: string[]; leadAttorney?: string[]; client?: string[]; dateRange?: { start?: string; end?: string; }; budgetRange?: { min?: number; max?: number; }; hasTrialDate?: boolean; isArchived?: boolean; searchQuery?: string;

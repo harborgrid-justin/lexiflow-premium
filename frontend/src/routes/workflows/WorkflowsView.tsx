@@ -9,13 +9,16 @@
  * - React 18 concurrent features
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
-import type { Task, WorkflowInstance, WorkflowTemplate } from '@/types';
 import { AlertTriangle, CheckCircle, Clock, Play, Plus } from 'lucide-react';
 import React, { useId } from 'react';
 import { Link } from 'react-router-dom';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useWorkflows } from './WorkflowsProvider';
+
+import type { Task, WorkflowInstance, WorkflowTemplate } from '@/types';
 
 export function WorkflowsView() {
   const {

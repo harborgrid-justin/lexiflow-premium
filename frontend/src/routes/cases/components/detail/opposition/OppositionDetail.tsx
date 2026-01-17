@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { X, FileText, Gavel, Scale, Activity } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button/Button';

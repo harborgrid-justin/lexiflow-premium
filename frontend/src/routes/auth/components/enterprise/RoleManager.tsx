@@ -13,10 +13,12 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { PermissionsApiService } from '@/lib/frontend-api';
-import type { Permission } from '@/types';
-import { TIMEOUTS } from '@/config/ports.config';
 import React, { useState } from 'react';
+
+import { TIMEOUTS } from '@/config/ports.config';
+import { PermissionsApiService } from '@/lib/frontend-api';
+
+import type { Permission } from '@/types';
 
 export interface RoleManagerProps {
   roleId: string;

@@ -7,14 +7,18 @@
  * @module routes/real-estate/acquisition
  */
 
-import { AcquisitionManager } from '@/routes/real-estate/acquisition/AcquisitionManager';
-import type { AcquisitionLoaderData } from '@/routes/real-estate/acquisition/types';
-import { DataService } from '@/services/data/data-service.service';
-import type { AcquisitionStatus, RealEstateAcquisition } from '@/services/domain/RealEstateDomain';
 import { useLoaderData, type ActionFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/acquisition";
+import type { AcquisitionLoaderData } from '@/routes/real-estate/acquisition/types';
+import type { AcquisitionStatus, RealEstateAcquisition } from '@/services/domain/RealEstateDomain';
+
+import { AcquisitionManager } from '@/routes/real-estate/acquisition/AcquisitionManager';
 
 // ============================================================================
 // Meta Tags

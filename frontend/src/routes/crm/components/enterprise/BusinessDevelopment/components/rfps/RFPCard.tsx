@@ -5,9 +5,11 @@
  */
 
 import React from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { RFP } from '../../types';
+
+import { type RFP } from '../../types';
 
 interface RFPCardProps {
   rfp: RFP;

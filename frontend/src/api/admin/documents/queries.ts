@@ -4,9 +4,11 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
-import type { LegalDocument } from "@/types";
+
 import { getAll } from "./crud";
 import { validateId } from "./validation";
+
+import type { LegalDocument } from "@/types";
 
 /** Get documents by case ID */
 export async function getByCaseId(caseId: string): Promise<LegalDocument[]> {

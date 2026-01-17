@@ -4,10 +4,6 @@
  * @description Enterprise notification center with filtering, categorization, and real-time updates.
  */
 
-import { ThemeStateValue } from "@/unknown_fix_me/ThemeStateValue";
-import { useTheme } from "@/hooks/useTheme";
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { cn } from '@/lib/cn';
 import {
   AlertCircle,
   Bell,
@@ -19,6 +15,13 @@ import {
   XCircle,
 } from 'lucide-react';
 import React, { useRef, useState } from 'react';
+
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+
+import { type ThemeStateValue } from "@/unknown_fix_me/ThemeStateValue";
 
 // ========================================
 // TYPES & INTERFACES

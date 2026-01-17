@@ -10,21 +10,21 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { LucideIcon } from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 import React, { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { Box } from '@/components/atoms/Box/Box';
+import { Text } from '@/components/atoms/Text/Text';
 import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
 
 // Primitives
-import { Box } from '@/components/atoms/Box/Box';
-import { Text } from '@/components/atoms/Text/Text';
 
 // ============================================================================
 // TYPES & INTERFACES

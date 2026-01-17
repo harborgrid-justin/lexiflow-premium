@@ -1,4 +1,5 @@
 import { ProgressIndicator } from '@/components/atoms/ProgressIndicator/ProgressIndicator';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

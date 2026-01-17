@@ -1,4 +1,5 @@
 import { RulesDashboard } from '@/routes/rules/components/RulesDashboard';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

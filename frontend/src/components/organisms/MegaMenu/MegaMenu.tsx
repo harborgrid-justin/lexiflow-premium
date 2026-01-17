@@ -15,9 +15,8 @@ import React from 'react';
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useRef, useState } from 'react';
-import type { LucideIcon } from 'lucide-react';
 import { ChevronDown, ExternalLink } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -28,11 +27,14 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
-import type { MegaMenuLayout } from './MegaMenu.styles';
+
 import * as styles from './MegaMenu.styles';
+
+import type { MegaMenuLayout } from './MegaMenu.styles';
 
 // Types
 import type { UserRole } from '@/types';
+import type { LucideIcon } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES

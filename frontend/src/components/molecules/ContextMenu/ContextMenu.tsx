@@ -10,15 +10,15 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { type LucideIcon } from 'lucide-react';
 import React, { useRef, useId } from 'react';
-import { LucideIcon } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

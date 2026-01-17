@@ -5,8 +5,9 @@
  * Ideal for advanced workflows with navigation, content, and detail panels.
  */
 
-import { cn } from '@/lib/cn';
 import React from "react";
+
+import { cn } from '@/lib/cn';
 
 interface ThreeColumnLayoutProps {
   leftColumn: React.ReactNode;

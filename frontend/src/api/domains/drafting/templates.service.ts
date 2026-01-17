@@ -4,13 +4,15 @@
  * Template management service - focused on template CRUD operations
  */
 
-import { ApiClient } from "@/services/infrastructure/api-client.service";
+import { type ApiClient } from "@/services/infrastructure/api-client.service";
+
+import { buildFilterQuery } from "./utils";
+
 import type {
   CreateTemplateDto,
   DraftingTemplate,
   UpdateTemplateDto,
 } from "./types";
-import { buildFilterQuery } from "./utils";
 
 export class TemplateService {
   private client: ApiClient;

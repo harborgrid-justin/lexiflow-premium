@@ -1,7 +1,8 @@
-import { useTheme } from "@/hooks/useTheme";
-import { DesignTokens, ThemeDensity } from "@/lib/theme/tokens";
-import { DataService } from "@/services/data/data-service.service";
 import { useCallback, useEffect, useState } from "react";
+
+import { useTheme } from "@/hooks/useTheme";
+import { type DesignTokens, type ThemeDensity } from "@/lib/theme/tokens";
+import { DataService } from "@/services/data/data-service.service";
 
 // ============================================================================
 // Types

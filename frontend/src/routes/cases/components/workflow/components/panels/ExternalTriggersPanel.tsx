@@ -3,11 +3,13 @@
  * @description External system triggers and webhook configuration
  */
 
+import { Webhook } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Webhook } from 'lucide-react';
+
 import type { ExternalTrigger } from '@/types/workflow-advanced-types';
 
 interface ExternalTriggersPanelProps {

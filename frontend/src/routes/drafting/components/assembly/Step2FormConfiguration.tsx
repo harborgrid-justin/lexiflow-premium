@@ -4,10 +4,11 @@
  * ✅ Backend-ready with proper data handling (2025-12-21)
  */
 
+import { Calendar, FileText, Sparkles, User } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { getTodayString } from '@/lib/dateUtils';
-import { useTheme } from "@/hooks/useTheme";
-import { Calendar, FileText, Sparkles, User } from 'lucide-react';
 interface Step2FormConfigurationProps {
   template: string;
   formData: {

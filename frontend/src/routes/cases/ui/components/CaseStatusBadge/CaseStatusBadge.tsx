@@ -8,6 +8,7 @@
  */
 
 import { cn } from '@/lib/utils';
+
 import type { CaseStatus } from '@/types/enums';
 
 export interface CaseStatusBadgeProps {

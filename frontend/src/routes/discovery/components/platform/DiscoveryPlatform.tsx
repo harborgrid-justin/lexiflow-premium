@@ -22,22 +22,27 @@ import React, { lazy, Suspense, useCallback, useMemo } from 'react';
 import { Button } from '@/components/atoms/Button/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
-import { DiscoveryNavigation } from './layout/DiscoveryNavigation';
+
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
-import { DiscoveryProvider, useDiscoveryActions, useDiscoveryState } from './contexts/DiscoveryContext';
+
 
 // Services & Utils
-import { DiscoveryRepository } from '@/services/api/discoveryRepository';
-import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/lib/cn';
-import type { DiscoveryView } from '@/utils/discoveryNavigation';
+import { DataService } from '@/services/data/data-service.service';
 import { queryKeys } from '@/utils/queryKeys';
+
+import { DiscoveryProvider, useDiscoveryActions, useDiscoveryState } from './contexts/DiscoveryContext';
+import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
+import { DiscoveryNavigation } from './layout/DiscoveryNavigation';
+
+import type { DiscoveryView } from '@/utils/discoveryNavigation';
+
+import { type DiscoveryRepository } from '@/services/api/discoveryRepository';
 
 // Internal Discovery Components (Lazy)
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));

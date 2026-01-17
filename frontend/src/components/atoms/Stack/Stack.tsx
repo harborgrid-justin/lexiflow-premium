@@ -6,9 +6,11 @@
  * Provides consistent spacing and alignment for stacked layouts.
  */
 
-import { cn } from '@/lib/cn';
-import { directionClasses, spacingClasses, alignClasses, justifyClasses } from './Stack.styles';
 import React from "react";
+
+import { cn } from '@/lib/cn';
+
+import { directionClasses, spacingClasses, alignClasses, justifyClasses } from './Stack.styles';
 
 export interface StackProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Stack direction */

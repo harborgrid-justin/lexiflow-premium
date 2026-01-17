@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { VirtualList } from './VirtualList';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof VirtualList> = {
   title: 'Components/Organisms/VirtualList/VirtualList',

@@ -7,11 +7,14 @@
  * @module components/features/cases/CaseCard
  */
 
-import { cn } from '@/lib/utils';
-import type { Case } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router';
+
+import { cn } from '@/lib/utils';
+
 import { CaseStatusBadge } from '../CaseStatusBadge';
+
+import type { Case } from '@/types';
 
 interface CaseCardContainerProps {
   children: React.ReactNode;

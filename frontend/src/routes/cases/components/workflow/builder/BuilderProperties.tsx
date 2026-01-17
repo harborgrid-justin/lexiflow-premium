@@ -1,13 +1,16 @@
-import { useModalState } from '@/hooks/core';
-import { cn } from '@/lib/cn';
+import { Move, Settings, Trash2, X } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { useModalState } from '@/hooks/core';
 import { useTheme } from "@/hooks/useTheme";
-import { Move, Settings, Trash2, X } from 'lucide-react';
-import React from 'react';
-import { WorkflowNode, getNodeIcon } from './types';
+import { cn } from '@/lib/cn';
+
+
+import { type WorkflowNode, getNodeIcon } from './types';
 
 interface BuilderPropertiesProps {
   isOpen: boolean;

@@ -1,7 +1,9 @@
-import React from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { DraftingStats as StatsType } from '@api/domains/drafting';
 import { CheckSquare, FileCode, FileText } from 'lucide-react';
+import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { type DraftingStats as StatsType } from '@api/domains/drafting';
+
 import * as styles from './DraftingDashboard.styles';
 
 interface DraftingStatsProps {

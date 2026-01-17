@@ -15,10 +15,12 @@
  * NO THEME USAGE: Pure routing logic
  */
 
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { DiscoveryRequest } from '@/types';
 import React, { lazy, Suspense } from 'react';
-import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
+
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { type DiscoveryRequest } from '@/types';
+
+import { type DiscoveryView } from '../../hooks/useDiscoveryPlatform';
 
 // Lazy load components ensuring named exports are handled correctly
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));

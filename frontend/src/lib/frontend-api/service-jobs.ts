@@ -3,10 +3,11 @@
  * Enterprise-grade API layer for service of process jobs
  */
 
-import type { ServiceJob } from "@/types";
 import { client } from "./client";
 import { ValidationError } from "./errors";
 import { failure, type PaginatedResult, type Result, success } from "./types";
+
+import type { ServiceJob } from "@/types";
 
 export interface ServiceJobFilters {
   caseId?: string;

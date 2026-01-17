@@ -4,8 +4,10 @@
  */
 
 import { useState } from 'react';
-import type { ConnectionFormData } from '../types';
+
 import { DEFAULT_CONNECTION_FORM } from '../constants';
+
+import type { ConnectionFormData } from '../types';
 
 export function useConnectionForm() {
   const [formData, setFormData] = useState<ConnectionFormData>(DEFAULT_CONNECTION_FORM);

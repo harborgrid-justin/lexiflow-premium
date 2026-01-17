@@ -22,13 +22,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Data
-import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '@/lib/frontend-api/types';
 import { cn } from '@/lib/cn';
+import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '@/lib/frontend-api/types';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { JurisdictionObject } from '@/types';
+import { type JurisdictionObject } from '@/types';
 
 interface JurisdictionSelectorProps {
     onJurisdictionChange: (data: { finalCourt: string; jurisdictionConfig: JurisdictionObject } | null) => void;
@@ -44,12 +44,12 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
     useEffect(() => {
         if (system && level1 && ((system === 'Federal' && level2) || (system === 'State' && level2 && finalCourt))) {
             onJurisdictionChange({
-                finalCourt: finalCourt || level2!,
+                finalCourt: finalCourt || level2,
                 jurisdictionConfig: {
                     country: 'USA',
                     state: system === 'State' ? (Object.values(STATE_JURISDICTIONS).find(s => s.name === level1)?.name || 'Unknown') : 'Federal',
                     courtLevel: system,
-                    division: system === 'Federal' ? level2! : undefined,
+                    division: system === 'Federal' ? level2 : undefined,
                     county: system === 'State' ? finalCourt! : undefined,
                 }
             });

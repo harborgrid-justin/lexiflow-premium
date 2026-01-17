@@ -1,13 +1,16 @@
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { Card } from '@/components/molecules/Card/Card';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { Clause } from '@/types';
-import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, FileText, ShieldAlert, TrendingUp } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { DataService } from '@/services/data/data-service.service';
+import { type Clause } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
+
+
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 
 export function ClauseAnalytics() {
@@ -23,7 +26,7 @@ export function ClauseAnalytics() {
     );
 
     const clauses = Array.isArray(clausesData) ? clausesData : [];
-    const riskData = getRiskData(clauses, mode as 'light' | 'dark');
+    const riskData = getRiskData(clauses, mode);
     const usageData = getUsageData(clauses);
 
     return (

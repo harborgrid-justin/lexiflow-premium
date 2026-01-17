@@ -1,3 +1,6 @@
+import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
+import { memo, useCallback, useState } from 'react';
+
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Input } from '@/components/atoms/Input/Input';
@@ -7,8 +10,7 @@ import { useModalState } from '@/hooks/core';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
-import { memo, useCallback, useState } from 'react';
+
 import { useRateTables, type RateTable } from '../../hooks/useRateTables';
 
 const RateTableManagementComponent = function RateTableManagement() {

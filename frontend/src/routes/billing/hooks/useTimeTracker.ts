@@ -71,7 +71,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from "@/services/data/data-service.service";
 
 // Configuration
 import {
@@ -82,9 +81,10 @@ import {
 
 // Hooks
 import { useNotify } from "@/hooks/useNotify";
+import { DataService } from "@/services/data/data-service.service";
 
 // Types
-import { CaseId, TimeEntry, UserId, UUID } from "@/types";
+import { type CaseId, type TimeEntry, type UserId, type UUID } from "@/types";
 
 // ============================================================================
 // TYPES & INTERFACES

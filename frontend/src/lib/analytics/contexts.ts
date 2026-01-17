@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { AnalyticsActionsValue, AnalyticsStateValue } from "./types";
 
 export const AnalyticsStateContext = createContext<AnalyticsStateValue | null>(

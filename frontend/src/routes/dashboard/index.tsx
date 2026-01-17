@@ -4,8 +4,10 @@
  */
 
 import { useLoaderData } from "react-router";
+
 import { createMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { DashboardPage } from './DashboardPage';
 import { loader } from "./loader";
 

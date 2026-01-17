@@ -1,4 +1,4 @@
-import { Clause } from '@/types';
+import { type Clause } from '@/types';
 
 export const filterClauses = (clauses: Clause[], searchTerm: string): Clause[] => {
     const lowercasedTerm = searchTerm.toLowerCase();

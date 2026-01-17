@@ -1,21 +1,24 @@
+import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';
+import { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+import { Modal } from '@/components/molecules/Modal/Modal';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
 import { SignaturePad } from '@/routes/discovery/components/SignaturePad/SignaturePad';
 import { DataService } from '@/services/data/data-service.service';
 import { DocumentService } from '@/services/features/documents/documents';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
-import { Modal } from '@/components/molecules/Modal/Modal';
-import { useTheme } from "@/hooks/useTheme";
-import { LegalDocument } from '@/types';
+import { type LegalDocument } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';
-import { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
-import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
-import { Field, InteractiveOverlay } from "../preview/InteractiveOverlay";
+
+
+import { AcrobatToolbar, type PDFTool } from "../preview/AcrobatToolbar";
+import { type Field, InteractiveOverlay } from "../preview/InteractiveOverlay";
 
 type FormStatus = 'Draft' | 'Sent' | 'Signed';
 type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Completed';

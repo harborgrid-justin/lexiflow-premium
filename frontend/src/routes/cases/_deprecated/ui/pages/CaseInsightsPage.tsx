@@ -9,9 +9,10 @@
  * @description Strategic case insights page - AI-powered case analysis and recommendations
  */
 
+import React from 'react';
+
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseInsightsDashboard';
-import React from 'react';
 
 interface CaseInsightsPageProps {
   caseId: string;

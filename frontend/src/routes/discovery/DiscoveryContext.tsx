@@ -8,8 +8,9 @@
  * Enterprise React Architecture Pattern
  */
 
-import type { DiscoveryRequest, Evidence, ProductionSet } from '@/types';
 import React, { createContext, useCallback, useMemo, useState, useTransition } from 'react';
+
+import type { DiscoveryRequest, Evidence, ProductionSet } from '@/types';
 
 interface DiscoveryMetrics {
   totalEvidence: number;

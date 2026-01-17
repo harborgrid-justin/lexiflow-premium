@@ -1,10 +1,11 @@
+import { AlertCircle, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from "@/hooks/useTheme";
-import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/lib/cn';
-import { AlertCircle, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 interface AIDraftingAssistantProps {
     onInsert: (text: string) => void;

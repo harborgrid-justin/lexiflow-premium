@@ -1,6 +1,7 @@
+import { Shield } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Shield } from 'lucide-react';
 
 export function ClientPortalSecurity() {
     const { theme } = useTheme();

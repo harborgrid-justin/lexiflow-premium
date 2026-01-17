@@ -3,11 +3,13 @@
  * @module hooks/useEvidenceManager/useEvidenceNavigation
  */
 
-import type { EvidenceItem } from "@/types";
 import { useCallback, useState } from "react";
+
 import { DEFAULT_DETAIL_TAB, DEFAULT_VIEW_MODE } from "./constants";
-import type { DetailTab, ViewMode } from "./types";
 import { validateEvidenceItem } from "./utils";
+
+import type { DetailTab, ViewMode } from "./types";
+import type { EvidenceItem } from "@/types";
 
 /**
  * Hook for evidence navigation

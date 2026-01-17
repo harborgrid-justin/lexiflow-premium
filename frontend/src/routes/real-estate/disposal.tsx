@@ -1,13 +1,16 @@
 /** * Real Estate: Disposal Route * * Manages the disposal and divestiture of real estate assets, including * surplus property identification, valuation, and sale or transfer processes. * * @module routes/real-estate/disposal */
 
-import { DataService } from '@/services/data/data-service.service';
-import type { DisposalStatus, RealEstateDisposal } from '@/services/domain/RealEstateDomain';
 import { CheckCircle, Clock, Package, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { DataService } from '@/services/data/data-service.service';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/disposal"; // ============================================================================
+import type { DisposalStatus, RealEstateDisposal } from '@/services/domain/RealEstateDomain';
 // Types
 // ============================================================================
 interface LoaderData {

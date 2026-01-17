@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { useTheme } from "@/hooks/useTheme";
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Group, GroupId, Organization, User as UserType } from '@/types';
-import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Loader2, Plus, Shield, Users } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type Group, type GroupId, type Organization, type User as UserType } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
+
 import { HierarchyColumn } from './HierarchyColumn';
 import { GroupListItem, OrgListItem, UserListItem } from './HierarchyRows';
 

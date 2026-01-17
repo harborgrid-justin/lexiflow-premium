@@ -12,18 +12,20 @@
  * - G37: Mutations account for automatic batching
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { useTheme } from "@/hooks/useTheme";
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import type { ProcessingJob } from '@/types/discovery-enhanced';
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
+import { DataService } from '@/services/data/data-service.service';
+import { DISCOVERY_QUERY_KEYS, type DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+
+import type { ProcessingJob } from '@/types/discovery-enhanced';
 
 
 interface ProcessingProps {

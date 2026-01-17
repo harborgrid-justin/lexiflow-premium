@@ -6,6 +6,7 @@
  */
 
 import { createContext } from "react";
+
 import type { TrialActionsValue, TrialStateValue } from "./types";
 
 export const TrialStateContext = createContext<TrialStateValue | null>(null);

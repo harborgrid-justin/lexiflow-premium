@@ -3,28 +3,13 @@
  * @module hooks/useTrustAccounts
  */
 
-import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
-import type {
-  CreateTrustAccountDto,
-  DepositDto,
-  ThreeWayReconciliationDto,
-  TrustAccount,
-  TrustAccountFilters,
-  TrustTransactionEntity,
-  WithdrawalDto,
-} from "@/types";
 import { useCallback, useMemo, useState } from "react";
+
+import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
+
 import { queryClient, useMutation, useQuery } from "../useQueryHooks";
+
 import { CACHE_CONFIG, trustKeys } from "./constants";
-import type {
-  TrustAccountError,
-  UseCreateTrustAccountResult,
-  UseDepositFundsResult,
-  UseReconcileAccountResult,
-  UseTrustAccountDetailResult,
-  UseTrustAccountsResult,
-  UseWithdrawFundsResult,
-} from "./types";
 import {
   calculateTotalBalance,
   calculateTotalDeposits,
@@ -43,6 +28,25 @@ import {
   validatePromptDeposit,
   validateZeroBalance,
 } from "./validation";
+
+import type {
+  TrustAccountError,
+  UseCreateTrustAccountResult,
+  UseDepositFundsResult,
+  UseReconcileAccountResult,
+  UseTrustAccountDetailResult,
+  UseTrustAccountsResult,
+  UseWithdrawFundsResult,
+} from "./types";
+import type {
+  CreateTrustAccountDto,
+  DepositDto,
+  ThreeWayReconciliationDto,
+  TrustAccount,
+  TrustAccountFilters,
+  TrustTransactionEntity,
+  WithdrawalDto,
+} from "@/types";
 
 export * from "./constants";
 export * from "./types";

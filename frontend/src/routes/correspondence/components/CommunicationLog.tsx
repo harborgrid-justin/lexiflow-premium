@@ -10,26 +10,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useMemo, useState } from 'react';
 import { ArrowDownLeft, ArrowUpRight, Mail, Paperclip, Shield } from 'lucide-react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { Badge } from '@/components/atoms/Badge/Badge';
 
 // Utils & Constants
-import { CommunicationStatus } from '@/types/enums';
 import { cn } from '@/lib/cn';
+import { type CommunicationItem } from '@/types';
+import { CommunicationStatus } from '@/types/enums';
 
 // Types
-import { CommunicationItem } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

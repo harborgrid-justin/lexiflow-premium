@@ -23,24 +23,26 @@ import { Button } from '@/components/atoms/Button/Button';
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { CitationDetail } from './CitationDetail';
+
 
 // Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
+import { cn } from '@/lib/cn';
+import { knowledgeApi } from '@/lib/frontend-api';
 import { useWindow } from '@/providers';
 
 // Services & Utils
-import { knowledgeApi } from '@/lib/frontend-api';
-import { cn } from '@/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation } from '@/types';
-import { CitationLibraryProps } from './types';
+import { type Citation } from '@/types';
+
+import { CitationDetail } from './CitationDetail';
+import { type CitationLibraryProps } from './types';
 import { getSignalIcon, getTypeIcon } from './utils';
 
 export function CitationLibrary({ onSelect }: CitationLibraryProps) {

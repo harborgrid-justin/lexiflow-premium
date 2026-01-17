@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+
 import type { Organization } from '@/types';
 
 export interface OrganizationFilters {

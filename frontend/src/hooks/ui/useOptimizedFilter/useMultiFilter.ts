@@ -16,6 +16,7 @@
  */
 
 import { useCallback, useMemo, useState, useTransition } from "react";
+
 import type { MultiFilterReturn } from "./types";
 
 export function useMultiFilter<T, F extends Record<string, unknown>>(

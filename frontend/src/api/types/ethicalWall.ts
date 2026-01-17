@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/compliance/entities/ethical-wall.entity.ts
  */
 
-import { EthicalWall } from '@/types/compliance-risk';
-import { UUID, CaseId, GroupId, UserId } from '@/types/primitives';
+import { type EthicalWall } from '@/types/compliance-risk';
+import { type UUID, type CaseId, type GroupId, type UserId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.compliance instead

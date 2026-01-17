@@ -10,18 +10,18 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo } from 'react';
 import { Maximize2, X, Layers } from 'lucide-react';
+import React, { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 import { useWindow } from '@/providers';
 
 // Utils & Constants
-import { cn } from '@/lib/cn';
 
 // ============================================================================
 // COMPONENT

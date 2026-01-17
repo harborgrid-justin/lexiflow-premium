@@ -14,9 +14,11 @@
 
 import { knowledgeApi } from '@/lib/frontend-api';
 import { CitationManager } from '@/routes/citations/components/CitationManager';
-import type { ActionFunctionArgs } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import type { ActionFunctionArgs } from 'react-router';
 
 // ============================================================================
 // Meta Tags

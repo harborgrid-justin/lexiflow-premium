@@ -10,9 +10,11 @@
 
 // External Dependencies
 import { AlertCircle, FileText, Gavel, RefreshCw } from 'lucide-react';
+
 // Internal Dependencies - Components
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import React from "react";
+
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 export const DocketStats: React.FC = () => {
   return (

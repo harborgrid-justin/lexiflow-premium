@@ -5,8 +5,9 @@
  */
 
 import React from 'react';
-import { MasterWorkflow } from '@/routes/cases/components/workflow/MasterWorkflow';
+
 import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+import { MasterWorkflow } from '@/routes/cases/components/workflow/MasterWorkflow';
 
 interface WorkflowPageProps {
   caseId?: string;

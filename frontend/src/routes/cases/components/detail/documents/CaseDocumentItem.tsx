@@ -9,8 +9,9 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { CheckSquare, FileText, Loader2, Wand2 } from 'lucide-react';
+import React from 'react';
+
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { TagList } from '@/components/molecules/TagList/TagList';
@@ -19,7 +20,7 @@ import { TagList } from '@/components/molecules/TagList/TagList';
 import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { LegalDocument } from '@/types';
+import { type LegalDocument } from '@/types';
 
 interface CaseDocumentItemProps {
   doc: LegalDocument;

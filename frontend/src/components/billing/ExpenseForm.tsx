@@ -3,12 +3,14 @@
  * Form for creating/editing expenses with receipt upload
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from "@/lib/cn";
-import type { FirmExpense } from '@/types/financial';
 import { FileText, Upload, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/cn";
+
+import type { FirmExpense } from '@/types/financial';
 
 interface ExpenseFormProps {
   expense?: Partial<FirmExpense>;

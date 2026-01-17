@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+
 import type { WorkflowExecutionOptions, WorkflowInstance } from "./types";
 
 export class WorkflowInstanceService {

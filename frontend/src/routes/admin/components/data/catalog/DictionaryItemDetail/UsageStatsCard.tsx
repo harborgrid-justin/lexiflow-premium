@@ -1,6 +1,7 @@
+import { Activity } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Activity } from 'lucide-react';
 export function UsageStatsCard() {
   const { theme } = useTheme();
 

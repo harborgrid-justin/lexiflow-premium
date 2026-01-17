@@ -4,11 +4,12 @@
  * @description Error boundary for correspondence components with fallback UI
  */
 
-import { cn } from '@/lib/cn';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import React, { Component, type ErrorInfo, type ReactNode } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
-import { AlertTriangle, RefreshCw } from 'lucide-react';
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { cn } from '@/lib/cn';
 
 interface Props {
   children: ReactNode;

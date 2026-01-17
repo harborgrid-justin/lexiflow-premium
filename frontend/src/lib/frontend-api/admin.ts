@@ -14,12 +14,15 @@
  */
 
 import { BackupsApiService } from "@/api/admin/backups-api";
+
 import {
   normalizeAuditLogs,
   normalizeSystemMetrics,
 } from "../normalization/admin";
+
 import { client } from "./client";
 import { ValidationError } from "./errors";
+import { toRecord } from "./guards";
 import { failure, type PaginatedResult, type Result, success } from "./types";
 
 /**
@@ -126,7 +129,7 @@ export async function getAuditLogs(
     return result;
   }
 
-  const data = result.data as Record<string, unknown>;
+  const data = toRecord(result.data);
   const items = Array.isArray(data.data) ? data.data : [];
   const total = typeof data.total === "number" ? data.total : 0;
   const page = typeof data.page === "number" ? data.page : 1;
@@ -166,9 +169,9 @@ export async function getSystemHealth(): Promise<Result<SystemHealthResult>> {
     return result;
   }
 
-  const data = result.data as Record<string, unknown>;
-  const components = (data.components || {}) as Record<string, unknown>;
-  const dbComponent = (components.database || {}) as Record<string, unknown>;
+  const data = toRecord(result.data);
+  const components = toRecord(data.components);
+  const dbComponent = toRecord(components.database);
 
   return success({
     status: (data.status as string) === "ok" ? "healthy" : "degraded",
@@ -201,7 +204,7 @@ export async function clearCache(
     return result;
   }
 
-  const data = result.data as Record<string, unknown>;
+  const data = toRecord(result.data);
   return success({
     cleared: typeof data.cleared === "number" ? data.cleared : 0,
   });

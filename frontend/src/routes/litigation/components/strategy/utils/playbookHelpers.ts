@@ -6,7 +6,7 @@
  * @module components/litigation/utils/playbookHelpers
  */
 
-import { Playbook } from "@/types/playbook";
+import { type Playbook } from "@/types/playbook";
 
 /**
  * Returns CSS classes for difficulty level badge styling

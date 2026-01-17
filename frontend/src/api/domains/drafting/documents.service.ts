@@ -4,14 +4,16 @@
  * Document generation service - focused on generated document operations
  */
 
-import { ApiClient } from "@/services/infrastructure/api-client.service";
+import { type ApiClient } from "@/services/infrastructure/api-client.service";
+
+import { buildFilterQuery } from "./utils";
+
 import type {
   GeneratedDocument,
   GeneratedDocumentStatus,
   GenerateDocumentDto,
   UpdateGeneratedDocumentDto,
 } from "./types";
-import { buildFilterQuery } from "./utils";
 
 export class DocumentService {
   private client: ApiClient;

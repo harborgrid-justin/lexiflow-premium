@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumbs } from '@/components/molecules/Breadcrumbs/Breadcrumbs';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Breadcrumbs component for navigation hierarchy.

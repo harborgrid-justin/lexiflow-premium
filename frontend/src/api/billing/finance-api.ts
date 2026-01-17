@@ -32,6 +32,7 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
+
 import type {
   CreateTrustAccountDto,
   CreateTrustTransactionDto,
@@ -470,9 +471,9 @@ export class BillingApiService {
         response &&
         typeof response === "object" &&
         "data" in response &&
-        Array.isArray((response as PaginatedResponse<Invoice>).data)
+        Array.isArray((response).data)
       ) {
-        return (response as PaginatedResponse<Invoice>).data;
+        return (response).data;
       }
 
       // Handle direct array response

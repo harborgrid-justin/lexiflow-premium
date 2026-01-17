@@ -3,9 +3,11 @@
  * PDF-like preview of invoice with professional formatting
  */
 
-import { useTheme } from "@/hooks/useTheme";
-import type { Invoice } from '@/types/financial';
 import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+
+import type { Invoice } from '@/types/financial';
 
 interface InvoicePreviewProps {
   invoice: Invoice;

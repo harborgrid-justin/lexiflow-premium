@@ -4,8 +4,9 @@
  * Displayed when user navigates to a non-existent route
  */
 
-import { useTheme } from "@/hooks/useTheme";
 import { Link } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
 
 export default function NotFoundPage() {
   const { theme } = useTheme();

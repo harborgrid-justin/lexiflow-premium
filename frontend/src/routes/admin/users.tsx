@@ -4,12 +4,14 @@
  * Enterprise user management with role assignment, permissions, and audit trails.
  */
 
-import { authApi } from '@/lib/frontend-api';
-import { useTheme } from "@/hooks/useTheme";
-import type { User } from '@/types';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
+
+import { useTheme } from "@/hooks/useTheme";
+import { authApi } from '@/lib/frontend-api';
+
 import type { Route } from './+types/users';
+import type { User } from '@/types';
 
 export async function loader(_args: Route.LoaderArgs) {
   try {

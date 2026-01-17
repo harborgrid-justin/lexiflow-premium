@@ -1,9 +1,13 @@
-import { UseCaseListReturn } from '@/hooks/useCaseList';
-import { Case } from '@/types';
 import React from "react";
-import { CaseListActive, CaseListArchived, CaseListClosing, CaseListConflicts, CaseListDocket, CaseListIntake, CaseListResources } from './';
+
+import { type UseCaseListReturn } from '@/hooks/useCaseList';
+import { type Case } from '@/types';
+
+
 import { CaseListTasks } from './CaseListTasks';
 import { CaseListTrust } from './CaseListTrust';
+
+import { CaseListActive, CaseListArchived, CaseListClosing, CaseListConflicts, CaseListDocket, CaseListIntake, CaseListResources } from './';
 
 interface CaseListContentProps {
   activeTab: string;

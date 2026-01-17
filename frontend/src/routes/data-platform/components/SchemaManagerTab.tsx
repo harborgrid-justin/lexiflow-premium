@@ -1,4 +1,5 @@
 import { Table } from 'lucide-react';
+
 import { useDataPlatform } from '../hooks/useDataPlatform';
 
 export function SchemaManagerTab() {

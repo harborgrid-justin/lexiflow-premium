@@ -17,10 +17,10 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { UserAvatar } from '@/components/atoms/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

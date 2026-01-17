@@ -3,8 +3,8 @@
  * @module hooks/useEvidenceManager/utils
  */
 
-import type { EvidenceItem } from "@/types";
 import type { EvidenceFilters } from "./types";
+import type { EvidenceItem } from "@/types";
 
 /**
  * Validate evidence item for completeness

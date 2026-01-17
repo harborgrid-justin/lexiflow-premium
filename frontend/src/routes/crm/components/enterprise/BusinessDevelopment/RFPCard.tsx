@@ -3,10 +3,12 @@
  * @description Individual RFP card component
  */
 
-import type { ThemeObject } from '@/lib/theme/types';
 import { cn } from '@/lib/cn';
-import type { RFP } from './types';
+
 import { formatCurrency, getStatusColor } from './utils';
+
+import type { RFP } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface RFPCardProps {
   rfp: RFP;

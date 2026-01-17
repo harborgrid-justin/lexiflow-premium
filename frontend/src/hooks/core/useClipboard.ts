@@ -1,7 +1,9 @@
 import { useCallback } from "react";
+
+import { ServiceRegistry } from "../../services/core/ServiceRegistry";
+
 import type { ClipboardService } from "../../services/clipboard/ClipboardService";
 import type { IService } from "../../services/core/ServiceLifecycle";
-import { ServiceRegistry } from "../../services/core/ServiceRegistry";
 
 /**
  * HOOK ADAPTER for ClipboardService

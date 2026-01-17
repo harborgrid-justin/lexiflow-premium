@@ -1,15 +1,17 @@
-import { Button } from '@/components/atoms/Button';
-import { useTheme } from "@/hooks/useTheme";
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { CaseId, CustodianInterview } from '@/types';
-import { cn } from '@/lib/cn';
 import { MessageSquare, Plus } from 'lucide-react';
+
+import { Button } from '@/components/atoms/Button';
+import { useModalState } from '@/hooks/core';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type CaseId, type CustodianInterview } from '@/types';
 
 import { InterviewList } from './interviews/InterviewList';
 import { InterviewModal } from './interviews/InterviewModal';
+
 // ✅ Migrated to backend API (2025-12-21)
-import { useModalState } from '@/hooks/core';
 
 interface DiscoveryInterviewsProps {
   caseId?: string;

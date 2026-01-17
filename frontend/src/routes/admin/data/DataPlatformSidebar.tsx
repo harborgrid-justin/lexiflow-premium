@@ -79,7 +79,7 @@ export function DataPlatformSidebar({ activeView, onChange }: DataPlatformSideba
       <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar min-h-0">
         {menu.map((item: MenuItem) => {
           const hasChildren = item.children && item.children.length > 0;
-          const itemId = item.id as string;
+          const itemId = item.id;
           const isExpanded = expanded[itemId];
           const isActive = activeView === itemId || (activeView.startsWith(itemId + '-'));
 
@@ -88,7 +88,7 @@ export function DataPlatformSidebar({ activeView, onChange }: DataPlatformSideba
               <button
                 onClick={() => {
                   if (hasChildren) toggleExpand(itemId);
-                  else onChange(itemId as PlatformView);
+                  else onChange(itemId);
                 }}
                 className={cn(
                   "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 group",
@@ -113,7 +113,7 @@ export function DataPlatformSidebar({ activeView, onChange }: DataPlatformSideba
                   {item.children.map((sub: MenuItem) => (
                     <button
                       key={sub.id}
-                      onClick={() => onChange(sub.id as PlatformView)}
+                      onClick={() => onChange(sub.id)}
                       className={cn(
                         "w-full flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
                         activeView === sub.id

@@ -1,5 +1,6 @@
-import { ExtendedUserProfile } from "@/types";
 import { useCallback, useState } from "react";
+
+import { type ExtendedUserProfile } from "@/types";
 
 // ============================================================================
 // Types

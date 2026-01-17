@@ -4,10 +4,11 @@
  * Allows authenticated users to change their password with policy enforcement
  */
 
+import { type FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router';
+
 import { PasswordStrengthIndicator } from '@/components/auth/PasswordStrengthIndicator';
 import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
-import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 export default function ChangePasswordPage() {
   const navigate = useNavigate();

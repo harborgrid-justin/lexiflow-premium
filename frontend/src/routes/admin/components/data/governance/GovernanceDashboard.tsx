@@ -1,8 +1,10 @@
-import { cn } from '@/lib/cn';
+import { AlertTriangle, Edit2, FileSearch, Scale, ShieldCheck } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 import { useTheme } from "@/hooks/useTheme";
-import { AlertTriangle, Edit2, FileSearch, Scale, ShieldCheck } from 'lucide-react';
+import { cn } from '@/lib/cn';
+
 
 // interface GovernanceDashboardProps {
 //     rules: GovernanceRule[];

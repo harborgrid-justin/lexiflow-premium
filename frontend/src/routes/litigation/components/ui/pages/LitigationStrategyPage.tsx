@@ -4,9 +4,10 @@
  * @description Litigation strategy canvas page - visual strategy planning and execution
  */
 
-import { LitigationBuilder } from '@/routes/litigation/components/strategy/LitigationBuilder';
-import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
 import React from "react";
+
+import { PageContainerLayout } from '@/layouts/PageContainerLayout/PageContainerLayout';
+import { LitigationBuilder } from '@/routes/litigation/components/strategy/LitigationBuilder';
 
 interface LitigationStrategyPageProps {
   caseId: string;

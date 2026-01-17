@@ -1,11 +1,12 @@
 
-import { CustodianInterview } from '@/types';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { User, Calendar, CheckSquare } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
-import { User, Calendar, CheckSquare } from 'lucide-react';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
+import { type CustodianInterview } from '@/types';
 
 interface InterviewListProps {
   interviews: CustodianInterview[];

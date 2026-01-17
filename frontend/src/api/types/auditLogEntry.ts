@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/audit/entities/audit-log.entity.ts
  */
 
-import { AuditLogEntry } from '@/types/compliance-risk';
-import { UUID, UserId } from '@/types/primitives';
+import { type AuditLogEntry } from '@/types/compliance-risk';
+import { type UUID, type UserId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.admin instead

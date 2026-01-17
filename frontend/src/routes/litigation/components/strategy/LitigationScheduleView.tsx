@@ -11,18 +11,20 @@ import { TrendingUp } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
 
 // Internal Components
-import { PlanningSidebar, ScheduleTimeline } from '@/routes/cases/components/detail/planning';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
-import { useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
+
 
 // Utils
 import { cn } from '@/lib/cn';
+import { PlanningSidebar, ScheduleTimeline } from '@/routes/cases/components/detail/planning';
 import { Pathfinding } from '@/utils/pathfinding';
 
+import { useLitigationActions, useLitigationState } from '../contexts/LitigationContext';
+
 // Types
-import { ZoomLevel } from './types';
+import { type ZoomLevel } from './types';
 import { calculateNodePositionFromDate, calculatePixelsPerDay, transformNodesToSchedule } from './utils';
 
 export const LitigationScheduleView: React.FC = () => {

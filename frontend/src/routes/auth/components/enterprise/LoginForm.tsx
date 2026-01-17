@@ -12,10 +12,12 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { AuthApiService } from '@/lib/frontend-api';
-import type { User } from '@/types';
 import React, { useState } from 'react';
 import { z } from 'zod';
+
+import { AuthApiService } from '@/lib/frontend-api';
+
+import type { User } from '@/types';
 
 // Validation schemas
 const loginSchema = z.object({

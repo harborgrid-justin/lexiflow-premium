@@ -10,16 +10,19 @@
  * deleting, and testing connections.
  */
 
-import { useTheme } from '@/hooks/useTheme';
-import { cn } from '@/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';
 import React from 'react';
+
+import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/cn';
+
 import { ConnectionCard } from './ConnectionCard';
-import { DataSourceSelector } from './DataSourceSelector';
-import { SystemHealthDisplay } from './SystemHealthDisplay';
 import { DATA_PROVIDERS } from './constants';
+import { DataSourceSelector } from './DataSourceSelector';
 import { useConnectionForm, useDataSourceConnections } from './hooks';
+import { SystemHealthDisplay } from './SystemHealthDisplay';
+
 import type { ConnectionFormData, DataProvider } from './types';
 
 /**

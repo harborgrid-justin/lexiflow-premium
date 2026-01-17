@@ -1,4 +1,4 @@
-import { DocketEntry, TimeEntry } from "@/types";
+import { type DocketEntry, type TimeEntry } from "@/types";
 
 /**
  * Deferred Data Skeleton

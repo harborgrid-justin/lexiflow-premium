@@ -19,7 +19,13 @@ import React, { useEffect } from 'react';
 // Components
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { Modal } from '@/components/molecules/Modal';
+import { useThemeContext } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { useWindow } from '@/providers';
+import { useDocketSheet } from '@/routes/cases/hooks/useDocketSheet';
 import { DocketTableSkeleton } from '@/routes/cases/ui/components/DocketSkeleton/DocketSkeleton';
+import { type CaseId, type DocketEntry } from '@/types';
+
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketEntryModal } from './DocketEntryModal';
 import { DocketFilterPanel } from './DocketFilterPanel';
@@ -28,15 +34,10 @@ import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useThemeContext } from "@/hooks/useTheme";
-import { useWindow } from '@/providers';
-import { useDocketSheet } from '@/routes/cases/hooks/useDocketSheet';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/lib/cn';
 
 // Types & Interfaces
-import { CaseId, DocketEntry } from '@/types';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';

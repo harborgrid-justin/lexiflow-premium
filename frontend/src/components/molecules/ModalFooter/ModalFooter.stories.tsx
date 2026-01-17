@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ModalFooter } from './ModalFooter';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ModalFooter> = {
   title: 'Components/Molecules/ModalFooter/ModalFooter',

@@ -6,13 +6,16 @@
  * @module routes/discovery/detail
  */
 
+import { redirect, useLoaderData, useNavigate } from 'react-router';
+
 import { discoveryApi } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
-import type { DiscoveryRequest } from '@/types';
-import { redirect, useLoaderData, useNavigate } from 'react-router';
-import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/detail";
+import type { DiscoveryRequest } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -94,7 +97,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 export default function DiscoveryDetailRoute() {
   const navigate = useNavigate();
-  const { item } = useLoaderData() as { item: DiscoveryRequest };
+  const { item } = useLoaderData();
 
   return (
     <div className="p-8">

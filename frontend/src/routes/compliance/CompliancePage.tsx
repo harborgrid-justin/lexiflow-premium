@@ -14,9 +14,12 @@
 
 import { Suspense } from 'react';
 import { Await } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
+
 import { ComplianceProvider } from './ComplianceProvider';
 import { ComplianceView } from './ComplianceView';
+
 import type { ComplianceLoaderData } from './loader';
 
 interface CompliancePageProps {

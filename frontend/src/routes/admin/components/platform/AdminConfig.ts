@@ -1,4 +1,4 @@
-import { Category } from './EntitySidebar';
+import { type Category } from './EntitySidebar';
 
 export const COLUMN_CONFIG: Record<Category, { header: string; key: string; type?: 'badge' | 'currency' | 'date' | 'default' }[]> = {
   users: [

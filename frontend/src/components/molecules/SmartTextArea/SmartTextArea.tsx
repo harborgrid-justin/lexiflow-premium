@@ -11,8 +11,9 @@
  * - Accessibility compliant
  */
 
-import React, { useRef, useEffect, useState, useCallback, useMemo, useId } from 'react';
 import { AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react';
+import React, { useRef, useEffect, useState, useCallback, useMemo, useId } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 

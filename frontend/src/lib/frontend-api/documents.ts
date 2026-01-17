@@ -32,10 +32,11 @@
  * ```
  */
 
-import type { Document } from "@/types";
 import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
 import { failure, type PaginatedResult, type Result, success } from "./types";
+
+import type { Document } from "@/types";
 
 /**
  * Document query filters

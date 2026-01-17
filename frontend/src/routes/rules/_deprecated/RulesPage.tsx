@@ -9,10 +9,13 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { RulesLoaderData } from './loader';
+
 import { RulesProvider } from './RulesProvider';
 import { RulesView } from './RulesView';
+
+import type { RulesLoaderData } from './loader';
 
 export function RulesPage() {
   const initialData = useLoaderData() as RulesLoaderData;

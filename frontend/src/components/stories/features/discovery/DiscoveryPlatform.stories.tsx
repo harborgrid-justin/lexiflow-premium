@@ -5,8 +5,9 @@
  * privilege logging, and legal holds management.
  */
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DiscoveryPlatform> = {
   title: 'Pages/Discovery Platform',

@@ -7,10 +7,12 @@
  * DAF (Document Assembly Framework) Domain - View Component
  */
 
-import { Button } from '@/components/organisms/_legacy/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
 import { FileStack, Plus } from 'lucide-react';
 import React, { useId } from 'react';
+
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+
 import { useDAF } from './DAFProvider';
 
 export function DAFView() {

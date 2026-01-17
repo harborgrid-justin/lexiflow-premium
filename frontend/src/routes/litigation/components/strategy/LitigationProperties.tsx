@@ -7,8 +7,9 @@
  * @module components/litigation/LitigationProperties
  */
 
-import React from 'react';
 import { BookOpen, Settings, X } from 'lucide-react';
+import React from 'react';
+
 // Internal Components
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
@@ -21,7 +22,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Types
-import { LitigationPropertiesProps } from './types';
+import { type LitigationPropertiesProps } from './types';
 
 export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
   isOpen, onClose, selectedNode, selectedConnection, onUpdateNode, onDeleteNode, onUpdateConnection, onDeleteConnection

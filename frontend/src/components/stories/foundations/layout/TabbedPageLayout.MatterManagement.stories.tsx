@@ -1,8 +1,8 @@
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/components/atoms/Button/Button';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Activity, BarChart3, Briefcase, Clock, DollarSign, Eye, Lightbulb, Plus, Settings, TrendingUp } from 'lucide-react';
 import { Suspense, useState } from 'react';
+
+import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout, type TabConfigItem } from '@/components/layouts';
 
 // Import actual Case Management components
 import { CaseAnalyticsDashboard } from '@/routes/cases/components/analytics/CaseAnalyticsDashboard';
@@ -12,6 +12,8 @@ import { CaseInsightsDashboard } from '@/routes/cases/components/insights/CaseIn
 import { NewCaseIntakeForm } from '@/routes/cases/components/intake/NewCaseIntakeForm';
 import { CaseOperationsCenter } from '@/routes/cases/components/operations/CaseOperationsCenter';
 import { CaseOverviewDashboard } from '@/routes/cases/components/overview/CaseOverviewDashboard';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * TabbedPageLayout with Actions - Matter Management pattern

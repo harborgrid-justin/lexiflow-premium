@@ -18,19 +18,19 @@ import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/data-service.service';
-import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
 import { cn } from '@/lib/cn';
 import { getTodayString } from '@/lib/dateUtils';
-import { sanitizeDocketEntry, validateDocketEntry } from '@/utils/docketValidation';
 import { IdGenerator } from '@/lib/idGenerator';
+import { DataService } from '@/services/data/data-service.service';
+import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
 
 // Types & Interfaces
-import { Case, CaseId, DocketEntry, DocketEntryType, TaskId, TaskPriorityBackend, TaskStatusBackend, WorkflowTask } from '@/types';
+import { type Case, type CaseId, type DocketEntry, type DocketEntryType, type TaskId, TaskPriorityBackend, TaskStatusBackend, type WorkflowTask } from '@/types';
+import { sanitizeDocketEntry, validateDocketEntry } from '@/utils/docketValidation';
 
 interface DocketEntryBuilderProps {
   initialData?: Partial<DocketEntry>;
@@ -150,7 +150,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
         assignee: 'Current User',
         dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         priority: TaskPriorityBackend.HIGH,
-        caseId: initialData.caseId as CaseId,
+        caseId: initialData.caseId,
         description: `Review newly filed docket entry: ${previewText}`,
         relatedModule: 'Motions',
         actionLabel: 'Open Docket'

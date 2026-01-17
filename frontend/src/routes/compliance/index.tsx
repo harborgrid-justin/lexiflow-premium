@@ -13,11 +13,13 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Import Page component
 import { CompliancePage } from './CompliancePage';
+
 import type { ComplianceLoaderData } from './loader';
 
 // Export loader

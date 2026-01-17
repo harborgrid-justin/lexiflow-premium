@@ -10,12 +10,13 @@
  * @optimization React.memo, useMemo for expensive analytics calculations
  */
 
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { Matter } from '@/types';
-import { queryKeys } from '@/utils/queryKeys';
 import { BarChart3, Briefcase, DollarSign, TrendingUp, Users } from 'lucide-react';
 import React, { useMemo } from 'react';
+
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/data-service.service';
+import { type Matter } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
 
 export const CaseAnalyticsView: React.FC = React.memo(() => {
   const { data: matters = [] } = useQuery<Matter[]>(

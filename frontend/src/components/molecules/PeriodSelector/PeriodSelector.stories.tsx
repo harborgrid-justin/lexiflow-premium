@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PeriodSelector } from './PeriodSelector';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof PeriodSelector> = {
   title: 'Components/Molecules/PeriodSelector/PeriodSelector',

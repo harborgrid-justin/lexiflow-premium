@@ -3,9 +3,10 @@
  * System-level settings including data source configuration
  */
 
+import { Database, Settings, Zap } from 'lucide-react';
+
 import { Card } from '@/components/molecules/Card/Card';
 import { DataSourceSelector } from '@/components/molecules/DataSourceSelector/DataSourceSelector';
-import { Database, Settings, Zap } from 'lucide-react';
 export function SystemSettings() {
   return (
     <div className="space-y-6">

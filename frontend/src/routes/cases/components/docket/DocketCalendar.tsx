@@ -9,16 +9,17 @@
  */
 
 // External Dependencies
-import React, { useState, useMemo } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from "@/hooks/useTheme";
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
+import { type DocketEntry } from '@/types';
 
 import {
     getPaddingDays,
@@ -28,7 +29,6 @@ import {
 } from './docketCalendar.utils';
 
 // Types & Interfaces
-import { DocketEntry } from '@/types';
 
 export const DocketCalendar: React.FC = () => {
   const { theme } = useTheme();

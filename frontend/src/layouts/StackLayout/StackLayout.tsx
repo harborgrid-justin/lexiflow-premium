@@ -5,8 +5,9 @@
  * Ideal for forms, toolbars, and linear content flow.
  */
 
-import { cn } from '@/lib/cn';
 import React, { memo } from 'react';
+
+import { cn } from '@/lib/cn';
 
 interface StackLayoutProps {
   children: React.ReactNode;

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CaseAnalyticsPage } from './CaseAnalyticsPage';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CaseAnalyticsPage> = {
   title: 'Components/Pages/cases/CaseAnalyticsPage',

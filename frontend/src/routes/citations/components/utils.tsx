@@ -4,8 +4,9 @@
  */
 
 import { CheckCircle, AlertTriangle, X, Book, Scale, FileText } from 'lucide-react';
-import { cn } from '@/lib/cn';
 import React from "react";
+
+import { cn } from '@/lib/cn';
 
 /**
  * Sanitize HTML string by removing script tags, iframes, and event handlers

@@ -16,10 +16,11 @@
  * @module Toast
  */
 
-import { TIMEOUTS } from '@/config/ports.config';
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
 import React from 'react';
-import toast, { Toaster, Toast as ToastType } from 'react-hot-toast';
+import toast, { Toaster, type Toast as ToastType } from 'react-hot-toast';
+
+import { TIMEOUTS } from '@/config/ports.config';
 
 /**
  * Toast notification props

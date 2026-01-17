@@ -1,4 +1,5 @@
 import { StatusBadge } from '@/components/atoms/StatusBadge/StatusBadge';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

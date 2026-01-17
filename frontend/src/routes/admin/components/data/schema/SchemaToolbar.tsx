@@ -1,8 +1,9 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/atoms/Button';
 import { BrainCircuit as Brain, Code, GitBranch, History, RefreshCw, Save, Table } from 'lucide-react';
 import React from "react";
+
+import { Button } from '@/components/atoms/Button';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
 interface SchemaToolbarProps {
   activeTab: string;
   setActiveTab: (tab: 'visual' | 'code' | 'history' | 'snapshots') => void;

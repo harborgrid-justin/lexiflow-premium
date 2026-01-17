@@ -14,8 +14,10 @@
 
 import { catalogApi } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/index";
 
 // ============================================================================

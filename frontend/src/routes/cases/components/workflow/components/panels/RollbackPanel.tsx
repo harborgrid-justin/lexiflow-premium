@@ -3,11 +3,13 @@
  * @description State snapshots and rollback functionality
  */
 
+import { Database, Undo2 } from 'lucide-react';
+
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
-import { Database, Undo2 } from 'lucide-react';
+
 import type { WorkflowSnapshot } from '@/types/workflow-advanced-types';
 
 interface RollbackPanelProps {

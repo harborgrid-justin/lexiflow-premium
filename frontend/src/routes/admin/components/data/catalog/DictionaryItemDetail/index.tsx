@@ -3,18 +3,21 @@
  * See: routes/_shared/ENTERPRISE_REACT_ARCHITECTURE_STANDARD.md
  */
 
+import { ArrowLeft, Save } from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button';
 import { useMutation } from '@/hooks/backend';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { ArrowLeft, Save } from 'lucide-react';
-import { useState } from 'react';
+
 import { DefinitionCard } from './DefinitionCard';
 import { GovernanceCard } from './GovernanceCard';
 import { TechSpecsCard } from './TechSpecsCard';
 import { UsageStatsCard } from './UsageStatsCard';
+
 import type { DictionaryItemDetailProps } from './types';
 
 export function DictionaryItemDetail({ item, onClose }: DictionaryItemDetailProps) {

@@ -33,12 +33,14 @@
  */
 
 import { getApiBaseUrl, getApiPrefix } from "@/config/network/api.config";
+
 import {
   extractFieldErrors,
   mapFetchError,
   mapHttpStatusToError,
   ValidationError,
 } from "./errors";
+import { toRecord } from "./guards";
 import { failure, type Result, success } from "./types";
 
 /**
@@ -258,9 +260,7 @@ export function createClient(config: ClientConfig = {}) {
 
         // Error - map to domain error
         const errorMessage = extractErrorMessage(result.data);
-        const fieldErrors = extractFieldErrors(
-          (result.data as Record<string, unknown>)?.errors
-        );
+        const fieldErrors = extractFieldErrors(toRecord(result.data).errors);
 
         if (response.status === 400 && fieldErrors) {
           return failure(new ValidationError(errorMessage, fieldErrors));
@@ -304,9 +304,11 @@ export function createClient(config: ClientConfig = {}) {
 
     const contentType = response.headers.get("content-type");
     if (contentType?.includes("application/json")) {
-      data = await response.json();
+      const parsed: unknown = await response.json();
+      data = parsed as T;
     } else {
-      data = (await response.text()) as unknown as T;
+      const parsed: unknown = await response.text();
+      data = parsed as T;
     }
 
     return {

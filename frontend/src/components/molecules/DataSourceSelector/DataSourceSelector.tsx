@@ -4,11 +4,13 @@
  * Shows backend availability status and only enables backend option when available
  */
 
-import { useBackendHealth } from '@/hooks/useBackendHealth';
-import type { DataSourceType } from '@/routes/dashboard/data/DataSourceContext';
-import { useDataSource } from '@/routes/dashboard/data/DataSourceContext';
 import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
+
+import { useBackendHealth } from '@/hooks/useBackendHealth';
+import { useDataSource } from '@/routes/dashboard/data/DataSourceContext';
+
+import type { DataSourceType } from '@/routes/dashboard/data/DataSourceContext';
 
 interface DataSourceOption {
   value: DataSourceType;

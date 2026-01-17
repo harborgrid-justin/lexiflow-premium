@@ -5,9 +5,10 @@
  * Lightweight alternative to KPICard for simpler metrics
  */
 
-import { cn } from '@/lib/cn';
+import { type LucideIcon } from 'lucide-react';
+
 import { useTheme } from "@/hooks/useTheme";
-import { LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

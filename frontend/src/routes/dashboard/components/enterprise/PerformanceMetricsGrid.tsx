@@ -5,9 +5,6 @@
  * Displays comprehensive performance metrics with benchmarks and trends
  */
 
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
-import type { BaseDashboardProps, PerformanceMetric } from '@/types/dashboard';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
@@ -17,13 +14,18 @@ import {
   Award,
   BarChart3,
   Filter,
-  LucideIcon,
+  type LucideIcon,
   Minus,
   Target,
   TrendingDown,
   TrendingUp
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import type { BaseDashboardProps, PerformanceMetric } from '@/types/dashboard';
 
 export interface PerformanceMetricsGridProps extends BaseDashboardProps {
   metrics: PerformanceMetric[];

@@ -5,6 +5,7 @@
  * Integration: Opp #8 from architecture docs
  */
 
+
 import { SystemEventType } from "@/types/integration-types";
 
 import { BaseEventHandler } from "./base-event.handler.service";
@@ -17,18 +18,32 @@ export class WallErectedHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.WALL_ERECTED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.WALL_ERECTED]
+    payload: SystemEventPayloads[typeof SystemEventType.WALL_ERECTED],
   ) {
     const actions: string[] = [];
     const { wall } = payload;
 
-    const { DataService } =
-      await import("@/services/data/data-service.service");
+    const dataServiceModule =
+      (await import("@/services/data/data-service.service"));
+    const { DataService } = dataServiceModule;
 
     // Generate RLS policy for ethical wall
     const policyName = `wall_enforce_${wall.caseId}`;
 
-    await DataService.admin.saveRLSPolicy({
+    const { admin } = DataService as {
+      admin: {
+        saveRLSPolicy: (policy: {
+          name: string;
+          table: string;
+          cmd: "SELECT";
+          roles: string[];
+          using: string;
+          status: "Active";
+        }) => Promise<void>;
+      };
+    };
+
+    await admin.saveRLSPolicy({
       name: policyName,
       table: "documents",
       cmd: "SELECT",

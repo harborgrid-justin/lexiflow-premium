@@ -6,8 +6,8 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { ConferralSession } from '@/types/discovery';
-import { UUID, CaseId, MotionId } from '@/types/primitives';
+import { type ConferralSession } from '@/types/discovery';
+import { type UUID, type CaseId, type MotionId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.pleadings instead

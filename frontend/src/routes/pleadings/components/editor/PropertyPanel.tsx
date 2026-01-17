@@ -1,9 +1,10 @@
+import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold } from 'lucide-react';
 import React from 'react';
+
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { useTheme } from "@/hooks/useTheme";
-import { PleadingSection } from '@/types';
 import { cn } from '@/lib/cn';
-import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold } from 'lucide-react';
+import { type PleadingSection } from '@/types';
 interface PropertyPanelProps {
     section?: PleadingSection;
     onUpdate: (updates: Partial<PleadingSection>) => void;

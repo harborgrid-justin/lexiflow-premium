@@ -18,7 +18,7 @@ export class ServiceCompletedHandler extends BaseEventHandler<
   readonly eventType = SystemEventType.SERVICE_COMPLETED;
 
   async handle(
-    payload: SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED]
+    payload: SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED],
   ) {
     const actions: string[] = [];
     const { job } = payload;
@@ -28,8 +28,9 @@ export class ServiceCompletedHandler extends BaseEventHandler<
       return this.createSuccess([]);
     }
 
-    const { DataService } =
+    const dataServiceModule =
       await import("@/services/data/data-service.service");
+    const { DataService } = dataServiceModule;
 
     const todayDate = new Date().toISOString().split("T")[0]!;
     const entry: DocketEntry = {
@@ -46,7 +47,10 @@ export class ServiceCompletedHandler extends BaseEventHandler<
       isSealed: false,
     };
 
-    await DataService.docket.add(entry);
+    const { docket } = DataService as {
+      docket: { add: (payload: DocketEntry) => Promise<void> };
+    };
+    await docket.add(entry);
     actions.push("Auto-filed Proof of Service to Docket");
 
     return this.createSuccess(actions);

@@ -12,7 +12,7 @@
 
 import { queryClient, useMutation, useQuery } from "@/hooks/backend";
 import { DataService } from "@/services/data/data-service.service";
-import { WorkflowTask } from "@/types";
+import { type WorkflowTask } from "@/types";
 
 /**
  * Main tasks hook - access all tasks

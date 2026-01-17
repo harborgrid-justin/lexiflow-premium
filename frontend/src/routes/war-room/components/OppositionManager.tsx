@@ -19,16 +19,9 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
-import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { useTheme } from "@/hooks/useTheme";
-import { useToggle } from '@/hooks/useToggle';
 
 // Components
 import { Button } from '@/components/atoms/Button';
@@ -36,12 +29,21 @@ import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { ErrorState } from '@/components/molecules/ErrorState';
 import { Modal } from '@/components/molecules/Modal';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { OppositionDetail } from './opposition/OppositionDetail';
-import { OppositionEntity, OppositionList } from './opposition/OppositionList';
-import { OppositionSidebar } from './opposition/OppositionSidebar';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
+import { useSingleSelection } from '@/hooks/useMultiSelection';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { useToggle } from '@/hooks/useToggle';
+
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
+
+import { OppositionDetail } from './opposition/OppositionDetail';
+import { type OppositionEntity, OppositionList } from './opposition/OppositionList';
+import { OppositionSidebar } from './opposition/OppositionSidebar';
 
 // ============================================================================
 // TYPES & INTERFACES

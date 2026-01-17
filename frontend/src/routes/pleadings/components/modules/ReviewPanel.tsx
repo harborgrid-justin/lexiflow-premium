@@ -1,11 +1,11 @@
-import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
-import { useTheme } from "@/hooks/useTheme";
-import { DataService } from '@/services/data/data-service.service';
-import { CaseId, TaskId, TaskPriorityBackend, TaskStatusBackend, UserId, WorkflowTask } from '@/types';
-import { PleadingComment } from '@/types';
-import { cn } from '@/lib/cn';
 import { CheckCircle, MessageSquare, MessagesSquare, Send } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type CaseId, type TaskId, TaskPriorityBackend, TaskStatusBackend, type UserId, type WorkflowTask , type PleadingComment } from '@/types';
 
 interface ReviewPanelProps {
     comments: PleadingComment[];

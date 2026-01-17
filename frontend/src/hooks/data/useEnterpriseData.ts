@@ -29,6 +29,9 @@
 
 import { enterpriseApi } from "@/api/enterprise";
 import { queryClient } from "@/services/infrastructure/query-client.service";
+
+import { useMutation, useQuery } from "./useQueryHooks";
+
 import type {
   Case,
   Client,
@@ -39,7 +42,6 @@ import type {
   User,
   WorkflowTask,
 } from "@/types";
-import { useMutation, useQuery } from "./useQueryHooks";
 
 interface UpdateCaseContext {
   previousCase?: { data: Case };

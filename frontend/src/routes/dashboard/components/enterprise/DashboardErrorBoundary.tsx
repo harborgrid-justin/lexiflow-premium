@@ -7,7 +7,7 @@
 
 import { motion } from 'framer-motion';
 import { AlertTriangle, ChevronDown, ChevronUp, Home, RefreshCw } from 'lucide-react';
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;

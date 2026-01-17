@@ -14,9 +14,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import type { LucideIcon } from 'lucide-react';
 import { ChevronRight, Home } from 'lucide-react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -26,11 +25,12 @@ import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+
 import * as styles from './Breadcrumbs.styles';
 
 // Types
 import type { UserRole } from '@/types';
-import React from "react";
+import type { LucideIcon } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES

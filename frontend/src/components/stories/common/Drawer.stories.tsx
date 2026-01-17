@@ -1,7 +1,9 @@
+import React, { useState } from 'react';
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Drawer } from '@/components/molecules/Drawer/Drawer';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React, { useState } from 'react';
 
 /**
  * Drawer component for side panels.

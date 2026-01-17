@@ -1,6 +1,6 @@
+import { ArrowRight } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router';
-import { ArrowRight } from 'lucide-react';
 
 interface AdminNavLinkProps {
   to: string;

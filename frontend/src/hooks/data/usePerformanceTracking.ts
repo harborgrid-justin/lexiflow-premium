@@ -18,8 +18,9 @@
  * ```
  */
 
-import { memoryMonitor } from "@/utils/memoryMonitor";
 import { useEffect, useRef } from "react";
+
+import { memoryMonitor } from "@/utils/memoryMonitor";
 
 /**
  * Options for performance tracking

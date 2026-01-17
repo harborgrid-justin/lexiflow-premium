@@ -8,8 +8,8 @@
  * Backend alignment: /backend/src/groups/entities/group.entity.ts
  */
 
-import { Group } from '@/types/system';
-import { GroupId, OrgId } from '@/types/primitives';
+import { type GroupId, type OrgId } from '@/types/primitives';
+import { type Group } from '@/types/system';
 
 /**
  * @deprecated MOCK DATA - Use DataService.admin instead

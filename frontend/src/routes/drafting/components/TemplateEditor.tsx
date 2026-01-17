@@ -5,6 +5,7 @@ import { api } from '@/api';
 import { useTheme } from '@/hooks/useTheme';
 import { useToast } from '@/providers';
 import { draftingApi, TemplateCategory, TemplateStatus } from '@api/domains/drafting';
+
 import type {
   ClauseReference,
   CreateTemplateDto,

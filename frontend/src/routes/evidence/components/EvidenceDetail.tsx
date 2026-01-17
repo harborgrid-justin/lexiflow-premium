@@ -5,13 +5,22 @@
  * Orchestrates sub-views (Overview, Admissibility, Chain of Custody, Forensics) via tabs.
  */
 
-import React from 'react';
 import { ArrowLeft, ExternalLink, FileSearch, Lock, Stamp } from 'lucide-react';
+import React from 'react';
+
 // Common Components
 import { Button } from '@/components/atoms/Button/Button';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 // Sub-components
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
+import { type ChainOfCustodyEvent, type EvidenceItem, type TrialExhibit } from '@/types';
+
 import { EvidenceAdmissibility } from './EvidenceAdmissibility';
 import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
 import { EvidenceForensics } from './EvidenceForensics';
@@ -19,16 +28,9 @@ import { EvidenceOverview } from './EvidenceOverview';
 import { EvidenceStructure } from './EvidenceStructure';
 
 // Context & Utils
-import { useTheme } from "@/hooks/useTheme";
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/lib/cn';
 
 // Services & Types
-import { useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 // ✅ Migrated to backend API (2025-12-21)
-import { ChainOfCustodyEvent, EvidenceItem, TrialExhibit } from '@/types';
 
 interface EvidenceDetailProps {
   selectedItem: EvidenceItem;

@@ -16,6 +16,7 @@
 // ============================================================================
 // Components
 import React from 'react';
+
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 
@@ -28,7 +29,7 @@ import { cn } from '@/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, MatterType } from '@/types';
+import { type Case, type MatterType } from '@/types';
 
 interface CaseFormFieldsProps {
   formData: Partial<Case>;

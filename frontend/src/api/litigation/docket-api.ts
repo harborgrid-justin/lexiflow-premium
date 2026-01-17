@@ -31,6 +31,7 @@ import {
   apiClient,
   type PaginatedResponse,
 } from "@/services/infrastructure/api-client.service";
+
 import type { DocketEntry } from "@/types";
 
 export interface DocketFilterOptions {
@@ -138,7 +139,7 @@ export class DocketApiService {
         response.data &&
         typeof response.data === "object"
       ) {
-        return response.data as PaginatedResponse<DocketEntry>;
+        return response.data;
       }
 
       // Fallback for direct response

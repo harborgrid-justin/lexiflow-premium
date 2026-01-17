@@ -6,7 +6,7 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { StipulationRequest } from '@/types/pleadings';
+import { type StipulationRequest } from '@/types/pleadings';
 
 /**
  * @deprecated MOCK DATA - Use DataService.pleadings instead

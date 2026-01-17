@@ -1,9 +1,11 @@
-import { DiffViewer } from '@/routes/discovery/components/DiffViewer/DiffViewer';
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
-import { Clause, ClauseVersion } from '@/types';
 import { ArrowLeftRight, History, X } from 'lucide-react';
 import { useState } from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { DiffViewer } from '@/routes/discovery/components/DiffViewer/DiffViewer';
+import { type Clause, type ClauseVersion } from '@/types';
+
 
 interface ClauseHistoryModalProps {
   clause: Clause;

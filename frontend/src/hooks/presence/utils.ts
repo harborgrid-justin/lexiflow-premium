@@ -3,7 +3,7 @@
  * @module hooks/presence/utils
  */
 
-import { PresenceStatus, PresenceStatusDisplay } from './types';
+import { PresenceStatus, type PresenceStatusDisplay } from './types';
 
 /**
  * Get color, label, and icon for presence status display.

@@ -13,12 +13,16 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
+import { LibraryPage } from './LibraryPage';
+
 import type { Route } from "./+types/index";
 
 // Import Page component
-import { LibraryPage } from './LibraryPage';
+
 import type { LibraryLoaderData } from './loader';
 
 // Export loader
@@ -41,7 +45,7 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export default function LibraryIndexRoute() {
-  const loaderData = useLoaderData() as LibraryLoaderData;
+  const loaderData = useLoaderData();
 
   return <LibraryPage loaderData={loaderData} />;
 }

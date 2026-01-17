@@ -5,11 +5,12 @@
  * @module routes/billing/hooks/useRateTables
  */
 
+import { useCallback } from "react";
+
 import { useNotify } from "@/hooks/useNotify";
 import { useQuery } from "@/hooks/useQueryHooks";
 import { billingApi } from "@/lib/frontend-api";
 import { queryKeys } from "@/utils/queryKeys";
-import { useCallback } from "react";
 
 export interface RateTable {
   id: string;

@@ -5,8 +5,8 @@
  * Displays high-level metrics, charts, and recent activity for evidence items.
  */
 
-import React from 'react';
 import { Activity, AlertTriangle, Box, HardDrive, ShieldCheck } from 'lucide-react';
+import React from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 // Common Components
@@ -15,12 +15,12 @@ import { Card } from '@/components/molecules/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 // Context & Utils
+import { type ViewMode } from '@/hooks/useEvidenceManager';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 
 // Services & Types
-import { ViewMode } from '@/hooks/useEvidenceManager';
-import { EvidenceItem } from '@/types';
+import { type EvidenceItem } from '@/types';
 
 interface EvidenceDashboardProps {
   onNavigate: (view: ViewMode) => void;

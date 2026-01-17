@@ -13,10 +13,12 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 import { WorkflowsPage } from './WorkflowsPage';
+
 import type { WorkflowsDeferredLoaderData } from './loader';
 
 // Export loader
@@ -38,7 +40,7 @@ export function meta() {
 // ============================================================================
 
 export default function WorkflowsIndexRoute() {
-  const loaderData = useLoaderData() as WorkflowsDeferredLoaderData;
+  const loaderData = useLoaderData();
 
   return <WorkflowsPage loaderData={loaderData} />;
 }

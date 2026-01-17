@@ -3,11 +3,14 @@
  * @description Individual lead card component
  */
 
-import type { ThemeObject } from '@/lib/theme/types';
-import { cn } from '@/lib/cn';
 import { Clock } from 'lucide-react';
-import type { Lead } from './types';
+
+import { cn } from '@/lib/cn';
+
 import { formatCurrency, getStatusColor } from './utils';
+
+import type { Lead } from './types';
+import type { ThemeObject } from '@/lib/theme/types';
 
 interface LeadCardProps {
   lead: Lead;

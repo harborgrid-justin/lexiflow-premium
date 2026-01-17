@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlanBuilder } from '@/routes/cases/components/detail/collaboration/DiscoveryPlanBuilder';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * DiscoveryPlanBuilder provides collaborative discovery planning tools including

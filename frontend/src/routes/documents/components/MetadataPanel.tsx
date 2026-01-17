@@ -3,9 +3,11 @@
  * Display and edit document metadata, tags, and custom fields
  */
 
-import type { LegalDocument } from '@/types/documents';
-import { formatDate } from '@/utils/formatters';
 import { useState } from 'react';
+
+import { formatDate } from '@/utils/formatters';
+
+import type { LegalDocument } from '@/types/documents';
 
 interface MetadataPanelProps {
   document: LegalDocument;

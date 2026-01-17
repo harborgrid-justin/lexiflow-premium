@@ -4,8 +4,9 @@
  * @description Standard styled search input without full toolbar overhead
  */
 
-import React, { useId } from 'react';
 import { Search } from 'lucide-react';
+import React, { useId } from 'react';
+
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 

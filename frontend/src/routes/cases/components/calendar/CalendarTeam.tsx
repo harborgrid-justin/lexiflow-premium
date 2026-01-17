@@ -15,17 +15,18 @@
 // ============================================================================
 // Services/Data
 import React from 'react';
+
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
 
 // Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';
+import { DataService } from '@/services/data/data-service.service';
 
 // ============================================================================
 // COMPONENT

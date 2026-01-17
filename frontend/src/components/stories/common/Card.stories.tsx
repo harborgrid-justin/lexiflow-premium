@@ -1,7 +1,9 @@
+import React from "react";
+
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React from "react";
 
 /**
  * Card component provides a container with optional header and footer sections.

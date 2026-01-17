@@ -2,7 +2,9 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import type React from 'react';
 interface InvoiceLineItem {
   id: string; type: 'time' | 'expense' | 'fixed_fee' | 'disbursement'; description: string; quantity: number; rate: number; amount: number; discount?: number; discountAmount?: number; taxable: boolean; utbmsCode?: string;
 } interface RateCard {

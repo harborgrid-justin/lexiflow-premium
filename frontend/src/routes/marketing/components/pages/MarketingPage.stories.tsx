@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MarketingPage } from './MarketingPage';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MarketingPage> = {
   title: 'Components/Pages/user/MarketingPage',

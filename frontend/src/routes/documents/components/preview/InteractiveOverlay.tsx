@@ -1,8 +1,10 @@
-import { useTheme } from "@/hooks/useTheme";
-import { cn } from '@/lib/cn';
 import { Move, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { PDFTool } from './AcrobatToolbar';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
+import { type PDFTool } from './AcrobatToolbar';
 
 interface Point { x: number; y: number }
 

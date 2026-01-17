@@ -3,9 +3,10 @@
  * Summary card showing billing metrics and KPIs
  */
 
-import { useTheme } from "@/hooks/useTheme";
 import { Clock, DollarSign, FileText, TrendingDown, TrendingUp } from 'lucide-react';
 import React from 'react';
+
+import { useTheme } from "@/hooks/useTheme";
 
 interface BillingSummaryCardProps {
   title: string;

@@ -10,13 +10,16 @@
 
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
+
 import { RouteError, RouteSkeleton } from '../_shared/RouteSkeletons';
-import type { PleadingsLoaderData } from './loader';
+
 import { PleadingsProvider } from './PleadingsContext';
 import { PleadingsView } from './PleadingsView';
 
+import type { PleadingsLoaderData } from './loader';
+
 export function PleadingsPage() {
-  const initialData = useLoaderData() as PleadingsLoaderData;
+  const initialData = useLoaderData();
 
   return (
     <Suspense fallback={<RouteSkeleton title="Loading Pleadings" />}>

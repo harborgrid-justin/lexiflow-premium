@@ -13,11 +13,13 @@
  */
 
 import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // Import standard components
 import { AnalyticsPage } from './AnalyticsPage';
+
 import type { clientLoader } from './loader';
 
 // Export loader (renamed to loader for standard router usage)
@@ -39,7 +41,7 @@ export function meta() {
 // ============================================================================
 
 export default function AnalyticsIndexRoute() {
-  const loaderData = useLoaderData() as ReturnType<typeof clientLoader>;
+  const loaderData = useLoaderData();
 
   return <AnalyticsPage loaderData={loaderData} />;
 }

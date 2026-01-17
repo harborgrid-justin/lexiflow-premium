@@ -1,9 +1,10 @@
 /** * QuickAddPartyModal Component * * Modal for quickly creating a party entity with attorney representation. * * Architecture: * - Form state managed with discriminated union for party types * - Attorney fields conditionally shown based on representation type * - Zod schema validation (client-side) * - Optimistic UI updates * - Error boundary for graceful failure handling */
 
-import { type CreateComponentProps } from '@/components/molecules/AutocompleteSelect/AutocompleteSelect';
-import { CreatePartyDto, PartyRoleBackend, PartyTypeBackend } from '@/lib/frontend-api';
 import { Building2, Gavel, User, X } from 'lucide-react';
 import React, { useCallback, useState } from 'react'; // Type aliases for cleaner code
+
+import { type CreateComponentProps } from '@/components/molecules/AutocompleteSelect/AutocompleteSelect';
+import { type CreatePartyDto, type PartyRoleBackend, type PartyTypeBackend } from '@/lib/frontend-api';
 type PartyType = PartyTypeBackend;
 type PartyRole = PartyRoleBackend; export interface QuickAddPartyModalProps extends CreateComponentProps<CreatePartyDto> { /** Pre-selected case ID if creating for specific case */ caseId?: string;
 } /** * Type-safe form state with discriminated unions * Extends CreatePartyDto with form-only fields */

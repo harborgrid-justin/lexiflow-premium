@@ -5,15 +5,6 @@
  * lifetime value calculation, risk assessment, and satisfaction tracking.
  */
 
-import { useQuery } from '@/hooks/backend';
-import { crmApi } from '@/lib/frontend-api';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/lib/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { ChartColorService } from "@/lib/theme/chartColorService";
-import { useTheme } from "@/hooks/useTheme";
-import { getChartTheme } from '@/utils/chartConfig';
 import {
   Activity,
   AlertTriangle,
@@ -46,6 +37,17 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
+
+import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { useQuery } from '@/hooks/backend';
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+import { crmApi } from '@/lib/frontend-api';
+import { ChartColorService } from "@/lib/theme/chartColorService";
+import { QUERY_KEYS } from '@/services/data/queryKeys';
+import { getChartTheme } from '@/utils/chartConfig';
+
 
 // ============================================================================
 // TYPES
@@ -119,8 +121,8 @@ interface ClientSegment {
 
 export const ClientAnalytics: React.FC = () => {
   const { theme, tokens: _tokens, mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
-  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
   const [activeTab, setActiveTab] = useState<'profitability' | 'ltv' | 'risk' | 'satisfaction'>('profitability');
 
   // Data queries

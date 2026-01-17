@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { useSortableList } from './useSortableList';
+
+import { type LegalDocument } from '@/types/documents';
+
 import { sortDocuments } from '../utils/documentUtils';
-import { LegalDocument } from '@/types/documents';
+
+import { useSortableList } from './useSortableList';
 
 export function useDocumentList(documents: LegalDocument[], viewMode: 'grid' | 'list') {
     const itemsPerPage = viewMode === 'grid' ? 12 : 20;

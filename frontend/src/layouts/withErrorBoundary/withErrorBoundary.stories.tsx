@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { withErrorBoundary } from './withErrorBoundary';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // Create a sample component to demonstrate the HOC
 const SampleComponent = () => <div>Sample Component</div>;

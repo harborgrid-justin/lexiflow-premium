@@ -1,6 +1,8 @@
-import { cn } from '@/lib/cn';
-import { useTheme } from "@/hooks/useTheme";
 import { Database } from 'lucide-react';
+
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from '@/lib/cn';
+
 import type { StoreInfo } from './types';
 
 interface IndexedDBStoreListProps {

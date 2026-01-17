@@ -15,11 +15,14 @@
  * @module routes/crm/index
  */
 
+import { useLoaderData } from 'react-router';
+
 import { communicationsApi } from '@/lib/frontend-api';
 import { ClientStatus } from '@/types';
-import { useLoaderData } from 'react-router';
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import { createListMeta } from '../_shared/meta-utils';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+
 import type { Route } from "./+types/index";
 
 // ============================================================================

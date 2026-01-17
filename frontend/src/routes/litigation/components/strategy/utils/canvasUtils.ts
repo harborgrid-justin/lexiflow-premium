@@ -6,8 +6,6 @@
  * @module components/litigation/utils/canvasUtils
  */
 
-import { NodeType } from "@/routes/cases/components/workflow/builder/types";
-import { type ContextMenuItem } from "@/components/molecules/ContextMenu";
 import {
   BoxSelect,
   Copy,
@@ -16,6 +14,10 @@ import {
   Layout,
   Trash2,
 } from "lucide-react";
+
+import { type ContextMenuItem } from "@/components/molecules/ContextMenu";
+import { type NodeType } from "@/routes/cases/components/workflow/builder/types";
+
 import { CANVAS_CONSTANTS } from "../canvasConstants";
 
 /**

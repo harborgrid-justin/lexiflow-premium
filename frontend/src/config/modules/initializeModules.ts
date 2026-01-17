@@ -1,8 +1,11 @@
-import { ModuleRegistry } from "@/services/infrastructure/module-registry.service";
-import { ModuleDefinition } from "@/types/misc";
 import { FilePlus, UserCircle } from "lucide-react";
+
+import { ModuleRegistry } from "@/services/infrastructure/module-registry.service";
+import { type ModuleDefinition } from "@/types/misc";
+
 import { NAVIGATION_ITEMS } from "../nav.config";
 import { PATHS } from "../paths.config";
+
 import { COMPONENT_MAP } from "./componentMap";
 import { NewCasePage, UserProfileManager } from "./lazyComponents";
 

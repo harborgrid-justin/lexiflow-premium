@@ -1,9 +1,10 @@
-import { CRMView } from '@/config/tabs.config';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/data-service.service';
-import { Client } from '@/types';
 import { Loader2 } from 'lucide-react';
 import { lazy } from 'react';
+
+import { type CRMView } from '@/config/tabs.config';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/data-service.service';
+import { type Client } from '@/types';
 
 const CRMDashboard = lazy(() => import('./CRMDashboard').then(m => ({ default: m.CRMDashboard })));
 const ClientDirectory = lazy(() => import('./ClientDirectory').then(m => ({ default: m.ClientDirectory })));

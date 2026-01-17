@@ -3,11 +3,13 @@
  * @module hooks/useEvidenceManager/useEvidenceFilters
  */
 
-import type { EvidenceItem } from "@/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
+
 import { DEFAULT_FILTERS } from "./constants";
-import type { EvidenceFilters } from "./types";
 import { applyEvidenceFilters } from "./utils";
+
+import type { EvidenceFilters } from "./types";
+import type { EvidenceItem } from "@/types";
 
 interface UseEvidenceFiltersParams {
   evidenceItems: EvidenceItem[];

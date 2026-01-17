@@ -12,17 +12,17 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo } from 'react';
 import { Folder, FileText, ChevronRight, Gavel, Plus, File, Scale, MoreVertical } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { Button } from '@/components/atoms/Button';
 import { useTheme } from "@/hooks/useTheme";
 
 // Components
-import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/lib/cn';

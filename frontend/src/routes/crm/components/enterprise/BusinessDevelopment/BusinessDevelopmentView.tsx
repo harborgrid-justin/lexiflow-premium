@@ -8,9 +8,11 @@
  * @description Main view component (90 LOC target) - Pure JSX presentation layer
  */
 
+import { Award, DollarSign, Target, Users } from 'lucide-react';
+
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 import { cn } from '@/lib/cn';
-import { Award, DollarSign, Target, Users } from 'lucide-react';
+
 import { AnalysisTab } from './AnalysisTab';
 import { TABS } from './constants';
 import { LeadsTab } from './LeadsTab';

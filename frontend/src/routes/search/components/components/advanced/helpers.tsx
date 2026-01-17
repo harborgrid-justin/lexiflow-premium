@@ -1,6 +1,8 @@
 import { FileText, Users, Calendar, Tag, Hash, Search } from 'lucide-react';
-import type { SearchCategory } from './types';
+
 import * as styles from './helpers.styles';
+
+import type { SearchCategory } from './types';
 
 export function getCategoryIcon(category: SearchCategory): React.ReactNode {
   switch (category) {

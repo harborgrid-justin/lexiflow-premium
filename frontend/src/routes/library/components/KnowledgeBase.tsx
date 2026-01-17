@@ -17,17 +17,19 @@ import { Suspense, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/atoms/Button/Button';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { KnowledgeContent } from './KnowledgeContent';
+
 
 // Utils & Config
-import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '@/config/tabs.config';
+import { KNOWLEDGE_BASE_TABS, type KnowledgeView } from '@/config/tabs.config';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { cn } from '@/lib/cn';
+
+import { KnowledgeContent } from './KnowledgeContent';
 
 // ============================================================================
 // TYPES & INTERFACES

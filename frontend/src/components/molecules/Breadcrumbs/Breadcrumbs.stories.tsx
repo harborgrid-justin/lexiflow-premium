@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumbs } from './Breadcrumbs';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Breadcrumbs> = {
   title: 'Components/Molecules/Breadcrumbs/Breadcrumbs',

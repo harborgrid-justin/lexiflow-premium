@@ -12,6 +12,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useDAF } from './DAFProvider';
 
@@ -70,16 +71,21 @@ export function DAFView() {
         )}
 
         {!isPending && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {templates.map(template => (
-              <TemplateCard key={template.id} template={template} />
-            ))}
-            {templates.length === 0 && (
-              <div className="col-span-full text-center py-12 text-slate-600 dark:text-slate-400">
-                No templates found
+          <>
+            {templates.length === 0 ? (
+              <EmptyState
+                icon={FileStack}
+                title="No templates found"
+                message="Create your first document assembly template to get started"
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {templates.map(template => (
+                  <TemplateCard key={template.id} template={template} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

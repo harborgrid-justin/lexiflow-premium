@@ -8,9 +8,11 @@ import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { PasswordStrengthIndicator } from '@/components/auth/PasswordStrengthIndicator';
+import { useFormError } from '@/hooks/routes';
 import { useAuthActions, useAuthState } from '@/providers/application/authprovider';
+import { withAuth } from '@/routes/_shared/hoc/withAuth';
 
-export default function ChangePasswordPage() {
+function ChangePasswordPage() {
   const navigate = useNavigate();
   const { changePassword } = useAuthActions();
   const { user, passwordPolicy } = useAuthState();
@@ -19,17 +21,17 @@ export default function ChangePasswordPage() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { errors, setError, clearAll, hasError } = useFormError();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
+    clearAll();
     setSuccess(false);
 
     // Validate new password matches confirmation
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      setError('confirmPassword', 'New passwords do not match');
       return;
     }
 
@@ -53,7 +55,7 @@ export default function ChangePasswordPage() {
     }
 
     if (policyErrors.length > 0) {
-      setError(policyErrors.join('. '));
+      setError('newPassword', policyErrors.join('. '));
       return;
     }
 
@@ -74,16 +76,13 @@ export default function ChangePasswordPage() {
       }, 2000);
     } catch (err) {
       console.error('[ChangePassword] Error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to change password');
+      setError('__global__', err instanceof Error ? err.message : 'Failed to change password');
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (!user) {
-    navigate('/login');
-    return null;
-  }
+  const { user } = useAuthState();
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -121,9 +120,9 @@ export default function ChangePasswordPage() {
           )}
 
           {/* Error Message */}
-          {error && (
+          {hasError('__global__') && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-              {error}
+              {errors.__global__}
             </div>
           )}
 
@@ -168,6 +167,9 @@ export default function ChangePasswordPage() {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              {errors.newPassword && (
+                <p className="mt-1 text-sm text-red-600">{errors.newPassword}</p>
+              )}
               {newPassword && (
                 <div className="mt-3">
                   <PasswordStrengthIndicator password={newPassword} showRequirements />
@@ -188,8 +190,8 @@ export default function ChangePasswordPage() {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              {confirmPassword && newPassword !== confirmPassword && (
-                <p className="mt-2 text-sm text-red-600">Passwords do not match</p>
+              {errors.confirmPassword && (
+                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
               )}
             </div>
 
@@ -227,3 +229,5 @@ export default function ChangePasswordPage() {
     </div>
   );
 }
+
+export default withAuth(ChangePasswordPage);

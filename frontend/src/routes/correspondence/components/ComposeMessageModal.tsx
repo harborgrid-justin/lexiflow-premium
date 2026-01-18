@@ -9,6 +9,7 @@ import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useFormError } from '@/hooks/routes';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { casesApi } from '@/lib/frontend-api';
@@ -28,6 +29,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
     const { theme } = useTheme();
     const notify = useNotify();
     const { register, revoke } = useBlobRegistry();
+    const { errors, setError, setErrors, clearAll } = useFormError();
 
     const [formData, setFormData] = useState<Partial<CommunicationItem>>({
         type: 'Email',
@@ -36,8 +38,6 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
         status: CommunicationStatus.DRAFT
     });
     const [isDrafting, setIsDrafting] = useState(false);
-    const [_validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-    // Note: validationErrors is set but not currently displayed in UI - can be used to show field-level errors
 
     // Load cases from IndexedDB via useQuery for accurate, cached data
     const { data: cases = [] } = useQuery(
@@ -158,12 +158,11 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
     }, [revoke]);
 
     const handleSend = () => {
+        clearAll();
         if (!formData.subject || !formData.recipient || !formData.caseId) {
-            setValidationErrors({
-                subject: !formData.subject ? 'Subject is required' : '',
-                recipient: !formData.recipient ? 'Recipient is required' : '',
-                caseId: !formData.caseId ? 'Case is required' : ''
-            });
+            if (!formData.subject) setError('subject', 'Subject is required');
+            if (!formData.recipient) setError('recipient', 'Recipient is required');
+            if (!formData.caseId) setError('caseId', 'Case is required');
             notify.error('Please fill in all required fields');
             return;
         }
@@ -187,11 +186,11 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
         // Validate with Zod schema
         const validation = validateCommunicationItemSafe(newMessage);
         if (!validation.success) {
-            const errors: Record<string, string> = {};
+            const errorMap: Record<string, string> = {};
             validation.error.issues.forEach(err => {
-                errors[err.path[0] as string] = err.message;
+                errorMap[err.path[0] as string] = err.message;
             });
-            setValidationErrors(errors);
+            setErrors(errorMap);
             notify.error('Validation failed. Please check your input.');
             return;
         }
@@ -200,7 +199,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
         setFormData({ type: 'Email', direction: 'Outbound', isPrivileged: false, status: CommunicationStatus.DRAFT });
         setBody('');
         setAttachments([]);
-        setValidationErrors({});
+        clearAll();
     };
 
     return (

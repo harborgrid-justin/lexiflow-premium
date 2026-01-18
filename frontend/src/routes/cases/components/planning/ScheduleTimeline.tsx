@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { cn } from '@/lib/cn';
+import { useAsyncState } from '@/hooks/routes';
 import { DataService } from '@/services/data/data-service.service';
 
 interface ScheduleTimelineProps {
@@ -18,36 +19,25 @@ interface TimelinePhase {
 
 export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ className, caseId }) => {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-  const [phases, setPhases] = useState<TimelinePhase[]>([]);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchPhases = async () => {
-      if (!caseId) return;
-      setLoading(true);
-      try {
-        // Fetch case phases from backend
-        const timelineData = await DataService.cases.getTimeline(caseId);
-        if (Array.isArray(timelineData)) {
-          // Adapt API response to UI model
-          setPhases(timelineData.map((t) => ({
-            id: t.id,
-            title: t.title || t.type,
-            startDate: t.date?.toString() || new Date().toISOString(),
-            endDate: t.endDate?.toString() || new Date().toISOString(),
-            isActive: t.status === 'ACTIVE'
-          })));
-        }
-      } catch (err) {
-        console.error("Failed to load timeline phases", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: timelineData, loading } = useAsyncState(
+    async () => {
+      if (!caseId) return [];
+      const data = await DataService.cases.getTimeline(caseId);
+      if (!Array.isArray(data)) return [];
+      return data.map((t) => ({
+        id: t.id,
+        title: t.title || t.type,
+        startDate: t.date?.toString() || new Date().toISOString(),
+        endDate: t.endDate?.toString() || new Date().toISOString(),
+        isActive: t.status === 'ACTIVE'
+      }));
+    },
+    'Failed to load timeline phases',
+    { dependencies: [caseId], immediate: !!caseId, initialData: [] }
+  );
 
-    // Only fetch if we have a caseId context, otherwise component is idle/empty
-    if (caseId) fetchPhases();
-  }, [caseId]);
+  const phases = timelineData || [];
 
   return (
     <div className={cn("flex flex-col h-full bg-white dark:bg-slate-950", className)}>

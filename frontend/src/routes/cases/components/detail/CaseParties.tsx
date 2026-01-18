@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User } from 'lucide-react';
+import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User, Users } from 'lucide-react';
 import React from 'react';
 
 // Internal Dependencies - Components
@@ -19,6 +19,7 @@ import { Input } from '@/components/atoms/Input';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
 import { Modal } from '@/components/molecules/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -170,7 +171,12 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             ))}
 
             {parties.length === 0 && (
-                <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No parties recorded.</div>
+                <EmptyState 
+                    icon={Users}
+                    title="No parties recorded"
+                    message="Add plaintiffs, defendants, or other involved parties to get started"
+                    size="sm"
+                />
             )}
 
             <Modal isOpen={partyModal.isOpen} onClose={partyModal.close} title={currentParty.id ? 'Edit Party' : 'Add New Party'}>

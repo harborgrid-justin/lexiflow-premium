@@ -9,12 +9,13 @@
  */
 
 // External Dependencies
-import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
+import { FileText, Handshake, Loader2, PenTool, Users } from 'lucide-react';
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -126,7 +127,12 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
                 ))
             )}
             {!loadingStips && stipulations.length === 0 && (
-                <div className="text-center py-12 text-slate-400 italic border-2 border-dashed rounded-lg">No pending stipulations.</div>
+                <EmptyState 
+                  icon={Handshake}
+                  title="No pending stipulations"
+                  message="Propose deadline extensions or agreements with opposing counsel"
+                  action={<Button variant="primary" icon={PenTool}>Propose Stipulation</Button>}
+                />
             )}
           </div>
         )}

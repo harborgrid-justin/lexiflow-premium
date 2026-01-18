@@ -8,6 +8,7 @@
  * repositories to trigger cross-domain workflows without tight coupling.
  */
 
+import { EventEmitter } from "@/services/core/factories";
 import { SystemEventType } from "@/types/integration-types";
 
 import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
@@ -18,25 +19,16 @@ type EventHandler = (payload: unknown) => Promise<void>;
  * Centralized event publisher for data layer integration events
  */
 export class IntegrationEventPublisher {
-  private static listeners = new Map<string, EventHandler[]>();
+  private static listeners = new Map<string, EventEmitter<unknown>>();
 
   /**
    * Subscribe to an event type
    */
   static subscribe(eventType: string, handler: EventHandler): () => void {
     if (!this.listeners.has(eventType)) {
-      this.listeners.set(eventType, []);
+      this.listeners.set(eventType, new EventEmitter({ serviceName: 'IntegrationEventPublisher' }));
     }
-    this.listeners.get(eventType)?.push(handler);
-    return () => {
-      const handlers = this.listeners.get(eventType);
-      if (handlers) {
-        const index = handlers.indexOf(handler);
-        if (index > -1) {
-          handlers.splice(index, 1);
-        }
-      }
-    };
+    return this.listeners.get(eventType)!.subscribe(handler);
   }
 
   /**
@@ -109,8 +101,10 @@ export class IntegrationEventPublisher {
       | { citation: unknown; queryContext: string }
       | Record<string, unknown>
   ): Promise<void> {
-    const handlers = this.listeners.get(eventType) || [];
-    await Promise.all(handlers.map((h) => h(payload)));
+    const emitter = this.listeners.get(eventType);
+    if (emitter) {
+      emitter.notify(payload);
+    }
   }
 }
 

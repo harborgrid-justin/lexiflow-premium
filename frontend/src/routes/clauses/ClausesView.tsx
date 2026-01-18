@@ -12,6 +12,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useClauses } from './ClausesProvider';
 
@@ -73,16 +74,21 @@ export function ClausesView() {
         )}
 
         {!isPending && (
-          <div className="space-y-3">
-            {clauses.map(clause => (
-              <ClauseCard key={clause.id} clause={clause} />
-            ))}
-            {clauses.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No clauses found
+          <>
+            {clauses.length === 0 ? (
+              <EmptyState
+                icon={FileText}
+                title="No clauses found"
+                message="Create or import clauses to build your contract library"
+              />
+            ) : (
+              <div className="space-y-3">
+                {clauses.map(clause => (
+                  <ClauseCard key={clause.id} clause={clause} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

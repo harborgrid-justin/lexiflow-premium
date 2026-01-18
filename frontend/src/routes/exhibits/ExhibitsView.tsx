@@ -7,6 +7,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useExhibits } from './ExhibitsProvider';
 
@@ -108,16 +109,21 @@ export function ExhibitsView() {
         )}
 
         {!isPending && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {exhibits.map(exhibit => (
-              <ExhibitCard key={exhibit.id} exhibit={exhibit} />
-            ))}
-            {exhibits.length === 0 && (
-              <div className="col-span-full text-center py-12 text-slate-600 dark:text-slate-400">
-                No exhibits found
+          <>
+            {exhibits.length === 0 ? (
+              <EmptyState
+                icon={Package}
+                title="No exhibits found"
+                message="Add your first exhibit to start organizing your trial evidence"
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {exhibits.map(exhibit => (
+                  <ExhibitCard key={exhibit.id} exhibit={exhibit} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

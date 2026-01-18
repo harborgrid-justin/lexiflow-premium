@@ -85,3 +85,15 @@ export interface ActionResponse<T = unknown> {
   error?: string;
   fieldErrors?: Record<string, string>;
 }
+
+/**
+ * Props for EmptyState component
+ */
+export interface EmptyStateProps {
+  title: string;
+  message: string;
+  icon?: any;
+  action?: React.ReactNode;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}

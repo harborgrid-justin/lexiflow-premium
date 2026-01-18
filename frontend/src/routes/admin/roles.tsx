@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 
 import { authApi } from '@/lib/frontend-api';
+import { withAdminAuth } from '@/routes/_shared/hoc/withAuth';
 
 import type { Route } from './+types/roles';
 import type { Role } from '@/lib/frontend-api';
@@ -27,7 +28,7 @@ export async function loader(_args: Route.LoaderArgs) {
   }
 }
 
-export default function AdminRolesPage() {
+function AdminRolesPage() {
   const { roles, permissionGroups } = useLoaderData() as Route.ComponentProps['loaderData'];
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
@@ -166,3 +167,5 @@ export const meta: Route.MetaFunction = () => [
   { title: 'Role Management - Admin - LexiFlow' },
   { name: 'description', content: 'Manage roles and permissions' },
 ];
+
+export default withAdminAuth(AdminRolesPage);

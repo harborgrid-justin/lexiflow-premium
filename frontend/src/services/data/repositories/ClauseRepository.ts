@@ -22,17 +22,10 @@ import {
   type CreateClauseDto,
   type UpdateClauseDto,
 } from "@/api/intelligence/clauses-api";
-import { ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository, createQueryKeys } from "@/services/core/factories";
 import { type BaseEntity, type Clause } from "@/types";
 
-export const CLAUSE_QUERY_KEYS = {
-  all: () => ["clauses"] as const,
-  byId: (id: string) => ["clauses", id] as const,
-  byCategory: (category: string) => ["clauses", "category", category] as const,
-  byJurisdiction: (jurisdiction: string) =>
-    ["clauses", "jurisdiction", jurisdiction] as const,
-} as const;
+export const CLAUSE_QUERY_KEYS = createQueryKeys('clauses');
 
 type ClauseEntity = Omit<Clause, "createdBy" | "updatedBy"> &
   Pick<
@@ -40,7 +33,10 @@ type ClauseEntity = Omit<Clause, "createdBy" | "updatedBy"> &
     "id" | "createdAt" | "updatedAt" | "deletedAt" | "createdBy" | "updatedBy"
   >;
 
-export class ClauseRepository extends Repository<ClauseEntity> {
+export class ClauseRepository extends GenericRepository<ClauseEntity> {
+  protected apiService = new ClausesApiService();
+  protected repositoryName = "ClauseRepository";
+
   private clausesApi: ClausesApiService;
 
   constructor() {
@@ -48,66 +44,43 @@ export class ClauseRepository extends Repository<ClauseEntity> {
     this.clausesApi = new ClausesApiService();
   }
 
-  private validateId(id: string, methodName: string): void {
-    if (!id || id.trim() === "") {
-      throw new Error(`[ClauseRepository.${methodName}] Invalid id parameter`);
-    }
-  }
-
-  override async getAll(): Promise<ClauseEntity[]> {
-    try {
-      const result = await this.clausesApi.getAll();
-      return result as unknown as ClauseEntity[];
-    } catch (error) {
-      console.error("Failed to fetch clauses", error);
-      return [];
-    }
-  }
-
-  override async getById(id: string): Promise<ClauseEntity | undefined> {
-    this.validateId(id, "getById");
-    const result = await this.clausesApi.getById(id);
-    return result as unknown as ClauseEntity;
-  }
-
-  override async add(item: ClauseEntity): Promise<ClauseEntity> {
-    if (!item || typeof item !== "object") {
-      throw new ValidationError("[ClauseRepository.add] Invalid clause data");
-    }
-    const {
-      id: _id,
-      createdAt: _createdAt,
-      updatedAt: _updatedAt,
-      ...createData
-    } = item;
-    const result = await this.clausesApi.create(
-      createData as unknown as CreateClauseDto
-    );
-    return result as unknown as ClauseEntity;
-  }
-
-  override async update(
+  async render(
     id: string,
-    updates: Partial<ClauseEntity>
-  ): Promise<ClauseEntity> {
-    this.validateId(id, "update");
-    const result = await this.clausesApi.update(
-      id,
-      updates as unknown as UpdateClauseDto
-    );
-    return result as unknown as ClauseEntity;
+    variables: Record<string, unknown>
+  ): Promise<string> {
+    this.validateIdParameter(id, "render");
+    const result = await this.clausesApi.render(id, variables);
+    return result.text;
   }
 
-  override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
-    await this.clausesApi.delete(id);
+  async getByCategory(category: string): Promise<ClauseEntity[]> {
+    const clauses = await this.getAll();
+    return clauses.filter((c) => c.category === category);
+  }
+
+  async search(query: string): Promise<ClauseEntity[]> {
+    if (!query) return [];
+    const clauses = await this.getAll();
+    const lowerQuery = query.toLowerCase();
+    return clauses.filter((c) => {
+      const clauseWithText = c as ClauseEntity & { text?: string };
+      const text = clauseWithText.text || "";
+      const textMatches =
+        typeof text === "string" && text.toLowerCase().includes(lowerQuery);
+      return (
+        c.name?.toLowerCase().includes(lowerQuery) ||
+        textMatches ||
+        c.content?.toLowerCase().includes(lowerQuery) ||
+        c.tags?.some((t) => t.toLowerCase().includes(lowerQuery))
+      );
+    });
   }
 
   async render(
     id: string,
     variables: Record<string, unknown>
   ): Promise<string> {
-    this.validateId(id, "render");
+    this.validateIdParameter(id, "render");
     const result = await this.clausesApi.render(id, variables);
     return result.text;
   }

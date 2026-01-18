@@ -16,10 +16,11 @@
  */
 
 // External Dependencies
-import { Loader2, Plus, ShieldCheck, Wand2 } from 'lucide-react';
+import { FileText, Loader2, Plus, ShieldCheck, Wand2 } from 'lucide-react';
 import React, { lazy, Suspense } from 'react';
 
 // Internal Dependencies - Components
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -137,9 +138,16 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
           />
         ))}
         {documents.length === 0 && (
-          <div className={cn("text-center py-12 rounded-lg border border-dashed", theme.border.default, theme.text.tertiary)}>
-            No documents found. Upload new or assemble from template.
-          </div>
+          <EmptyState 
+            icon={FileText}
+            title="No documents found"
+            message="Upload new documents or assemble from template to get started"
+            action={
+              <button onClick={handleOpenWizard} className={cn("flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm hover:shadow", theme.primary.DEFAULT, theme.text.inverse, theme.primary.hover)}>
+                <Wand2 className="h-4 w-4 mr-2" /> Assemble Document
+              </button>
+            }
+          />
         )}
       </div>
     </div>

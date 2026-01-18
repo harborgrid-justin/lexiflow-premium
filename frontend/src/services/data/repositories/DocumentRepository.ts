@@ -32,7 +32,7 @@ import {
   OperationError,
   ValidationError,
 } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository, createQueryKeys, type IApiService } from "@/services/core/factories";
 import { BlobManager } from "@/services/infrastructure/blob-manager.service";
 import { type DocumentVersion, type FileChunk, type LegalDocument } from "@/types";
 
@@ -40,15 +40,9 @@ const yieldToMain = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 /**
  * Query keys for React Query integration
- * Use these constants for cache invalidation and refetching
- *
- * @example
- * queryClient.invalidateQueries({ queryKey: DOCUMENT_QUERY_KEYS.all() });
- * queryClient.invalidateQueries({ queryKey: DOCUMENT_QUERY_KEYS.byCase(caseId) });
  */
 export const DOCUMENT_QUERY_KEYS = {
-  all: () => ["documents"] as const,
-  byId: (id: string) => ["documents", id] as const,
+  ...createQueryKeys('documents'),
   byCase: (caseId: string) => ["documents", "case", caseId] as const,
   templates: () => ["documents", "templates"] as const,
   recent: () => ["documents", "recent"] as const,
@@ -61,12 +55,12 @@ export const DOCUMENT_QUERY_KEYS = {
  * Document Repository Class
  * Implements backend-first pattern
  */
-export class DocumentRepository extends Repository<LegalDocument> {
-  private documentsApi: DocumentsApiService;
+export class DocumentRepository extends GenericRepository<LegalDocument> {
+  protected apiService: IApiService<LegalDocument> = new DocumentsApiService();
+  protected repositoryName = 'DocumentRepository';
 
   constructor() {
-    super("documents");
-    this.documentsApi = new DocumentsApiService();
+    super('documents');
     this.logInitialization();
   }
 
@@ -78,18 +72,6 @@ export class DocumentRepository extends Repository<LegalDocument> {
     console.log(
       `[DocumentRepository] Initialized with Backend API (PostgreSQL)`
     );
-  }
-
-  /**
-   * Validate and sanitize document ID parameter
-   * @private
-   */
-  private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== "string" || id.trim() === "") {
-      throw new Error(
-        `[DocumentRepository.${methodName}] Invalid id parameter`
-      );
-    }
   }
 
   /**
@@ -114,20 +96,10 @@ export class DocumentRepository extends Repository<LegalDocument> {
   }
 
   // =============================================================================
-  // CRUD OPERATIONS
+  // CRUD OPERATIONS - Inherited from GenericRepository
+  // Custom implementations for options support
   // =============================================================================
 
-  /**
-   * Get all documents with optional filters
-   *
-   * @returns Promise<LegalDocument[]> Array of documents
-   * @throws Error if fetch fails
-   *
-   * @example
-   * const allDocs = await repo.getAll();
-   * const caseDocs = await repo.getAll({ caseId: 'case-123' });
-   * @param options
-   */
   override async getAll(options?: {
     caseId?: string;
     type?: string;
@@ -136,103 +108,35 @@ export class DocumentRepository extends Repository<LegalDocument> {
     limit?: number;
     cursor?: string;
   }): Promise<LegalDocument[]> {
-    try {
-      const result = await this.documentsApi.getAll(options);
-      return result as unknown as LegalDocument[];
-    } catch (error) {
-      console.error("[DocumentRepository] Backend API error", error);
-      throw error;
-    }
+    const result = await this.apiService.getAll(options);
+    return result as unknown as LegalDocument[];
   }
 
-  /**
-   * Get document by ID
-   *
-   * @param id - Document ID
-   * @returns Promise<LegalDocument | undefined> Document or undefined
-   * @throws Error if id is invalid or fetch fails
-   */
   override async getById(id: string): Promise<LegalDocument | undefined> {
-    this.validateId(id, "getById");
-
-    try {
-      const result = await this.documentsApi.getById(id);
-      return result as unknown as LegalDocument;
-    } catch (error) {
-      console.error("[DocumentRepository] Backend API error", error);
-      throw error;
-    }
+    this.validateIdParameter(id, 'getById');
+    const result = await this.apiService.getById(id);
+    return result as unknown as LegalDocument;
   }
 
-  /**
-   * Add a new document
-   *
-   * @param document - Document data
-   * @returns Promise<LegalDocument> Created document
-   * @throws Error if validation fails or create fails
-   */
   override async add(document: LegalDocument): Promise<LegalDocument> {
-    if (!document || typeof document !== "object") {
-      throw new ValidationError(
-        "[DocumentRepository.add] Invalid document data"
-      );
-    }
-
-    try {
-      const result = await this.documentsApi.add(document);
-      return result as unknown as LegalDocument;
-    } catch (error) {
-      console.error("[DocumentRepository] Backend API error", error);
-      throw error;
-    }
+    this.validateItemData(document, 'add');
+    const result = await this.apiService.add(document);
+    return result as unknown as LegalDocument;
   }
 
-  /**
-   * Update an existing document
-   *
-   * @param id - Document ID
-   * @param updates - Partial document updates
-   * @returns Promise<LegalDocument> Updated document
-   * @throws Error if validation fails or update fails
-   */
   override async update(
     id: string,
     updates: Partial<LegalDocument>
   ): Promise<LegalDocument> {
-    this.validateId(id, "update");
-
-    if (!updates || typeof updates !== "object") {
-      throw new ValidationError(
-        "[DocumentRepository.update] Invalid updates data"
-      );
-    }
-
-    try {
-      const result = await this.documentsApi.update(id, updates);
-      return result as unknown as LegalDocument;
-    } catch (error) {
-      console.error("[DocumentRepository] Backend API error", error);
-      throw error;
-    }
+    this.validateIdParameter(id, 'update');
+    this.validateItemData(updates, 'update');
+    const result = await this.apiService.update(id, updates);
+    return result as unknown as LegalDocument;
   }
 
-  /**
-   * Delete a document
-   *
-   * @param id - Document ID
-   * @returns Promise<void>
-   * @throws Error if id is invalid or delete fails
-   */
   override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
-
-    try {
-      await this.documentsApi.delete(id);
-      return;
-    } catch (error) {
-      console.error("[DocumentRepository] Backend API error", error);
-      throw error;
-    }
+    this.validateIdParameter(id, 'delete');
+    await this.apiService.delete(id);
   }
 
   // =============================================================================
@@ -241,16 +145,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
   /**
    * Get file blob for a document
-   *
-   * @param id - Document ID
-   * @returns Promise<Blob | null> File blob or null
-   * @throws Error if id is invalid
    */
   async getFile(id: string): Promise<Blob | null> {
-    this.validateId(id, "getFile");
+    this.validateIdParameter(id, "getFile");
 
     try {
-      return await this.documentsApi.download(id);
+      return await this.apiService.download(id);
     } catch (error) {
       console.error("[DocumentRepository.getFile] Error:", error);
       return null;
@@ -259,13 +159,9 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
   /**
    * Get document text content
-   *
-   * @param id - Document ID
-   * @returns Promise<string> Document content as text
-   * @throws Error if id is invalid or fetch fails
    */
   async getContent(id: string): Promise<string> {
-    this.validateId(id, "getContent");
+    this.validateIdParameter(id, "getContent");
 
     try {
       const blob = await this.getFile(id);
@@ -280,7 +176,6 @@ export class DocumentRepository extends Repository<LegalDocument> {
         }
       }
 
-      // Fallback to metadata content
       const doc = await this.getById(id);
       return doc?.content || "";
     } catch (error) {
@@ -291,54 +186,28 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
   /**
    * Upload a document file with metadata
-   *
-   * @param file - File to upload
-   * @param meta - Document metadata
-   * @returns Promise<LegalDocument> Created document
-   * @throws Error if validation fails or upload fails
    */
   async uploadDocument(
     file: File,
     meta: Partial<LegalDocument>
   ): Promise<LegalDocument> {
     this.validateFile(file, "uploadDocument");
-
-    try {
-      return await this.documentsApi.upload(file, meta || {});
-    } catch (error) {
-      console.error("[DocumentRepository.uploadDocument] Error:", error);
-      throw error;
-    }
+    return await this.apiService.upload(file, meta || {});
   }
 
   /**
    * Download a document file
-   *
-   * @param id - Document ID
-   * @returns Promise<Blob> File blob
-   * @throws Error if id is invalid or download fails
    */
   async downloadDocument(id: string): Promise<Blob> {
-    this.validateId(id, "downloadDocument");
-
-    try {
-      return await this.documentsApi.download(id);
-    } catch (error) {
-      console.error("[DocumentRepository.downloadDocument] Error:", error);
-      throw error;
-    }
+    this.validateIdParameter(id, "downloadDocument");
+    return await this.apiService.download(id);
   }
 
   /**
    * Get document URL for display
-   * Note: Caller is responsible for revoking the URL when done
-   *
-   * @param id - Document ID
-   * @returns Promise<string | null> Blob URL or null
-   * @throws Error if id is invalid
    */
   async getDocumentUrl(id: string): Promise<string | null> {
-    this.validateId(id, "getDocumentUrl");
+    this.validateIdParameter(id, "getDocumentUrl");
 
     try {
       const blob = await this.getFile(id);
@@ -354,11 +223,6 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
   /**
    * Bulk upload multiple documents
-   *
-   * @param files - Array of files to upload
-   * @param metadata - Shared metadata for all files
-   * @returns Promise<LegalDocument[]> Created documents
-   * @throws Error if validation fails or upload fails
    */
   async bulkUpload(
     files: File[],
@@ -374,12 +238,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
       this.validateFile(file, `bulkUpload[${index}]`);
     });
 
-    try {
-      return await this.documentsApi.bulkUpload(files, metadata);
-    } catch (error) {
-      console.error("[DocumentRepository.bulkUpload] Error:", error);
-      throw error;
-    }
+    return await this.apiService.bulkUpload(files, metadata);
   }
 
   // =============================================================================
@@ -388,11 +247,6 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
   /**
    * Process a file and extract metadata
-   * Generates hash, chunks, tags, and summary
-   *
-   * @param file - File to process
-   * @returns Promise with processing results
-   * @throws Error if validation fails or processing fails
    */
   async processFile(file: File): Promise<{
     hash: string;
@@ -477,14 +331,9 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
   /**
    * Redact sensitive information from a document
-   * Creates a new version with redacted content
-   *
-   * @param docId - Document ID
-   * @returns Promise<LegalDocument> Redacted document
-   * @throws Error if document not found or redaction fails
    */
   async redact(docId: string): Promise<LegalDocument> {
-    this.validateId(docId, "redact");
+    this.validateIdParameter(docId, "redact");
 
     try {
       const doc = await this.getById(docId);

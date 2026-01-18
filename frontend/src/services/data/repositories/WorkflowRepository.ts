@@ -1,7 +1,10 @@
 import { BUSINESS_PROCESSES } from "@/api/types/firmProcess";
 import { TEMPLATE_LIBRARY } from "@/api/types/workflowTemplates";
-import { TasksApiService } from "@/api/workflow/tasks-api";
-import { WorkflowApiService } from "@/api/workflow/workflow-api";
+import { type CreateTaskDto, TasksApiService } from "@/api/workflow/tasks-api";
+import {
+  WorkflowApiService,
+  type WorkflowTemplate,
+} from "@/api/workflow/workflow-api";
 import {
   type CasePhase,
   TaskPriorityBackend,
@@ -36,7 +39,7 @@ class WorkflowRepositoryClass {
     } catch (error) {
       console.warn(
         "[WorkflowRepository] Error fetching templates from API, using fallback:",
-        error
+        error,
       );
       return TEMPLATE_LIBRARY;
     }
@@ -48,7 +51,7 @@ class WorkflowRepositoryClass {
     } catch (error) {
       console.warn(
         "[WorkflowRepository] Error fetching tasks from API:",
-        error
+        error,
       );
       return [];
     }
@@ -58,7 +61,7 @@ class WorkflowRepositoryClass {
     try {
       const tasks = await this.getTasks();
       const completed = tasks.filter(
-        (t) => t.status === TaskStatusBackend.COMPLETED
+        (t) => t.status === TaskStatusBackend.COMPLETED,
       ).length;
       const total = tasks.length;
 
@@ -67,7 +70,7 @@ class WorkflowRepositoryClass {
         (t) =>
           t.status !== TaskStatusBackend.COMPLETED &&
           t.dueDate &&
-          new Date(t.dueDate) < now
+          new Date(t.dueDate) < now,
       ).length;
       const atRisk = tasks.filter((t) => {
         if (t.status === TaskStatusBackend.COMPLETED) return false;
@@ -124,12 +127,15 @@ class WorkflowRepositoryClass {
       if (template.id && !template.id.startsWith("temp-")) {
         return await this.workflowApi.updateTemplate(
           template.id,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          template as any
+          template as unknown as Partial<WorkflowTemplate>,
         );
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return await this.workflowApi.createTemplate(template as any);
+        return await this.workflowApi.createTemplate(
+          template as unknown as Omit<
+            WorkflowTemplate,
+            "id" | "createdAt" | "updatedAt"
+          >,
+        );
       }
     } catch (error) {
       console.error("[WorkflowRepository] Error saving template:", error);
@@ -141,7 +147,7 @@ class WorkflowRepositoryClass {
     try {
       const tasks = await this.getTasks();
       const reviewTasks = tasks.filter(
-        (t) => t.status === TaskStatusBackend.BLOCKED
+        (t) => t.status === TaskStatusBackend.BLOCKED,
       );
       return reviewTasks.map((t) => ({
         id: t.id,
@@ -183,21 +189,21 @@ class WorkflowRepositoryClass {
 
   deployStrategyToCase = async (
     caseId: string,
-    payload: { phases: CasePhase[]; tasks: WorkflowTask[] }
+    payload: { phases: CasePhase[]; tasks: WorkflowTask[] },
   ) => {
     try {
       if (payload.tasks && payload.tasks.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (this.tasksApi as any).createBulk({
-          entries: payload.tasks.map((t) => ({ ...t, caseId })),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any);
+        await this.tasksApi.createBulk({
+          entries: payload.tasks.map(
+            (t) => ({ ...t, caseId }) as CreateTaskDto,
+          ),
+        });
       }
       return { success: true };
     } catch (error) {
       console.error(
         "[WorkflowRepository] Error deploying strategy to case:",
-        error
+        error,
       );
       return { success: false };
     }
@@ -262,9 +268,9 @@ class WorkflowRepositoryClass {
   getEngineDetails = async (id: string, type: "case" | "process") => {
     try {
       await delay(100);
-      const tasks = (await this.tasksApi.getAll({
+      const tasks = await this.tasksApi.getAll({
         caseId: id,
-      }));
+      });
       const total = tasks?.length || 0;
       const completed =
         tasks?.filter((t) => t.status === TaskStatusBackend.COMPLETED).length ||
@@ -299,7 +305,7 @@ class WorkflowRepositoryClass {
     } catch (error) {
       console.warn(
         "[WorkflowRepository] Error fetching engine details:",
-        error
+        error,
       );
       return {
         id,

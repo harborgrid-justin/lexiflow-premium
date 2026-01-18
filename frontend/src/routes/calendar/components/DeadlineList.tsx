@@ -3,9 +3,10 @@
  * Displays upcoming deadlines with priority indicators and court-specific features
  */
 
-import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
+import { Calendar, differenceInDays, format, formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
 
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import type { CalendarEvent } from '@/lib/frontend-api';
 
 export interface DeadlineListProps {
@@ -145,12 +146,12 @@ export function DeadlineList({
 
       {/* Deadline list */}
       {sortedEvents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 p-12 text-center dark:border-gray-700">
-          <svg className="mb-3 h-12 w-12 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm text-gray-500 dark:text-gray-400">No deadlines found</p>
-        </div>
+        <EmptyState 
+          icon={Calendar}
+          title="No deadlines found"
+          message="Deadlines will appear here based on your selected filter"
+          size="sm"
+        />
       ) : (
         <div className="space-y-2">
           {sortedEvents.map((event) => {

@@ -16,6 +16,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/api-client.service";
+import { StoragePersistence } from "@/services/core/factories";
 
 interface SearchResult {
   id: string;
@@ -28,6 +29,7 @@ interface SearchResult {
 
 const RECENT_SEARCHES_KEY = "lexiflow_recent_searches";
 const MAX_RECENT_SEARCHES = 10;
+const recentSearchStorage = new StoragePersistence<string[]>(RECENT_SEARCHES_KEY);
 
 export const SearchService = {
   getAll: async () => [], // Not applicable for search service
@@ -66,8 +68,7 @@ export const SearchService = {
 
   getRecentSearches: async (): Promise<string[]> => {
     try {
-      const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
-      return stored ? JSON.parse(stored) : [];
+      return recentSearchStorage.get() ?? [];
     } catch (error) {
       console.error("[SearchService.getRecentSearches] Error:", error);
       return [];
@@ -81,7 +82,7 @@ export const SearchService = {
         0,
         MAX_RECENT_SEARCHES,
       );
-      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+      recentSearchStorage.set(updated);
       return true;
     } catch (error) {
       console.error("[SearchService.saveSearch] Error:", error);

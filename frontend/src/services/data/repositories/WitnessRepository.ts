@@ -1,66 +1,34 @@
 /**
  * Witness Repository
  * Enterprise-grade repository for witness management with backend API integration
- *
- * @module WitnessRepository
- * @description Manages all witness-related operations including:
- * - Witness CRUD operations
- * - Type and status filtering
- * - Credibility tracking
- * - Prep status management
- * - Search and filtering
- *
- * @security
- * - Input validation on all parameters
- * - XSS prevention through type enforcement
- * - Backend-first architecture with secure fallback
- * - Proper error handling and logging
  */
 
 import { type Witness, WitnessesApiService } from "@/api/discovery/witnesses-api";
 import { ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository, createQueryKeys, type IApiService } from "@/services/core/factories";
 
 export const WITNESS_QUERY_KEYS = {
-  all: () => ["witnesses"] as const,
-  byId: (id: string) => ["witnesses", id] as const,
+  ...createQueryKeys('witnesses'),
   byCase: (caseId: string) => ["witnesses", "case", caseId] as const,
   byType: (type: string) => ["witnesses", "type", type] as const,
   byStatus: (status: string) => ["witnesses", "status", status] as const,
 } as const;
 
-export class WitnessRepository extends Repository<Witness> {
-  private witnessesApi: WitnessesApiService;
+export class WitnessRepository extends GenericRepository<Witness> {
+  protected apiService: IApiService<Witness> = new WitnessesApiService();
+  protected repositoryName = 'WitnessRepository';
 
   constructor() {
-    super("witnesses");
-    this.witnessesApi = new WitnessesApiService();
+    super('witnesses');
     console.log(`[WitnessRepository] Initialized with Backend API`);
   }
 
-  private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== "string" || id.trim() === "") {
-      throw new Error(`[WitnessRepository.${methodName}] Invalid id parameter`);
-    }
-  }
+  // CRUD operations inherited from GenericRepository
 
-  override async getAll(): Promise<Witness[]> {
-    try {
-      return await this.witnessesApi.getAll();
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
+  // Custom methods
   override async getByCaseId(caseId: string): Promise<Witness[]> {
-    this.validateId(caseId, "getByCaseId");
-    try {
-      return await this.witnessesApi.getByCaseId(caseId);
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
+    this.validateIdParameter(caseId, "getByCaseId");
+    return await this.apiService.getByCaseId(caseId);
   }
 
   async getByType(witnessType: string): Promise<Witness[]> {
@@ -69,14 +37,9 @@ export class WitnessRepository extends Repository<Witness> {
         "[WitnessRepository.getByType] Invalid witnessType"
       );
     }
-    try {
-      return await this.witnessesApi.getByType(
-        witnessType as Witness["witnessType"]
-      );
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
+    return await this.apiService.getByType(
+      witnessType as Witness["witnessType"]
+    );
   }
 
   async getByStatus(status: string): Promise<Witness[]> {
@@ -85,79 +48,23 @@ export class WitnessRepository extends Repository<Witness> {
         "[WitnessRepository.getByStatus] Invalid status"
       );
     }
-    try {
-      return await this.witnessesApi.getByStatus(status as Witness["status"]);
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async getById(id: string): Promise<Witness | undefined> {
-    this.validateId(id, "getById");
-    try {
-      return await this.witnessesApi.getById(id);
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async add(item: Witness): Promise<Witness> {
-    if (!item || typeof item !== "object") {
-      throw new ValidationError("[WitnessRepository.add] Invalid witness data");
-    }
-    try {
-      return await this.witnessesApi.create(item);
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async update(
-    id: string,
-    updates: Partial<Witness>
-  ): Promise<Witness> {
-    this.validateId(id, "update");
-    try {
-      return await this.witnessesApi.update(id, updates);
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
+    return await this.apiService.getByStatus(status as Witness["status"]);
   }
 
   async updateStatus(id: string, status: string): Promise<Witness> {
-    this.validateId(id, "updateStatus");
+    this.validateIdParameter(id, "updateStatus");
     if (!status || typeof status !== "string") {
       throw new ValidationError(
         "[WitnessRepository.updateStatus] Invalid status"
       );
     }
-    try {
-      return await this.witnessesApi.updateStatus(
-        id,
-        status as Witness["status"]
-      );
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
+    return await this.apiService.updateStatus(
+      id,
+      status as Witness["status"]
+    );
   }
 
-  override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
-    try {
-      await this.witnessesApi.delete(id);
-      return;
-    } catch (error) {
-      console.error("[WitnessRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  async search(criteria: {
+  async searchWitnesses(criteria: {
     caseId?: string;
     type?: string;
     status?: string;

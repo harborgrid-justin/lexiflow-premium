@@ -173,6 +173,9 @@
 // ============================================================================
 // Types
 import { type AuditLogEntry, type UUID } from '@/types';
+import { IdGenerator } from '@/services/core/factories';
+
+const logIdGen = new IdGenerator("log");
 
 // =============================================================================
 // TYPES & INTERFACES
@@ -227,7 +230,7 @@ export const ChainService = {
    * Creates a new cryptographically chained entry.
    */
   createEntry: async (entry: Omit<AuditLogEntry, 'id'>, prevHash: string): Promise<ChainedLogEntry> => {
-    const id = `log-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` as UUID;
+    const id = logIdGen.generate() as UUID;
     // The data string includes the previous hash, locking the chain.
     const dataString = `${id}:${entry.timestamp}:${entry.user}:${entry.action}:${entry.resource}:${prevHash}`;
     const hash = await generateHash(dataString);

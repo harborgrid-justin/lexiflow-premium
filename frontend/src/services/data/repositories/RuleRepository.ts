@@ -4,62 +4,41 @@
  */
 
 import { ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository, createQueryKeys } from "@/services/core/factories";
 import { RuleService } from "@/services/features/rules/rules";
 import { type LegalRule } from "@/types";
 
-export const RULE_QUERY_KEYS = {
-  all: () => ["rules"] as const,
-  byId: (id: string) => ["rules", id] as const,
-  byJurisdiction: (jurisdiction: string) =>
-    ["rules", "jurisdiction", jurisdiction] as const,
-  byCategory: (category: string) => ["rules", "category", category] as const,
-} as const;
+export const RULE_QUERY_KEYS = createQueryKeys('rules');
 
-export class RuleRepository extends Repository<LegalRule> {
+// Stub API service for RuleRepository (Backend not implemented yet)
+class RuleApiService {
+  async getAll(): Promise<LegalRule[]> {
+    return [];
+  }
+  async getById(_id: string): Promise<LegalRule | undefined> {
+    return undefined;
+  }
+  async create(_item: Partial<LegalRule>): Promise<LegalRule> {
+    console.warn("[RuleRepository] Backend API not implemented for Rules");
+    throw new Error("Backend API not implemented for Rules");
+  }
+  async update(_id: string, _updates: Partial<LegalRule>): Promise<LegalRule> {
+    console.warn("[RuleRepository] Backend API not implemented for Rules");
+    throw new Error("Backend API not implemented for Rules");
+  }
+  async delete(_id: string): Promise<void> {
+    console.warn("[RuleRepository] Backend API not implemented for Rules");
+    throw new Error("Backend API not implemented for Rules");
+  }
+}
+
+export class RuleRepository extends GenericRepository<LegalRule> {
+  protected apiService = new RuleApiService();
+  protected repositoryName = "RuleRepository";
+
   constructor() {
     super("rules");
     console.log(`[RuleRepository] Initialized with Backend API`);
-  }
-
-  private validateId(id: string, methodName: string): void {
-    if (!id || id.trim() === "") {
-      throw new Error(`[RuleRepository.${methodName}] Invalid id parameter`);
-    }
-  }
-
-  override async getAll(): Promise<LegalRule[]> {
-    // RuleService doesn't support getAll yet, defaulting to empty or implementing minimal fetch
-    return [];
-  }
-
-  override async getById(id: string): Promise<LegalRule | undefined> {
-    this.validateId(id, "getById");
-    // RuleService doesn't support getById, defaulting to undefined
-    return undefined;
-  }
-
-  override async add(item: LegalRule): Promise<LegalRule> {
-    if (!item || typeof item !== "object") {
-      throw new ValidationError("[RuleRepository.add] Invalid rule data");
-    }
-    console.warn("[RuleRepository] Backend API not implemented for Rules");
-    throw new Error("Backend API not implemented for Rules");
-  }
-
-  override async update(
-    id: string,
-    _updates: Partial<LegalRule>
-  ): Promise<LegalRule> {
-    this.validateId(id, "update");
-    console.warn("[RuleRepository] Backend API not implemented for Rules");
-    throw new Error("Backend API not implemented for Rules");
-  }
-
-  override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
-    console.warn("[RuleRepository] Backend API not implemented for Rules");
-    throw new Error("Backend API not implemented for Rules");
   }
 
   async getByJurisdiction(jurisdiction: string): Promise<LegalRule[]> {

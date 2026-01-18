@@ -12,6 +12,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useCitations } from './CitationsProvider';
 
@@ -70,16 +71,21 @@ export function CitationsView() {
         )}
 
         {!isPending && (
-          <div className="space-y-3">
-            {citations.map(citation => (
-              <CitationCard key={citation.id} citation={citation} />
-            ))}
-            {citations.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No citations found
+          <>
+            {citations.length === 0 ? (
+              <EmptyState
+                icon={BookOpen}
+                title="No citations found"
+                message="Add your first citation to get started with your legal research"
+              />
+            ) : (
+              <div className="space-y-3">
+                {citations.map(citation => (
+                  <CitationCard key={citation.id} citation={citation} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

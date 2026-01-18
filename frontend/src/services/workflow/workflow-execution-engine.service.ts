@@ -8,6 +8,7 @@
 import { EventEmitter } from "events";
 
 import { WorkflowExecutionError, OperationError } from "@/services/core/errors";
+import { TimerManager } from "@/services/core/factories";
 
 import type {
   EnhancedWorkflowInstance,
@@ -86,10 +87,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
   private readonly visitedNodes: Set<string>;
   private nodeMap: Map<string, WorkflowNode>;
   private connectionMap: Map<string, WorkflowConnection[]>;
-  private snapshotTimer: NodeJS.Timeout | undefined;
-  private slaTimers: Map<string, NodeJS.Timeout>;
+  private readonly timers = new TimerManager();
   private parallelExecutions: Map<string, Promise<unknown>[]>;
-  private executionTimeout: NodeJS.Timeout | undefined;
+  private slaTimerIds: Map<string, NodeJS.Timeout>;
 
   constructor(
     workflow: EnhancedWorkflowInstance,
@@ -116,7 +116,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     this.visitedNodes = new Set();
     this.nodeMap = new Map(workflow.nodes.map((n: WorkflowNode) => [n.id, n]));
     this.connectionMap = new Map();
-    this.slaTimers = new Map();
+    this.slaTimerIds = new Map();
     this.parallelExecutions = new Map();
 
     this._buildConnectionMap();
@@ -157,7 +157,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
 
       // Setup timeout if specified
       if (this.options.timeout) {
-        this.executionTimeout = setTimeout(() => {
+        this.timers.setTimeout(() => {
           if (this.state === "running") {
             this.cancel("Execution timeout exceeded");
           }
@@ -656,28 +656,28 @@ export class WorkflowExecutionEngine extends EventEmitter {
       slaConfig.targetDuration * (slaConfig.criticalThreshold / 100);
 
     // Warning timer
-    const warningTimer = setTimeout(() => {
+    const warningTimer = this.timers.setTimeout(() => {
       this.emit("sla_warning", { node, status: "at_risk" });
       this.options.onSLAWarning?.(node.id, "at_risk");
     }, warningTime);
 
     // Critical timer
-    setTimeout(() => {
+    this.timers.setTimeout(() => {
       this.emit("sla_breached", { node, status: "breached" });
       this.options.onSLAWarning?.(node.id, "breached");
     }, criticalTime);
 
-    this.slaTimers.set(node.id, warningTimer);
+    this.slaTimerIds.set(node.id, warningTimer);
   }
 
   /**
    * Clear SLA timer
    */
   private _clearSLATimer(nodeId: string): void {
-    const timer = this.slaTimers.get(nodeId);
+    const timer = this.slaTimerIds.get(nodeId);
     if (timer) {
       clearTimeout(timer);
-      this.slaTimers.delete(nodeId);
+      this.slaTimerIds.delete(nodeId);
     }
   }
 
@@ -685,7 +685,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Setup auto-snapshots
    */
   private _setupAutoSnapshots(): void {
-    this.snapshotTimer = setInterval(() => {
+    this.timers.setInterval(() => {
       const snapshot = this._createSnapshot("auto");
       this.emit("snapshot_created", snapshot);
       this.options.onSnapshot?.(snapshot);
@@ -720,18 +720,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Cleanup timers and resources
    */
   private _cleanup(): void {
-    if (this.snapshotTimer) {
-      clearInterval(this.snapshotTimer);
-      this.snapshotTimer = undefined;
-    }
-
-    if (this.executionTimeout) {
-      clearTimeout(this.executionTimeout);
-      this.executionTimeout = undefined;
-    }
-
-    this.slaTimers.forEach((timer) => clearTimeout(timer));
-    this.slaTimers.clear();
+    this.timers.clearAll();
+    this.slaTimerIds.forEach((timer) => clearTimeout(timer));
+    this.slaTimerIds.clear();
   }
 
   /**
@@ -751,6 +742,6 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Delay helper
    */
   private _delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise((resolve) => this.timers.setTimeout(resolve, ms));
   }
 }

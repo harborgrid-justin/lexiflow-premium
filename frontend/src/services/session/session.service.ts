@@ -1,4 +1,5 @@
 import { BaseService, ServiceError } from "../core/ServiceLifecycle";
+import { EventEmitter } from "../core/factories";
 
 /**
  * ENTERPRISE REACT SERVICE: SessionService
@@ -30,7 +31,10 @@ export class BrowserSessionService
   extends BaseService
   implements SessionService
 {
-  private listeners: Set<SessionListener> = new Set();
+  private eventEmitter = new EventEmitter<SessionEvent>({ 
+    serviceName: 'BrowserSessionService',
+    maxListeners: 1000 
+  });
   private visibilityHandler?: () => void;
   private beforeUnloadHandler?: (e: BeforeUnloadEvent) => void;
   private storageHandler?: (e: StorageEvent) => void;
@@ -82,7 +86,7 @@ export class BrowserSessionService
     if (this.storageHandler) {
       window.removeEventListener("storage", this.storageHandler);
     }
-    this.listeners.clear();
+    this.eventEmitter.clearAllListeners();
   }
 
   setItem(key: string, value: string): void {
@@ -147,19 +151,10 @@ export class BrowserSessionService
 
   addListener(listener: SessionListener): () => void {
     this.ensureRunning();
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
+    return this.eventEmitter.subscribe(listener);
   }
 
   private notifyListeners(event: SessionEvent): void {
-    this.listeners.forEach((listener) => {
-      try {
-        listener(event);
-      } catch (error) {
-        this.error("Listener error:", error);
-      }
-    });
+    this.eventEmitter.notify(event);
   }
 }

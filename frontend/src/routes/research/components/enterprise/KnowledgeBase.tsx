@@ -29,13 +29,14 @@ import {
   Tag,
   User,
 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
+import { useAsyncState } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 
@@ -89,30 +90,12 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
   const [selectedArticle, setSelectedArticle] = useState<WikiArticle | null>(null);
   const [sortBy, setSortBy] = useState<'recent' | 'title'>('recent');
 
-  // Data Loading State
-  const [articles, setArticles] = useState<WikiArticle[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Load articles from DataService
-  const loadArticles = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await DataService.knowledge.getWikiArticles(searchQuery || undefined);
-      setArticles(data);
-    } catch (err) {
-      console.error('[KnowledgeBase] Failed to load articles:', err);
-      setError('Failed to load knowledge base articles');
-      setArticles([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [searchQuery]);
-
-  useEffect(() => {
-    loadArticles();
-  }, [loadArticles]);
+  // Load articles using useAsyncState
+  const { data: articles = [], loading, error, refetch: loadArticles } = useAsyncState(
+    () => DataService.knowledge.getWikiArticles(searchQuery || undefined),
+    'Failed to load knowledge base articles',
+    { dependencies: [searchQuery] }
+  );
 
   // Category computation
   const categories = [

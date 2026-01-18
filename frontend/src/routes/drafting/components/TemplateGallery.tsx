@@ -1,6 +1,7 @@
 import { Edit, FileCode } from 'lucide-react';
 import React from 'react';
 
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { type DraftingTemplate } from '@api/domains/drafting';
 interface TemplateGalleryProps {
   templates: DraftingTemplate[];
@@ -14,9 +15,12 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ templates, onS
 
   if (templatesList.length === 0) {
     return (
-      <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-        No templates available.
-      </div>
+      <EmptyState 
+        icon={FileCode}
+        title="No templates available"
+        message="Create or import templates to get started with document drafting"
+        size="sm"
+      />
     );
   }
 

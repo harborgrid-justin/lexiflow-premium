@@ -14,10 +14,11 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { z } from 'zod';
 
 import { ApiKeysApiService } from '@/lib/frontend-api';
+import { useParallelData } from '@/hooks/routes';
 
 import type { ApiKey } from '@/types';
 
@@ -50,9 +51,6 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
   onKeyRevoked,
   className = '',
 }) => {
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
-  const [availableScopes, setAvailableScopes] = useState<AvailableScope[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newlyCreatedKey, setNewlyCreatedKey] = useState<string | null>(null);
@@ -67,27 +65,21 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
 
   const apiKeysService = React.useMemo(() => new ApiKeysApiService(), []);
 
-  const loadData = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const [keys, scopes] = await Promise.all([
-        apiKeysService.getAll(),
-        apiKeysService.getAvailableScopes(),
-      ]);
-
-      setApiKeys(keys);
-      setAvailableScopes(scopes);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to load API keys';
-      setErrors({ general: message });
-    } finally {
-      setIsLoading(false);
+  // Load API keys and available scopes using useParallelData
+  const { data, loading: isLoading, refetch: loadData } = useParallelData(
+    [
+      () => apiKeysService.getAll(),
+      () => apiKeysService.getAvailableScopes(),
+    ],
+    'Failed to load API keys',
+    {
+      onError: (err) => {
+        setErrors({ general: err.message });
+      }
     }
-  }, [apiKeysService]);
+  );
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  const [apiKeys = [], availableScopes = []] = data || [[], []];
 
   const handleInputChange = (field: keyof ApiKeyFormData) => (
     e: React.ChangeEvent<HTMLInputElement>

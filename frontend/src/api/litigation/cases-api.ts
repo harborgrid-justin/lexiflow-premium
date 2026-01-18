@@ -428,6 +428,13 @@ export class CasesApiService {
   }
 
   /**
+   * Alias for add() to satisfy IApiService interface
+   */
+  async create(data: Parameters<CasesApiService["add"]>[0]): Promise<Case> {
+    return this.add(data);
+  }
+
+  /**
    * Update an existing case
    *
    * @param id - Case ID

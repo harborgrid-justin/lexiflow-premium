@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/hooks/useTheme';
+import { useParallelData } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { useToast } from '@/providers';
 import { draftingApi } from '@api/domains/drafting';
@@ -35,41 +36,30 @@ export function DraftingDashboard({ initialData }: DraftingDashboardProps) {
 
   const [activeTab, setActiveTab] = useState<View>('overview');
   const [editorView, setEditorView] = useState<EditorView>(null);
-  const [recentDrafts, setRecentDrafts] = useState<GeneratedDocument[]>(initialData?.recentDrafts || []);
-  const [templates, setTemplates] = useState<DraftingTemplate[]>(initialData?.templates || []);
-  const [approvals, setApprovals] = useState<GeneratedDocument[]>(initialData?.approvals || []);
-  const [stats, setStats] = useState<StatsType>(initialData?.stats || { drafts: 0, templates: 0, pendingReviews: 0, myTemplates: 0 });
-  const [loading, setLoading] = useState(!initialData);
   const [editingTemplate, setEditingTemplate] = useState<DraftingTemplate | undefined>(undefined);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | undefined>(undefined);
 
-  const loadData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const [draftsData, templatesData, approvalsData, statsData] = await Promise.all([
-        draftingApi.getRecentDrafts(),
-        draftingApi.templates.getAll(),
-        draftingApi.dashboard.getPendingApprovals(),
-        draftingApi.getStats()
-      ]);
-
-      setRecentDrafts(draftsData);
-      setTemplates(templatesData);
-      setApprovals(approvalsData);
-      setStats(statsData);
-    } catch (error) {
-      console.error('Failed to load drafting dashboard data:', error);
-      addToast('Failed to load dashboard data', 'error');
-    } finally {
-      setLoading(false);
+  // Load dashboard data using useParallelData
+  const { data, loading, refetch: loadData } = useParallelData(
+    [
+      () => draftingApi.getRecentDrafts(),
+      () => draftingApi.templates.getAll(),
+      () => draftingApi.dashboard.getPendingApprovals(),
+      () => draftingApi.getStats()
+    ],
+    'Failed to load dashboard data',
+    {
+      dependencies: [!initialData],
+      onError: () => addToast('Failed to load dashboard data', 'error')
     }
-  }, [addToast]);
+  );
 
-  useEffect(() => {
-    if (!initialData) {
-      void loadData();
-    }
-  }, [loadData, initialData]);
+  const [recentDrafts, templates, approvals, stats] = data || [
+    initialData?.recentDrafts || [],
+    initialData?.templates || [],
+    initialData?.approvals || [],
+    initialData?.stats || { drafts: 0, templates: 0, pendingReviews: 0, myTemplates: 0 }
+  ];
 
   const handleCreateDraft = () => {
     setSelectedTemplateId(undefined);

@@ -3,6 +3,9 @@
  * Display and manage document version history
  */
 
+import { Clock } from 'lucide-react';
+
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { formatDate } from '@/utils/formatters';
 
 import type { DocumentVersion } from '@/types/documents';
@@ -29,12 +32,12 @@ export function VersionHistory({ versions, currentVersion, onRestore, onCompare 
       </div>
 
       {sortedVersions.length === 0 ? (
-        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          <svg className="mx-auto h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <p>No version history available</p>
-        </div>
+        <EmptyState 
+          icon={Clock}
+          title="No version history available"
+          message="Document versions will appear here as changes are saved"
+          size="sm"
+        />
       ) : (
         <div className="space-y-3">
           {sortedVersions.map((version, index) => {

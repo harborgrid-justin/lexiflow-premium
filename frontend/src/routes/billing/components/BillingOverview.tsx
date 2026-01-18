@@ -25,6 +25,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, Tooltip, XAx
 import { Currency } from '@/components/atoms/Currency';
 import { Card } from '@/components/molecules/Card';
 import { MetricCard } from '@/components/molecules/MetricCard';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { useTheme } from "@/hooks/useTheme";
 
@@ -258,9 +259,13 @@ const BillingOverviewComponent = function BillingOverview({ onNavigate }: Billin
           ))}
           {/* Empty State Fillers if less than 4 clients */}
           {topClients.length === 0 && (
-            <div className="p-8 text-center text-slate-400 col-span-2 bg-slate-50 dark:bg-slate-900/50">
-              <Users className="h-10 w-10 mx-auto mb-2 opacity-20" />
-              <p>No active accounts found</p>
+            <div className="col-span-2">
+              <EmptyState 
+                icon={Users}
+                title="No active accounts found"
+                message="Client accounts will appear here once billing activity begins"
+                size="sm"
+              />
             </div>
           )}
         </div>

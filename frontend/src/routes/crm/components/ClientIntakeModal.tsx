@@ -6,6 +6,7 @@ import { Input } from '@/components/atoms/Input';
 import { Modal } from '@/components/molecules/Modal';
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useParallelData } from '@/hooks/routes';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
@@ -21,45 +22,43 @@ export function ClientIntakeModal({ onClose, onSave }: ClientIntakeModalProps) {
   const [name, setName] = useState('');
   const [industry, setIndustry] = useState('');
   const [contact, setContact] = useState('');
-
-  // Conflict State
-  const [isChecking, setIsChecking] = useState(false);
   const [conflicts, setConflicts] = useState<string[]>([]);
   const debouncedName = useDebounce(name, SEARCH_DEBOUNCE_MS);
 
+  // Load clients and parties data using useParallelData when debouncedName changes
+  const shouldFetch = debouncedName && debouncedName.length >= 3;
+  const { data, loading: isChecking } = useParallelData(
+    [
+      () => DataService.clients.getAll(),
+      () => DataService.cases.getAll().then((cases: Array<{ parties?: Array<{ name: string; role: string }> }>) => 
+        cases.flatMap((c: { parties?: Array<{ name: string; role: string }> }) => c.parties || [])
+      )
+    ],
+    'Failed to check for conflicts',
+    { dependencies: [debouncedName, shouldFetch] }
+  );
+
+  // Process conflicts whenever data changes
   useEffect(() => {
-    if (!debouncedName || debouncedName.length < 3) {
+    if (!shouldFetch || !data) {
       setConflicts([]);
-      setIsChecking(false);
       return;
     }
 
-    const runCheck = async () => {
-      setIsChecking(true);
-      // Parallel fetch for full scope
-      const [clients, parties] = await Promise.all([
-        DataService.clients.getAll(),
-        // DataService.parties.getAll() // Assuming we implement a party retrieval in DataService facade or fetch cases and flatten parties
-        DataService.cases.getAll().then((cases: Array<{ parties?: Array<{ name: string; role: string }> }>) => cases.flatMap((c: { parties?: Array<{ name: string; role: string }> }) => c.parties || []))
-      ]);
+    const [clients = [], parties = []] = data;
+    const q = debouncedName.toLowerCase();
+    const found: string[] = [];
 
-      const q = debouncedName.toLowerCase();
-      const found: string[] = [];
+    clients.forEach((c: { name: string }) => {
+      if (c.name.toLowerCase().includes(q)) found.push(`Existing Client: ${c.name}`);
+    });
 
-      clients.forEach((c: { name: string }) => {
-        if (c.name.toLowerCase().includes(q)) found.push(`Existing Client: ${c.name}`);
-      });
+    parties.forEach((p: { name: string; role: string }) => {
+      if (p.name.toLowerCase().includes(q)) found.push(`Party in Case: ${p.name} (${p.role})`);
+    });
 
-      parties.forEach((p: { name: string; role: string }) => {
-        if (p.name.toLowerCase().includes(q)) found.push(`Party in Case: ${p.name} (${p.role})`);
-      });
-
-      setConflicts(found);
-      setIsChecking(false);
-    };
-
-    runCheck();
-  }, [debouncedName]);
+    setConflicts(found);
+  }, [data, debouncedName, shouldFetch]);
 
   return (
     <Modal isOpen={true} onClose={onClose} title="New Client Intake">

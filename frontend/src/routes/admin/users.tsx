@@ -9,6 +9,7 @@ import { useLoaderData } from 'react-router';
 
 import { useTheme } from "@/hooks/useTheme";
 import { authApi } from '@/lib/frontend-api';
+import { withAdminAuth } from '@/routes/_shared/hoc/withAuth';
 
 import type { Route } from './+types/users';
 import type { User } from '@/types';
@@ -24,7 +25,7 @@ export async function loader(_args: Route.LoaderArgs) {
   }
 }
 
-export default function AdminUsersPage() {
+function AdminUsersPage() {
   const { users } = useLoaderData() as Route.ComponentProps['loaderData'];
   const { theme, tokens } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
@@ -235,3 +236,5 @@ export const meta: Route.MetaFunction = () => [
   { title: 'User Management - Admin - LexiFlow' },
   { name: 'description', content: 'Manage user accounts and permissions' },
 ];
+
+export default withAdminAuth(AdminUsersPage);

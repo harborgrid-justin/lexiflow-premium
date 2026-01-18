@@ -8,7 +8,7 @@ import {
   type LegalEntityApi,
 } from "@/api/domains/legal-entities.api";
 import { ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository } from "@/services/core/factories";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { type LegalEntity } from "@/types";
 import { type EntityRole } from "@/types/enums";
@@ -22,28 +22,21 @@ export const ENTITY_QUERY_KEYS = {
   relationships: (id: string) => ["entities", id, "relationships"] as const,
 } as const;
 
-export class EntityRepository extends Repository<LegalEntity> {
+export class EntityRepository extends GenericRepository<LegalEntity> {
   private legalEntitiesApi: LegalEntitiesApiService;
+  protected apiService: LegalEntitiesApiService;
+  protected repositoryName = "EntityRepository";
 
   constructor() {
     super("entities");
     this.legalEntitiesApi = new LegalEntitiesApiService();
+    this.apiService = this.legalEntitiesApi;
     console.log(`[EntityRepository] Initialized with Backend API`);
   }
 
   private validateId(id: string, methodName: string): void {
     if (!id || id.trim() === "") {
       throw new Error(`[EntityRepository.${methodName}] Invalid id parameter`);
-    }
-  }
-
-  override async getAll(): Promise<LegalEntity[]> {
-    try {
-      const entities = await this.legalEntitiesApi.getAll();
-      return entities.map((e) => this.mapToFrontend(e));
-    } catch (error) {
-      console.error("[EntityRepository] Backend API error", error);
-      throw error;
     }
   }
 
@@ -59,13 +52,12 @@ export class EntityRepository extends Repository<LegalEntity> {
       government: "Government",
       foreign_entity: "Corporation",
       other: "Vendor",
-      court: "Court", // Added based on inference
+      court: "Court",
     };
     return typeMap[apiType.toLowerCase()] || "Vendor";
   }
 
   private mapToFrontend(entity: LegalEntityApi): LegalEntity {
-    // Explicitly cast to an intermediate type that matches our spread assumptions
     const entityAny = entity as unknown as Record<string, unknown>;
 
     return {
@@ -84,9 +76,18 @@ export class EntityRepository extends Repository<LegalEntity> {
         | "Deceased",
       createdAt: entity.createdAt || new Date().toISOString(),
       updatedAt: entity.updatedAt || new Date().toISOString(),
-      // Mapped to available fields
       metadata: (entity.metadata as unknown as MetadataRecord) || {},
     };
+  }
+
+  override async getAll(): Promise<LegalEntity[]> {
+    try {
+      const entities = await this.legalEntitiesApi.getAll();
+      return entities.map((e) => this.mapToFrontend(e));
+    } catch (error) {
+      console.error("[EntityRepository] Backend API error", error);
+      throw error;
+    }
   }
 
   override async getById(id: string): Promise<LegalEntity | undefined> {
@@ -100,20 +101,6 @@ export class EntityRepository extends Repository<LegalEntity> {
     }
   }
 
-  async getRelationships(id: string): Promise<Record<string, unknown>[]> {
-    this.validateId(id, "getRelationships");
-    if (id !== "all") {
-      try {
-        const relationships = await this.legalEntitiesApi.getRelationships(id);
-        return relationships as unknown as Record<string, unknown>[];
-      } catch (error) {
-        console.error("[EntityRepository] Backend API error", error);
-        return [];
-      }
-    }
-    return [];
-  }
-
   override async add(item: LegalEntity): Promise<LegalEntity> {
     if (!item || typeof item !== "object") {
       throw new ValidationError("[EntityRepository.add] Invalid entity data");
@@ -121,9 +108,6 @@ export class EntityRepository extends Repository<LegalEntity> {
 
     try {
       const apiItem = item as unknown as Partial<LegalEntityApi>;
-      // Simplified mapping (direct cast) for now, assuming BE handles flexibility or item matches reasonably well.
-      // Ideally should map types back to enums.
-
       const resultApi = await this.legalEntitiesApi.create(apiItem);
       const result = this.mapToFrontend(resultApi);
 
@@ -179,7 +163,7 @@ export class EntityRepository extends Repository<LegalEntity> {
     return entities.filter((e) => e.type === type);
   }
 
-  async search(query: string): Promise<LegalEntity[]> {
+  override async search(query: string): Promise<LegalEntity[]> {
     if (!query) return [];
     const entities = await this.getAll();
     const lowerQuery = query.toLowerCase();

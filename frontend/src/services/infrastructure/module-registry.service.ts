@@ -12,6 +12,7 @@
 // ============================================================================
 // Types
 import { type ModuleDefinition } from '@/types';
+import { EventEmitter } from '@/services/core/factories';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -23,7 +24,7 @@ type RegistryListener = () => void;
 // ============================================================================
 class ModuleRegistryService {
   private modules: Map<string, ModuleDefinition> = new Map();
-  private listeners: Set<RegistryListener> = new Set();
+  private events = new EventEmitter<void>({ serviceName: 'ModuleRegistry' });
 
   /**
    * Register a single module definition.
@@ -85,12 +86,11 @@ class ModuleRegistryService {
    * Subscribe to registry updates (for dynamic menu re-rendering).
    */
   subscribe(listener: RegistryListener) {
-    this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return this.events.subscribe(listener);
   }
 
   private notifyListeners() {
-    this.listeners.forEach(l => l());
+    this.events.notify();
   }
 }
 

@@ -2,6 +2,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { Clock, FileText } from 'lucide-react';
 import React from 'react';
 
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
 import { type GeneratedDocument } from '@api/domains/drafting';
 
@@ -20,9 +21,12 @@ export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) 
 
   if (draftsList.length === 0) {
     return (
-      <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-        No recent drafts found. Start a new draft to see it here.
-      </div>
+      <EmptyState 
+        icon={FileText}
+        title="No recent drafts found"
+        message="Start a new draft to see it appear here"
+        size="sm"
+      />
     );
   }
 

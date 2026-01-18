@@ -7,6 +7,7 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
+import { useFormError } from '@/hooks/routes';
 import { useAuthActions } from '@/providers/application/authprovider';
 
 export default function LoginPage() {
@@ -17,15 +18,15 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { errors, setError, clearAll, hasError } = useFormError();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
+    clearAll();
 
     // Validate inputs
     if (!email.trim() || !password) {
-      setError('Please enter both email and password.');
+      setError('__global__', 'Please enter both email and password.');
       return;
     }
 
@@ -40,13 +41,13 @@ export default function LoginPage() {
         const redirect = searchParams.get('redirect') || '/dashboard';
         navigate(redirect);
       } else if (result.mfaRequired) {
-        setError('Multi-factor verification required. Please complete MFA using the enterprise login experience.');
+        setError('__global__', 'Multi-factor verification required. Please complete MFA using the enterprise login experience.');
       } else {
-        setError('Login failed. Please check your credentials.');
+        setError('__global__', 'Login failed. Please check your credentials.');
       }
     } catch (err) {
       console.error('[Login] Login error:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred during login');
+      setError('__global__', err instanceof Error ? err.message : 'An error occurred during login');
     } finally {
       setIsLoading(false);
     }
@@ -66,9 +67,9 @@ export default function LoginPage() {
           <h2 className="text-2xl font-semibold text-white mb-6">Sign In</h2>
 
           {/* Error Message */}
-          {error && (
+          {hasError('__global__') && (
             <div className="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded text-rose-400 text-sm">
-              {error}
+              {errors.__global__}
             </div>
           )}
 

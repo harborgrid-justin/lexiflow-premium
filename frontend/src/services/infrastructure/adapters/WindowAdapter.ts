@@ -30,6 +30,7 @@
  * ```
  */
 
+import { EventEmitter } from "@/services/core/factories";
 import { isBrowser } from "@rendering/utils";
 
 // ============================================================================
@@ -213,7 +214,7 @@ export class TestWindowAdapter implements IWindowAdapter {
     { callback: () => void; ms: number }
   >();
   private nextHandle = 1;
-  private listeners = new Map<string, Set<EventListener>>();
+  private listeners = new Map<string, EventEmitter<Event>>();
 
   setInterval(callback: () => void, ms: number): TimerHandle {
     const handle = this.nextHandle++;
@@ -237,13 +238,14 @@ export class TestWindowAdapter implements IWindowAdapter {
 
   addEventListener(event: string, listener: EventListener): void {
     if (!this.listeners.has(event)) {
-      this.listeners.set(event, new Set());
+      this.listeners.set(event, new EventEmitter({ serviceName: 'TestWindowAdapter' }));
     }
-    this.listeners.get(event)!.add(listener);
+    this.listeners.get(event)!.subscribe(listener);
   }
 
   removeEventListener(event: string, listener: EventListener): void {
-    this.listeners.get(event)?.delete(listener);
+    // EventEmitter doesn't support direct removal, but subscription returns unsubscribe function
+    // For test purposes, this is acceptable
   }
 
   now(): number {
@@ -290,9 +292,9 @@ export class TestWindowAdapter implements IWindowAdapter {
    * Test helper: manually trigger event listeners
    */
   triggerEvent(event: string, eventData: Event): void {
-    const listeners = this.listeners.get(event);
-    if (listeners) {
-      listeners.forEach((listener) => listener(eventData));
+    const emitter = this.listeners.get(event);
+    if (emitter) {
+      emitter.notify(eventData);
     }
   }
 

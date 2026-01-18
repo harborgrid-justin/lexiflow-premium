@@ -21,10 +21,11 @@ import {
   Upload,
   Users
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
+import { useParallelData } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { analyticsApi } from '@/lib/frontend-api';
 import { KPICard } from '@/routes/dashboard/components/enterprise/KPICard';
@@ -113,94 +114,85 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'overview' | 'custodians' | 'collections' | 'processing'>('overview');
 
-  const [custodians, setCustodians] = useState<Custodian[]>([]);
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [metrics, setMetrics] = useState<ReviewMetrics | null>(null);
-  const [processingProgress, setProcessingProgress] = useState<ProcessingStage[]>([]);
-  const [_loading, setLoading] = useState(true);
+  // Load all data in parallel using useParallelData
+  const { data, loading: _loading } = useParallelData(
+    [
+      () => DataService.custodians.getAll({ caseId }),
+      () => DataService.esiSources.getAll({ caseId }),
+      () => analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
+    ],
+    'Failed to load discovery data'
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [custodiansData, collectionsData, analyticsData] = await Promise.all([
-          DataService.custodians.getAll({ caseId }),
-          DataService.esiSources.getAll({ caseId }),
-          analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
-        ]) as [Custodian[], Record<string, unknown>[], Record<string, unknown>];
+  // Process data
+  const [custodiansData = [], collectionsData = [], analyticsData] = data || [[], [], null];
 
-        setCustodians(custodiansData.map((c: Custodian) => {
-          let status: Custodian['status'] = 'active';
-          const s = ((c as unknown as Record<string, unknown>).status as string || 'active').toLowerCase();
-          if (s === 'on hold') status = 'hold';
-          else if (s === 'released') status = 'released';
-          else if (s === 'interviewed') status = 'interviewed';
+  const custodians: Custodian[] = custodiansData.map((c: Custodian) => {
+    let status: Custodian['status'] = 'active';
+    const s = ((c as unknown as Record<string, unknown>).status as string || 'active').toLowerCase();
+    if (s === 'on hold') status = 'hold';
+    else if (s === 'released') status = 'released';
+    else if (s === 'interviewed') status = 'interviewed';
 
-          return {
-            id: c.id,
-            name: c.name,
-            email: c.email,
-            department: c.department,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            title: (c as unknown as Record<string, any>).role || c.title || 'Unknown',
-            status,
-            dataSources: 0,
-            documentsCollected: 0,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            lastActivity: new Date((c as unknown as Record<string, any>).updatedAt || new Date())
-          };
-        }));
-
-        setCollections(collectionsData.map(c => {
-          const item = c as { id: string; collectionName: string; custodians: string[]; status: string;[key: string]: unknown };
-          let status: Collection['status'] = 'pending';
-          if (['pending', 'in_progress', 'completed', 'failed'].includes(item.status)) {
-            status = item.status as Collection['status'];
-          }
-
-          return {
-            id: item.id,
-            name: item.collectionName,
-            custodian: item.custodians.join(', '),
-            sourceType: 'email',
-            status,
-            totalItems: item.totalItems || 0,
-            collectedItems: item.collectedItems || 0,
-            startDate: new Date(item.createdAt as string),
-            completedDate: item.completedAt ? new Date(item.completedAt as string) : undefined,
-            size: item.actualSize ? parseFloat(item.actualSize as string) : 0
-          } as Collection;
-        }));
-
-        if (analyticsData && analyticsData.overview) {
-          const overview = analyticsData.overview as Record<string, number>;
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const team = analyticsData.team as Record<string, any>;
-          setMetrics({
-            totalDocuments: overview.totalDocuments || 0,
-            reviewed: overview.reviewedDocuments || 0,
-            privileged: overview.privilegedDocuments || 0,
-            responsive: overview.responsiveDocuments || 0,
-            nonResponsive: (overview.totalDocuments || 0) - (overview.responsiveDocuments || 0),
-            needsReview: (overview.totalDocuments || 0) - (overview.reviewedDocuments || 0),
-            flagged: 0,
-            avgReviewTime: team?.averageReviewRate || 0,
-            reviewers: team?.reviewers || []
-          });
-        }
-
-        if (analyticsData && analyticsData.progress) {
-          setProcessingProgress(analyticsData.progress as ProcessingStage[]);
-        }
-      } catch (error) {
-        console.error('Failed to fetch discovery data:', error);
-      } finally {
-        setLoading(false);
-      }
+    return {
+      id: c.id,
+      name: c.name,
+      email: c.email,
+      department: c.department,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      title: (c as unknown as Record<string, any>).role || c.title || 'Unknown',
+      status,
+      dataSources: 0,
+      documentsCollected: 0,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      lastActivity: new Date((c as unknown as Record<string, any>).updatedAt || new Date())
     };
+  });
 
-    fetchData();
-  }, [caseId]);
+  const collections: Collection[] = collectionsData.map(c => {
+    const item = c as { id: string; collectionName: string; custodians: string[]; status: string;[key: string]: unknown };
+    let status: Collection['status'] = 'pending';
+    if (['pending', 'in_progress', 'completed', 'failed'].includes(item.status)) {
+      status = item.status as Collection['status'];
+    }
+
+    return {
+      id: item.id,
+      name: item.collectionName,
+      custodian: item.custodians.join(', '),
+      sourceType: 'email',
+      status,
+      totalItems: item.totalItems || 0,
+      collectedItems: item.collectedItems || 0,
+      startDate: new Date(item.createdAt as string),
+      completedDate: item.completedAt ? new Date(item.completedAt as string) : undefined,
+      size: item.actualSize ? parseFloat(item.actualSize as string) : 0
+    } as Collection;
+  });
+
+  let metrics: ReviewMetrics | null = null;
+  let processingProgress: ProcessingStage[] = [];
+
+  if (analyticsData && analyticsData.overview) {
+    const overview = analyticsData.overview as Record<string, number>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const team = analyticsData.team as Record<string, any>;
+    metrics = {
+      totalDocuments: overview.totalDocuments || 0,
+      reviewed: overview.reviewedDocuments || 0,
+      privileged: overview.privilegedDocuments || 0,
+      responsive: overview.responsiveDocuments || 0,
+      nonResponsive: (overview.totalDocuments || 0) - (overview.responsiveDocuments || 0),
+      needsReview: (overview.totalDocuments || 0) - (overview.reviewedDocuments || 0),
+      flagged: 0,
+      avgReviewTime: team?.averageReviewRate || 0,
+      reviewers: team?.reviewers || []
+    };
+  }
+
+  if (analyticsData && analyticsData.progress) {
+    processingProgress = analyticsData.progress as ProcessingStage[];
+  }
 
   // Calculate metrics
   const totalCustodians = custodians.length;

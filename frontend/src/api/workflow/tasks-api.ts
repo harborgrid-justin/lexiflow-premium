@@ -444,6 +444,23 @@ export class TasksApiService {
   }
 
   /**
+   * Bulk create tasks
+   */
+  async createBulk(data: {
+    entries: CreateTaskDto[];
+  }): Promise<TaskBulkOperationResult> {
+    try {
+      return await apiClient.post<TaskBulkOperationResult>(
+        `${this.baseUrl}/bulk`,
+        data,
+      );
+    } catch (error) {
+      console.error("[TasksApiService.createBulk] Error:", error);
+      throw new Error("Failed to bulk create tasks");
+    }
+  }
+
+  /**
    * Bulk delete tasks
    *
    * @param taskIds - Array of task IDs

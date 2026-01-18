@@ -12,6 +12,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useDrafting } from './DraftingProvider';
 
@@ -91,16 +92,21 @@ export function DraftingView() {
         )}
 
         {!isPending && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {drafts.map(draft => (
-              <DraftCard key={draft.id} draft={draft} />
-            ))}
-            {drafts.length === 0 && (
-              <div className="col-span-full text-center py-12 text-slate-600 dark:text-slate-400">
-                No drafts found
+          <>
+            {drafts.length === 0 ? (
+              <EmptyState
+                icon={PenTool}
+                title="No drafts found"
+                message="Create your first draft to start working on legal documents"
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {drafts.map(draft => (
+                  <DraftCard key={draft.id} draft={draft} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

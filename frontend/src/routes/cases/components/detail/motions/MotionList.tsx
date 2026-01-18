@@ -16,6 +16,7 @@ import React from 'react';
 import { Badge, type BadgeProps } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -120,7 +121,14 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
             ))}
             {motions.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className={cn("text-center py-8 italic", theme.text.tertiary)}>No motions found.</TableCell>
+                <TableCell colSpan={7}>
+                  <EmptyState 
+                    icon={Gavel}
+                    title="No motions found"
+                    message="Create your first motion to get started"
+                    size="sm"
+                  />
+                </TableCell>
               </TableRow>
             )}
           </TableBody>
@@ -168,7 +176,12 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
           </div>
         ))}
         {safeMotions.length === 0 && (
-          <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No motions found.</div>
+          <EmptyState 
+            icon={Gavel}
+            title="No motions found"
+            message="Create your first motion to get started"
+            size="sm"
+          />
         )}
       </div>
     </>

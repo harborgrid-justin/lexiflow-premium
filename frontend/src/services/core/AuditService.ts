@@ -1,4 +1,5 @@
 import { apiClient } from "@/services/infrastructure/api-client.service";
+import { IdGenerator, StoragePersistence } from "@/services/core/factories";
 // UserId import removed as we use string type for userId in methods
 
 export type AuditAction =
@@ -36,12 +37,16 @@ export interface AuditEntry {
  * Implements "Issue #7: Audit Trail Gaps" from Business Logic Audit.
  */
 export class AuditService {
+  private static idGenerator = new IdGenerator("audit");
+  private static userStorage = new StoragePersistence<{ id: string }>("lexiflow_user");
+  private static tokenStorage = new StoragePersistence<string>("access_token");
+
   /**
    * Log a general audit entry
    */
   static async log(entry: Omit<AuditEntry, "id" | "timestamp">): Promise<void> {
     const auditEntry: AuditEntry = {
-      id: `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: AuditService.idGenerator.generate(),
       timestamp: new Date().toISOString(),
       userAgent:
         typeof window !== "undefined" ? window.navigator.userAgent : "server", // Simple user agent capture
@@ -121,14 +126,10 @@ export class AuditService {
     if (typeof localStorage === "undefined") return "system";
 
     try {
-      // Try standard keys
-      const userJson = localStorage.getItem("lexiflow_user");
-      if (userJson) {
-        const user = JSON.parse(userJson);
-        return user.id || "unknown-user";
-      }
+      const user = AuditService.userStorage.get();
+      if (user?.id) return user.id;
 
-      const token = localStorage.getItem("access_token");
+      const token = AuditService.tokenStorage.get();
       if (token) return "authenticated-user"; // Placeholder if we can't parse token
     } catch (e) {
       console.error("Error retrieving user ID:", e);

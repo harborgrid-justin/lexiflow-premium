@@ -6,22 +6,6 @@ import { InvoicesApiService } from "@/api/billing/invoices-api";
 import { RateTablesApiService } from "@/api/billing/rate-tables-api";
 import { TrustAccountsApiService } from "@/api/billing/trust-accounts-api";
 import { TimeEntriesApiService } from "@/api/billing/work-logs-api";
-// Fix missing import - assuming these types exist conceptually or need to be defined
-// In a real scenario, check api definitions. For now, using placeholders to satisfy TS.
-export interface CreateInvoiceDto {
-  caseId: string;
-  invoiceNumber: string;
-  date: string;
-  dueDate: string;
-  items: unknown[];
-  taxRate: number;
-  discount: number;
-  notes: string;
-}
-export interface UpdateInvoiceDto {
-  status?: string;
-  [key: string]: unknown;
-}
 
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { Repository } from "@/services/core/Repository";
@@ -208,7 +192,6 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getInvoices(): Promise<Invoice[]> {
     try {
       const response = await this.invoicesApi.getAll();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return Array.isArray(response) ? response : (response as any).data || [];
     } catch (error) {
       console.error("[BillingRepository] Failed to get invoices", error);
@@ -250,8 +233,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         notes: `Invoice for ${clientName}`,
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const invoice = await this.invoicesApi.create(invoiceData as any);
+      const invoice = await this.invoicesApi.create(invoiceData);
 
       return invoice;
     } catch (error) {
@@ -262,8 +244,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const updated = await this.invoicesApi.update(id, updates as any);
+      const updated = await this.invoicesApi.update(id, updates);
 
       if (updates.status) {
         await IntegrationEventPublisher.publish(
@@ -376,17 +357,16 @@ export class BillingRepository extends Repository<TimeEntry> {
     try {
       // Use invoices API to get overdue/pending invoices
       const invoices = await this.invoicesApi.getAll({ status: "Overdue" });
-      return invoices.map((inv: Record<string, unknown>) => ({
-        id: inv["id"],
-        clientName: "Client Name", // Should resolve client
-        invoiceNumber: inv["invoiceNumber"],
-        amount: inv["total"],
+      return invoices.map((inv: Invoice) => ({
+        id: inv.id,
+        clientName: inv.clientName || "Client Name", // Should resolve client
+        invoiceNumber: inv.invoiceNumber,
+        amount: inv.totalAmount,
         daysOverdue: Math.floor(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (new Date().getTime() - new Date(inv["dueDate"] as any).getTime()) /
+          (new Date().getTime() - new Date(inv.dueDate).getTime()) /
             (1000 * 60 * 60 * 24),
         ),
-        status: inv["status"],
+        status: inv.status as string,
       }));
     } catch (error) {
       console.error("[BillingRepository] Failed to get collections", error);

@@ -12,6 +12,7 @@ import {
   Calendar,
   DollarSign,
   FileText,
+  Link2,
   Mail,
   MapPin,
   MessageSquare,
@@ -23,6 +24,7 @@ import React, { useState } from 'react';
 
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
@@ -328,7 +330,12 @@ export const EnterpriseCRM: React.FC = () => {
                   </div>
                 ))}
               {relationships.filter(rel => rel.clientId === selectedClient.id).length === 0 && (
-                <p className={cn("text-sm text-center py-4", theme.text.secondary)}>No relationships mapped</p>
+                <EmptyState 
+                  icon={Link2}
+                  title="No relationships mapped"
+                  message="Map client relationships to visualize business connections"
+                  size="sm"
+                />
               )}
             </div>
           </Card>
@@ -360,7 +367,12 @@ export const EnterpriseCRM: React.FC = () => {
                   </div>
                 ))}
               {opportunitiesArray.filter(opp => opp.clientId === selectedClient.id).length === 0 && (
-                <p className={cn("text-sm text-center py-4", theme.text.secondary)}>No active opportunities</p>
+                <EmptyState 
+                  icon={TrendingUp}
+                  title="No active opportunities"
+                  message="Track business opportunities and deals to forecast revenue"
+                  size="sm"
+                />
               )}
             </div>
           </Card>

@@ -7,6 +7,7 @@
 import { BACKEND_DISCOVERY_CHECK_INTERVAL_MS } from "@/config/features/services.config";
 import { getApiBaseUrl } from "@/config/network/api.config";
 import { TIMEOUTS } from "@/config/ports.config";
+import { EventEmitter, TimerManager } from "@/services/core/factories";
 
 export interface BackendStatus {
   available: boolean;
@@ -27,16 +28,16 @@ class BackendDiscoveryService {
   };
 
   private checkInterval: NodeJS.Timeout | null = null;
-  private listeners: Set<BackendStatusCallback> = new Set();
+  private events = new EventEmitter<BackendStatus>({ serviceName: 'BackendDiscovery' });
   private readonly CHECK_INTERVAL_MS = BACKEND_DISCOVERY_CHECK_INTERVAL_MS;
+  private readonly TIMEOUT_MS = TIMEOUTS.BACKEND_DISCOVERY;
+  private notifyTimeout: NodeJS.Timeout | null = null;
+  private timers = new TimerManager();
 
   // Dynamic getter for health endpoint
   private getHealthEndpoint(): string {
     return `${getApiBaseUrl()}/api/health`;
   }
-
-  private readonly TIMEOUT_MS = TIMEOUTS.BACKEND_DISCOVERY; // Use centralized timeout
-  private notifyTimeout: NodeJS.Timeout | null = null; // Debounce notifications
 
   /**
    * Start auto-discovery service
@@ -48,7 +49,7 @@ class BackendDiscoveryService {
     this.checkBackend();
 
     // Schedule periodic checks
-    this.checkInterval = setInterval(() => {
+    this.checkInterval = this.timers.setInterval(() => {
       this.checkBackend();
     }, this.CHECK_INTERVAL_MS);
   }
@@ -58,16 +59,9 @@ class BackendDiscoveryService {
    */
   stop(): void {
     console.log("[BackendDiscovery] Stopping auto-discovery service");
-
-    if (this.checkInterval) {
-      clearInterval(this.checkInterval);
-      this.checkInterval = null;
-    }
-
-    if (this.notifyTimeout) {
-      clearTimeout(this.notifyTimeout);
-      this.notifyTimeout = null;
-    }
+    this.timers.clearAll();
+    this.checkInterval = null;
+    this.notifyTimeout = null;
   }
 
   /**
@@ -81,7 +75,7 @@ class BackendDiscoveryService {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS);
+      const timeoutId = this.timers.setTimeout(() => controller.abort(), this.TIMEOUT_MS);
 
       const response = await fetch(this.getHealthEndpoint(), {
         method: "GET",
@@ -91,7 +85,7 @@ class BackendDiscoveryService {
         },
       });
 
-      clearTimeout(timeoutId);
+      this.timers.clearTimeout(timeoutId);
       const latency = Date.now() - startTime;
 
       if (response.ok) {
@@ -172,24 +166,9 @@ class BackendDiscoveryService {
    * Notify all registered listeners (debounced to prevent performance issues)
    */
   private notifyListeners(): void {
-    // Clear any pending notification
-    if (this.notifyTimeout) {
-      clearTimeout(this.notifyTimeout);
-    }
-
     // Debounce notifications by 100ms to batch rapid updates
-    this.notifyTimeout = setTimeout(() => {
-      this.listeners.forEach((callback) => {
-        try {
-          callback(this.status);
-        } catch (error) {
-          console.error(
-            "[BackendDiscovery] Error in listener callback:",
-            error,
-          );
-        }
-      });
-      this.notifyTimeout = null;
+    this.timers.setTimeout(() => {
+      this.events.notify(this.status);
     }, 100);
   }
 
@@ -204,15 +183,13 @@ class BackendDiscoveryService {
    * Subscribe to status changes
    */
   subscribe(callback: BackendStatusCallback): () => void {
-    this.listeners.add(callback);
+    const unsubscribe = this.events.subscribe(callback);
 
     // Immediately notify with current status
     callback(this.status);
 
     // Return unsubscribe function
-    return () => {
-      this.listeners.delete(callback);
-    };
+    return unsubscribe;
   }
 
   /**

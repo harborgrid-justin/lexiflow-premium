@@ -15,7 +15,7 @@ export class WorkflowTemplateService {
     try {
       return await apiClient.get<WorkflowTemplate[]>(
         "/workflow/templates",
-        filters as Record<string, unknown>
+        filters as Record<string, unknown>,
       );
     } catch (error) {
       console.error("[WorkflowTemplateService.getTemplates] Error:", error);
@@ -29,7 +29,7 @@ export class WorkflowTemplateService {
   async getTemplateById(id: string): Promise<WorkflowTemplate> {
     if (!id) {
       throw new Error(
-        "[WorkflowTemplateService.getTemplateById] Invalid id parameter"
+        "[WorkflowTemplateService.getTemplateById] Invalid id parameter",
       );
     }
 
@@ -45,18 +45,18 @@ export class WorkflowTemplateService {
    * Create a new workflow template
    */
   async createTemplate(
-    template: Omit<WorkflowTemplate, "id" | "createdAt" | "updatedAt">
+    template: Omit<WorkflowTemplate, "id" | "createdAt" | "updatedAt">,
   ): Promise<WorkflowTemplate> {
     if (!template.name) {
       throw new Error(
-        "[WorkflowTemplateService.createTemplate] Template name is required"
+        "[WorkflowTemplateService.createTemplate] Template name is required",
       );
     }
 
     try {
       return await apiClient.post<WorkflowTemplate>(
         "/workflow/templates",
-        template
+        template,
       );
     } catch (error) {
       console.error("[WorkflowTemplateService.createTemplate] Error:", error);
@@ -69,18 +69,18 @@ export class WorkflowTemplateService {
    */
   async updateTemplate(
     id: string,
-    template: Partial<WorkflowTemplate>
+    template: Partial<WorkflowTemplate>,
   ): Promise<WorkflowTemplate> {
     if (!id) {
       throw new Error(
-        "[WorkflowTemplateService.updateTemplate] Invalid id parameter"
+        "[WorkflowTemplateService.updateTemplate] Invalid id parameter",
       );
     }
 
     try {
       return await apiClient.put<WorkflowTemplate>(
         `/workflow/templates/${id}`,
-        template
+        template,
       );
     } catch (error) {
       console.error("[WorkflowTemplateService.updateTemplate] Error:", error);
@@ -94,7 +94,7 @@ export class WorkflowTemplateService {
   async deleteTemplate(id: string): Promise<void> {
     if (!id) {
       throw new Error(
-        "[WorkflowTemplateService.deleteTemplate] Invalid id parameter"
+        "[WorkflowTemplateService.deleteTemplate] Invalid id parameter",
       );
     }
 
@@ -112,14 +112,14 @@ export class WorkflowTemplateService {
   async activateTemplate(id: string): Promise<WorkflowTemplate> {
     if (!id) {
       throw new Error(
-        "[WorkflowTemplateService.activateTemplate] Invalid id parameter"
+        "[WorkflowTemplateService.activateTemplate] Invalid id parameter",
       );
     }
 
     try {
       return await apiClient.post<WorkflowTemplate>(
         `/workflow/templates/${id}/activate`,
-        {}
+        {},
       );
     } catch (error) {
       console.error("[WorkflowTemplateService.activateTemplate] Error:", error);
@@ -133,19 +133,19 @@ export class WorkflowTemplateService {
   async deactivateTemplate(id: string): Promise<WorkflowTemplate> {
     if (!id) {
       throw new Error(
-        "[WorkflowTemplateService.deactivateTemplate] Invalid id parameter"
+        "[WorkflowTemplateService.deactivateTemplate] Invalid id parameter",
       );
     }
 
     try {
       return await apiClient.post<WorkflowTemplate>(
         `/workflow/templates/${id}/deactivate`,
-        {}
+        {},
       );
     } catch (error) {
       console.error(
         "[WorkflowTemplateService.deactivateTemplate] Error:",
-        error
+        error,
       );
       throw new Error(`Failed to deactivate workflow template with id: ${id}`);
     }
@@ -157,22 +157,50 @@ export class WorkflowTemplateService {
   async duplicateTemplate(id: string): Promise<WorkflowTemplate> {
     if (!id) {
       throw new Error(
-        "[WorkflowTemplateService.duplicateTemplate] Invalid id parameter"
+        "[WorkflowTemplateService.duplicateTemplate] Invalid id parameter",
       );
     }
 
     try {
       return await apiClient.post<WorkflowTemplate>(
         `/workflow/templates/${id}/duplicate`,
-        {}
+        {},
       );
     } catch (error) {
       console.error(
         "[WorkflowTemplateService.duplicateTemplate] Error:",
-        error
+        error,
       );
       throw new Error(`Failed to duplicate workflow template with id: ${id}`);
     }
+  }
+
+  // IApiService implementation
+  async getAll(options?: any): Promise<WorkflowTemplate[]> {
+    return this.getTemplates(options);
+  }
+
+  async getById(id: string): Promise<WorkflowTemplate | undefined> {
+    try {
+      return await this.getTemplateById(id);
+    } catch {
+      return undefined;
+    }
+  }
+
+  async create(item: any): Promise<WorkflowTemplate> {
+    return this.createTemplate(item as any);
+  }
+
+  async update(
+    id: string,
+    updates: Partial<WorkflowTemplate>,
+  ): Promise<WorkflowTemplate> {
+    return this.updateTemplate(id, updates);
+  }
+
+  async delete(id: string): Promise<void> {
+    return this.deleteTemplate(id);
   }
 }
 

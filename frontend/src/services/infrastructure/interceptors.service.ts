@@ -23,6 +23,11 @@ import type {
   ErrorInterceptor,
 } from "./apiClientEnhanced";
 
+import { IdGenerator, StoragePersistence } from "@/services/core/factories";
+
+const requestIdGen = new IdGenerator("req");
+const tenantStorage = new StoragePersistence<string>("tenant_id");
+
 /**
  * Logging interceptor for development mode
  * Logs all requests and responses to console
@@ -278,7 +283,7 @@ export const serverErrorInterceptor: ErrorInterceptor = (error, endpoint) => {
  * Adds unique request ID for tracking
  */
 export const requestIdInterceptor: RequestInterceptor = (endpoint, config) => {
-  const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const requestId = requestIdGen.generate();
 
   return {
     endpoint,
@@ -300,8 +305,7 @@ export const tenantIsolationInterceptor: RequestInterceptor = (
   endpoint,
   config,
 ) => {
-  // Get tenant ID from localStorage or auth context
-  const tenantId = localStorage.getItem("tenant_id");
+  const tenantId = tenantStorage.get();
 
   if (tenantId) {
     return {

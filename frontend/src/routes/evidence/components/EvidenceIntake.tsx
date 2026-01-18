@@ -17,6 +17,7 @@ import { TagInput } from '@/components/molecules/TagInput/TagInput';
 // Context & Utils
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
+import { useFormError } from '@/hooks/routes';
 import { useTheme } from "@/hooks/useTheme";
 import { useWizard } from '@/hooks/useWizard';
 import { cn } from '@/lib/cn';
@@ -36,10 +37,10 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
   const wizard = useWizard(2);
   const notify = useNotify();
   const { theme } = useTheme();
+  const { errors, setError, clearAll } = useFormError();
   const [file, setFile] = useState<File | null>(null);
   const [processing, setProcessing] = useState(false);
   const [processStage, setProcessStage] = useState('');
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const [title, setTitle] = useState('');
   const [custodian, setCustodian] = useState('');
@@ -106,6 +107,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
   };
 
   const handleFinish = () => {
+    clearAll();
     const newItem: EvidenceItem = {
       id: crypto.randomUUID() as EvidenceId,
       trackingUuid: (generatedData.uuid || crypto.randomUUID()) as UUID,
@@ -132,7 +134,9 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
     // Validate before submission
     const validation = validateEvidenceItemSafe(newItem);
     if (!validation.success) {
-      setValidationErrors(validation.error.errors.map(e => e.message));
+      validation.error.errors.forEach((err, idx) => {
+        setError(`error_${idx}`, err.message);
+      });
       notify.error('Validation failed. Please check the form.');
       return;
     }
@@ -174,11 +178,11 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
         <div className="space-y-6">
           <Stepper steps={['Upload & Hash', 'Metadata & Tagging']} currentStep={wizard.currentStep} />
 
-          {validationErrors.length > 0 && (
+          {Object.keys(errors).length > 0 && (
             <div className={cn("p-4 rounded-lg border", theme.status.error.bg, theme.status.error.border)}>
               <h4 className={cn("font-bold text-sm mb-2", theme.status.error.text)}>Validation Errors:</h4>
               <ul className={cn("text-xs list-disc list-inside", theme.status.error.text)}>
-                {validationErrors.map((err, idx) => <li key={idx}>{err}</li>)}
+                {Object.values(errors).map((err, idx) => <li key={idx}>{err}</li>)}
               </ul>
             </div>
           )}

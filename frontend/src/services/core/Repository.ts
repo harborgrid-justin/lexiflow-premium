@@ -4,6 +4,7 @@ import { type BaseEntity, type UserId } from "@/types";
 import { errorHandler } from "@/utils/errorHandler";
 import { LRUCache } from "@/utils/LRUCache";
 
+import { EventEmitter } from "./factories/EventEmitterMixin";
 import { MicroORM } from "./microORM";
 
 type Listener<T> = (item: T) => void;
@@ -11,13 +12,16 @@ const MAX_LISTENERS_PER_REPO = 1000; // Safety limit to prevent runaway listener
 
 export abstract class Repository<T extends BaseEntity> {
   private cache: LRUCache<T>;
-  private listeners: Set<Listener<T>> = new Set();
+  private events: EventEmitter<T>;
   protected orm: MicroORM<T>;
-  private listenerWarningLogged = false;
 
   protected constructor(protected storeName: string) {
     this.cache = new LRUCache<T>(REPOSITORY_CACHE_MAX_SIZE);
     this.orm = new MicroORM<T>(storeName);
+    this.events = new EventEmitter<T>({
+      maxListeners: MAX_LISTENERS_PER_REPO,
+      serviceName: `Repository:${storeName}`,
+    });
 
     // Bind all methods to ensure correct 'this' context when passed as callbacks
     this.getAll = this.getAll.bind(this);
@@ -53,37 +57,19 @@ export abstract class Repository<T extends BaseEntity> {
   }
 
   subscribe(listener: Listener<T>) {
-    this.listeners.add(listener);
-
-    // Safety check: warn if listeners are accumulating
-    if (
-      this.listeners.size > MAX_LISTENERS_PER_REPO &&
-      !this.listenerWarningLogged
-    ) {
-      console.warn(
-        `[Repository:${this.storeName}] Listener count exceeded ${MAX_LISTENERS_PER_REPO}. Possible memory leak - ensure components unsubscribe on unmount.`
-      );
-      this.listenerWarningLogged = true;
-    }
-
-    return () => this.removeListener(listener);
+    return this.events.subscribe(listener);
   }
 
   removeListener(listener: Listener<T>) {
-    this.listeners.delete(listener);
+    this.events.removeListener(listener);
   }
 
   clearAllListeners() {
-    const count = this.listeners.size;
-    this.listeners.clear();
-    this.listenerWarningLogged = false;
-    if (count > 0) {
-      console.log(`[Repository:${this.storeName}] Cleared ${count} listeners`);
-    }
+    this.events.clearAllListeners();
   }
 
   getListenerCount(): number {
-    return this.listeners.size;
+    return this.events.getListenerCount();
   }
 
   /**
@@ -112,16 +98,7 @@ export abstract class Repository<T extends BaseEntity> {
   }
 
   protected notify(item: T) {
-    this.listeners.forEach((l) => {
-      try {
-        l(item);
-      } catch (error) {
-        console.error(
-          `[Repository:${this.storeName}] Error in listener:`,
-          error
-        );
-      }
-    });
+    this.events.notify(item);
   }
 
   protected logAction = async (

@@ -9,6 +9,7 @@ import { useLoaderData } from 'react-router';
 
 import { SYSTEM_PERMISSIONS, type PermissionDefinition } from '@/config/permissions';
 import { authApi } from '@/lib/frontend-api';
+import { withAdminAuth } from '@/routes/_shared/hoc/withAuth';
 
 import type { Route } from './+types/permissions';
 
@@ -42,7 +43,7 @@ export async function loader(_args: Route.LoaderArgs) {
   return { permissions };
 }
 
-export default function AdminPermissionsPage() {
+function AdminPermissionsPage() {
   const { permissions } = useLoaderData();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
@@ -223,3 +224,5 @@ export const meta: Route.MetaFunction = () => [
   { title: 'Permission Management - Admin - LexiFlow' },
   { name: 'description', content: 'Manage system permissions' },
 ];
+
+export default withAdminAuth(AdminPermissionsPage);

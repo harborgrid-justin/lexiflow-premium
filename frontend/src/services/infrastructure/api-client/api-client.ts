@@ -4,6 +4,7 @@
  */
 
 import { API_CLIENT_DEFAULT_TIMEOUT_MS } from "@/config/features/services.config";
+import { InterceptorChain } from "@/services/core/factories/InterceptorChain";
 
 import * as AuthManager from "./auth-manager";
 import * as BlobHandler from "./blob-handler";
@@ -29,9 +30,7 @@ interface RequestConfig {
  */
 export class ApiClient {
   private _baseURL: string | null = null;
-  private requestInterceptors: Array<(config: RequestConfig) => RequestConfig> =
-    [];
-  private responseInterceptors: Array<(response: unknown) => unknown> = [];
+  private interceptors = new InterceptorChain();
   private _retryAttempts: number = 0;
   private _timeout: number = API_CLIENT_DEFAULT_TIMEOUT_MS;
 
@@ -73,20 +72,19 @@ export class ApiClient {
       ...(options?.params ? { params: options.params } : {}),
     };
 
-    // Apply request interceptors
-    for (const interceptor of this.requestInterceptors) {
-      config = interceptor(config);
-    }
+    config = await this.interceptors.runRequestInterceptors(config);
 
     let result = (await HttpMethods.get<T>(endpoint, {
       ...(config.params ? { params: config.params } : {}),
       ...(config.headers ? { headers: config.headers } : {}),
     })) as T;
 
-    // Apply response interceptors
-    for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result) as T;
-    }
+    result = (await this.interceptors.runResponseInterceptors({ 
+      data: result, 
+      status: 200, 
+      statusText: 'OK', 
+      headers: {} 
+    })).data as T;
 
     return result;
   };
@@ -103,20 +101,19 @@ export class ApiClient {
       headers: (options?.headers as Record<string, string>) || {},
     };
 
-    // Apply request interceptors
-    for (const interceptor of this.requestInterceptors) {
-      config = interceptor(config);
-    }
+    config = await this.interceptors.runRequestInterceptors(config);
 
     let result = (await HttpMethods.post<T>(endpoint, config.data, {
       ...options,
       ...(config.headers ? { headers: config.headers } : {}),
     })) as T;
 
-    // Apply response interceptors
-    for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result) as T;
-    }
+    result = (await this.interceptors.runResponseInterceptors({ 
+      data: result, 
+      status: 200, 
+      statusText: 'OK', 
+      headers: {} 
+    })).data as T;
 
     return result;
   };
@@ -129,17 +126,16 @@ export class ApiClient {
       headers: {},
     };
 
-    // Apply request interceptors
-    for (const interceptor of this.requestInterceptors) {
-      config = interceptor(config);
-    }
+    config = await this.interceptors.runRequestInterceptors(config);
 
     let result = (await HttpMethods.put<T>(endpoint, config.data)) as T;
 
-    // Apply response interceptors
-    for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result) as T;
-    }
+    result = (await this.interceptors.runResponseInterceptors({ 
+      data: result, 
+      status: 200, 
+      statusText: 'OK', 
+      headers: {} 
+    })).data as T;
 
     return result;
   };
@@ -152,17 +148,16 @@ export class ApiClient {
       headers: {},
     };
 
-    // Apply request interceptors
-    for (const interceptor of this.requestInterceptors) {
-      config = interceptor(config);
-    }
+    config = await this.interceptors.runRequestInterceptors(config);
 
     let result = (await HttpMethods.patch<T>(endpoint, config.data)) as T;
 
-    // Apply response interceptors
-    for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result) as T;
-    }
+    result = (await this.interceptors.runResponseInterceptors({ 
+      data: result, 
+      status: 200, 
+      statusText: 'OK', 
+      headers: {} 
+    })).data as T;
 
     return result;
   };
@@ -174,17 +169,16 @@ export class ApiClient {
       headers: {},
     };
 
-    // Apply request interceptors
-    for (const interceptor of this.requestInterceptors) {
-      config = interceptor(config);
-    }
+    config = await this.interceptors.runRequestInterceptors(config);
 
     let result = (await HttpMethods.deleteFn<T>(endpoint)) as T;
 
-    // Apply response interceptors
-    for (const interceptor of this.responseInterceptors) {
-      result = interceptor(result) as T;
-    }
+    result = (await this.interceptors.runResponseInterceptors({ 
+      data: result, 
+      status: 200, 
+      statusText: 'OK', 
+      headers: {} 
+    })).data as T;
 
     return result;
   };
@@ -230,42 +224,34 @@ export class ApiClient {
   public addRequestInterceptor(
     interceptor: (config: RequestConfig) => RequestConfig,
   ): void {
-    this.requestInterceptors.push(interceptor);
+    this.interceptors.addRequestInterceptor(interceptor as any);
   }
 
-  public removeRequestInterceptor(
-    interceptor: (config: RequestConfig) => RequestConfig,
-  ): void {
-    const index = this.requestInterceptors.indexOf(interceptor);
-    if (index > -1) {
-      this.requestInterceptors.splice(index, 1);
-    }
+  public removeRequestInterceptor(): void {
+    console.warn('[ApiClient] removeRequestInterceptor not supported with InterceptorChain. Use handles instead.');
   }
 
   public addResponseInterceptor(
     interceptor: (response: unknown) => unknown,
   ): void {
-    this.responseInterceptors.push(interceptor);
+    this.interceptors.addResponseInterceptor(interceptor as any);
   }
 
-  public removeResponseInterceptor(
-    interceptor: (response: unknown) => unknown,
-  ): void {
-    const index = this.responseInterceptors.indexOf(interceptor);
-    if (index > -1) {
-      this.responseInterceptors.splice(index, 1);
-    }
+  public removeResponseInterceptor(): void {
+    console.warn('[ApiClient] removeResponseInterceptor not supported with InterceptorChain. Use handles instead.');
   }
 
   // Internal accessor for interceptors
   public getRequestInterceptors(): Array<
     (config: RequestConfig) => RequestConfig
   > {
-    return this.requestInterceptors;
+    // Return empty array for backward compatibility
+    return [];
   }
 
   public getResponseInterceptors(): Array<(response: unknown) => unknown> {
-    return this.responseInterceptors;
+    // Return empty array for backward compatibility
+    return [];
   }
 
   public getTimeout(): number {

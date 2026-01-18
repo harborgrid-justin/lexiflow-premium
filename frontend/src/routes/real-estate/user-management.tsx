@@ -15,6 +15,7 @@ import { DataService } from "@/services/data/data-service.service";
 
 import { createMeta } from "../_shared/meta-utils";
 import { RouteErrorBoundary } from "../_shared/RouteErrorBoundary";
+import { withAdminAuth } from "../_shared/hoc/withAuth";
 
 // Types
 // ============================================================================
@@ -103,7 +104,7 @@ export async function action({ request }: ActionFunctionArgs) {
 } // ============================================================================
 // Component
 // ============================================================================
-export default function UserManagementRoute() {
+function UserManagementRoute() {
   const { data, stats } = useLoaderData<LoaderData>();
   const navigate = useNavigate();
   const [showAddUser, setShowAddUser] = useState(false);
@@ -416,3 +417,5 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     />
   );
 }
+
+export default withAdminAuth(UserManagementRoute);

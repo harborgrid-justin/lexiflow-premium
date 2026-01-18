@@ -7,6 +7,7 @@
 import { type FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 
+import { useFormError } from '@/hooks/routes';
 import { AuthApiService } from '@/lib/frontend-api';
 
 export default function ResetPasswordPage() {
@@ -19,7 +20,7 @@ export default function ResetPasswordPage() {
     confirmPassword: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { errors, setError, clearAll, hasError } = useFormError();
 
   // If no token, show error
   if (!token) {
@@ -62,17 +63,17 @@ export default function ResetPasswordPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
+    clearAll();
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError('confirmPassword', 'Passwords do not match');
       return;
     }
 
     // Validate password strength
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long');
+      setError('password', 'Password must be at least 8 characters long');
       return;
     }
 
@@ -88,7 +89,7 @@ export default function ResetPasswordPage() {
       navigate('/login?reset=success');
     } catch (err) {
       console.error('[ResetPassword] Error:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred. Please try again.');
+      setError('__global__', err instanceof Error ? err.message : 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -117,9 +118,9 @@ export default function ResetPasswordPage() {
           </p>
 
           {/* Error Message */}
-          {error && (
+          {hasError('__global__') && (
             <div className="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded text-rose-400 text-sm">
-              {error}
+              {errors.__global__}
             </div>
           )}
 
@@ -140,6 +141,9 @@ export default function ResetPasswordPage() {
                 required
                 className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
               />
+              {errors.password && (
+                <p className="mt-1 text-xs text-rose-400">{errors.password}</p>
+              )}
               <p className="mt-1 text-xs text-slate-500">
                 Must be at least 8 characters long
               </p>
@@ -160,6 +164,9 @@ export default function ResetPasswordPage() {
                 required
                 className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
               />
+              {errors.confirmPassword && (
+                <p className="mt-1 text-xs text-rose-400">{errors.confirmPassword}</p>
+              )}
             </div>
 
             {/* Submit Button */}

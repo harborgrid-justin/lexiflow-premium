@@ -42,3 +42,6 @@ export { useHoverIntent } from './useHoverIntent';
 export { useNotify, type UseNotifyReturn } from './useNotify';
 export { useSort, type UseSortReturn, type SortConfig, type SortDirection } from './useSort';
 export { useFilterAndSearch } from './useFilterAndSearch';
+
+// Backend Integration Hooks
+export * from '../integration';

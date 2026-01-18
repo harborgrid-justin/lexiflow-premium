@@ -11,6 +11,7 @@ import { AlertCircle, AlertTriangle, Info, Shield } from 'lucide-react';
 import React, { useId } from 'react';
 
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useAudit } from './AuditProvider';
 
@@ -84,16 +85,21 @@ export function AuditView() {
         )}
 
         {!isPending && (
-          <div className="space-y-2">
-            {logs.map(log => (
-              <AuditLogRow key={log.id} log={log} />
-            ))}
-            {logs.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No audit logs found
+          <>
+            {logs.length === 0 ? (
+              <EmptyState
+                icon={Shield}
+                title="No audit logs found"
+                message="System activity will appear here as actions are performed"
+              />
+            ) : (
+              <div className="space-y-2">
+                {logs.map(log => (
+                  <AuditLogRow key={log.id} log={log} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

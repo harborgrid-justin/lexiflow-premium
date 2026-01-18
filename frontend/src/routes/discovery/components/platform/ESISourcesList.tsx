@@ -14,6 +14,7 @@ import { TextArea } from '@/components/atoms/TextArea';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { Modal } from '@/components/molecules/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
@@ -211,8 +212,13 @@ export function ESISourcesList({ caseId }: ESISourcesListProps) {
           <TableBody>
             {sources.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-8 text-gray-500">
-                  No ESI sources found. Add one to get started.
+                <TableCell colSpan={7}>
+                  <EmptyState 
+                    icon={Database}
+                    title="No ESI sources found"
+                    message="Add electronically stored information sources to track data collection"
+                    action={<Button variant="primary" icon={Plus} onClick={createModal.open}>Add Source</Button>}
+                  />
                 </TableCell>
               </TableRow>
             ) : (

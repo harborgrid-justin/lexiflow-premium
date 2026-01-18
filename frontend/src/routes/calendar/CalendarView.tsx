@@ -13,6 +13,7 @@ import React, { useCallback } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useCalendar } from './CalendarProvider';
 import { CalendarEvent } from './components/CalendarEvent/CalendarEvent';
@@ -141,13 +142,18 @@ export function CalendarView() {
           )}
 
           {viewMode === 'list' && (
-            <div className="h-full overflow-y-auto p-4 space-y-3">
-              {upcomingEvents.map(event => (
-                <EventParamsCard key={event.id} event={event} />
-              ))}
-              {upcomingEvents.length === 0 && (
-                <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                  No upcoming events
+            <div className="h-full overflow-y-auto p-4">
+              {upcomingEvents.length === 0 ? (
+                <EmptyState
+                  icon={CalendarIcon}
+                  title="No upcoming events"
+                  message="Schedule your first event to get started"
+                />
+              ) : (
+                <div className="space-y-3">
+                  {upcomingEvents.map(event => (
+                    <EventParamsCard key={event.id} event={event} />
+                  ))}
                 </div>
               )}
             </div>

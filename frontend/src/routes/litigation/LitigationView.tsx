@@ -12,6 +12,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useLitigation } from './hooks/useLitigation';
 
@@ -109,16 +110,21 @@ export function LitigationView() {
         )}
 
         {!isPending && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {matters.map(matter => (
-              <LitigationCard key={matter.id} matter={matter} />
-            ))}
-            {matters.length === 0 && (
-              <div className="col-span-full text-center py-12 text-slate-600 dark:text-slate-400">
-                No litigation matters found
+          <>
+            {matters.length === 0 ? (
+              <EmptyState
+                icon={Gavel}
+                title="No litigation matters found"
+                message="Create your first matter to start managing litigation cases"
+              />
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {matters.map(matter => (
+                  <LitigationCard key={matter.id} matter={matter} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

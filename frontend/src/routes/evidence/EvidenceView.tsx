@@ -13,6 +13,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useEvidence } from './hooks/useEvidence';
 
@@ -113,16 +114,21 @@ export function EvidenceView() {
         )}
 
         {!isPending && (
-          <div className="space-y-3">
-            {evidence.map(item => (
-              <EvidenceCard key={item.id} evidence={item} />
-            ))}
-            {evidence.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No evidence found
+          <>
+            {evidence.length === 0 ? (
+              <EmptyState
+                icon={Shield}
+                title="No evidence found"
+                message="Add your first evidence item to start tracking chain of custody"
+              />
+            ) : (
+              <div className="space-y-3">
+                {evidence.map(item => (
+                  <EvidenceCard key={item.id} evidence={item} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

@@ -16,6 +16,7 @@ import { validateVariableValues } from '@/api/domains/drafting/utils';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/hooks/useTheme';
+import { useParallelData, useAsyncState } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { useToast } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
@@ -44,12 +45,9 @@ export function DocumentGenerator({
   const { addToast } = useToast();
 
   const [step, setStep] = useState<'template' | 'variables' | 'clauses' | 'preview' | 'save'>('template');
-  const [templates, setTemplates] = useState<DraftingTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<DraftingTemplate | null>(null);
   const [variableValues, setVariableValues] = useState<Record<string, unknown>>({});
   const [selectedClauses, setSelectedClauses] = useState<string[]>([]);
-  const [availableClauses, setAvailableClauses] = useState<unknown[]>([]);
-  const [cases, setCases] = useState<unknown[]>([]);
   const [selectedCaseId, setSelectedCaseId] = useState<string | undefined>(caseId);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -57,75 +55,42 @@ export function DocumentGenerator({
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
 
-  // Effect discipline: Synchronize with external data sources (Principle #6)
-  // Strict Mode ready: Runs twice in dev, idempotent (Principle #7)
-  useEffect(() => {
-    let isMounted = true;
+  // Load initial data using useParallelData
+  const { data } = useParallelData(
+    [
+      () => draftingApi.getAllTemplates(),
+      () => apiClient.get<unknown[]>('/cases'),
+      () => apiClient.get<unknown[]>('/clauses'),
+    ],
+    'Failed to load data',
+    { onError: () => addToast('Failed to load data', 'error') }
+  );
 
-    const loadData = async () => {
-      try {
-        const [templatesData, casesData, clausesData] = await Promise.all([
-          draftingApi.getAllTemplates(),
-          apiClient.get<unknown[]>('/cases'),
-          apiClient.get<unknown[]>('/clauses'),
-        ]);
+  const [templates = [], cases = [], availableClauses = []] = data || [[], [], []];
 
-        // Only update state if component is still mounted
-        if (isMounted) {
-          setTemplates(Array.isArray(templatesData) ? templatesData : []);
-          setCases(Array.isArray(casesData) ? casesData : []);
-          setAvailableClauses(Array.isArray(clausesData) ? clausesData : []);
+  // Load specific template if templateId is provided
+  const { data: templateData } = useAsyncState(
+    async () => {
+      if (!templateId) return null;
+      return await draftingApi.getTemplateById(templateId);
+    },
+    'Failed to load template',
+    {
+      dependencies: [templateId],
+      onSuccess: (template) => {
+        if (template) {
+          setSelectedTemplate(template);
+          setTitle(`${template.name} - ${new Date().toLocaleDateString()}`);
+          const initialValues: Record<string, unknown> = {};
+          template.variables.forEach((v) => {
+            initialValues[v.name] = v.defaultValue || '';
+          });
+          setVariableValues(initialValues);
         }
-      } catch (error) {
-        if (isMounted) {
-          console.error('Failed to load data:', error);
-          addToast('Failed to load data', 'error');
-        }
-      }
-    };
-
-    void loadData();
-
-    // Cleanup: Prevent state updates after unmount (Principle #6)
-    return () => {
-      isMounted = false;
-    };
-  }, [addToast]);
-
-  // Template-specific loading effect
-  useEffect(() => {
-    if (!templateId) return;
-
-    let isMounted = true;
-
-    const loadData = async () => {
-      try {
-        const template = await draftingApi.getTemplateById(templateId);
-        if (!isMounted) return;
-
-        setSelectedTemplate(template);
-        setTitle(`${template.name} - ${new Date().toLocaleDateString()}`);
-
-        // Initialize variable values with defaults
-        const initialValues: Record<string, unknown> = {};
-        template.variables.forEach((v) => {
-          initialValues[v.name] = v.defaultValue || '';
-        });
-        setVariableValues(initialValues);
-      } catch (error) {
-        if (isMounted) {
-          console.error('Failed to load template:', error);
-          addToast('Failed to load template', 'error');
-        }
-      }
-    };
-
-    void loadData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [templateId, addToast]);
+      },
+      onError: () => addToast('Failed to load template', 'error')
+    }
+  );
 
   const loadTemplate = async (id: string) => {
     try {

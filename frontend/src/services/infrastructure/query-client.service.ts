@@ -33,6 +33,7 @@
  */
 
 import { ValidationError } from "@/services/core/errors";
+import { EventEmitter } from "@/services/core/factories";
 import { hashQueryKey } from "@/services/utils/queryUtils";
 
 import type { QueryFunction, QueryKey, QueryState } from "./queryTypes";
@@ -43,9 +44,9 @@ import type { QueryFunction, QueryKey, QueryState } from "./queryTypes";
  */
 export class QueryClient {
   private cache = new Map<string, QueryState>();
-  private listeners = new Map<string, Set<(state: QueryState) => void>>();
+  private listeners = new Map<string, EventEmitter<QueryState>>();
   private inflight = new Map<string, Promise<unknown>>();
-  private globalListeners = new Set<(status: { isFetching: number }) => void>();
+  private globalEvents = new EventEmitter<{ isFetching: number }>({ serviceName: 'QueryClient' });
   private readonly DEFAULT_STALE_TIME = 30000; // 30 seconds
 
   constructor() {
@@ -135,11 +136,9 @@ export class QueryClient {
         "[QueryClient.subscribeToGlobalUpdates] Listener must be a function"
       );
     }
-    this.globalListeners.add(listener);
+    const unsubscribe = this.globalEvents.subscribe(listener);
     this.notifyGlobal();
-    return () => {
-      this.globalListeners.delete(listener);
-    };
+    return unsubscribe;
   }
 
   /**
@@ -161,14 +160,9 @@ export class QueryClient {
     }
     const hashedKey = this.hashKey(key);
     if (!this.listeners.has(hashedKey)) {
-      this.listeners.set(hashedKey, new Set());
+      this.listeners.set(hashedKey, new EventEmitter({ serviceName: 'QueryClient' }));
     }
-    this.listeners.get(hashedKey)!.add(listener as (state: QueryState) => void);
-    return () => {
-      this.listeners
-        .get(hashedKey)
-        ?.delete(listener as (state: QueryState) => void);
-    };
+    return this.listeners.get(hashedKey)!.subscribe(listener as (state: QueryState) => void);
   }
 
   /**
@@ -180,7 +174,7 @@ export class QueryClient {
     this.cache.forEach((state) => {
       if (state.isFetching) fetchingCount++;
     });
-    this.globalListeners.forEach((l) => l({ isFetching: fetchingCount }));
+    this.globalEvents.notify({ isFetching: fetchingCount });
   }
 
   /**
@@ -188,7 +182,7 @@ export class QueryClient {
    * @private
    */
   private notify<T>(hashedKey: string, state: QueryState<T>): void {
-    this.listeners.get(hashedKey)?.forEach((l) => l(state));
+    this.listeners.get(hashedKey)?.notify(state);
   }
 
   // =============================================================================

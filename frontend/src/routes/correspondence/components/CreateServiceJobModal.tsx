@@ -6,6 +6,7 @@ import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useFormError } from '@/hooks/routes';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { casesApi, documentsApi } from '@/lib/frontend-api';
@@ -22,13 +23,12 @@ interface CreateServiceJobModalProps {
 export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateServiceJobModalProps) {
     const { theme } = useTheme();
     const notify = useNotify();
+    const { errors, setError, setErrors, clearAll } = useFormError();
     const [formData, setFormData] = useState<Partial<ServiceJob>>({
         status: 'DRAFT',
         attempts: 0,
         method: 'Process Server'
     });
-    const [_validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-    // Note: validationErrors is set but not currently displayed in UI - can be used to show field-level errors
 
     // Load cases from IndexedDB via useQuery for accurate, cached data
     const { data: cases = [] } = useQuery(
@@ -55,7 +55,12 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
     );
 
     const handleSave = () => {
+        clearAll();
         if (!formData.targetPerson || !formData.caseId || !formData.documentTitle || !formData.dueDate) {
+            if (!formData.targetPerson) setError('targetPerson', 'Target person is required');
+            if (!formData.caseId) setError('caseId', 'Case is required');
+            if (!formData.documentTitle) setError('documentTitle', 'Document is required');
+            if (!formData.dueDate) setError('dueDate', 'Due date is required');
             notify.error('Please fill in all required fields');
             return;
         }
@@ -81,18 +86,18 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
         // Validate with Zod schema
         const validation = validateServiceJobSafe(newJob);
         if (!validation.success) {
-            const errors: Record<string, string> = {};
+            const errorMap: Record<string, string> = {};
             validation.error.issues.forEach(err => {
-                errors[err.path[0] as string] = err.message;
+                errorMap[err.path[0] as string] = err.message;
             });
-            setValidationErrors(errors);
+            setErrors(errorMap);
             notify.error('Validation failed: ' + (validation.error.issues[0]?.message || 'Unknown error'));
             return;
         }
 
         onSave(newJob);
         setFormData({ status: 'DRAFT', attempts: 0, method: 'Process Server' });
-        setValidationErrors({});
+        clearAll();
     };
 
     return (

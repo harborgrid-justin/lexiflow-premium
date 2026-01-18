@@ -53,6 +53,7 @@ export const STORES = {
 
   // Litigation
   PLEADINGS: "pleadings", // ✓ Backend: pleadings (renamed from pleading_documents)
+  PLEADING_TEMPLATES: "pleading_templates",
   EXHIBITS: "exhibits", // ✓ Backend: exhibits
   TRIAL_EXHIBITS: "trial_exhibits", // ✓ Backend: trial_exhibits (added)
   TRIAL_EVENTS: "trial_events", // ✓ Backend: trial_events (added)
@@ -198,41 +199,41 @@ export class DatabaseManager {
 
   async getAll<T>(_storeName: string): Promise<T[]> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`,
     );
   }
 
   async get<T>(_storeName: string, _id: string): Promise<T | undefined> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`,
     );
   }
 
   async put<T>(_storeName: string, _item: T): Promise<void> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`,
     );
   }
 
   async bulkPut<T>(_storeName: string, _items: T[]): Promise<void> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`,
     );
   }
 
   async delete(_storeName: string, _id: string): Promise<void> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`,
     );
   }
 
   async getByIndex<T>(
     _storeName: string,
     _indexName: string,
-    _value: string | unknown[]
+    _value: string | unknown[],
   ): Promise<T[]> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`,
     );
   }
 

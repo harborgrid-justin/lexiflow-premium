@@ -28,13 +28,14 @@ import {
   Sparkles,
   Star
 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
+import { useParallelData } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 
@@ -71,6 +72,17 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   const [isSearching, setIsSearching] = useState(false);
   const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
 
+  // Load research data using useParallelData
+  const { data, loading, error, refetch: loadData } = useParallelData(
+    [
+      () => DataService.knowledge.getResearchSessions?.() || Promise.resolve([]),
+      () => DataService.citations.getAll()
+    ],
+    'Failed to load research data'
+  );
+
+  const [sessions = [], citations = []] = data || [[], []];
+
   // Helpers for session selection
   const toggleSession = (sessionId: string) => {
     setSelectedSessions(prev =>
@@ -85,35 +97,6 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
       onExport(selectedSessions);
     }
   };
-  const [sessions, setSessions] = useState<ResearchSession[]>([]);
-  const [citations, setCitations] = useState<Citation[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Load research data from DataService
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [sessionsData, citationsData] = await Promise.all([
-        DataService.knowledge.getResearchSessions?.() || Promise.resolve([]),
-        DataService.citations.getAll()
-      ]);
-      setSessions(sessionsData);
-      setCitations(citationsData);
-    } catch (err) {
-      console.error('[LegalResearchHub] Failed to load data:', err);
-      setError('Failed to load research data');
-      setSessions([]);
-      setCitations([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
 
   const handleSearch = useCallback(() => {
     if (!searchQuery.trim()) return;

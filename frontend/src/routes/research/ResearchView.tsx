@@ -13,6 +13,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useResearch } from './ResearchProvider';
 
@@ -143,26 +144,36 @@ export function ResearchView() {
         )}
 
         {!isPending && activeView === 'history' && (
-          <div className="max-w-4xl mx-auto space-y-3">
-            {recentSearches.map(query => (
-              <QueryCard key={query.id} query={query} />
-            ))}
-            {recentSearches.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No search history found
+          <div className="max-w-4xl mx-auto">
+            {recentSearches.length === 0 ? (
+              <EmptyState
+                icon={History}
+                title="No search history found"
+                message="Your search history will appear here"
+              />
+            ) : (
+              <div className="space-y-3">
+                {recentSearches.map(query => (
+                  <QueryCard key={query.id} query={query} />
+                ))}
               </div>
             )}
           </div>
         )}
 
         {!isPending && activeView === 'citations' && (
-          <div className="max-w-4xl mx-auto space-y-3">
-            {citations.map(citation => (
-              <CitationCard key={citation.id} citation={citation} />
-            ))}
-            {citations.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No citations found
+          <div className="max-w-4xl mx-auto">
+            {citations.length === 0 ? (
+              <EmptyState
+                icon={BookOpen}
+                title="No citations found"
+                message="Add citations from your research to save them here"
+              />
+            ) : (
+              <div className="space-y-3">
+                {citations.map(citation => (
+                  <CitationCard key={citation.id} citation={citation} />
+                ))}
               </div>
             )}
           </div>

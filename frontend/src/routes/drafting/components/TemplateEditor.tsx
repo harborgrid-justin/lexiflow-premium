@@ -1,7 +1,8 @@
-import { Code, Eye, FileText, Save, X } from 'lucide-react';
+import { Code, Eye, FileText, List, Save, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { api } from '@/api';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useTheme } from '@/hooks/useTheme';
 import { useToast } from '@/providers';
 import { draftingApi, TemplateCategory, TemplateStatus } from '@api/domains/drafting';
@@ -635,14 +636,12 @@ export function TemplateEditor({
                   </div>
                 ))}
                 {variables.length === 0 && (
-                  <p style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: theme.text.muted,
-                    textAlign: 'center',
-                    padding: `${tokens.spacing.normal.lg} 0`,
-                  }}>
-                    No variables defined
-                  </p>
+                  <EmptyState 
+                    icon={List}
+                    title="No variables defined"
+                    message="Add variables to make your template dynamic"
+                    size="sm"
+                  />
                 )}
               </div>
             </div>
@@ -748,14 +747,12 @@ export function TemplateEditor({
                   </div>
                 ))}
                 {clauseRefs.length === 0 && (
-                  <p style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: theme.text.muted,
-                    textAlign: 'center',
-                    padding: `${tokens.spacing.normal.lg} 0`,
-                  }}>
-                    No clause references
-                  </p>
+                  <EmptyState 
+                    icon={FileText}
+                    title="No clause references"
+                    message="Link standard clauses to reuse common legal language"
+                    size="sm"
+                  />
                 )}
               </div>
             </div>

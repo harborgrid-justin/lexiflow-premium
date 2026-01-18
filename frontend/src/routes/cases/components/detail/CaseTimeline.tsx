@@ -8,10 +8,11 @@
  * @category Case Management - Timeline & Events
  */
 
-import { BookOpen, Filter, List } from 'lucide-react';
+import { BookOpen, Calendar, Filter, List } from 'lucide-react';
 import React from 'react';
 
 import { TimelineItem } from '@/components/molecules/TimelineItem/TimelineItem';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { cn } from '@/lib/cn';
 import { useCaseTimeline } from '@/routes/cases/hooks/useCaseTimeline';
@@ -100,7 +101,12 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
 
       <div className="flex-1 overflow-hidden p-0 relative">
         {filteredEvents.length === 0 ? (
-          <p className={cn("text-sm text-center italic py-4", theme.text.tertiary)}>No events found.</p>
+          <EmptyState 
+            icon={Calendar}
+            title="No events found"
+            message="Timeline events will appear here as the case progresses"
+            size="sm"
+          />
         ) : (
           viewMode === 'story' ? (
             <div className="overflow-y-auto h-full custom-scrollbar p-4">

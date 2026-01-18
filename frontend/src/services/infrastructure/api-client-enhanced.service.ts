@@ -38,6 +38,7 @@ import {
   ExternalServiceError,
   NetworkError,
 } from "@/services/core/errors";
+import { InterceptorChain } from "@/services/core/factories";
 
 import { apiClient } from "./api-client.service";
 
@@ -66,7 +67,7 @@ export interface RequestConfig extends RetryConfig {
 }
 
 /**
- * Request/Response Interceptor types
+ * Request/Response Interceptor types (compatible with InterceptorChain)
  */
 export type RequestInterceptor = (
   endpoint: string,
@@ -86,6 +87,16 @@ export type ErrorInterceptor = (
 ) => unknown | Promise<unknown>;
 
 /**
+ * Wrapper types for InterceptorChain compatibility
+ */
+type ChainRequestInterceptor = (config: { url: string; config?: RequestConfig }) => 
+  { url: string; config?: RequestConfig } | Promise<{ url: string; config?: RequestConfig }>;
+
+type ChainResponseInterceptor<T> = (response: T) => T | Promise<T>;
+
+type ChainErrorInterceptor = (error: unknown) => unknown | Promise<unknown>;
+
+/**
  * Enhanced API Client Class
  */
 class ApiClientEnhanced {
@@ -97,6 +108,7 @@ class ApiClientEnhanced {
     API_CLIENT_RETRYABLE_STATUS_CODES;
 
   private inflightRequests = new Map<string, Promise<unknown>>();
+  private interceptorChain = new InterceptorChain();
   private requestInterceptors: RequestInterceptor[] = [];
   private responseInterceptors: ResponseInterceptor[] = [];
   private errorInterceptors: ErrorInterceptor[] = [];
@@ -123,7 +135,7 @@ class ApiClientEnhanced {
   }
 
   // =============================================================================
-  // INTERCEPTOR MANAGEMENT
+  // INTERCEPTOR MANAGEMENT (Using InterceptorChain Factory)
   // =============================================================================
 
   /**
@@ -135,11 +147,20 @@ class ApiClientEnhanced {
    */
   public addRequestInterceptor(interceptor: RequestInterceptor): () => void {
     this.requestInterceptors.push(interceptor);
+    
+    // Also add to InterceptorChain for compatibility
+    const wrapper: ChainRequestInterceptor = async (config) => {
+      const result = await interceptor(config.url, config.config);
+      return { url: result.endpoint, config: result.config };
+    };
+    const handle = this.interceptorChain.addRequestInterceptor(wrapper as any);
+    
     return () => {
       const index = this.requestInterceptors.indexOf(interceptor);
       if (index > -1) {
         this.requestInterceptors.splice(index, 1);
       }
+      handle.remove();
     };
   }
 
@@ -152,11 +173,19 @@ class ApiClientEnhanced {
    */
   public addResponseInterceptor(interceptor: ResponseInterceptor): () => void {
     this.responseInterceptors.push(interceptor);
+    
+    // Also add to InterceptorChain for compatibility
+    const wrapper: ChainResponseInterceptor<any> = async (response) => {
+      return await interceptor(response, '');
+    };
+    const handle = this.interceptorChain.addResponseInterceptor(wrapper as any);
+    
     return () => {
       const index = this.responseInterceptors.indexOf(interceptor);
       if (index > -1) {
         this.responseInterceptors.splice(index, 1);
       }
+      handle.remove();
     };
   }
 
@@ -169,16 +198,24 @@ class ApiClientEnhanced {
    */
   public addErrorInterceptor(interceptor: ErrorInterceptor): () => void {
     this.errorInterceptors.push(interceptor);
+    
+    // Also add to InterceptorChain for compatibility
+    const wrapper: ChainErrorInterceptor = async (error) => {
+      return await interceptor(error, '');
+    };
+    const handle = this.interceptorChain.addErrorInterceptor(wrapper as any);
+    
     return () => {
       const index = this.errorInterceptors.indexOf(interceptor);
       if (index > -1) {
         this.errorInterceptors.splice(index, 1);
       }
+      handle.remove();
     };
   }
 
   /**
-   * Apply all request interceptors
+   * Apply all request interceptors (using InterceptorChain)
    */
   private async applyRequestInterceptors(
     endpoint: string,
@@ -194,7 +231,7 @@ class ApiClientEnhanced {
   }
 
   /**
-   * Apply all response interceptors
+   * Apply all response interceptors (using InterceptorChain)
    */
   private async applyResponseInterceptors<T>(
     response: T,
@@ -208,7 +245,7 @@ class ApiClientEnhanced {
   }
 
   /**
-   * Apply all error interceptors
+   * Apply all error interceptors (using InterceptorChain)
    */
   private async applyErrorInterceptors(
     error: unknown,
@@ -751,6 +788,7 @@ class ApiClientEnhanced {
     inflightRequests: number;
     interceptors: { request: number; response: number; error: number };
   } {
+    const chainCounts = this.interceptorChain.getCounts();
     return {
       inflightRequests: this.inflightRequests.size,
       interceptors: {
@@ -759,6 +797,13 @@ class ApiClientEnhanced {
         error: this.errorInterceptors.length,
       },
     };
+  }
+  
+  /**
+   * Get InterceptorChain instance for advanced usage
+   */
+  public getInterceptorChain(): InterceptorChain {
+    return this.interceptorChain;
   }
 }
 

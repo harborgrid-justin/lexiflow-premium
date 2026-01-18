@@ -26,6 +26,9 @@ export {
   TableSkeleton,
 } from "./RouteLoading";
 
+export { EmptyState } from "./EmptyState";
+export type { EmptyStateProps } from "./EmptyState";
+
 export { createCaseMeta, createDetailMeta, createMeta } from "./meta-utils";
 
 export {
@@ -61,3 +64,42 @@ export {
 } from "./sync/SyncContext";
 export type { SyncContextType } from "./sync/SyncContext";
 export type { SyncStatus } from "./sync/SyncContext.types";
+
+// ============================================================================
+// Higher-Order Components (HOCs)
+// ============================================================================
+
+export {
+  withAuth,
+  withAdminAuth,
+  withAttorneyAuth,
+  withStaffAuth,
+  withLayout,
+  wrapInLayout,
+  createLayoutWithData,
+} from "./hoc";
+
+export type {
+  WithAuthOptions,
+  WithLayoutOptions,
+  WithLayoutResult,
+  LayoutComponentProps,
+} from "./hoc";
+
+// Enhanced Loader Utilities
+export {
+  combineLoaders,
+  chainLoaders,
+  withAuthLoader,
+  validateParams,
+  requireParam,
+  getOptionalParam,
+  requireAuth,
+  requireAdmin,
+  requireAttorney,
+} from "./loaderUtils";
+
+export type {
+  LoaderFunction,
+  WithAuthLoaderOptions,
+} from "./loaderUtils";

@@ -18,12 +18,18 @@ import {
   clearAuthTokens,
   setAuthTokens,
 } from "@/services/infrastructure/api-client/auth-manager";
+import { StoragePersistence } from "../core/factories/Utilities";
 
 import type { User } from "@/types";
 
 const AUTH_STORAGE_KEY = "lexiflow_auth_token";
 const AUTH_REFRESH_KEY = "lexiflow_refresh_token";
 const AUTH_USER_KEY = "lexiflow_user";
+
+// Type-safe storage wrappers
+const tokenStorage = new StoragePersistence<string>(AUTH_STORAGE_KEY);
+const refreshTokenStorage = new StoragePersistence<string>(AUTH_REFRESH_KEY);
+const userStorage = new StoragePersistence<User>(AUTH_USER_KEY);
 
 export class AuthService {
   /**
@@ -32,14 +38,14 @@ export class AuthService {
    */
   static async initializeFromStorage(): Promise<User | null> {
     try {
-      const token = localStorage.getItem(AUTH_STORAGE_KEY);
-      const storedUser = localStorage.getItem(AUTH_USER_KEY);
-      const refreshToken = localStorage.getItem(AUTH_REFRESH_KEY);
+      const token = tokenStorage.get();
+      const storedUser = userStorage.get();
+      const refreshToken = refreshTokenStorage.get();
 
       if (token && storedUser && refreshToken) {
         // Sync with API client
         setAuthTokens(token, refreshToken);
-        return JSON.parse(storedUser);
+        return storedUser;
       }
 
       return null;
@@ -60,9 +66,9 @@ export class AuthService {
       const { accessToken, refreshToken, user } = response;
 
       // Store tokens and user
-      localStorage.setItem(AUTH_STORAGE_KEY, accessToken);
-      localStorage.setItem(AUTH_REFRESH_KEY, refreshToken);
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+      tokenStorage.set(accessToken);
+      refreshTokenStorage.set(refreshToken);
+      userStorage.set(user);
 
       // Sync with API client
       setAuthTokens(accessToken, refreshToken);
@@ -95,14 +101,14 @@ export class AuthService {
    */
   static async refreshToken(): Promise<void> {
     try {
-      const refreshToken = localStorage.getItem(AUTH_REFRESH_KEY);
+      const refreshToken = refreshTokenStorage.get();
       if (!refreshToken) {
         throw new Error("No refresh token available");
       }
 
       // Call refresh endpoint
       // const response = await authApi.auth.refreshToken(refreshToken);
-      // localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
+      // tokenStorage.set(response.accessToken);
       // setAuthTokens(response.accessToken, refreshToken);
     } catch (err) {
       console.error("Token refresh failed", err);
@@ -114,8 +120,8 @@ export class AuthService {
    * Clear all auth storage
    */
   private static clearStorage(): void {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-    localStorage.removeItem(AUTH_REFRESH_KEY);
-    localStorage.removeItem(AUTH_USER_KEY);
+    tokenStorage.remove();
+    refreshTokenStorage.remove();
+    userStorage.remove();
   }
 }

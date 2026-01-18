@@ -28,13 +28,14 @@ import {
   Search,
   Tag
 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
 import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
+import { useParallelData } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 
@@ -74,36 +75,16 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
   const [filterJurisdiction, setFilterJurisdiction] = useState<string>('all');
   const [selectedRule, setSelectedRule] = useState<LegalRule | null>(null);
 
-  // Data Loading State
-  const [rules, setRules] = useState<LegalRule[]>([]);
-  const [jurisdictions, setJurisdictions] = useState<Jurisdiction[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Load data from DataService using useParallelData
+  const { data, loading, error, refetch: loadData } = useParallelData(
+    [
+      () => DataService.legalRules.getAll(),
+      () => DataService.jurisdiction.getAll()
+    ],
+    'Failed to load statutory monitoring data'
+  );
 
-  // Load data from DataService
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [rulesData, jurisdictionsData] = await Promise.all([
-        DataService.legalRules.getAll(),
-        DataService.jurisdiction.getAll()
-      ]);
-      setRules(rulesData);
-      setJurisdictions(jurisdictionsData);
-    } catch (err) {
-      console.error('[StatutoryMonitor] Failed to load data:', err);
-      setError('Failed to load statutory monitoring data');
-      setRules([]);
-      setJurisdictions([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  const [rules = [], jurisdictions = []] = data || [[], []];
 
   // Filter rules
   const filteredRules = rules.filter((rule) => {
@@ -182,7 +163,7 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
         <EmptyState
           icon={Gavel}
           title="Failed to Load Statutory Monitor"
-          description={error}
+          description={error.message}
           action={
             <button
               onClick={loadData}

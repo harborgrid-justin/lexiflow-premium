@@ -39,6 +39,7 @@ import { Input } from '@/components/atoms/Input/Input';
 import { TextArea } from '@/components/atoms/TextArea/TextArea';
 import { Modal } from '@/components/molecules/Modal/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
@@ -249,26 +250,6 @@ export function DiscoveryStipulations({ caseId }: DiscoveryStipulationsProps) {
   }
 
   // ==========================================================================
-  // RENDER - Empty State
-  // ==========================================================================
-
-  const renderEmptyState = () => (
-    <div className={cn('flex flex-col items-center justify-center py-16 rounded-lg border border-dashed', theme.surface.default, theme.border.default)}>
-      <FileQuestion className={cn('h-12 w-12 mb-4', theme.text.tertiary)} />
-      <h3 className={cn('text-lg font-semibold mb-2', theme.text.primary)}>
-        No Stipulations Found
-      </h3>
-      <p className={cn('text-sm mb-4 text-center max-w-md', theme.text.secondary)}>
-        Discovery stipulations help manage joint agreements between parties.
-        Create your first stipulation to get started.
-      </p>
-      <Button variant="primary" icon={Plus} onClick={handleOpenModal}>
-        Create First Stipulation
-      </Button>
-    </div>
-  );
-
-  // ==========================================================================
   // MAIN RENDER
   // ==========================================================================
 
@@ -295,7 +276,12 @@ export function DiscoveryStipulations({ caseId }: DiscoveryStipulationsProps) {
 
       {/* Stipulations Table or Empty State */}
       {stipulations.length === 0 ? (
-        renderEmptyState()
+        <EmptyState 
+          icon={FileQuestion}
+          title="No Stipulations Found"
+          message="Discovery stipulations help manage joint agreements between parties. Create your first stipulation to get started."
+          action={<Button variant="primary" icon={Plus} onClick={handleOpenModal}>Create First Stipulation</Button>}
+        />
       ) : (
         <TableContainer>
           <TableHeader>

@@ -4,8 +4,7 @@
  */
 
 import { WorkflowTemplateService } from "@/api/workflow/core/template.service";
-import { ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository } from "@/services/core/factories";
 import { type WorkflowTemplateData } from "@/types";
 
 export const TEMPLATE_QUERY_KEYS = {
@@ -15,90 +14,16 @@ export const TEMPLATE_QUERY_KEYS = {
     ["templates", "category", category] as const,
 } as const;
 
-export class TemplateRepository extends Repository<WorkflowTemplateData> {
+export class TemplateRepository extends GenericRepository<WorkflowTemplateData> {
   private templateService: WorkflowTemplateService;
+  protected apiService: WorkflowTemplateService;
+  protected repositoryName = "TemplateRepository";
 
   constructor() {
     super("templates");
     this.templateService = new WorkflowTemplateService();
+    this.apiService = this.templateService;
     console.log(`[TemplateRepository] Initialized with Backend API`);
-  }
-
-  private validateId(id: string, methodName: string): void {
-    if (!id || id.trim() === "") {
-      throw new Error(
-        `[TemplateRepository.${methodName}] Invalid id parameter`,
-      );
-    }
-  }
-
-  override async getAll(): Promise<WorkflowTemplateData[]> {
-    try {
-      const templates = await this.templateService.getTemplates();
-      return templates as unknown as WorkflowTemplateData[];
-    } catch (error) {
-      console.error("[TemplateRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async getById(
-    id: string,
-  ): Promise<WorkflowTemplateData | undefined> {
-    this.validateId(id, "getById");
-    try {
-      const template = await this.templateService.getTemplateById(id);
-      return template as unknown as WorkflowTemplateData;
-    } catch (error) {
-      console.error("[TemplateRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async add(
-    item: WorkflowTemplateData,
-  ): Promise<WorkflowTemplateData> {
-    if (!item || typeof item !== "object") {
-      throw new ValidationError(
-        "[TemplateRepository.add] Invalid template data",
-      );
-    }
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const template = await this.templateService.createTemplate(item as any);
-      return template as unknown as WorkflowTemplateData;
-    } catch (error) {
-      console.error("[TemplateRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async update(
-    id: string,
-    updates: Partial<WorkflowTemplateData>,
-  ): Promise<WorkflowTemplateData> {
-    this.validateId(id, "update");
-    try {
-      const template = await this.templateService.updateTemplate(
-        id,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updates as any,
-      );
-      return template as unknown as WorkflowTemplateData;
-    } catch (error) {
-      console.error("[TemplateRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
-    try {
-      await this.templateService.deleteTemplate(id);
-    } catch (error) {
-      console.error("[TemplateRepository] Backend API error", error);
-      throw error;
-    }
   }
 
   async getByCategory(category: string): Promise<WorkflowTemplateData[]> {
@@ -111,7 +36,7 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
     }
   }
 
-  async search(query: string): Promise<WorkflowTemplateData[]> {
+  override async search(query: string): Promise<WorkflowTemplateData[]> {
     if (!query) return [];
     try {
       const templates = await this.getAll();

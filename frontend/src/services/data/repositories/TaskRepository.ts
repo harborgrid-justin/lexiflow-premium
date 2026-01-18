@@ -26,8 +26,8 @@
  */
 
 import { TasksApiService } from "@/api/workflow/tasks-api";
-import { OperationError, ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { ValidationError } from "@/services/core/errors";
+import { GenericRepository, createQueryKeys, type IApiService } from "@/services/core/factories";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import {
   type CaseId,
@@ -43,15 +43,9 @@ type WorkflowTaskEntity = WorkflowTask & { createdBy?: UserId };
 
 /**
  * Query keys for React Query integration
- * Use these constants for cache invalidation and refetching
- *
- * @example
- * queryClient.invalidateQueries({ queryKey: TASK_QUERY_KEYS.all() });
- * queryClient.invalidateQueries({ queryKey: TASK_QUERY_KEYS.byCase(caseId) });
  */
 export const TASK_QUERY_KEYS = {
-  all: () => ["tasks"] as const,
-  byId: (id: string) => ["tasks", id] as const,
+  ...createQueryKeys('tasks'),
   byCase: (caseId: string) => ["tasks", "case", caseId] as const,
   byUser: (userId: string) => ["tasks", "user", userId] as const,
   byStatus: (status: string) => ["tasks", "status", status] as const,
@@ -64,23 +58,13 @@ export const TASK_QUERY_KEYS = {
  * Task Repository Class
  * Implements strict backend pattern
  */
-export class TaskRepository extends Repository<WorkflowTaskEntity> {
-  private tasksApi: TasksApiService;
+export class TaskRepository extends GenericRepository<WorkflowTaskEntity> {
+  protected apiService: IApiService<WorkflowTaskEntity> = new TasksApiService();
+  protected repositoryName = 'TaskRepository';
 
   constructor() {
-    super("tasks");
-    this.tasksApi = new TasksApiService();
+    super('tasks');
     console.log(`[TaskRepository] Initialized with Backend API`);
-  }
-
-  /**
-   * Validate and sanitize ID parameter
-   * @private
-   */
-  private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== "string" || id.trim() === "") {
-      throw new Error(`[TaskRepository.${methodName}] Invalid id parameter`);
-    }
   }
 
   /**
@@ -108,139 +92,22 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   }
 
   // =============================================================================
-  // CRUD OPERATIONS
+  // CRUD OPERATIONS - Inherited from GenericRepository
+  // Custom override for update to publish integration events
   // =============================================================================
 
-  /**
-   * Get all tasks
-   *
-   * @returns Promise<WorkflowTask[]> Array of tasks
-   * @throws Error if fetch fails
-   *
-   * @example
-   * const allTasks = await repo.getAll();
-   */
-  override async getAll(): Promise<WorkflowTaskEntity[]> {
-    try {
-      return (await this.tasksApi.getAll()) as WorkflowTaskEntity[];
-    } catch (error) {
-      console.error("[TaskRepository.getAll] Error:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get tasks by case ID
-   *
-   * @param caseId - Case ID
-   * @returns Promise<WorkflowTask[]> Array of tasks
-   * @throws Error if caseId is invalid or fetch fails
-   */
-  override async getByCaseId(caseId: CaseId): Promise<WorkflowTaskEntity[]> {
-    this.validateCaseId(caseId, "getByCaseId");
-
-    try {
-      return (await this.tasksApi.getAll({ caseId })) as WorkflowTaskEntity[];
-    } catch (error) {
-      console.error("[TaskRepository.getByCaseId] Error:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Count active tasks by case ID (excludes Done/Completed)
-   *
-   * @param caseId - Case ID
-   * @returns Promise<number> Count of active tasks
-   * @throws Error if caseId is invalid or fetch fails
-   */
-  async countByCaseId(caseId: string): Promise<number> {
-    this.validateCaseId(caseId, "countByCaseId");
-
-    try {
-      const tasks = await this.getByCaseId(caseId as CaseId);
-      return tasks.filter((t) => t.status !== TaskStatusBackend.COMPLETED)
-        .length;
-    } catch (error) {
-      console.error("[TaskRepository.countByCaseId] Error:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get task by ID
-   *
-   * @param id - Task ID
-   * @returns Promise<WorkflowTask | undefined> Task or undefined
-   * @throws Error if id is invalid or fetch fails
-   */
-  override async getById(id: string): Promise<WorkflowTaskEntity | undefined> {
-    this.validateId(id, "getById");
-
-    try {
-      return (await this.tasksApi.getById(id)) as WorkflowTaskEntity;
-    } catch (error) {
-      console.error("[TaskRepository.getById] Error:", error);
-      return undefined;
-    }
-  }
-
-  /**
-   * Add a new task
-   *
-   * @param item - Task data
-   * @returns Promise<WorkflowTask> Created task
-   * @throws Error if validation fails or create fails
-   */
-  override async add(item: WorkflowTaskEntity): Promise<WorkflowTaskEntity> {
-    if (!item || typeof item !== "object") {
-      throw new ValidationError("[TaskRepository.add] Invalid task data");
-    }
-
-    try {
-      return (await this.tasksApi.create(item)) as WorkflowTaskEntity;
-    } catch (error) {
-      console.error("[TaskRepository.add] Error:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Update an existing task
-   * Publishes integration event when task is completed
-   *
-   * @param id - Task ID
-   * @param updates - Partial task updates
-   * @returns Promise<WorkflowTask> Updated task
-   * @throws Error if validation fails or update fails
-   */
   override async update(
     id: string,
     updates: Partial<WorkflowTaskEntity>,
   ): Promise<WorkflowTaskEntity> {
-    this.validateId(id, "update");
-
-    if (!updates || typeof updates !== "object") {
-      throw new ValidationError("[TaskRepository.update] Invalid updates data");
-    }
-
-    let result: WorkflowTaskEntity;
-
-    try {
-      result = (await this.tasksApi.update(id, updates)) as WorkflowTaskEntity;
-    } catch (error) {
-      console.error("[TaskRepository.update] Error:", error);
-      throw error;
-    }
+    const result = await super.update(id, updates);
 
     // Integration Point: Publish event when task is completed
     if (updates.status === TaskStatusBackend.COMPLETED) {
       try {
         await IntegrationEventPublisher.publish(
           SystemEventType.TASK_COMPLETED,
-          {
-            task: result,
-          },
+          { task: result },
         );
       } catch (eventError) {
         console.warn(
@@ -254,21 +121,20 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   }
 
   /**
-   * Delete a task
-   *
-   * @param id - Task ID
-   * @returns Promise<void>
-   * @throws Error if id is invalid or delete fails
+   * Get tasks by case ID
    */
-  override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
+  override async getByCaseId(caseId: CaseId): Promise<WorkflowTaskEntity[]> {
+    this.validateCaseId(caseId, "getByCaseId");
+    return (await this.apiService.getAll({ caseId })) as WorkflowTaskEntity[];
+  }
 
-    try {
-      await this.tasksApi.delete(id);
-    } catch (error) {
-      console.error("[TaskRepository.delete] Error:", error);
-      throw error;
-    }
+  /**
+   * Count active tasks by case ID (excludes Done/Completed)
+   */
+  async countByCaseId(caseId: string): Promise<number> {
+    this.validateCaseId(caseId, "countByCaseId");
+    const tasks = await this.getByCaseId(caseId as CaseId);
+    return tasks.filter((t) => t.status !== TaskStatusBackend.COMPLETED).length;
   }
 
   // =============================================================================
@@ -277,47 +143,29 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
   /**
    * Mark a task as complete
-   * Publishes integration event for completed tasks
-   *
-   * @param id - Task ID
-   * @returns Promise<WorkflowTask> Completed task
-   * @throws Error if id is invalid or update fails
    */
   completeTask = async (id: string): Promise<WorkflowTaskEntity> => {
-    this.validateId(id, "completeTask");
+    this.validateIdParameter(id, "completeTask");
 
-    try {
-      const task = await this.getById(id);
-      if (!task) {
-        throw new Error(`Task ${id} not found`);
-      }
-
-      // Update task status
-      const completed = await this.update(id, {
-        status: TaskStatusBackend.COMPLETED,
-        completionPercentage: 100,
-      });
-
-      return completed;
-    } catch (error) {
-      console.error("[TaskRepository.completeTask] Error:", error);
-      throw new OperationError("completeTask", "Failed to complete task");
+    const task = await this.getById(id);
+    if (!task) {
+      throw new Error(`Task ${id} not found`);
     }
+
+    return await this.update(id, {
+      status: TaskStatusBackend.COMPLETED,
+      completionPercentage: 100,
+    });
   };
 
   /**
    * Update task status
-   *
-   * @param id - Task ID
-   * @param status - New status
-   * @returns Promise<WorkflowTask> Updated task
-   * @throws Error if validation fails or update fails
    */
   async updateStatus(
     id: string,
     status: TaskStatusBackend,
   ): Promise<WorkflowTaskEntity> {
-    this.validateId(id, "updateStatus");
+    this.validateIdParameter(id, "updateStatus");
 
     if (!status || typeof status !== "string" || status.trim() === "") {
       throw new ValidationError(
@@ -325,30 +173,20 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
       );
     }
 
-    try {
-      return (await this.tasksApi.updateStatus(
-        id,
-        status,
-      )) as WorkflowTaskEntity;
-    } catch (error) {
-      console.error("[TaskRepository.updateStatus] Error:", error);
-      throw error;
-    }
+    return (await this.apiService.updateStatus(
+      id,
+      status,
+    )) as WorkflowTaskEntity;
   }
 
   /**
    * Update task priority
-   *
-   * @param id - Task ID
-   * @param priority - New priority (low, medium, high, urgent)
-   * @returns Promise<WorkflowTask> Updated task
-   * @throws Error if validation fails or update fails
    */
   async updatePriority(
     id: string,
     priority: TaskPriorityBackend,
   ): Promise<WorkflowTaskEntity> {
-    this.validateId(id, "updatePriority");
+    this.validateIdParameter(id, "updatePriority");
 
     if (!priority) {
       throw new ValidationError(
@@ -361,17 +199,12 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
   /**
    * Update task progress
-   *
-   * @param id - Task ID
-   * @param progress - Progress percentage (0-100)
-   * @returns Promise<WorkflowTask> Updated task
-   * @throws Error if validation fails or update fails
    */
   async updateProgress(
     id: string,
     progress: number,
   ): Promise<WorkflowTaskEntity> {
-    this.validateId(id, "updateProgress");
+    this.validateIdParameter(id, "updateProgress");
 
     if (typeof progress !== "number" || progress < 0 || progress > 100) {
       throw new ValidationError(
@@ -383,7 +216,6 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
       completionPercentage: progress,
     };
 
-    // Auto-complete if progress reaches 100%
     if (progress === 100) {
       updates.status = TaskStatusBackend.COMPLETED;
     }
@@ -397,64 +229,27 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
   /**
    * Assign task to user
-   *
-   * @param id - Task ID
-   * @param userId - User ID
-   * @returns Promise<WorkflowTask> Updated task
-   * @throws Error if validation fails or update fails
    */
   async assignToUser(id: string, userId: UserId): Promise<WorkflowTaskEntity> {
-    this.validateId(id, "assignToUser");
+    this.validateIdParameter(id, "assignToUser");
     this.validateUserId(userId, "assignToUser");
-
-    try {
-      return (await this.tasksApi.patch(id, {
-        assignedTo: userId,
-      })) as WorkflowTaskEntity;
-    } catch (error) {
-      console.error("[TaskRepository.assignToUser] Error:", error);
-      throw error;
-    }
+    return (await this.apiService.patch(id, { assignedTo: userId })) as WorkflowTaskEntity;
   }
 
   /**
    * Unassign task from user
-   *
-   * @param id - Task ID
-   * @returns Promise<WorkflowTask> Updated task
-   * @throws Error if id is invalid or update fails
    */
   async unassignTask(id: string): Promise<WorkflowTaskEntity> {
-    this.validateId(id, "unassignTask");
-
-    try {
-      return (await this.tasksApi.patch(id, {
-        assignedTo: null,
-      })) as WorkflowTaskEntity;
-    } catch (error) {
-      console.error("[TaskRepository.unassignTask] Error:", error);
-      throw error;
-    }
+    this.validateIdParameter(id, "unassignTask");
+    return (await this.apiService.patch(id, { assignedTo: null })) as WorkflowTaskEntity;
   }
 
   /**
    * Get tasks assigned to user
-   *
-   * @param userId - User ID
-   * @returns Promise<WorkflowTask[]> Array of assigned tasks
-   * @throws Error if userId is invalid or fetch fails
    */
   async getByAssignee(userId: UserId): Promise<WorkflowTaskEntity[]> {
     this.validateUserId(userId, "getByAssignee");
-
-    try {
-      return (await this.tasksApi.getAll({
-        assignedTo: userId,
-      })) as WorkflowTaskEntity[];
-    } catch (error) {
-      console.error("[TaskRepository.getByAssignee] Error:", error);
-      throw error;
-    }
+    return (await this.apiService.getAll({ assignedTo: userId })) as WorkflowTaskEntity[];
   }
 
   // =============================================================================
@@ -463,57 +258,36 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
   /**
    * Get overdue tasks
-   *
-   * @returns Promise<WorkflowTask[]> Array of overdue tasks
-   * @throws Error if fetch fails
    */
   async getOverdue(): Promise<WorkflowTaskEntity[]> {
-    try {
-      const tasks = await this.getAll();
-      const now = new Date();
+    const tasks = await this.getAll();
+    const now = new Date();
 
-      return tasks.filter((task) => {
-        if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED)
-          return false;
-        return new Date(task.dueDate) < now;
-      });
-    } catch (error) {
-      console.error("[TaskRepository.getOverdue] Error:", error);
-      throw new OperationError("getOverdue", "Failed to fetch overdue tasks");
-    }
+    return tasks.filter((task) => {
+      if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED)
+        return false;
+      return new Date(task.dueDate) < now;
+    });
   }
 
   /**
    * Get upcoming tasks (due within specified days)
-   *
-   * @param days - Number of days to look ahead (default: 7)
-   * @returns Promise<WorkflowTask[]> Array of upcoming tasks
-   * @throws Error if fetch fails
    */
   async getUpcoming(days: number = 7): Promise<WorkflowTaskEntity[]> {
-    try {
-      const tasks = await this.getAll();
-      const now = new Date();
-      const future = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+    const tasks = await this.getAll();
+    const now = new Date();
+    const future = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
 
-      return tasks.filter((task) => {
-        if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED)
-          return false;
-        const due = new Date(task.dueDate);
-        return due >= now && due <= future;
-      });
-    } catch (error) {
-      console.error("[TaskRepository.getUpcoming] Error:", error);
-      throw new OperationError("getUpcoming", "Failed to fetch upcoming tasks");
-    }
+    return tasks.filter((task) => {
+      if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED)
+        return false;
+      const due = new Date(task.dueDate);
+      return due >= now && due <= future;
+    });
   }
 
   /**
    * Get tasks by status
-   *
-   * @param status - Task status
-   * @returns Promise<WorkflowTask[]> Array of tasks with status
-   * @throws Error if status is invalid or fetch fails
    */
   async getByStatus(status: string): Promise<WorkflowTaskEntity[]> {
     if (!status || typeof status !== "string" || status.trim() === "") {
@@ -521,23 +295,13 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         "[TaskRepository.getByStatus] Invalid status parameter",
       );
     }
-
-    try {
-      return (await this.tasksApi.getAll({
-        status: status as TaskStatusBackend,
-      })) as WorkflowTaskEntity[];
-    } catch (error) {
-      console.error("[TaskRepository.getByStatus] Error:", error);
-      throw error;
-    }
+    return (await this.apiService.getAll({
+      status: status as TaskStatusBackend,
+    })) as WorkflowTaskEntity[];
   }
 
   /**
    * Get tasks by priority
-   *
-   * @param priority - Task priority
-   * @returns Promise<WorkflowTask[]> Array of tasks with priority
-   * @throws Error if priority is invalid or fetch fails
    */
   async getByPriority(priority: string): Promise<WorkflowTaskEntity[]> {
     if (!priority || typeof priority !== "string" || priority.trim() === "") {
@@ -545,64 +309,49 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         "[TaskRepository.getByPriority] Invalid priority parameter",
       );
     }
-
-    try {
-      return (await this.tasksApi.getAll({
-        priority: priority as TaskPriorityBackend,
-      })) as WorkflowTaskEntity[];
-    } catch (error) {
-      console.error("[TaskRepository.getByPriority] Error:", error);
-      throw error;
-    }
+    return (await this.apiService.getAll({
+      priority: priority as TaskPriorityBackend,
+    })) as WorkflowTaskEntity[];
   }
 
   /**
    * Search tasks by criteria
-   *
-   * @param criteria - Search criteria
-   * @returns Promise<WorkflowTask[]> Matching tasks
-   * @throws Error if search fails
    */
-  async search(criteria: {
+  async searchTasks(criteria: {
     caseId?: string;
     assignedTo?: string;
     status?: string;
     priority?: string;
     query?: string;
   }): Promise<WorkflowTaskEntity[]> {
-    try {
-      let tasks = await this.getAll();
+    let tasks = await this.getAll();
 
-      if (criteria.caseId) {
-        tasks = tasks.filter((task) => task.caseId === criteria.caseId);
-      }
-
-      if (criteria.assignedTo) {
-        tasks = tasks.filter((task) => task.assignedTo === criteria.assignedTo);
-      }
-
-      if (criteria.status) {
-        tasks = tasks.filter((task) => task.status === criteria.status);
-      }
-
-      if (criteria.priority) {
-        tasks = tasks.filter((task) => task.priority === criteria.priority);
-      }
-
-      if (criteria.query) {
-        const lowerQuery = criteria.query.toLowerCase();
-        tasks = tasks.filter(
-          (task) =>
-            task.title?.toLowerCase().includes(lowerQuery) ||
-            task.description?.toLowerCase().includes(lowerQuery),
-        );
-      }
-
-      return tasks;
-    } catch (error) {
-      console.error("[TaskRepository.search] Error:", error);
-      throw new OperationError("search", "Failed to search tasks");
+    if (criteria.caseId) {
+      tasks = tasks.filter((task) => task.caseId === criteria.caseId);
     }
+
+    if (criteria.assignedTo) {
+      tasks = tasks.filter((task) => task.assignedTo === criteria.assignedTo);
+    }
+
+    if (criteria.status) {
+      tasks = tasks.filter((task) => task.status === criteria.status);
+    }
+
+    if (criteria.priority) {
+      tasks = tasks.filter((task) => task.priority === criteria.priority);
+    }
+
+    if (criteria.query) {
+      const lowerQuery = criteria.query.toLowerCase();
+      tasks = tasks.filter(
+        (task) =>
+          task.title?.toLowerCase().includes(lowerQuery) ||
+          task.description?.toLowerCase().includes(lowerQuery),
+      );
+    }
+
+    return tasks;
   }
 
   // =============================================================================
@@ -611,10 +360,6 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
   /**
    * Get task statistics
-   *
-   * @param caseId - Optional case ID filter
-   * @returns Promise with statistics
-   * @throws Error if fetch fails
    */
   async getStatistics(caseId?: string): Promise<{
     total: number;
@@ -624,49 +369,41 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
     overdue: number;
     avgProgress: number;
   }> {
-    try {
-      const tasks = caseId
-        ? await this.getByCaseId(caseId as CaseId)
-        : await this.getAll();
+    const tasks = caseId
+      ? await this.getByCaseId(caseId as CaseId)
+      : await this.getAll();
 
-      const byStatus: Record<string, number> = {};
-      const byPriority: Record<string, number> = {};
-      let completed = 0;
-      let totalProgress = 0;
+    const byStatus: Record<string, number> = {};
+    const byPriority: Record<string, number> = {};
+    let completed = 0;
+    let totalProgress = 0;
 
-      tasks.forEach((task) => {
-        const status = task.status || "unknown";
-        byStatus[status] = (byStatus[status] || 0) + 1;
+    tasks.forEach((task) => {
+      const status = task.status || "unknown";
+      byStatus[status] = (byStatus[status] || 0) + 1;
 
-        const priority = task.priority || "medium";
-        byPriority[priority] = (byPriority[priority] || 0) + 1;
+      const priority = task.priority || "medium";
+      byPriority[priority] = (byPriority[priority] || 0) + 1;
 
-        if (task.status === TaskStatusBackend.COMPLETED) {
-          completed++;
-        }
+      if (task.status === TaskStatusBackend.COMPLETED) {
+        completed++;
+      }
 
-        totalProgress += task.completionPercentage || 0;
-      });
+      totalProgress += task.completionPercentage || 0;
+    });
 
-      const overdueTasks = await this.getOverdue();
-      const overdue = caseId
-        ? overdueTasks.filter((t) => t.caseId === caseId).length
-        : overdueTasks.length;
+    const overdueTasks = await this.getOverdue();
+    const overdue = caseId
+      ? overdueTasks.filter((t) => t.caseId === caseId).length
+      : overdueTasks.length;
 
-      return {
-        total: tasks.length,
-        byStatus,
-        byPriority,
-        completed,
-        overdue,
-        avgProgress: tasks.length > 0 ? totalProgress / tasks.length : 0,
-      };
-    } catch (error) {
-      console.error("[TaskRepository.getStatistics] Error:", error);
-      throw new OperationError(
-        "getStatistics",
-        "Failed to get task statistics",
-      );
-    }
+    return {
+      total: tasks.length,
+      byStatus,
+      byPriority,
+      completed,
+      overdue,
+      avgProgress: tasks.length > 0 ? totalProgress / tasks.length : 0,
+    };
   }
 }

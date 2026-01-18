@@ -9,11 +9,12 @@
  */
 
 // External Dependencies
-import { Scale, Fingerprint, ChevronRight } from 'lucide-react';
+import { Briefcase, Fingerprint, Gavel, Scale } from 'lucide-react';
 import React from 'react';
 
 // Internal Dependencies - Components
 import { Badge } from '@/components/atoms/Badge';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from "@/hooks/useTheme";
@@ -36,9 +37,12 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
 
   if (argumentsList.length === 0) {
       return (
-          <div className={cn("flex flex-col items-center justify-center h-full p-8 text-center", theme.text.tertiary)}>
-              <p>No arguments found matching your criteria.</p>
-          </div>
+          <EmptyState 
+            icon={Briefcase}
+            title="No arguments found"
+            message="No legal arguments match your search criteria"
+            size="sm"
+          />
       );
   }
 

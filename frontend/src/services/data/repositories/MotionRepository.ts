@@ -25,7 +25,7 @@
 
 import { MotionsApiService } from "@/api/litigation/motions-api";
 import { ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository } from "@/services/core/factories";
 import { type Motion } from "@/types";
 
 /**
@@ -39,27 +39,21 @@ export const MOTION_QUERY_KEYS = {
   byStatus: (status: string) => ["motions", "status", status] as const,
 } as const;
 
-export class MotionRepository extends Repository<Motion> {
+export class MotionRepository extends GenericRepository<Motion> {
   private motionsApi: MotionsApiService;
+  protected apiService: MotionsApiService;
+  protected repositoryName = "MotionRepository";
 
   constructor() {
     super("motions");
     this.motionsApi = new MotionsApiService();
+    this.apiService = this.motionsApi;
     console.log(`[MotionRepository] Initialized with Backend API`);
   }
 
   private validateId(id: string, methodName: string): void {
     if (!id || typeof id !== "string" || id.trim() === "") {
       throw new Error(`[MotionRepository.${methodName}] Invalid id parameter`);
-    }
-  }
-
-  override async getAll(): Promise<Motion[]> {
-    try {
-      return await this.motionsApi.getAll();
-    } catch (error) {
-      console.error("[MotionRepository] Backend API error", error);
-      throw error;
     }
   }
 
@@ -73,62 +67,17 @@ export class MotionRepository extends Repository<Motion> {
     }
   };
 
-  override async getById(id: string): Promise<Motion | undefined> {
-    this.validateId(id, "getById");
-    try {
-      return await this.motionsApi.getById(id);
-    } catch (error) {
-      console.error("[MotionRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async add(item: Motion): Promise<Motion> {
-    if (!item || typeof item !== "object") {
-      throw new ValidationError("[MotionRepository.add] Invalid motion data");
-    }
-    try {
-      return await this.motionsApi.create(item);
-    } catch (error) {
-      console.error("[MotionRepository] Backend API error", error);
-      throw error;
-    }
-
-    return item;
-  }
-
-  override async update(id: string, updates: Partial<Motion>): Promise<Motion> {
-    this.validateId(id, "update");
-    try {
-      return await this.motionsApi.update(id, updates);
-    } catch (error) {
-      console.error("[MotionRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
-    try {
-      await this.motionsApi.delete(id);
-      return;
-    } catch (error) {
-      console.error("[MotionRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
   async updateStatus(id: string, status: string): Promise<Motion> {
     this.validateId(id, "updateStatus");
     if (!status || typeof status !== "string") {
       throw new ValidationError(
-        "[MotionRepository.updateStatus] Invalid status"
+        "[MotionRepository.updateStatus] Invalid status",
       );
     }
     return await this.update(id, { status } as Partial<Motion>);
   }
 
-  async search(criteria: {
+  async searchMotions(criteria: {
     caseId?: string;
     type?: string;
     status?: string;
@@ -146,7 +95,7 @@ export class MotionRepository extends Repository<Motion> {
       motions = motions.filter(
         (m) =>
           m.title?.toLowerCase().includes(lowerQuery) ||
-          (m as { notes?: string }).notes?.toLowerCase().includes(lowerQuery)
+          (m as { notes?: string }).notes?.toLowerCase().includes(lowerQuery),
       );
     }
     return motions;

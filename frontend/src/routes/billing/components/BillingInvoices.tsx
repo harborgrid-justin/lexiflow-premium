@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { CheckCircle, Download, Filter, Mail, Plus } from 'lucide-react';
+import { CheckCircle, Download, DollarSign, Filter, Mail, Plus } from 'lucide-react';
 import React from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -25,6 +25,7 @@ import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useThemeContext } from "@/hooks/useTheme";
@@ -139,7 +140,14 @@ function BillingInvoicesComponent() {
           ))}
           {filteredInvoices.length === 0 && (
             <TableRow>
-              <TableCell colSpan={7} className={cn("text-center py-8 italic", theme.text.tertiary)}>No invoices found.</TableCell>
+              <TableCell colSpan={7}>
+                <EmptyState 
+                  icon={DollarSign}
+                  title="No invoices found"
+                  message="Create your first invoice or adjust your filters to see results"
+                  size="sm"
+                />
+              </TableCell>
             </TableRow>
           )}
         </TableBody>

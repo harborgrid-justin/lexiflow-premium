@@ -19,7 +19,7 @@
 
 import { CitationsApiService } from "@/api/intelligence/citations-api";
 import { ValidationError } from "@/services/core/errors";
-import { Repository } from "@/services/core/Repository";
+import { GenericRepository } from "@/services/core/factories";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { type Citation } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
@@ -33,12 +33,15 @@ export const CITATION_QUERY_KEYS = {
   byType: (type: string) => ["citations", "type", type] as const,
 } as const;
 
-export class CitationRepository extends Repository<Citation> {
+export class CitationRepository extends GenericRepository<Citation> {
   private citationsApi: CitationsApiService;
+  protected apiService: CitationsApiService;
+  protected repositoryName = "CitationRepository";
 
   constructor() {
     super("citations");
     this.citationsApi = new CitationsApiService();
+    this.apiService = this.citationsApi;
     console.log(`[CitationRepository] Initialized with Backend API`);
   }
 
@@ -47,28 +50,6 @@ export class CitationRepository extends Repository<Citation> {
       throw new Error(
         `[CitationRepository.${methodName}] Invalid id parameter`,
       );
-    }
-  }
-
-  override async getAll(): Promise<Citation[]> {
-    try {
-      // Ensure the API returns Citation compatible objects
-      const result = await this.citationsApi.getAll();
-      return result as unknown as Citation[];
-    } catch (error) {
-      console.error("[CitationRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async getById(id: string): Promise<Citation | undefined> {
-    this.validateId(id, "getById");
-    try {
-      const result = await this.citationsApi.getById(id);
-      return result as unknown as Citation;
-    } catch (error) {
-      console.error("[CitationRepository] Backend API error", error);
-      throw error;
     }
   }
 
@@ -81,7 +62,6 @@ export class CitationRepository extends Repository<Citation> {
 
     let result: Citation;
     try {
-      // Cast item to unknown then Record to satisfy API signature if needed
       result = (await this.citationsApi.create(
         item as unknown as Record<string, unknown>,
       )) as unknown as Citation;
@@ -90,7 +70,6 @@ export class CitationRepository extends Repository<Citation> {
       throw error;
     }
 
-    // Publish integration event
     try {
       await IntegrationEventPublisher.publish(SystemEventType.CITATION_SAVED, {
         citation: result,
@@ -105,34 +84,6 @@ export class CitationRepository extends Repository<Citation> {
     }
 
     return result;
-  }
-
-  override async update(
-    id: string,
-    updates: Partial<Citation>,
-  ): Promise<Citation> {
-    this.validateId(id, "update");
-    try {
-      const result = await this.citationsApi.update(
-        id,
-        updates as unknown as Record<string, unknown>,
-      );
-      return result as unknown as Citation;
-    } catch (error) {
-      console.error("[CitationRepository] Backend API error", error);
-      throw error;
-    }
-  }
-
-  override async delete(id: string): Promise<void> {
-    this.validateId(id, "delete");
-    try {
-      await this.citationsApi.delete(id);
-      return;
-    } catch (error) {
-      console.error("[CitationRepository] Backend API error", error);
-      throw error;
-    }
   }
 
   async verifyAll(): Promise<{ checked: number; flagged: number }> {
@@ -170,7 +121,7 @@ export class CitationRepository extends Repository<Citation> {
     }
   }
 
-  async search(criteria: {
+  async searchCitations(criteria: {
     caseId?: string;
     documentId?: string;
     type?: string;

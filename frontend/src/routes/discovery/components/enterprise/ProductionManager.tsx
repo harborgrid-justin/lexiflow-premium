@@ -23,10 +23,11 @@ import {
   Search,
   Send
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
+import { useAsyncState } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { type Production as APIProduction } from '@/lib/frontend-api';
 import { DataService } from '@/services/data/data-service.service';
@@ -105,59 +106,49 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
   caseId = 'default-case'
 }) => {
   const { theme } = useTheme();
-  const [productions, setProductions] = useState<Production[]>([]);
   const [selectedProduction, setSelectedProduction] = useState<Production | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showBatesGenerator, setShowBatesGenerator] = useState(false);
-  const [_loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProductions = async () => {
-      setLoading(true);
-      try {
-        const data = await DataService.productions.getAll({ caseId });
-        setProductions((data as APIProduction[]).map((p: APIProduction) => {
-          let status: Production['status'] = 'draft';
-          if (p.status === 'ready' || p.status === 'produced') {
-            status = p.status;
-          }
+  // Load productions using useAsyncState
+  const { data: productionsData, loading: _loading } = useAsyncState(
+    () => DataService.productions.getAll({ caseId }),
+    'Failed to load productions'
+  );
 
-          return {
-            id: p.id,
-            name: p.name,
-            productionNumber: p.productionNumber || 'N/A',
-            recipientParty: p.producedTo || 'Unknown',
-            status,
-            createdDate: new Date(p.createdAt || Date.now()),
-            producedDate: p.productionDate ? new Date(p.productionDate) : undefined,
-            batesRange: {
-              prefix: p.beginBatesNumber?.split('-')[0] || 'UNK',
-              startNumber: parseInt(p.beginBatesNumber?.split('-')[1] || '0'),
-              endNumber: parseInt(p.endBatesNumber?.split('-')[1] || '0'),
-              totalDocuments: p.documentCount || 0
-            },
-            documentCount: p.documentCount || 0,
-            redactionCount: 0,
-            format: (p.format === 'native' || p.format === 'pdf' || p.format === 'tiff') ? p.format : 'mixed',
-            media: 'electronic',
-            deliveryMethod: 'litigation-platform',
-            loadFileIncluded: true,
-            metadata: {
-              createdBy: 'System',
-              ...(p.metadata as Record<string, string> || {})
-            },
-            notes: p.notes
-          };
-        }));
-      } catch (error) {
-        console.error('Failed to fetch productions:', error);
-      } finally {
-        setLoading(false);
-      }
+  const productions: Production[] = (productionsData as APIProduction[] || []).map((p: APIProduction) => {
+    let status: Production['status'] = 'draft';
+    if (p.status === 'ready' || p.status === 'produced') {
+      status = p.status;
+    }
+
+    return {
+      id: p.id,
+      name: p.name,
+      productionNumber: p.productionNumber || 'N/A',
+      recipientParty: p.producedTo || 'Unknown',
+      status,
+      createdDate: new Date(p.createdAt || Date.now()),
+      producedDate: p.productionDate ? new Date(p.productionDate) : undefined,
+      batesRange: {
+        prefix: p.beginBatesNumber?.split('-')[0] || 'UNK',
+        startNumber: parseInt(p.beginBatesNumber?.split('-')[1] || '0'),
+        endNumber: parseInt(p.endBatesNumber?.split('-')[1] || '0'),
+        totalDocuments: p.documentCount || 0
+      },
+      documentCount: p.documentCount || 0,
+      redactionCount: 0,
+      format: (p.format === 'native' || p.format === 'pdf' || p.format === 'tiff') ? p.format : 'mixed',
+      media: 'electronic',
+      deliveryMethod: 'litigation-platform',
+      loadFileIncluded: true,
+      metadata: {
+        createdBy: 'System',
+        ...(p.metadata as Record<string, string> || {})
+      },
+      notes: p.notes
     };
-
-    fetchProductions();
-  }, [caseId]);
+  });
 
   // Filter productions
   const filteredProductions = productions.filter(prod =>

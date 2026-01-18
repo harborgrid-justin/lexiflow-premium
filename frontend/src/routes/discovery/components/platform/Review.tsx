@@ -14,12 +14,13 @@
  * - G34: Query reads side-effect free
  */
 
-import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Eye, FileSearch, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
 import React, { useCallback, useMemo, useState, useTransition } from 'react';
 
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
@@ -142,7 +143,13 @@ export function Review({ caseId }: ReviewProps) {
   }
 
   if (documents.length === 0) {
-    return <div className="p-8 text-center">No documents found for review.</div>;
+    return (
+      <EmptyState 
+        icon={FileSearch}
+        title="No documents found for review"
+        message="Documents will appear here when they are ready for review"
+      />
+    );
   }
 
   return (

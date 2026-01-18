@@ -84,6 +84,7 @@ export class VersionConflictError extends Error {
  */
 export class PleadingRepository extends Repository<PleadingDocument> {
   private pleadingsApi: PleadingsApiService;
+  private useBackend = true;
 
   constructor() {
     super("pleadings");
@@ -285,10 +286,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
    */
   getTemplates = async (): Promise<PleadingTemplate[]> => {
     try {
-      return await db.getAll<PleadingTemplate>(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        STORES["PLEADING_TEMPLATES"] as any,
-      );
+      return await db.getAll<PleadingTemplate>(STORES.PLEADING_TEMPLATES);
     } catch (error) {
       console.error("[PleadingRepository.getTemplates] Error:", error);
       throw new OperationError(
@@ -331,13 +329,8 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
     try {
       const [template, caseData] = await Promise.all([
-         
-        db.get<PleadingTemplate>(
-          STORES["PLEADING_TEMPLATES"] as any,
-          templateId,
-        ),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        db.get<Case>(STORES["CASES"] as any, caseId),
+        db.get<PleadingTemplate>(STORES.PLEADING_TEMPLATES, templateId),
+        db.get<Case>(STORES.CASES, caseId),
       ]);
 
       if (!template) {
@@ -481,12 +474,6 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     jurisdictionId?: string,
   ): Promise<FormattingRule> => {
     try {
-      // Check for backend rules if available
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if ((this as any).useBackend && jurisdictionId) {
-        // Future integration: return await this.pleadingsApi.getRules(jurisdictionId);
-      }
-
       // Standard Rules Configuration
       if (jurisdictionId === "CA-SUPERIOR") {
         return {
@@ -550,8 +537,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
         throw new Error(`Pleading not found: ${pleadingId}`);
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if ((this as any).useBackend) {
+      if (this.useBackend) {
         // Request PDF generation from backend
         const response = await apiClient.post<{ url: string }>(
           `/litigation/pleadings/${pleadingId}/pdf`,

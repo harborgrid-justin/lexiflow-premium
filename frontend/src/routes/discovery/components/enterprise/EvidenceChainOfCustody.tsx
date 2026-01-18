@@ -28,10 +28,11 @@ import {
   Unlock,
   User
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
 import { useTheme } from "@/hooks/useTheme";
+import { useAsyncState } from '@/hooks/routes';
 import { cn } from '@/lib/cn';
 import { DataService } from '@/services/data/data-service.service';
 
@@ -123,56 +124,33 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({
 }) => {
   const { theme } = useTheme();
 
-  // State for data
-  const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
-  const [custodyTransfers, setTransfers] = useState<CustodyTransfer[]>([]);
-  const [handlingLogs, setAuditLogs] = useState<HandlingLog[]>([]);
-  const [, setIsLoading] = useState(false);
-
+  // State for UI
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceItem | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'transfers' | 'handling' | 'authentication'>('overview');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Fetch data on mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        // Load evidence items
-        const items = await DataService.discovery.getEvidence();
-        setEvidenceItems(items as unknown as EvidenceItem[]);
-
-        // If evidenceId provided, find it and load its data
-        if (evidenceId) {
-          const found = items.find((i: { id: string }) => i.id === evidenceId);
-          if (found) {
-            const evidenceItem = found as unknown as EvidenceItem;
-            setSelectedEvidence(evidenceItem);
-
-            // Load transfers and logs for selected evidence
-            try {
-              const [transfersData, logsData] = await Promise.all([
-                DataService.discovery.getTransfers?.(evidenceId) || Promise.resolve([]),
-                DataService.discovery.getAuditLogs?.(evidenceId) || Promise.resolve([])
-              ]);
-
-              setTransfers(transfersData as CustodyTransfer[]);
-              setAuditLogs(logsData as AuditLogEntry[]);
-            } catch (fetchError) {
-              console.error('Failed to load evidence details:', fetchError);
-              // Continue with empty arrays - UI will show empty states
-            }
-          }
+  // Load evidence items using useAsyncState
+  const { data: evidenceItems = [], loading: isLoading } = useAsyncState(
+    async () => {
+      const items = await DataService.discovery.getEvidence();
+      const typedItems = items as unknown as EvidenceItem[];
+      
+      // If evidenceId provided, find and select it
+      if (evidenceId) {
+        const found = typedItems.find(i => i.id === evidenceId);
+        if (found) {
+          setSelectedEvidence(found);
         }
-      } catch (err) {
-        console.error('Failed to load evidence data', err);
-        setEvidenceItems([]); // Show empty state on error
-      } finally {
-        setIsLoading(false);
       }
-    };
-    fetchData();
-  }, [evidenceId]);
+      
+      return typedItems;
+    },
+    'Failed to load evidence items'
+  );
+
+  // Separate state for transfers and logs that can be set independently
+  const [custodyTransfers, setTransfers] = useState<CustodyTransfer[]>([]);
+  const [handlingLogs, setAuditLogs] = useState<HandlingLog[]>([]);
 
   // Filter evidence items
   const filteredEvidence = evidenceItems.filter(item =>

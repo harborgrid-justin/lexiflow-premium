@@ -17,6 +17,10 @@
  */
 
 import { BaseService, type ServiceConfig } from "../core/ServiceLifecycle";
+import { IdGenerator, TimerManager } from "../core/factories/Utilities";
+import { EventEmitter } from "../core/factories";
+import { defaultStorage } from "../infrastructure/adapters/StorageAdapter";
+import { TIMEOUTS } from "@/config/ports.config";
 
 // ============================================================================
 // TYPES
@@ -47,6 +51,14 @@ export interface Notification {
   read?: boolean;
 }
 
+export interface NotificationGroup {
+  groupKey: string;
+  notifications: Notification[];
+  count: number;
+  latestTimestamp: number;
+  collapsed: boolean;
+}
+
 export type NotificationListener = (notifications: Notification[]) => void;
 
 export interface NotificationServiceConfig extends ServiceConfig {
@@ -64,9 +76,15 @@ export interface NotificationService {
   dismiss(id: string): void;
   dismissAll(): void;
   markAsRead(id: string): void;
+  markAllAsRead(): void;
   getAll(): Notification[];
+  getUnreadCount(): number;
+  getGrouped(): (Notification | NotificationGroup)[];
   addListener(listener: NotificationListener): () => void;
   requestDesktopPermission(): Promise<boolean>;
+  setSoundEnabled(enabled: boolean): void;
+  getSoundEnabled(): boolean;
+  getDesktopEnabled(): boolean;
 }
 
 // ============================================================================
@@ -78,11 +96,17 @@ export class BrowserNotificationService
   implements NotificationService
 {
   private notifications: Notification[] = [];
-  private listeners: Set<NotificationListener> = new Set();
+  private eventEmitter = new EventEmitter<Notification[]>({
+    serviceName: 'NotificationService',
+    maxListeners: 1000
+  });
   private maxNotifications: number = 50;
   private desktopEnabled: boolean = true;
   private soundEnabled: boolean = true;
   private desktopPermission: NotificationPermission = "default";
+  private idGen = new IdGenerator('notif');
+  private timers = new TimerManager();
+  private desktopNotifications = new Map<string, Notification>();
 
   constructor() {
     super("NotificationService");
@@ -99,16 +123,27 @@ export class BrowserNotificationService
     if ("Notification" in window) {
       this.desktopPermission = Notification.permission;
     }
+    
+    // Load preferences from storage
+    try {
+      const soundPref = defaultStorage.getItem("notification_sound");
+      if (soundPref !== null) {
+        this.soundEnabled = soundPref === "true";
+      }
+    } catch (error) {
+      this.warn("Failed to load sound preference:", error);
+    }
   }
 
   protected override onStop(): void {
     this.dismissAll();
+    this.timers.clearAll();
   }
 
   show(notification: Omit<Notification, "id" | "timestamp">): string {
     this.ensureRunning();
 
-    const id = this.generateId();
+    const id = this.idGen.short();
     const fullNotification: Notification = {
       ...notification,
       id,
@@ -139,7 +174,7 @@ export class BrowserNotificationService
 
     // Auto-dismiss if duration specified
     if (fullNotification.duration && fullNotification.duration > 0) {
-      setTimeout(() => {
+      this.timers.setTimeout(() => {
         this.dismiss(id);
       }, fullNotification.duration);
     }
@@ -174,6 +209,93 @@ export class BrowserNotificationService
     }
   }
 
+  markAllAsRead(): void {
+    this.ensureRunning();
+    
+    let changed = false;
+    this.notifications.forEach((n) => {
+      if (!n.read) {
+        n.read = true;
+        changed = true;
+      }
+    });
+    
+    if (changed) {
+      this.notifyListeners();
+    }
+  }
+
+  getUnreadCount(): number {
+    this.ensureRunning();
+    return this.notifications.filter((n) => !n.read).length;
+  }
+
+  getGrouped(): (Notification | NotificationGroup)[] {
+    this.ensureRunning();
+    
+    try {
+      const groups = new Map<string, Notification[]>();
+      const ungrouped: Notification[] = [];
+
+      // Group notifications by groupKey
+      this.notifications.forEach((notification) => {
+        if (notification.groupKey) {
+          const existing = groups.get(notification.groupKey) || [];
+          existing.push(notification);
+          groups.set(notification.groupKey, existing);
+        } else {
+          ungrouped.push(notification);
+        }
+      });
+
+      // Convert to array with groups
+      const result: (Notification | NotificationGroup)[] = [...ungrouped];
+
+      groups.forEach((notifications, groupKey) => {
+        if (notifications.length >= 3) {
+          // Create collapsed group
+          result.push({
+            groupKey,
+            notifications,
+            count: notifications.length,
+            latestTimestamp: Math.max(...notifications.map((n) => n.timestamp)),
+            collapsed: true,
+          });
+        } else {
+          // Add individually
+          result.push(...notifications);
+        }
+      });
+
+      // Sort by timestamp (newest first)
+      return result.sort((a, b) => {
+        const aTime = "latestTimestamp" in a ? a.latestTimestamp : a.timestamp;
+        const bTime = "latestTimestamp" in b ? b.latestTimestamp : b.timestamp;
+        return bTime - aTime;
+      });
+    } catch (error) {
+      this.error("Failed to group notifications:", error);
+      return [];
+    }
+  }
+
+  setSoundEnabled(enabled: boolean): void {
+    this.soundEnabled = enabled;
+    try {
+      defaultStorage.setItem("notification_sound", String(enabled));
+    } catch (error) {
+      this.warn("Failed to save sound preference:", error);
+    }
+  }
+
+  getSoundEnabled(): boolean {
+    return this.soundEnabled;
+  }
+
+  getDesktopEnabled(): boolean {
+    return this.desktopEnabled && this.desktopPermission === "granted";
+  }
+
   getAll(): Notification[] {
     this.ensureRunning();
     return [...this.notifications];
@@ -181,10 +303,7 @@ export class BrowserNotificationService
 
   addListener(listener: NotificationListener): () => void {
     this.ensureRunning();
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
+    return this.eventEmitter.subscribe(listener);
   }
 
   async requestDesktopPermission(): Promise<boolean> {
@@ -217,10 +336,6 @@ export class BrowserNotificationService
   // PRIVATE HELPERS
   // ==========================================================================
 
-  private generateId(): string {
-    return `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
-
   private showDesktopNotification(notification: Notification): void {
     try {
       const desktopNotif = new Notification(notification.title, {
@@ -231,7 +346,7 @@ export class BrowserNotificationService
 
       // Auto-close after duration
       if (notification.duration) {
-        setTimeout(() => desktopNotif.close(), notification.duration);
+        this.timers.setTimeout(() => desktopNotif.close(), notification.duration);
       }
     } catch (error) {
       this.error("Failed to show desktop notification:", error);
@@ -280,12 +395,130 @@ export class BrowserNotificationService
 
   private notifyListeners(): void {
     const notifications = this.getAll();
-    this.listeners.forEach((listener) => {
-      try {
-        listener(notifications);
-      } catch (error) {
-        this.error("Listener error:", error);
-      }
-    });
+    this.eventEmitter.notify(notifications);
   }
+}
+
+// ============================================================================
+// CONVENIENCE FUNCTIONS
+// ============================================================================
+
+const NOTIFICATION_SUCCESS_DISMISS_MS = TIMEOUTS.NOTIFICATION_SUCCESS || 3000;
+const NOTIFICATION_AUTO_DISMISS_MS = TIMEOUTS.NOTIFICATION_ERROR || 5000;
+
+/**
+ * Get the notification service instance from ServiceRegistry
+ * @private
+ */
+function getNotificationService(): BrowserNotificationService {
+  const { ServiceRegistry } = require("../core/ServiceRegistry");
+  return ServiceRegistry.get<BrowserNotificationService>("NotificationService");
+}
+
+/**
+ * Convenience functions for common notification patterns
+ * Provides semantic shortcuts for info, success, warning, error, and undo
+ *
+ * @example
+ * notify.success('Saved', 'Document saved successfully');
+ * notify.error('Failed', 'Upload failed', { desktop: true });
+ * notify.withUndo('Deleted', 'Item deleted', () => restoreItem());
+ */
+export const notify = {
+  /**
+   * Info notification (normal priority, no auto-dismiss)
+   */
+  info: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
+  ) => {
+    return getNotificationService().show({
+      title,
+      message: message ?? "",
+      type: "info",
+      priority: "normal",
+      ...options,
+    });
+  },
+
+  /**
+   * Success notification (normal priority, auto-dismiss)
+   */
+  success: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
+  ) => {
+    return getNotificationService().show({
+      title,
+      message: message ?? "",
+      type: "success",
+      priority: "normal",
+      duration: NOTIFICATION_SUCCESS_DISMISS_MS,
+      ...options,
+    });
+  },
+
+  /**
+   * Warning notification (high priority, auto-dismiss)
+   */
+  warning: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
+  ) => {
+    return getNotificationService().show({
+      title,
+      message: message ?? "",
+      type: "warning",
+      priority: "high",
+      duration: NOTIFICATION_AUTO_DISMISS_MS,
+      ...options,
+    });
+  },
+
+  /**
+   * Error notification (urgent priority, persistent)
+   */
+  error: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
+  ) => {
+    return getNotificationService().show({
+      title,
+      message: message ?? "",
+      type: "error",
+      priority: "urgent",
+      duration: 0, // Persistent
+      ...options,
+    });
+  },
+
+  /**
+   * Notification with Undo action (success type, 5s duration)
+   */
+  withUndo: (
+    title: string,
+    message: string,
+    onUndo: () => void,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>,
+  ) => {
+    return getNotificationService().show({
+      title,
+      message,
+      type: "success",
+      priority: "normal",
+      duration: 5000,
+      actions: [
+        {
+          label: "Undo",
+          onClick: onUndo,
+          variant: "primary",
+        },
+      ],
+      ...options,
+    });
+  },
 }

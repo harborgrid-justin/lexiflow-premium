@@ -1,4 +1,5 @@
 import { BaseService } from "../core/ServiceLifecycle";
+import { StoragePersistence } from "@/services/core/factories";
 
 /**
  * ENTERPRISE REACT SERVICE: FeatureFlagService
@@ -19,6 +20,7 @@ export class EnvironmentFeatureFlagService
   implements FeatureFlagService
 {
   private flags: Map<string, boolean> = new Map();
+  private flagStorage = new StoragePersistence<Record<string, boolean>>("feature_flags");
 
   constructor() {
     super("FeatureFlagService");
@@ -64,9 +66,8 @@ export class EnvironmentFeatureFlagService
     const flags = new Map<string, boolean>();
 
     try {
-      const stored = localStorage.getItem("feature_flags");
-      if (stored) {
-        const parsed = JSON.parse(stored) as Record<string, boolean>;
+      const parsed = this.flagStorage.get();
+      if (parsed) {
         Object.entries(parsed).forEach(([key, value]) => {
           flags.set(key.toLowerCase(), value);
         });

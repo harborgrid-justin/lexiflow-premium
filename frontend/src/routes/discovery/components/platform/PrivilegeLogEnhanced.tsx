@@ -12,12 +12,13 @@
  * - G34: Query reads side-effect free, can be repeated
  */
 
-import { Download, Edit, Eye, FileText, Plus, Search } from 'lucide-react';
+import { Download, Edit, Eye, FileText, Plus, Search, Shield } from 'lucide-react';
 import { useState } from 'react';
 
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from "@/hooks/useTheme";
@@ -254,8 +255,13 @@ export function PrivilegeLogEnhanced({ caseId }: PrivilegeLogEnhancedProps) {
               ))}
               {filteredEntries.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={10} className={cn("text-center py-8 italic", theme.text.tertiary)}>
-                    No privilege log entries found matching your criteria.
+                  <TableCell colSpan={10}>
+                    <EmptyState 
+                      icon={Shield}
+                      title="No privilege log entries found"
+                      message="Add entries to document privileged communications and attorney work product"
+                      size="sm"
+                    />
                   </TableCell>
                 </TableRow>
               )}

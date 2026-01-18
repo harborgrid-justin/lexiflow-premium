@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useWorkflows } from './WorkflowsProvider';
 
@@ -143,42 +144,57 @@ export function WorkflowsView() {
         )}
 
         {!isPending && activeTab === 'templates' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {templates.map((template) => (
-              <TemplateCard key={template.id} template={template} />
-            ))}
-            {templates.length === 0 && (
-              <div className="col-span-full text-center py-12 text-[var(--color-textMuted)]">
-                No workflow templates found
+          <>
+            {templates.length === 0 ? (
+              <EmptyState
+                icon={Play}
+                title="No workflow templates found"
+                message="Create your first workflow template to automate your processes"
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {templates.map((template) => (
+                  <TemplateCard key={template.id} template={template} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
 
         {!isPending && activeTab === 'instances' && (
-          <div className="space-y-3">
-            {instances.map((instance) => (
-              <InstanceRow key={instance.id} instance={instance} />
-            ))}
-            {instances.length === 0 && (
-              <div className="text-center py-12 text-[var(--color-textMuted)]">
-                No workflow instances found
+          <>
+            {instances.length === 0 ? (
+              <EmptyState
+                icon={Clock}
+                title="No workflow instances found"
+                message="Start a workflow from a template to see it here"
+              />
+            ) : (
+              <div className="space-y-3">
+                {instances.map((instance) => (
+                  <InstanceRow key={instance.id} instance={instance} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
 
         {!isPending && activeTab === 'tasks' && (
-          <div className="space-y-3">
-            {tasks.map((task) => (
-              <TaskRow key={task.id} task={task} />
-            ))}
-            {tasks.length === 0 && (
-              <div className="text-center py-12 text-[var(--color-textMuted)]">
-                No tasks found
+          <>
+            {tasks.length === 0 ? (
+              <EmptyState
+                icon={CheckCircle}
+                title="No tasks found"
+                message="Tasks from active workflows will appear here"
+              />
+            ) : (
+              <div className="space-y-3">
+                {tasks.map((task) => (
+                  <TaskRow key={task.id} task={task} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

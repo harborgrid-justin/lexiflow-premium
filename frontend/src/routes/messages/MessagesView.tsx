@@ -12,6 +12,7 @@ import React, { useId } from 'react';
 
 import { Button } from '@/components/organisms/_legacy/Button';
 import { PageHeader } from '@/components/organisms/PageHeader';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 import { useMessages } from './MessagesProvider';
 
@@ -90,16 +91,21 @@ export function MessagesView() {
         )}
 
         {!isPending && (
-          <div className="space-y-2">
-            {messages.map(message => (
-              <MessageRow key={message.id} message={message} />
-            ))}
-            {messages.length === 0 && (
-              <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                No messages found
+          <>
+            {messages.length === 0 ? (
+              <EmptyState
+                icon={Mail}
+                title="No messages found"
+                message="Your inbox is empty. Send your first message to get started"
+              />
+            ) : (
+              <div className="space-y-2">
+                {messages.map(message => (
+                  <MessageRow key={message.id} message={message} />
+                ))}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

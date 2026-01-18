@@ -7,6 +7,8 @@
  * @module services/analytics/routeAnalytics
  */
 
+import { StoragePersistence, IdGenerator } from "@/services/core/factories";
+
 export interface RouteAnalyticsEvent {
   type: "page_view" | "route_change" | "navigation_intent" | "route_error";
   path: string;
@@ -39,6 +41,8 @@ class RouteAnalyticsService {
   private journey: UserJourney | null = null;
   private performanceMarks = new Map<string, number>();
   private enabled = true;
+  private eventStorage = new StoragePersistence<RouteAnalyticsEvent[]>("route_analytics_events");
+  private sessionIdGen = new IdGenerator("session");
 
   constructor() {
     this.initSession();
@@ -68,7 +72,7 @@ class RouteAnalyticsService {
    * Generate unique session ID
    */
   private generateSessionId(): string {
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return this.sessionIdGen.generate();
   }
 
   /**
@@ -251,10 +255,7 @@ class RouteAnalyticsService {
   private persistEvents(): void {
     try {
       const recentEvents = this.events.slice(-100); // Keep last 100 events
-      localStorage.setItem(
-        "route_analytics_events",
-        JSON.stringify(recentEvents),
-      );
+      this.eventStorage.set(recentEvents);
     } catch {
       // Ignore storage errors
     }
@@ -299,7 +300,7 @@ class RouteAnalyticsService {
   clear(): void {
     this.events = [];
     this.journey = null;
-    localStorage.removeItem("route_analytics_events");
+    this.eventStorage.remove();
   }
 
   /**

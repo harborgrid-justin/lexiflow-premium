@@ -1,8 +1,9 @@
-import { Plus, X } from 'lucide-react';
+import { Plus, Tags, X } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
 import { Modal } from '@/components/molecules/Modal/Modal';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
 import { type LegalDocument } from '@/types';
@@ -33,15 +34,23 @@ export function TagManagementModal({
             <div className="p-6">
                 <div className="mb-4">
                     <label className={cn("block text-xs font-semibold uppercase mb-2", theme.text.secondary)}>Current Tags</label>
-                    <div className="flex flex-wrap gap-2">
-                        {document.tags.length === 0 && <span className={cn("text-sm italic", theme.text.tertiary)}>No tags assigned.</span>}
-                        {document.tags.map(tag => (
-                            <span key={tag} className={cn("inline-flex items-center px-2 py-1 rounded text-sm border", theme.primary.light, theme.primary.text, theme.primary.border)}>
-                                {tag}
-                                <button onClick={() => onRemoveTag(document.id, tag)} className={cn("ml-2 hover:opacity-75", theme.primary.text)}><X className="h-3 w-3" /></button>
-                            </span>
-                        ))}
-                    </div>
+                    {document.tags.length === 0 ? (
+                        <EmptyState 
+                            icon={Tags}
+                            title="No tags assigned"
+                            message="Add tags to organize and categorize this document"
+                            size="sm"
+                        />
+                    ) : (
+                        <div className="flex flex-wrap gap-2">
+                            {document.tags.map(tag => (
+                                <span key={tag} className={cn("inline-flex items-center px-2 py-1 rounded text-sm border", theme.primary.light, theme.primary.text, theme.primary.border)}>
+                                    {tag}
+                                    <button onClick={() => onRemoveTag(document.id, tag)} className={cn("ml-2 hover:opacity-75", theme.primary.text)}><X className="h-3 w-3" /></button>
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="mb-6">

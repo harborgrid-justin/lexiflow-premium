@@ -19,6 +19,7 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContaine
 // Services & Data
 import { Card } from '@/components/molecules/Card/Card';
 import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from '@/lib/cn';
@@ -197,7 +198,12 @@ export function CRMDashboard() {
               </div>
             ))}
             {cases.length === 0 && (
-              <p className={cn("text-sm text-center py-8", theme.text.secondary)}>No recent interactions</p>
+              <EmptyState 
+                icon={Activity}
+                title="No recent interactions"
+                message="Client interactions will appear here"
+                size="sm"
+              />
             )}
           </div>
         </Card>
@@ -222,7 +228,12 @@ export function CRMDashboard() {
                 </div>
               ))}
             {clients.length === 0 && (
-              <p className={cn("text-sm text-center py-8", theme.text.secondary)}>No clients yet</p>
+              <EmptyState 
+                icon={Users}
+                title="No clients yet"
+                message="Add your first client to start tracking revenue"
+                size="sm"
+              />
             )}
           </div>
         </Card>

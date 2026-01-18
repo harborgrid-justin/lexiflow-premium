@@ -14,6 +14,7 @@ import { SystemSettings, type SystemFeatures, type SystemSettingsData } from '@/
 
 import { createAdminMeta } from '../_shared/meta-utils';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { withAdminAuth } from '../_shared/hoc/withAuth';
 
 // ============================================================================
 // Types
@@ -226,10 +227,12 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-export default function SystemSettingsRoute() {
+function SystemSettingsRoute() {
   const loaderData = useLoaderData();
   return <SystemSettings settings={loaderData.settings} features={loaderData.features} />;
 }
+
+export default withAdminAuth(SystemSettingsRoute);
 
 // ============================================================================
 // Error Boundary

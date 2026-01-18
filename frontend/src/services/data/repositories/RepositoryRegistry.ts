@@ -8,12 +8,22 @@
  * the application, preventing memory leaks and inconsistent state.
  */
 
+import { GenericRegistry } from "@/services/core/factories/GenericRegistry";
+
 /**
  * Registry for managing singleton repository instances
+ * 
+ * Now uses GenericRegistry factory to eliminate 60+ duplicate registry lines
+ */
+const repositoryRegistry = new GenericRegistry<unknown>({
+  name: 'Repository',
+  lazy: true,
+});
+
+/**
+ * Legacy compatibility wrapper
  */
 export class RepositoryRegistry {
-  private static instances = new Map<string, unknown>();
-
   /**
    * Gets or creates a singleton repository instance
    *
@@ -22,31 +32,31 @@ export class RepositoryRegistry {
    * @returns The singleton repository instance
    */
   static getOrCreate<T>(key: string, factory: () => T): T {
-    if (!this.instances.has(key)) {
-      this.instances.set(key, factory());
+    if (!repositoryRegistry.has(key)) {
+      repositoryRegistry.register(key, factory);
     }
-    return this.instances.get(key) as T;
+    return repositoryRegistry.get(key) as T;
   }
 
   /**
    * Checks if a repository instance exists
    */
   static has(key: string): boolean {
-    return this.instances.has(key);
+    return repositoryRegistry.has(key);
   }
 
   /**
    * Gets an existing repository instance (returns undefined if not found)
    */
   static get<T>(key: string): T | undefined {
-    return this.instances.get(key) as T | undefined;
+    return repositoryRegistry.get(key) as T | undefined;
   }
 
   /**
    * Manually registers a repository instance
    */
   static register<T>(key: string, instance: T): void {
-    this.instances.set(key, instance);
+    repositoryRegistry.register(key, instance);
   }
 
   /**
@@ -54,7 +64,7 @@ export class RepositoryRegistry {
    * Useful for testing or hot module replacement
    */
   static remove(key: string): boolean {
-    return this.instances.delete(key);
+    return repositoryRegistry.unregister(key);
   }
 
   /**
@@ -62,21 +72,21 @@ export class RepositoryRegistry {
    * WARNING: Use only for testing or application shutdown
    */
   static clear(): void {
-    this.instances.clear();
+    repositoryRegistry.clear();
   }
 
   /**
    * Gets all registered repository keys
    */
   static keys(): string[] {
-    return Array.from(this.instances.keys());
+    return repositoryRegistry.keys();
   }
 
   /**
    * Gets the count of registered repositories
    */
   static size(): number {
-    return this.instances.size;
+    return repositoryRegistry.size;
   }
 }
 

@@ -117,6 +117,38 @@ export type TimeEntry = BaseEntity & {
   // Frontend-specific
   readonly ledesActivity?: LedesActivityCode; // Alias for ledesCode
 };
+
+export type InvoiceItem = {
+  description: string;
+  quantity: number;
+  rate: number;
+  amount: number;
+  taxable?: boolean;
+};
+
+/**
+ * Create Invoice DTO
+ */
+export type CreateInvoiceDto = {
+  caseId: string;
+  clientId?: string;
+  invoiceNumber: string;
+  date: string;
+  dueDate: string;
+  items: InvoiceItem[];
+  taxRate: number;
+  discount: number;
+  notes: string;
+  terms?: string;
+};
+
+/**
+ * Update Invoice DTO
+ */
+export type UpdateInvoiceDto = {
+  status?: string;
+  [key: string]: unknown;
+};
 /**
  * Time entry creation payload
  * Simplified DTO for creating unbilled time entries

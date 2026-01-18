@@ -11,6 +11,7 @@
  */
 
 import { PATHS } from "@/config/paths.config";
+import { TimerManager, StoragePersistence } from "@/services/core/factories";
 
 export type PrefetchStrategy = "hover" | "viewport" | "predictive" | "priority";
 
@@ -32,10 +33,12 @@ class RoutePrefetchService {
   private prefetchQueue = new Map<string, Promise<void>>();
   private routeMetadata = new Map<string, RouteMetadata>();
   private intersectionObserver: IntersectionObserver | null = null;
-  private hoverTimers = new Map<string, number>();
+  private hoverTimers = new Map<string, NodeJS.Timeout>();
   private enabled = true;
   private readonly HOVER_DELAY = 300; // ms
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  private readonly timers = new TimerManager();
+  private metadataStorage = new StoragePersistence<Record<string, unknown>>("route_prefetch_metadata");
 
   private static isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === "object" && value !== null;
@@ -94,7 +97,7 @@ class RoutePrefetchService {
       console.warn("[RoutePrefetch] Prefetch failed", error);
     } finally {
       // Clean up after TTL
-      setTimeout(() => {
+      this.timers.setTimeout(() => {
         this.prefetchQueue.delete(path);
       }, this.CACHE_TTL);
     }
@@ -109,7 +112,7 @@ class RoutePrefetchService {
   ): Promise<void> {
     // Simulate network delay for demo
     if (import.meta.env.DEV) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => this.timers.setTimeout(resolve, 100));
     }
 
     // In production, this would:
@@ -134,7 +137,7 @@ class RoutePrefetchService {
     }
 
     // Set new timer
-    const timer = window.setTimeout(() => {
+    const timer = this.timers.setTimeout(() => {
       this.prefetchRoute(path, "hover").catch((error) => {
         console.warn("[RoutePrefetch] Prefetch failed", error);
       });
@@ -265,19 +268,15 @@ class RoutePrefetchService {
    */
   private loadMetadata(): void {
     try {
-      const stored = localStorage.getItem("route_prefetch_metadata");
-      if (stored) {
-        const parsed: unknown = JSON.parse(stored);
-        if (!RoutePrefetchService.isRecord(parsed)) {
+      const parsed = this.metadataStorage.get();
+      if (!parsed) return;
+
+      Object.entries(parsed).forEach(([path, meta]) => {
+        if (!RoutePrefetchService.isRecord(meta)) {
           return;
         }
 
-        Object.entries(parsed).forEach(([path, meta]) => {
-          if (!RoutePrefetchService.isRecord(meta)) {
-            return;
-          }
-
-          const transitionsRaw = RoutePrefetchService.isRecord(
+        const transitionsRaw = RoutePrefetchService.isRecord(
             meta.transitionsFrom,
           )
             ? meta.transitionsFrom
@@ -315,7 +314,7 @@ class RoutePrefetchService {
           transitionsFrom: Object.fromEntries(meta.transitionsFrom),
         };
       });
-      localStorage.setItem("route_prefetch_metadata", JSON.stringify(data));
+      this.metadataStorage.set(data);
     } catch (error) {
       console.warn("[RoutePrefetch] Failed to save metadata", error);
     }
@@ -343,7 +342,7 @@ class RoutePrefetchService {
     this.routeMetadata.clear();
     this.hoverTimers.forEach((timer) => clearTimeout(timer));
     this.hoverTimers.clear();
-    localStorage.removeItem("route_prefetch_metadata");
+    this.metadataStorage.remove();
   }
 
   /**

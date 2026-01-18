@@ -3,6 +3,15 @@
  * Production-grade toast, desktop, and in-app notification system
  *
  * @module services/infrastructure/notificationService
+ * @deprecated This service has been consolidated into BrowserNotificationService
+ * @see services/notification/NotificationService for the new implementation
+ * @see NOTIFICATION_MIGRATION_GUIDE.md for migration instructions
+ * 
+ * MIGRATION NOTICE:
+ * - Use: import { notify } from '@/services/notification/NotificationService'
+ * - All functionality preserved in enhanced BrowserNotificationService
+ * - This file will be removed in a future release
+ *
  * @description Comprehensive notification service providing:
  * - Multi-tier notification system (toast, desktop, in-app panel)
  * - Priority-based delivery (low, normal, high, urgent)
@@ -18,6 +27,7 @@
 import { TIMEOUTS } from "@/config/ports.config";
 
 import { defaultStorage } from "./adapters/StorageAdapter";
+import { EventEmitter, TimerManager, IdGenerator } from "../core/factories";
 
 class ValidationError extends Error {
   constructor(message: string) {
@@ -27,11 +37,7 @@ class ValidationError extends Error {
 }
 
 const NOTIFICATION_MAX_DISPLAY = 50; // Maximum notifications to keep in memory
-
-// UUID generation inline
-function generateId(): string {
-  return `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-}
+const idGenerator = new IdGenerator("notif");
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -92,6 +98,13 @@ export interface NotificationGroup {
  */
 type NotificationListener = (notifications: Notification[]) => void;
 
+/**
+ * Notification event for EventEmitter
+ */
+interface NotificationEvent {
+  notifications: Notification[];
+}
+
 // ============================================================================
 // NOTIFICATION SERVICE
 // ============================================================================
@@ -102,12 +115,15 @@ type NotificationListener = (notifications: Notification[]) => void;
  */
 class NotificationServiceClass {
   private notifications: Notification[] = [];
-  private listeners: Set<NotificationListener> = new Set();
+  private eventEmitter = new EventEmitter<NotificationEvent>({ 
+    serviceName: 'NotificationService',
+    maxListeners: 1000 
+  });
   private soundEnabled: boolean = true;
   private desktopEnabled: boolean = false;
   private maxNotifications: number = NOTIFICATION_MAX_DISPLAY * 20;
   private initialized: boolean = false;
-  private autoDismissTimers: Map<string, NodeJS.Timeout> = new Map();
+  private readonly timers = new TimerManager();
   private desktopNotifications: Map<string, globalThis.Notification> =
     new Map();
 
@@ -235,7 +251,7 @@ class NotificationServiceClass {
     try {
       this.validateNotification(notification, "add");
 
-      const id = generateId();
+      const id = idGenerator.generate();
       const newNotification: Notification = {
         ...notification,
         id,
@@ -269,11 +285,9 @@ class NotificationServiceClass {
 
       // Auto-dismiss if duration is set
       if (notification.duration && notification.duration > 0) {
-        const timer = setTimeout(() => {
+        this.timers.setTimeout(() => {
           this.remove(id);
-          this.autoDismissTimers.delete(id);
         }, notification.duration);
-        this.autoDismissTimers.set(id, timer);
       }
 
       return id;
@@ -478,13 +492,14 @@ class NotificationServiceClass {
       );
     }
     try {
-      this.listeners.add(listener);
+      const unsubscribe = this.eventEmitter.subscribe((event) => {
+        listener(event.notifications);
+      });
+      
+      // Send current state immediately
       listener(this.notifications);
 
-      // Return unsubscribe function
-      return () => {
-        this.listeners.delete(listener);
-      };
+      return unsubscribe;
     } catch (error) {
       console.error("[NotificationService.subscribe] Error:", error);
       throw error;
@@ -626,16 +641,7 @@ class NotificationServiceClass {
    * @private
    */
   private notifyListeners(): void {
-    this.listeners.forEach((listener) => {
-      try {
-        listener(this.notifications);
-      } catch (error) {
-        console.error(
-          "[NotificationService.notifyListeners] Listener error:",
-          error,
-        );
-      }
-    });
+    this.eventEmitter.notify({ notifications: this.notifications });
   }
 
   /**
@@ -663,7 +669,7 @@ class NotificationServiceClass {
     this.desktopNotifications.clear();
 
     // Clear all listeners
-    this.listeners.clear();
+    this.eventEmitter.clearAllListeners();
 
     // Clear all notifications
     this.notifications = [];

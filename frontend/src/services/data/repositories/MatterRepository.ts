@@ -1,82 +1,11 @@
 // services/repositories/MatterRepository.ts
-import { casesApi } from "@/api/litigation/cases-api";
-import { Repository } from "@/services/core/Repository";
+import { casesApi, CasesApiService } from "@/api/litigation/cases-api";
+import { GenericRepository } from "@/services/core/factories";
 import { type Matter, type MatterId, MatterStatus } from "@/types";
 
-export class MatterRepository extends Repository<Matter> {
-  constructor() {
-    super("matters");
-    console.log("[MatterRepository] Initialized with Backend API");
-  }
-
-  /**
-   * Override getAll to use backend API
-   */
-  override async getAll(): Promise<Matter[]> {
-    try {
-      return (await casesApi.getAll()) as unknown as Matter[];
-    } catch (error) {
-      console.error("[MatterRepository.getAll] Error:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Override getById to use backend API
-   */
-  override async getById(id: MatterId): Promise<Matter | undefined> {
-    try {
-      return (await casesApi.getById(id)) as unknown as Matter;
-    } catch (error) {
-      console.error("[MatterRepository.getById] Error:", error);
-      return undefined;
-    }
-  }
-
-  /**
-   * Override add to use backend API
-   */
-  override async add(matter: Matter): Promise<Matter> {
-    try {
-      return (await casesApi.add(
-        matter as unknown as Parameters<typeof casesApi.add>[0]
-      )) as unknown as Matter;
-    } catch (error) {
-      console.error("[MatterRepository.add] Error:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Override update to use backend API
-   */
-  override async update(
-    id: MatterId,
-    updates: Partial<Matter>
-  ): Promise<Matter> {
-    try {
-      return (await casesApi.update(
-        id,
-        updates as unknown as Parameters<typeof casesApi.update>[1]
-      )) as unknown as Matter;
-    } catch (error) {
-      console.error("[MatterRepository.update] Error:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Override delete to use backend API
-   */
-  override async delete(id: MatterId): Promise<void> {
-    try {
-      await casesApi.delete(id);
-      return;
-    } catch (error) {
-      console.error("[MatterRepository.delete] Error:", error);
-      throw error;
-    }
-  }
+export class MatterRepository extends GenericRepository<Matter> {
+  protected apiService: CasesApiService = casesApi;
+  protected repositoryName = "MatterRepository";
 
   /**
    * Get matters by status
@@ -109,7 +38,7 @@ export class MatterRepository extends Repository<Matter> {
     return allMatters.filter(
       (matter) =>
         matter.leadAttorneyId === leadAttorneyId ||
-        matter.responsibleAttorneyId === leadAttorneyId
+        matter.responsibleAttorneyId === leadAttorneyId,
     );
   }
 
@@ -130,7 +59,7 @@ export class MatterRepository extends Repository<Matter> {
   /**
    * Search matters by title, matter number, or client name
    */
-  async search(query: string): Promise<Matter[]> {
+  async searchMatters(query: string): Promise<Matter[]> {
     try {
       return (await casesApi.search(query)) as unknown as Matter[];
     } catch (error) {
@@ -147,7 +76,7 @@ export class MatterRepository extends Repository<Matter> {
     return allMatters.filter(
       (matter) =>
         matter.status !== MatterStatus.CLOSED &&
-        matter.status !== MatterStatus.ARCHIVED
+        matter.status !== MatterStatus.ARCHIVED,
     );
   }
 

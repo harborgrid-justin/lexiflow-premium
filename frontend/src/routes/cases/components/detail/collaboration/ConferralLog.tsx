@@ -18,6 +18,7 @@ import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { TextArea } from '@/components/atoms/TextArea';
 import { Modal } from '@/components/molecules/Modal';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
@@ -149,10 +150,12 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
         ))}
 
         {sessions.length === 0 && (
-          <div className={cn("text-center py-12 border-2 border-dashed rounded-lg", theme.border.default, theme.text.tertiary)}>
-            <Users className="h-12 w-12 mx-auto mb-2 opacity-20" />
-            <p>No conferral sessions recorded.</p>
-          </div>
+          <EmptyState 
+            icon={Users}
+            title="No conferral sessions recorded"
+            message="Log your meet and confer sessions to track compliance with court requirements"
+            action={<Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Log Session</Button>}
+          />
         )}
       </div>
 

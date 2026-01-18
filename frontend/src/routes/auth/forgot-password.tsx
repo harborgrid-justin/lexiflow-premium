@@ -7,17 +7,18 @@
 import { type FormEvent, useState } from 'react';
 import { Link } from 'react-router';
 
+import { useFormError } from '@/hooks/routes';
 import { AuthApiService } from '@/lib/frontend-api';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { errors, setError, clearAll, hasError } = useFormError();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
+    clearAll();
     setIsLoading(true);
 
     try {
@@ -29,7 +30,7 @@ export default function ForgotPasswordPage() {
       setSuccess(true);
     } catch (err) {
       console.error('[ForgotPassword] Error:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred. Please try again.');
+      setError('__global__', err instanceof Error ? err.message : 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -100,9 +101,9 @@ export default function ForgotPasswordPage() {
           </p>
 
           {/* Error Message */}
-          {error && (
+          {hasError('__global__') && (
             <div className="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded text-rose-400 text-sm">
-              {error}
+              {errors.__global__}
             </div>
           )}
 

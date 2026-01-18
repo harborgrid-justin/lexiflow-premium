@@ -112,6 +112,7 @@ import {
   WS_URL,
 } from "@/config/network/websocket.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
+import { TimerManager, IdGenerator } from "@/services/core/factories";
 
 import type {
   CollaborativeEdit,
@@ -174,8 +175,8 @@ export class CollaborationService extends EventEmitter {
   private locks = new Map<string, DocumentLock>();
   private pendingEdits: CollaborativeEdit[] = [];
   private reconnectAttempts = 0;
-  private reconnectTimer: NodeJS.Timeout | null = null;
-  private activityTimer: NodeJS.Timeout | null = null;
+  private readonly timers = new TimerManager();
+  private readonly idGenerator = new IdGenerator("edit");
 
   /**
    * Initialize collaboration service
@@ -300,15 +301,7 @@ export class CollaborationService extends EventEmitter {
       this.ws = null;
     }
 
-    if (this.reconnectTimer) {
-      clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = null;
-    }
-
-    if (this.activityTimer) {
-      clearInterval(this.activityTimer);
-      this.activityTimer = null;
-    }
+    this.timers.clearAll();
 
     // Clear data structures to release memory
     this.presenceMap.clear();
@@ -328,7 +321,7 @@ export class CollaborationService extends EventEmitter {
 
     this.reconnectAttempts++;
 
-    this.reconnectTimer = setTimeout(() => {
+    this.timers.setTimeout(() => {
       console.log(`Reconnection attempt ${this.reconnectAttempts}...`);
       this.connect().catch((error) => {
         console.error("Reconnection failed:", error);
@@ -433,7 +426,7 @@ export class CollaborationService extends EventEmitter {
   sendEdit(edit: Omit<CollaborativeEdit, "id" | "userId" | "timestamp">): void {
     const fullEdit: CollaborativeEdit = {
       ...edit,
-      id: `edit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: this.idGenerator.generate(),
       userId: this.currentUserId,
       timestamp: new Date(),
     };
@@ -491,7 +484,7 @@ export class CollaborationService extends EventEmitter {
       this.on("lock-acquired", responseHandler);
 
       // Timeout after 5 seconds
-      timeoutId = setTimeout(() => {
+      timeoutId = this.timers.setTimeout(() => {
         if (!resolved) {
           resolved = true;
           this.off("lock-acquired", responseHandler);
@@ -709,7 +702,7 @@ export class CollaborationService extends EventEmitter {
    * Start monitoring user activity
    */
   private startActivityMonitoring(): void {
-    this.activityTimer = setInterval(() => {
+    this.timers.setInterval(() => {
       const presence = this.presenceMap.get(this.currentUserId);
       if (!presence) return;
 

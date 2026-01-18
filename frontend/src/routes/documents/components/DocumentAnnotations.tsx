@@ -3,6 +3,9 @@
  * Manage annotations, notes, and comments on documents
  */
 
+import { MessageSquare } from 'lucide-react';
+
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
 import { formatDate } from '@/utils/formatters';
 
@@ -173,13 +176,12 @@ export function DocumentAnnotations({
       {/* Annotations List */}
       <div className="space-y-3">
         {filteredAnnotations.length === 0 ? (
-          <div style={{ color: tokens.colors.textMuted }} className="text-center py-8">
-            <svg className="mx-auto h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-            </svg>
-            <p>No annotations yet</p>
-            <p className="text-sm mt-1">Add notes to help with document review</p>
-          </div>
+          <EmptyState 
+            icon={MessageSquare}
+            title="No annotations yet"
+            message="Add notes to help with document review and collaboration"
+            size="sm"
+          />
         ) : (
           filteredAnnotations.map((annotation) => (
             <div

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { CheckSquare, Loader2 } from 'lucide-react';
+import { CheckSquare, Clock, Loader2 } from 'lucide-react';
 import React from 'react';
 
 // ============================================================================
@@ -24,6 +24,7 @@ import React from 'react';
 import { Button } from '@/components/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { EmptyState } from '@/routes/_shared/EmptyState';
 import { useTheme } from "@/hooks/useTheme";
 
 // Utils & Constants
@@ -137,7 +138,14 @@ function BillingWIPComponent() {
                     ))}
                     {filteredEntries.length === 0 && (
                         <TableRow>
-                            <TableCell colSpan={8} className={cn("text-center py-8 italic", theme.text.tertiary)}>No unbilled time entries found.</TableCell>
+                            <TableCell colSpan={8}>
+                                <EmptyState 
+                                    icon={Clock}
+                                    title="No unbilled time entries found"
+                                    message="Time entries will appear here when they are ready for invoicing"
+                                    size="sm"
+                                />
+                            </TableCell>
                         </TableRow>
                     )}
                 </TableBody>
